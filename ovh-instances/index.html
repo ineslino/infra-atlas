@@ -379,6 +379,41 @@ a.masthead__back::before { display: none; }
   margin-right: 4px;
 }
 
+.chip-group {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  align-items: center;
+}
+
+.result-meta__tools {
+  display: flex;
+  align-items: baseline;
+  gap: 18px;
+}
+
+.sort-select {
+  background: var(--ink);
+  border: 1px solid var(--line-2);
+  color: var(--paper-2);
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  padding: 7px 28px 7px 13px;
+  border-radius: 99px;
+  cursor: pointer;
+  outline: none;
+  -webkit-appearance: none;
+  appearance: none;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 10 10'><path d='M2 3.5 L5 6.5 L8 3.5' stroke='%23F4EFE6' stroke-width='1.3' fill='none' stroke-opacity='0.5'/></svg>");
+  background-repeat: no-repeat;
+  background-position: right 11px center;
+  transition: border-color 0.15s ease, color 0.15s ease;
+}
+
+.sort-select:hover { border-color: var(--paper-3); color: var(--paper); }
+.sort-select:focus { border-color: var(--accent); }
+
 .chip {
   background: transparent;
   border: 1px solid var(--line-2);
@@ -622,19 +657,42 @@ a.masthead__back::before { display: none; }
   gap: 7px;
 }
 
-.instance-row__avail {
+.instance-row__right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 3px;
   text-align: right;
+}
+
+.instance-row__price {
   font-family: var(--mono);
-  font-size: 11px;
-  color: var(--paper-2);
-  letter-spacing: 0.04em;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--accent);
+  letter-spacing: 0.01em;
   white-space: nowrap;
 }
 
-.instance-row__avail strong {
-  color: var(--accent);
-  font-size: 14px;
-  font-weight: 500;
+.instance-row__price .unit {
+  font-size: 9.5px;
+  font-weight: 400;
+  color: var(--paper-3);
+  letter-spacing: 0.05em;
+  margin-left: 1px;
+}
+
+.instance-row__price.is-na {
+  color: var(--paper-4);
+  font-weight: 400;
+}
+
+.instance-row__spec {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--paper-3);
+  letter-spacing: 0.05em;
+  white-space: nowrap;
 }
 
 /* ─────────────── DRAWER (region/instance detail) ─────────────── */
@@ -727,7 +785,8 @@ a.masthead__back::before { display: none; }
 
 .drawer__meta {
   display: flex;
-  gap: 24px;
+  flex-wrap: wrap;
+  gap: 10px 24px;
   margin-top: 18px;
   font-family: var(--mono);
   font-size: 11px;
@@ -1026,12 +1085,29 @@ a.masthead__back::before { display: none; }
       <button class="chip is-active" data-arch="all"><span class="dot"></span>All</button>
       <button class="chip" data-arch="x86"><span class="dot"></span>x86_64</button>
       <button class="chip" data-arch="arm"><span class="dot"></span>arm64</button>
+      <span class="chip-group" id="price-chips">
+        <span class="filter-chips__label" style="margin-left: 16px;">Price</span>
+        <button class="chip is-active" data-tier="any">Any</button>
+        <button class="chip" data-tier="0">&lt; €0.25</button>
+        <button class="chip" data-tier="1">€0.25–1</button>
+        <button class="chip" data-tier="2">€1–4</button>
+        <button class="chip" data-tier="3">≥ €4</button>
+      </span>
     </div>
   </section>
 
   <div class="result-meta">
     <div class="result-meta__title" id="result-title">All regions</div>
-    <div class="result-meta__count"><strong id="result-count">0</strong> shown</div>
+    <div class="result-meta__tools">
+      <select class="sort-select" id="sort" aria-label="Sort instance types">
+        <option value="name">Sort · Name</option>
+        <option value="price-asc">Sort · Price ↑</option>
+        <option value="price-desc">Sort · Price ↓</option>
+        <option value="vcpu-desc">Sort · vCPU ↓</option>
+        <option value="mem-desc">Sort · Memory ↓</option>
+      </select>
+      <div class="result-meta__count"><strong id="result-count">0</strong> shown</div>
+    </div>
   </div>
 
   <main class="results" id="results">
@@ -1070,7 +1146,7 @@ a.masthead__back::before { display: none; }
 //  The page upgrades to ./data.json when that file is available.
 // ───────────────────────────────────────────────────────────────────
 
-const SNAPSHOT_DATE = "2026-05-15T06:00:00Z";
+const SNAPSHOT_DATE = "2026-05-15T23:34:15Z";
 
 const REGIONS = [
   { code: "GRA",          name: "Gravelines",      area: "Europe",       flag: "🇫🇷", since: 2016 },
@@ -1093,72 +1169,73 @@ const REGIONS = [
 
 // OVHcloud families — Public Cloud + Bare Metal lines.
 const FAMILIES = [
-  // ── Public Cloud — General Purpose
-  { key:"d2",  cat:"general",  arch:"x86", vendor:"AMD/Intel", desc:"Discovery — sandbox tier, low cost",
+  // ── General purpose
+  { key:"d2", cat:"general", arch:"x86", vendor:"AMD/Intel", desc:"Discovery — sandbox tier, low cost",
     sizes:["d2-2","d2-4","d2-8"],
-    in:["GRA","RBX","SBG","BHS","WAW","LIM","ERI","SGP","SYD","US-EAST-VA-1","US-WEST-OR-1"]},
-  { key:"b3",  cat:"general",  arch:"x86", vendor:"AMD",       desc:"Balanced general — AMD EPYC + premium NVMe",
-    sizes:["b3-8","b3-16","b3-32","b3-64","b3-128","b3-256"],
-    in:["GRA","RBX","SBG","BHS","WAW","LIM","ERI","SGP","SYD","US-EAST-VA-1","US-WEST-OR-1","MIL"]},
-
-  // ── Public Cloud — Compute
-  { key:"c3",  cat:"compute",  arch:"x86", vendor:"AMD",       desc:"CPU-optimized — high-freq AMD EPYC",
-    sizes:["c3-8","c3-16","c3-32","c3-64","c3-128","c3-256"],
-    in:["GRA","RBX","SBG","BHS","WAW","LIM","SGP","SYD","US-EAST-VA-1","US-WEST-OR-1"]},
-
-  // ── Public Cloud — Memory
-  { key:"r3",  cat:"memory",   arch:"x86", vendor:"AMD",       desc:"RAM-optimized — up to 512 GB",
-    sizes:["r3-32","r3-64","r3-128","r3-256","r3-512"],
-    in:["GRA","RBX","SBG","BHS","WAW","LIM","SGP","US-EAST-VA-1","US-WEST-OR-1"]},
-
-  // ── Public Cloud — Storage
-  { key:"i1",  cat:"storage",  arch:"x86", vendor:"Intel/AMD", desc:"IOPS-optimized — NVMe-heavy, 1.5 TB to 18 TB",
-    sizes:["i1-15","i1-30","i1-45","i1-60","i1-90","i1-180"],
-    in:["GRA","RBX","SBG","BHS","WAW","SGP","US-EAST-VA-1"]},
-
-  // ── Public Cloud — GPU
-  { key:"t1",  cat:"accelerated", arch:"x86", vendor:"Intel",  desc:"NVIDIA Tesla V100 (legacy)",
-    sizes:["t1-45","t1-90","t1-180"],
-    in:["GRA","BHS","SGP"]},
-  { key:"t2",  cat:"accelerated", arch:"x86", vendor:"AMD",    desc:"NVIDIA A100 / L4 / L40s (current)",
-    sizes:["t2-le-45","t2-le-90","t2-le-180","t2-180","t2-le-360"],
-    in:["GRA","BHS","ERI","US-EAST-VA-1"]},
-  { key:"h100",cat:"accelerated", arch:"x86", vendor:"AMD",    desc:"NVIDIA H100 80GB — LLM training",
-    sizes:["h100-1-380","h100-2-380","h100-4-380","h100-8-380"],
-    in:["GRA","BHS"]},
-
-  // ── Bare Metal — High-end
+    specs:{"d2-2":{vcpu:1,mem:2,price:0.0104},"d2-4":{vcpu:2,mem:4,price:0.0206},"d2-8":{vcpu:4,mem:8,price:0.0372}},
+    in:["GRA","RBX","SBG","BHS","WAW","LIM","ERI","SGP","SYD","US-EAST-VA-1","US-WEST-OR-1"] },
+  { key:"b3", cat:"general", arch:"x86", vendor:"AMD", desc:"Balanced general — AMD EPYC + premium NVMe",
+    sizes:["b3-8","b3-16","b3-32","b3-64","b3-128","b3-256","b3-512","b3-640"],
+    specs:{"b3-8":{vcpu:2,mem:8,price:0.0512},"b3-16":{vcpu:4,mem:16,price:0.1023},"b3-32":{vcpu:8,mem:32,price:0.2046},"b3-64":{vcpu:16,mem:64,price:0.4092},"b3-128":{vcpu:32,mem:128,price:0.819},"b3-256":{vcpu:64,mem:256,price:1.637},"b3-512":{vcpu:128,mem:512,price:3.274},"b3-640":{vcpu:160,mem:640,price:4.092}},
+    in:["GRA","RBX","SBG","BHS","WAW","LIM","ERI","SGP","SYD","US-EAST-VA-1","US-WEST-OR-1","MIL"] },
+  // ── Compute optimized
+  { key:"c3", cat:"compute", arch:"x86", vendor:"AMD", desc:"CPU-optimized — high-freq AMD EPYC",
+    sizes:["c3-4","c3-8","c3-16","c3-32","c3-64","c3-128","c3-256","c3-320"],
+    specs:{"c3-4":{vcpu:2,mem:4,price:0.0457},"c3-8":{vcpu:4,mem:8,price:0.0913},"c3-16":{vcpu:8,mem:16,price:0.1825},"c3-32":{vcpu:16,mem:32,price:0.365},"c3-64":{vcpu:32,mem:64,price:0.7301},"c3-128":{vcpu:64,mem:128,price:1.461},"c3-256":{vcpu:128,mem:256,price:2.921},"c3-320":{vcpu:160,mem:320,price:3.651}},
+    in:["GRA","RBX","SBG","BHS","WAW","LIM","SGP","SYD","US-EAST-VA-1","US-WEST-OR-1"] },
+  // ── Memory optimized
+  { key:"r3", cat:"memory", arch:"x86", vendor:"AMD", desc:"RAM-optimized — up to 512 GB",
+    sizes:["r3-16","r3-32","r3-64","r3-128","r3-256","r3-512","r3-1024"],
+    specs:{"r3-16":{vcpu:2,mem:16,price:0.0663},"r3-32":{vcpu:4,mem:32,price:0.1324},"r3-64":{vcpu:8,mem:64,price:0.2648},"r3-128":{vcpu:16,mem:128,price:0.53},"r3-256":{vcpu:32,mem:256,price:1.059},"r3-512":{vcpu:64,mem:512,price:2.118},"r3-1024":{vcpu:128,mem:1024,price:4.236}},
+    in:["GRA","RBX","SBG","BHS","WAW","LIM","SGP","US-EAST-VA-1","US-WEST-OR-1"] },
+  // ── Storage optimized
+  { key:"i1", cat:"storage", arch:"x86", vendor:"Intel/AMD", desc:"IOPS-optimized — NVMe-heavy, 1.5 TB to 18 TB",
+    sizes:["i1-45","i1-90","i1-180"],
+    specs:{"i1-45":{vcpu:8,mem:45,price:0.439},"i1-90":{vcpu:16,mem:90,price:0.879},"i1-180":{vcpu:32,mem:180,price:1.76}},
+    in:["GRA","RBX","SBG","BHS","WAW","SGP","US-EAST-VA-1"] },
+  { key:"Storage", cat:"storage", arch:"x86", vendor:"AMD", desc:"Bare metal storage-dense — large HDD arrays",
+    sizes:["FS-12T","FS-24T","FS-48T","FS-72T","FS-96T"],
+    specs:{"FS-12T":{vcpu:null,mem:null,price:null},"FS-24T":{vcpu:null,mem:null,price:null},"FS-48T":{vcpu:null,mem:null,price:null},"FS-72T":{vcpu:null,mem:null,price:null},"FS-96T":{vcpu:null,mem:null,price:null}},
+    in:["GRA","RBX","SBG","BHS","ERI"] },
+  // ── Accelerated
+  { key:"t1", cat:"accelerated", arch:"x86", vendor:"Intel", desc:"NVIDIA Tesla V100 (legacy)",
+    sizes:["t1-45","t1-90","t1-180","t1-le-45","t1-le-90","t1-le-180"],
+    specs:{"t1-45":{vcpu:8,mem:45,price:0.7},"t1-90":{vcpu:18,mem:90,price:1.4},"t1-180":{vcpu:36,mem:180,price:2.8},"t1-le-45":{vcpu:8,mem:45,price:0.7},"t1-le-90":{vcpu:16,mem:90,price:1.4},"t1-le-180":{vcpu:32,mem:180,price:2.8}},
+    in:["GRA","BHS","SGP"] },
+  { key:"t2", cat:"accelerated", arch:"x86", vendor:"AMD", desc:"NVIDIA A100 / L4 / L40s (current)",
+    sizes:["t2-45","t2-90","t2-180","t2-le-45","t2-le-90","t2-le-180"],
+    specs:{"t2-45":{vcpu:15,mem:45,price:0.8},"t2-90":{vcpu:30,mem:90,price:1.6},"t2-180":{vcpu:60,mem:180,price:3.2},"t2-le-45":{vcpu:15,mem:45,price:0.8},"t2-le-90":{vcpu:30,mem:90,price:1.6},"t2-le-180":{vcpu:60,mem:180,price:3.2}},
+    in:["GRA","BHS","ERI","US-EAST-VA-1"] },
+  { key:"h100", cat:"accelerated", arch:"x86", vendor:"AMD", desc:"NVIDIA H100 80GB — LLM training",
+    sizes:["h100-380","h100-760","h100-1520"],
+    specs:{"h100-380":{vcpu:30,mem:380,price:2.8},"h100-760":{vcpu:60,mem:760,price:5.6},"h100-1520":{vcpu:120,mem:1520,price:11.2}},
+    in:["GRA","BHS"] },
+  // ── Bare metal
   { key:"HGR-HCI", cat:"baremetal", arch:"x86", vendor:"Intel/AMD", desc:"High Grade — hyperconverged + GPU options",
     sizes:["HGR-HCI-i2","HGR-HCI-i5","HGR-HCI-a1","HGR-HCI-a2"],
-    in:["GRA","RBX","SBG","BHS","LIM","ERI","SGP","SYD"]},
+    specs:{"HGR-HCI-i2":{vcpu:null,mem:null,price:null},"HGR-HCI-i5":{vcpu:null,mem:null,price:null},"HGR-HCI-a1":{vcpu:null,mem:null,price:null},"HGR-HCI-a2":{vcpu:null,mem:null,price:null}},
+    in:["GRA","RBX","SBG","BHS","LIM","ERI","SGP","SYD"] },
   { key:"HGR-SDS", cat:"baremetal", arch:"x86", vendor:"Intel/AMD", desc:"High Grade — software-defined storage configs",
     sizes:["HGR-SDS-1","HGR-SDS-2","HGR-SDS-3"],
-    in:["GRA","RBX","SBG","BHS","ERI"]},
-
-  // ── Bare Metal — Mid range
+    specs:{"HGR-SDS-1":{vcpu:null,mem:null,price:null},"HGR-SDS-2":{vcpu:null,mem:null,price:null},"HGR-SDS-3":{vcpu:null,mem:null,price:null}},
+    in:["GRA","RBX","SBG","BHS","ERI"] },
   { key:"Advance", cat:"baremetal", arch:"x86", vendor:"AMD/Intel", desc:"Mid-range bare metal — virtualization workloads",
     sizes:["Advance-1","Advance-2","Advance-3","Advance-4","Advance-5","Advance-6","Advance-Gen2"],
-    in:["GRA","RBX","SBG","BHS","LIM","ERI","WAW","SGP","SYD","US-EAST-VA-1","US-WEST-OR-1"]},
-
-  // ── Bare Metal — Entry
-  { key:"Rise",    cat:"baremetal", arch:"x86", vendor:"Intel/AMD", desc:"Entry-level bare metal — web/app workloads",
+    specs:{"Advance-1":{vcpu:null,mem:null,price:null},"Advance-2":{vcpu:null,mem:null,price:null},"Advance-3":{vcpu:null,mem:null,price:null},"Advance-4":{vcpu:null,mem:null,price:null},"Advance-5":{vcpu:null,mem:null,price:null},"Advance-6":{vcpu:null,mem:null,price:null},"Advance-Gen2":{vcpu:null,mem:null,price:null}},
+    in:["GRA","RBX","SBG","BHS","LIM","ERI","WAW","SGP","SYD","US-EAST-VA-1","US-WEST-OR-1"] },
+  { key:"Rise", cat:"baremetal", arch:"x86", vendor:"Intel/AMD", desc:"Entry-level bare metal — web/app workloads",
     sizes:["Rise-1","Rise-2","Rise-3","Rise-4","Rise-LE-1","Rise-LE-2"],
-    in:["GRA","RBX","SBG","BHS","WAW","LIM","ERI","SGP","SYD","US-EAST-VA-1","US-WEST-OR-1"]},
-
-  // ── Bare Metal — Scale-out
-  { key:"Scale",   cat:"baremetal", arch:"x86", vendor:"AMD",       desc:"Scale-out bare metal — high density",
+    specs:{"Rise-1":{vcpu:null,mem:null,price:null},"Rise-2":{vcpu:null,mem:null,price:null},"Rise-3":{vcpu:null,mem:null,price:null},"Rise-4":{vcpu:null,mem:null,price:null},"Rise-LE-1":{vcpu:null,mem:null,price:null},"Rise-LE-2":{vcpu:null,mem:null,price:null}},
+    in:["GRA","RBX","SBG","BHS","WAW","LIM","ERI","SGP","SYD","US-EAST-VA-1","US-WEST-OR-1"] },
+  { key:"Scale", cat:"baremetal", arch:"x86", vendor:"AMD", desc:"Scale-out bare metal — high density",
     sizes:["Scale-GPU","Scale-LE-1","Scale-LE-2","Scale-1","Scale-2","Scale-3","Scale-4"],
-    in:["GRA","RBX","SBG","BHS","LIM","ERI","SGP","SYD"]},
-
-  // ── Bare Metal — Storage-dense
-  { key:"Storage", cat:"storage", arch:"x86", vendor:"AMD",       desc:"Bare metal storage-dense — large HDD arrays",
-    sizes:["FS-12T","FS-24T","FS-48T","FS-72T","FS-96T"],
-    in:["GRA","RBX","SBG","BHS","ERI"]},
-
-  // ── Bare Metal — HPC (Game/HPC line)
-  { key:"HPC",     cat:"hpc",       arch:"x86", vendor:"AMD",       desc:"HPC bare metal — AMD EPYC + InfiniBand",
+    specs:{"Scale-GPU":{vcpu:null,mem:null,price:null},"Scale-LE-1":{vcpu:null,mem:null,price:null},"Scale-LE-2":{vcpu:null,mem:null,price:null},"Scale-1":{vcpu:null,mem:null,price:null},"Scale-2":{vcpu:null,mem:null,price:null},"Scale-3":{vcpu:null,mem:null,price:null},"Scale-4":{vcpu:null,mem:null,price:null}},
+    in:["GRA","RBX","SBG","BHS","LIM","ERI","SGP","SYD"] },
+  // ── HPC
+  { key:"HPC", cat:"hpc", arch:"x86", vendor:"AMD", desc:"HPC bare metal — AMD EPYC + InfiniBand",
     sizes:["HPC-1","HPC-2","HPC-3"],
-    in:["GRA","RBX","SBG"]}
+    specs:{"HPC-1":{vcpu:null,mem:null,price:null},"HPC-2":{vcpu:null,mem:null,price:null},"HPC-3":{vcpu:null,mem:null,price:null}},
+    in:["GRA","RBX","SBG"] }
 ];
 
 
@@ -1171,11 +1248,63 @@ const state = {
   cat: "all",
   arch: "all",
   query: "",
+  sort: "name",        // name | price-asc | price-desc | vcpu-desc | mem-desc
+  priceTier: "any",    // any | 0 | 1 | 2 | 3
+  currency: "EUR",
+  priceRef: "GRA",
   data: null
 };
 
 const $ = (sel) => document.querySelector(sel);
 const $$ = (sel) => Array.from(document.querySelectorAll(sel));
+
+// ─── Price / spec helpers ───────────────────────────────────────
+function specOf(fam, size) {
+  return (fam.specs && fam.specs[size]) || null;
+}
+function priceOf(fam, size) {
+  const s = specOf(fam, size);
+  return s && typeof s.price === "number" ? s.price : null;
+}
+
+// Price-filter tiers — thresholds in the page's native currency.
+const PRICE_TIERS = { "0": [0, 0.25], "1": [0.25, 1], "2": [1, 4], "3": [4, Infinity] };
+function priceInTier(price, tier) {
+  if (tier === "any") return true;
+  if (price == null) return false;
+  const band = PRICE_TIERS[tier];
+  return band ? (price >= band[0] && price < band[1]) : true;
+}
+
+// Format an hourly price: 0.096 → "$0.096", 6 → "$6.00", null → null.
+function fmtPrice(price, currency) {
+  if (price == null) return null;
+  const sym = currency === "EUR" ? "€" : "$";
+  let s = price.toFixed(4).replace(/0+$/, "").replace(/\.$/, "");
+  const dot = s.indexOf(".");
+  if (dot === -1) s += ".00";
+  else if (s.length - dot - 1 === 1) s += "0";
+  return sym + s;
+}
+
+// Sort the flattened instance-type entries by state.sort; nulls always last.
+function sortEntries(entries) {
+  const byName = (a, b) => a.full.localeCompare(b.full, undefined, { numeric: true });
+  const cmp = (key, dir) => (a, b) => {
+    const av = a[key], bv = b[key];
+    if (av == null && bv == null) return byName(a, b);
+    if (av == null) return 1;
+    if (bv == null) return -1;
+    return dir * (av - bv) || byName(a, b);
+  };
+  switch (state.sort) {
+    case "price-asc":  entries.sort(cmp("price", 1));  break;
+    case "price-desc": entries.sort(cmp("price", -1)); break;
+    case "vcpu-desc":  entries.sort(cmp("vcpu", -1));  break;
+    case "mem-desc":   entries.sort(cmp("mem", -1));   break;
+    default:           entries.sort(byName);
+  }
+}
 
 function expandIn(rawIn, allCodes) {
   if (rawIn === "*") return new Set(allCodes);
@@ -1376,25 +1505,36 @@ function renderInstanceView() {
   results.innerHTML = '<div class="instance-list"></div>';
   const list = results.firstElementChild;
 
-  // Flatten into instance-type entries
+  // Flatten into instance-type entries, applying search + price-tier filters
   const entries = [];
   visible.forEach(fam => {
     fam.sizes.forEach(size => {
-      const full = `${fam.key}.${size}`;
-      if (instanceTypeMatches(fam, size, q)) {
-        const availCount = state.data.familyRegions.get(fam.key).size;
-        entries.push({ fam, size, full, availCount });
-      }
+      if (!instanceTypeMatches(fam, size, q)) return;
+      const spec = specOf(fam, size) || {};
+      const price = typeof spec.price === "number" ? spec.price : null;
+      if (!priceInTier(price, state.priceTier)) return;
+      entries.push({
+        fam, size,
+        full: `${fam.key}.${size}`,
+        availCount: state.data.familyRegions.get(fam.key).size,
+        price,
+        vcpu: spec.vcpu != null ? spec.vcpu : null,
+        mem: spec.mem != null ? spec.mem : null
+      });
     });
   });
 
-  // sort: full name
-  entries.sort((a, b) => a.full.localeCompare(b.full, undefined, { numeric: true }));
+  sortEntries(entries);
 
   entries.forEach((entry, idx) => {
     const row = document.createElement("div");
     row.className = "instance-row fade-in";
     row.style.animationDelay = Math.min(idx * 0.004, 0.6) + "s";
+    const priceStr = fmtPrice(entry.price, state.currency);
+    const specBits = [];
+    if (entry.vcpu != null) specBits.push(`${entry.vcpu} vCPU`);
+    if (entry.mem != null)  specBits.push(`${entry.mem} GB`);
+    specBits.push(`${entry.availCount} reg`);
     row.innerHTML = `
       <div>
         <div class="instance-row__name">${entry.full}</div>
@@ -1403,8 +1543,9 @@ function renderInstanceView() {
           ${CAT_LABEL[entry.fam.cat]} · ${entry.fam.vendor} · ${entry.fam.arch === "x86" ? "x86_64" : "arm64"}
         </div>
       </div>
-      <div class="instance-row__avail">
-        <strong>${entry.availCount}</strong>/${state.data.regions.length} regions
+      <div class="instance-row__right">
+        <div class="instance-row__price${priceStr ? "" : " is-na"}" title="On-demand · ${state.priceRef}">${priceStr ? `${priceStr}<span class="unit">/hr</span>` : "—"}</div>
+        <div class="instance-row__spec">${specBits.join(" · ")}</div>
       </div>
     `;
     row.addEventListener("click", () => openInstanceDrawer(entry.fam, entry.size));
@@ -1507,6 +1648,8 @@ function openInstanceDrawer(family, size) {
   });
 
   const fullName = `${family.key}.${size}`;
+  const spec = specOf(family, size) || {};
+  const priceStr = fmtPrice(typeof spec.price === "number" ? spec.price : null, state.currency);
   $("#drawer-head").innerHTML = `
     <div class="drawer__eyebrow">Instance family · ${CAT_LABEL[family.cat]}</div>
     <div class="drawer__title" style="font-family:var(--mono); font-size:36px; letter-spacing:0;">${fullName}</div>
@@ -1514,6 +1657,9 @@ function openInstanceDrawer(family, size) {
     <div class="drawer__meta">
       <span>Vendor <strong>${family.vendor}</strong></span>
       <span>Arch <strong>${family.arch === "x86" ? "x86_64" : "arm64"}</strong></span>
+      ${spec.vcpu != null ? `<span>vCPU <strong>${spec.vcpu}</strong></span>` : ""}
+      ${spec.mem != null ? `<span>Memory <strong>${spec.mem} GB</strong></span>` : ""}
+      <span title="On-demand · ${state.priceRef}">Price <strong>${priceStr ? priceStr + "/hr" : "—"}</strong></span>
       <span><strong>${regions.length}</strong>/${state.data.regions.length} regions</span>
     </div>
     <button class="drawer__close" onclick="closeDrawer()">Close ⤬</button>
@@ -1567,6 +1713,8 @@ function writeHash() {
   if (state.mode !== "region") p.set("mode", state.mode);
   if (state.cat !== "all")     p.set("cat", state.cat);
   if (state.arch !== "all")    p.set("arch", state.arch);
+  if (state.sort !== "name")   p.set("sort", state.sort);
+  if (state.priceTier !== "any") p.set("price", state.priceTier);
   if (state.query.trim())      p.set("q", state.query.trim());
   const h = p.toString();
   history.replaceState(null, "", h ? "#" + h : location.pathname + location.search);
@@ -1576,6 +1724,8 @@ function applyHash() {
   const m = p.get("mode"); if (m === "region" || m === "instance") state.mode = m;
   const c = p.get("cat");  if (c) state.cat = c;
   const a = p.get("arch"); if (a) state.arch = a;
+  const so = p.get("sort");  if (so) state.sort = so;
+  const pt = p.get("price"); if (pt) state.priceTier = pt;
   state.query = p.get("q") || "";
   $$(".filter-tab").forEach(b => {
     const on = b.dataset.mode === state.mode;
@@ -1584,11 +1734,17 @@ function applyHash() {
   });
   $$('.chip[data-cat]').forEach(b => b.classList.toggle("is-active", b.dataset.cat === state.cat));
   $$('.chip[data-arch]').forEach(b => b.classList.toggle("is-active", b.dataset.arch === state.arch));
+  $$('.chip[data-tier]').forEach(b => b.classList.toggle("is-active", b.dataset.tier === state.priceTier));
+  const sortSel = $("#sort"); if (sortSel) sortSel.value = state.sort;
   const s = $("#search"); if (s) s.value = state.query;
 }
 
 function render() {
   if (!state.data) return;   // guard: keyboard shortcut may fire before data.json loads
+  // Sort + price-tier controls apply to the instance view only.
+  const instanceOnly = state.mode === "instance";
+  const sortSel = $("#sort");           if (sortSel)    sortSel.style.display    = instanceOnly ? "" : "none";
+  const priceChips = $("#price-chips"); if (priceChips) priceChips.style.display = instanceOnly ? "" : "none";
   if (state.mode === "region") renderRegionView();
   else renderInstanceView();
   writeHash();
@@ -1616,11 +1772,25 @@ function setArch(a) {
   render();
 }
 
+function setSort(v) {
+  state.sort = v;
+  render();
+}
+
+function setPriceTier(t) {
+  state.priceTier = t;
+  $$('.chip[data-tier]').forEach(b => b.classList.toggle("is-active", b.dataset.tier === t));
+  render();
+}
+
 function init() {
   // Wire up UI
   $$(".filter-tab").forEach(b => b.addEventListener("click", () => setMode(b.dataset.mode)));
   $$(".chip[data-cat]").forEach(b => b.addEventListener("click", () => setCat(b.dataset.cat)));
   $$(".chip[data-arch]").forEach(b => b.addEventListener("click", () => setArch(b.dataset.arch)));
+  $$(".chip[data-tier]").forEach(b => b.addEventListener("click", () => setPriceTier(b.dataset.tier)));
+  const sortSel = $("#sort");
+  if (sortSel) sortSel.addEventListener("change", (e) => setSort(e.target.value));
   $("#search").addEventListener("input", (e) => {
     state.query = e.target.value;
     render();
@@ -1651,6 +1821,8 @@ async function loadData() {
         regions = fresh.regions;
         families = fresh.families;
         timestamp = fresh.generated || timestamp;
+        if (fresh.currency) state.currency = fresh.currency;
+        if (fresh.priceRef) state.priceRef = fresh.priceRef;
         isFresh = true;
       }
     }

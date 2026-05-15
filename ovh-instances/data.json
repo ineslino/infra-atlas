@@ -1,6 +1,9 @@
 {
-  "generated": "2026-05-15T23:20:32Z",
+  "generated": "2026-05-15T23:34:15Z",
   "provider": "ovh",
+  "source": "OVHcloud public order catalogue — no credentials",
+  "currency": "EUR",
+  "priceRef": "GRA",
   "regions": [
     {
       "code": "GRA",
@@ -125,7 +128,24 @@
         "SYD",
         "US-EAST-VA-1",
         "US-WEST-OR-1"
-      ]
+      ],
+      "specs": {
+        "d2-2": {
+          "vcpu": 1,
+          "mem": 2,
+          "price": 0.0104
+        },
+        "d2-4": {
+          "vcpu": 2,
+          "mem": 4,
+          "price": 0.0206
+        },
+        "d2-8": {
+          "vcpu": 4,
+          "mem": 8,
+          "price": 0.0372
+        }
+      }
     },
     {
       "key": "b3",
@@ -139,7 +159,9 @@
         "b3-32",
         "b3-64",
         "b3-128",
-        "b3-256"
+        "b3-256",
+        "b3-512",
+        "b3-640"
       ],
       "in": [
         "GRA",
@@ -154,7 +176,49 @@
         "US-EAST-VA-1",
         "US-WEST-OR-1",
         "MIL"
-      ]
+      ],
+      "specs": {
+        "b3-8": {
+          "vcpu": 2,
+          "mem": 8,
+          "price": 0.0512
+        },
+        "b3-16": {
+          "vcpu": 4,
+          "mem": 16,
+          "price": 0.1023
+        },
+        "b3-32": {
+          "vcpu": 8,
+          "mem": 32,
+          "price": 0.2046
+        },
+        "b3-64": {
+          "vcpu": 16,
+          "mem": 64,
+          "price": 0.4092
+        },
+        "b3-128": {
+          "vcpu": 32,
+          "mem": 128,
+          "price": 0.819
+        },
+        "b3-256": {
+          "vcpu": 64,
+          "mem": 256,
+          "price": 1.637
+        },
+        "b3-512": {
+          "vcpu": 128,
+          "mem": 512,
+          "price": 3.274
+        },
+        "b3-640": {
+          "vcpu": 160,
+          "mem": 640,
+          "price": 4.092
+        }
+      }
     },
     {
       "key": "c3",
@@ -163,12 +227,14 @@
       "vendor": "AMD",
       "desc": "CPU-optimized — high-freq AMD EPYC",
       "sizes": [
+        "c3-4",
         "c3-8",
         "c3-16",
         "c3-32",
         "c3-64",
         "c3-128",
-        "c3-256"
+        "c3-256",
+        "c3-320"
       ],
       "in": [
         "GRA",
@@ -181,7 +247,49 @@
         "SYD",
         "US-EAST-VA-1",
         "US-WEST-OR-1"
-      ]
+      ],
+      "specs": {
+        "c3-4": {
+          "vcpu": 2,
+          "mem": 4,
+          "price": 0.0457
+        },
+        "c3-8": {
+          "vcpu": 4,
+          "mem": 8,
+          "price": 0.0913
+        },
+        "c3-16": {
+          "vcpu": 8,
+          "mem": 16,
+          "price": 0.1825
+        },
+        "c3-32": {
+          "vcpu": 16,
+          "mem": 32,
+          "price": 0.365
+        },
+        "c3-64": {
+          "vcpu": 32,
+          "mem": 64,
+          "price": 0.7301
+        },
+        "c3-128": {
+          "vcpu": 64,
+          "mem": 128,
+          "price": 1.461
+        },
+        "c3-256": {
+          "vcpu": 128,
+          "mem": 256,
+          "price": 2.921
+        },
+        "c3-320": {
+          "vcpu": 160,
+          "mem": 320,
+          "price": 3.651
+        }
+      }
     },
     {
       "key": "r3",
@@ -190,11 +298,13 @@
       "vendor": "AMD",
       "desc": "RAM-optimized — up to 512 GB",
       "sizes": [
+        "r3-16",
         "r3-32",
         "r3-64",
         "r3-128",
         "r3-256",
-        "r3-512"
+        "r3-512",
+        "r3-1024"
       ],
       "in": [
         "GRA",
@@ -206,7 +316,44 @@
         "SGP",
         "US-EAST-VA-1",
         "US-WEST-OR-1"
-      ]
+      ],
+      "specs": {
+        "r3-16": {
+          "vcpu": 2,
+          "mem": 16,
+          "price": 0.0663
+        },
+        "r3-32": {
+          "vcpu": 4,
+          "mem": 32,
+          "price": 0.1324
+        },
+        "r3-64": {
+          "vcpu": 8,
+          "mem": 64,
+          "price": 0.2648
+        },
+        "r3-128": {
+          "vcpu": 16,
+          "mem": 128,
+          "price": 0.53
+        },
+        "r3-256": {
+          "vcpu": 32,
+          "mem": 256,
+          "price": 1.059
+        },
+        "r3-512": {
+          "vcpu": 64,
+          "mem": 512,
+          "price": 2.118
+        },
+        "r3-1024": {
+          "vcpu": 128,
+          "mem": 1024,
+          "price": 4.236
+        }
+      }
     },
     {
       "key": "i1",
@@ -215,10 +362,7 @@
       "vendor": "Intel/AMD",
       "desc": "IOPS-optimized — NVMe-heavy, 1.5 TB to 18 TB",
       "sizes": [
-        "i1-15",
-        "i1-30",
         "i1-45",
-        "i1-60",
         "i1-90",
         "i1-180"
       ],
@@ -230,7 +374,24 @@
         "WAW",
         "SGP",
         "US-EAST-VA-1"
-      ]
+      ],
+      "specs": {
+        "i1-45": {
+          "vcpu": 8,
+          "mem": 45,
+          "price": 0.439
+        },
+        "i1-90": {
+          "vcpu": 16,
+          "mem": 90,
+          "price": 0.879
+        },
+        "i1-180": {
+          "vcpu": 32,
+          "mem": 180,
+          "price": 1.76
+        }
+      }
     },
     {
       "key": "t1",
@@ -241,13 +402,48 @@
       "sizes": [
         "t1-45",
         "t1-90",
-        "t1-180"
+        "t1-180",
+        "t1-le-45",
+        "t1-le-90",
+        "t1-le-180"
       ],
       "in": [
         "GRA",
         "BHS",
         "SGP"
-      ]
+      ],
+      "specs": {
+        "t1-45": {
+          "vcpu": 8,
+          "mem": 45,
+          "price": 0.7
+        },
+        "t1-90": {
+          "vcpu": 18,
+          "mem": 90,
+          "price": 1.4
+        },
+        "t1-180": {
+          "vcpu": 36,
+          "mem": 180,
+          "price": 2.8
+        },
+        "t1-le-45": {
+          "vcpu": 8,
+          "mem": 45,
+          "price": 0.7
+        },
+        "t1-le-90": {
+          "vcpu": 16,
+          "mem": 90,
+          "price": 1.4
+        },
+        "t1-le-180": {
+          "vcpu": 32,
+          "mem": 180,
+          "price": 2.8
+        }
+      }
     },
     {
       "key": "t2",
@@ -256,18 +452,51 @@
       "vendor": "AMD",
       "desc": "NVIDIA A100 / L4 / L40s (current)",
       "sizes": [
+        "t2-45",
+        "t2-90",
+        "t2-180",
         "t2-le-45",
         "t2-le-90",
-        "t2-le-180",
-        "t2-180",
-        "t2-le-360"
+        "t2-le-180"
       ],
       "in": [
         "GRA",
         "BHS",
         "ERI",
         "US-EAST-VA-1"
-      ]
+      ],
+      "specs": {
+        "t2-45": {
+          "vcpu": 15,
+          "mem": 45,
+          "price": 0.8
+        },
+        "t2-90": {
+          "vcpu": 30,
+          "mem": 90,
+          "price": 1.6
+        },
+        "t2-180": {
+          "vcpu": 60,
+          "mem": 180,
+          "price": 3.2
+        },
+        "t2-le-45": {
+          "vcpu": 15,
+          "mem": 45,
+          "price": 0.8
+        },
+        "t2-le-90": {
+          "vcpu": 30,
+          "mem": 90,
+          "price": 1.6
+        },
+        "t2-le-180": {
+          "vcpu": 60,
+          "mem": 180,
+          "price": 3.2
+        }
+      }
     },
     {
       "key": "h100",
@@ -276,15 +505,31 @@
       "vendor": "AMD",
       "desc": "NVIDIA H100 80GB — LLM training",
       "sizes": [
-        "h100-1-380",
-        "h100-2-380",
-        "h100-4-380",
-        "h100-8-380"
+        "h100-380",
+        "h100-760",
+        "h100-1520"
       ],
       "in": [
         "GRA",
         "BHS"
-      ]
+      ],
+      "specs": {
+        "h100-380": {
+          "vcpu": 30,
+          "mem": 380,
+          "price": 2.8
+        },
+        "h100-760": {
+          "vcpu": 60,
+          "mem": 760,
+          "price": 5.6
+        },
+        "h100-1520": {
+          "vcpu": 120,
+          "mem": 1520,
+          "price": 11.2
+        }
+      }
     },
     {
       "key": "HGR-HCI",
@@ -307,7 +552,29 @@
         "ERI",
         "SGP",
         "SYD"
-      ]
+      ],
+      "specs": {
+        "HGR-HCI-i2": {
+          "vcpu": null,
+          "mem": null,
+          "price": null
+        },
+        "HGR-HCI-i5": {
+          "vcpu": null,
+          "mem": null,
+          "price": null
+        },
+        "HGR-HCI-a1": {
+          "vcpu": null,
+          "mem": null,
+          "price": null
+        },
+        "HGR-HCI-a2": {
+          "vcpu": null,
+          "mem": null,
+          "price": null
+        }
+      }
     },
     {
       "key": "HGR-SDS",
@@ -326,7 +593,24 @@
         "SBG",
         "BHS",
         "ERI"
-      ]
+      ],
+      "specs": {
+        "HGR-SDS-1": {
+          "vcpu": null,
+          "mem": null,
+          "price": null
+        },
+        "HGR-SDS-2": {
+          "vcpu": null,
+          "mem": null,
+          "price": null
+        },
+        "HGR-SDS-3": {
+          "vcpu": null,
+          "mem": null,
+          "price": null
+        }
+      }
     },
     {
       "key": "Advance",
@@ -355,7 +639,44 @@
         "SYD",
         "US-EAST-VA-1",
         "US-WEST-OR-1"
-      ]
+      ],
+      "specs": {
+        "Advance-1": {
+          "vcpu": null,
+          "mem": null,
+          "price": null
+        },
+        "Advance-2": {
+          "vcpu": null,
+          "mem": null,
+          "price": null
+        },
+        "Advance-3": {
+          "vcpu": null,
+          "mem": null,
+          "price": null
+        },
+        "Advance-4": {
+          "vcpu": null,
+          "mem": null,
+          "price": null
+        },
+        "Advance-5": {
+          "vcpu": null,
+          "mem": null,
+          "price": null
+        },
+        "Advance-6": {
+          "vcpu": null,
+          "mem": null,
+          "price": null
+        },
+        "Advance-Gen2": {
+          "vcpu": null,
+          "mem": null,
+          "price": null
+        }
+      }
     },
     {
       "key": "Rise",
@@ -383,7 +704,39 @@
         "SYD",
         "US-EAST-VA-1",
         "US-WEST-OR-1"
-      ]
+      ],
+      "specs": {
+        "Rise-1": {
+          "vcpu": null,
+          "mem": null,
+          "price": null
+        },
+        "Rise-2": {
+          "vcpu": null,
+          "mem": null,
+          "price": null
+        },
+        "Rise-3": {
+          "vcpu": null,
+          "mem": null,
+          "price": null
+        },
+        "Rise-4": {
+          "vcpu": null,
+          "mem": null,
+          "price": null
+        },
+        "Rise-LE-1": {
+          "vcpu": null,
+          "mem": null,
+          "price": null
+        },
+        "Rise-LE-2": {
+          "vcpu": null,
+          "mem": null,
+          "price": null
+        }
+      }
     },
     {
       "key": "Scale",
@@ -409,7 +762,44 @@
         "ERI",
         "SGP",
         "SYD"
-      ]
+      ],
+      "specs": {
+        "Scale-GPU": {
+          "vcpu": null,
+          "mem": null,
+          "price": null
+        },
+        "Scale-LE-1": {
+          "vcpu": null,
+          "mem": null,
+          "price": null
+        },
+        "Scale-LE-2": {
+          "vcpu": null,
+          "mem": null,
+          "price": null
+        },
+        "Scale-1": {
+          "vcpu": null,
+          "mem": null,
+          "price": null
+        },
+        "Scale-2": {
+          "vcpu": null,
+          "mem": null,
+          "price": null
+        },
+        "Scale-3": {
+          "vcpu": null,
+          "mem": null,
+          "price": null
+        },
+        "Scale-4": {
+          "vcpu": null,
+          "mem": null,
+          "price": null
+        }
+      }
     },
     {
       "key": "Storage",
@@ -430,7 +820,34 @@
         "SBG",
         "BHS",
         "ERI"
-      ]
+      ],
+      "specs": {
+        "FS-12T": {
+          "vcpu": null,
+          "mem": null,
+          "price": null
+        },
+        "FS-24T": {
+          "vcpu": null,
+          "mem": null,
+          "price": null
+        },
+        "FS-48T": {
+          "vcpu": null,
+          "mem": null,
+          "price": null
+        },
+        "FS-72T": {
+          "vcpu": null,
+          "mem": null,
+          "price": null
+        },
+        "FS-96T": {
+          "vcpu": null,
+          "mem": null,
+          "price": null
+        }
+      }
     },
     {
       "key": "HPC",
@@ -447,7 +864,24 @@
         "GRA",
         "RBX",
         "SBG"
-      ]
+      ],
+      "specs": {
+        "HPC-1": {
+          "vcpu": null,
+          "mem": null,
+          "price": null
+        },
+        "HPC-2": {
+          "vcpu": null,
+          "mem": null,
+          "price": null
+        },
+        "HPC-3": {
+          "vcpu": null,
+          "mem": null,
+          "price": null
+        }
+      }
     }
   ]
 }
