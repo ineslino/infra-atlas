@@ -1,5 +1,5 @@
 {
-  "generated": "2026-05-15T11:13:29Z",
+  "generated": "2026-05-15T21:19:00Z",
   "cities": [
     {
       "city": "Ashburn, Virginia",
@@ -1320,13 +1320,6 @@
       "lng": 39.19,
       "regions": [
         {
-          "p": "gcp",
-          "code": "me-central1",
-          "name": "Doha (QA)",
-          "az": 3,
-          "since": 2023
-        },
-        {
           "p": "oci",
           "code": "me-jeddah-1",
           "name": "Jeddah",
@@ -1349,6 +1342,13 @@
           "name": "Qatar Central",
           "az": 3,
           "since": 2022
+        },
+        {
+          "p": "gcp",
+          "code": "me-central1",
+          "name": "Doha (QA)",
+          "az": 3,
+          "since": 2023
         }
       ]
     },
