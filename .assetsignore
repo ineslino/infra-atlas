@@ -1,0 +1,12 @@
+# Files in the repo that must NOT be served as part of the published site.
+# Cloudflare Workers static assets reads this like a .gitignore.
+.git
+.github
+.wrangler
+.gitignore
+.assetsignore
+wrangler.jsonc
+wrangler.toml
+README.md
+LICENSE
+refresh.sh

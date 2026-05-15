@@ -38,8 +38,8 @@ infraatlas/
 ├── self-hosted-apim/           # 11 · Kong · Gravitee · IBM Almanac
 │   └── index.html
 │
-├── _headers                    # Cloudflare Pages cache + security rules
-├── _redirects                  # www → apex, tidy URLs
+├── _headers                    # Cloudflare cache + security rules
+├── .assetsignore               # files excluded from the published site
 ├── .github/workflows/refresh.yml   # daily cron, only the data-driven instruments
 ├── LICENSE
 └── README.md
@@ -74,7 +74,7 @@ Landing is just an editorial index — instruments are independent.
    - **Framework preset**: None
    - **Build command**: *(empty)*
    - **Output directory**: `/`
-4. **Custom domains**: add `infraatlas.dev` and `www.infraatlas.dev`. The `_redirects` file handles the `www → apex` redirect.
+4. **Custom domains**: add `infraatlas.dev` and `www.infraatlas.dev`. For a canonical `www → apex` redirect, add a Cloudflare **Redirect Rule** (Rules → Redirect Rules) — the Workers `_redirects` file only supports relative paths, not cross-domain.
 5. Cloudflare provisions TLS automatically.
 
 ### GitHub Actions data refresh
