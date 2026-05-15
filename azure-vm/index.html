@@ -379,6 +379,41 @@ a.masthead__back::before { display: none; }
   margin-right: 4px;
 }
 
+.chip-group {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  align-items: center;
+}
+
+.result-meta__tools {
+  display: flex;
+  align-items: baseline;
+  gap: 18px;
+}
+
+.sort-select {
+  background: var(--ink);
+  border: 1px solid var(--line-2);
+  color: var(--paper-2);
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  padding: 7px 28px 7px 13px;
+  border-radius: 99px;
+  cursor: pointer;
+  outline: none;
+  -webkit-appearance: none;
+  appearance: none;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 10 10'><path d='M2 3.5 L5 6.5 L8 3.5' stroke='%23F4EFE6' stroke-width='1.3' fill='none' stroke-opacity='0.5'/></svg>");
+  background-repeat: no-repeat;
+  background-position: right 11px center;
+  transition: border-color 0.15s ease, color 0.15s ease;
+}
+
+.sort-select:hover { border-color: var(--paper-3); color: var(--paper); }
+.sort-select:focus { border-color: var(--accent); }
+
 .chip {
   background: transparent;
   border: 1px solid var(--line-2);
@@ -622,19 +657,42 @@ a.masthead__back::before { display: none; }
   gap: 7px;
 }
 
-.instance-row__avail {
+.instance-row__right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 3px;
   text-align: right;
+}
+
+.instance-row__price {
   font-family: var(--mono);
-  font-size: 11px;
-  color: var(--paper-2);
-  letter-spacing: 0.04em;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--accent);
+  letter-spacing: 0.01em;
   white-space: nowrap;
 }
 
-.instance-row__avail strong {
-  color: var(--accent);
-  font-size: 14px;
-  font-weight: 500;
+.instance-row__price .unit {
+  font-size: 9.5px;
+  font-weight: 400;
+  color: var(--paper-3);
+  letter-spacing: 0.05em;
+  margin-left: 1px;
+}
+
+.instance-row__price.is-na {
+  color: var(--paper-4);
+  font-weight: 400;
+}
+
+.instance-row__spec {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--paper-3);
+  letter-spacing: 0.05em;
+  white-space: nowrap;
 }
 
 /* ─────────────── DRAWER (region/instance detail) ─────────────── */
@@ -727,7 +785,8 @@ a.masthead__back::before { display: none; }
 
 .drawer__meta {
   display: flex;
-  gap: 24px;
+  flex-wrap: wrap;
+  gap: 10px 24px;
   margin-top: 18px;
   font-family: var(--mono);
   font-size: 11px;
@@ -1026,12 +1085,29 @@ a.masthead__back::before { display: none; }
       <button class="chip is-active" data-arch="all"><span class="dot"></span>All</button>
       <button class="chip" data-arch="x86"><span class="dot"></span>x86_64</button>
       <button class="chip" data-arch="arm"><span class="dot"></span>arm64</button>
+      <span class="chip-group" id="price-chips">
+        <span class="filter-chips__label" style="margin-left: 16px;">Price</span>
+        <button class="chip is-active" data-tier="any">Any</button>
+        <button class="chip" data-tier="0">&lt; $0.25</button>
+        <button class="chip" data-tier="1">$0.25–1</button>
+        <button class="chip" data-tier="2">$1–4</button>
+        <button class="chip" data-tier="3">≥ $4</button>
+      </span>
     </div>
   </section>
 
   <div class="result-meta">
     <div class="result-meta__title" id="result-title">All regions</div>
-    <div class="result-meta__count"><strong id="result-count">0</strong> shown</div>
+    <div class="result-meta__tools">
+      <select class="sort-select" id="sort" aria-label="Sort instance types">
+        <option value="name">Sort · Name</option>
+        <option value="price-asc">Sort · Price ↑</option>
+        <option value="price-desc">Sort · Price ↓</option>
+        <option value="vcpu-desc">Sort · vCPU ↓</option>
+        <option value="mem-desc">Sort · Memory ↓</option>
+      </select>
+      <div class="result-meta__count"><strong id="result-count">0</strong> shown</div>
+    </div>
   </div>
 
   <main class="results" id="results">
@@ -1070,7 +1146,7 @@ a.masthead__back::before { display: none; }
 //  The page upgrades to ./data.json when that file is available.
 // ───────────────────────────────────────────────────────────────────
 
-const SNAPSHOT_DATE = "2026-05-14T14:32:00Z";
+const SNAPSHOT_DATE = "2026-05-15T23:51:23Z";
 
 const REGIONS = [
   { code: "eastus",            name: "Virginia",       area: "Americas",     flag: "🇺🇸", since: 2010 },
@@ -1133,174 +1209,217 @@ const REGIONS = [
 
 // VM series — keyed by series prefix; "in: \"*\"" means available in all listed regions.
 const FAMILIES = [
-  // ── Burstable
-  { key:"B",      cat:"general",      arch:"x86", vendor:"Intel",  desc:"Burstable, baseline + credits, low cost",
-    sizes:["B1ls","B1s","B1ms","B2s","B2ms","B4ms","B8ms","B12ms","B16ms","B20ms"], in:"*"},
-  { key:"Bsv2",   cat:"general",      arch:"x86", vendor:"Intel",  desc:"Newer burstable, premium storage",
+  // ── General purpose
+  { key:"B", cat:"general", arch:"x86", vendor:"Intel", desc:"Burstable, baseline + credits, low cost",
+    sizes:["B1ls","B1s","B1ms","B2s","B2ms","B4ms","B8ms","B12ms","B16ms","B20ms"],
+    specs:{"B1ls":{vcpu:1,mem:null,price:0.006},"B1s":{vcpu:1,mem:null,price:0.012},"B1ms":{vcpu:1,mem:null,price:0.024},"B2s":{vcpu:2,mem:null,price:0.048},"B2ms":{vcpu:2,mem:null,price:0.096},"B4ms":{vcpu:4,mem:null,price:0.192},"B8ms":{vcpu:8,mem:null,price:0.384},"B12ms":{vcpu:12,mem:null,price:0.576},"B16ms":{vcpu:16,mem:null,price:0.768},"B20ms":{vcpu:20,mem:null,price:0.96}},
+    in:"*" },
+  { key:"Bsv2", cat:"general", arch:"x86", vendor:"Intel", desc:"Newer burstable, premium storage",
     sizes:["B2s_v2","B4s_v2","B8s_v2","B16s_v2","B32s_v2","B48s_v2"],
-    in:["eastus","eastus2","westus2","westus3","centralus","northeurope","westeurope","uksouth","francecentral","germanywestcentral","swedencentral","japaneast","koreacentral","southeastasia","australiaeast"]},
-
-  // ── General purpose (Intel)
-  { key:"Dv3",    cat:"general",      arch:"x86", vendor:"Intel",  desc:"2nd gen Broadwell/Skylake (legacy)",
-    sizes:["D2_v3","D4_v3","D8_v3","D16_v3","D32_v3","D48_v3","D64_v3"], in:"*"},
-  { key:"Dsv3",   cat:"general",      arch:"x86", vendor:"Intel",  desc:"Dv3 + premium storage (legacy)",
-    sizes:["D2s_v3","D4s_v3","D8s_v3","D16s_v3","D32s_v3","D48s_v3","D64s_v3"], in:"*"},
-  { key:"Dsv4",   cat:"general",      arch:"x86", vendor:"Intel",  desc:"Cascade Lake Xeon Platinum",
-    sizes:["D2s_v4","D4s_v4","D8s_v4","D16s_v4","D32s_v4","D48s_v4","D64s_v4"], in:"*"},
-  { key:"Ddsv4",  cat:"general",      arch:"x86", vendor:"Intel",  desc:"Dsv4 + local NVMe SSD",
-    sizes:["D2ds_v4","D4ds_v4","D8ds_v4","D16ds_v4","D32ds_v4","D48ds_v4","D64ds_v4"], in:"*"},
-  { key:"Dsv5",   cat:"general",      arch:"x86", vendor:"Intel",  desc:"3rd gen Ice Lake, premium storage",
-    sizes:["D2s_v5","D4s_v5","D8s_v5","D16s_v5","D32s_v5","D48s_v5","D64s_v5","D96s_v5"], in:"*"},
-  { key:"Ddsv5",  cat:"general",      arch:"x86", vendor:"Intel",  desc:"Dsv5 + local NVMe SSD",
-    sizes:["D2ds_v5","D4ds_v5","D8ds_v5","D16ds_v5","D32ds_v5","D48ds_v5","D64ds_v5","D96ds_v5"], in:"*"},
-
-  // ── General purpose (AMD)
-  { key:"Dasv4",  cat:"general",      arch:"x86", vendor:"AMD",    desc:"AMD EPYC Rome (2nd gen)",
+    specs:{"B2s_v2":{vcpu:2,mem:null,price:0.096},"B4s_v2":{vcpu:4,mem:null,price:0.192},"B8s_v2":{vcpu:8,mem:null,price:0.384},"B16s_v2":{vcpu:16,mem:null,price:0.768},"B32s_v2":{vcpu:32,mem:null,price:1.536},"B48s_v2":{vcpu:48,mem:null,price:null}},
+    in:["eastus","eastus2","westus2","westus3","centralus","northeurope","westeurope","uksouth","francecentral","germanywestcentral","swedencentral","japaneast","koreacentral","southeastasia","australiaeast"] },
+  { key:"Dv3", cat:"general", arch:"x86", vendor:"Intel", desc:"2nd gen Broadwell/Skylake (legacy)",
+    sizes:["D2_v3","D4_v3","D8_v3","D16_v3","D32_v3","D48_v3","D64_v3"],
+    specs:{"D2_v3":{vcpu:2,mem:8,price:0.12},"D4_v3":{vcpu:4,mem:16,price:0.24},"D8_v3":{vcpu:8,mem:32,price:0.48},"D16_v3":{vcpu:16,mem:64,price:0.96},"D32_v3":{vcpu:32,mem:128,price:1.92},"D48_v3":{vcpu:48,mem:192,price:2.88},"D64_v3":{vcpu:64,mem:256,price:3.84}},
+    in:"*" },
+  { key:"Dsv3", cat:"general", arch:"x86", vendor:"Intel", desc:"Dv3 + premium storage (legacy)",
+    sizes:["D2s_v3","D4s_v3","D8s_v3","D16s_v3","D32s_v3","D48s_v3","D64s_v3"],
+    specs:{"D2s_v3":{vcpu:2,mem:8,price:0.12},"D4s_v3":{vcpu:4,mem:16,price:0.24},"D8s_v3":{vcpu:8,mem:32,price:0.48},"D16s_v3":{vcpu:16,mem:64,price:0.96},"D32s_v3":{vcpu:32,mem:128,price:1.92},"D48s_v3":{vcpu:48,mem:192,price:2.88},"D64s_v3":{vcpu:64,mem:256,price:3.84}},
+    in:"*" },
+  { key:"Dsv4", cat:"general", arch:"x86", vendor:"Intel", desc:"Cascade Lake Xeon Platinum",
+    sizes:["D2s_v4","D4s_v4","D8s_v4","D16s_v4","D32s_v4","D48s_v4","D64s_v4"],
+    specs:{"D2s_v4":{vcpu:2,mem:8,price:0.115},"D4s_v4":{vcpu:4,mem:16,price:0.23},"D8s_v4":{vcpu:8,mem:32,price:0.46},"D16s_v4":{vcpu:16,mem:64,price:0.92},"D32s_v4":{vcpu:32,mem:128,price:1.84},"D48s_v4":{vcpu:48,mem:192,price:2.76},"D64s_v4":{vcpu:64,mem:256,price:3.68}},
+    in:"*" },
+  { key:"Ddsv4", cat:"general", arch:"x86", vendor:"Intel", desc:"Dsv4 + local NVMe SSD",
+    sizes:["D2ds_v4","D4ds_v4","D8ds_v4","D16ds_v4","D32ds_v4","D48ds_v4","D64ds_v4"],
+    specs:{"D2ds_v4":{vcpu:2,mem:8,price:0.136},"D4ds_v4":{vcpu:4,mem:16,price:0.272},"D8ds_v4":{vcpu:8,mem:32,price:0.544},"D16ds_v4":{vcpu:16,mem:64,price:1.088},"D32ds_v4":{vcpu:32,mem:128,price:2.176},"D48ds_v4":{vcpu:48,mem:192,price:3.264},"D64ds_v4":{vcpu:64,mem:256,price:4.352}},
+    in:"*" },
+  { key:"Dsv5", cat:"general", arch:"x86", vendor:"Intel", desc:"3rd gen Ice Lake, premium storage",
+    sizes:["D2s_v5","D4s_v5","D8s_v5","D16s_v5","D32s_v5","D48s_v5","D64s_v5","D96s_v5"],
+    specs:{"D2s_v5":{vcpu:2,mem:8,price:0.115},"D4s_v5":{vcpu:4,mem:16,price:0.23},"D8s_v5":{vcpu:8,mem:32,price:0.46},"D16s_v5":{vcpu:16,mem:64,price:0.92},"D32s_v5":{vcpu:32,mem:128,price:1.84},"D48s_v5":{vcpu:48,mem:192,price:2.76},"D64s_v5":{vcpu:64,mem:256,price:3.68},"D96s_v5":{vcpu:96,mem:384,price:5.52}},
+    in:"*" },
+  { key:"Ddsv5", cat:"general", arch:"x86", vendor:"Intel", desc:"Dsv5 + local NVMe SSD",
+    sizes:["D2ds_v5","D4ds_v5","D8ds_v5","D16ds_v5","D32ds_v5","D48ds_v5","D64ds_v5","D96ds_v5"],
+    specs:{"D2ds_v5":{vcpu:2,mem:8,price:0.136},"D4ds_v5":{vcpu:4,mem:16,price:0.272},"D8ds_v5":{vcpu:8,mem:32,price:0.544},"D16ds_v5":{vcpu:16,mem:64,price:1.088},"D32ds_v5":{vcpu:32,mem:128,price:2.176},"D48ds_v5":{vcpu:48,mem:192,price:3.264},"D64ds_v5":{vcpu:64,mem:256,price:4.352},"D96ds_v5":{vcpu:96,mem:384,price:6.528}},
+    in:"*" },
+  { key:"Dasv4", cat:"general", arch:"x86", vendor:"AMD", desc:"AMD EPYC Rome (2nd gen)",
     sizes:["D2as_v4","D4as_v4","D8as_v4","D16as_v4","D32as_v4","D48as_v4","D64as_v4","D96as_v4"],
-    in:["eastus","eastus2","westus","westus2","westus3","centralus","northcentralus","southcentralus","canadacentral","northeurope","westeurope","uksouth","ukwest","francecentral","germanywestcentral","swedencentral","switzerlandnorth","norwayeast","japaneast","koreacentral","southeastasia","eastasia","australiaeast","centralindia","southafricanorth","uaenorth","brazilsouth"]},
-  { key:"Dasv5",  cat:"general",      arch:"x86", vendor:"AMD",    desc:"AMD EPYC Milan (3rd gen)",
+    specs:{"D2as_v4":{vcpu:2,mem:8,price:0.115},"D4as_v4":{vcpu:4,mem:16,price:0.23},"D8as_v4":{vcpu:8,mem:32,price:0.46},"D16as_v4":{vcpu:16,mem:64,price:0.92},"D32as_v4":{vcpu:32,mem:128,price:1.84},"D48as_v4":{vcpu:48,mem:192,price:2.76},"D64as_v4":{vcpu:64,mem:256,price:3.68},"D96as_v4":{vcpu:96,mem:384,price:5.52}},
+    in:["eastus","eastus2","westus","westus2","westus3","centralus","northcentralus","southcentralus","canadacentral","northeurope","westeurope","uksouth","ukwest","francecentral","germanywestcentral","swedencentral","switzerlandnorth","norwayeast","japaneast","koreacentral","southeastasia","eastasia","australiaeast","centralindia","southafricanorth","uaenorth","brazilsouth"] },
+  { key:"Dasv5", cat:"general", arch:"x86", vendor:"AMD", desc:"AMD EPYC Milan (3rd gen)",
     sizes:["D2as_v5","D4as_v5","D8as_v5","D16as_v5","D32as_v5","D48as_v5","D64as_v5","D96as_v5"],
-    in:["eastus","eastus2","westus2","westus3","centralus","southcentralus","northeurope","westeurope","uksouth","francecentral","germanywestcentral","swedencentral","switzerlandnorth","japaneast","koreacentral","southeastasia","eastasia","australiaeast","centralindia","brazilsouth","uaenorth"]},
-  { key:"Dadsv5", cat:"general",      arch:"x86", vendor:"AMD",    desc:"AMD Milan + local NVMe",
+    specs:{"D2as_v5":{vcpu:2,mem:8,price:0.104},"D4as_v5":{vcpu:4,mem:16,price:0.208},"D8as_v5":{vcpu:8,mem:32,price:0.416},"D16as_v5":{vcpu:16,mem:64,price:0.832},"D32as_v5":{vcpu:32,mem:128,price:1.664},"D48as_v5":{vcpu:48,mem:192,price:2.496},"D64as_v5":{vcpu:64,mem:256,price:3.328},"D96as_v5":{vcpu:96,mem:384,price:4.992}},
+    in:["eastus","eastus2","westus2","westus3","centralus","southcentralus","northeurope","westeurope","uksouth","francecentral","germanywestcentral","swedencentral","switzerlandnorth","japaneast","koreacentral","southeastasia","eastasia","australiaeast","centralindia","brazilsouth","uaenorth"] },
+  { key:"Dadsv5", cat:"general", arch:"x86", vendor:"AMD", desc:"AMD Milan + local NVMe",
     sizes:["D2ads_v5","D4ads_v5","D8ads_v5","D16ads_v5","D32ads_v5","D48ads_v5","D64ads_v5","D96ads_v5"],
-    in:["eastus","eastus2","westus2","westus3","northeurope","westeurope","uksouth","francecentral","germanywestcentral","swedencentral","japaneast","southeastasia","australiaeast"]},
-
-  // ── General purpose (ARM)
-  { key:"Dpsv5",  cat:"general",      arch:"arm", vendor:"Ampere", desc:"Ampere Altra ARM, premium storage",
+    specs:{"D2ads_v5":{vcpu:2,mem:8,price:0.125},"D4ads_v5":{vcpu:4,mem:16,price:0.25},"D8ads_v5":{vcpu:8,mem:32,price:0.5},"D16ads_v5":{vcpu:16,mem:64,price:1},"D32ads_v5":{vcpu:32,mem:128,price:2},"D48ads_v5":{vcpu:48,mem:192,price:3},"D64ads_v5":{vcpu:64,mem:256,price:4},"D96ads_v5":{vcpu:96,mem:384,price:6}},
+    in:["eastus","eastus2","westus2","westus3","northeurope","westeurope","uksouth","francecentral","germanywestcentral","swedencentral","japaneast","southeastasia","australiaeast"] },
+  { key:"Dpsv5", cat:"general", arch:"arm", vendor:"Ampere", desc:"Ampere Altra ARM, premium storage",
     sizes:["D2ps_v5","D4ps_v5","D8ps_v5","D16ps_v5","D32ps_v5","D48ps_v5","D64ps_v5"],
-    in:["eastus","eastus2","westus2","westus3","centralus","northeurope","westeurope","uksouth","francecentral","germanywestcentral","swedencentral","japaneast","koreacentral","southeastasia","australiaeast"]},
-  { key:"Dpdsv5", cat:"general",      arch:"arm", vendor:"Ampere", desc:"Dpsv5 + local NVMe",
+    specs:{"D2ps_v5":{vcpu:2,mem:8,price:0.092},"D4ps_v5":{vcpu:4,mem:16,price:0.184},"D8ps_v5":{vcpu:8,mem:32,price:0.368},"D16ps_v5":{vcpu:16,mem:64,price:0.736},"D32ps_v5":{vcpu:32,mem:128,price:1.472},"D48ps_v5":{vcpu:48,mem:192,price:2.208},"D64ps_v5":{vcpu:64,mem:256,price:2.944}},
+    in:["eastus","eastus2","westus2","westus3","centralus","northeurope","westeurope","uksouth","francecentral","germanywestcentral","swedencentral","japaneast","koreacentral","southeastasia","australiaeast"] },
+  { key:"Dpdsv5", cat:"general", arch:"arm", vendor:"Ampere", desc:"Dpsv5 + local NVMe",
     sizes:["D2pds_v5","D4pds_v5","D8pds_v5","D16pds_v5","D32pds_v5","D48pds_v5","D64pds_v5"],
-    in:["eastus","eastus2","westus2","westus3","northeurope","westeurope","uksouth","francecentral","germanywestcentral","japaneast","southeastasia","australiaeast"]},
-  { key:"Dpsv6",  cat:"general",      arch:"arm", vendor:"Cobalt", desc:"Microsoft Cobalt 100 ARM (newest)",
+    specs:{"D2pds_v5":{vcpu:2,mem:8,price:0.109},"D4pds_v5":{vcpu:4,mem:16,price:0.218},"D8pds_v5":{vcpu:8,mem:32,price:0.436},"D16pds_v5":{vcpu:16,mem:64,price:0.872},"D32pds_v5":{vcpu:32,mem:128,price:1.744},"D48pds_v5":{vcpu:48,mem:192,price:2.616},"D64pds_v5":{vcpu:64,mem:256,price:3.488}},
+    in:["eastus","eastus2","westus2","westus3","northeurope","westeurope","uksouth","francecentral","germanywestcentral","japaneast","southeastasia","australiaeast"] },
+  { key:"Dpsv6", cat:"general", arch:"arm", vendor:"Cobalt", desc:"Microsoft Cobalt 100 ARM (newest)",
     sizes:["D2ps_v6","D4ps_v6","D8ps_v6","D16ps_v6","D32ps_v6","D48ps_v6","D64ps_v6","D96ps_v6"],
-    in:["eastus","eastus2","westus2","westus3","northeurope","westeurope","japaneast","southeastasia","australiaeast"]},
-
-  // ── Memory optimized (Intel)
-  { key:"Esv3",   cat:"memory",       arch:"x86", vendor:"Intel",  desc:"2nd gen memory-optimized (legacy)",
-    sizes:["E2s_v3","E4s_v3","E8s_v3","E16s_v3","E20s_v3","E32s_v3","E48s_v3","E64s_v3"], in:"*"},
-  { key:"Esv4",   cat:"memory",       arch:"x86", vendor:"Intel",  desc:"Cascade Lake memory",
-    sizes:["E2s_v4","E4s_v4","E8s_v4","E16s_v4","E20s_v4","E32s_v4","E48s_v4","E64s_v4"], in:"*"},
-  { key:"Esv5",   cat:"memory",       arch:"x86", vendor:"Intel",  desc:"Ice Lake memory, premium storage",
-    sizes:["E2s_v5","E4s_v5","E8s_v5","E16s_v5","E20s_v5","E32s_v5","E48s_v5","E64s_v5","E96s_v5","E104s_v5"], in:"*"},
-  { key:"Edsv5",  cat:"memory",       arch:"x86", vendor:"Intel",  desc:"Esv5 + local NVMe",
-    sizes:["E2ds_v5","E4ds_v5","E8ds_v5","E16ds_v5","E20ds_v5","E32ds_v5","E48ds_v5","E64ds_v5","E96ds_v5","E104ids_v5"], in:"*"},
-
-  // ── Memory optimized (AMD)
-  { key:"Easv4",  cat:"memory",       arch:"x86", vendor:"AMD",    desc:"AMD Rome memory",
+    specs:{"D2ps_v6":{vcpu:2,mem:8,price:0.0838},"D4ps_v6":{vcpu:4,mem:16,price:0.168},"D8ps_v6":{vcpu:8,mem:32,price:0.335},"D16ps_v6":{vcpu:16,mem:64,price:0.67},"D32ps_v6":{vcpu:32,mem:128,price:1.341},"D48ps_v6":{vcpu:48,mem:192,price:2.011},"D64ps_v6":{vcpu:64,mem:256,price:2.682},"D96ps_v6":{vcpu:96,mem:384,price:4.022}},
+    in:["eastus","eastus2","westus2","westus3","northeurope","westeurope","japaneast","southeastasia","australiaeast"] },
+  // ── Memory optimized
+  { key:"Esv3", cat:"memory", arch:"x86", vendor:"Intel", desc:"2nd gen memory-optimized (legacy)",
+    sizes:["E2s_v3","E4s_v3","E8s_v3","E16s_v3","E20s_v3","E32s_v3","E48s_v3","E64s_v3"],
+    specs:{"E2s_v3":{vcpu:2,mem:16,price:0.16},"E4s_v3":{vcpu:4,mem:32,price:0.32},"E8s_v3":{vcpu:8,mem:64,price:0.64},"E16s_v3":{vcpu:16,mem:128,price:1.28},"E20s_v3":{vcpu:20,mem:160,price:1.6},"E32s_v3":{vcpu:32,mem:256,price:2.56},"E48s_v3":{vcpu:48,mem:384,price:3.647},"E64s_v3":{vcpu:64,mem:512,price:4.376}},
+    in:"*" },
+  { key:"Esv4", cat:"memory", arch:"x86", vendor:"Intel", desc:"Cascade Lake memory",
+    sizes:["E2s_v4","E4s_v4","E8s_v4","E16s_v4","E20s_v4","E32s_v4","E48s_v4","E64s_v4"],
+    specs:{"E2s_v4":{vcpu:2,mem:16,price:0.152},"E4s_v4":{vcpu:4,mem:32,price:0.304},"E8s_v4":{vcpu:8,mem:64,price:0.608},"E16s_v4":{vcpu:16,mem:128,price:1.216},"E20s_v4":{vcpu:20,mem:160,price:1.52},"E32s_v4":{vcpu:32,mem:256,price:2.432},"E48s_v4":{vcpu:48,mem:384,price:3.648},"E64s_v4":{vcpu:64,mem:512,price:4.864}},
+    in:"*" },
+  { key:"Esv5", cat:"memory", arch:"x86", vendor:"Intel", desc:"Ice Lake memory, premium storage",
+    sizes:["E2s_v5","E4s_v5","E8s_v5","E16s_v5","E20s_v5","E32s_v5","E48s_v5","E64s_v5","E96s_v5","E104s_v5"],
+    specs:{"E2s_v5":{vcpu:2,mem:16,price:0.152},"E4s_v5":{vcpu:4,mem:32,price:0.304},"E8s_v5":{vcpu:8,mem:64,price:0.608},"E16s_v5":{vcpu:16,mem:128,price:1.216},"E20s_v5":{vcpu:20,mem:160,price:1.52},"E32s_v5":{vcpu:32,mem:256,price:2.432},"E48s_v5":{vcpu:48,mem:384,price:3.648},"E64s_v5":{vcpu:64,mem:512,price:4.864},"E96s_v5":{vcpu:96,mem:672,price:7.296},"E104s_v5":{vcpu:104,mem:672,price:null}},
+    in:"*" },
+  { key:"Edsv5", cat:"memory", arch:"x86", vendor:"Intel", desc:"Esv5 + local NVMe",
+    sizes:["E2ds_v5","E4ds_v5","E8ds_v5","E16ds_v5","E20ds_v5","E32ds_v5","E48ds_v5","E64ds_v5","E96ds_v5","E104ids_v5"],
+    specs:{"E2ds_v5":{vcpu:2,mem:16,price:0.173},"E4ds_v5":{vcpu:4,mem:32,price:0.346},"E8ds_v5":{vcpu:8,mem:64,price:0.692},"E16ds_v5":{vcpu:16,mem:128,price:1.384},"E20ds_v5":{vcpu:20,mem:160,price:1.73},"E32ds_v5":{vcpu:32,mem:256,price:2.768},"E48ds_v5":{vcpu:48,mem:384,price:4.152},"E64ds_v5":{vcpu:64,mem:512,price:5.536},"E96ds_v5":{vcpu:96,mem:672,price:8.304},"E104ids_v5":{vcpu:104,mem:672,price:9.896}},
+    in:"*" },
+  { key:"Easv4", cat:"memory", arch:"x86", vendor:"AMD", desc:"AMD Rome memory",
     sizes:["E2as_v4","E4as_v4","E8as_v4","E16as_v4","E20as_v4","E32as_v4","E48as_v4","E64as_v4","E96as_v4"],
-    in:["eastus","eastus2","westus","westus2","westus3","centralus","northcentralus","southcentralus","canadacentral","northeurope","westeurope","uksouth","ukwest","francecentral","germanywestcentral","swedencentral","switzerlandnorth","norwayeast","japaneast","koreacentral","southeastasia","eastasia","australiaeast","centralindia","southafricanorth","uaenorth","brazilsouth"]},
-  { key:"Easv5",  cat:"memory",       arch:"x86", vendor:"AMD",    desc:"AMD Milan memory",
+    specs:{"E2as_v4":{vcpu:2,mem:16,price:0.152},"E4as_v4":{vcpu:4,mem:32,price:0.304},"E8as_v4":{vcpu:8,mem:64,price:0.608},"E16as_v4":{vcpu:16,mem:128,price:1.216},"E20as_v4":{vcpu:20,mem:160,price:1.52},"E32as_v4":{vcpu:32,mem:256,price:2.432},"E48as_v4":{vcpu:48,mem:384,price:3.648},"E64as_v4":{vcpu:64,mem:512,price:4.864},"E96as_v4":{vcpu:96,mem:672,price:7.296}},
+    in:["eastus","eastus2","westus","westus2","westus3","centralus","northcentralus","southcentralus","canadacentral","northeurope","westeurope","uksouth","ukwest","francecentral","germanywestcentral","swedencentral","switzerlandnorth","norwayeast","japaneast","koreacentral","southeastasia","eastasia","australiaeast","centralindia","southafricanorth","uaenorth","brazilsouth"] },
+  { key:"Easv5", cat:"memory", arch:"x86", vendor:"AMD", desc:"AMD Milan memory",
     sizes:["E2as_v5","E4as_v5","E8as_v5","E16as_v5","E20as_v5","E32as_v5","E48as_v5","E64as_v5","E96as_v5"],
-    in:["eastus","eastus2","westus2","westus3","centralus","southcentralus","northeurope","westeurope","uksouth","francecentral","germanywestcentral","swedencentral","japaneast","koreacentral","southeastasia","eastasia","australiaeast","centralindia","brazilsouth","uaenorth"]},
-  { key:"Eadsv5", cat:"memory",       arch:"x86", vendor:"AMD",    desc:"AMD Milan memory + NVMe",
+    specs:{"E2as_v5":{vcpu:2,mem:16,price:0.137},"E4as_v5":{vcpu:4,mem:32,price:0.274},"E8as_v5":{vcpu:8,mem:64,price:0.548},"E16as_v5":{vcpu:16,mem:128,price:1.096},"E20as_v5":{vcpu:20,mem:160,price:1.37},"E32as_v5":{vcpu:32,mem:256,price:2.192},"E48as_v5":{vcpu:48,mem:384,price:3.288},"E64as_v5":{vcpu:64,mem:512,price:4.384},"E96as_v5":{vcpu:96,mem:672,price:6.576}},
+    in:["eastus","eastus2","westus2","westus3","centralus","southcentralus","northeurope","westeurope","uksouth","francecentral","germanywestcentral","swedencentral","japaneast","koreacentral","southeastasia","eastasia","australiaeast","centralindia","brazilsouth","uaenorth"] },
+  { key:"Eadsv5", cat:"memory", arch:"x86", vendor:"AMD", desc:"AMD Milan memory + NVMe",
     sizes:["E2ads_v5","E4ads_v5","E8ads_v5","E16ads_v5","E20ads_v5","E32ads_v5","E48ads_v5","E64ads_v5","E96ads_v5"],
-    in:["eastus","eastus2","westus2","westus3","northeurope","westeurope","uksouth","francecentral","germanywestcentral","japaneast","southeastasia","australiaeast"]},
-
-  // ── Memory optimized (ARM)
-  { key:"Epsv5",  cat:"memory",       arch:"arm", vendor:"Ampere", desc:"Ampere Altra memory-optimized",
+    specs:{"E2ads_v5":{vcpu:2,mem:16,price:0.158},"E4ads_v5":{vcpu:4,mem:32,price:0.316},"E8ads_v5":{vcpu:8,mem:64,price:0.632},"E16ads_v5":{vcpu:16,mem:128,price:1.264},"E20ads_v5":{vcpu:20,mem:160,price:1.58},"E32ads_v5":{vcpu:32,mem:256,price:2.528},"E48ads_v5":{vcpu:48,mem:384,price:3.792},"E64ads_v5":{vcpu:64,mem:512,price:5.056},"E96ads_v5":{vcpu:96,mem:672,price:7.584}},
+    in:["eastus","eastus2","westus2","westus3","northeurope","westeurope","uksouth","francecentral","germanywestcentral","japaneast","southeastasia","australiaeast"] },
+  { key:"Epsv5", cat:"memory", arch:"arm", vendor:"Ampere", desc:"Ampere Altra memory-optimized",
     sizes:["E2ps_v5","E4ps_v5","E8ps_v5","E16ps_v5","E20ps_v5","E32ps_v5"],
-    in:["eastus","eastus2","westus2","westus3","northeurope","westeurope","uksouth","francecentral","germanywestcentral","japaneast","southeastasia","australiaeast"]},
-  { key:"Epdsv5", cat:"memory",       arch:"arm", vendor:"Ampere", desc:"Epsv5 + local NVMe",
+    specs:{"E2ps_v5":{vcpu:2,mem:16,price:0.122},"E4ps_v5":{vcpu:4,mem:32,price:0.243},"E8ps_v5":{vcpu:8,mem:64,price:0.486},"E16ps_v5":{vcpu:16,mem:128,price:0.973},"E20ps_v5":{vcpu:20,mem:160,price:1.216},"E32ps_v5":{vcpu:32,mem:256,price:1.946}},
+    in:["eastus","eastus2","westus2","westus3","northeurope","westeurope","uksouth","francecentral","germanywestcentral","japaneast","southeastasia","australiaeast"] },
+  { key:"Epdsv5", cat:"memory", arch:"arm", vendor:"Ampere", desc:"Epsv5 + local NVMe",
     sizes:["E2pds_v5","E4pds_v5","E8pds_v5","E16pds_v5","E20pds_v5","E32pds_v5"],
-    in:["eastus","eastus2","westus2","westus3","northeurope","westeurope","japaneast","southeastasia","australiaeast"]},
-
-  // ── Extreme memory (M-series)
-  { key:"Mv2",    cat:"memory",       arch:"x86", vendor:"Intel",  desc:"Extreme memory — up to 12 TB",
+    specs:{"E2pds_v5":{vcpu:2,mem:16,price:0.138},"E4pds_v5":{vcpu:4,mem:32,price:0.276},"E8pds_v5":{vcpu:8,mem:64,price:0.552},"E16pds_v5":{vcpu:16,mem:128,price:1.104},"E20pds_v5":{vcpu:20,mem:160,price:1.38},"E32pds_v5":{vcpu:32,mem:256,price:2.208}},
+    in:["eastus","eastus2","westus2","westus3","northeurope","westeurope","japaneast","southeastasia","australiaeast"] },
+  { key:"Mv2", cat:"memory", arch:"x86", vendor:"Intel", desc:"Extreme memory — up to 12 TB",
     sizes:["M208ms_v2","M208s_v2","M416ms_v2","M416s_v2"],
-    in:["eastus","eastus2","westus2","westus3","southcentralus","centralus","northeurope","westeurope","uksouth","francecentral","germanywestcentral","japaneast","southeastasia","australiaeast"]},
-  { key:"Msv3",   cat:"memory",       arch:"x86", vendor:"Intel",  desc:"Ice Lake extreme memory (newer)",
+    specs:{"M208ms_v2":{vcpu:208,mem:null,price:53.544},"M208s_v2":{vcpu:208,mem:null,price:26.772},"M416ms_v2":{vcpu:416,mem:null,price:118.98},"M416s_v2":{vcpu:416,mem:null,price:59.496}},
+    in:["eastus","eastus2","westus2","westus3","southcentralus","centralus","northeurope","westeurope","uksouth","francecentral","germanywestcentral","japaneast","southeastasia","australiaeast"] },
+  { key:"Msv3", cat:"memory", arch:"x86", vendor:"Intel", desc:"Ice Lake extreme memory (newer)",
     sizes:["M8s_v3","M16s_v3","M32s_v3","M64s_v3","M96s_v3","M128s_v3","M176s_v3","M192is_v3","M192ims_v3"],
-    in:["eastus","eastus2","westus2","westus3","northeurope","westeurope","uksouth","francecentral","germanywestcentral","japaneast","southeastasia"]},
-  { key:"Mbdsv2", cat:"memory",       arch:"x86", vendor:"Intel",  desc:"M-series + NVMe (bare metal-ish)",
+    specs:{"M8s_v3":{vcpu:8,mem:null,price:null},"M16s_v3":{vcpu:16,mem:null,price:null},"M32s_v3":{vcpu:32,mem:null,price:null},"M64s_v3":{vcpu:64,mem:null,price:null},"M96s_v3":{vcpu:96,mem:null,price:null},"M128s_v3":{vcpu:128,mem:null,price:null},"M176s_v3":{vcpu:176,mem:null,price:null},"M192is_v3":{vcpu:192,mem:null,price:null},"M192ims_v3":{vcpu:192,mem:null,price:null}},
+    in:["eastus","eastus2","westus2","westus3","northeurope","westeurope","uksouth","francecentral","germanywestcentral","japaneast","southeastasia"] },
+  { key:"Mbdsv2", cat:"memory", arch:"x86", vendor:"Intel", desc:"M-series + NVMe (bare metal-ish)",
     sizes:["M16bds_v2","M32bds_v2","M64bds_v2","M128bds_v2","M192bds_v2"],
-    in:["eastus","eastus2","westus2","westus3","northeurope","westeurope","japaneast","southeastasia"]},
-
+    specs:{"M16bds_v2":{vcpu:16,mem:null,price:null},"M32bds_v2":{vcpu:32,mem:null,price:null},"M64bds_v2":{vcpu:64,mem:null,price:null},"M128bds_v2":{vcpu:128,mem:null,price:null},"M192bds_v2":{vcpu:192,mem:null,price:null}},
+    in:["eastus","eastus2","westus2","westus3","northeurope","westeurope","japaneast","southeastasia"] },
   // ── Compute optimized
-  { key:"Fsv2",   cat:"compute",      arch:"x86", vendor:"Intel",  desc:"High CPU-to-memory ratio (Skylake)",
-    sizes:["F2s_v2","F4s_v2","F8s_v2","F16s_v2","F32s_v2","F48s_v2","F64s_v2","F72s_v2"], in:"*"},
-  { key:"Fxsv5",  cat:"compute",      arch:"x86", vendor:"Intel",  desc:"Ice Lake high-frequency (4.5 GHz)",
+  { key:"Fsv2", cat:"compute", arch:"x86", vendor:"Intel", desc:"High CPU-to-memory ratio (Skylake)",
+    sizes:["F2s_v2","F4s_v2","F8s_v2","F16s_v2","F32s_v2","F48s_v2","F64s_v2","F72s_v2"],
+    specs:{"F2s_v2":{vcpu:2,mem:4,price:0.097},"F4s_v2":{vcpu:4,mem:8,price:0.194},"F8s_v2":{vcpu:8,mem:16,price:0.388},"F16s_v2":{vcpu:16,mem:32,price:0.776},"F32s_v2":{vcpu:32,mem:64,price:1.552},"F48s_v2":{vcpu:48,mem:96,price:2.328},"F64s_v2":{vcpu:64,mem:128,price:3.104},"F72s_v2":{vcpu:72,mem:144,price:3.492}},
+    in:"*" },
+  { key:"Fxsv5", cat:"compute", arch:"x86", vendor:"Intel", desc:"Ice Lake high-frequency (4.5 GHz)",
     sizes:["FX4s_v5","FX12s_v5","FX24s_v5","FX36s_v5","FX48s_v5"],
-    in:["eastus","eastus2","westus2","westus3","centralus","southcentralus","northeurope","westeurope","uksouth","francecentral","germanywestcentral","swedencentral","japaneast","koreacentral","southeastasia","eastasia","australiaeast"]},
-
+    specs:{"FX4s_v5":{vcpu:4,mem:84,price:null},"FX12s_v5":{vcpu:12,mem:252,price:null},"FX24s_v5":{vcpu:24,mem:504,price:null},"FX36s_v5":{vcpu:36,mem:756,price:null},"FX48s_v5":{vcpu:48,mem:1008,price:null}},
+    in:["eastus","eastus2","westus2","westus3","centralus","southcentralus","northeurope","westeurope","uksouth","francecentral","germanywestcentral","swedencentral","japaneast","koreacentral","southeastasia","eastasia","australiaeast"] },
   // ── Storage optimized
-  { key:"Lsv2",   cat:"storage",      arch:"x86", vendor:"AMD",    desc:"AMD Rome + local NVMe (legacy)",
+  { key:"Lsv2", cat:"storage", arch:"x86", vendor:"AMD", desc:"AMD Rome + local NVMe (legacy)",
     sizes:["L8s_v2","L16s_v2","L32s_v2","L48s_v2","L64s_v2","L80s_v2"],
-    in:["eastus","eastus2","westus2","westus3","centralus","northcentralus","southcentralus","canadacentral","northeurope","westeurope","uksouth","francecentral","germanywestcentral","swedencentral","japaneast","koreacentral","southeastasia","eastasia","australiaeast","centralindia","brazilsouth"]},
-  { key:"Lsv3",   cat:"storage",      arch:"x86", vendor:"Intel",  desc:"Ice Lake + local NVMe SSD",
+    specs:{"L8s_v2":{vcpu:8,mem:64,price:0.744},"L16s_v2":{vcpu:16,mem:128,price:1.488},"L32s_v2":{vcpu:32,mem:256,price:2.976},"L48s_v2":{vcpu:48,mem:384,price:4.464},"L64s_v2":{vcpu:64,mem:512,price:5.952},"L80s_v2":{vcpu:80,mem:640,price:7.44}},
+    in:["eastus","eastus2","westus2","westus3","centralus","northcentralus","southcentralus","canadacentral","northeurope","westeurope","uksouth","francecentral","germanywestcentral","swedencentral","japaneast","koreacentral","southeastasia","eastasia","australiaeast","centralindia","brazilsouth"] },
+  { key:"Lsv3", cat:"storage", arch:"x86", vendor:"Intel", desc:"Ice Lake + local NVMe SSD",
     sizes:["L8s_v3","L16s_v3","L32s_v3","L48s_v3","L64s_v3","L80s_v3"],
-    in:["eastus","eastus2","westus2","westus3","centralus","southcentralus","northeurope","westeurope","uksouth","francecentral","germanywestcentral","swedencentral","japaneast","koreacentral","southeastasia","eastasia","australiaeast"]},
-  { key:"Lasv3",  cat:"storage",      arch:"x86", vendor:"AMD",    desc:"AMD Milan + local NVMe SSD",
+    specs:{"L8s_v3":{vcpu:8,mem:64,price:0.832},"L16s_v3":{vcpu:16,mem:128,price:1.664},"L32s_v3":{vcpu:32,mem:256,price:3.328},"L48s_v3":{vcpu:48,mem:384,price:4.992},"L64s_v3":{vcpu:64,mem:512,price:6.656},"L80s_v3":{vcpu:80,mem:640,price:8.32}},
+    in:["eastus","eastus2","westus2","westus3","centralus","southcentralus","northeurope","westeurope","uksouth","francecentral","germanywestcentral","swedencentral","japaneast","koreacentral","southeastasia","eastasia","australiaeast"] },
+  { key:"Lasv3", cat:"storage", arch:"x86", vendor:"AMD", desc:"AMD Milan + local NVMe SSD",
     sizes:["L8as_v3","L16as_v3","L32as_v3","L48as_v3","L64as_v3","L80as_v3"],
-    in:["eastus","eastus2","westus2","westus3","centralus","southcentralus","northeurope","westeurope","uksouth","francecentral","germanywestcentral","japaneast","southeastasia","australiaeast"]},
-
-  // ── Accelerated — Graphics (NV)
-  { key:"NVv3",   cat:"accelerated",  arch:"x86", vendor:"Intel",  desc:"NVIDIA M60 GPU (graphics, legacy)",
+    specs:{"L8as_v3":{vcpu:8,mem:64,price:0.744},"L16as_v3":{vcpu:16,mem:128,price:1.488},"L32as_v3":{vcpu:32,mem:256,price:2.976},"L48as_v3":{vcpu:48,mem:384,price:4.464},"L64as_v3":{vcpu:64,mem:512,price:5.952},"L80as_v3":{vcpu:80,mem:640,price:7.44}},
+    in:["eastus","eastus2","westus2","westus3","centralus","southcentralus","northeurope","westeurope","uksouth","francecentral","germanywestcentral","japaneast","southeastasia","australiaeast"] },
+  // ── Accelerated
+  { key:"NVv3", cat:"accelerated", arch:"x86", vendor:"Intel", desc:"NVIDIA M60 GPU (graphics, legacy)",
     sizes:["NV12s_v3","NV24s_v3","NV48s_v3"],
-    in:["eastus","eastus2","westus2","centralus","southcentralus","northeurope","westeurope","uksouth","japaneast","southeastasia","australiaeast"]},
-  { key:"NVv4",   cat:"accelerated",  arch:"x86", vendor:"AMD",    desc:"AMD Radeon MI25 (graphics)",
+    specs:{"NV12s_v3":{vcpu:12,mem:null,price:1.426},"NV24s_v3":{vcpu:24,mem:null,price:2.85},"NV48s_v3":{vcpu:48,mem:null,price:5.7}},
+    in:["eastus","eastus2","westus2","centralus","southcentralus","northeurope","westeurope","uksouth","japaneast","southeastasia","australiaeast"] },
+  { key:"NVv4", cat:"accelerated", arch:"x86", vendor:"AMD", desc:"AMD Radeon MI25 (graphics)",
     sizes:["NV4as_v4","NV8as_v4","NV16as_v4","NV32as_v4"],
-    in:["eastus","eastus2","westus2","westus3","centralus","southcentralus","northeurope","westeurope","uksouth","francecentral","germanywestcentral","japaneast","southeastasia","australiaeast"]},
+    specs:{"NV4as_v4":{vcpu:4,mem:null,price:0.291},"NV8as_v4":{vcpu:8,mem:null,price:0.582},"NV16as_v4":{vcpu:16,mem:null,price:1.165},"NV32as_v4":{vcpu:32,mem:null,price:2.33}},
+    in:["eastus","eastus2","westus2","westus3","centralus","southcentralus","northeurope","westeurope","uksouth","francecentral","germanywestcentral","japaneast","southeastasia","australiaeast"] },
   { key:"NVadsA10v5", cat:"accelerated", arch:"x86", vendor:"AMD", desc:"NVIDIA A10 GPU (graphics + ML)",
     sizes:["NV6ads_A10_v5","NV12ads_A10_v5","NV18ads_A10_v5","NV36ads_A10_v5","NV36adms_A10_v5","NV72ads_A10_v5"],
-    in:["eastus","eastus2","westus2","westus3","northeurope","westeurope","uksouth","francecentral","germanywestcentral","japaneast","southeastasia","australiaeast"]},
-
-  // ── Accelerated — Compute (NC, ND)
-  { key:"NCv3",   cat:"accelerated",  arch:"x86", vendor:"Intel",  desc:"NVIDIA V100 (ML training, legacy)",
+    specs:{"NV6ads_A10_v5":{vcpu:6,mem:null,price:0.59},"NV12ads_A10_v5":{vcpu:12,mem:null,price:1.18},"NV18ads_A10_v5":{vcpu:18,mem:null,price:2.08},"NV36ads_A10_v5":{vcpu:36,mem:null,price:4.16},"NV36adms_A10_v5":{vcpu:36,mem:null,price:5.876},"NV72ads_A10_v5":{vcpu:72,mem:null,price:8.476}},
+    in:["eastus","eastus2","westus2","westus3","northeurope","westeurope","uksouth","francecentral","germanywestcentral","japaneast","southeastasia","australiaeast"] },
+  { key:"NCv3", cat:"accelerated", arch:"x86", vendor:"Intel", desc:"NVIDIA V100 (ML training, legacy)",
     sizes:["NC6s_v3","NC12s_v3","NC24s_v3","NC24rs_v3"],
-    in:["eastus","eastus2","westus2","centralus","southcentralus","northeurope","westeurope","uksouth","japaneast","southeastasia","australiaeast","centralindia"]},
-  { key:"NCasT4v3", cat:"accelerated", arch:"x86", vendor:"AMD",   desc:"NVIDIA T4 (inference, ML)",
+    specs:{"NC6s_v3":{vcpu:6,mem:null,price:3.823},"NC12s_v3":{vcpu:12,mem:null,price:7.646},"NC24s_v3":{vcpu:24,mem:null,price:15.292},"NC24rs_v3":{vcpu:24,mem:null,price:16.821}},
+    in:["eastus","eastus2","westus2","centralus","southcentralus","northeurope","westeurope","uksouth","japaneast","southeastasia","australiaeast","centralindia"] },
+  { key:"NCasT4v3", cat:"accelerated", arch:"x86", vendor:"AMD", desc:"NVIDIA T4 (inference, ML)",
     sizes:["NC4as_T4_v3","NC8as_T4_v3","NC16as_T4_v3","NC64as_T4_v3"],
-    in:["eastus","eastus2","westus2","westus3","northeurope","westeurope","uksouth","francecentral","germanywestcentral","japaneast","koreacentral","southeastasia","australiaeast","centralindia","brazilsouth"]},
-  { key:"NCadsA100v4", cat:"accelerated", arch:"x86", vendor:"AMD",desc:"NVIDIA A100 80GB",
+    specs:{"NC4as_T4_v3":{vcpu:4,mem:null,price:0.658},"NC8as_T4_v3":{vcpu:8,mem:null,price:0.94},"NC16as_T4_v3":{vcpu:16,mem:null,price:1.505},"NC64as_T4_v3":{vcpu:64,mem:null,price:5.44}},
+    in:["eastus","eastus2","westus2","westus3","northeurope","westeurope","uksouth","francecentral","germanywestcentral","japaneast","koreacentral","southeastasia","australiaeast","centralindia","brazilsouth"] },
+  { key:"NCadsA100v4", cat:"accelerated", arch:"x86", vendor:"AMD", desc:"NVIDIA A100 80GB",
     sizes:["NC24ads_A100_v4","NC48ads_A100_v4","NC96ads_A100_v4"],
-    in:["eastus","eastus2","westus2","westus3","centralus","southcentralus","northeurope","westeurope","uksouth","francecentral","germanywestcentral","swedencentral","japaneast","koreacentral","southeastasia","australiaeast","centralindia"]},
-  { key:"NCadsH100v5", cat:"accelerated", arch:"x86", vendor:"AMD",desc:"NVIDIA H100 (LLM training, newest)",
+    specs:{"NC24ads_A100_v4":{vcpu:24,mem:null,price:4.775},"NC48ads_A100_v4":{vcpu:48,mem:null,price:9.55},"NC96ads_A100_v4":{vcpu:96,mem:null,price:19.1}},
+    in:["eastus","eastus2","westus2","westus3","centralus","southcentralus","northeurope","westeurope","uksouth","francecentral","germanywestcentral","swedencentral","japaneast","koreacentral","southeastasia","australiaeast","centralindia"] },
+  { key:"NCadsH100v5", cat:"accelerated", arch:"x86", vendor:"AMD", desc:"NVIDIA H100 (LLM training, newest)",
     sizes:["NC40ads_H100_v5","NC80adis_H100_v5"],
-    in:["eastus","eastus2","westus3","southcentralus","westeurope","uksouth","francecentral","germanywestcentral","swedencentral","japaneast","koreacentral","australiaeast"]},
-  { key:"NDv4",   cat:"accelerated",  arch:"x86", vendor:"Intel",  desc:"NVIDIA A100 ×8 + NVLink (DL training)",
+    specs:{"NC40ads_H100_v5":{vcpu:40,mem:null,price:9.08},"NC80adis_H100_v5":{vcpu:80,mem:null,price:18.16}},
+    in:["eastus","eastus2","westus3","southcentralus","westeurope","uksouth","francecentral","germanywestcentral","swedencentral","japaneast","koreacentral","australiaeast"] },
+  { key:"NDv4", cat:"accelerated", arch:"x86", vendor:"Intel", desc:"NVIDIA A100 ×8 + NVLink (DL training)",
     sizes:["ND96asr_v4"],
-    in:["eastus","eastus2","westus2","westus3","southcentralus","northeurope","westeurope","uksouth","francecentral","japaneast","southeastasia","australiaeast"]},
+    specs:{"ND96asr_v4":{vcpu:96,mem:null,price:35.357}},
+    in:["eastus","eastus2","westus2","westus3","southcentralus","northeurope","westeurope","uksouth","francecentral","japaneast","southeastasia","australiaeast"] },
   { key:"NDH100v5", cat:"accelerated", arch:"x86", vendor:"Intel", desc:"NVIDIA H100 ×8 (LLM training)",
     sizes:["ND96isr_H100_v5"],
-    in:["eastus","eastus2","westus3","southcentralus","westeurope","uksouth","swedencentral","japaneast","australiaeast"]},
+    specs:{"ND96isr_H100_v5":{vcpu:96,mem:null,price:127.816}},
+    in:["eastus","eastus2","westus3","southcentralus","westeurope","uksouth","swedencentral","japaneast","australiaeast"] },
   { key:"NDH200v5", cat:"accelerated", arch:"x86", vendor:"Intel", desc:"NVIDIA H200 ×8 (newest, scarce)",
     sizes:["ND96isr_H200_v5"],
-    in:["eastus","westus3","southcentralus","westeurope","swedencentral"]},
-
+    specs:{"ND96isr_H200_v5":{vcpu:96,mem:null,price:null}},
+    in:["eastus","westus3","southcentralus","westeurope","swedencentral"] },
   // ── HPC
-  { key:"HBv2",   cat:"hpc",          arch:"x86", vendor:"AMD",    desc:"AMD Rome HPC + InfiniBand HDR (legacy)",
+  { key:"HBv2", cat:"hpc", arch:"x86", vendor:"AMD", desc:"AMD Rome HPC + InfiniBand HDR (legacy)",
     sizes:["HB120-16rs_v2","HB120-32rs_v2","HB120-64rs_v2","HB120-96rs_v2","HB120rs_v2"],
-    in:["eastus","eastus2","southcentralus","westeurope","northeurope","francecentral","japaneast","southeastasia"]},
-  { key:"HBv3",   cat:"hpc",          arch:"x86", vendor:"AMD",    desc:"AMD Milan HPC + InfiniBand HDR",
+    specs:{"HB120-16rs_v2":{vcpu:16,mem:null,price:4.68},"HB120-32rs_v2":{vcpu:32,mem:null,price:4.68},"HB120-64rs_v2":{vcpu:64,mem:null,price:4.68},"HB120-96rs_v2":{vcpu:96,mem:null,price:4.68},"HB120rs_v2":{vcpu:120,mem:null,price:4.68}},
+    in:["eastus","eastus2","southcentralus","westeurope","northeurope","francecentral","japaneast","southeastasia"] },
+  { key:"HBv3", cat:"hpc", arch:"x86", vendor:"AMD", desc:"AMD Milan HPC + InfiniBand HDR",
     sizes:["HB120-16rs_v3","HB120-32rs_v3","HB120-64rs_v3","HB120-96rs_v3","HB120rs_v3"],
-    in:["eastus","eastus2","southcentralus","westus3","westeurope","northeurope","francecentral","japaneast","southeastasia"]},
-  { key:"HBv4",   cat:"hpc",          arch:"x86", vendor:"AMD",    desc:"AMD Genoa HPC + InfiniBand NDR (newest)",
+    specs:{"HB120-16rs_v3":{vcpu:16,mem:null,price:4.68},"HB120-32rs_v3":{vcpu:32,mem:null,price:4.68},"HB120-64rs_v3":{vcpu:64,mem:null,price:4.68},"HB120-96rs_v3":{vcpu:96,mem:null,price:4.68},"HB120rs_v3":{vcpu:120,mem:null,price:4.68}},
+    in:["eastus","eastus2","southcentralus","westus3","westeurope","northeurope","francecentral","japaneast","southeastasia"] },
+  { key:"HBv4", cat:"hpc", arch:"x86", vendor:"AMD", desc:"AMD Genoa HPC + InfiniBand NDR (newest)",
     sizes:["HB176-24rs_v4","HB176-48rs_v4","HB176-96rs_v4","HB176-144rs_v4","HB176rs_v4"],
-    in:["eastus2","southcentralus","westus3","westeurope","northeurope","francecentral","japaneast"]},
-  { key:"HXv5",   cat:"hpc",          arch:"x86", vendor:"AMD",    desc:"AMD EPYC 9V64H — extreme HPC (newest)",
+    specs:{"HB176-24rs_v4":{vcpu:24,mem:null,price:9.36},"HB176-48rs_v4":{vcpu:48,mem:null,price:9.36},"HB176-96rs_v4":{vcpu:96,mem:null,price:9.36},"HB176-144rs_v4":{vcpu:144,mem:null,price:9.36},"HB176rs_v4":{vcpu:176,mem:null,price:9.36}},
+    in:["eastus2","southcentralus","westus3","westeurope","northeurope","francecentral","japaneast"] },
+  { key:"HXv5", cat:"hpc", arch:"x86", vendor:"AMD", desc:"AMD EPYC 9V64H — extreme HPC (newest)",
     sizes:["HX176-24rs","HX176-48rs","HX176-96rs","HX176-144rs","HX176rs"],
-    in:["eastus2","southcentralus","westus3","westeurope","francecentral"]},
-
+    specs:{"HX176-24rs":{vcpu:24,mem:null,price:11.232},"HX176-48rs":{vcpu:48,mem:null,price:11.232},"HX176-96rs":{vcpu:96,mem:null,price:11.232},"HX176-144rs":{vcpu:144,mem:null,price:11.232},"HX176rs":{vcpu:176,mem:null,price:11.232}},
+    in:["eastus2","southcentralus","westus3","westeurope","francecentral"] },
   // ── Confidential
-  { key:"DCsv2",  cat:"confidential", arch:"x86", vendor:"Intel",  desc:"Intel SGX enclaves (legacy)",
+  { key:"DCsv2", cat:"confidential", arch:"x86", vendor:"Intel", desc:"Intel SGX enclaves (legacy)",
     sizes:["DC1s_v2","DC2s_v2","DC4s_v2","DC8_v2"],
-    in:["eastus","westus","ukwest","westeurope","canadacentral","japaneast","southeastasia"]},
-  { key:"DCsv3",  cat:"confidential", arch:"x86", vendor:"Intel",  desc:"Intel SGX — Ice Lake, larger EPC",
+    specs:{"DC1s_v2":{vcpu:1,mem:null,price:0.115},"DC2s_v2":{vcpu:2,mem:null,price:0.23},"DC4s_v2":{vcpu:4,mem:null,price:0.46},"DC8_v2":{vcpu:8,mem:null,price:0.92}},
+    in:["eastus","westus","ukwest","westeurope","canadacentral","japaneast","southeastasia"] },
+  { key:"DCsv3", cat:"confidential", arch:"x86", vendor:"Intel", desc:"Intel SGX — Ice Lake, larger EPC",
     sizes:["DC1s_v3","DC2s_v3","DC4s_v3","DC8s_v3","DC16s_v3","DC24s_v3","DC32s_v3","DC48s_v3"],
-    in:["eastus","eastus2","westus","westus3","westeurope","northeurope","uksouth","canadacentral","japaneast","southeastasia","australiaeast"]},
-  { key:"DCasv5", cat:"confidential", arch:"x86", vendor:"AMD",    desc:"AMD SEV-SNP — whole-VM confidential",
+    specs:{"DC1s_v3":{vcpu:1,mem:null,price:0.115},"DC2s_v3":{vcpu:2,mem:null,price:0.23},"DC4s_v3":{vcpu:4,mem:null,price:0.46},"DC8s_v3":{vcpu:8,mem:null,price:0.92},"DC16s_v3":{vcpu:16,mem:null,price:1.84},"DC24s_v3":{vcpu:24,mem:null,price:2.76},"DC32s_v3":{vcpu:32,mem:null,price:3.68},"DC48s_v3":{vcpu:48,mem:null,price:5.52}},
+    in:["eastus","eastus2","westus","westus3","westeurope","northeurope","uksouth","canadacentral","japaneast","southeastasia","australiaeast"] },
+  { key:"DCasv5", cat:"confidential", arch:"x86", vendor:"AMD", desc:"AMD SEV-SNP — whole-VM confidential",
     sizes:["DC2as_v5","DC4as_v5","DC8as_v5","DC16as_v5","DC32as_v5","DC48as_v5","DC64as_v5","DC96as_v5"],
-    in:["eastus","eastus2","westus2","westus3","northeurope","westeurope","uksouth","francecentral","germanywestcentral","swedencentral","japaneast","southeastasia","australiaeast"]},
-  { key:"DCadsv5",cat:"confidential", arch:"x86", vendor:"AMD",    desc:"DCasv5 + local NVMe",
+    specs:{"DC2as_v5":{vcpu:2,mem:null,price:0.104},"DC4as_v5":{vcpu:4,mem:null,price:0.208},"DC8as_v5":{vcpu:8,mem:null,price:0.416},"DC16as_v5":{vcpu:16,mem:null,price:0.832},"DC32as_v5":{vcpu:32,mem:null,price:1.664},"DC48as_v5":{vcpu:48,mem:null,price:2.496},"DC64as_v5":{vcpu:64,mem:null,price:3.328},"DC96as_v5":{vcpu:96,mem:null,price:4.992}},
+    in:["eastus","eastus2","westus2","westus3","northeurope","westeurope","uksouth","francecentral","germanywestcentral","swedencentral","japaneast","southeastasia","australiaeast"] },
+  { key:"DCadsv5", cat:"confidential", arch:"x86", vendor:"AMD", desc:"DCasv5 + local NVMe",
     sizes:["DC2ads_v5","DC4ads_v5","DC8ads_v5","DC16ads_v5","DC32ads_v5","DC48ads_v5","DC64ads_v5","DC96ads_v5"],
-    in:["eastus","eastus2","westus2","westus3","northeurope","westeurope","uksouth","francecentral","germanywestcentral","japaneast","southeastasia"]},
-  { key:"ECasv5", cat:"confidential", arch:"x86", vendor:"AMD",    desc:"AMD SEV-SNP — memory-optimized confidential",
+    specs:{"DC2ads_v5":{vcpu:2,mem:null,price:0.125},"DC4ads_v5":{vcpu:4,mem:null,price:0.25},"DC8ads_v5":{vcpu:8,mem:null,price:0.5},"DC16ads_v5":{vcpu:16,mem:null,price:1},"DC32ads_v5":{vcpu:32,mem:null,price:2},"DC48ads_v5":{vcpu:48,mem:null,price:3},"DC64ads_v5":{vcpu:64,mem:null,price:4},"DC96ads_v5":{vcpu:96,mem:null,price:6}},
+    in:["eastus","eastus2","westus2","westus3","northeurope","westeurope","uksouth","francecentral","germanywestcentral","japaneast","southeastasia"] },
+  { key:"ECasv5", cat:"confidential", arch:"x86", vendor:"AMD", desc:"AMD SEV-SNP — memory-optimized confidential",
     sizes:["EC2as_v5","EC4as_v5","EC8as_v5","EC16as_v5","EC20as_v5","EC32as_v5","EC48as_v5","EC64as_v5","EC96as_v5"],
-    in:["eastus","eastus2","westus2","westus3","northeurope","westeurope","uksouth","francecentral","germanywestcentral","swedencentral","japaneast","southeastasia","australiaeast"]},
-  { key:"ECadsv5",cat:"confidential", arch:"x86", vendor:"AMD",    desc:"ECasv5 + local NVMe",
+    specs:{"EC2as_v5":{vcpu:2,mem:null,price:0.137},"EC4as_v5":{vcpu:4,mem:null,price:0.274},"EC8as_v5":{vcpu:8,mem:null,price:0.548},"EC16as_v5":{vcpu:16,mem:null,price:1.096},"EC20as_v5":{vcpu:20,mem:null,price:1.37},"EC32as_v5":{vcpu:32,mem:null,price:2.192},"EC48as_v5":{vcpu:48,mem:null,price:3.288},"EC64as_v5":{vcpu:64,mem:null,price:4.384},"EC96as_v5":{vcpu:96,mem:null,price:6.576}},
+    in:["eastus","eastus2","westus2","westus3","northeurope","westeurope","uksouth","francecentral","germanywestcentral","swedencentral","japaneast","southeastasia","australiaeast"] },
+  { key:"ECadsv5", cat:"confidential", arch:"x86", vendor:"AMD", desc:"ECasv5 + local NVMe",
     sizes:["EC2ads_v5","EC4ads_v5","EC8ads_v5","EC16ads_v5","EC20ads_v5","EC32ads_v5","EC48ads_v5","EC64ads_v5","EC96ads_v5"],
-    in:["eastus","eastus2","westus3","northeurope","westeurope","francecentral","germanywestcentral","japaneast","southeastasia"]}
+    specs:{"EC2ads_v5":{vcpu:2,mem:null,price:0.148},"EC4ads_v5":{vcpu:4,mem:null,price:0.296},"EC8ads_v5":{vcpu:8,mem:null,price:0.592},"EC16ads_v5":{vcpu:16,mem:null,price:1.184},"EC20ads_v5":{vcpu:20,mem:null,price:1.48},"EC32ads_v5":{vcpu:32,mem:null,price:2.368},"EC48ads_v5":{vcpu:48,mem:null,price:3.552},"EC64ads_v5":{vcpu:64,mem:null,price:4.736},"EC96ads_v5":{vcpu:96,mem:null,price:7.104}},
+    in:["eastus","eastus2","westus3","northeurope","westeurope","francecentral","germanywestcentral","japaneast","southeastasia"] }
 ];
 
 
@@ -1313,11 +1432,63 @@ const state = {
   cat: "all",
   arch: "all",
   query: "",
+  sort: "name",        // name | price-asc | price-desc | vcpu-desc | mem-desc
+  priceTier: "any",    // any | 0 | 1 | 2 | 3
+  currency: "USD",
+  priceRef: "westeurope",
   data: null
 };
 
 const $ = (sel) => document.querySelector(sel);
 const $$ = (sel) => Array.from(document.querySelectorAll(sel));
+
+// ─── Price / spec helpers ───────────────────────────────────────
+function specOf(fam, size) {
+  return (fam.specs && fam.specs[size]) || null;
+}
+function priceOf(fam, size) {
+  const s = specOf(fam, size);
+  return s && typeof s.price === "number" ? s.price : null;
+}
+
+// Price-filter tiers — thresholds in the page's native currency.
+const PRICE_TIERS = { "0": [0, 0.25], "1": [0.25, 1], "2": [1, 4], "3": [4, Infinity] };
+function priceInTier(price, tier) {
+  if (tier === "any") return true;
+  if (price == null) return false;
+  const band = PRICE_TIERS[tier];
+  return band ? (price >= band[0] && price < band[1]) : true;
+}
+
+// Format an hourly price: 0.096 → "$0.096", 6 → "$6.00", null → null.
+function fmtPrice(price, currency) {
+  if (price == null) return null;
+  const sym = currency === "EUR" ? "€" : "$";
+  let s = price.toFixed(4).replace(/0+$/, "").replace(/\.$/, "");
+  const dot = s.indexOf(".");
+  if (dot === -1) s += ".00";
+  else if (s.length - dot - 1 === 1) s += "0";
+  return sym + s;
+}
+
+// Sort the flattened instance-type entries by state.sort; nulls always last.
+function sortEntries(entries) {
+  const byName = (a, b) => a.full.localeCompare(b.full, undefined, { numeric: true });
+  const cmp = (key, dir) => (a, b) => {
+    const av = a[key], bv = b[key];
+    if (av == null && bv == null) return byName(a, b);
+    if (av == null) return 1;
+    if (bv == null) return -1;
+    return dir * (av - bv) || byName(a, b);
+  };
+  switch (state.sort) {
+    case "price-asc":  entries.sort(cmp("price", 1));  break;
+    case "price-desc": entries.sort(cmp("price", -1)); break;
+    case "vcpu-desc":  entries.sort(cmp("vcpu", -1));  break;
+    case "mem-desc":   entries.sort(cmp("mem", -1));   break;
+    default:           entries.sort(byName);
+  }
+}
 
 function expandIn(rawIn, allCodes) {
   if (rawIn === "*") return new Set(allCodes);
@@ -1518,25 +1689,36 @@ function renderInstanceView() {
   results.innerHTML = '<div class="instance-list"></div>';
   const list = results.firstElementChild;
 
-  // Flatten into instance-type entries
+  // Flatten into instance-type entries, applying search + price-tier filters
   const entries = [];
   visible.forEach(fam => {
     fam.sizes.forEach(size => {
-      const full = `${fam.key}.${size}`;
-      if (instanceTypeMatches(fam, size, q)) {
-        const availCount = state.data.familyRegions.get(fam.key).size;
-        entries.push({ fam, size, full, availCount });
-      }
+      if (!instanceTypeMatches(fam, size, q)) return;
+      const spec = specOf(fam, size) || {};
+      const price = typeof spec.price === "number" ? spec.price : null;
+      if (!priceInTier(price, state.priceTier)) return;
+      entries.push({
+        fam, size,
+        full: `${fam.key}.${size}`,
+        availCount: state.data.familyRegions.get(fam.key).size,
+        price,
+        vcpu: spec.vcpu != null ? spec.vcpu : null,
+        mem: spec.mem != null ? spec.mem : null
+      });
     });
   });
 
-  // sort: full name
-  entries.sort((a, b) => a.full.localeCompare(b.full, undefined, { numeric: true }));
+  sortEntries(entries);
 
   entries.forEach((entry, idx) => {
     const row = document.createElement("div");
     row.className = "instance-row fade-in";
     row.style.animationDelay = Math.min(idx * 0.004, 0.6) + "s";
+    const priceStr = fmtPrice(entry.price, state.currency);
+    const specBits = [];
+    if (entry.vcpu != null) specBits.push(`${entry.vcpu} vCPU`);
+    if (entry.mem != null)  specBits.push(`${entry.mem} GB`);
+    specBits.push(`${entry.availCount} reg`);
     row.innerHTML = `
       <div>
         <div class="instance-row__name">${entry.full}</div>
@@ -1545,8 +1727,9 @@ function renderInstanceView() {
           ${CAT_LABEL[entry.fam.cat]} · ${entry.fam.vendor} · ${entry.fam.arch === "x86" ? "x86_64" : "arm64"}
         </div>
       </div>
-      <div class="instance-row__avail">
-        <strong>${entry.availCount}</strong>/${state.data.regions.length} regions
+      <div class="instance-row__right">
+        <div class="instance-row__price${priceStr ? "" : " is-na"}" title="On-demand · ${state.priceRef}">${priceStr ? `${priceStr}<span class="unit">/hr</span>` : "—"}</div>
+        <div class="instance-row__spec">${specBits.join(" · ")}</div>
       </div>
     `;
     row.addEventListener("click", () => openInstanceDrawer(entry.fam, entry.size));
@@ -1649,6 +1832,8 @@ function openInstanceDrawer(family, size) {
   });
 
   const fullName = `${family.key}.${size}`;
+  const spec = specOf(family, size) || {};
+  const priceStr = fmtPrice(typeof spec.price === "number" ? spec.price : null, state.currency);
   $("#drawer-head").innerHTML = `
     <div class="drawer__eyebrow">VM series · ${CAT_LABEL[family.cat]}</div>
     <div class="drawer__title" style="font-family:var(--mono); font-size:36px; letter-spacing:0;">${fullName}</div>
@@ -1656,6 +1841,9 @@ function openInstanceDrawer(family, size) {
     <div class="drawer__meta">
       <span>Vendor <strong>${family.vendor}</strong></span>
       <span>Arch <strong>${family.arch === "x86" ? "x86_64" : "arm64"}</strong></span>
+      ${spec.vcpu != null ? `<span>vCPU <strong>${spec.vcpu}</strong></span>` : ""}
+      ${spec.mem != null ? `<span>Memory <strong>${spec.mem} GB</strong></span>` : ""}
+      <span title="On-demand · ${state.priceRef}">Price <strong>${priceStr ? priceStr + "/hr" : "—"}</strong></span>
       <span><strong>${regions.length}</strong>/${state.data.regions.length} regions</span>
     </div>
     <button class="drawer__close" onclick="closeDrawer()">Close ⤬</button>
@@ -1709,6 +1897,8 @@ function writeHash() {
   if (state.mode !== "region") p.set("mode", state.mode);
   if (state.cat !== "all")     p.set("cat", state.cat);
   if (state.arch !== "all")    p.set("arch", state.arch);
+  if (state.sort !== "name")   p.set("sort", state.sort);
+  if (state.priceTier !== "any") p.set("price", state.priceTier);
   if (state.query.trim())      p.set("q", state.query.trim());
   const h = p.toString();
   history.replaceState(null, "", h ? "#" + h : location.pathname + location.search);
@@ -1718,6 +1908,8 @@ function applyHash() {
   const m = p.get("mode"); if (m === "region" || m === "instance") state.mode = m;
   const c = p.get("cat");  if (c) state.cat = c;
   const a = p.get("arch"); if (a) state.arch = a;
+  const so = p.get("sort");  if (so) state.sort = so;
+  const pt = p.get("price"); if (pt) state.priceTier = pt;
   state.query = p.get("q") || "";
   $$(".filter-tab").forEach(b => {
     const on = b.dataset.mode === state.mode;
@@ -1726,11 +1918,17 @@ function applyHash() {
   });
   $$('.chip[data-cat]').forEach(b => b.classList.toggle("is-active", b.dataset.cat === state.cat));
   $$('.chip[data-arch]').forEach(b => b.classList.toggle("is-active", b.dataset.arch === state.arch));
+  $$('.chip[data-tier]').forEach(b => b.classList.toggle("is-active", b.dataset.tier === state.priceTier));
+  const sortSel = $("#sort"); if (sortSel) sortSel.value = state.sort;
   const s = $("#search"); if (s) s.value = state.query;
 }
 
 function render() {
   if (!state.data) return;   // guard: keyboard shortcut may fire before data.json loads
+  // Sort + price-tier controls apply to the instance view only.
+  const instanceOnly = state.mode === "instance";
+  const sortSel = $("#sort");           if (sortSel)    sortSel.style.display    = instanceOnly ? "" : "none";
+  const priceChips = $("#price-chips"); if (priceChips) priceChips.style.display = instanceOnly ? "" : "none";
   if (state.mode === "region") renderRegionView();
   else renderInstanceView();
   writeHash();
@@ -1758,11 +1956,25 @@ function setArch(a) {
   render();
 }
 
+function setSort(v) {
+  state.sort = v;
+  render();
+}
+
+function setPriceTier(t) {
+  state.priceTier = t;
+  $$('.chip[data-tier]').forEach(b => b.classList.toggle("is-active", b.dataset.tier === t));
+  render();
+}
+
 function init() {
   // Wire up UI
   $$(".filter-tab").forEach(b => b.addEventListener("click", () => setMode(b.dataset.mode)));
   $$(".chip[data-cat]").forEach(b => b.addEventListener("click", () => setCat(b.dataset.cat)));
   $$(".chip[data-arch]").forEach(b => b.addEventListener("click", () => setArch(b.dataset.arch)));
+  $$(".chip[data-tier]").forEach(b => b.addEventListener("click", () => setPriceTier(b.dataset.tier)));
+  const sortSel = $("#sort");
+  if (sortSel) sortSel.addEventListener("change", (e) => setSort(e.target.value));
   $("#search").addEventListener("input", (e) => {
     state.query = e.target.value;
     render();
@@ -1793,6 +2005,8 @@ async function loadData() {
         regions = fresh.regions;
         families = fresh.families;
         timestamp = fresh.generated || timestamp;
+        if (fresh.currency) state.currency = fresh.currency;
+        if (fresh.priceRef) state.priceRef = fresh.priceRef;
         isFresh = true;
       }
     }
