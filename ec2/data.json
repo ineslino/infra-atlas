@@ -1,6 +1,8 @@
 {
-  "generated": "2026-05-15T11:14:28Z",
+  "generated": "2026-05-15T22:53:09Z",
   "source": "ec2instances.info (Vantage) — public dataset, no credentials",
+  "currency": "USD",
+  "priceRef": "us-east-1",
   "regions": [
     {
       "code": "af-south-1",
@@ -256,6 +258,38 @@
         "4xlarge",
         "metal"
       ],
+      "specs": {
+        "medium": {
+          "vcpu": 1,
+          "mem": 2,
+          "price": 0.0255
+        },
+        "large": {
+          "vcpu": 2,
+          "mem": 4,
+          "price": 0.051
+        },
+        "xlarge": {
+          "vcpu": 4,
+          "mem": 8,
+          "price": 0.102
+        },
+        "2xlarge": {
+          "vcpu": 8,
+          "mem": 16,
+          "price": 0.204
+        },
+        "4xlarge": {
+          "vcpu": 16,
+          "mem": 32,
+          "price": 0.408
+        },
+        "metal": {
+          "vcpu": 16,
+          "mem": 32,
+          "price": 0.408
+        }
+      },
       "in": [
         "ap-northeast-1",
         "ap-south-1",
@@ -278,6 +312,18 @@
         "medium",
         "xlarge"
       ],
+      "specs": {
+        "medium": {
+          "vcpu": 2,
+          "mem": 1.7,
+          "price": 0.13
+        },
+        "xlarge": {
+          "vcpu": 8,
+          "mem": 7,
+          "price": 0.52
+        }
+      },
       "in": [
         "ap-northeast-1",
         "ap-southeast-1",
@@ -302,6 +348,33 @@
         "4xlarge",
         "8xlarge"
       ],
+      "specs": {
+        "large": {
+          "vcpu": 2,
+          "mem": 3.75,
+          "price": 0.105
+        },
+        "xlarge": {
+          "vcpu": 4,
+          "mem": 7.5,
+          "price": 0.21
+        },
+        "2xlarge": {
+          "vcpu": 8,
+          "mem": 15,
+          "price": 0.42
+        },
+        "4xlarge": {
+          "vcpu": 16,
+          "mem": 30,
+          "price": 0.84
+        },
+        "8xlarge": {
+          "vcpu": 32,
+          "mem": 60,
+          "price": 1.68
+        }
+      },
       "in": [
         "ap-northeast-1",
         "ap-northeast-2",
@@ -329,6 +402,33 @@
         "4xlarge",
         "8xlarge"
       ],
+      "specs": {
+        "large": {
+          "vcpu": 2,
+          "mem": 3.75,
+          "price": 0.1
+        },
+        "xlarge": {
+          "vcpu": 4,
+          "mem": 7.5,
+          "price": 0.199
+        },
+        "2xlarge": {
+          "vcpu": 8,
+          "mem": 15,
+          "price": 0.398
+        },
+        "4xlarge": {
+          "vcpu": 16,
+          "mem": 30,
+          "price": 0.796
+        },
+        "8xlarge": {
+          "vcpu": 36,
+          "mem": 60,
+          "price": 1.591
+        }
+      },
       "in": [
         "ap-northeast-1",
         "ap-northeast-2",
@@ -364,6 +464,53 @@
         "24xlarge",
         "metal"
       ],
+      "specs": {
+        "large": {
+          "vcpu": 2,
+          "mem": 4,
+          "price": 0.085
+        },
+        "xlarge": {
+          "vcpu": 4,
+          "mem": 8,
+          "price": 0.17
+        },
+        "2xlarge": {
+          "vcpu": 8,
+          "mem": 16,
+          "price": 0.34
+        },
+        "4xlarge": {
+          "vcpu": 16,
+          "mem": 32,
+          "price": 0.68
+        },
+        "9xlarge": {
+          "vcpu": 36,
+          "mem": 72,
+          "price": 1.53
+        },
+        "12xlarge": {
+          "vcpu": 48,
+          "mem": 96,
+          "price": 2.04
+        },
+        "18xlarge": {
+          "vcpu": 72,
+          "mem": 144,
+          "price": 3.06
+        },
+        "24xlarge": {
+          "vcpu": 96,
+          "mem": 192,
+          "price": 4.08
+        },
+        "metal": {
+          "vcpu": 96,
+          "mem": 192,
+          "price": 4.08
+        }
+      },
       "in": [
         "af-south-1",
         "ap-east-1",
@@ -412,6 +559,48 @@
         "16xlarge",
         "24xlarge"
       ],
+      "specs": {
+        "large": {
+          "vcpu": 2,
+          "mem": 4,
+          "price": 0.077
+        },
+        "xlarge": {
+          "vcpu": 4,
+          "mem": 8,
+          "price": 0.154
+        },
+        "2xlarge": {
+          "vcpu": 8,
+          "mem": 16,
+          "price": 0.308
+        },
+        "4xlarge": {
+          "vcpu": 16,
+          "mem": 32,
+          "price": 0.616
+        },
+        "8xlarge": {
+          "vcpu": 32,
+          "mem": 64,
+          "price": 1.232
+        },
+        "12xlarge": {
+          "vcpu": 48,
+          "mem": 96,
+          "price": 1.848
+        },
+        "16xlarge": {
+          "vcpu": 64,
+          "mem": 128,
+          "price": 2.464
+        },
+        "24xlarge": {
+          "vcpu": 96,
+          "mem": 192,
+          "price": 3.696
+        }
+      },
       "in": [
         "af-south-1",
         "ap-east-1",
@@ -460,6 +649,48 @@
         "16xlarge",
         "24xlarge"
       ],
+      "specs": {
+        "large": {
+          "vcpu": 2,
+          "mem": 4,
+          "price": 0.086
+        },
+        "xlarge": {
+          "vcpu": 4,
+          "mem": 8,
+          "price": 0.172
+        },
+        "2xlarge": {
+          "vcpu": 8,
+          "mem": 16,
+          "price": 0.344
+        },
+        "4xlarge": {
+          "vcpu": 16,
+          "mem": 32,
+          "price": 0.688
+        },
+        "8xlarge": {
+          "vcpu": 32,
+          "mem": 64,
+          "price": 1.376
+        },
+        "12xlarge": {
+          "vcpu": 48,
+          "mem": 96,
+          "price": 2.064
+        },
+        "16xlarge": {
+          "vcpu": 64,
+          "mem": 128,
+          "price": 2.752
+        },
+        "24xlarge": {
+          "vcpu": 96,
+          "mem": 192,
+          "price": 4.128
+        }
+      },
       "in": [
         "af-south-1",
         "ap-east-1",
@@ -509,6 +740,53 @@
         "24xlarge",
         "metal"
       ],
+      "specs": {
+        "large": {
+          "vcpu": 2,
+          "mem": 4,
+          "price": 0.096
+        },
+        "xlarge": {
+          "vcpu": 4,
+          "mem": 8,
+          "price": 0.192
+        },
+        "2xlarge": {
+          "vcpu": 8,
+          "mem": 16,
+          "price": 0.384
+        },
+        "4xlarge": {
+          "vcpu": 16,
+          "mem": 32,
+          "price": 0.768
+        },
+        "9xlarge": {
+          "vcpu": 36,
+          "mem": 72,
+          "price": 1.728
+        },
+        "12xlarge": {
+          "vcpu": 48,
+          "mem": 96,
+          "price": 2.304
+        },
+        "18xlarge": {
+          "vcpu": 72,
+          "mem": 144,
+          "price": 3.456
+        },
+        "24xlarge": {
+          "vcpu": 96,
+          "mem": 192,
+          "price": 4.608
+        },
+        "metal": {
+          "vcpu": 96,
+          "mem": 192,
+          "price": 4.608
+        }
+      },
       "in": [
         "af-south-1",
         "ap-east-1",
@@ -556,6 +834,43 @@
         "18xlarge",
         "metal"
       ],
+      "specs": {
+        "large": {
+          "vcpu": 2,
+          "mem": 5.25,
+          "price": 0.108
+        },
+        "xlarge": {
+          "vcpu": 4,
+          "mem": 10.5,
+          "price": 0.216
+        },
+        "2xlarge": {
+          "vcpu": 8,
+          "mem": 21,
+          "price": 0.432
+        },
+        "4xlarge": {
+          "vcpu": 16,
+          "mem": 42,
+          "price": 0.864
+        },
+        "9xlarge": {
+          "vcpu": 36,
+          "mem": 96,
+          "price": 1.944
+        },
+        "18xlarge": {
+          "vcpu": 72,
+          "mem": 192,
+          "price": 3.888
+        },
+        "metal": {
+          "vcpu": 72,
+          "mem": 192,
+          "price": 3.888
+        }
+      },
       "in": [
         "af-south-1",
         "ap-east-1",
@@ -607,6 +922,63 @@
         "48xlarge",
         "metal"
       ],
+      "specs": {
+        "large": {
+          "vcpu": 2,
+          "mem": 4,
+          "price": 0.0765
+        },
+        "xlarge": {
+          "vcpu": 4,
+          "mem": 8,
+          "price": 0.153
+        },
+        "2xlarge": {
+          "vcpu": 8,
+          "mem": 16,
+          "price": 0.306
+        },
+        "4xlarge": {
+          "vcpu": 16,
+          "mem": 32,
+          "price": 0.612
+        },
+        "8xlarge": {
+          "vcpu": 32,
+          "mem": 64,
+          "price": 1.224
+        },
+        "12xlarge": {
+          "vcpu": 48,
+          "mem": 96,
+          "price": 1.836
+        },
+        "16xlarge": {
+          "vcpu": 64,
+          "mem": 128,
+          "price": 2.448
+        },
+        "24xlarge": {
+          "vcpu": 96,
+          "mem": 192,
+          "price": 3.672
+        },
+        "32xlarge": {
+          "vcpu": 128,
+          "mem": 256,
+          "price": 4.896
+        },
+        "48xlarge": {
+          "vcpu": 192,
+          "mem": 384,
+          "price": 7.344
+        },
+        "metal": {
+          "vcpu": 192,
+          "mem": 384,
+          "price": 7.344
+        }
+      },
       "in": [
         "ap-east-1",
         "ap-northeast-1",
@@ -642,6 +1014,53 @@
         "16xlarge",
         "metal"
       ],
+      "specs": {
+        "medium": {
+          "vcpu": 1,
+          "mem": 2,
+          "price": 0.034
+        },
+        "large": {
+          "vcpu": 2,
+          "mem": 4,
+          "price": 0.068
+        },
+        "xlarge": {
+          "vcpu": 4,
+          "mem": 8,
+          "price": 0.136
+        },
+        "2xlarge": {
+          "vcpu": 8,
+          "mem": 16,
+          "price": 0.272
+        },
+        "4xlarge": {
+          "vcpu": 16,
+          "mem": 32,
+          "price": 0.544
+        },
+        "8xlarge": {
+          "vcpu": 32,
+          "mem": 64,
+          "price": 1.088
+        },
+        "12xlarge": {
+          "vcpu": 48,
+          "mem": 96,
+          "price": 1.632
+        },
+        "16xlarge": {
+          "vcpu": 64,
+          "mem": 128,
+          "price": 2.176
+        },
+        "metal": {
+          "vcpu": 64,
+          "mem": 128,
+          "price": 2.176
+        }
+      },
       "in": [
         "af-south-1",
         "ap-east-1",
@@ -696,6 +1115,53 @@
         "16xlarge",
         "metal"
       ],
+      "specs": {
+        "medium": {
+          "vcpu": 1,
+          "mem": 2,
+          "price": 0.0384
+        },
+        "large": {
+          "vcpu": 2,
+          "mem": 4,
+          "price": 0.0768
+        },
+        "xlarge": {
+          "vcpu": 4,
+          "mem": 8,
+          "price": 0.1536
+        },
+        "2xlarge": {
+          "vcpu": 8,
+          "mem": 16,
+          "price": 0.3072
+        },
+        "4xlarge": {
+          "vcpu": 16,
+          "mem": 32,
+          "price": 0.6144
+        },
+        "8xlarge": {
+          "vcpu": 32,
+          "mem": 64,
+          "price": 1.2288
+        },
+        "12xlarge": {
+          "vcpu": 48,
+          "mem": 96,
+          "price": 1.8432
+        },
+        "16xlarge": {
+          "vcpu": 64,
+          "mem": 128,
+          "price": 2.4576
+        },
+        "metal": {
+          "vcpu": 64,
+          "mem": 128,
+          "price": 2.4576
+        }
+      },
       "in": [
         "af-south-1",
         "ap-east-1",
@@ -750,6 +1216,53 @@
         "16xlarge",
         "metal"
       ],
+      "specs": {
+        "medium": {
+          "vcpu": 1,
+          "mem": 2,
+          "price": 0.0432
+        },
+        "large": {
+          "vcpu": 2,
+          "mem": 4,
+          "price": 0.0864
+        },
+        "xlarge": {
+          "vcpu": 4,
+          "mem": 8,
+          "price": 0.1728
+        },
+        "2xlarge": {
+          "vcpu": 8,
+          "mem": 16,
+          "price": 0.3456
+        },
+        "4xlarge": {
+          "vcpu": 16,
+          "mem": 32,
+          "price": 0.6912
+        },
+        "8xlarge": {
+          "vcpu": 32,
+          "mem": 64,
+          "price": 1.3824
+        },
+        "12xlarge": {
+          "vcpu": 48,
+          "mem": 96,
+          "price": 2.0736
+        },
+        "16xlarge": {
+          "vcpu": 64,
+          "mem": 128,
+          "price": 2.7648
+        },
+        "metal": {
+          "vcpu": 64,
+          "mem": 128,
+          "price": null
+        }
+      },
       "in": [
         "af-south-1",
         "ap-east-1",
@@ -805,6 +1318,58 @@
         "32xlarge",
         "metal"
       ],
+      "specs": {
+        "large": {
+          "vcpu": 2,
+          "mem": 4,
+          "price": 0.085
+        },
+        "xlarge": {
+          "vcpu": 4,
+          "mem": 8,
+          "price": 0.17
+        },
+        "2xlarge": {
+          "vcpu": 8,
+          "mem": 16,
+          "price": 0.34
+        },
+        "4xlarge": {
+          "vcpu": 16,
+          "mem": 32,
+          "price": 0.68
+        },
+        "8xlarge": {
+          "vcpu": 32,
+          "mem": 64,
+          "price": 1.36
+        },
+        "12xlarge": {
+          "vcpu": 48,
+          "mem": 96,
+          "price": 2.04
+        },
+        "16xlarge": {
+          "vcpu": 64,
+          "mem": 128,
+          "price": 2.72
+        },
+        "24xlarge": {
+          "vcpu": 96,
+          "mem": 192,
+          "price": 4.08
+        },
+        "32xlarge": {
+          "vcpu": 128,
+          "mem": 256,
+          "price": 5.44
+        },
+        "metal": {
+          "vcpu": 128,
+          "mem": 256,
+          "price": 5.44
+        }
+      },
       "in": [
         "af-south-1",
         "ap-east-1",
@@ -855,6 +1420,58 @@
         "32xlarge",
         "metal"
       ],
+      "specs": {
+        "large": {
+          "vcpu": 2,
+          "mem": 4,
+          "price": 0.1008
+        },
+        "xlarge": {
+          "vcpu": 4,
+          "mem": 8,
+          "price": 0.2016
+        },
+        "2xlarge": {
+          "vcpu": 8,
+          "mem": 16,
+          "price": 0.4032
+        },
+        "4xlarge": {
+          "vcpu": 16,
+          "mem": 32,
+          "price": 0.8064
+        },
+        "8xlarge": {
+          "vcpu": 32,
+          "mem": 64,
+          "price": 1.6128
+        },
+        "12xlarge": {
+          "vcpu": 48,
+          "mem": 96,
+          "price": 2.4192
+        },
+        "16xlarge": {
+          "vcpu": 64,
+          "mem": 128,
+          "price": 3.2256
+        },
+        "24xlarge": {
+          "vcpu": 96,
+          "mem": 192,
+          "price": 4.8384
+        },
+        "32xlarge": {
+          "vcpu": 128,
+          "mem": 256,
+          "price": 6.4512
+        },
+        "metal": {
+          "vcpu": 128,
+          "mem": 256,
+          "price": 6.4512
+        }
+      },
       "in": [
         "af-south-1",
         "ap-east-1",
@@ -905,6 +1522,58 @@
         "32xlarge",
         "metal"
       ],
+      "specs": {
+        "large": {
+          "vcpu": 2,
+          "mem": 4,
+          "price": 0.1134
+        },
+        "xlarge": {
+          "vcpu": 4,
+          "mem": 8,
+          "price": 0.2268
+        },
+        "2xlarge": {
+          "vcpu": 8,
+          "mem": 16,
+          "price": 0.4536
+        },
+        "4xlarge": {
+          "vcpu": 16,
+          "mem": 32,
+          "price": 0.9072
+        },
+        "8xlarge": {
+          "vcpu": 32,
+          "mem": 64,
+          "price": 1.8144
+        },
+        "12xlarge": {
+          "vcpu": 48,
+          "mem": 96,
+          "price": 2.7216
+        },
+        "16xlarge": {
+          "vcpu": 64,
+          "mem": 128,
+          "price": 3.6288
+        },
+        "24xlarge": {
+          "vcpu": 96,
+          "mem": 192,
+          "price": 5.4432
+        },
+        "32xlarge": {
+          "vcpu": 128,
+          "mem": 256,
+          "price": 7.2576
+        },
+        "metal": {
+          "vcpu": 128,
+          "mem": 256,
+          "price": 7.2576
+        }
+      },
       "in": [
         "af-south-1",
         "ap-east-1",
@@ -962,6 +1631,68 @@
         "48xlarge",
         "metal-48xl"
       ],
+      "specs": {
+        "medium": {
+          "vcpu": 1,
+          "mem": 2,
+          "price": 0.0513
+        },
+        "large": {
+          "vcpu": 2,
+          "mem": 4,
+          "price": 0.1026
+        },
+        "xlarge": {
+          "vcpu": 4,
+          "mem": 8,
+          "price": 0.2053
+        },
+        "2xlarge": {
+          "vcpu": 8,
+          "mem": 16,
+          "price": 0.4106
+        },
+        "4xlarge": {
+          "vcpu": 16,
+          "mem": 32,
+          "price": 0.8211
+        },
+        "8xlarge": {
+          "vcpu": 32,
+          "mem": 64,
+          "price": 1.6422
+        },
+        "12xlarge": {
+          "vcpu": 48,
+          "mem": 96,
+          "price": 2.4634
+        },
+        "16xlarge": {
+          "vcpu": 64,
+          "mem": 128,
+          "price": 3.2845
+        },
+        "24xlarge": {
+          "vcpu": 96,
+          "mem": 192,
+          "price": 4.9267
+        },
+        "32xlarge": {
+          "vcpu": 128,
+          "mem": 256,
+          "price": 6.569
+        },
+        "48xlarge": {
+          "vcpu": 192,
+          "mem": 384,
+          "price": 9.8534
+        },
+        "metal-48xl": {
+          "vcpu": 192,
+          "mem": 384,
+          "price": 9.8534
+        }
+      },
       "in": [
         "ap-northeast-1",
         "ap-southeast-1",
@@ -992,6 +1723,53 @@
         "16xlarge",
         "metal"
       ],
+      "specs": {
+        "medium": {
+          "vcpu": 1,
+          "mem": 2,
+          "price": 0.0363
+        },
+        "large": {
+          "vcpu": 2,
+          "mem": 4,
+          "price": 0.0725
+        },
+        "xlarge": {
+          "vcpu": 4,
+          "mem": 8,
+          "price": 0.145
+        },
+        "2xlarge": {
+          "vcpu": 8,
+          "mem": 16,
+          "price": 0.29
+        },
+        "4xlarge": {
+          "vcpu": 16,
+          "mem": 32,
+          "price": 0.58
+        },
+        "8xlarge": {
+          "vcpu": 32,
+          "mem": 64,
+          "price": 1.16
+        },
+        "12xlarge": {
+          "vcpu": 48,
+          "mem": 96,
+          "price": 1.74
+        },
+        "16xlarge": {
+          "vcpu": 64,
+          "mem": 128,
+          "price": 2.32
+        },
+        "metal": {
+          "vcpu": 64,
+          "mem": 128,
+          "price": 2.32
+        }
+      },
       "in": [
         "af-south-1",
         "ap-east-1",
@@ -1044,6 +1822,53 @@
         "16xlarge",
         "metal"
       ],
+      "specs": {
+        "medium": {
+          "vcpu": 1,
+          "mem": 2,
+          "price": 0.0454
+        },
+        "large": {
+          "vcpu": 2,
+          "mem": 4,
+          "price": 0.0907
+        },
+        "xlarge": {
+          "vcpu": 4,
+          "mem": 8,
+          "price": 0.1814
+        },
+        "2xlarge": {
+          "vcpu": 8,
+          "mem": 16,
+          "price": 0.3629
+        },
+        "4xlarge": {
+          "vcpu": 16,
+          "mem": 32,
+          "price": 0.7258
+        },
+        "8xlarge": {
+          "vcpu": 32,
+          "mem": 64,
+          "price": 1.4515
+        },
+        "12xlarge": {
+          "vcpu": 48,
+          "mem": 96,
+          "price": 2.1773
+        },
+        "16xlarge": {
+          "vcpu": 64,
+          "mem": 128,
+          "price": 2.903
+        },
+        "metal": {
+          "vcpu": 64,
+          "mem": 128,
+          "price": 2.903
+        }
+      },
       "in": [
         "af-south-1",
         "ap-east-1",
@@ -1096,6 +1921,53 @@
         "16xlarge",
         "metal"
       ],
+      "specs": {
+        "medium": {
+          "vcpu": 1,
+          "mem": 2,
+          "price": 0.0624
+        },
+        "large": {
+          "vcpu": 2,
+          "mem": 4,
+          "price": 0.1248
+        },
+        "xlarge": {
+          "vcpu": 4,
+          "mem": 8,
+          "price": 0.2496
+        },
+        "2xlarge": {
+          "vcpu": 8,
+          "mem": 16,
+          "price": 0.4992
+        },
+        "4xlarge": {
+          "vcpu": 16,
+          "mem": 32,
+          "price": 0.9984
+        },
+        "8xlarge": {
+          "vcpu": 32,
+          "mem": 64,
+          "price": 1.9968
+        },
+        "12xlarge": {
+          "vcpu": 48,
+          "mem": 96,
+          "price": 2.9952
+        },
+        "16xlarge": {
+          "vcpu": 64,
+          "mem": 128,
+          "price": 3.9936
+        },
+        "metal": {
+          "vcpu": 64,
+          "mem": 128,
+          "price": 3.9936
+        }
+      },
       "in": [
         "af-south-1",
         "ap-east-1",
@@ -1150,6 +2022,63 @@
         "metal-24xl",
         "metal-48xl"
       ],
+      "specs": {
+        "large": {
+          "vcpu": 2,
+          "mem": 4,
+          "price": 0.0892
+        },
+        "xlarge": {
+          "vcpu": 4,
+          "mem": 8,
+          "price": 0.1785
+        },
+        "2xlarge": {
+          "vcpu": 8,
+          "mem": 16,
+          "price": 0.357
+        },
+        "4xlarge": {
+          "vcpu": 16,
+          "mem": 32,
+          "price": 0.714
+        },
+        "8xlarge": {
+          "vcpu": 32,
+          "mem": 64,
+          "price": 1.428
+        },
+        "12xlarge": {
+          "vcpu": 48,
+          "mem": 96,
+          "price": 2.142
+        },
+        "16xlarge": {
+          "vcpu": 64,
+          "mem": 128,
+          "price": 2.856
+        },
+        "24xlarge": {
+          "vcpu": 96,
+          "mem": 192,
+          "price": 4.284
+        },
+        "48xlarge": {
+          "vcpu": 192,
+          "mem": 384,
+          "price": 8.568
+        },
+        "metal-24xl": {
+          "vcpu": 96,
+          "mem": 192,
+          "price": 4.284
+        },
+        "metal-48xl": {
+          "vcpu": 192,
+          "mem": 384,
+          "price": 8.568
+        }
+      },
       "in": [
         "af-south-1",
         "ap-east-1",
@@ -1198,6 +2127,43 @@
         "12xlarge",
         "16xlarge"
       ],
+      "specs": {
+        "large": {
+          "vcpu": 2,
+          "mem": 4,
+          "price": 0.0848
+        },
+        "xlarge": {
+          "vcpu": 4,
+          "mem": 8,
+          "price": 0.1696
+        },
+        "2xlarge": {
+          "vcpu": 8,
+          "mem": 16,
+          "price": 0.3392
+        },
+        "4xlarge": {
+          "vcpu": 16,
+          "mem": 32,
+          "price": 0.6783
+        },
+        "8xlarge": {
+          "vcpu": 32,
+          "mem": 64,
+          "price": 1.3566
+        },
+        "12xlarge": {
+          "vcpu": 48,
+          "mem": 96,
+          "price": 2.0349
+        },
+        "16xlarge": {
+          "vcpu": 64,
+          "mem": 128,
+          "price": 2.7132
+        }
+      },
       "in": [
         "af-south-1",
         "ap-east-1",
@@ -1251,6 +2217,68 @@
         "metal-24xl",
         "metal-48xl"
       ],
+      "specs": {
+        "medium": {
+          "vcpu": 1,
+          "mem": 2,
+          "price": 0.0539
+        },
+        "large": {
+          "vcpu": 2,
+          "mem": 4,
+          "price": 0.1078
+        },
+        "xlarge": {
+          "vcpu": 4,
+          "mem": 8,
+          "price": 0.2155
+        },
+        "2xlarge": {
+          "vcpu": 8,
+          "mem": 16,
+          "price": 0.4311
+        },
+        "4xlarge": {
+          "vcpu": 16,
+          "mem": 32,
+          "price": 0.8622
+        },
+        "8xlarge": {
+          "vcpu": 32,
+          "mem": 64,
+          "price": 1.7243
+        },
+        "12xlarge": {
+          "vcpu": 48,
+          "mem": 96,
+          "price": 2.5865
+        },
+        "16xlarge": {
+          "vcpu": 64,
+          "mem": 128,
+          "price": 3.4486
+        },
+        "24xlarge": {
+          "vcpu": 96,
+          "mem": 192,
+          "price": 5.173
+        },
+        "48xlarge": {
+          "vcpu": 192,
+          "mem": 384,
+          "price": 10.3459
+        },
+        "metal-24xl": {
+          "vcpu": 96,
+          "mem": 192,
+          "price": 5.173
+        },
+        "metal-48xl": {
+          "vcpu": 192,
+          "mem": 384,
+          "price": 10.3459
+        }
+      },
       "in": [
         "ap-northeast-1",
         "eu-central-1",
@@ -1281,6 +2309,68 @@
         "metal-24xl",
         "metal-48xl"
       ],
+      "specs": {
+        "medium": {
+          "vcpu": 1,
+          "mem": 2,
+          "price": 0.0399
+        },
+        "large": {
+          "vcpu": 2,
+          "mem": 4,
+          "price": 0.0798
+        },
+        "xlarge": {
+          "vcpu": 4,
+          "mem": 8,
+          "price": 0.1595
+        },
+        "2xlarge": {
+          "vcpu": 8,
+          "mem": 16,
+          "price": 0.319
+        },
+        "4xlarge": {
+          "vcpu": 16,
+          "mem": 32,
+          "price": 0.6381
+        },
+        "8xlarge": {
+          "vcpu": 32,
+          "mem": 64,
+          "price": 1.2762
+        },
+        "12xlarge": {
+          "vcpu": 48,
+          "mem": 96,
+          "price": 1.9142
+        },
+        "16xlarge": {
+          "vcpu": 64,
+          "mem": 128,
+          "price": 2.5523
+        },
+        "24xlarge": {
+          "vcpu": 96,
+          "mem": 192,
+          "price": 3.8285
+        },
+        "48xlarge": {
+          "vcpu": 192,
+          "mem": 384,
+          "price": 7.657
+        },
+        "metal-24xl": {
+          "vcpu": 96,
+          "mem": 192,
+          "price": 3.8285
+        },
+        "metal-48xl": {
+          "vcpu": 192,
+          "mem": 384,
+          "price": 7.657
+        }
+      },
       "in": [
         "ap-east-1",
         "ap-northeast-1",
@@ -1329,6 +2419,68 @@
         "metal-24xl",
         "metal-48xl"
       ],
+      "specs": {
+        "medium": {
+          "vcpu": 1,
+          "mem": 2,
+          "price": 0.0592
+        },
+        "large": {
+          "vcpu": 2,
+          "mem": 4,
+          "price": 0.1185
+        },
+        "xlarge": {
+          "vcpu": 4,
+          "mem": 8,
+          "price": 0.237
+        },
+        "2xlarge": {
+          "vcpu": 8,
+          "mem": 16,
+          "price": 0.474
+        },
+        "4xlarge": {
+          "vcpu": 16,
+          "mem": 32,
+          "price": 0.948
+        },
+        "8xlarge": {
+          "vcpu": 32,
+          "mem": 64,
+          "price": 1.896
+        },
+        "12xlarge": {
+          "vcpu": 48,
+          "mem": 96,
+          "price": 2.844
+        },
+        "16xlarge": {
+          "vcpu": 64,
+          "mem": 128,
+          "price": 3.792
+        },
+        "24xlarge": {
+          "vcpu": 96,
+          "mem": 192,
+          "price": 5.688
+        },
+        "48xlarge": {
+          "vcpu": 192,
+          "mem": 384,
+          "price": 11.376
+        },
+        "metal-24xl": {
+          "vcpu": 96,
+          "mem": 192,
+          "price": 5.688
+        },
+        "metal-48xl": {
+          "vcpu": 192,
+          "mem": 384,
+          "price": 11.376
+        }
+      },
       "in": [
         "ap-east-1",
         "ap-northeast-1",
@@ -1377,6 +2529,68 @@
         "metal-24xl",
         "metal-48xl"
       ],
+      "specs": {
+        "medium": {
+          "vcpu": 1,
+          "mem": 2,
+          "price": 0.049
+        },
+        "large": {
+          "vcpu": 2,
+          "mem": 4,
+          "price": 0.098
+        },
+        "xlarge": {
+          "vcpu": 4,
+          "mem": 8,
+          "price": 0.196
+        },
+        "2xlarge": {
+          "vcpu": 8,
+          "mem": 16,
+          "price": 0.3919
+        },
+        "4xlarge": {
+          "vcpu": 16,
+          "mem": 32,
+          "price": 0.7838
+        },
+        "8xlarge": {
+          "vcpu": 32,
+          "mem": 64,
+          "price": 1.5677
+        },
+        "12xlarge": {
+          "vcpu": 48,
+          "mem": 96,
+          "price": 2.3515
+        },
+        "16xlarge": {
+          "vcpu": 64,
+          "mem": 128,
+          "price": 3.1354
+        },
+        "24xlarge": {
+          "vcpu": 96,
+          "mem": 192,
+          "price": 4.703
+        },
+        "48xlarge": {
+          "vcpu": 192,
+          "mem": 384,
+          "price": 9.4061
+        },
+        "metal-24xl": {
+          "vcpu": 96,
+          "mem": 192,
+          "price": 4.703
+        },
+        "metal-48xl": {
+          "vcpu": 192,
+          "mem": 384,
+          "price": 9.4061
+        }
+      },
       "in": [
         "ap-east-1",
         "ap-northeast-1",
@@ -1425,6 +2639,68 @@
         "metal-24xl",
         "metal-48xl"
       ],
+      "specs": {
+        "medium": {
+          "vcpu": 1,
+          "mem": 2,
+          "price": 0.0593
+        },
+        "large": {
+          "vcpu": 2,
+          "mem": 4,
+          "price": 0.1185
+        },
+        "xlarge": {
+          "vcpu": 4,
+          "mem": 8,
+          "price": 0.237
+        },
+        "2xlarge": {
+          "vcpu": 8,
+          "mem": 16,
+          "price": 0.474
+        },
+        "4xlarge": {
+          "vcpu": 16,
+          "mem": 32,
+          "price": 0.948
+        },
+        "8xlarge": {
+          "vcpu": 32,
+          "mem": 64,
+          "price": 1.896
+        },
+        "12xlarge": {
+          "vcpu": 48,
+          "mem": 96,
+          "price": 2.844
+        },
+        "16xlarge": {
+          "vcpu": 64,
+          "mem": 128,
+          "price": 3.792
+        },
+        "24xlarge": {
+          "vcpu": 96,
+          "mem": 192,
+          "price": 5.688
+        },
+        "48xlarge": {
+          "vcpu": 192,
+          "mem": 384,
+          "price": 11.376
+        },
+        "metal-24xl": {
+          "vcpu": 96,
+          "mem": 192,
+          "price": 5.688
+        },
+        "metal-48xl": {
+          "vcpu": 192,
+          "mem": 384,
+          "price": 11.376
+        }
+      },
       "in": [
         "af-south-1",
         "ap-east-1",
@@ -1477,6 +2753,73 @@
         "metal-48xl",
         "metal-96xl"
       ],
+      "specs": {
+        "large": {
+          "vcpu": 2,
+          "mem": 4,
+          "price": 0.0937
+        },
+        "xlarge": {
+          "vcpu": 4,
+          "mem": 8,
+          "price": 0.1874
+        },
+        "2xlarge": {
+          "vcpu": 8,
+          "mem": 16,
+          "price": 0.3748
+        },
+        "4xlarge": {
+          "vcpu": 16,
+          "mem": 32,
+          "price": 0.7497
+        },
+        "8xlarge": {
+          "vcpu": 32,
+          "mem": 64,
+          "price": 1.4994
+        },
+        "12xlarge": {
+          "vcpu": 48,
+          "mem": 96,
+          "price": 2.249
+        },
+        "16xlarge": {
+          "vcpu": 64,
+          "mem": 128,
+          "price": 2.9987
+        },
+        "24xlarge": {
+          "vcpu": 96,
+          "mem": 192,
+          "price": 4.4981
+        },
+        "32xlarge": {
+          "vcpu": 128,
+          "mem": 256,
+          "price": 5.9974
+        },
+        "48xlarge": {
+          "vcpu": 192,
+          "mem": 384,
+          "price": 8.9962
+        },
+        "96xlarge": {
+          "vcpu": 384,
+          "mem": 768,
+          "price": 17.9923
+        },
+        "metal-48xl": {
+          "vcpu": 192,
+          "mem": 384,
+          "price": 8.9962
+        },
+        "metal-96xl": {
+          "vcpu": 384,
+          "mem": 768,
+          "price": 17.9923
+        }
+      },
       "in": [
         "af-south-1",
         "ap-northeast-1",
@@ -1515,6 +2858,43 @@
         "12xlarge",
         "16xlarge"
       ],
+      "specs": {
+        "large": {
+          "vcpu": 2,
+          "mem": 4,
+          "price": 0.089
+        },
+        "xlarge": {
+          "vcpu": 4,
+          "mem": 8,
+          "price": 0.178
+        },
+        "2xlarge": {
+          "vcpu": 8,
+          "mem": 16,
+          "price": 0.3561
+        },
+        "4xlarge": {
+          "vcpu": 16,
+          "mem": 32,
+          "price": 0.7122
+        },
+        "8xlarge": {
+          "vcpu": 32,
+          "mem": 64,
+          "price": 1.4243
+        },
+        "12xlarge": {
+          "vcpu": 48,
+          "mem": 96,
+          "price": 2.1365
+        },
+        "16xlarge": {
+          "vcpu": 64,
+          "mem": 128,
+          "price": 2.8486
+        }
+      },
       "in": [
         "af-south-1",
         "ap-northeast-1",
@@ -1559,6 +2939,73 @@
         "metal-48xl",
         "metal-96xl"
       ],
+      "specs": {
+        "large": {
+          "vcpu": 2,
+          "mem": 4,
+          "price": 0.1361
+        },
+        "xlarge": {
+          "vcpu": 4,
+          "mem": 8,
+          "price": 0.2722
+        },
+        "2xlarge": {
+          "vcpu": 8,
+          "mem": 16,
+          "price": 0.5443
+        },
+        "4xlarge": {
+          "vcpu": 16,
+          "mem": 32,
+          "price": 1.0886
+        },
+        "8xlarge": {
+          "vcpu": 32,
+          "mem": 64,
+          "price": 2.1773
+        },
+        "12xlarge": {
+          "vcpu": 48,
+          "mem": 96,
+          "price": 3.2659
+        },
+        "16xlarge": {
+          "vcpu": 64,
+          "mem": 128,
+          "price": 4.3546
+        },
+        "24xlarge": {
+          "vcpu": 96,
+          "mem": 192,
+          "price": 6.5318
+        },
+        "32xlarge": {
+          "vcpu": 128,
+          "mem": 256,
+          "price": 8.7091
+        },
+        "48xlarge": {
+          "vcpu": 192,
+          "mem": 384,
+          "price": 13.0637
+        },
+        "96xlarge": {
+          "vcpu": 384,
+          "mem": 768,
+          "price": 26.1274
+        },
+        "metal-48xl": {
+          "vcpu": 192,
+          "mem": 384,
+          "price": 13.0637
+        },
+        "metal-96xl": {
+          "vcpu": 384,
+          "mem": 768,
+          "price": 26.1274
+        }
+      },
       "in": [
         "af-south-1",
         "ap-northeast-1",
@@ -1603,6 +3050,73 @@
         "metal-48xl",
         "metal-96xl"
       ],
+      "specs": {
+        "large": {
+          "vcpu": 2,
+          "mem": 4,
+          "price": 0.1109
+        },
+        "xlarge": {
+          "vcpu": 4,
+          "mem": 8,
+          "price": 0.2218
+        },
+        "2xlarge": {
+          "vcpu": 8,
+          "mem": 16,
+          "price": 0.4435
+        },
+        "4xlarge": {
+          "vcpu": 16,
+          "mem": 32,
+          "price": 0.887
+        },
+        "8xlarge": {
+          "vcpu": 32,
+          "mem": 64,
+          "price": 1.7741
+        },
+        "12xlarge": {
+          "vcpu": 48,
+          "mem": 96,
+          "price": 2.6611
+        },
+        "16xlarge": {
+          "vcpu": 64,
+          "mem": 128,
+          "price": 3.5482
+        },
+        "24xlarge": {
+          "vcpu": 96,
+          "mem": 192,
+          "price": 5.3222
+        },
+        "32xlarge": {
+          "vcpu": 128,
+          "mem": 256,
+          "price": 7.0963
+        },
+        "48xlarge": {
+          "vcpu": 192,
+          "mem": 384,
+          "price": 10.6445
+        },
+        "96xlarge": {
+          "vcpu": 384,
+          "mem": 768,
+          "price": 21.289
+        },
+        "metal-48xl": {
+          "vcpu": 192,
+          "mem": 384,
+          "price": 10.6445
+        },
+        "metal-96xl": {
+          "vcpu": 384,
+          "mem": 768,
+          "price": 21.289
+        }
+      },
       "in": [
         "af-south-1",
         "ap-northeast-1",
@@ -1647,6 +3161,73 @@
         "metal-48xl",
         "metal-96xl"
       ],
+      "specs": {
+        "large": {
+          "vcpu": 2,
+          "mem": 4,
+          "price": 0.1361
+        },
+        "xlarge": {
+          "vcpu": 4,
+          "mem": 8,
+          "price": 0.2722
+        },
+        "2xlarge": {
+          "vcpu": 8,
+          "mem": 16,
+          "price": 0.5443
+        },
+        "4xlarge": {
+          "vcpu": 16,
+          "mem": 32,
+          "price": 1.0886
+        },
+        "8xlarge": {
+          "vcpu": 32,
+          "mem": 64,
+          "price": 2.1773
+        },
+        "12xlarge": {
+          "vcpu": 48,
+          "mem": 96,
+          "price": 3.2659
+        },
+        "16xlarge": {
+          "vcpu": 64,
+          "mem": 128,
+          "price": 4.3546
+        },
+        "24xlarge": {
+          "vcpu": 96,
+          "mem": 192,
+          "price": 6.5318
+        },
+        "32xlarge": {
+          "vcpu": 128,
+          "mem": 256,
+          "price": 8.7091
+        },
+        "48xlarge": {
+          "vcpu": 192,
+          "mem": 384,
+          "price": 13.0637
+        },
+        "96xlarge": {
+          "vcpu": 384,
+          "mem": 768,
+          "price": 26.1274
+        },
+        "metal-48xl": {
+          "vcpu": 192,
+          "mem": 384,
+          "price": 13.0637
+        },
+        "metal-96xl": {
+          "vcpu": 384,
+          "mem": 768,
+          "price": 26.1274
+        }
+      },
       "in": [
         "af-south-1",
         "ap-northeast-1",
@@ -1684,6 +3265,38 @@
         "8xlarge",
         "12xlarge"
       ],
+      "specs": {
+        "large": {
+          "vcpu": 2,
+          "mem": 4,
+          "price": 0.1701
+        },
+        "xlarge": {
+          "vcpu": 4,
+          "mem": 8,
+          "price": 0.3402
+        },
+        "2xlarge": {
+          "vcpu": 8,
+          "mem": 16,
+          "price": 0.6804
+        },
+        "4xlarge": {
+          "vcpu": 16,
+          "mem": 32,
+          "price": 1.3608
+        },
+        "8xlarge": {
+          "vcpu": 32,
+          "mem": 64,
+          "price": 2.7216
+        },
+        "12xlarge": {
+          "vcpu": 48,
+          "mem": 96,
+          "price": 4.0824
+        }
+      },
       "in": [
         "af-south-1",
         "ap-northeast-1",
@@ -1716,6 +3329,13 @@
       "sizes": [
         "8xlarge"
       ],
+      "specs": {
+        "8xlarge": {
+          "vcpu": 32,
+          "mem": 60.5,
+          "price": null
+        }
+      },
       "in": [
         "ap-northeast-1",
         "eu-west-1",
@@ -1732,6 +3352,13 @@
       "sizes": [
         "8xlarge"
       ],
+      "specs": {
+        "8xlarge": {
+          "vcpu": 32,
+          "mem": 244,
+          "price": 3.5
+        }
+      },
       "in": [
         "ap-northeast-1",
         "eu-west-1",
@@ -1751,6 +3378,28 @@
         "4xlarge",
         "8xlarge"
       ],
+      "specs": {
+        "xlarge": {
+          "vcpu": 4,
+          "mem": 30.5,
+          "price": 0.69
+        },
+        "2xlarge": {
+          "vcpu": 8,
+          "mem": 61,
+          "price": 1.38
+        },
+        "4xlarge": {
+          "vcpu": 16,
+          "mem": 122,
+          "price": 2.76
+        },
+        "8xlarge": {
+          "vcpu": 36,
+          "mem": 244,
+          "price": 5.52
+        }
+      },
       "in": [
         "af-south-1",
         "ap-east-1",
@@ -1786,6 +3435,28 @@
         "4xlarge",
         "8xlarge"
       ],
+      "specs": {
+        "xlarge": {
+          "vcpu": 4,
+          "mem": 32,
+          "price": 0.499
+        },
+        "2xlarge": {
+          "vcpu": 8,
+          "mem": 64,
+          "price": 0.999
+        },
+        "4xlarge": {
+          "vcpu": 16,
+          "mem": 128,
+          "price": 1.998
+        },
+        "8xlarge": {
+          "vcpu": 32,
+          "mem": 256,
+          "price": 3.9955
+        }
+      },
       "in": [
         "ap-northeast-1",
         "ap-south-1",
@@ -1817,6 +3488,38 @@
         "8xlarge",
         "12xlarge"
       ],
+      "specs": {
+        "xlarge": {
+          "vcpu": 4,
+          "mem": 16,
+          "price": 0.526
+        },
+        "2xlarge": {
+          "vcpu": 8,
+          "mem": 32,
+          "price": 1.051
+        },
+        "4xlarge": {
+          "vcpu": 16,
+          "mem": 64,
+          "price": 2.103
+        },
+        "6xlarge": {
+          "vcpu": 24,
+          "mem": 96,
+          "price": 3.154
+        },
+        "8xlarge": {
+          "vcpu": 32,
+          "mem": 128,
+          "price": 4.2058
+        },
+        "12xlarge": {
+          "vcpu": 48,
+          "mem": 192,
+          "price": 6.3086
+        }
+      },
       "in": [
         "ap-northeast-1",
         "ap-southeast-1",
@@ -1837,6 +3540,13 @@
       "sizes": [
         "24xlarge"
       ],
+      "specs": {
+        "24xlarge": {
+          "vcpu": 96,
+          "mem": 768,
+          "price": 13.109
+        }
+      },
       "in": [
         "us-east-1",
         "us-west-2"
@@ -1851,6 +3561,13 @@
       "sizes": [
         "24xlarge"
       ],
+      "specs": {
+        "24xlarge": {
+          "vcpu": 96,
+          "mem": 768,
+          "price": null
+        }
+      },
       "in": [
         "eu-central-1",
         "us-west-2"
@@ -1867,6 +3584,23 @@
         "4xlarge",
         "16xlarge"
       ],
+      "specs": {
+        "2xlarge": {
+          "vcpu": 8,
+          "mem": 122,
+          "price": 1.65
+        },
+        "4xlarge": {
+          "vcpu": 16,
+          "mem": 244,
+          "price": 3.3
+        },
+        "16xlarge": {
+          "vcpu": 64,
+          "mem": 976,
+          "price": 13.2
+        }
+      },
       "in": [
         "ap-southeast-2",
         "eu-central-1",
@@ -1887,6 +3621,23 @@
         "12xlarge",
         "48xlarge"
       ],
+      "specs": {
+        "6xlarge": {
+          "vcpu": 24,
+          "mem": 256,
+          "price": 1.98
+        },
+        "12xlarge": {
+          "vcpu": 48,
+          "mem": 512,
+          "price": 3.96
+        },
+        "48xlarge": {
+          "vcpu": 192,
+          "mem": 2048,
+          "price": 15.84
+        }
+      },
       "in": [
         "ap-northeast-1",
         "ap-northeast-2",
@@ -1908,6 +3659,18 @@
         "2xlarge",
         "8xlarge"
       ],
+      "specs": {
+        "2xlarge": {
+          "vcpu": 8,
+          "mem": 15,
+          "price": 0.65
+        },
+        "8xlarge": {
+          "vcpu": 32,
+          "mem": 60,
+          "price": 2.6
+        }
+      },
       "in": [
         "ap-northeast-1",
         "ap-northeast-2",
@@ -1931,6 +3694,23 @@
         "8xlarge",
         "16xlarge"
       ],
+      "specs": {
+        "4xlarge": {
+          "vcpu": 16,
+          "mem": 122,
+          "price": 1.14
+        },
+        "8xlarge": {
+          "vcpu": 32,
+          "mem": 244,
+          "price": 2.28
+        },
+        "16xlarge": {
+          "vcpu": 64,
+          "mem": 488,
+          "price": 4.56
+        }
+      },
       "in": [
         "ap-northeast-1",
         "ap-northeast-2",
@@ -1955,6 +3735,13 @@
       "sizes": [
         "xlarge"
       ],
+      "specs": {
+        "xlarge": {
+          "vcpu": 4,
+          "mem": 30.5,
+          "price": 0.75
+        }
+      },
       "in": [
         "ap-northeast-1",
         "ap-northeast-2",
@@ -1983,6 +3770,33 @@
         "8xlarge",
         "16xlarge"
       ],
+      "specs": {
+        "xlarge": {
+          "vcpu": 4,
+          "mem": 16,
+          "price": 0.3785
+        },
+        "2xlarge": {
+          "vcpu": 8,
+          "mem": 32,
+          "price": 0.5412
+        },
+        "4xlarge": {
+          "vcpu": 16,
+          "mem": 64,
+          "price": 0.867
+        },
+        "8xlarge": {
+          "vcpu": 32,
+          "mem": 128,
+          "price": 1.734
+        },
+        "16xlarge": {
+          "vcpu": 64,
+          "mem": 256,
+          "price": 3.468
+        }
+      },
       "in": [
         "ap-northeast-1",
         "ca-central-1",
@@ -2009,6 +3823,43 @@
         "16xlarge",
         "metal"
       ],
+      "specs": {
+        "xlarge": {
+          "vcpu": 4,
+          "mem": 16,
+          "price": 0.526
+        },
+        "2xlarge": {
+          "vcpu": 8,
+          "mem": 32,
+          "price": 0.752
+        },
+        "4xlarge": {
+          "vcpu": 16,
+          "mem": 64,
+          "price": 1.204
+        },
+        "8xlarge": {
+          "vcpu": 32,
+          "mem": 128,
+          "price": 2.176
+        },
+        "12xlarge": {
+          "vcpu": 48,
+          "mem": 192,
+          "price": 3.912
+        },
+        "16xlarge": {
+          "vcpu": 64,
+          "mem": 256,
+          "price": 4.352
+        },
+        "metal": {
+          "vcpu": 96,
+          "mem": 384,
+          "price": 7.824
+        }
+      },
       "in": [
         "af-south-1",
         "ap-east-1",
@@ -2049,6 +3900,48 @@
         "24xlarge",
         "48xlarge"
       ],
+      "specs": {
+        "xlarge": {
+          "vcpu": 4,
+          "mem": 16,
+          "price": 1.006
+        },
+        "2xlarge": {
+          "vcpu": 8,
+          "mem": 32,
+          "price": 1.212
+        },
+        "4xlarge": {
+          "vcpu": 16,
+          "mem": 64,
+          "price": 1.624
+        },
+        "8xlarge": {
+          "vcpu": 32,
+          "mem": 128,
+          "price": 2.448
+        },
+        "12xlarge": {
+          "vcpu": 48,
+          "mem": 192,
+          "price": 5.672
+        },
+        "16xlarge": {
+          "vcpu": 64,
+          "mem": 256,
+          "price": 4.096
+        },
+        "24xlarge": {
+          "vcpu": 96,
+          "mem": 384,
+          "price": 8.144
+        },
+        "48xlarge": {
+          "vcpu": 192,
+          "mem": 768,
+          "price": 16.288
+        }
+      },
       "in": [
         "ap-east-1",
         "ap-northeast-1",
@@ -2083,6 +3976,38 @@
         "16xlarge",
         "metal"
       ],
+      "specs": {
+        "xlarge": {
+          "vcpu": 4,
+          "mem": 8,
+          "price": 0.42
+        },
+        "2xlarge": {
+          "vcpu": 8,
+          "mem": 16,
+          "price": 0.556
+        },
+        "4xlarge": {
+          "vcpu": 16,
+          "mem": 32,
+          "price": 0.828
+        },
+        "8xlarge": {
+          "vcpu": 32,
+          "mem": 64,
+          "price": 1.372
+        },
+        "16xlarge": {
+          "vcpu": 64,
+          "mem": 128,
+          "price": 2.744
+        },
+        "metal": {
+          "vcpu": 64,
+          "mem": 128,
+          "price": 2.744
+        }
+      },
       "in": [
         "ap-east-1",
         "ap-northeast-1",
@@ -2121,6 +4046,48 @@
         "24xlarge",
         "48xlarge"
       ],
+      "specs": {
+        "xlarge": {
+          "vcpu": 4,
+          "mem": 16,
+          "price": 0.8048
+        },
+        "2xlarge": {
+          "vcpu": 8,
+          "mem": 32,
+          "price": 0.9776
+        },
+        "4xlarge": {
+          "vcpu": 16,
+          "mem": 64,
+          "price": 1.3232
+        },
+        "8xlarge": {
+          "vcpu": 32,
+          "mem": 128,
+          "price": 2.0144
+        },
+        "12xlarge": {
+          "vcpu": 48,
+          "mem": 192,
+          "price": 4.6016
+        },
+        "16xlarge": {
+          "vcpu": 64,
+          "mem": 256,
+          "price": 3.3968
+        },
+        "24xlarge": {
+          "vcpu": 96,
+          "mem": 384,
+          "price": 6.6752
+        },
+        "48xlarge": {
+          "vcpu": 192,
+          "mem": 768,
+          "price": 13.3504
+        }
+      },
       "in": [
         "ap-northeast-1",
         "ap-northeast-2",
@@ -2158,6 +4125,48 @@
         "24xlarge",
         "48xlarge"
       ],
+      "specs": {
+        "xlarge": {
+          "vcpu": 4,
+          "mem": 32,
+          "price": 1.861
+        },
+        "2xlarge": {
+          "vcpu": 8,
+          "mem": 64,
+          "price": 2.2421
+        },
+        "4xlarge": {
+          "vcpu": 16,
+          "mem": 128,
+          "price": 3.0042
+        },
+        "8xlarge": {
+          "vcpu": 32,
+          "mem": 256,
+          "price": 4.5286
+        },
+        "12xlarge": {
+          "vcpu": 48,
+          "mem": 384,
+          "price": 10.4926
+        },
+        "16xlarge": {
+          "vcpu": 64,
+          "mem": 512,
+          "price": 7.5772
+        },
+        "24xlarge": {
+          "vcpu": 96,
+          "mem": 768,
+          "price": 15.0656
+        },
+        "48xlarge": {
+          "vcpu": 192,
+          "mem": 1536,
+          "price": 30.1312
+        }
+      },
       "in": [
         "ap-northeast-1",
         "ap-northeast-2",
@@ -2192,6 +4201,28 @@
         "2xlarge",
         "4xlarge"
       ],
+      "specs": {
+        "large": {
+          "vcpu": 2,
+          "mem": 8,
+          "price": 0.202
+        },
+        "xlarge": {
+          "vcpu": 4,
+          "mem": 16,
+          "price": 0.2375
+        },
+        "2xlarge": {
+          "vcpu": 8,
+          "mem": 32,
+          "price": 0.475
+        },
+        "4xlarge": {
+          "vcpu": 16,
+          "mem": 64,
+          "price": 0.95
+        }
+      },
       "in": [
         "ap-northeast-1",
         "ap-northeast-2",
@@ -2227,6 +4258,38 @@
         "24xlarge",
         "48xlarge"
       ],
+      "specs": {
+        "2xlarge": {
+          "vcpu": 8,
+          "mem": 64,
+          "price": 3.3631
+        },
+        "4xlarge": {
+          "vcpu": 16,
+          "mem": 128,
+          "price": 3.9982
+        },
+        "8xlarge": {
+          "vcpu": 32,
+          "mem": 256,
+          "price": 5.2682
+        },
+        "12xlarge": {
+          "vcpu": 48,
+          "mem": 512,
+          "price": 8.2861
+        },
+        "24xlarge": {
+          "vcpu": 96,
+          "mem": 1024,
+          "price": 16.5722
+        },
+        "48xlarge": {
+          "vcpu": 192,
+          "mem": 2048,
+          "price": 33.1443
+        }
+      },
       "in": [
         "ap-northeast-1",
         "ap-northeast-2",
@@ -2247,6 +4310,18 @@
         "4xlarge",
         "8xlarge"
       ],
+      "specs": {
+        "4xlarge": {
+          "vcpu": 16,
+          "mem": 128,
+          "price": 1.5392
+        },
+        "8xlarge": {
+          "vcpu": 32,
+          "mem": 256,
+          "price": 2.4464
+        }
+      },
       "in": [
         "ap-northeast-1",
         "ap-northeast-2",
@@ -2275,6 +4350,13 @@
       "sizes": [
         "4xlarge"
       ],
+      "specs": {
+        "4xlarge": {
+          "vcpu": 16,
+          "mem": 128,
+          "price": 1.066
+        }
+      },
       "in": [
         "ap-northeast-1",
         "ap-northeast-2",
@@ -2303,6 +4385,28 @@
         "8xlarge",
         "16xlarge"
       ],
+      "specs": {
+        "2xlarge": {
+          "vcpu": 8,
+          "mem": 32,
+          "price": 0.468
+        },
+        "4xlarge": {
+          "vcpu": 16,
+          "mem": 64,
+          "price": 0.936
+        },
+        "8xlarge": {
+          "vcpu": 32,
+          "mem": 128,
+          "price": 1.872
+        },
+        "16xlarge": {
+          "vcpu": 64,
+          "mem": 256,
+          "price": 3.744
+        }
+      },
       "in": [
         "eu-west-1",
         "us-east-1",
@@ -2319,6 +4423,13 @@
       "sizes": [
         "48xlarge"
       ],
+      "specs": {
+        "48xlarge": {
+          "vcpu": 96,
+          "mem": 384,
+          "price": null
+        }
+      },
       "in": [
         "ap-southeast-1",
         "ap-southeast-2",
@@ -2335,6 +4446,13 @@
       "sizes": [
         "32xlarge"
       ],
+      "specs": {
+        "32xlarge": {
+          "vcpu": 64,
+          "mem": 1024,
+          "price": null
+        }
+      },
       "in": [
         "eu-north-1",
         "eu-west-3",
@@ -2353,6 +4471,28 @@
         "48xlarge",
         "96xlarge"
       ],
+      "specs": {
+        "12xlarge": {
+          "vcpu": 24,
+          "mem": 768,
+          "price": null
+        },
+        "24xlarge": {
+          "vcpu": 48,
+          "mem": 768,
+          "price": null
+        },
+        "48xlarge": {
+          "vcpu": 96,
+          "mem": 768,
+          "price": null
+        },
+        "96xlarge": {
+          "vcpu": 192,
+          "mem": 768,
+          "price": null
+        }
+      },
       "in": [
         "ap-southeast-5",
         "eu-north-1",
@@ -2372,6 +4512,23 @@
         "8xlarge",
         "16xlarge"
       ],
+      "specs": {
+        "4xlarge": {
+          "vcpu": 16,
+          "mem": 128,
+          "price": 1.6832
+        },
+        "8xlarge": {
+          "vcpu": 32,
+          "mem": 128,
+          "price": 1.6832
+        },
+        "16xlarge": {
+          "vcpu": 64,
+          "mem": 128,
+          "price": 1.6832
+        }
+      },
       "in": [
         "ap-northeast-1",
         "eu-west-1",
@@ -2387,6 +4544,13 @@
       "sizes": [
         "96xlarge"
       ],
+      "specs": {
+        "96xlarge": {
+          "vcpu": 192,
+          "mem": 768,
+          "price": null
+        }
+      },
       "in": [
         "ap-northeast-1",
         "eu-north-1",
@@ -2402,6 +4566,13 @@
       "sizes": [
         "8xlarge"
       ],
+      "specs": {
+        "8xlarge": {
+          "vcpu": 16,
+          "mem": 117,
+          "price": null
+        }
+      },
       "in": [
         "ap-northeast-1",
         "ap-southeast-1",
@@ -2424,6 +4595,33 @@
         "4xlarge",
         "8xlarge"
       ],
+      "specs": {
+        "large": {
+          "vcpu": 2,
+          "mem": 15,
+          "price": null
+        },
+        "xlarge": {
+          "vcpu": 4,
+          "mem": 30.5,
+          "price": 0.853
+        },
+        "2xlarge": {
+          "vcpu": 8,
+          "mem": 61,
+          "price": 1.705
+        },
+        "4xlarge": {
+          "vcpu": 16,
+          "mem": 122,
+          "price": 3.41
+        },
+        "8xlarge": {
+          "vcpu": 32,
+          "mem": 244,
+          "price": 6.82
+        }
+      },
       "in": [
         "ap-northeast-1",
         "ap-northeast-2",
@@ -2453,6 +4651,43 @@
         "16xlarge",
         "metal"
       ],
+      "specs": {
+        "large": {
+          "vcpu": 2,
+          "mem": 15.25,
+          "price": 0.156
+        },
+        "xlarge": {
+          "vcpu": 4,
+          "mem": 30.5,
+          "price": 0.312
+        },
+        "2xlarge": {
+          "vcpu": 8,
+          "mem": 61,
+          "price": 0.624
+        },
+        "4xlarge": {
+          "vcpu": 16,
+          "mem": 122,
+          "price": 1.248
+        },
+        "8xlarge": {
+          "vcpu": 32,
+          "mem": 244,
+          "price": 2.496
+        },
+        "16xlarge": {
+          "vcpu": 64,
+          "mem": 488,
+          "price": 4.992
+        },
+        "metal": {
+          "vcpu": 64,
+          "mem": 488,
+          "price": 4.992
+        }
+      },
       "in": [
         "af-south-1",
         "ap-east-1",
@@ -2500,6 +4735,48 @@
         "24xlarge",
         "metal"
       ],
+      "specs": {
+        "large": {
+          "vcpu": 2,
+          "mem": 16,
+          "price": 0.226
+        },
+        "xlarge": {
+          "vcpu": 4,
+          "mem": 32,
+          "price": 0.452
+        },
+        "2xlarge": {
+          "vcpu": 8,
+          "mem": 64,
+          "price": 0.904
+        },
+        "3xlarge": {
+          "vcpu": 12,
+          "mem": 96,
+          "price": 1.356
+        },
+        "6xlarge": {
+          "vcpu": 24,
+          "mem": 192,
+          "price": 2.712
+        },
+        "12xlarge": {
+          "vcpu": 48,
+          "mem": 384,
+          "price": 5.424
+        },
+        "24xlarge": {
+          "vcpu": 96,
+          "mem": 768,
+          "price": 10.848
+        },
+        "metal": {
+          "vcpu": 96,
+          "mem": 768,
+          "price": 10.848
+        }
+      },
       "in": [
         "af-south-1",
         "ap-east-1",
@@ -2546,6 +4823,13 @@
       "sizes": [
         "16xlarge"
       ],
+      "specs": {
+        "16xlarge": {
+          "vcpu": 64,
+          "mem": 488,
+          "price": null
+        }
+      },
       "in": [
         "af-south-1",
         "ap-east-1",
@@ -2590,6 +4874,38 @@
         "8xlarge",
         "16xlarge"
       ],
+      "specs": {
+        "large": {
+          "vcpu": 2,
+          "mem": 16,
+          "price": 0.1544
+        },
+        "xlarge": {
+          "vcpu": 4,
+          "mem": 32,
+          "price": 0.3089
+        },
+        "2xlarge": {
+          "vcpu": 8,
+          "mem": 64,
+          "price": 0.6178
+        },
+        "4xlarge": {
+          "vcpu": 16,
+          "mem": 128,
+          "price": 1.2355
+        },
+        "8xlarge": {
+          "vcpu": 32,
+          "mem": 256,
+          "price": 2.471
+        },
+        "16xlarge": {
+          "vcpu": 64,
+          "mem": 512,
+          "price": 4.9421
+        }
+      },
       "in": [
         "ap-southeast-1",
         "ap-southeast-2",
@@ -2619,6 +4935,58 @@
         "32xlarge",
         "metal"
       ],
+      "specs": {
+        "large": {
+          "vcpu": 2,
+          "mem": 16,
+          "price": 0.172
+        },
+        "xlarge": {
+          "vcpu": 4,
+          "mem": 32,
+          "price": 0.343
+        },
+        "2xlarge": {
+          "vcpu": 8,
+          "mem": 64,
+          "price": 0.686
+        },
+        "4xlarge": {
+          "vcpu": 16,
+          "mem": 128,
+          "price": 1.373
+        },
+        "8xlarge": {
+          "vcpu": 32,
+          "mem": 256,
+          "price": 2.746
+        },
+        "12xlarge": {
+          "vcpu": 48,
+          "mem": 384,
+          "price": 4.118
+        },
+        "16xlarge": {
+          "vcpu": 64,
+          "mem": 512,
+          "price": 5.491
+        },
+        "24xlarge": {
+          "vcpu": 96,
+          "mem": 768,
+          "price": 8.2368
+        },
+        "32xlarge": {
+          "vcpu": 128,
+          "mem": 1024,
+          "price": 10.9824
+        },
+        "metal": {
+          "vcpu": 128,
+          "mem": 1024,
+          "price": 10.982
+        }
+      },
       "in": [
         "af-south-1",
         "ap-east-1",
@@ -2675,6 +5043,63 @@
         "metal-24xl",
         "metal-48xl"
       ],
+      "specs": {
+        "large": {
+          "vcpu": 2,
+          "mem": 16,
+          "price": 0.1888
+        },
+        "xlarge": {
+          "vcpu": 4,
+          "mem": 32,
+          "price": 0.3775
+        },
+        "2xlarge": {
+          "vcpu": 8,
+          "mem": 64,
+          "price": 0.755
+        },
+        "4xlarge": {
+          "vcpu": 16,
+          "mem": 128,
+          "price": 1.5101
+        },
+        "8xlarge": {
+          "vcpu": 32,
+          "mem": 256,
+          "price": 3.0202
+        },
+        "12xlarge": {
+          "vcpu": 48,
+          "mem": 384,
+          "price": 4.5302
+        },
+        "16xlarge": {
+          "vcpu": 64,
+          "mem": 512,
+          "price": 6.0403
+        },
+        "24xlarge": {
+          "vcpu": 96,
+          "mem": 768,
+          "price": 9.0605
+        },
+        "48xlarge": {
+          "vcpu": 192,
+          "mem": 1536,
+          "price": 18.121
+        },
+        "metal-24xl": {
+          "vcpu": 96,
+          "mem": 768,
+          "price": 9.0605
+        },
+        "metal-48xl": {
+          "vcpu": 192,
+          "mem": 1536,
+          "price": 18.121
+        }
+      },
       "in": [
         "af-south-1",
         "ap-east-1",
@@ -2724,6 +5149,63 @@
         "metal-24xl",
         "metal-48xl"
       ],
+      "specs": {
+        "large": {
+          "vcpu": 2,
+          "mem": 16,
+          "price": 0.2599
+        },
+        "xlarge": {
+          "vcpu": 4,
+          "mem": 32,
+          "price": 0.5198
+        },
+        "2xlarge": {
+          "vcpu": 8,
+          "mem": 64,
+          "price": 1.0396
+        },
+        "3xlarge": {
+          "vcpu": 12,
+          "mem": 96,
+          "price": 1.5594
+        },
+        "6xlarge": {
+          "vcpu": 24,
+          "mem": 192,
+          "price": 3.1188
+        },
+        "12xlarge": {
+          "vcpu": 48,
+          "mem": 384,
+          "price": 6.2376
+        },
+        "18xlarge": {
+          "vcpu": 72,
+          "mem": 576,
+          "price": 9.3564
+        },
+        "24xlarge": {
+          "vcpu": 96,
+          "mem": 768,
+          "price": 12.4752
+        },
+        "48xlarge": {
+          "vcpu": 192,
+          "mem": 1536,
+          "price": 24.9504
+        },
+        "metal-24xl": {
+          "vcpu": 96,
+          "mem": 768,
+          "price": 12.4752
+        },
+        "metal-48xl": {
+          "vcpu": 192,
+          "mem": 1536,
+          "price": 24.9504
+        }
+      },
       "in": [
         "af-south-1",
         "ap-east-1",
@@ -2776,6 +5258,63 @@
         "metal-24xl",
         "metal-48xl"
       ],
+      "specs": {
+        "large": {
+          "vcpu": 2,
+          "mem": 16,
+          "price": 0.1716
+        },
+        "xlarge": {
+          "vcpu": 4,
+          "mem": 32,
+          "price": 0.3432
+        },
+        "2xlarge": {
+          "vcpu": 8,
+          "mem": 64,
+          "price": 0.6864
+        },
+        "4xlarge": {
+          "vcpu": 16,
+          "mem": 128,
+          "price": 1.3728
+        },
+        "8xlarge": {
+          "vcpu": 32,
+          "mem": 256,
+          "price": 2.7456
+        },
+        "12xlarge": {
+          "vcpu": 48,
+          "mem": 384,
+          "price": 4.1184
+        },
+        "16xlarge": {
+          "vcpu": 64,
+          "mem": 512,
+          "price": 5.4912
+        },
+        "24xlarge": {
+          "vcpu": 96,
+          "mem": 768,
+          "price": 8.2368
+        },
+        "48xlarge": {
+          "vcpu": 192,
+          "mem": 1536,
+          "price": 16.4736
+        },
+        "metal-24xl": {
+          "vcpu": 96,
+          "mem": 768,
+          "price": 8.2368
+        },
+        "metal-48xl": {
+          "vcpu": 192,
+          "mem": 1536,
+          "price": 16.4736
+        }
+      },
       "in": [
         "ap-northeast-1",
         "ap-northeast-2",
@@ -2814,6 +5353,63 @@
         "metal-24xl",
         "metal-48xl"
       ],
+      "specs": {
+        "large": {
+          "vcpu": 2,
+          "mem": 16,
+          "price": 0.2373
+        },
+        "xlarge": {
+          "vcpu": 4,
+          "mem": 32,
+          "price": 0.4746
+        },
+        "2xlarge": {
+          "vcpu": 8,
+          "mem": 64,
+          "price": 0.9492
+        },
+        "3xlarge": {
+          "vcpu": 12,
+          "mem": 96,
+          "price": 1.4238
+        },
+        "6xlarge": {
+          "vcpu": 24,
+          "mem": 192,
+          "price": 2.8476
+        },
+        "12xlarge": {
+          "vcpu": 48,
+          "mem": 384,
+          "price": 5.6952
+        },
+        "18xlarge": {
+          "vcpu": 72,
+          "mem": 576,
+          "price": 8.5428
+        },
+        "24xlarge": {
+          "vcpu": 96,
+          "mem": 768,
+          "price": 11.3904
+        },
+        "48xlarge": {
+          "vcpu": 192,
+          "mem": 1536,
+          "price": 22.7808
+        },
+        "metal-24xl": {
+          "vcpu": 96,
+          "mem": 768,
+          "price": 11.3904
+        },
+        "metal-48xl": {
+          "vcpu": 192,
+          "mem": 1536,
+          "price": 22.7808
+        }
+      },
       "in": [
         "ap-east-1",
         "ap-northeast-1",
@@ -2851,6 +5447,38 @@
         "8xlarge",
         "16xlarge"
       ],
+      "specs": {
+        "large": {
+          "vcpu": 2,
+          "mem": 8,
+          "price": 0.1819
+        },
+        "xlarge": {
+          "vcpu": 4,
+          "mem": 16,
+          "price": 0.3638
+        },
+        "2xlarge": {
+          "vcpu": 8,
+          "mem": 32,
+          "price": 0.7276
+        },
+        "4xlarge": {
+          "vcpu": 16,
+          "mem": 64,
+          "price": 1.4552
+        },
+        "8xlarge": {
+          "vcpu": 32,
+          "mem": 128,
+          "price": 2.9103
+        },
+        "16xlarge": {
+          "vcpu": 64,
+          "mem": 256,
+          "price": 5.8207
+        }
+      },
       "in": [
         "ap-northeast-1",
         "ap-south-1",
@@ -2880,6 +5508,28 @@
         "6xlarge",
         "24xlarge"
       ],
+      "specs": {
+        "xlarge": {
+          "vcpu": 4,
+          "mem": 8,
+          "price": 0.228
+        },
+        "2xlarge": {
+          "vcpu": 8,
+          "mem": 16,
+          "price": 0.362
+        },
+        "6xlarge": {
+          "vcpu": 24,
+          "mem": 48,
+          "price": 1.18
+        },
+        "24xlarge": {
+          "vcpu": 96,
+          "mem": 192,
+          "price": 4.721
+        }
+      },
       "in": [
         "af-south-1",
         "ap-east-1",
@@ -2916,6 +5566,28 @@
         "24xlarge",
         "48xlarge"
       ],
+      "specs": {
+        "xlarge": {
+          "vcpu": 4,
+          "mem": 16,
+          "price": 0.7582
+        },
+        "8xlarge": {
+          "vcpu": 32,
+          "mem": 128,
+          "price": 1.9679
+        },
+        "24xlarge": {
+          "vcpu": 96,
+          "mem": 384,
+          "price": 6.4906
+        },
+        "48xlarge": {
+          "vcpu": 192,
+          "mem": 768,
+          "price": 12.9813
+        }
+      },
       "in": [
         "ap-northeast-1",
         "ap-northeast-2",
@@ -2947,6 +5619,38 @@
         "4xlarge",
         "8xlarge"
       ],
+      "specs": {
+        "medium": {
+          "vcpu": 1,
+          "mem": 6,
+          "price": 0.1441
+        },
+        "large": {
+          "vcpu": 2,
+          "mem": 12,
+          "price": 0.2882
+        },
+        "xlarge": {
+          "vcpu": 4,
+          "mem": 24,
+          "price": 0.5763
+        },
+        "2xlarge": {
+          "vcpu": 8,
+          "mem": 48,
+          "price": 1.1526
+        },
+        "4xlarge": {
+          "vcpu": 16,
+          "mem": 96,
+          "price": 2.3052
+        },
+        "8xlarge": {
+          "vcpu": 32,
+          "mem": 192,
+          "price": 4.6104
+        }
+      },
       "in": [
         "ap-northeast-1",
         "ap-south-1",
@@ -2974,6 +5678,28 @@
         "large",
         "xlarge"
       ],
+      "specs": {
+        "small": {
+          "vcpu": 1,
+          "mem": 1.7,
+          "price": 0.044
+        },
+        "medium": {
+          "vcpu": 1,
+          "mem": 3.75,
+          "price": 0.087
+        },
+        "large": {
+          "vcpu": 2,
+          "mem": 7.5,
+          "price": 0.175
+        },
+        "xlarge": {
+          "vcpu": 4,
+          "mem": 15,
+          "price": 0.35
+        }
+      },
       "in": [
         "ap-northeast-1",
         "ap-southeast-1",
@@ -2996,6 +5722,23 @@
         "2xlarge",
         "4xlarge"
       ],
+      "specs": {
+        "xlarge": {
+          "vcpu": 2,
+          "mem": 17.1,
+          "price": 0.245
+        },
+        "2xlarge": {
+          "vcpu": 4,
+          "mem": 34.2,
+          "price": 0.49
+        },
+        "4xlarge": {
+          "vcpu": 8,
+          "mem": 68.4,
+          "price": 0.98
+        }
+      },
       "in": [
         "ap-northeast-1",
         "ap-southeast-1",
@@ -3019,6 +5762,28 @@
         "xlarge",
         "2xlarge"
       ],
+      "specs": {
+        "medium": {
+          "vcpu": 1,
+          "mem": 3.75,
+          "price": 0.067
+        },
+        "large": {
+          "vcpu": 2,
+          "mem": 7.5,
+          "price": 0.133
+        },
+        "xlarge": {
+          "vcpu": 4,
+          "mem": 15,
+          "price": 0.266
+        },
+        "2xlarge": {
+          "vcpu": 8,
+          "mem": 30,
+          "price": 0.532
+        }
+      },
       "in": [
         "ap-northeast-1",
         "ap-northeast-2",
@@ -3047,6 +5812,38 @@
         "10xlarge",
         "16xlarge"
       ],
+      "specs": {
+        "large": {
+          "vcpu": 2,
+          "mem": 8,
+          "price": 0.1
+        },
+        "xlarge": {
+          "vcpu": 4,
+          "mem": 16,
+          "price": 0.2
+        },
+        "2xlarge": {
+          "vcpu": 8,
+          "mem": 32,
+          "price": 0.4
+        },
+        "4xlarge": {
+          "vcpu": 16,
+          "mem": 64,
+          "price": 0.8
+        },
+        "10xlarge": {
+          "vcpu": 40,
+          "mem": 160,
+          "price": 2.0
+        },
+        "16xlarge": {
+          "vcpu": 64,
+          "mem": 256,
+          "price": 3.2
+        }
+      },
       "in": [
         "ap-northeast-1",
         "ap-northeast-2",
@@ -3082,6 +5879,53 @@
         "24xlarge",
         "metal"
       ],
+      "specs": {
+        "large": {
+          "vcpu": 2,
+          "mem": 8,
+          "price": 0.096
+        },
+        "xlarge": {
+          "vcpu": 4,
+          "mem": 16,
+          "price": 0.192
+        },
+        "2xlarge": {
+          "vcpu": 8,
+          "mem": 32,
+          "price": 0.384
+        },
+        "4xlarge": {
+          "vcpu": 16,
+          "mem": 64,
+          "price": 0.768
+        },
+        "8xlarge": {
+          "vcpu": 32,
+          "mem": 128,
+          "price": 1.536
+        },
+        "12xlarge": {
+          "vcpu": 48,
+          "mem": 192,
+          "price": 2.304
+        },
+        "16xlarge": {
+          "vcpu": 64,
+          "mem": 256,
+          "price": 3.072
+        },
+        "24xlarge": {
+          "vcpu": 96,
+          "mem": 384,
+          "price": 4.608
+        },
+        "metal": {
+          "vcpu": 96,
+          "mem": 384,
+          "price": 4.608
+        }
+      },
       "in": [
         "af-south-1",
         "ap-east-1",
@@ -3130,6 +5974,48 @@
         "16xlarge",
         "24xlarge"
       ],
+      "specs": {
+        "large": {
+          "vcpu": 2,
+          "mem": 8,
+          "price": 0.086
+        },
+        "xlarge": {
+          "vcpu": 4,
+          "mem": 16,
+          "price": 0.172
+        },
+        "2xlarge": {
+          "vcpu": 8,
+          "mem": 32,
+          "price": 0.344
+        },
+        "4xlarge": {
+          "vcpu": 16,
+          "mem": 64,
+          "price": 0.688
+        },
+        "8xlarge": {
+          "vcpu": 32,
+          "mem": 128,
+          "price": 1.376
+        },
+        "12xlarge": {
+          "vcpu": 48,
+          "mem": 192,
+          "price": 2.064
+        },
+        "16xlarge": {
+          "vcpu": 64,
+          "mem": 256,
+          "price": 2.752
+        },
+        "24xlarge": {
+          "vcpu": 96,
+          "mem": 384,
+          "price": 4.128
+        }
+      },
       "in": [
         "af-south-1",
         "ap-east-1",
@@ -3178,6 +6064,48 @@
         "16xlarge",
         "24xlarge"
       ],
+      "specs": {
+        "large": {
+          "vcpu": 2,
+          "mem": 8,
+          "price": 0.103
+        },
+        "xlarge": {
+          "vcpu": 4,
+          "mem": 16,
+          "price": 0.206
+        },
+        "2xlarge": {
+          "vcpu": 8,
+          "mem": 32,
+          "price": 0.412
+        },
+        "4xlarge": {
+          "vcpu": 16,
+          "mem": 64,
+          "price": 0.824
+        },
+        "8xlarge": {
+          "vcpu": 32,
+          "mem": 128,
+          "price": 1.648
+        },
+        "12xlarge": {
+          "vcpu": 48,
+          "mem": 192,
+          "price": 2.472
+        },
+        "16xlarge": {
+          "vcpu": 64,
+          "mem": 256,
+          "price": 3.296
+        },
+        "24xlarge": {
+          "vcpu": 96,
+          "mem": 384,
+          "price": 4.944
+        }
+      },
       "in": [
         "af-south-1",
         "ap-east-1",
@@ -3227,6 +6155,53 @@
         "24xlarge",
         "metal"
       ],
+      "specs": {
+        "large": {
+          "vcpu": 2,
+          "mem": 8,
+          "price": 0.113
+        },
+        "xlarge": {
+          "vcpu": 4,
+          "mem": 16,
+          "price": 0.226
+        },
+        "2xlarge": {
+          "vcpu": 8,
+          "mem": 32,
+          "price": 0.452
+        },
+        "4xlarge": {
+          "vcpu": 16,
+          "mem": 64,
+          "price": 0.904
+        },
+        "8xlarge": {
+          "vcpu": 32,
+          "mem": 128,
+          "price": 1.808
+        },
+        "12xlarge": {
+          "vcpu": 48,
+          "mem": 192,
+          "price": 2.712
+        },
+        "16xlarge": {
+          "vcpu": 64,
+          "mem": 256,
+          "price": 3.616
+        },
+        "24xlarge": {
+          "vcpu": 96,
+          "mem": 384,
+          "price": 5.424
+        },
+        "metal": {
+          "vcpu": 96,
+          "mem": 384,
+          "price": 5.424
+        }
+      },
       "in": [
         "af-south-1",
         "ap-east-1",
@@ -3276,6 +6251,53 @@
         "24xlarge",
         "metal"
       ],
+      "specs": {
+        "large": {
+          "vcpu": 2,
+          "mem": 8,
+          "price": 0.136
+        },
+        "xlarge": {
+          "vcpu": 4,
+          "mem": 16,
+          "price": 0.272
+        },
+        "2xlarge": {
+          "vcpu": 8,
+          "mem": 32,
+          "price": 0.544
+        },
+        "4xlarge": {
+          "vcpu": 16,
+          "mem": 64,
+          "price": 1.088
+        },
+        "8xlarge": {
+          "vcpu": 32,
+          "mem": 128,
+          "price": 2.176
+        },
+        "12xlarge": {
+          "vcpu": 48,
+          "mem": 192,
+          "price": 3.264
+        },
+        "16xlarge": {
+          "vcpu": 64,
+          "mem": 256,
+          "price": 4.352
+        },
+        "24xlarge": {
+          "vcpu": 96,
+          "mem": 384,
+          "price": 6.528
+        },
+        "metal": {
+          "vcpu": 96,
+          "mem": 384,
+          "price": 6.528
+        }
+      },
       "in": [
         "af-south-1",
         "ap-east-1",
@@ -3325,6 +6347,53 @@
         "24xlarge",
         "metal"
       ],
+      "specs": {
+        "large": {
+          "vcpu": 2,
+          "mem": 8,
+          "price": 0.119
+        },
+        "xlarge": {
+          "vcpu": 4,
+          "mem": 16,
+          "price": 0.238
+        },
+        "2xlarge": {
+          "vcpu": 8,
+          "mem": 32,
+          "price": 0.476
+        },
+        "4xlarge": {
+          "vcpu": 16,
+          "mem": 64,
+          "price": 0.952
+        },
+        "8xlarge": {
+          "vcpu": 32,
+          "mem": 128,
+          "price": 1.904
+        },
+        "12xlarge": {
+          "vcpu": 48,
+          "mem": 192,
+          "price": 2.856
+        },
+        "16xlarge": {
+          "vcpu": 64,
+          "mem": 256,
+          "price": 3.808
+        },
+        "24xlarge": {
+          "vcpu": 96,
+          "mem": 384,
+          "price": 5.712
+        },
+        "metal": {
+          "vcpu": 96,
+          "mem": 384,
+          "price": 5.712
+        }
+      },
       "in": [
         "af-south-1",
         "ap-east-1",
@@ -3372,6 +6441,43 @@
         "12xlarge",
         "metal"
       ],
+      "specs": {
+        "large": {
+          "vcpu": 2,
+          "mem": 8,
+          "price": 0.1652
+        },
+        "xlarge": {
+          "vcpu": 4,
+          "mem": 16,
+          "price": 0.3303
+        },
+        "2xlarge": {
+          "vcpu": 8,
+          "mem": 32,
+          "price": 0.6607
+        },
+        "3xlarge": {
+          "vcpu": 12,
+          "mem": 48,
+          "price": 0.991
+        },
+        "6xlarge": {
+          "vcpu": 24,
+          "mem": 96,
+          "price": 1.982
+        },
+        "12xlarge": {
+          "vcpu": 48,
+          "mem": 192,
+          "price": 3.9641
+        },
+        "metal": {
+          "vcpu": 48,
+          "mem": 192,
+          "price": 3.9641
+        }
+      },
       "in": [
         "af-south-1",
         "ap-east-1",
@@ -3423,6 +6529,63 @@
         "48xlarge",
         "metal"
       ],
+      "specs": {
+        "large": {
+          "vcpu": 2,
+          "mem": 8,
+          "price": 0.0864
+        },
+        "xlarge": {
+          "vcpu": 4,
+          "mem": 16,
+          "price": 0.1728
+        },
+        "2xlarge": {
+          "vcpu": 8,
+          "mem": 32,
+          "price": 0.3456
+        },
+        "4xlarge": {
+          "vcpu": 16,
+          "mem": 64,
+          "price": 0.6912
+        },
+        "8xlarge": {
+          "vcpu": 32,
+          "mem": 128,
+          "price": 1.3824
+        },
+        "12xlarge": {
+          "vcpu": 48,
+          "mem": 192,
+          "price": 2.0736
+        },
+        "16xlarge": {
+          "vcpu": 64,
+          "mem": 256,
+          "price": 2.7648
+        },
+        "24xlarge": {
+          "vcpu": 96,
+          "mem": 384,
+          "price": 4.1472
+        },
+        "32xlarge": {
+          "vcpu": 128,
+          "mem": 512,
+          "price": 5.5296
+        },
+        "48xlarge": {
+          "vcpu": 192,
+          "mem": 768,
+          "price": 8.2944
+        },
+        "metal": {
+          "vcpu": 192,
+          "mem": 768,
+          "price": 8.2944
+        }
+      },
       "in": [
         "ap-northeast-1",
         "ap-south-1",
@@ -3459,6 +6622,53 @@
         "16xlarge",
         "metal"
       ],
+      "specs": {
+        "medium": {
+          "vcpu": 1,
+          "mem": 4,
+          "price": 0.0385
+        },
+        "large": {
+          "vcpu": 2,
+          "mem": 8,
+          "price": 0.077
+        },
+        "xlarge": {
+          "vcpu": 4,
+          "mem": 16,
+          "price": 0.154
+        },
+        "2xlarge": {
+          "vcpu": 8,
+          "mem": 32,
+          "price": 0.308
+        },
+        "4xlarge": {
+          "vcpu": 16,
+          "mem": 64,
+          "price": 0.616
+        },
+        "8xlarge": {
+          "vcpu": 32,
+          "mem": 128,
+          "price": 1.232
+        },
+        "12xlarge": {
+          "vcpu": 48,
+          "mem": 192,
+          "price": 1.848
+        },
+        "16xlarge": {
+          "vcpu": 64,
+          "mem": 256,
+          "price": 2.464
+        },
+        "metal": {
+          "vcpu": 64,
+          "mem": 256,
+          "price": 2.464
+        }
+      },
       "in": [
         "af-south-1",
         "ap-east-1",
@@ -3513,6 +6723,53 @@
         "16xlarge",
         "metal"
       ],
+      "specs": {
+        "medium": {
+          "vcpu": 1,
+          "mem": 4,
+          "price": 0.0452
+        },
+        "large": {
+          "vcpu": 2,
+          "mem": 8,
+          "price": 0.0904
+        },
+        "xlarge": {
+          "vcpu": 4,
+          "mem": 16,
+          "price": 0.1808
+        },
+        "2xlarge": {
+          "vcpu": 8,
+          "mem": 32,
+          "price": 0.3616
+        },
+        "4xlarge": {
+          "vcpu": 16,
+          "mem": 64,
+          "price": 0.7232
+        },
+        "8xlarge": {
+          "vcpu": 32,
+          "mem": 128,
+          "price": 1.4464
+        },
+        "12xlarge": {
+          "vcpu": 48,
+          "mem": 192,
+          "price": 2.1696
+        },
+        "16xlarge": {
+          "vcpu": 64,
+          "mem": 256,
+          "price": 2.8928
+        },
+        "metal": {
+          "vcpu": 64,
+          "mem": 256,
+          "price": 2.8928
+        }
+      },
       "in": [
         "af-south-1",
         "ap-east-1",
@@ -3568,6 +6825,58 @@
         "32xlarge",
         "metal"
       ],
+      "specs": {
+        "large": {
+          "vcpu": 2,
+          "mem": 8,
+          "price": 0.096
+        },
+        "xlarge": {
+          "vcpu": 4,
+          "mem": 16,
+          "price": 0.192
+        },
+        "2xlarge": {
+          "vcpu": 8,
+          "mem": 32,
+          "price": 0.384
+        },
+        "4xlarge": {
+          "vcpu": 16,
+          "mem": 64,
+          "price": 0.768
+        },
+        "8xlarge": {
+          "vcpu": 32,
+          "mem": 128,
+          "price": 1.536
+        },
+        "12xlarge": {
+          "vcpu": 48,
+          "mem": 192,
+          "price": 2.304
+        },
+        "16xlarge": {
+          "vcpu": 64,
+          "mem": 256,
+          "price": 3.072
+        },
+        "24xlarge": {
+          "vcpu": 96,
+          "mem": 384,
+          "price": 4.608
+        },
+        "32xlarge": {
+          "vcpu": 128,
+          "mem": 512,
+          "price": 6.144
+        },
+        "metal": {
+          "vcpu": 128,
+          "mem": 512,
+          "price": 6.144
+        }
+      },
       "in": [
         "af-south-1",
         "ap-east-1",
@@ -3621,6 +6930,58 @@
         "32xlarge",
         "metal"
       ],
+      "specs": {
+        "large": {
+          "vcpu": 2,
+          "mem": 8,
+          "price": 0.1187
+        },
+        "xlarge": {
+          "vcpu": 4,
+          "mem": 16,
+          "price": 0.2373
+        },
+        "2xlarge": {
+          "vcpu": 8,
+          "mem": 32,
+          "price": 0.4746
+        },
+        "4xlarge": {
+          "vcpu": 16,
+          "mem": 64,
+          "price": 0.9492
+        },
+        "8xlarge": {
+          "vcpu": 32,
+          "mem": 128,
+          "price": 1.8984
+        },
+        "12xlarge": {
+          "vcpu": 48,
+          "mem": 192,
+          "price": 2.8476
+        },
+        "16xlarge": {
+          "vcpu": 64,
+          "mem": 256,
+          "price": 3.7968
+        },
+        "24xlarge": {
+          "vcpu": 96,
+          "mem": 384,
+          "price": 5.6952
+        },
+        "32xlarge": {
+          "vcpu": 128,
+          "mem": 512,
+          "price": 7.5936
+        },
+        "metal": {
+          "vcpu": 128,
+          "mem": 512,
+          "price": 7.5936
+        }
+      },
       "in": [
         "af-south-1",
         "ap-east-1",
@@ -3675,6 +7036,58 @@
         "32xlarge",
         "metal"
       ],
+      "specs": {
+        "large": {
+          "vcpu": 2,
+          "mem": 8,
+          "price": 0.1591
+        },
+        "xlarge": {
+          "vcpu": 4,
+          "mem": 16,
+          "price": 0.3182
+        },
+        "2xlarge": {
+          "vcpu": 8,
+          "mem": 32,
+          "price": 0.6365
+        },
+        "4xlarge": {
+          "vcpu": 16,
+          "mem": 64,
+          "price": 1.273
+        },
+        "8xlarge": {
+          "vcpu": 32,
+          "mem": 128,
+          "price": 2.5459
+        },
+        "12xlarge": {
+          "vcpu": 48,
+          "mem": 192,
+          "price": 3.8189
+        },
+        "16xlarge": {
+          "vcpu": 64,
+          "mem": 256,
+          "price": 5.0918
+        },
+        "24xlarge": {
+          "vcpu": 96,
+          "mem": 384,
+          "price": 7.6378
+        },
+        "32xlarge": {
+          "vcpu": 128,
+          "mem": 512,
+          "price": 10.1837
+        },
+        "metal": {
+          "vcpu": 128,
+          "mem": 512,
+          "price": 10.1837
+        }
+      },
       "in": [
         "af-south-1",
         "ap-east-1",
@@ -3729,6 +7142,58 @@
         "32xlarge",
         "metal"
       ],
+      "specs": {
+        "large": {
+          "vcpu": 2,
+          "mem": 8,
+          "price": 0.1392
+        },
+        "xlarge": {
+          "vcpu": 4,
+          "mem": 16,
+          "price": 0.2785
+        },
+        "2xlarge": {
+          "vcpu": 8,
+          "mem": 32,
+          "price": 0.5569
+        },
+        "4xlarge": {
+          "vcpu": 16,
+          "mem": 64,
+          "price": 1.1138
+        },
+        "8xlarge": {
+          "vcpu": 32,
+          "mem": 128,
+          "price": 2.2277
+        },
+        "12xlarge": {
+          "vcpu": 48,
+          "mem": 192,
+          "price": 3.3415
+        },
+        "16xlarge": {
+          "vcpu": 64,
+          "mem": 256,
+          "price": 4.4554
+        },
+        "24xlarge": {
+          "vcpu": 96,
+          "mem": 384,
+          "price": 6.683
+        },
+        "32xlarge": {
+          "vcpu": 128,
+          "mem": 512,
+          "price": 8.9107
+        },
+        "metal": {
+          "vcpu": 128,
+          "mem": 512,
+          "price": 8.9107
+        }
+      },
       "in": [
         "af-south-1",
         "ap-east-1",
@@ -3785,6 +7250,68 @@
         "48xlarge",
         "metal-48xl"
       ],
+      "specs": {
+        "medium": {
+          "vcpu": 1,
+          "mem": 4,
+          "price": 0.058
+        },
+        "large": {
+          "vcpu": 2,
+          "mem": 8,
+          "price": 0.1159
+        },
+        "xlarge": {
+          "vcpu": 4,
+          "mem": 16,
+          "price": 0.2318
+        },
+        "2xlarge": {
+          "vcpu": 8,
+          "mem": 32,
+          "price": 0.4637
+        },
+        "4xlarge": {
+          "vcpu": 16,
+          "mem": 64,
+          "price": 0.9274
+        },
+        "8xlarge": {
+          "vcpu": 32,
+          "mem": 128,
+          "price": 1.8547
+        },
+        "12xlarge": {
+          "vcpu": 48,
+          "mem": 192,
+          "price": 2.7821
+        },
+        "16xlarge": {
+          "vcpu": 64,
+          "mem": 256,
+          "price": 3.7094
+        },
+        "24xlarge": {
+          "vcpu": 96,
+          "mem": 384,
+          "price": 5.5642
+        },
+        "32xlarge": {
+          "vcpu": 128,
+          "mem": 512,
+          "price": 7.4189
+        },
+        "48xlarge": {
+          "vcpu": 192,
+          "mem": 768,
+          "price": 11.1283
+        },
+        "metal-48xl": {
+          "vcpu": 192,
+          "mem": 768,
+          "price": 11.1283
+        }
+      },
       "in": [
         "ap-northeast-1",
         "ap-southeast-2",
@@ -3815,6 +7342,53 @@
         "16xlarge",
         "metal"
       ],
+      "specs": {
+        "medium": {
+          "vcpu": 1,
+          "mem": 4,
+          "price": 0.0408
+        },
+        "large": {
+          "vcpu": 2,
+          "mem": 8,
+          "price": 0.0816
+        },
+        "xlarge": {
+          "vcpu": 4,
+          "mem": 16,
+          "price": 0.1632
+        },
+        "2xlarge": {
+          "vcpu": 8,
+          "mem": 32,
+          "price": 0.3264
+        },
+        "4xlarge": {
+          "vcpu": 16,
+          "mem": 64,
+          "price": 0.6528
+        },
+        "8xlarge": {
+          "vcpu": 32,
+          "mem": 128,
+          "price": 1.3056
+        },
+        "12xlarge": {
+          "vcpu": 48,
+          "mem": 192,
+          "price": 1.9584
+        },
+        "16xlarge": {
+          "vcpu": 64,
+          "mem": 256,
+          "price": 2.6112
+        },
+        "metal": {
+          "vcpu": 64,
+          "mem": 256,
+          "price": 2.6112
+        }
+      },
       "in": [
         "af-south-1",
         "ap-east-1",
@@ -3867,6 +7441,53 @@
         "16xlarge",
         "metal"
       ],
+      "specs": {
+        "medium": {
+          "vcpu": 1,
+          "mem": 4,
+          "price": 0.0534
+        },
+        "large": {
+          "vcpu": 2,
+          "mem": 8,
+          "price": 0.1068
+        },
+        "xlarge": {
+          "vcpu": 4,
+          "mem": 16,
+          "price": 0.2136
+        },
+        "2xlarge": {
+          "vcpu": 8,
+          "mem": 32,
+          "price": 0.4271
+        },
+        "4xlarge": {
+          "vcpu": 16,
+          "mem": 64,
+          "price": 0.8543
+        },
+        "8xlarge": {
+          "vcpu": 32,
+          "mem": 128,
+          "price": 1.7086
+        },
+        "12xlarge": {
+          "vcpu": 48,
+          "mem": 192,
+          "price": 2.5628
+        },
+        "16xlarge": {
+          "vcpu": 64,
+          "mem": 256,
+          "price": 3.4171
+        },
+        "metal": {
+          "vcpu": 64,
+          "mem": 256,
+          "price": 3.4171
+        }
+      },
       "in": [
         "af-south-1",
         "ap-east-1",
@@ -3921,6 +7542,63 @@
         "metal-24xl",
         "metal-48xl"
       ],
+      "specs": {
+        "large": {
+          "vcpu": 2,
+          "mem": 8,
+          "price": 0.1008
+        },
+        "xlarge": {
+          "vcpu": 4,
+          "mem": 16,
+          "price": 0.2016
+        },
+        "2xlarge": {
+          "vcpu": 8,
+          "mem": 32,
+          "price": 0.4032
+        },
+        "4xlarge": {
+          "vcpu": 16,
+          "mem": 64,
+          "price": 0.8064
+        },
+        "8xlarge": {
+          "vcpu": 32,
+          "mem": 128,
+          "price": 1.6128
+        },
+        "12xlarge": {
+          "vcpu": 48,
+          "mem": 192,
+          "price": 2.4192
+        },
+        "16xlarge": {
+          "vcpu": 64,
+          "mem": 256,
+          "price": 3.2256
+        },
+        "24xlarge": {
+          "vcpu": 96,
+          "mem": 384,
+          "price": 4.8384
+        },
+        "48xlarge": {
+          "vcpu": 192,
+          "mem": 768,
+          "price": 9.6768
+        },
+        "metal-24xl": {
+          "vcpu": 96,
+          "mem": 384,
+          "price": 4.8384
+        },
+        "metal-48xl": {
+          "vcpu": 192,
+          "mem": 768,
+          "price": 9.6768
+        }
+      },
       "in": [
         "af-south-1",
         "ap-east-1",
@@ -3970,6 +7648,43 @@
         "12xlarge",
         "16xlarge"
       ],
+      "specs": {
+        "large": {
+          "vcpu": 2,
+          "mem": 8,
+          "price": 0.0958
+        },
+        "xlarge": {
+          "vcpu": 4,
+          "mem": 16,
+          "price": 0.1915
+        },
+        "2xlarge": {
+          "vcpu": 8,
+          "mem": 32,
+          "price": 0.383
+        },
+        "4xlarge": {
+          "vcpu": 16,
+          "mem": 64,
+          "price": 0.7661
+        },
+        "8xlarge": {
+          "vcpu": 32,
+          "mem": 128,
+          "price": 1.5322
+        },
+        "12xlarge": {
+          "vcpu": 48,
+          "mem": 192,
+          "price": 2.2982
+        },
+        "16xlarge": {
+          "vcpu": 64,
+          "mem": 256,
+          "price": 3.0643
+        }
+      },
       "in": [
         "af-south-1",
         "ap-east-1",
@@ -4024,6 +7739,68 @@
         "metal-24xl",
         "metal-48xl"
       ],
+      "specs": {
+        "medium": {
+          "vcpu": 1,
+          "mem": 4,
+          "price": 0.0609
+        },
+        "large": {
+          "vcpu": 2,
+          "mem": 8,
+          "price": 0.1217
+        },
+        "xlarge": {
+          "vcpu": 4,
+          "mem": 16,
+          "price": 0.2434
+        },
+        "2xlarge": {
+          "vcpu": 8,
+          "mem": 32,
+          "price": 0.4869
+        },
+        "4xlarge": {
+          "vcpu": 16,
+          "mem": 64,
+          "price": 0.9738
+        },
+        "8xlarge": {
+          "vcpu": 32,
+          "mem": 128,
+          "price": 1.9475
+        },
+        "12xlarge": {
+          "vcpu": 48,
+          "mem": 192,
+          "price": 2.9213
+        },
+        "16xlarge": {
+          "vcpu": 64,
+          "mem": 256,
+          "price": 3.895
+        },
+        "24xlarge": {
+          "vcpu": 96,
+          "mem": 384,
+          "price": 5.8426
+        },
+        "48xlarge": {
+          "vcpu": 192,
+          "mem": 768,
+          "price": 11.6851
+        },
+        "metal-24xl": {
+          "vcpu": 96,
+          "mem": 384,
+          "price": 5.8426
+        },
+        "metal-48xl": {
+          "vcpu": 192,
+          "mem": 768,
+          "price": 11.6851
+        }
+      },
       "in": [
         "ap-northeast-1",
         "eu-central-1",
@@ -4051,6 +7828,53 @@
         "metal-12xl",
         "metal-24xl"
       ],
+      "specs": {
+        "medium": {
+          "vcpu": 1,
+          "mem": 4,
+          "price": 0.1032
+        },
+        "large": {
+          "vcpu": 2,
+          "mem": 8,
+          "price": 0.2065
+        },
+        "xlarge": {
+          "vcpu": 4,
+          "mem": 16,
+          "price": 0.4129
+        },
+        "3xlarge": {
+          "vcpu": 12,
+          "mem": 48,
+          "price": 1.2388
+        },
+        "6xlarge": {
+          "vcpu": 24,
+          "mem": 96,
+          "price": 2.4775
+        },
+        "12xlarge": {
+          "vcpu": 48,
+          "mem": 192,
+          "price": 4.955
+        },
+        "24xlarge": {
+          "vcpu": 96,
+          "mem": 384,
+          "price": 9.9101
+        },
+        "metal-12xl": {
+          "vcpu": 48,
+          "mem": 192,
+          "price": 4.955
+        },
+        "metal-24xl": {
+          "vcpu": 96,
+          "mem": 384,
+          "price": 9.9101
+        }
+      },
       "in": [
         "ap-northeast-1",
         "eu-central-1",
@@ -4081,6 +7905,68 @@
         "metal-24xl",
         "metal-48xl"
       ],
+      "specs": {
+        "medium": {
+          "vcpu": 1,
+          "mem": 4,
+          "price": 0.0449
+        },
+        "large": {
+          "vcpu": 2,
+          "mem": 8,
+          "price": 0.0898
+        },
+        "xlarge": {
+          "vcpu": 4,
+          "mem": 16,
+          "price": 0.1795
+        },
+        "2xlarge": {
+          "vcpu": 8,
+          "mem": 32,
+          "price": 0.359
+        },
+        "4xlarge": {
+          "vcpu": 16,
+          "mem": 64,
+          "price": 0.7181
+        },
+        "8xlarge": {
+          "vcpu": 32,
+          "mem": 128,
+          "price": 1.4362
+        },
+        "12xlarge": {
+          "vcpu": 48,
+          "mem": 192,
+          "price": 2.1542
+        },
+        "16xlarge": {
+          "vcpu": 64,
+          "mem": 256,
+          "price": 2.8723
+        },
+        "24xlarge": {
+          "vcpu": 96,
+          "mem": 384,
+          "price": 4.3085
+        },
+        "48xlarge": {
+          "vcpu": 192,
+          "mem": 768,
+          "price": 8.617
+        },
+        "metal-24xl": {
+          "vcpu": 96,
+          "mem": 384,
+          "price": 4.3085
+        },
+        "metal-48xl": {
+          "vcpu": 192,
+          "mem": 768,
+          "price": 8.617
+        }
+      },
       "in": [
         "af-south-1",
         "ap-east-1",
@@ -4134,6 +8020,68 @@
         "metal-24xl",
         "metal-48xl"
       ],
+      "specs": {
+        "medium": {
+          "vcpu": 1,
+          "mem": 4,
+          "price": 0.0727
+        },
+        "large": {
+          "vcpu": 2,
+          "mem": 8,
+          "price": 0.1455
+        },
+        "xlarge": {
+          "vcpu": 4,
+          "mem": 16,
+          "price": 0.291
+        },
+        "2xlarge": {
+          "vcpu": 8,
+          "mem": 32,
+          "price": 0.582
+        },
+        "4xlarge": {
+          "vcpu": 16,
+          "mem": 64,
+          "price": 1.164
+        },
+        "8xlarge": {
+          "vcpu": 32,
+          "mem": 128,
+          "price": 2.328
+        },
+        "12xlarge": {
+          "vcpu": 48,
+          "mem": 192,
+          "price": 3.492
+        },
+        "16xlarge": {
+          "vcpu": 64,
+          "mem": 256,
+          "price": 4.656
+        },
+        "24xlarge": {
+          "vcpu": 96,
+          "mem": 384,
+          "price": 6.984
+        },
+        "48xlarge": {
+          "vcpu": 192,
+          "mem": 768,
+          "price": 13.968
+        },
+        "metal-24xl": {
+          "vcpu": 96,
+          "mem": 384,
+          "price": 13.968
+        },
+        "metal-48xl": {
+          "vcpu": 192,
+          "mem": 768,
+          "price": 13.968
+        }
+      },
       "in": [
         "af-south-1",
         "ap-east-1",
@@ -4187,6 +8135,68 @@
         "metal-24xl",
         "metal-48xl"
       ],
+      "specs": {
+        "medium": {
+          "vcpu": 1,
+          "mem": 4,
+          "price": 0.0577
+        },
+        "large": {
+          "vcpu": 2,
+          "mem": 8,
+          "price": 0.1153
+        },
+        "xlarge": {
+          "vcpu": 4,
+          "mem": 16,
+          "price": 0.2306
+        },
+        "2xlarge": {
+          "vcpu": 8,
+          "mem": 32,
+          "price": 0.4613
+        },
+        "4xlarge": {
+          "vcpu": 16,
+          "mem": 64,
+          "price": 0.9226
+        },
+        "8xlarge": {
+          "vcpu": 32,
+          "mem": 128,
+          "price": 1.8451
+        },
+        "12xlarge": {
+          "vcpu": 48,
+          "mem": 192,
+          "price": 2.7677
+        },
+        "16xlarge": {
+          "vcpu": 64,
+          "mem": 256,
+          "price": 3.6902
+        },
+        "24xlarge": {
+          "vcpu": 96,
+          "mem": 384,
+          "price": 5.5354
+        },
+        "48xlarge": {
+          "vcpu": 192,
+          "mem": 768,
+          "price": 11.0707
+        },
+        "metal-24xl": {
+          "vcpu": 96,
+          "mem": 384,
+          "price": 5.5354
+        },
+        "metal-48xl": {
+          "vcpu": 192,
+          "mem": 768,
+          "price": 11.0707
+        }
+      },
       "in": [
         "af-south-1",
         "ap-east-1",
@@ -4240,6 +8250,68 @@
         "metal-24xl",
         "metal-48xl"
       ],
+      "specs": {
+        "medium": {
+          "vcpu": 1,
+          "mem": 4,
+          "price": 0.0728
+        },
+        "large": {
+          "vcpu": 2,
+          "mem": 8,
+          "price": 0.1455
+        },
+        "xlarge": {
+          "vcpu": 4,
+          "mem": 16,
+          "price": 0.291
+        },
+        "2xlarge": {
+          "vcpu": 8,
+          "mem": 32,
+          "price": 0.582
+        },
+        "4xlarge": {
+          "vcpu": 16,
+          "mem": 64,
+          "price": 1.164
+        },
+        "8xlarge": {
+          "vcpu": 32,
+          "mem": 128,
+          "price": 2.328
+        },
+        "12xlarge": {
+          "vcpu": 48,
+          "mem": 192,
+          "price": 3.492
+        },
+        "16xlarge": {
+          "vcpu": 64,
+          "mem": 256,
+          "price": 4.656
+        },
+        "24xlarge": {
+          "vcpu": 96,
+          "mem": 384,
+          "price": 6.984
+        },
+        "48xlarge": {
+          "vcpu": 192,
+          "mem": 768,
+          "price": 13.968
+        },
+        "metal-24xl": {
+          "vcpu": 96,
+          "mem": 384,
+          "price": 6.984
+        },
+        "metal-48xl": {
+          "vcpu": 192,
+          "mem": 768,
+          "price": 13.968
+        }
+      },
       "in": [
         "af-south-1",
         "ap-east-1",
@@ -4294,6 +8366,73 @@
         "metal-48xl",
         "metal-96xl"
       ],
+      "specs": {
+        "large": {
+          "vcpu": 2,
+          "mem": 8,
+          "price": 0.1058
+        },
+        "xlarge": {
+          "vcpu": 4,
+          "mem": 16,
+          "price": 0.2117
+        },
+        "2xlarge": {
+          "vcpu": 8,
+          "mem": 32,
+          "price": 0.4234
+        },
+        "4xlarge": {
+          "vcpu": 16,
+          "mem": 64,
+          "price": 0.8467
+        },
+        "8xlarge": {
+          "vcpu": 32,
+          "mem": 128,
+          "price": 1.6934
+        },
+        "12xlarge": {
+          "vcpu": 48,
+          "mem": 192,
+          "price": 2.5402
+        },
+        "16xlarge": {
+          "vcpu": 64,
+          "mem": 256,
+          "price": 3.3869
+        },
+        "24xlarge": {
+          "vcpu": 96,
+          "mem": 384,
+          "price": 5.0803
+        },
+        "32xlarge": {
+          "vcpu": 128,
+          "mem": 512,
+          "price": 6.7738
+        },
+        "48xlarge": {
+          "vcpu": 192,
+          "mem": 768,
+          "price": 10.1606
+        },
+        "96xlarge": {
+          "vcpu": 384,
+          "mem": 1536,
+          "price": 20.3213
+        },
+        "metal-48xl": {
+          "vcpu": 192,
+          "mem": 768,
+          "price": 10.1606
+        },
+        "metal-96xl": {
+          "vcpu": 384,
+          "mem": 1536,
+          "price": 20.3213
+        }
+      },
       "in": [
         "af-south-1",
         "ap-northeast-1",
@@ -4331,6 +8470,43 @@
         "12xlarge",
         "16xlarge"
       ],
+      "specs": {
+        "large": {
+          "vcpu": 2,
+          "mem": 8,
+          "price": 0.1006
+        },
+        "xlarge": {
+          "vcpu": 4,
+          "mem": 16,
+          "price": 0.2011
+        },
+        "2xlarge": {
+          "vcpu": 8,
+          "mem": 32,
+          "price": 0.4022
+        },
+        "4xlarge": {
+          "vcpu": 16,
+          "mem": 64,
+          "price": 0.8044
+        },
+        "8xlarge": {
+          "vcpu": 32,
+          "mem": 128,
+          "price": 1.6088
+        },
+        "12xlarge": {
+          "vcpu": 48,
+          "mem": 192,
+          "price": 2.4132
+        },
+        "16xlarge": {
+          "vcpu": 64,
+          "mem": 256,
+          "price": 3.2176
+        }
+      },
       "in": [
         "af-south-1",
         "ap-northeast-1",
@@ -4372,6 +8548,63 @@
         "48xlarge",
         "96xlarge"
       ],
+      "specs": {
+        "large": {
+          "vcpu": 2,
+          "mem": 8,
+          "price": 0.1671
+        },
+        "xlarge": {
+          "vcpu": 4,
+          "mem": 16,
+          "price": 0.3342
+        },
+        "2xlarge": {
+          "vcpu": 8,
+          "mem": 32,
+          "price": 0.6683
+        },
+        "4xlarge": {
+          "vcpu": 16,
+          "mem": 64,
+          "price": 1.3366
+        },
+        "8xlarge": {
+          "vcpu": 32,
+          "mem": 128,
+          "price": 2.6733
+        },
+        "12xlarge": {
+          "vcpu": 48,
+          "mem": 192,
+          "price": 4.0099
+        },
+        "16xlarge": {
+          "vcpu": 64,
+          "mem": 256,
+          "price": 5.3466
+        },
+        "24xlarge": {
+          "vcpu": 96,
+          "mem": 384,
+          "price": 8.0198
+        },
+        "32xlarge": {
+          "vcpu": 128,
+          "mem": 512,
+          "price": 10.6931
+        },
+        "48xlarge": {
+          "vcpu": 192,
+          "mem": 768,
+          "price": 16.0397
+        },
+        "96xlarge": {
+          "vcpu": 384,
+          "mem": 1536,
+          "price": 32.0794
+        }
+      },
       "in": [
         "af-south-1",
         "ap-northeast-1",
@@ -4415,6 +8648,73 @@
         "metal-48xl",
         "metal-96xl"
       ],
+      "specs": {
+        "large": {
+          "vcpu": 2,
+          "mem": 8,
+          "price": 0.1305
+        },
+        "xlarge": {
+          "vcpu": 4,
+          "mem": 16,
+          "price": 0.261
+        },
+        "2xlarge": {
+          "vcpu": 8,
+          "mem": 32,
+          "price": 0.5221
+        },
+        "4xlarge": {
+          "vcpu": 16,
+          "mem": 64,
+          "price": 1.0442
+        },
+        "8xlarge": {
+          "vcpu": 32,
+          "mem": 128,
+          "price": 2.0883
+        },
+        "12xlarge": {
+          "vcpu": 48,
+          "mem": 192,
+          "price": 3.1325
+        },
+        "16xlarge": {
+          "vcpu": 64,
+          "mem": 256,
+          "price": 4.1766
+        },
+        "24xlarge": {
+          "vcpu": 96,
+          "mem": 384,
+          "price": 6.265
+        },
+        "32xlarge": {
+          "vcpu": 128,
+          "mem": 512,
+          "price": 8.3533
+        },
+        "48xlarge": {
+          "vcpu": 192,
+          "mem": 768,
+          "price": 12.5299
+        },
+        "96xlarge": {
+          "vcpu": 384,
+          "mem": 1536,
+          "price": 25.0598
+        },
+        "metal-48xl": {
+          "vcpu": 192,
+          "mem": 768,
+          "price": 12.5299
+        },
+        "metal-96xl": {
+          "vcpu": 384,
+          "mem": 1536,
+          "price": 25.0598
+        }
+      },
       "in": [
         "af-south-1",
         "ap-northeast-1",
@@ -4456,6 +8756,63 @@
         "48xlarge",
         "96xlarge"
       ],
+      "specs": {
+        "large": {
+          "vcpu": 2,
+          "mem": 8,
+          "price": 0.1909
+        },
+        "xlarge": {
+          "vcpu": 4,
+          "mem": 16,
+          "price": 0.3819
+        },
+        "2xlarge": {
+          "vcpu": 8,
+          "mem": 32,
+          "price": 0.7638
+        },
+        "4xlarge": {
+          "vcpu": 16,
+          "mem": 64,
+          "price": 1.5275
+        },
+        "8xlarge": {
+          "vcpu": 32,
+          "mem": 128,
+          "price": 3.055
+        },
+        "12xlarge": {
+          "vcpu": 48,
+          "mem": 192,
+          "price": 4.5826
+        },
+        "16xlarge": {
+          "vcpu": 64,
+          "mem": 256,
+          "price": 6.1101
+        },
+        "24xlarge": {
+          "vcpu": 96,
+          "mem": 384,
+          "price": 9.1651
+        },
+        "32xlarge": {
+          "vcpu": 128,
+          "mem": 512,
+          "price": 12.2202
+        },
+        "48xlarge": {
+          "vcpu": 192,
+          "mem": 768,
+          "price": 18.3302
+        },
+        "96xlarge": {
+          "vcpu": 384,
+          "mem": 1536,
+          "price": 36.6605
+        }
+      },
       "in": [
         "af-south-1",
         "ap-northeast-1",
@@ -4497,6 +8854,63 @@
         "48xlarge",
         "96xlarge"
       ],
+      "specs": {
+        "large": {
+          "vcpu": 2,
+          "mem": 8,
+          "price": 0.1909
+        },
+        "xlarge": {
+          "vcpu": 4,
+          "mem": 16,
+          "price": 0.3819
+        },
+        "2xlarge": {
+          "vcpu": 8,
+          "mem": 32,
+          "price": 0.7638
+        },
+        "4xlarge": {
+          "vcpu": 16,
+          "mem": 64,
+          "price": 1.5275
+        },
+        "8xlarge": {
+          "vcpu": 32,
+          "mem": 128,
+          "price": 3.055
+        },
+        "12xlarge": {
+          "vcpu": 48,
+          "mem": 192,
+          "price": 4.5826
+        },
+        "16xlarge": {
+          "vcpu": 64,
+          "mem": 256,
+          "price": 6.1101
+        },
+        "24xlarge": {
+          "vcpu": 96,
+          "mem": 384,
+          "price": 9.1651
+        },
+        "32xlarge": {
+          "vcpu": 128,
+          "mem": 512,
+          "price": 12.2202
+        },
+        "48xlarge": {
+          "vcpu": 192,
+          "mem": 768,
+          "price": 18.3302
+        },
+        "96xlarge": {
+          "vcpu": 384,
+          "mem": 1536,
+          "price": 36.6605
+        }
+      },
       "in": [
         "af-south-1",
         "ap-northeast-1",
@@ -4538,6 +8952,63 @@
         "48xlarge",
         "96xlarge"
       ],
+      "specs": {
+        "large": {
+          "vcpu": 2,
+          "mem": 8,
+          "price": 0.1671
+        },
+        "xlarge": {
+          "vcpu": 4,
+          "mem": 16,
+          "price": 0.3342
+        },
+        "2xlarge": {
+          "vcpu": 8,
+          "mem": 32,
+          "price": 0.6683
+        },
+        "4xlarge": {
+          "vcpu": 16,
+          "mem": 64,
+          "price": 1.3366
+        },
+        "8xlarge": {
+          "vcpu": 32,
+          "mem": 128,
+          "price": 2.6733
+        },
+        "12xlarge": {
+          "vcpu": 48,
+          "mem": 192,
+          "price": 4.0099
+        },
+        "16xlarge": {
+          "vcpu": 64,
+          "mem": 256,
+          "price": 5.3466
+        },
+        "24xlarge": {
+          "vcpu": 96,
+          "mem": 384,
+          "price": 8.0198
+        },
+        "32xlarge": {
+          "vcpu": 128,
+          "mem": 512,
+          "price": 10.6931
+        },
+        "48xlarge": {
+          "vcpu": 192,
+          "mem": 768,
+          "price": 16.0397
+        },
+        "96xlarge": {
+          "vcpu": 384,
+          "mem": 1536,
+          "price": 32.0794
+        }
+      },
       "in": [
         "af-south-1",
         "ap-northeast-1",
@@ -4574,6 +9045,38 @@
         "8xlarge",
         "12xlarge"
       ],
+      "specs": {
+        "large": {
+          "vcpu": 2,
+          "mem": 8,
+          "price": 0.2089
+        },
+        "xlarge": {
+          "vcpu": 4,
+          "mem": 16,
+          "price": 0.4177
+        },
+        "2xlarge": {
+          "vcpu": 8,
+          "mem": 32,
+          "price": 0.8354
+        },
+        "4xlarge": {
+          "vcpu": 16,
+          "mem": 64,
+          "price": 1.6708
+        },
+        "8xlarge": {
+          "vcpu": 32,
+          "mem": 128,
+          "price": 3.3416
+        },
+        "12xlarge": {
+          "vcpu": 48,
+          "mem": 192,
+          "price": 5.0124
+        }
+      },
       "in": [
         "af-south-1",
         "ap-northeast-1",
@@ -4597,6 +9100,27 @@
       ]
     },
     {
+      "key": "mac-m3ultra",
+      "cat": "macos",
+      "arch": "arm",
+      "vendor": "Apple",
+      "desc": "Apple silicon M3 Ultra",
+      "sizes": [
+        "metal"
+      ],
+      "specs": {
+        "metal": {
+          "vcpu": 28,
+          "mem": 256,
+          "price": null
+        }
+      },
+      "in": [
+        "us-east-1",
+        "us-west-2"
+      ]
+    },
+    {
       "key": "mac-m4",
       "cat": "macos",
       "arch": "arm",
@@ -4605,6 +9129,13 @@
       "sizes": [
         "metal"
       ],
+      "specs": {
+        "metal": {
+          "vcpu": 10,
+          "mem": 24,
+          "price": null
+        }
+      },
       "in": [
         "ap-southeast-2",
         "eu-central-1",
@@ -4623,6 +9154,13 @@
       "sizes": [
         "metal"
       ],
+      "specs": {
+        "metal": {
+          "vcpu": 16,
+          "mem": 128,
+          "price": null
+        }
+      },
       "in": [
         "ap-southeast-2",
         "eu-central-1",
@@ -4641,6 +9179,13 @@
       "sizes": [
         "metal"
       ],
+      "specs": {
+        "metal": {
+          "vcpu": 14,
+          "mem": 48,
+          "price": null
+        }
+      },
       "in": [
         "ap-southeast-2",
         "eu-central-1",
@@ -4659,6 +9204,13 @@
       "sizes": [
         "metal"
       ],
+      "specs": {
+        "metal": {
+          "vcpu": 12,
+          "mem": 32,
+          "price": null
+        }
+      },
       "in": [
         "ap-northeast-1",
         "ap-northeast-2",
@@ -4683,6 +9235,13 @@
       "sizes": [
         "metal"
       ],
+      "specs": {
+        "metal": {
+          "vcpu": 8,
+          "mem": 16,
+          "price": null
+        }
+      },
       "in": [
         "ap-southeast-1",
         "eu-west-1",
@@ -4700,6 +9259,13 @@
       "sizes": [
         "metal"
       ],
+      "specs": {
+        "metal": {
+          "vcpu": 20,
+          "mem": 128,
+          "price": null
+        }
+      },
       "in": [
         "ap-southeast-1",
         "eu-west-1",
@@ -4717,6 +9283,13 @@
       "sizes": [
         "metal"
       ],
+      "specs": {
+        "metal": {
+          "vcpu": 8,
+          "mem": 24,
+          "price": null
+        }
+      },
       "in": [
         "ap-southeast-1",
         "ap-southeast-2",
@@ -4737,6 +9310,13 @@
       "sizes": [
         "metal"
       ],
+      "specs": {
+        "metal": {
+          "vcpu": 12,
+          "mem": 32,
+          "price": null
+        }
+      },
       "in": [
         "ap-southeast-1",
         "ap-southeast-2",
@@ -4759,6 +9339,23 @@
         "8xlarge",
         "16xlarge"
       ],
+      "specs": {
+        "xlarge": {
+          "vcpu": 4,
+          "mem": 61,
+          "price": 0.9
+        },
+        "8xlarge": {
+          "vcpu": 32,
+          "mem": 488,
+          "price": 7.2
+        },
+        "16xlarge": {
+          "vcpu": 64,
+          "mem": 732,
+          "price": 14.4
+        }
+      },
       "in": [
         "ap-northeast-1",
         "ap-northeast-2",
@@ -4783,6 +9380,23 @@
         "8xlarge",
         "16xlarge"
       ],
+      "specs": {
+        "2xlarge": {
+          "vcpu": 8,
+          "mem": 61,
+          "price": 3.06
+        },
+        "8xlarge": {
+          "vcpu": 32,
+          "mem": 244,
+          "price": 12.24
+        },
+        "16xlarge": {
+          "vcpu": 64,
+          "mem": 488,
+          "price": 24.48
+        }
+      },
       "in": [
         "ap-northeast-1",
         "ap-northeast-2",
@@ -4806,6 +9420,13 @@
       "sizes": [
         "24xlarge"
       ],
+      "specs": {
+        "24xlarge": {
+          "vcpu": 96,
+          "mem": 768,
+          "price": 31.212
+        }
+      },
       "in": [
         "ap-northeast-1",
         "ap-northeast-2",
@@ -4829,6 +9450,13 @@
       "sizes": [
         "24xlarge"
       ],
+      "specs": {
+        "24xlarge": {
+          "vcpu": 96,
+          "mem": 1152,
+          "price": 21.9576
+        }
+      },
       "in": [
         "ap-northeast-1",
         "ap-northeast-2",
@@ -4855,6 +9483,13 @@
       "sizes": [
         "24xlarge"
       ],
+      "specs": {
+        "24xlarge": {
+          "vcpu": 96,
+          "mem": 1152,
+          "price": 27.4471
+        }
+      },
       "in": [
         "ap-northeast-1",
         "ap-northeast-2",
@@ -4882,6 +9517,18 @@
         "4xlarge",
         "48xlarge"
       ],
+      "specs": {
+        "4xlarge": {
+          "vcpu": 16,
+          "mem": 256,
+          "price": 6.88
+        },
+        "48xlarge": {
+          "vcpu": 192,
+          "mem": 2048,
+          "price": 55.04
+        }
+      },
       "in": [
         "ap-northeast-1",
         "ap-northeast-2",
@@ -4907,6 +9554,13 @@
       "sizes": [
         "48xlarge"
       ],
+      "specs": {
+        "48xlarge": {
+          "vcpu": 192,
+          "mem": 2048,
+          "price": null
+        }
+      },
       "in": [
         "us-east-2"
       ]
@@ -4920,6 +9574,13 @@
       "sizes": [
         "48xlarge"
       ],
+      "specs": {
+        "48xlarge": {
+          "vcpu": 192,
+          "mem": 2048,
+          "price": 63.296
+        }
+      },
       "in": [
         "ap-northeast-1",
         "ap-northeast-2",
@@ -4943,6 +9604,13 @@
       "sizes": [
         "48xlarge"
       ],
+      "specs": {
+        "48xlarge": {
+          "vcpu": 192,
+          "mem": 2048,
+          "price": 113.9328
+        }
+      },
       "in": [
         "us-east-1",
         "us-east-2",
@@ -4958,6 +9626,13 @@
       "sizes": [
         "48xlarge"
       ],
+      "specs": {
+        "48xlarge": {
+          "vcpu": 192,
+          "mem": 4096,
+          "price": 142.416
+        }
+      },
       "in": [
         "us-east-1",
         "us-west-2"
@@ -4976,6 +9651,33 @@
         "4xlarge",
         "8xlarge"
       ],
+      "specs": {
+        "large": {
+          "vcpu": 2,
+          "mem": 15.25,
+          "price": 0.166
+        },
+        "xlarge": {
+          "vcpu": 4,
+          "mem": 30.5,
+          "price": 0.333
+        },
+        "2xlarge": {
+          "vcpu": 8,
+          "mem": 61,
+          "price": 0.665
+        },
+        "4xlarge": {
+          "vcpu": 16,
+          "mem": 122,
+          "price": 1.33
+        },
+        "8xlarge": {
+          "vcpu": 32,
+          "mem": 244,
+          "price": 2.66
+        }
+      },
       "in": [
         "ap-northeast-1",
         "ap-northeast-2",
@@ -5006,6 +9708,38 @@
         "8xlarge",
         "16xlarge"
       ],
+      "specs": {
+        "large": {
+          "vcpu": 2,
+          "mem": 15.25,
+          "price": 0.133
+        },
+        "xlarge": {
+          "vcpu": 4,
+          "mem": 30.5,
+          "price": 0.266
+        },
+        "2xlarge": {
+          "vcpu": 8,
+          "mem": 61,
+          "price": 0.532
+        },
+        "4xlarge": {
+          "vcpu": 16,
+          "mem": 122,
+          "price": 1.064
+        },
+        "8xlarge": {
+          "vcpu": 32,
+          "mem": 244,
+          "price": 2.128
+        },
+        "16xlarge": {
+          "vcpu": 64,
+          "mem": 488,
+          "price": 4.256
+        }
+      },
       "in": [
         "ap-northeast-1",
         "ap-northeast-2",
@@ -5042,6 +9776,53 @@
         "24xlarge",
         "metal"
       ],
+      "specs": {
+        "large": {
+          "vcpu": 2,
+          "mem": 16,
+          "price": 0.126
+        },
+        "xlarge": {
+          "vcpu": 4,
+          "mem": 32,
+          "price": 0.252
+        },
+        "2xlarge": {
+          "vcpu": 8,
+          "mem": 64,
+          "price": 0.504
+        },
+        "4xlarge": {
+          "vcpu": 16,
+          "mem": 128,
+          "price": 1.008
+        },
+        "8xlarge": {
+          "vcpu": 32,
+          "mem": 256,
+          "price": 2.016
+        },
+        "12xlarge": {
+          "vcpu": 48,
+          "mem": 384,
+          "price": 3.024
+        },
+        "16xlarge": {
+          "vcpu": 64,
+          "mem": 512,
+          "price": 4.032
+        },
+        "24xlarge": {
+          "vcpu": 96,
+          "mem": 768,
+          "price": 6.048
+        },
+        "metal": {
+          "vcpu": 96,
+          "mem": 768,
+          "price": 6.048
+        }
+      },
       "in": [
         "af-south-1",
         "ap-east-1",
@@ -5090,6 +9871,48 @@
         "16xlarge",
         "24xlarge"
       ],
+      "specs": {
+        "large": {
+          "vcpu": 2,
+          "mem": 16,
+          "price": 0.113
+        },
+        "xlarge": {
+          "vcpu": 4,
+          "mem": 32,
+          "price": 0.226
+        },
+        "2xlarge": {
+          "vcpu": 8,
+          "mem": 64,
+          "price": 0.452
+        },
+        "4xlarge": {
+          "vcpu": 16,
+          "mem": 128,
+          "price": 0.904
+        },
+        "8xlarge": {
+          "vcpu": 32,
+          "mem": 256,
+          "price": 1.808
+        },
+        "12xlarge": {
+          "vcpu": 48,
+          "mem": 384,
+          "price": 2.712
+        },
+        "16xlarge": {
+          "vcpu": 64,
+          "mem": 512,
+          "price": 3.616
+        },
+        "24xlarge": {
+          "vcpu": 96,
+          "mem": 768,
+          "price": 5.424
+        }
+      },
       "in": [
         "af-south-1",
         "ap-east-1",
@@ -5138,6 +9961,48 @@
         "16xlarge",
         "24xlarge"
       ],
+      "specs": {
+        "large": {
+          "vcpu": 2,
+          "mem": 16,
+          "price": 0.131
+        },
+        "xlarge": {
+          "vcpu": 4,
+          "mem": 32,
+          "price": 0.262
+        },
+        "2xlarge": {
+          "vcpu": 8,
+          "mem": 64,
+          "price": 0.524
+        },
+        "4xlarge": {
+          "vcpu": 16,
+          "mem": 128,
+          "price": 1.048
+        },
+        "8xlarge": {
+          "vcpu": 32,
+          "mem": 256,
+          "price": 2.096
+        },
+        "12xlarge": {
+          "vcpu": 48,
+          "mem": 384,
+          "price": 3.144
+        },
+        "16xlarge": {
+          "vcpu": 64,
+          "mem": 512,
+          "price": 4.192
+        },
+        "24xlarge": {
+          "vcpu": 96,
+          "mem": 768,
+          "price": 6.288
+        }
+      },
       "in": [
         "af-south-1",
         "ap-east-1",
@@ -5187,6 +10052,53 @@
         "24xlarge",
         "metal"
       ],
+      "specs": {
+        "large": {
+          "vcpu": 2,
+          "mem": 16,
+          "price": 0.149
+        },
+        "xlarge": {
+          "vcpu": 4,
+          "mem": 32,
+          "price": 0.298
+        },
+        "2xlarge": {
+          "vcpu": 8,
+          "mem": 64,
+          "price": 0.596
+        },
+        "4xlarge": {
+          "vcpu": 16,
+          "mem": 128,
+          "price": 1.192
+        },
+        "8xlarge": {
+          "vcpu": 32,
+          "mem": 256,
+          "price": 2.384
+        },
+        "12xlarge": {
+          "vcpu": 48,
+          "mem": 384,
+          "price": 3.576
+        },
+        "16xlarge": {
+          "vcpu": 64,
+          "mem": 512,
+          "price": 4.768
+        },
+        "24xlarge": {
+          "vcpu": 96,
+          "mem": 768,
+          "price": 7.152
+        },
+        "metal": {
+          "vcpu": 96,
+          "mem": 768,
+          "price": 7.152
+        }
+      },
       "in": [
         "af-south-1",
         "ap-east-1",
@@ -5236,6 +10148,53 @@
         "24xlarge",
         "metal"
       ],
+      "specs": {
+        "large": {
+          "vcpu": 2,
+          "mem": 16,
+          "price": 0.144
+        },
+        "xlarge": {
+          "vcpu": 4,
+          "mem": 32,
+          "price": 0.288
+        },
+        "2xlarge": {
+          "vcpu": 8,
+          "mem": 64,
+          "price": 0.576
+        },
+        "4xlarge": {
+          "vcpu": 16,
+          "mem": 128,
+          "price": 1.152
+        },
+        "8xlarge": {
+          "vcpu": 32,
+          "mem": 256,
+          "price": 2.304
+        },
+        "12xlarge": {
+          "vcpu": 48,
+          "mem": 384,
+          "price": 3.456
+        },
+        "16xlarge": {
+          "vcpu": 64,
+          "mem": 512,
+          "price": 4.608
+        },
+        "24xlarge": {
+          "vcpu": 96,
+          "mem": 768,
+          "price": 6.912
+        },
+        "metal": {
+          "vcpu": 96,
+          "mem": 768,
+          "price": 6.912
+        }
+      },
       "in": [
         "af-south-1",
         "ap-east-1",
@@ -5285,6 +10244,53 @@
         "24xlarge",
         "metal"
       ],
+      "specs": {
+        "large": {
+          "vcpu": 2,
+          "mem": 16,
+          "price": 0.167
+        },
+        "xlarge": {
+          "vcpu": 4,
+          "mem": 32,
+          "price": 0.334
+        },
+        "2xlarge": {
+          "vcpu": 8,
+          "mem": 64,
+          "price": 0.668
+        },
+        "4xlarge": {
+          "vcpu": 16,
+          "mem": 128,
+          "price": 1.336
+        },
+        "8xlarge": {
+          "vcpu": 32,
+          "mem": 256,
+          "price": 2.672
+        },
+        "12xlarge": {
+          "vcpu": 48,
+          "mem": 384,
+          "price": 4.008
+        },
+        "16xlarge": {
+          "vcpu": 64,
+          "mem": 512,
+          "price": 5.344
+        },
+        "24xlarge": {
+          "vcpu": 96,
+          "mem": 768,
+          "price": 8.016
+        },
+        "metal": {
+          "vcpu": 96,
+          "mem": 768,
+          "price": 8.016
+        }
+      },
       "in": [
         "af-south-1",
         "ap-east-1",
@@ -5334,6 +10340,53 @@
         "24xlarge",
         "metal"
       ],
+      "specs": {
+        "large": {
+          "vcpu": 2,
+          "mem": 16,
+          "price": 0.149
+        },
+        "xlarge": {
+          "vcpu": 4,
+          "mem": 32,
+          "price": 0.298
+        },
+        "2xlarge": {
+          "vcpu": 8,
+          "mem": 64,
+          "price": 0.596
+        },
+        "4xlarge": {
+          "vcpu": 16,
+          "mem": 128,
+          "price": 1.192
+        },
+        "8xlarge": {
+          "vcpu": 32,
+          "mem": 256,
+          "price": 2.384
+        },
+        "12xlarge": {
+          "vcpu": 48,
+          "mem": 384,
+          "price": 3.576
+        },
+        "16xlarge": {
+          "vcpu": 64,
+          "mem": 512,
+          "price": 4.768
+        },
+        "24xlarge": {
+          "vcpu": 96,
+          "mem": 768,
+          "price": 7.152
+        },
+        "metal": {
+          "vcpu": 96,
+          "mem": 768,
+          "price": 7.152
+        }
+      },
       "in": [
         "af-south-1",
         "ap-east-1",
@@ -5385,6 +10438,63 @@
         "48xlarge",
         "metal"
       ],
+      "specs": {
+        "large": {
+          "vcpu": 2,
+          "mem": 16,
+          "price": 0.1134
+        },
+        "xlarge": {
+          "vcpu": 4,
+          "mem": 32,
+          "price": 0.2268
+        },
+        "2xlarge": {
+          "vcpu": 8,
+          "mem": 64,
+          "price": 0.4536
+        },
+        "4xlarge": {
+          "vcpu": 16,
+          "mem": 128,
+          "price": 0.9072
+        },
+        "8xlarge": {
+          "vcpu": 32,
+          "mem": 256,
+          "price": 1.8144
+        },
+        "12xlarge": {
+          "vcpu": 48,
+          "mem": 384,
+          "price": 2.7216
+        },
+        "16xlarge": {
+          "vcpu": 64,
+          "mem": 512,
+          "price": 3.6288
+        },
+        "24xlarge": {
+          "vcpu": 96,
+          "mem": 768,
+          "price": 5.4432
+        },
+        "32xlarge": {
+          "vcpu": 128,
+          "mem": 1024,
+          "price": 7.2576
+        },
+        "48xlarge": {
+          "vcpu": 192,
+          "mem": 1536,
+          "price": 10.8864
+        },
+        "metal": {
+          "vcpu": 192,
+          "mem": 1536,
+          "price": 10.8864
+        }
+      },
       "in": [
         "ap-northeast-1",
         "ap-south-1",
@@ -5418,6 +10528,53 @@
         "16xlarge",
         "metal"
       ],
+      "specs": {
+        "medium": {
+          "vcpu": 1,
+          "mem": 8,
+          "price": 0.0504
+        },
+        "large": {
+          "vcpu": 2,
+          "mem": 16,
+          "price": 0.1008
+        },
+        "xlarge": {
+          "vcpu": 4,
+          "mem": 32,
+          "price": 0.2016
+        },
+        "2xlarge": {
+          "vcpu": 8,
+          "mem": 64,
+          "price": 0.4032
+        },
+        "4xlarge": {
+          "vcpu": 16,
+          "mem": 128,
+          "price": 0.8064
+        },
+        "8xlarge": {
+          "vcpu": 32,
+          "mem": 256,
+          "price": 1.6128
+        },
+        "12xlarge": {
+          "vcpu": 48,
+          "mem": 384,
+          "price": 2.4192
+        },
+        "16xlarge": {
+          "vcpu": 64,
+          "mem": 512,
+          "price": 3.2256
+        },
+        "metal": {
+          "vcpu": 64,
+          "mem": 512,
+          "price": 3.2256
+        }
+      },
       "in": [
         "af-south-1",
         "ap-east-1",
@@ -5472,6 +10629,53 @@
         "16xlarge",
         "metal"
       ],
+      "specs": {
+        "medium": {
+          "vcpu": 1,
+          "mem": 8,
+          "price": 0.0576
+        },
+        "large": {
+          "vcpu": 2,
+          "mem": 16,
+          "price": 0.1152
+        },
+        "xlarge": {
+          "vcpu": 4,
+          "mem": 32,
+          "price": 0.2304
+        },
+        "2xlarge": {
+          "vcpu": 8,
+          "mem": 64,
+          "price": 0.4608
+        },
+        "4xlarge": {
+          "vcpu": 16,
+          "mem": 128,
+          "price": 0.9216
+        },
+        "8xlarge": {
+          "vcpu": 32,
+          "mem": 256,
+          "price": 1.8432
+        },
+        "12xlarge": {
+          "vcpu": 48,
+          "mem": 384,
+          "price": 2.7648
+        },
+        "16xlarge": {
+          "vcpu": 64,
+          "mem": 512,
+          "price": 3.6864
+        },
+        "metal": {
+          "vcpu": 64,
+          "mem": 512,
+          "price": 3.6864
+        }
+      },
       "in": [
         "af-south-1",
         "ap-east-1",
@@ -5527,6 +10731,58 @@
         "32xlarge",
         "metal"
       ],
+      "specs": {
+        "large": {
+          "vcpu": 2,
+          "mem": 16,
+          "price": 0.126
+        },
+        "xlarge": {
+          "vcpu": 4,
+          "mem": 32,
+          "price": 0.252
+        },
+        "2xlarge": {
+          "vcpu": 8,
+          "mem": 64,
+          "price": 0.504
+        },
+        "4xlarge": {
+          "vcpu": 16,
+          "mem": 128,
+          "price": 1.008
+        },
+        "8xlarge": {
+          "vcpu": 32,
+          "mem": 256,
+          "price": 2.016
+        },
+        "12xlarge": {
+          "vcpu": 48,
+          "mem": 384,
+          "price": 3.024
+        },
+        "16xlarge": {
+          "vcpu": 64,
+          "mem": 512,
+          "price": 4.032
+        },
+        "24xlarge": {
+          "vcpu": 96,
+          "mem": 768,
+          "price": 6.048
+        },
+        "32xlarge": {
+          "vcpu": 128,
+          "mem": 1024,
+          "price": 8.064
+        },
+        "metal": {
+          "vcpu": 128,
+          "mem": 1024,
+          "price": 8.064
+        }
+      },
       "in": [
         "af-south-1",
         "ap-east-1",
@@ -5579,6 +10835,58 @@
         "32xlarge",
         "metal"
       ],
+      "specs": {
+        "large": {
+          "vcpu": 2,
+          "mem": 16,
+          "price": 0.1512
+        },
+        "xlarge": {
+          "vcpu": 4,
+          "mem": 32,
+          "price": 0.3024
+        },
+        "2xlarge": {
+          "vcpu": 8,
+          "mem": 64,
+          "price": 0.6048
+        },
+        "4xlarge": {
+          "vcpu": 16,
+          "mem": 128,
+          "price": 1.2096
+        },
+        "8xlarge": {
+          "vcpu": 32,
+          "mem": 256,
+          "price": 2.4192
+        },
+        "12xlarge": {
+          "vcpu": 48,
+          "mem": 384,
+          "price": 3.6288
+        },
+        "16xlarge": {
+          "vcpu": 64,
+          "mem": 512,
+          "price": 4.8384
+        },
+        "24xlarge": {
+          "vcpu": 96,
+          "mem": 768,
+          "price": 7.2576
+        },
+        "32xlarge": {
+          "vcpu": 128,
+          "mem": 1024,
+          "price": 9.6768
+        },
+        "metal": {
+          "vcpu": 128,
+          "mem": 1024,
+          "price": 9.6768
+        }
+      },
       "in": [
         "af-south-1",
         "ap-east-1",
@@ -5632,6 +10940,58 @@
         "32xlarge",
         "metal"
       ],
+      "specs": {
+        "large": {
+          "vcpu": 2,
+          "mem": 16,
+          "price": 0.1954
+        },
+        "xlarge": {
+          "vcpu": 4,
+          "mem": 32,
+          "price": 0.3908
+        },
+        "2xlarge": {
+          "vcpu": 8,
+          "mem": 64,
+          "price": 0.7816
+        },
+        "4xlarge": {
+          "vcpu": 16,
+          "mem": 128,
+          "price": 1.5631
+        },
+        "8xlarge": {
+          "vcpu": 32,
+          "mem": 256,
+          "price": 3.1262
+        },
+        "12xlarge": {
+          "vcpu": 48,
+          "mem": 384,
+          "price": 4.6894
+        },
+        "16xlarge": {
+          "vcpu": 64,
+          "mem": 512,
+          "price": 6.2525
+        },
+        "24xlarge": {
+          "vcpu": 96,
+          "mem": 768,
+          "price": 9.3787
+        },
+        "32xlarge": {
+          "vcpu": 128,
+          "mem": 1024,
+          "price": 12.505
+        },
+        "metal": {
+          "vcpu": 128,
+          "mem": 1024,
+          "price": 12.505
+        }
+      },
       "in": [
         "af-south-1",
         "ap-east-1",
@@ -5685,6 +11045,58 @@
         "32xlarge",
         "metal"
       ],
+      "specs": {
+        "large": {
+          "vcpu": 2,
+          "mem": 16,
+          "price": 0.1743
+        },
+        "xlarge": {
+          "vcpu": 4,
+          "mem": 32,
+          "price": 0.3487
+        },
+        "2xlarge": {
+          "vcpu": 8,
+          "mem": 64,
+          "price": 0.6973
+        },
+        "4xlarge": {
+          "vcpu": 16,
+          "mem": 128,
+          "price": 1.3946
+        },
+        "8xlarge": {
+          "vcpu": 32,
+          "mem": 256,
+          "price": 2.7893
+        },
+        "12xlarge": {
+          "vcpu": 48,
+          "mem": 384,
+          "price": 4.1839
+        },
+        "16xlarge": {
+          "vcpu": 64,
+          "mem": 512,
+          "price": 5.5786
+        },
+        "24xlarge": {
+          "vcpu": 96,
+          "mem": 768,
+          "price": 8.3678
+        },
+        "32xlarge": {
+          "vcpu": 128,
+          "mem": 1024,
+          "price": 11.1571
+        },
+        "metal": {
+          "vcpu": 128,
+          "mem": 1024,
+          "price": 11.1571
+        }
+      },
       "in": [
         "af-south-1",
         "ap-east-1",
@@ -5739,6 +11151,68 @@
         "48xlarge",
         "metal-48xl"
       ],
+      "specs": {
+        "medium": {
+          "vcpu": 1,
+          "mem": 8,
+          "price": 0.0761
+        },
+        "large": {
+          "vcpu": 2,
+          "mem": 16,
+          "price": 0.1522
+        },
+        "xlarge": {
+          "vcpu": 4,
+          "mem": 32,
+          "price": 0.3043
+        },
+        "2xlarge": {
+          "vcpu": 8,
+          "mem": 64,
+          "price": 0.6086
+        },
+        "4xlarge": {
+          "vcpu": 16,
+          "mem": 128,
+          "price": 1.2172
+        },
+        "8xlarge": {
+          "vcpu": 32,
+          "mem": 256,
+          "price": 2.4344
+        },
+        "12xlarge": {
+          "vcpu": 48,
+          "mem": 384,
+          "price": 3.6516
+        },
+        "16xlarge": {
+          "vcpu": 64,
+          "mem": 512,
+          "price": 4.8688
+        },
+        "24xlarge": {
+          "vcpu": 96,
+          "mem": 768,
+          "price": 7.3032
+        },
+        "32xlarge": {
+          "vcpu": 128,
+          "mem": 1024,
+          "price": 9.7376
+        },
+        "48xlarge": {
+          "vcpu": 192,
+          "mem": 1536,
+          "price": 14.6064
+        },
+        "metal-48xl": {
+          "vcpu": 192,
+          "mem": 1536,
+          "price": 14.6064
+        }
+      },
       "in": [
         "ap-northeast-1",
         "ap-south-2",
@@ -5768,6 +11242,53 @@
         "16xlarge",
         "metal"
       ],
+      "specs": {
+        "medium": {
+          "vcpu": 1,
+          "mem": 8,
+          "price": 0.0536
+        },
+        "large": {
+          "vcpu": 2,
+          "mem": 16,
+          "price": 0.1071
+        },
+        "xlarge": {
+          "vcpu": 4,
+          "mem": 32,
+          "price": 0.2142
+        },
+        "2xlarge": {
+          "vcpu": 8,
+          "mem": 64,
+          "price": 0.4284
+        },
+        "4xlarge": {
+          "vcpu": 16,
+          "mem": 128,
+          "price": 0.8568
+        },
+        "8xlarge": {
+          "vcpu": 32,
+          "mem": 256,
+          "price": 1.7136
+        },
+        "12xlarge": {
+          "vcpu": 48,
+          "mem": 384,
+          "price": 2.5704
+        },
+        "16xlarge": {
+          "vcpu": 64,
+          "mem": 512,
+          "price": 3.4272
+        },
+        "metal": {
+          "vcpu": 64,
+          "mem": 512,
+          "price": 3.4272
+        }
+      },
       "in": [
         "af-south-1",
         "ap-east-1",
@@ -5822,6 +11343,53 @@
         "16xlarge",
         "metal"
       ],
+      "specs": {
+        "medium": {
+          "vcpu": 1,
+          "mem": 8,
+          "price": 0.068
+        },
+        "large": {
+          "vcpu": 2,
+          "mem": 16,
+          "price": 0.1361
+        },
+        "xlarge": {
+          "vcpu": 4,
+          "mem": 32,
+          "price": 0.2722
+        },
+        "2xlarge": {
+          "vcpu": 8,
+          "mem": 64,
+          "price": 0.5443
+        },
+        "4xlarge": {
+          "vcpu": 16,
+          "mem": 128,
+          "price": 1.0886
+        },
+        "8xlarge": {
+          "vcpu": 32,
+          "mem": 256,
+          "price": 2.1773
+        },
+        "12xlarge": {
+          "vcpu": 48,
+          "mem": 384,
+          "price": 3.2659
+        },
+        "16xlarge": {
+          "vcpu": 64,
+          "mem": 512,
+          "price": 4.3546
+        },
+        "metal": {
+          "vcpu": 64,
+          "mem": 512,
+          "price": 4.3546
+        }
+      },
       "in": [
         "af-south-1",
         "ap-east-1",
@@ -5878,6 +11446,63 @@
         "metal-24xl",
         "metal-48xl"
       ],
+      "specs": {
+        "large": {
+          "vcpu": 2,
+          "mem": 16,
+          "price": 0.1323
+        },
+        "xlarge": {
+          "vcpu": 4,
+          "mem": 32,
+          "price": 0.2646
+        },
+        "2xlarge": {
+          "vcpu": 8,
+          "mem": 64,
+          "price": 0.5292
+        },
+        "4xlarge": {
+          "vcpu": 16,
+          "mem": 128,
+          "price": 1.0584
+        },
+        "8xlarge": {
+          "vcpu": 32,
+          "mem": 256,
+          "price": 2.1168
+        },
+        "12xlarge": {
+          "vcpu": 48,
+          "mem": 384,
+          "price": 3.1752
+        },
+        "16xlarge": {
+          "vcpu": 64,
+          "mem": 512,
+          "price": 4.2336
+        },
+        "24xlarge": {
+          "vcpu": 96,
+          "mem": 768,
+          "price": 6.3504
+        },
+        "48xlarge": {
+          "vcpu": 192,
+          "mem": 1536,
+          "price": 12.7008
+        },
+        "metal-24xl": {
+          "vcpu": 96,
+          "mem": 768,
+          "price": 6.3504
+        },
+        "metal-48xl": {
+          "vcpu": 192,
+          "mem": 1536,
+          "price": 12.7008
+        }
+      },
       "in": [
         "ap-east-2",
         "ap-northeast-1",
@@ -5926,6 +11551,58 @@
         "metal-16xl",
         "metal-32xl"
       ],
+      "specs": {
+        "large": {
+          "vcpu": 2,
+          "mem": 16,
+          "price": 0.186
+        },
+        "xlarge": {
+          "vcpu": 4,
+          "mem": 32,
+          "price": 0.372
+        },
+        "2xlarge": {
+          "vcpu": 8,
+          "mem": 64,
+          "price": 0.744
+        },
+        "4xlarge": {
+          "vcpu": 16,
+          "mem": 128,
+          "price": 1.488
+        },
+        "8xlarge": {
+          "vcpu": 32,
+          "mem": 256,
+          "price": 2.976
+        },
+        "12xlarge": {
+          "vcpu": 48,
+          "mem": 384,
+          "price": 4.464
+        },
+        "16xlarge": {
+          "vcpu": 64,
+          "mem": 512,
+          "price": 5.952
+        },
+        "32xlarge": {
+          "vcpu": 128,
+          "mem": 1024,
+          "price": 11.904
+        },
+        "metal-16xl": {
+          "vcpu": 64,
+          "mem": 512,
+          "price": 5.952
+        },
+        "metal-32xl": {
+          "vcpu": 128,
+          "mem": 1024,
+          "price": 11.904
+        }
+      },
       "in": [
         "ap-east-2",
         "ap-northeast-1",
@@ -5976,6 +11653,68 @@
         "metal-24xl",
         "metal-48xl"
       ],
+      "specs": {
+        "medium": {
+          "vcpu": 1,
+          "mem": 8,
+          "price": 0.0799
+        },
+        "large": {
+          "vcpu": 2,
+          "mem": 16,
+          "price": 0.1598
+        },
+        "xlarge": {
+          "vcpu": 4,
+          "mem": 32,
+          "price": 0.3195
+        },
+        "2xlarge": {
+          "vcpu": 8,
+          "mem": 64,
+          "price": 0.639
+        },
+        "4xlarge": {
+          "vcpu": 16,
+          "mem": 128,
+          "price": 1.2781
+        },
+        "8xlarge": {
+          "vcpu": 32,
+          "mem": 256,
+          "price": 2.5562
+        },
+        "12xlarge": {
+          "vcpu": 48,
+          "mem": 384,
+          "price": 3.8342
+        },
+        "16xlarge": {
+          "vcpu": 64,
+          "mem": 512,
+          "price": 5.1123
+        },
+        "24xlarge": {
+          "vcpu": 96,
+          "mem": 768,
+          "price": 7.6685
+        },
+        "48xlarge": {
+          "vcpu": 192,
+          "mem": 1536,
+          "price": 15.337
+        },
+        "metal-24xl": {
+          "vcpu": 96,
+          "mem": 768,
+          "price": 7.6685
+        },
+        "metal-48xl": {
+          "vcpu": 192,
+          "mem": 1536,
+          "price": 15.337
+        }
+      },
       "in": [
         "ap-northeast-1",
         "eu-central-1",
@@ -6006,6 +11745,68 @@
         "metal-24xl",
         "metal-48xl"
       ],
+      "specs": {
+        "medium": {
+          "vcpu": 1,
+          "mem": 8,
+          "price": 0.0589
+        },
+        "large": {
+          "vcpu": 2,
+          "mem": 16,
+          "price": 0.1178
+        },
+        "xlarge": {
+          "vcpu": 4,
+          "mem": 32,
+          "price": 0.2356
+        },
+        "2xlarge": {
+          "vcpu": 8,
+          "mem": 64,
+          "price": 0.4713
+        },
+        "4xlarge": {
+          "vcpu": 16,
+          "mem": 128,
+          "price": 0.9426
+        },
+        "8xlarge": {
+          "vcpu": 32,
+          "mem": 256,
+          "price": 1.8851
+        },
+        "12xlarge": {
+          "vcpu": 48,
+          "mem": 384,
+          "price": 2.8277
+        },
+        "16xlarge": {
+          "vcpu": 64,
+          "mem": 512,
+          "price": 3.7702
+        },
+        "24xlarge": {
+          "vcpu": 96,
+          "mem": 768,
+          "price": 5.6554
+        },
+        "48xlarge": {
+          "vcpu": 192,
+          "mem": 1536,
+          "price": 11.3107
+        },
+        "metal-24xl": {
+          "vcpu": 96,
+          "mem": 768,
+          "price": 5.6554
+        },
+        "metal-48xl": {
+          "vcpu": 192,
+          "mem": 1536,
+          "price": 11.3107
+        }
+      },
       "in": [
         "ap-east-1",
         "ap-northeast-1",
@@ -6055,6 +11856,68 @@
         "metal-24xl",
         "metal-48xl"
       ],
+      "specs": {
+        "medium": {
+          "vcpu": 1,
+          "mem": 8,
+          "price": 0.0911
+        },
+        "large": {
+          "vcpu": 2,
+          "mem": 16,
+          "price": 0.1822
+        },
+        "xlarge": {
+          "vcpu": 4,
+          "mem": 32,
+          "price": 0.3644
+        },
+        "2xlarge": {
+          "vcpu": 8,
+          "mem": 64,
+          "price": 0.7287
+        },
+        "4xlarge": {
+          "vcpu": 16,
+          "mem": 128,
+          "price": 1.4574
+        },
+        "8xlarge": {
+          "vcpu": 32,
+          "mem": 256,
+          "price": 2.9149
+        },
+        "12xlarge": {
+          "vcpu": 48,
+          "mem": 384,
+          "price": 4.3723
+        },
+        "16xlarge": {
+          "vcpu": 64,
+          "mem": 512,
+          "price": 5.8298
+        },
+        "24xlarge": {
+          "vcpu": 96,
+          "mem": 768,
+          "price": 8.7446
+        },
+        "48xlarge": {
+          "vcpu": 192,
+          "mem": 1536,
+          "price": 17.4893
+        },
+        "metal-24xl": {
+          "vcpu": 96,
+          "mem": 768,
+          "price": 17.4893
+        },
+        "metal-48xl": {
+          "vcpu": 192,
+          "mem": 1536,
+          "price": 17.4893
+        }
+      },
       "in": [
         "ap-east-1",
         "ap-northeast-1",
@@ -6104,6 +11967,68 @@
         "metal-24xl",
         "metal-48xl"
       ],
+      "specs": {
+        "medium": {
+          "vcpu": 1,
+          "mem": 8,
+          "price": 0.0735
+        },
+        "large": {
+          "vcpu": 2,
+          "mem": 16,
+          "price": 0.147
+        },
+        "xlarge": {
+          "vcpu": 4,
+          "mem": 32,
+          "price": 0.2939
+        },
+        "2xlarge": {
+          "vcpu": 8,
+          "mem": 64,
+          "price": 0.5878
+        },
+        "4xlarge": {
+          "vcpu": 16,
+          "mem": 128,
+          "price": 1.1757
+        },
+        "8xlarge": {
+          "vcpu": 32,
+          "mem": 256,
+          "price": 2.3514
+        },
+        "12xlarge": {
+          "vcpu": 48,
+          "mem": 384,
+          "price": 3.527
+        },
+        "16xlarge": {
+          "vcpu": 64,
+          "mem": 512,
+          "price": 4.7027
+        },
+        "24xlarge": {
+          "vcpu": 96,
+          "mem": 768,
+          "price": 7.0541
+        },
+        "48xlarge": {
+          "vcpu": 192,
+          "mem": 1536,
+          "price": 14.1082
+        },
+        "metal-24xl": {
+          "vcpu": 96,
+          "mem": 768,
+          "price": 7.0541
+        },
+        "metal-48xl": {
+          "vcpu": 192,
+          "mem": 1536,
+          "price": 14.1082
+        }
+      },
       "in": [
         "af-south-1",
         "ap-east-1",
@@ -6155,6 +12080,68 @@
         "metal-24xl",
         "metal-48xl"
       ],
+      "specs": {
+        "medium": {
+          "vcpu": 1,
+          "mem": 8,
+          "price": 0.0911
+        },
+        "large": {
+          "vcpu": 2,
+          "mem": 16,
+          "price": 0.1822
+        },
+        "xlarge": {
+          "vcpu": 4,
+          "mem": 32,
+          "price": 0.3644
+        },
+        "2xlarge": {
+          "vcpu": 8,
+          "mem": 64,
+          "price": 0.7287
+        },
+        "4xlarge": {
+          "vcpu": 16,
+          "mem": 128,
+          "price": 1.4574
+        },
+        "8xlarge": {
+          "vcpu": 32,
+          "mem": 256,
+          "price": 2.9149
+        },
+        "12xlarge": {
+          "vcpu": 48,
+          "mem": 384,
+          "price": 4.3723
+        },
+        "16xlarge": {
+          "vcpu": 64,
+          "mem": 512,
+          "price": 5.8298
+        },
+        "24xlarge": {
+          "vcpu": 96,
+          "mem": 768,
+          "price": 8.7446
+        },
+        "48xlarge": {
+          "vcpu": 192,
+          "mem": 1536,
+          "price": 17.4893
+        },
+        "metal-24xl": {
+          "vcpu": 96,
+          "mem": 768,
+          "price": 8.7446
+        },
+        "metal-48xl": {
+          "vcpu": 192,
+          "mem": 1536,
+          "price": 17.4893
+        }
+      },
       "in": [
         "ap-east-1",
         "ap-northeast-1",
@@ -6205,6 +12192,73 @@
         "metal-48xl",
         "metal-96xl"
       ],
+      "specs": {
+        "large": {
+          "vcpu": 2,
+          "mem": 16,
+          "price": 0.1389
+        },
+        "xlarge": {
+          "vcpu": 4,
+          "mem": 32,
+          "price": 0.2778
+        },
+        "2xlarge": {
+          "vcpu": 8,
+          "mem": 64,
+          "price": 0.5557
+        },
+        "4xlarge": {
+          "vcpu": 16,
+          "mem": 128,
+          "price": 1.1114
+        },
+        "8xlarge": {
+          "vcpu": 32,
+          "mem": 256,
+          "price": 2.2227
+        },
+        "12xlarge": {
+          "vcpu": 48,
+          "mem": 384,
+          "price": 3.3341
+        },
+        "16xlarge": {
+          "vcpu": 64,
+          "mem": 512,
+          "price": 4.4454
+        },
+        "24xlarge": {
+          "vcpu": 96,
+          "mem": 768,
+          "price": 6.6682
+        },
+        "32xlarge": {
+          "vcpu": 128,
+          "mem": 1024,
+          "price": 8.8909
+        },
+        "48xlarge": {
+          "vcpu": 192,
+          "mem": 1536,
+          "price": 13.3363
+        },
+        "96xlarge": {
+          "vcpu": 384,
+          "mem": 3072,
+          "price": 26.6726
+        },
+        "metal-48xl": {
+          "vcpu": 192,
+          "mem": 1536,
+          "price": 13.3363
+        },
+        "metal-96xl": {
+          "vcpu": 384,
+          "mem": 3072,
+          "price": 26.6726
+        }
+      },
       "in": [
         "af-south-1",
         "ap-northeast-1",
@@ -6244,6 +12298,43 @@
         "12xlarge",
         "16xlarge"
       ],
+      "specs": {
+        "large": {
+          "vcpu": 2,
+          "mem": 16,
+          "price": 0.132
+        },
+        "xlarge": {
+          "vcpu": 4,
+          "mem": 32,
+          "price": 0.2639
+        },
+        "2xlarge": {
+          "vcpu": 8,
+          "mem": 64,
+          "price": 0.5279
+        },
+        "4xlarge": {
+          "vcpu": 16,
+          "mem": 128,
+          "price": 1.0558
+        },
+        "8xlarge": {
+          "vcpu": 32,
+          "mem": 256,
+          "price": 2.1115
+        },
+        "12xlarge": {
+          "vcpu": 48,
+          "mem": 384,
+          "price": 3.1673
+        },
+        "16xlarge": {
+          "vcpu": 64,
+          "mem": 512,
+          "price": 4.223
+        }
+      },
       "in": [
         "af-south-1",
         "ap-northeast-1",
@@ -6287,6 +12378,63 @@
         "48xlarge",
         "96xlarge"
       ],
+      "specs": {
+        "large": {
+          "vcpu": 2,
+          "mem": 16,
+          "price": 0.2092
+        },
+        "xlarge": {
+          "vcpu": 4,
+          "mem": 32,
+          "price": 0.4184
+        },
+        "2xlarge": {
+          "vcpu": 8,
+          "mem": 64,
+          "price": 0.8368
+        },
+        "4xlarge": {
+          "vcpu": 16,
+          "mem": 128,
+          "price": 1.6736
+        },
+        "8xlarge": {
+          "vcpu": 32,
+          "mem": 256,
+          "price": 3.3472
+        },
+        "12xlarge": {
+          "vcpu": 48,
+          "mem": 384,
+          "price": 5.0208
+        },
+        "16xlarge": {
+          "vcpu": 64,
+          "mem": 512,
+          "price": 6.6944
+        },
+        "24xlarge": {
+          "vcpu": 96,
+          "mem": 768,
+          "price": 10.0416
+        },
+        "32xlarge": {
+          "vcpu": 128,
+          "mem": 1024,
+          "price": 13.3888
+        },
+        "48xlarge": {
+          "vcpu": 192,
+          "mem": 1536,
+          "price": 20.0832
+        },
+        "96xlarge": {
+          "vcpu": 384,
+          "mem": 3072,
+          "price": 40.1664
+        }
+      },
       "in": [
         "af-south-1",
         "ap-northeast-1",
@@ -6332,6 +12480,73 @@
         "metal-48xl",
         "metal-96xl"
       ],
+      "specs": {
+        "large": {
+          "vcpu": 2,
+          "mem": 16,
+          "price": 0.1663
+        },
+        "xlarge": {
+          "vcpu": 4,
+          "mem": 32,
+          "price": 0.3326
+        },
+        "2xlarge": {
+          "vcpu": 8,
+          "mem": 64,
+          "price": 0.6653
+        },
+        "4xlarge": {
+          "vcpu": 16,
+          "mem": 128,
+          "price": 1.3306
+        },
+        "8xlarge": {
+          "vcpu": 32,
+          "mem": 256,
+          "price": 2.6611
+        },
+        "12xlarge": {
+          "vcpu": 48,
+          "mem": 384,
+          "price": 3.9917
+        },
+        "16xlarge": {
+          "vcpu": 64,
+          "mem": 512,
+          "price": 5.3222
+        },
+        "24xlarge": {
+          "vcpu": 96,
+          "mem": 768,
+          "price": 7.9834
+        },
+        "32xlarge": {
+          "vcpu": 128,
+          "mem": 1024,
+          "price": 10.6445
+        },
+        "48xlarge": {
+          "vcpu": 192,
+          "mem": 1536,
+          "price": 15.9667
+        },
+        "96xlarge": {
+          "vcpu": 384,
+          "mem": 3072,
+          "price": 31.9334
+        },
+        "metal-48xl": {
+          "vcpu": 192,
+          "mem": 1536,
+          "price": 15.9667
+        },
+        "metal-96xl": {
+          "vcpu": 384,
+          "mem": 3072,
+          "price": 31.9334
+        }
+      },
       "in": [
         "af-south-1",
         "ap-northeast-1",
@@ -6375,6 +12590,63 @@
         "48xlarge",
         "96xlarge"
       ],
+      "specs": {
+        "large": {
+          "vcpu": 2,
+          "mem": 16,
+          "price": 0.2345
+        },
+        "xlarge": {
+          "vcpu": 4,
+          "mem": 32,
+          "price": 0.4689
+        },
+        "2xlarge": {
+          "vcpu": 8,
+          "mem": 64,
+          "price": 0.9379
+        },
+        "4xlarge": {
+          "vcpu": 16,
+          "mem": 128,
+          "price": 1.8758
+        },
+        "8xlarge": {
+          "vcpu": 32,
+          "mem": 256,
+          "price": 3.7515
+        },
+        "12xlarge": {
+          "vcpu": 48,
+          "mem": 384,
+          "price": 5.6273
+        },
+        "16xlarge": {
+          "vcpu": 64,
+          "mem": 512,
+          "price": 7.503
+        },
+        "24xlarge": {
+          "vcpu": 96,
+          "mem": 768,
+          "price": 11.2546
+        },
+        "32xlarge": {
+          "vcpu": 128,
+          "mem": 1024,
+          "price": 15.0061
+        },
+        "48xlarge": {
+          "vcpu": 192,
+          "mem": 1536,
+          "price": 22.5091
+        },
+        "96xlarge": {
+          "vcpu": 384,
+          "mem": 3072,
+          "price": 45.0182
+        }
+      },
       "in": [
         "af-south-1",
         "ap-northeast-1",
@@ -6418,6 +12690,63 @@
         "48xlarge",
         "96xlarge"
       ],
+      "specs": {
+        "large": {
+          "vcpu": 2,
+          "mem": 16,
+          "price": 0.2345
+        },
+        "xlarge": {
+          "vcpu": 4,
+          "mem": 32,
+          "price": 0.4689
+        },
+        "2xlarge": {
+          "vcpu": 8,
+          "mem": 64,
+          "price": 0.9379
+        },
+        "4xlarge": {
+          "vcpu": 16,
+          "mem": 128,
+          "price": 1.8758
+        },
+        "8xlarge": {
+          "vcpu": 32,
+          "mem": 256,
+          "price": 3.7515
+        },
+        "12xlarge": {
+          "vcpu": 48,
+          "mem": 384,
+          "price": 5.6273
+        },
+        "16xlarge": {
+          "vcpu": 64,
+          "mem": 512,
+          "price": 7.503
+        },
+        "24xlarge": {
+          "vcpu": 96,
+          "mem": 768,
+          "price": 11.2546
+        },
+        "32xlarge": {
+          "vcpu": 128,
+          "mem": 1024,
+          "price": 15.0061
+        },
+        "48xlarge": {
+          "vcpu": 192,
+          "mem": 1536,
+          "price": 22.5091
+        },
+        "96xlarge": {
+          "vcpu": 384,
+          "mem": 3072,
+          "price": 45.0182
+        }
+      },
       "in": [
         "af-south-1",
         "ap-northeast-1",
@@ -6461,6 +12790,63 @@
         "48xlarge",
         "96xlarge"
       ],
+      "specs": {
+        "large": {
+          "vcpu": 2,
+          "mem": 16,
+          "price": 0.2092
+        },
+        "xlarge": {
+          "vcpu": 4,
+          "mem": 32,
+          "price": 0.4184
+        },
+        "2xlarge": {
+          "vcpu": 8,
+          "mem": 64,
+          "price": 0.8368
+        },
+        "4xlarge": {
+          "vcpu": 16,
+          "mem": 128,
+          "price": 1.6736
+        },
+        "8xlarge": {
+          "vcpu": 32,
+          "mem": 256,
+          "price": 3.3472
+        },
+        "12xlarge": {
+          "vcpu": 48,
+          "mem": 384,
+          "price": 5.0208
+        },
+        "16xlarge": {
+          "vcpu": 64,
+          "mem": 512,
+          "price": 6.6944
+        },
+        "24xlarge": {
+          "vcpu": 96,
+          "mem": 768,
+          "price": 10.0416
+        },
+        "32xlarge": {
+          "vcpu": 128,
+          "mem": 1024,
+          "price": 13.3888
+        },
+        "48xlarge": {
+          "vcpu": 192,
+          "mem": 1536,
+          "price": 20.0832
+        },
+        "96xlarge": {
+          "vcpu": 384,
+          "mem": 3072,
+          "price": 40.1664
+        }
+      },
       "in": [
         "af-south-1",
         "ap-northeast-1",
@@ -6494,6 +12880,13 @@
       "sizes": [
         "micro"
       ],
+      "specs": {
+        "micro": {
+          "vcpu": 1,
+          "mem": 0.613,
+          "price": 0.02
+        }
+      },
       "in": [
         "ap-northeast-1",
         "ap-southeast-1",
@@ -6520,6 +12913,43 @@
         "xlarge",
         "2xlarge"
       ],
+      "specs": {
+        "nano": {
+          "vcpu": 1,
+          "mem": 0.5,
+          "price": 0.0058
+        },
+        "micro": {
+          "vcpu": 1,
+          "mem": 1,
+          "price": 0.0116
+        },
+        "small": {
+          "vcpu": 1,
+          "mem": 2,
+          "price": 0.023
+        },
+        "medium": {
+          "vcpu": 2,
+          "mem": 4,
+          "price": 0.0464
+        },
+        "large": {
+          "vcpu": 2,
+          "mem": 8,
+          "price": 0.0928
+        },
+        "xlarge": {
+          "vcpu": 4,
+          "mem": 16,
+          "price": 0.1856
+        },
+        "2xlarge": {
+          "vcpu": 8,
+          "mem": 32,
+          "price": 0.3712
+        }
+      },
       "in": [
         "ap-northeast-1",
         "ap-northeast-2",
@@ -6554,6 +12984,43 @@
         "xlarge",
         "2xlarge"
       ],
+      "specs": {
+        "nano": {
+          "vcpu": 2,
+          "mem": 0.5,
+          "price": 0.0052
+        },
+        "micro": {
+          "vcpu": 2,
+          "mem": 1,
+          "price": 0.0104
+        },
+        "small": {
+          "vcpu": 2,
+          "mem": 2,
+          "price": 0.0208
+        },
+        "medium": {
+          "vcpu": 2,
+          "mem": 4,
+          "price": 0.0416
+        },
+        "large": {
+          "vcpu": 2,
+          "mem": 8,
+          "price": 0.0832
+        },
+        "xlarge": {
+          "vcpu": 4,
+          "mem": 16,
+          "price": 0.1664
+        },
+        "2xlarge": {
+          "vcpu": 8,
+          "mem": 32,
+          "price": 0.3328
+        }
+      },
       "in": [
         "af-south-1",
         "ap-east-1",
@@ -6606,6 +13073,43 @@
         "xlarge",
         "2xlarge"
       ],
+      "specs": {
+        "nano": {
+          "vcpu": 2,
+          "mem": 0.5,
+          "price": 0.0047
+        },
+        "micro": {
+          "vcpu": 2,
+          "mem": 1,
+          "price": 0.0094
+        },
+        "small": {
+          "vcpu": 2,
+          "mem": 2,
+          "price": 0.0188
+        },
+        "medium": {
+          "vcpu": 2,
+          "mem": 4,
+          "price": 0.0376
+        },
+        "large": {
+          "vcpu": 2,
+          "mem": 8,
+          "price": 0.0752
+        },
+        "xlarge": {
+          "vcpu": 4,
+          "mem": 16,
+          "price": 0.1504
+        },
+        "2xlarge": {
+          "vcpu": 8,
+          "mem": 32,
+          "price": 0.3008
+        }
+      },
       "in": [
         "af-south-1",
         "ap-east-1",
@@ -6654,6 +13158,43 @@
         "xlarge",
         "2xlarge"
       ],
+      "specs": {
+        "nano": {
+          "vcpu": 2,
+          "mem": 0.5,
+          "price": 0.0042
+        },
+        "micro": {
+          "vcpu": 2,
+          "mem": 1,
+          "price": 0.0084
+        },
+        "small": {
+          "vcpu": 2,
+          "mem": 2,
+          "price": 0.0168
+        },
+        "medium": {
+          "vcpu": 2,
+          "mem": 4,
+          "price": 0.0336
+        },
+        "large": {
+          "vcpu": 2,
+          "mem": 8,
+          "price": 0.0672
+        },
+        "xlarge": {
+          "vcpu": 4,
+          "mem": 16,
+          "price": 0.1344
+        },
+        "2xlarge": {
+          "vcpu": 8,
+          "mem": 32,
+          "price": 0.2688
+        }
+      },
       "in": [
         "af-south-1",
         "ap-east-1",
@@ -6701,6 +13242,18 @@
         "2xlarge",
         "32xlarge"
       ],
+      "specs": {
+        "2xlarge": {
+          "vcpu": 8,
+          "mem": 32,
+          "price": 1.3438
+        },
+        "32xlarge": {
+          "vcpu": 128,
+          "mem": 512,
+          "price": 21.5
+        }
+      },
       "in": [
         "us-east-1",
         "us-east-2",
@@ -6716,6 +13269,13 @@
       "sizes": [
         "32xlarge"
       ],
+      "specs": {
+        "32xlarge": {
+          "vcpu": 128,
+          "mem": 512,
+          "price": 24.78
+        }
+      },
       "in": [
         "us-east-1",
         "us-east-2",
@@ -6731,6 +13291,13 @@
       "sizes": [
         "48xlarge"
       ],
+      "specs": {
+        "48xlarge": {
+          "vcpu": 192,
+          "mem": 2048,
+          "price": null
+        }
+      },
       "in": [
         "us-east-2"
       ]
@@ -6745,6 +13312,18 @@
         "112xlarge",
         "metal"
       ],
+      "specs": {
+        "112xlarge": {
+          "vcpu": 448,
+          "mem": 12288,
+          "price": 109.2
+        },
+        "metal": {
+          "vcpu": 448,
+          "mem": 12288,
+          "price": null
+        }
+      },
       "in": [
         "af-south-1",
         "ap-northeast-1",
@@ -6773,6 +13352,18 @@
         "112xlarge",
         "metal"
       ],
+      "specs": {
+        "112xlarge": {
+          "vcpu": 448,
+          "mem": 18432,
+          "price": 163.8
+        },
+        "metal": {
+          "vcpu": 448,
+          "mem": 18432,
+          "price": null
+        }
+      },
       "in": [
         "eu-central-1",
         "eu-west-1",
@@ -6792,6 +13383,18 @@
         "112xlarge",
         "metal"
       ],
+      "specs": {
+        "112xlarge": {
+          "vcpu": 448,
+          "mem": 24576,
+          "price": 218.4
+        },
+        "metal": {
+          "vcpu": 448,
+          "mem": 24576,
+          "price": null
+        }
+      },
       "in": [
         "ap-northeast-2",
         "eu-west-1",
@@ -6809,6 +13412,13 @@
       "sizes": [
         "56xlarge"
       ],
+      "specs": {
+        "56xlarge": {
+          "vcpu": 224,
+          "mem": 3072,
+          "price": 27.3
+        }
+      },
       "in": [
         "ap-east-1",
         "ap-northeast-1",
@@ -6837,6 +13447,23 @@
         "112xlarge",
         "metal"
       ],
+      "specs": {
+        "56xlarge": {
+          "vcpu": 224,
+          "mem": 6144,
+          "price": 46.4039
+        },
+        "112xlarge": {
+          "vcpu": 448,
+          "mem": 6144,
+          "price": 54.6
+        },
+        "metal": {
+          "vcpu": 448,
+          "mem": 6144,
+          "price": 0.0
+        }
+      },
       "in": [
         "af-south-1",
         "ap-northeast-1",
@@ -6873,6 +13500,18 @@
         "112xlarge",
         "metal"
       ],
+      "specs": {
+        "112xlarge": {
+          "vcpu": 448,
+          "mem": 9216,
+          "price": 81.9
+        },
+        "metal": {
+          "vcpu": 448,
+          "mem": 9216,
+          "price": null
+        }
+      },
       "in": [
         "af-south-1",
         "ap-northeast-1",
@@ -6900,6 +13539,13 @@
       "sizes": [
         "224xlarge"
       ],
+      "specs": {
+        "224xlarge": {
+          "vcpu": 896,
+          "mem": 12288,
+          "price": 125.5818
+        }
+      },
       "in": [
         "ap-northeast-2",
         "ap-south-1",
@@ -6911,6 +13557,7 @@
         "eu-south-1",
         "eu-south-2",
         "eu-west-1",
+        "eu-west-3",
         "sa-east-1",
         "us-east-1",
         "us-east-2",
@@ -6926,6 +13573,13 @@
       "sizes": [
         "112xlarge"
       ],
+      "specs": {
+        "112xlarge": {
+          "vcpu": 448,
+          "mem": 6144,
+          "price": 62.79
+        }
+      },
       "in": [
         "ap-northeast-1",
         "ap-northeast-2",
@@ -6957,6 +13611,13 @@
       "sizes": [
         "112xlarge"
       ],
+      "specs": {
+        "112xlarge": {
+          "vcpu": 448,
+          "mem": 8192,
+          "price": 83.72
+        }
+      },
       "in": [
         "ap-northeast-2",
         "ap-south-1",
@@ -6984,6 +13645,13 @@
       "sizes": [
         "224xlarge"
       ],
+      "specs": {
+        "224xlarge": {
+          "vcpu": 896,
+          "mem": 16384,
+          "price": 180.4756
+        }
+      },
       "in": [
         "ap-northeast-2",
         "ap-south-1",
@@ -6992,6 +13660,7 @@
         "eu-central-1",
         "eu-west-1",
         "eu-west-2",
+        "eu-west-3",
         "us-east-1",
         "us-east-2",
         "us-west-2"
@@ -7006,6 +13675,13 @@
       "sizes": [
         "224xlarge"
       ],
+      "specs": {
+        "224xlarge": {
+          "vcpu": 896,
+          "mem": 24576,
+          "price": 270.7313
+        }
+      },
       "in": [
         "eu-central-1",
         "eu-north-1",
@@ -7023,6 +13699,13 @@
       "sizes": [
         "224xlarge"
       ],
+      "specs": {
+        "224xlarge": {
+          "vcpu": 896,
+          "mem": 32768,
+          "price": 360.9869
+        }
+      },
       "in": [
         "us-east-1",
         "us-west-2"
@@ -7039,6 +13722,23 @@
         "6xlarge",
         "24xlarge"
       ],
+      "specs": {
+        "3xlarge": {
+          "vcpu": 12,
+          "mem": 24,
+          "price": 0.65
+        },
+        "6xlarge": {
+          "vcpu": 24,
+          "mem": 48,
+          "price": 1.3
+        },
+        "24xlarge": {
+          "vcpu": 96,
+          "mem": 192,
+          "price": 5.2
+        }
+      },
       "in": [
         "ap-northeast-1",
         "eu-west-1",
@@ -7056,6 +13756,18 @@
         "16xlarge",
         "32xlarge"
       ],
+      "specs": {
+        "16xlarge": {
+          "vcpu": 64,
+          "mem": 976,
+          "price": 6.669
+        },
+        "32xlarge": {
+          "vcpu": 128,
+          "mem": 1952,
+          "price": 13.338
+        }
+      },
       "in": [
         "af-south-1",
         "ap-east-1",
@@ -7090,6 +13802,38 @@
         "16xlarge",
         "32xlarge"
       ],
+      "specs": {
+        "xlarge": {
+          "vcpu": 4,
+          "mem": 122,
+          "price": 0.834
+        },
+        "2xlarge": {
+          "vcpu": 8,
+          "mem": 244,
+          "price": 1.668
+        },
+        "4xlarge": {
+          "vcpu": 16,
+          "mem": 488,
+          "price": 3.336
+        },
+        "8xlarge": {
+          "vcpu": 32,
+          "mem": 976,
+          "price": 6.672
+        },
+        "16xlarge": {
+          "vcpu": 64,
+          "mem": 1952,
+          "price": 13.344
+        },
+        "32xlarge": {
+          "vcpu": 128,
+          "mem": 3904,
+          "price": 26.688
+        }
+      },
       "in": [
         "af-south-1",
         "ap-east-1",
@@ -7127,6 +13871,53 @@
         "16xlarge",
         "metal"
       ],
+      "specs": {
+        "medium": {
+          "vcpu": 1,
+          "mem": 16,
+          "price": 0.0835
+        },
+        "large": {
+          "vcpu": 2,
+          "mem": 32,
+          "price": 0.167
+        },
+        "xlarge": {
+          "vcpu": 4,
+          "mem": 64,
+          "price": 0.334
+        },
+        "2xlarge": {
+          "vcpu": 8,
+          "mem": 128,
+          "price": 0.668
+        },
+        "4xlarge": {
+          "vcpu": 16,
+          "mem": 256,
+          "price": 1.336
+        },
+        "8xlarge": {
+          "vcpu": 32,
+          "mem": 512,
+          "price": 2.672
+        },
+        "12xlarge": {
+          "vcpu": 48,
+          "mem": 768,
+          "price": 4.008
+        },
+        "16xlarge": {
+          "vcpu": 64,
+          "mem": 1024,
+          "price": 5.344
+        },
+        "metal": {
+          "vcpu": 64,
+          "mem": 1024,
+          "price": 5.344
+        }
+      },
       "in": [
         "eu-west-1",
         "us-east-1",
@@ -7146,6 +13937,28 @@
         "32xlarge",
         "metal"
       ],
+      "specs": {
+        "16xlarge": {
+          "vcpu": 64,
+          "mem": 1024,
+          "price": 6.669
+        },
+        "24xlarge": {
+          "vcpu": 96,
+          "mem": 1536,
+          "price": 10.0035
+        },
+        "32xlarge": {
+          "vcpu": 128,
+          "mem": 2048,
+          "price": 13.338
+        },
+        "metal": {
+          "vcpu": 128,
+          "mem": 2048,
+          "price": 13.338
+        }
+      },
       "in": [
         "af-south-1",
         "ap-northeast-1",
@@ -7194,6 +14007,48 @@
         "32xlarge",
         "metal"
       ],
+      "specs": {
+        "xlarge": {
+          "vcpu": 4,
+          "mem": 128,
+          "price": 0.8336
+        },
+        "2xlarge": {
+          "vcpu": 8,
+          "mem": 256,
+          "price": 1.6672
+        },
+        "4xlarge": {
+          "vcpu": 16,
+          "mem": 512,
+          "price": 3.3345
+        },
+        "8xlarge": {
+          "vcpu": 32,
+          "mem": 1024,
+          "price": 6.669
+        },
+        "16xlarge": {
+          "vcpu": 64,
+          "mem": 2048,
+          "price": 13.338
+        },
+        "24xlarge": {
+          "vcpu": 96,
+          "mem": 3072,
+          "price": 20.007
+        },
+        "32xlarge": {
+          "vcpu": 128,
+          "mem": 4096,
+          "price": 26.676
+        },
+        "metal": {
+          "vcpu": 128,
+          "mem": 4096,
+          "price": 26.676
+        }
+      },
       "in": [
         "af-south-1",
         "ap-northeast-1",
@@ -7236,6 +14091,38 @@
         "12xlarge",
         "metal"
       ],
+      "specs": {
+        "2xlarge": {
+          "vcpu": 8,
+          "mem": 256,
+          "price": 1.668
+        },
+        "4xlarge": {
+          "vcpu": 16,
+          "mem": 512,
+          "price": 3.336
+        },
+        "6xlarge": {
+          "vcpu": 24,
+          "mem": 768,
+          "price": 5.004
+        },
+        "8xlarge": {
+          "vcpu": 32,
+          "mem": 1024,
+          "price": 6.672
+        },
+        "12xlarge": {
+          "vcpu": 48,
+          "mem": 1536,
+          "price": 10.008
+        },
+        "metal": {
+          "vcpu": 48,
+          "mem": 1536,
+          "price": 10.008
+        }
+      },
       "in": [
         "ap-northeast-1",
         "eu-west-1",
@@ -7260,11 +14147,54 @@
         "metal-12xl",
         "metal-24xl"
       ],
+      "specs": {
+        "large": {
+          "vcpu": 2,
+          "mem": 64,
+          "price": null
+        },
+        "xlarge": {
+          "vcpu": 4,
+          "mem": 128,
+          "price": null
+        },
+        "3xlarge": {
+          "vcpu": 12,
+          "mem": 384,
+          "price": null
+        },
+        "6xlarge": {
+          "vcpu": 24,
+          "mem": 768,
+          "price": null
+        },
+        "12xlarge": {
+          "vcpu": 48,
+          "mem": 1536,
+          "price": null
+        },
+        "24xlarge": {
+          "vcpu": 96,
+          "mem": 3072,
+          "price": null
+        },
+        "metal-12xl": {
+          "vcpu": 48,
+          "mem": 1536,
+          "price": null
+        },
+        "metal-24xl": {
+          "vcpu": 96,
+          "mem": 3072,
+          "price": null
+        }
+      },
       "in": [
         "ap-northeast-1",
         "ap-northeast-2",
         "ap-south-1",
         "eu-north-1",
+        "eu-west-1",
         "us-west-2"
       ]
     },
@@ -7288,6 +14218,68 @@
         "metal-24xl",
         "metal-48xl"
       ],
+      "specs": {
+        "medium": {
+          "vcpu": 1,
+          "mem": 16,
+          "price": 0.0977
+        },
+        "large": {
+          "vcpu": 2,
+          "mem": 32,
+          "price": 0.1954
+        },
+        "xlarge": {
+          "vcpu": 4,
+          "mem": 64,
+          "price": 0.3908
+        },
+        "2xlarge": {
+          "vcpu": 8,
+          "mem": 128,
+          "price": 0.7816
+        },
+        "4xlarge": {
+          "vcpu": 16,
+          "mem": 256,
+          "price": 1.5632
+        },
+        "8xlarge": {
+          "vcpu": 32,
+          "mem": 512,
+          "price": 3.1264
+        },
+        "12xlarge": {
+          "vcpu": 48,
+          "mem": 768,
+          "price": 4.6896
+        },
+        "16xlarge": {
+          "vcpu": 64,
+          "mem": 1024,
+          "price": 6.2528
+        },
+        "24xlarge": {
+          "vcpu": 96,
+          "mem": 1536,
+          "price": 9.3792
+        },
+        "48xlarge": {
+          "vcpu": 192,
+          "mem": 3072,
+          "price": 18.7584
+        },
+        "metal-24xl": {
+          "vcpu": 96,
+          "mem": 1536,
+          "price": 9.3792
+        },
+        "metal-48xl": {
+          "vcpu": 192,
+          "mem": 3072,
+          "price": 18.7584
+        }
+      },
       "in": [
         "ap-southeast-2",
         "eu-central-1",
@@ -7320,6 +14312,78 @@
         "metal-48xl",
         "metal-96xl"
       ],
+      "specs": {
+        "large": {
+          "vcpu": 2,
+          "mem": 32,
+          "price": 0.2188
+        },
+        "xlarge": {
+          "vcpu": 4,
+          "mem": 64,
+          "price": 0.4377
+        },
+        "2xlarge": {
+          "vcpu": 8,
+          "mem": 128,
+          "price": 0.8753
+        },
+        "4xlarge": {
+          "vcpu": 16,
+          "mem": 256,
+          "price": 1.7506
+        },
+        "8xlarge": {
+          "vcpu": 32,
+          "mem": 512,
+          "price": 3.5013
+        },
+        "12xlarge": {
+          "vcpu": 48,
+          "mem": 768,
+          "price": 5.2519
+        },
+        "16xlarge": {
+          "vcpu": 64,
+          "mem": 1024,
+          "price": 7.0026
+        },
+        "24xlarge": {
+          "vcpu": 96,
+          "mem": 1536,
+          "price": 10.5038
+        },
+        "32xlarge": {
+          "vcpu": 128,
+          "mem": 2048,
+          "price": 14.0051
+        },
+        "48xlarge": {
+          "vcpu": 192,
+          "mem": 3072,
+          "price": 21.0077
+        },
+        "64xlarge": {
+          "vcpu": 256,
+          "mem": 4096,
+          "price": 28.0102
+        },
+        "96xlarge": {
+          "vcpu": 384,
+          "mem": 6144,
+          "price": 48.7444
+        },
+        "metal-48xl": {
+          "vcpu": 192,
+          "mem": 3072,
+          "price": 21.0077
+        },
+        "metal-96xl": {
+          "vcpu": 384,
+          "mem": 6144,
+          "price": 48.7444
+        }
+      },
       "in": [
         "ap-south-1",
         "eu-central-1",
@@ -7346,6 +14410,43 @@
         "12xlarge",
         "metal"
       ],
+      "specs": {
+        "large": {
+          "vcpu": 2,
+          "mem": 16,
+          "price": 0.186
+        },
+        "xlarge": {
+          "vcpu": 4,
+          "mem": 32,
+          "price": 0.372
+        },
+        "2xlarge": {
+          "vcpu": 8,
+          "mem": 64,
+          "price": 0.744
+        },
+        "3xlarge": {
+          "vcpu": 12,
+          "mem": 96,
+          "price": 1.116
+        },
+        "6xlarge": {
+          "vcpu": 24,
+          "mem": 192,
+          "price": 2.232
+        },
+        "12xlarge": {
+          "vcpu": 48,
+          "mem": 384,
+          "price": 4.464
+        },
+        "metal": {
+          "vcpu": 48,
+          "mem": 384,
+          "price": 4.464
+        }
+      },
       "in": [
         "ap-northeast-1",
         "ap-northeast-2",

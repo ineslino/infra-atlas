@@ -1085,12 +1085,29 @@ a.masthead__back::before { display: none; }
       <button class="chip is-active" data-arch="all"><span class="dot"></span>All</button>
       <button class="chip" data-arch="x86"><span class="dot"></span>x86_64</button>
       <button class="chip" data-arch="arm"><span class="dot"></span>arm64</button>
+      <span class="chip-group" id="price-chips">
+        <span class="filter-chips__label" style="margin-left: 16px;">Price</span>
+        <button class="chip is-active" data-tier="any">Any</button>
+        <button class="chip" data-tier="0">&lt; $0.25</button>
+        <button class="chip" data-tier="1">$0.25–1</button>
+        <button class="chip" data-tier="2">$1–4</button>
+        <button class="chip" data-tier="3">≥ $4</button>
+      </span>
     </div>
   </section>
 
   <div class="result-meta">
     <div class="result-meta__title" id="result-title">All regions</div>
-    <div class="result-meta__count"><strong id="result-count">0</strong> shown</div>
+    <div class="result-meta__tools">
+      <select class="sort-select" id="sort" aria-label="Sort instance types">
+        <option value="name">Sort · Name</option>
+        <option value="price-asc">Sort · Price ↑</option>
+        <option value="price-desc">Sort · Price ↓</option>
+        <option value="vcpu-desc">Sort · vCPU ↓</option>
+        <option value="mem-desc">Sort · Memory ↓</option>
+      </select>
+      <div class="result-meta__count"><strong id="result-count">0</strong> shown</div>
+    </div>
   </div>
 
   <main class="results" id="results">
@@ -1658,11 +1675,63 @@ const state = {
   cat: "all",
   arch: "all",
   query: "",
+  sort: "name",        // name | price-asc | price-desc | vcpu-desc | mem-desc
+  priceTier: "any",    // any | 0 | 1 | 2 | 3
+  currency: "USD",
+  priceRef: "us-east-1",
   data: null
 };
 
 const $ = (sel) => document.querySelector(sel);
 const $$ = (sel) => Array.from(document.querySelectorAll(sel));
+
+// ─── Price / spec helpers ───────────────────────────────────────
+function specOf(fam, size) {
+  return (fam.specs && fam.specs[size]) || null;
+}
+function priceOf(fam, size) {
+  const s = specOf(fam, size);
+  return s && typeof s.price === "number" ? s.price : null;
+}
+
+// Price-filter tiers — thresholds in the page's native currency.
+const PRICE_TIERS = { "0": [0, 0.25], "1": [0.25, 1], "2": [1, 4], "3": [4, Infinity] };
+function priceInTier(price, tier) {
+  if (tier === "any") return true;
+  if (price == null) return false;
+  const band = PRICE_TIERS[tier];
+  return band ? (price >= band[0] && price < band[1]) : true;
+}
+
+// Format an hourly price: 0.096 → "$0.096", 6 → "$6.00", null → null.
+function fmtPrice(price, currency) {
+  if (price == null) return null;
+  const sym = currency === "EUR" ? "€" : "$";
+  let s = price.toFixed(4).replace(/0+$/, "").replace(/\.$/, "");
+  const dot = s.indexOf(".");
+  if (dot === -1) s += ".00";
+  else if (s.length - dot - 1 === 1) s += "0";
+  return sym + s;
+}
+
+// Sort the flattened instance-type entries by state.sort; nulls always last.
+function sortEntries(entries) {
+  const byName = (a, b) => a.full.localeCompare(b.full, undefined, { numeric: true });
+  const cmp = (key, dir) => (a, b) => {
+    const av = a[key], bv = b[key];
+    if (av == null && bv == null) return byName(a, b);
+    if (av == null) return 1;
+    if (bv == null) return -1;
+    return dir * (av - bv) || byName(a, b);
+  };
+  switch (state.sort) {
+    case "price-asc":  entries.sort(cmp("price", 1));  break;
+    case "price-desc": entries.sort(cmp("price", -1)); break;
+    case "vcpu-desc":  entries.sort(cmp("vcpu", -1));  break;
+    case "mem-desc":   entries.sort(cmp("mem", -1));   break;
+    default:           entries.sort(byName);
+  }
+}
 
 function expandIn(rawIn, allCodes) {
   if (rawIn === "*") return new Set(allCodes);
@@ -1863,25 +1932,36 @@ function renderInstanceView() {
   results.innerHTML = '<div class="instance-list"></div>';
   const list = results.firstElementChild;
 
-  // Flatten into instance-type entries
+  // Flatten into instance-type entries, applying search + price-tier filters
   const entries = [];
   visible.forEach(fam => {
     fam.sizes.forEach(size => {
-      const full = `${fam.key}.${size}`;
-      if (instanceTypeMatches(fam, size, q)) {
-        const availCount = state.data.familyRegions.get(fam.key).size;
-        entries.push({ fam, size, full, availCount });
-      }
+      if (!instanceTypeMatches(fam, size, q)) return;
+      const spec = specOf(fam, size) || {};
+      const price = typeof spec.price === "number" ? spec.price : null;
+      if (!priceInTier(price, state.priceTier)) return;
+      entries.push({
+        fam, size,
+        full: `${fam.key}.${size}`,
+        availCount: state.data.familyRegions.get(fam.key).size,
+        price,
+        vcpu: spec.vcpu != null ? spec.vcpu : null,
+        mem: spec.mem != null ? spec.mem : null
+      });
     });
   });
 
-  // sort: full name
-  entries.sort((a, b) => a.full.localeCompare(b.full, undefined, { numeric: true }));
+  sortEntries(entries);
 
   entries.forEach((entry, idx) => {
     const row = document.createElement("div");
     row.className = "instance-row fade-in";
     row.style.animationDelay = Math.min(idx * 0.004, 0.6) + "s";
+    const priceStr = fmtPrice(entry.price, state.currency);
+    const specBits = [];
+    if (entry.vcpu != null) specBits.push(`${entry.vcpu} vCPU`);
+    if (entry.mem != null)  specBits.push(`${entry.mem} GB`);
+    specBits.push(`${entry.availCount} reg`);
     row.innerHTML = `
       <div>
         <div class="instance-row__name">${entry.full}</div>
@@ -1890,8 +1970,9 @@ function renderInstanceView() {
           ${CAT_LABEL[entry.fam.cat]} · ${entry.fam.vendor} · ${entry.fam.arch === "x86" ? "x86_64" : "arm64"}
         </div>
       </div>
-      <div class="instance-row__avail">
-        <strong>${entry.availCount}</strong>/${state.data.regions.length} regions
+      <div class="instance-row__right">
+        <div class="instance-row__price${priceStr ? "" : " is-na"}" title="On-demand Linux · ${state.priceRef}">${priceStr ? `${priceStr}<span class="unit">/hr</span>` : "—"}</div>
+        <div class="instance-row__spec">${specBits.join(" · ")}</div>
       </div>
     `;
     row.addEventListener("click", () => openInstanceDrawer(entry.fam, entry.size));
@@ -1994,6 +2075,8 @@ function openInstanceDrawer(family, size) {
   });
 
   const fullName = `${family.key}.${size}`;
+  const spec = specOf(family, size) || {};
+  const priceStr = fmtPrice(typeof spec.price === "number" ? spec.price : null, state.currency);
   $("#drawer-head").innerHTML = `
     <div class="drawer__eyebrow">Instance type · ${CAT_LABEL[family.cat]}</div>
     <div class="drawer__title" style="font-family:var(--mono); font-size:36px; letter-spacing:0;">${fullName}</div>
@@ -2001,6 +2084,9 @@ function openInstanceDrawer(family, size) {
     <div class="drawer__meta">
       <span>Vendor <strong>${family.vendor}</strong></span>
       <span>Arch <strong>${family.arch === "x86" ? "x86_64" : "arm64"}</strong></span>
+      ${spec.vcpu != null ? `<span>vCPU <strong>${spec.vcpu}</strong></span>` : ""}
+      ${spec.mem != null ? `<span>Memory <strong>${spec.mem} GB</strong></span>` : ""}
+      <span title="On-demand Linux · ${state.priceRef}">Price <strong>${priceStr ? priceStr + "/hr" : "—"}</strong></span>
       <span><strong>${regions.length}</strong>/${state.data.regions.length} regions</span>
     </div>
     <button class="drawer__close" onclick="closeDrawer()">Close ⤬</button>
@@ -2054,6 +2140,8 @@ function writeHash() {
   if (state.mode !== "region") p.set("mode", state.mode);
   if (state.cat !== "all")     p.set("cat", state.cat);
   if (state.arch !== "all")    p.set("arch", state.arch);
+  if (state.sort !== "name")   p.set("sort", state.sort);
+  if (state.priceTier !== "any") p.set("price", state.priceTier);
   if (state.query.trim())      p.set("q", state.query.trim());
   const h = p.toString();
   history.replaceState(null, "", h ? "#" + h : location.pathname + location.search);
@@ -2063,6 +2151,8 @@ function applyHash() {
   const m = p.get("mode"); if (m === "region" || m === "instance") state.mode = m;
   const c = p.get("cat");  if (c) state.cat = c;
   const a = p.get("arch"); if (a) state.arch = a;
+  const so = p.get("sort");  if (so) state.sort = so;
+  const pt = p.get("price"); if (pt) state.priceTier = pt;
   state.query = p.get("q") || "";
   $$(".filter-tab").forEach(b => {
     const on = b.dataset.mode === state.mode;
@@ -2071,11 +2161,17 @@ function applyHash() {
   });
   $$('.chip[data-cat]').forEach(b => b.classList.toggle("is-active", b.dataset.cat === state.cat));
   $$('.chip[data-arch]').forEach(b => b.classList.toggle("is-active", b.dataset.arch === state.arch));
+  $$('.chip[data-tier]').forEach(b => b.classList.toggle("is-active", b.dataset.tier === state.priceTier));
+  const sortSel = $("#sort"); if (sortSel) sortSel.value = state.sort;
   const s = $("#search"); if (s) s.value = state.query;
 }
 
 function render() {
   if (!state.data) return;   // guard: keyboard shortcut may fire before data.json loads
+  // Sort + price-tier controls apply to the instance view only.
+  const instanceOnly = state.mode === "instance";
+  const sortSel = $("#sort");           if (sortSel)    sortSel.style.display    = instanceOnly ? "" : "none";
+  const priceChips = $("#price-chips"); if (priceChips) priceChips.style.display = instanceOnly ? "" : "none";
   if (state.mode === "region") renderRegionView();
   else renderInstanceView();
   writeHash();
@@ -2103,11 +2199,25 @@ function setArch(a) {
   render();
 }
 
+function setSort(v) {
+  state.sort = v;
+  render();
+}
+
+function setPriceTier(t) {
+  state.priceTier = t;
+  $$('.chip[data-tier]').forEach(b => b.classList.toggle("is-active", b.dataset.tier === t));
+  render();
+}
+
 function init() {
   // Wire up UI
   $$(".filter-tab").forEach(b => b.addEventListener("click", () => setMode(b.dataset.mode)));
   $$(".chip[data-cat]").forEach(b => b.addEventListener("click", () => setCat(b.dataset.cat)));
   $$(".chip[data-arch]").forEach(b => b.addEventListener("click", () => setArch(b.dataset.arch)));
+  $$(".chip[data-tier]").forEach(b => b.addEventListener("click", () => setPriceTier(b.dataset.tier)));
+  const sortSel = $("#sort");
+  if (sortSel) sortSel.addEventListener("change", (e) => setSort(e.target.value));
   $("#search").addEventListener("input", (e) => {
     state.query = e.target.value;
     render();
@@ -2138,6 +2248,8 @@ async function loadData() {
         regions = fresh.regions;
         families = fresh.families;
         timestamp = fresh.generated || timestamp;
+        if (fresh.currency) state.currency = fresh.currency;
+        if (fresh.priceRef) state.priceRef = fresh.priceRef;
         isFresh = true;
       }
     }

@@ -7,7 +7,9 @@
 # which carries per-region availability for every EC2 instance type.
 #
 # Transfer is ~18 MB gzipped (curl --compressed). Transforms into
-# Infra Atlas schema: { generated, regions[], families[] }.
+# Infra Atlas schema: { generated, currency, priceRef, regions[], families[] }.
+# Each family carries specs[size] = { vcpu, mem, price } — price is the
+# on-demand Linux $/hr in the reference region (us-east-1).
 #
 # Requirements: curl, python3.
 # ─────────────────────────────────────────────────────────────────
@@ -60,6 +62,9 @@ REGION_META = {
 REGION_RE = re.compile(r'^[a-z]{2}-[a-z]+-\d+$')
 def is_region(code):
     return bool(REGION_RE.match(code)) and not code.startswith(("us-gov", "cn-"))
+
+# Reference region for the headline on-demand price shown on instance rows.
+REF = "us-east-1"
 
 def category(vantage_family, key):
     if key.startswith("mac"):    return "macos"
@@ -121,27 +126,44 @@ for inst in raw:
             "vendor": vendor(inst.get("physical_processor")),
             "desc": (inst.get("physical_processor") or "EC2 instance family").strip(),
             "sizes": set(),
+            "specs": {},
             "in": set(),
         }
     fams[key]["sizes"].add(size)
     fams[key]["in"] |= pricing_regions
 
+    # Per-instance-type spec: vCPU, memory (GiB), on-demand Linux $/hr at REF.
+    od = (((inst.get("pricing") or {}).get(REF) or {}).get("linux") or {}).get("ondemand")
+    try:
+        price = round(float(od), 4)
+    except (TypeError, ValueError):
+        price = None
+    fams[key]["specs"][size] = {
+        "vcpu": inst.get("vCPU"),
+        "mem": inst.get("memory"),
+        "price": price,
+    }
+
 families = []
 for key in sorted(fams.keys()):
     f = fams[key]
+    ordered_sizes = sorted(f["sizes"], key=size_key)
     families.append({
         "key": f["key"],
         "cat": f["cat"],
         "arch": f["arch"],
         "vendor": f["vendor"],
         "desc": f["desc"],
-        "sizes": sorted(f["sizes"], key=size_key),
+        "sizes": ordered_sizes,
+        "specs": {s: f["specs"][s] for s in ordered_sizes if s in f["specs"]},
         "in": sorted(f["in"]),
     })
 
 out = {
     "generated": datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
     "source": "ec2instances.info (Vantage) — public dataset, no credentials",
+    "currency": "USD",
+    "priceRef": REF,
     "regions": regions,
     "families": families,
 }
@@ -150,7 +172,10 @@ with open("data.json", "w", encoding="utf-8") as f:
 
 unmapped = [r["code"] for r in regions if r["area"] == "Other"]
 n_types = sum(len(f["sizes"]) for f in families)
-print(f"  ✓ {len(regions)} regions · {len(families)} families · {n_types} instance types")
+priced = sum(1 for f in families for s in f["sizes"]
+             if (f["specs"].get(s) or {}).get("price") is not None)
+print(f"  ✓ {len(regions)} regions · {len(families)} families · "
+      f"{n_types} instance types · {priced} priced (REF {REF})")
 if unmapped:
     print(f"  ::warning:: regions without geo metadata (add to REGION_META): {', '.join(unmapped)}")
 PYEOF
