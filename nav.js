@@ -44,10 +44,7 @@
     + 'font-family:var(--mono,monospace);}'
     + '.ia-nav a{text-decoration:none;}'
     + '.ia-nav__brand{display:flex;align-items:center;gap:10px;}'
-    + '.ia-nav__glyph{width:14px;height:14px;border-radius:50%;'
-    + 'border:1px solid var(--accent,#FF7849);position:relative;flex:none;}'
-    + '.ia-nav__glyph::before{content:"";position:absolute;inset:3px;border-radius:50%;'
-    + 'background:var(--accent,#FF7849);}'
+    + '.ia-nav__glyph{width:17px;height:17px;flex:none;display:block;}'
     + '.ia-nav__word{font-size:11.5px;letter-spacing:0.18em;text-transform:uppercase;'
     + 'color:var(--paper,#F4EFE6);font-weight:500;}'
     + '.ia-nav__here{font-size:10.5px;letter-spacing:0.1em;color:var(--paper-3,rgba(244,239,230,0.42));'
@@ -107,7 +104,12 @@
 
   nav.innerHTML =
       '<a class="ia-nav__brand" href="/">'
-    +   '<span class="ia-nav__glyph"></span>'
+    +   '<svg class="ia-nav__glyph" viewBox="0 0 32 32" aria-hidden="true">'
+    +     '<circle cx="16" cy="6.2" r="3.1" fill="var(--accent,#FF7849)"/>'
+    +     '<path d="M16 9.3 L5.8 27.2 M16 9.3 L26.2 27.2 M10.4 20.6 L21.6 20.6" '
+    +       'fill="none" stroke="var(--accent,#FF7849)" stroke-width="3.1" '
+    +       'stroke-linecap="round" stroke-linejoin="round"/>'
+    +   '</svg>'
     +   '<span class="ia-nav__word">Infra Atlas</span>'
     +   hereHtml
     + '</a>'

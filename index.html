@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>Infra Atlas — A reference for the infrastructure stack</title>
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <meta name="description" content="Infra Atlas is an open reference for cloud and API management infrastructure — across AWS, Azure, GCP, OCI, OVH, and every major APIM vendor. Cross-referenced, updated daily, free to read.">
 <meta property="og:title" content="Infra Atlas">
 <meta property="og:description" content="A reference for the infrastructure stack. Multi-cloud regions, instance types, API gateway features — cross-referenced and updated daily.">
@@ -139,18 +140,9 @@ body {
 }
 
 .top-rule__mark-glyph {
-  width: 18px;
-  height: 18px;
-  border-radius: 50%;
-  border: 1px solid var(--accent);
-  position: relative;
-}
-.top-rule__mark-glyph::before {
-  content: '';
-  position: absolute;
-  inset: 4px;
-  border-radius: 50%;
-  background: var(--accent);
+  width: 19px;
+  height: 19px;
+  display: block;
 }
 
 .top-rule__center { text-align: center; }
@@ -800,7 +792,10 @@ body {
 
   <div class="top-rule">
     <div class="top-rule__mark">
-      <span class="top-rule__mark-glyph"></span>
+      <svg class="top-rule__mark-glyph" viewBox="0 0 32 32" aria-hidden="true">
+        <circle cx="16" cy="6.2" r="3.1" fill="var(--accent)"/>
+        <path d="M16 9.3 L5.8 27.2 M16 9.3 L26.2 27.2 M10.4 20.6 L21.6 20.6" fill="none" stroke="var(--accent)" stroke-width="3.1" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
       Infra Atlas
     </div>
     <div class="top-rule__center">Issue No. 01 · A reference for the infrastructure stack</div>
