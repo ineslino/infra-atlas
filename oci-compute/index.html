@@ -379,6 +379,41 @@ a.masthead__back::before { display: none; }
   margin-right: 4px;
 }
 
+.chip-group {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  align-items: center;
+}
+
+.result-meta__tools {
+  display: flex;
+  align-items: baseline;
+  gap: 18px;
+}
+
+.sort-select {
+  background: var(--ink);
+  border: 1px solid var(--line-2);
+  color: var(--paper-2);
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  padding: 7px 28px 7px 13px;
+  border-radius: 99px;
+  cursor: pointer;
+  outline: none;
+  -webkit-appearance: none;
+  appearance: none;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 10 10'><path d='M2 3.5 L5 6.5 L8 3.5' stroke='%23F4EFE6' stroke-width='1.3' fill='none' stroke-opacity='0.5'/></svg>");
+  background-repeat: no-repeat;
+  background-position: right 11px center;
+  transition: border-color 0.15s ease, color 0.15s ease;
+}
+
+.sort-select:hover { border-color: var(--paper-3); color: var(--paper); }
+.sort-select:focus { border-color: var(--accent); }
+
 .chip {
   background: transparent;
   border: 1px solid var(--line-2);
@@ -622,19 +657,42 @@ a.masthead__back::before { display: none; }
   gap: 7px;
 }
 
-.instance-row__avail {
+.instance-row__right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 3px;
   text-align: right;
+}
+
+.instance-row__price {
   font-family: var(--mono);
-  font-size: 11px;
-  color: var(--paper-2);
-  letter-spacing: 0.04em;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--accent);
+  letter-spacing: 0.01em;
   white-space: nowrap;
 }
 
-.instance-row__avail strong {
-  color: var(--accent);
-  font-size: 14px;
-  font-weight: 500;
+.instance-row__price .unit {
+  font-size: 9.5px;
+  font-weight: 400;
+  color: var(--paper-3);
+  letter-spacing: 0.05em;
+  margin-left: 1px;
+}
+
+.instance-row__price.is-na {
+  color: var(--paper-4);
+  font-weight: 400;
+}
+
+.instance-row__spec {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--paper-3);
+  letter-spacing: 0.05em;
+  white-space: nowrap;
 }
 
 /* ─────────────── DRAWER (region/instance detail) ─────────────── */
@@ -727,7 +785,8 @@ a.masthead__back::before { display: none; }
 
 .drawer__meta {
   display: flex;
-  gap: 24px;
+  flex-wrap: wrap;
+  gap: 10px 24px;
   margin-top: 18px;
   font-family: var(--mono);
   font-size: 11px;
@@ -1026,12 +1085,29 @@ a.masthead__back::before { display: none; }
       <button class="chip is-active" data-arch="all"><span class="dot"></span>All</button>
       <button class="chip" data-arch="x86"><span class="dot"></span>x86_64</button>
       <button class="chip" data-arch="arm"><span class="dot"></span>arm64</button>
+      <span class="chip-group" id="price-chips">
+        <span class="filter-chips__label" style="margin-left: 16px;">Price</span>
+        <button class="chip is-active" data-tier="any">Any</button>
+        <button class="chip" data-tier="0">&lt; $0.25</button>
+        <button class="chip" data-tier="1">$0.25–1</button>
+        <button class="chip" data-tier="2">$1–4</button>
+        <button class="chip" data-tier="3">≥ $4</button>
+      </span>
     </div>
   </section>
 
   <div class="result-meta">
     <div class="result-meta__title" id="result-title">All regions</div>
-    <div class="result-meta__count"><strong id="result-count">0</strong> shown</div>
+    <div class="result-meta__tools">
+      <select class="sort-select" id="sort" aria-label="Sort instance types">
+        <option value="name">Sort · Name</option>
+        <option value="price-asc">Sort · Price ↑</option>
+        <option value="price-desc">Sort · Price ↓</option>
+        <option value="vcpu-desc">Sort · vCPU ↓</option>
+        <option value="mem-desc">Sort · Memory ↓</option>
+      </select>
+      <div class="result-meta__count"><strong id="result-count">0</strong> shown</div>
+    </div>
   </div>
 
   <main class="results" id="results">
@@ -1070,7 +1146,7 @@ a.masthead__back::before { display: none; }
 //  The page upgrades to ./data.json when that file is available.
 // ───────────────────────────────────────────────────────────────────
 
-const SNAPSHOT_DATE = "2026-05-15T06:00:00Z";
+const SNAPSHOT_DATE = "2026-05-15T23:59:19Z";
 
 const REGIONS = [
   { code: "us-ashburn-1",   name: "Ashburn",       area: "Americas",     flag: "🇺🇸", since: 2018 },
@@ -1119,84 +1195,104 @@ const REGIONS = [
 
 // OCI shapes — "in: \"*\"" means available in all listed regions.
 const FAMILIES = [
-  // ── General purpose (AMD)
-  { key:"VM.Standard.E5.Flex",  cat:"general",   arch:"x86", vendor:"AMD",    desc:"AMD EPYC Genoa (4th gen), Flex (1-94 OCPUs)",
-    sizes:["1 OCPU","2 OCPU","4 OCPU","8 OCPU","16 OCPU","32 OCPU","64 OCPU","94 OCPU"], in:"*"},
-  { key:"VM.Standard.E4.Flex",  cat:"general",   arch:"x86", vendor:"AMD",    desc:"AMD EPYC Rome, Flex (1-64 OCPUs)",
-    sizes:["1 OCPU","2 OCPU","4 OCPU","8 OCPU","16 OCPU","32 OCPU","64 OCPU"], in:"*"},
-  { key:"VM.Standard.E3.Flex",  cat:"general",   arch:"x86", vendor:"AMD",    desc:"AMD EPYC Naples, Flex (1-64, legacy)",
+  // ── General purpose
+  { key:"VM.Standard.E5.Flex", cat:"general", arch:"x86", vendor:"AMD", desc:"AMD EPYC Genoa (4th gen), Flex (1-94 OCPUs)",
+    sizes:["1 OCPU","2 OCPU","4 OCPU","8 OCPU","16 OCPU","32 OCPU","64 OCPU","94 OCPU"],
+    specs:{"1 OCPU":{vcpu:2,mem:16,price:0.062},"2 OCPU":{vcpu:4,mem:32,price:0.124},"4 OCPU":{vcpu:8,mem:64,price:0.248},"8 OCPU":{vcpu:16,mem:128,price:0.496},"16 OCPU":{vcpu:32,mem:256,price:0.992},"32 OCPU":{vcpu:64,mem:512,price:1.984},"64 OCPU":{vcpu:128,mem:1024,price:3.968},"94 OCPU":{vcpu:188,mem:1504,price:5.828}},
+    in:"*" },
+  { key:"VM.Standard.E4.Flex", cat:"general", arch:"x86", vendor:"AMD", desc:"AMD EPYC Rome, Flex (1-64 OCPUs)",
     sizes:["1 OCPU","2 OCPU","4 OCPU","8 OCPU","16 OCPU","32 OCPU","64 OCPU"],
-    in:["us-ashburn-1","us-phoenix-1","us-sanjose-1","ca-toronto-1","ca-montreal-1","sa-saopaulo-1","uk-london-1","eu-amsterdam-1","eu-frankfurt-1","eu-zurich-1","ap-tokyo-1","ap-osaka-1","ap-seoul-1","ap-singapore-1","ap-mumbai-1","ap-sydney-1"]},
-
-  // ── General purpose (ARM)
-  { key:"VM.Standard.A1.Flex",  cat:"general",   arch:"arm", vendor:"Ampere", desc:"Ampere Altra ARM, Flex (1-80 OCPUs)",
-    sizes:["1 OCPU","2 OCPU","4 OCPU","8 OCPU","16 OCPU","32 OCPU","64 OCPU","80 OCPU"], in:"*"},
-  { key:"VM.Standard.A2.Flex",  cat:"general",   arch:"arm", vendor:"Ampere", desc:"AmpereOne ARM (newest), Flex (1-78)",
+    specs:{"1 OCPU":{vcpu:2,mem:16,price:0.049},"2 OCPU":{vcpu:4,mem:32,price:0.098},"4 OCPU":{vcpu:8,mem:64,price:0.196},"8 OCPU":{vcpu:16,mem:128,price:0.392},"16 OCPU":{vcpu:32,mem:256,price:0.784},"32 OCPU":{vcpu:64,mem:512,price:1.568},"64 OCPU":{vcpu:128,mem:1024,price:3.136}},
+    in:"*" },
+  { key:"VM.Standard.E3.Flex", cat:"general", arch:"x86", vendor:"AMD", desc:"AMD EPYC Naples, Flex (1-64, legacy)",
+    sizes:["1 OCPU","2 OCPU","4 OCPU","8 OCPU","16 OCPU","32 OCPU","64 OCPU"],
+    specs:{"1 OCPU":{vcpu:2,mem:16,price:0.049},"2 OCPU":{vcpu:4,mem:32,price:0.098},"4 OCPU":{vcpu:8,mem:64,price:0.196},"8 OCPU":{vcpu:16,mem:128,price:0.392},"16 OCPU":{vcpu:32,mem:256,price:0.784},"32 OCPU":{vcpu:64,mem:512,price:1.568},"64 OCPU":{vcpu:128,mem:1024,price:3.136}},
+    in:["us-ashburn-1","us-phoenix-1","us-sanjose-1","ca-toronto-1","ca-montreal-1","sa-saopaulo-1","uk-london-1","eu-amsterdam-1","eu-frankfurt-1","eu-zurich-1","ap-tokyo-1","ap-osaka-1","ap-seoul-1","ap-singapore-1","ap-mumbai-1","ap-sydney-1"] },
+  { key:"VM.Standard.A1.Flex", cat:"general", arch:"arm", vendor:"Ampere", desc:"Ampere Altra ARM, Flex (1-80 OCPUs)",
+    sizes:["1 OCPU","2 OCPU","4 OCPU","8 OCPU","16 OCPU","32 OCPU","64 OCPU","80 OCPU"],
+    specs:{"1 OCPU":{vcpu:1,mem:16,price:0.034},"2 OCPU":{vcpu:2,mem:32,price:0.068},"4 OCPU":{vcpu:4,mem:64,price:0.136},"8 OCPU":{vcpu:8,mem:128,price:0.272},"16 OCPU":{vcpu:16,mem:256,price:0.544},"32 OCPU":{vcpu:32,mem:512,price:1.088},"64 OCPU":{vcpu:64,mem:1024,price:2.176},"80 OCPU":{vcpu:80,mem:1280,price:2.72}},
+    in:"*" },
+  { key:"VM.Standard.A2.Flex", cat:"general", arch:"arm", vendor:"Ampere", desc:"AmpereOne ARM (newest), Flex (1-78)",
     sizes:["1 OCPU","2 OCPU","4 OCPU","8 OCPU","16 OCPU","32 OCPU","64 OCPU","78 OCPU"],
-    in:["us-ashburn-1","us-phoenix-1","us-chicago-1","ca-toronto-1","sa-saopaulo-1","uk-london-1","eu-amsterdam-1","eu-frankfurt-1","ap-tokyo-1","ap-singapore-1","ap-sydney-1"]},
-
-  // ── General purpose (Intel)
-  { key:"VM.Standard3.Flex",    cat:"general",   arch:"x86", vendor:"Intel",  desc:"Intel Ice Lake, Flex (1-32 OCPUs)",
-    sizes:["1 OCPU","2 OCPU","4 OCPU","8 OCPU","16 OCPU","32 OCPU"], in:"*"},
-  { key:"VM.Standard.x9",       cat:"general",   arch:"x86", vendor:"Intel",  desc:"Intel Sapphire Rapids (4th gen, newer)",
+    specs:{"1 OCPU":{vcpu:1,mem:16,price:0.046},"2 OCPU":{vcpu:2,mem:32,price:0.092},"4 OCPU":{vcpu:4,mem:64,price:0.184},"8 OCPU":{vcpu:8,mem:128,price:0.368},"16 OCPU":{vcpu:16,mem:256,price:0.736},"32 OCPU":{vcpu:32,mem:512,price:1.472},"64 OCPU":{vcpu:64,mem:1024,price:2.944},"78 OCPU":{vcpu:78,mem:1248,price:3.588}},
+    in:["us-ashburn-1","us-phoenix-1","us-chicago-1","ca-toronto-1","sa-saopaulo-1","uk-london-1","eu-amsterdam-1","eu-frankfurt-1","ap-tokyo-1","ap-singapore-1","ap-sydney-1"] },
+  { key:"VM.Standard3.Flex", cat:"general", arch:"x86", vendor:"Intel", desc:"Intel Ice Lake, Flex (1-32 OCPUs)",
+    sizes:["1 OCPU","2 OCPU","4 OCPU","8 OCPU","16 OCPU","32 OCPU"],
+    specs:{"1 OCPU":{vcpu:2,mem:16,price:0.064},"2 OCPU":{vcpu:4,mem:32,price:0.128},"4 OCPU":{vcpu:8,mem:64,price:0.256},"8 OCPU":{vcpu:16,mem:128,price:0.512},"16 OCPU":{vcpu:32,mem:256,price:1.024},"32 OCPU":{vcpu:64,mem:512,price:2.048}},
+    in:"*" },
+  { key:"VM.Standard.x9", cat:"general", arch:"x86", vendor:"Intel", desc:"Intel Sapphire Rapids (4th gen, newer)",
     sizes:["VM.Standard.x9.4","VM.Standard.x9.8","VM.Standard.x9.16","VM.Standard.x9.32","VM.Standard.x9.64"],
-    in:["us-ashburn-1","us-phoenix-1","us-chicago-1","ca-toronto-1","sa-saopaulo-1","uk-london-1","eu-amsterdam-1","eu-frankfurt-1","eu-paris-1","ap-tokyo-1","ap-singapore-1","ap-sydney-1"]},
-
+    specs:{"VM.Standard.x9.4":{vcpu:null,mem:null,price:null},"VM.Standard.x9.8":{vcpu:null,mem:null,price:null},"VM.Standard.x9.16":{vcpu:null,mem:null,price:null},"VM.Standard.x9.32":{vcpu:null,mem:null,price:null},"VM.Standard.x9.64":{vcpu:null,mem:null,price:null}},
+    in:["us-ashburn-1","us-phoenix-1","us-chicago-1","ca-toronto-1","sa-saopaulo-1","uk-london-1","eu-amsterdam-1","eu-frankfurt-1","eu-paris-1","ap-tokyo-1","ap-singapore-1","ap-sydney-1"] },
   // ── Compute optimized
-  { key:"VM.Optimized3.Flex",   cat:"compute",   arch:"x86", vendor:"Intel",  desc:"High-frequency Intel Ice Lake (3.4 GHz), Flex (1-18)",
+  { key:"VM.Optimized3.Flex", cat:"compute", arch:"x86", vendor:"Intel", desc:"High-frequency Intel Ice Lake (3.4 GHz), Flex (1-18)",
     sizes:["1 OCPU","2 OCPU","4 OCPU","8 OCPU","16 OCPU","18 OCPU"],
-    in:["us-ashburn-1","us-phoenix-1","us-chicago-1","ca-toronto-1","sa-saopaulo-1","uk-london-1","eu-amsterdam-1","eu-frankfurt-1","eu-zurich-1","eu-paris-1","ap-tokyo-1","ap-singapore-1","ap-sydney-1","ap-mumbai-1"]},
-
-  // ── Storage optimized (DenseIO — VM + NVMe)
-  { key:"VM.DenseIO.E5.Flex",   cat:"storage",   arch:"x86", vendor:"AMD",    desc:"AMD Genoa + local NVMe (newest)",
+    specs:{"1 OCPU":{vcpu:2,mem:16,price:0.078},"2 OCPU":{vcpu:4,mem:32,price:0.156},"4 OCPU":{vcpu:8,mem:64,price:0.312},"8 OCPU":{vcpu:16,mem:128,price:0.624},"16 OCPU":{vcpu:32,mem:256,price:1.248},"18 OCPU":{vcpu:36,mem:288,price:1.404}},
+    in:["us-ashburn-1","us-phoenix-1","us-chicago-1","ca-toronto-1","sa-saopaulo-1","uk-london-1","eu-amsterdam-1","eu-frankfurt-1","eu-zurich-1","eu-paris-1","ap-tokyo-1","ap-singapore-1","ap-sydney-1","ap-mumbai-1"] },
+  // ── Storage optimized
+  { key:"VM.DenseIO.E5.Flex", cat:"storage", arch:"x86", vendor:"AMD", desc:"AMD Genoa + local NVMe (newest)",
     sizes:["8 OCPU","16 OCPU","32 OCPU","48 OCPU"],
-    in:["us-ashburn-1","us-phoenix-1","us-chicago-1","uk-london-1","eu-amsterdam-1","eu-frankfurt-1","ap-tokyo-1","ap-singapore-1","ap-sydney-1"]},
-  { key:"VM.DenseIO.E4.Flex",   cat:"storage",   arch:"x86", vendor:"AMD",    desc:"AMD Rome + local NVMe",
-    sizes:["8 OCPU","16 OCPU","32 OCPU","48 OCPU","64 OCPU"], in:"*"},
-
-  // ── Bare metal (Standard)
-  { key:"BM.Standard.E5.192",   cat:"baremetal", arch:"x86", vendor:"AMD",    desc:"AMD Genoa bare metal, 192 cores",
-    sizes:["BM.Standard.E5.192"], in:"*"},
-  { key:"BM.Standard.E4.128",   cat:"baremetal", arch:"x86", vendor:"AMD",    desc:"AMD Rome bare metal, 128 cores",
-    sizes:["BM.Standard.E4.128"], in:"*"},
-  { key:"BM.Standard.A1.160",   cat:"baremetal", arch:"arm", vendor:"Ampere", desc:"Ampere Altra bare metal, 160 cores",
+    specs:{"8 OCPU":{vcpu:16,mem:128,price:0.496},"16 OCPU":{vcpu:32,mem:256,price:0.992},"32 OCPU":{vcpu:64,mem:512,price:1.984},"48 OCPU":{vcpu:96,mem:768,price:2.976}},
+    in:["us-ashburn-1","us-phoenix-1","us-chicago-1","uk-london-1","eu-amsterdam-1","eu-frankfurt-1","ap-tokyo-1","ap-singapore-1","ap-sydney-1"] },
+  { key:"VM.DenseIO.E4.Flex", cat:"storage", arch:"x86", vendor:"AMD", desc:"AMD Rome + local NVMe",
+    sizes:["8 OCPU","16 OCPU","32 OCPU","48 OCPU","64 OCPU"],
+    specs:{"8 OCPU":{vcpu:16,mem:128,price:0.392},"16 OCPU":{vcpu:32,mem:256,price:0.784},"32 OCPU":{vcpu:64,mem:512,price:1.568},"48 OCPU":{vcpu:96,mem:768,price:2.352},"64 OCPU":{vcpu:128,mem:1024,price:3.136}},
+    in:"*" },
+  // ── Bare metal
+  { key:"BM.Standard.E5.192", cat:"baremetal", arch:"x86", vendor:"AMD", desc:"AMD Genoa bare metal, 192 cores",
+    sizes:["BM.Standard.E5.192"],
+    specs:{"BM.Standard.E5.192":{vcpu:null,mem:null,price:null}},
+    in:"*" },
+  { key:"BM.Standard.E4.128", cat:"baremetal", arch:"x86", vendor:"AMD", desc:"AMD Rome bare metal, 128 cores",
+    sizes:["BM.Standard.E4.128"],
+    specs:{"BM.Standard.E4.128":{vcpu:null,mem:null,price:null}},
+    in:"*" },
+  { key:"BM.Standard.A1.160", cat:"baremetal", arch:"arm", vendor:"Ampere", desc:"Ampere Altra bare metal, 160 cores",
     sizes:["BM.Standard.A1.160"],
-    in:["us-ashburn-1","us-phoenix-1","us-chicago-1","ca-toronto-1","sa-saopaulo-1","uk-london-1","eu-amsterdam-1","eu-frankfurt-1","eu-paris-1","ap-tokyo-1","ap-singapore-1","ap-sydney-1","ap-mumbai-1"]},
-  { key:"BM.Standard3.64",      cat:"baremetal", arch:"x86", vendor:"Intel",  desc:"Intel Ice Lake bare metal, 64 cores",
-    sizes:["BM.Standard3.64"], in:"*"},
-  { key:"BM.DenseIO.E5.128",    cat:"baremetal", arch:"x86", vendor:"AMD",    desc:"AMD Genoa bare metal + 8× NVMe (storage extreme)",
+    specs:{"BM.Standard.A1.160":{vcpu:null,mem:null,price:null}},
+    in:["us-ashburn-1","us-phoenix-1","us-chicago-1","ca-toronto-1","sa-saopaulo-1","uk-london-1","eu-amsterdam-1","eu-frankfurt-1","eu-paris-1","ap-tokyo-1","ap-singapore-1","ap-sydney-1","ap-mumbai-1"] },
+  { key:"BM.Standard3.64", cat:"baremetal", arch:"x86", vendor:"Intel", desc:"Intel Ice Lake bare metal, 64 cores",
+    sizes:["BM.Standard3.64"],
+    specs:{"BM.Standard3.64":{vcpu:null,mem:null,price:null}},
+    in:"*" },
+  { key:"BM.DenseIO.E5.128", cat:"baremetal", arch:"x86", vendor:"AMD", desc:"AMD Genoa bare metal + 8× NVMe (storage extreme)",
     sizes:["BM.DenseIO.E5.128"],
-    in:["us-ashburn-1","us-phoenix-1","us-chicago-1","uk-london-1","eu-amsterdam-1","eu-frankfurt-1","ap-tokyo-1","ap-singapore-1","ap-sydney-1"]},
-
-  // ── HPC (bare metal + RDMA)
-  { key:"BM.HPC2.36",           cat:"hpc",       arch:"x86", vendor:"Intel",  desc:"Intel Cascade Lake + 100 Gbps RDMA (legacy)",
+    specs:{"BM.DenseIO.E5.128":{vcpu:null,mem:null,price:null}},
+    in:["us-ashburn-1","us-phoenix-1","us-chicago-1","uk-london-1","eu-amsterdam-1","eu-frankfurt-1","ap-tokyo-1","ap-singapore-1","ap-sydney-1"] },
+  // ── HPC
+  { key:"BM.HPC2.36", cat:"hpc", arch:"x86", vendor:"Intel", desc:"Intel Cascade Lake + 100 Gbps RDMA (legacy)",
     sizes:["BM.HPC2.36"],
-    in:["us-ashburn-1","us-phoenix-1","uk-london-1","eu-frankfurt-1","ap-tokyo-1"]},
-  { key:"BM.HPC.E5.128",        cat:"hpc",       arch:"x86", vendor:"AMD",    desc:"AMD Genoa HPC + 200 Gbps RDMA (newest)",
+    specs:{"BM.HPC2.36":{vcpu:null,mem:null,price:null}},
+    in:["us-ashburn-1","us-phoenix-1","uk-london-1","eu-frankfurt-1","ap-tokyo-1"] },
+  { key:"BM.HPC.E5.128", cat:"hpc", arch:"x86", vendor:"AMD", desc:"AMD Genoa HPC + 200 Gbps RDMA (newest)",
     sizes:["BM.HPC.E5.128"],
-    in:["us-ashburn-1","us-phoenix-1","us-chicago-1","uk-london-1","eu-frankfurt-1","eu-amsterdam-1","ap-tokyo-1"]},
-
-  // ── Accelerator (GPU — VM-form)
-  { key:"VM.GPU3.Flex",         cat:"accelerated",arch:"x86",vendor:"Intel",  desc:"NVIDIA V100 (legacy)",
+    specs:{"BM.HPC.E5.128":{vcpu:null,mem:null,price:null}},
+    in:["us-ashburn-1","us-phoenix-1","us-chicago-1","uk-london-1","eu-frankfurt-1","eu-amsterdam-1","ap-tokyo-1"] },
+  // ── Accelerated
+  { key:"VM.GPU3.Flex", cat:"accelerated", arch:"x86", vendor:"Intel", desc:"NVIDIA V100 (legacy)",
     sizes:["VM.GPU3.1","VM.GPU3.2","VM.GPU3.4"],
-    in:["us-ashburn-1","us-phoenix-1","uk-london-1","eu-frankfurt-1","ap-tokyo-1","ap-singapore-1"]},
-  { key:"VM.GPU.A10",           cat:"accelerated",arch:"x86",vendor:"Intel",  desc:"NVIDIA A10 — inference, graphics",
+    specs:{"VM.GPU3.1":{vcpu:null,mem:null,price:null},"VM.GPU3.2":{vcpu:null,mem:null,price:null},"VM.GPU3.4":{vcpu:null,mem:null,price:null}},
+    in:["us-ashburn-1","us-phoenix-1","uk-london-1","eu-frankfurt-1","ap-tokyo-1","ap-singapore-1"] },
+  { key:"VM.GPU.A10", cat:"accelerated", arch:"x86", vendor:"Intel", desc:"NVIDIA A10 — inference, graphics",
     sizes:["VM.GPU.A10.1","VM.GPU.A10.2"],
-    in:["us-ashburn-1","us-phoenix-1","us-chicago-1","uk-london-1","eu-amsterdam-1","eu-frankfurt-1","ap-tokyo-1","ap-singapore-1","ap-sydney-1"]},
-
-  // ── Accelerator (GPU — Bare Metal)
-  { key:"BM.GPU.A10.4",         cat:"accelerated",arch:"x86",vendor:"Intel",  desc:"NVIDIA A10 ×4 bare metal",
+    specs:{"VM.GPU.A10.1":{vcpu:null,mem:null,price:null},"VM.GPU.A10.2":{vcpu:null,mem:null,price:null}},
+    in:["us-ashburn-1","us-phoenix-1","us-chicago-1","uk-london-1","eu-amsterdam-1","eu-frankfurt-1","ap-tokyo-1","ap-singapore-1","ap-sydney-1"] },
+  { key:"BM.GPU.A10.4", cat:"accelerated", arch:"x86", vendor:"Intel", desc:"NVIDIA A10 ×4 bare metal",
     sizes:["BM.GPU.A10.4"],
-    in:["us-ashburn-1","us-phoenix-1","us-chicago-1","uk-london-1","eu-amsterdam-1","eu-frankfurt-1","ap-tokyo-1","ap-singapore-1","ap-sydney-1"]},
-  { key:"BM.GPU.A100-v2.8",     cat:"accelerated",arch:"x86",vendor:"Intel",  desc:"NVIDIA A100 80GB ×8 + NVLink (training)",
+    specs:{"BM.GPU.A10.4":{vcpu:null,mem:null,price:null}},
+    in:["us-ashburn-1","us-phoenix-1","us-chicago-1","uk-london-1","eu-amsterdam-1","eu-frankfurt-1","ap-tokyo-1","ap-singapore-1","ap-sydney-1"] },
+  { key:"BM.GPU.A100-v2.8", cat:"accelerated", arch:"x86", vendor:"Intel", desc:"NVIDIA A100 80GB ×8 + NVLink (training)",
     sizes:["BM.GPU.A100-v2.8"],
-    in:["us-ashburn-1","us-phoenix-1","us-chicago-1","uk-london-1","eu-frankfurt-1","eu-amsterdam-1","ap-tokyo-1","ap-singapore-1"]},
-  { key:"BM.GPU.H100.8",        cat:"accelerated",arch:"x86",vendor:"AMD",    desc:"NVIDIA H100 ×8 + 3200 Gbps RDMA cluster (LLM training)",
+    specs:{"BM.GPU.A100-v2.8":{vcpu:null,mem:null,price:null}},
+    in:["us-ashburn-1","us-phoenix-1","us-chicago-1","uk-london-1","eu-frankfurt-1","eu-amsterdam-1","ap-tokyo-1","ap-singapore-1"] },
+  { key:"BM.GPU.H100.8", cat:"accelerated", arch:"x86", vendor:"AMD", desc:"NVIDIA H100 ×8 + 3200 Gbps RDMA cluster (LLM training)",
     sizes:["BM.GPU.H100.8"],
-    in:["us-ashburn-1","us-chicago-1","us-phoenix-1","eu-frankfurt-1","ap-tokyo-1"]},
-  { key:"BM.GPU.B200.8",        cat:"accelerated",arch:"x86",vendor:"AMD",    desc:"NVIDIA B200 (Blackwell) ×8 — newest, scarce",
+    specs:{"BM.GPU.H100.8":{vcpu:null,mem:null,price:null}},
+    in:["us-ashburn-1","us-chicago-1","us-phoenix-1","eu-frankfurt-1","ap-tokyo-1"] },
+  { key:"BM.GPU.B200.8", cat:"accelerated", arch:"x86", vendor:"AMD", desc:"NVIDIA B200 (Blackwell) ×8 — newest, scarce",
     sizes:["BM.GPU.B200.8"],
-    in:["us-ashburn-1","us-chicago-1"]}
+    specs:{"BM.GPU.B200.8":{vcpu:null,mem:null,price:null}},
+    in:["us-ashburn-1","us-chicago-1"] }
 ];
 
 
@@ -1209,11 +1305,63 @@ const state = {
   cat: "all",
   arch: "all",
   query: "",
+  sort: "name",        // name | price-asc | price-desc | vcpu-desc | mem-desc
+  priceTier: "any",    // any | 0 | 1 | 2 | 3
+  currency: "USD",
+  priceRef: "us-ashburn-1",
   data: null
 };
 
 const $ = (sel) => document.querySelector(sel);
 const $$ = (sel) => Array.from(document.querySelectorAll(sel));
+
+// ─── Price / spec helpers ───────────────────────────────────────
+function specOf(fam, size) {
+  return (fam.specs && fam.specs[size]) || null;
+}
+function priceOf(fam, size) {
+  const s = specOf(fam, size);
+  return s && typeof s.price === "number" ? s.price : null;
+}
+
+// Price-filter tiers — thresholds in the page's native currency.
+const PRICE_TIERS = { "0": [0, 0.25], "1": [0.25, 1], "2": [1, 4], "3": [4, Infinity] };
+function priceInTier(price, tier) {
+  if (tier === "any") return true;
+  if (price == null) return false;
+  const band = PRICE_TIERS[tier];
+  return band ? (price >= band[0] && price < band[1]) : true;
+}
+
+// Format an hourly price: 0.096 → "$0.096", 6 → "$6.00", null → null.
+function fmtPrice(price, currency) {
+  if (price == null) return null;
+  const sym = currency === "EUR" ? "€" : "$";
+  let s = price.toFixed(4).replace(/0+$/, "").replace(/\.$/, "");
+  const dot = s.indexOf(".");
+  if (dot === -1) s += ".00";
+  else if (s.length - dot - 1 === 1) s += "0";
+  return sym + s;
+}
+
+// Sort the flattened instance-type entries by state.sort; nulls always last.
+function sortEntries(entries) {
+  const byName = (a, b) => a.full.localeCompare(b.full, undefined, { numeric: true });
+  const cmp = (key, dir) => (a, b) => {
+    const av = a[key], bv = b[key];
+    if (av == null && bv == null) return byName(a, b);
+    if (av == null) return 1;
+    if (bv == null) return -1;
+    return dir * (av - bv) || byName(a, b);
+  };
+  switch (state.sort) {
+    case "price-asc":  entries.sort(cmp("price", 1));  break;
+    case "price-desc": entries.sort(cmp("price", -1)); break;
+    case "vcpu-desc":  entries.sort(cmp("vcpu", -1));  break;
+    case "mem-desc":   entries.sort(cmp("mem", -1));   break;
+    default:           entries.sort(byName);
+  }
+}
 
 function expandIn(rawIn, allCodes) {
   if (rawIn === "*") return new Set(allCodes);
@@ -1414,25 +1562,36 @@ function renderInstanceView() {
   results.innerHTML = '<div class="instance-list"></div>';
   const list = results.firstElementChild;
 
-  // Flatten into instance-type entries
+  // Flatten into instance-type entries, applying search + price-tier filters
   const entries = [];
   visible.forEach(fam => {
     fam.sizes.forEach(size => {
-      const full = `${fam.key}.${size}`;
-      if (instanceTypeMatches(fam, size, q)) {
-        const availCount = state.data.familyRegions.get(fam.key).size;
-        entries.push({ fam, size, full, availCount });
-      }
+      if (!instanceTypeMatches(fam, size, q)) return;
+      const spec = specOf(fam, size) || {};
+      const price = typeof spec.price === "number" ? spec.price : null;
+      if (!priceInTier(price, state.priceTier)) return;
+      entries.push({
+        fam, size,
+        full: `${fam.key}.${size}`,
+        availCount: state.data.familyRegions.get(fam.key).size,
+        price,
+        vcpu: spec.vcpu != null ? spec.vcpu : null,
+        mem: spec.mem != null ? spec.mem : null
+      });
     });
   });
 
-  // sort: full name
-  entries.sort((a, b) => a.full.localeCompare(b.full, undefined, { numeric: true }));
+  sortEntries(entries);
 
   entries.forEach((entry, idx) => {
     const row = document.createElement("div");
     row.className = "instance-row fade-in";
     row.style.animationDelay = Math.min(idx * 0.004, 0.6) + "s";
+    const priceStr = fmtPrice(entry.price, state.currency);
+    const specBits = [];
+    if (entry.vcpu != null) specBits.push(`${entry.vcpu} vCPU`);
+    if (entry.mem != null)  specBits.push(`${entry.mem} GB`);
+    specBits.push(`${entry.availCount} reg`);
     row.innerHTML = `
       <div>
         <div class="instance-row__name">${entry.full}</div>
@@ -1441,8 +1600,9 @@ function renderInstanceView() {
           ${CAT_LABEL[entry.fam.cat]} · ${entry.fam.vendor} · ${entry.fam.arch === "x86" ? "x86_64" : "arm64"}
         </div>
       </div>
-      <div class="instance-row__avail">
-        <strong>${entry.availCount}</strong>/${state.data.regions.length} regions
+      <div class="instance-row__right">
+        <div class="instance-row__price${priceStr ? "" : " is-na"}" title="On-demand · ${state.priceRef}">${priceStr ? `${priceStr}<span class="unit">/hr</span>` : "—"}</div>
+        <div class="instance-row__spec">${specBits.join(" · ")}</div>
       </div>
     `;
     row.addEventListener("click", () => openInstanceDrawer(entry.fam, entry.size));
@@ -1545,6 +1705,8 @@ function openInstanceDrawer(family, size) {
   });
 
   const fullName = `${family.key}.${size}`;
+  const spec = specOf(family, size) || {};
+  const priceStr = fmtPrice(typeof spec.price === "number" ? spec.price : null, state.currency);
   $("#drawer-head").innerHTML = `
     <div class="drawer__eyebrow">Shape family · ${CAT_LABEL[family.cat]}</div>
     <div class="drawer__title" style="font-family:var(--mono); font-size:36px; letter-spacing:0;">${fullName}</div>
@@ -1552,6 +1714,9 @@ function openInstanceDrawer(family, size) {
     <div class="drawer__meta">
       <span>Vendor <strong>${family.vendor}</strong></span>
       <span>Arch <strong>${family.arch === "x86" ? "x86_64" : "arm64"}</strong></span>
+      ${spec.vcpu != null ? `<span>vCPU <strong>${spec.vcpu}</strong></span>` : ""}
+      ${spec.mem != null ? `<span>Memory <strong>${spec.mem} GB</strong></span>` : ""}
+      <span title="On-demand · ${state.priceRef}">Price <strong>${priceStr ? priceStr + "/hr" : "—"}</strong></span>
       <span><strong>${regions.length}</strong>/${state.data.regions.length} regions</span>
     </div>
     <button class="drawer__close" onclick="closeDrawer()">Close ⤬</button>
@@ -1605,6 +1770,8 @@ function writeHash() {
   if (state.mode !== "region") p.set("mode", state.mode);
   if (state.cat !== "all")     p.set("cat", state.cat);
   if (state.arch !== "all")    p.set("arch", state.arch);
+  if (state.sort !== "name")   p.set("sort", state.sort);
+  if (state.priceTier !== "any") p.set("price", state.priceTier);
   if (state.query.trim())      p.set("q", state.query.trim());
   const h = p.toString();
   history.replaceState(null, "", h ? "#" + h : location.pathname + location.search);
@@ -1614,6 +1781,8 @@ function applyHash() {
   const m = p.get("mode"); if (m === "region" || m === "instance") state.mode = m;
   const c = p.get("cat");  if (c) state.cat = c;
   const a = p.get("arch"); if (a) state.arch = a;
+  const so = p.get("sort");  if (so) state.sort = so;
+  const pt = p.get("price"); if (pt) state.priceTier = pt;
   state.query = p.get("q") || "";
   $$(".filter-tab").forEach(b => {
     const on = b.dataset.mode === state.mode;
@@ -1622,11 +1791,17 @@ function applyHash() {
   });
   $$('.chip[data-cat]').forEach(b => b.classList.toggle("is-active", b.dataset.cat === state.cat));
   $$('.chip[data-arch]').forEach(b => b.classList.toggle("is-active", b.dataset.arch === state.arch));
+  $$('.chip[data-tier]').forEach(b => b.classList.toggle("is-active", b.dataset.tier === state.priceTier));
+  const sortSel = $("#sort"); if (sortSel) sortSel.value = state.sort;
   const s = $("#search"); if (s) s.value = state.query;
 }
 
 function render() {
   if (!state.data) return;   // guard: keyboard shortcut may fire before data.json loads
+  // Sort + price-tier controls apply to the instance view only.
+  const instanceOnly = state.mode === "instance";
+  const sortSel = $("#sort");           if (sortSel)    sortSel.style.display    = instanceOnly ? "" : "none";
+  const priceChips = $("#price-chips"); if (priceChips) priceChips.style.display = instanceOnly ? "" : "none";
   if (state.mode === "region") renderRegionView();
   else renderInstanceView();
   writeHash();
@@ -1654,11 +1829,25 @@ function setArch(a) {
   render();
 }
 
+function setSort(v) {
+  state.sort = v;
+  render();
+}
+
+function setPriceTier(t) {
+  state.priceTier = t;
+  $$('.chip[data-tier]').forEach(b => b.classList.toggle("is-active", b.dataset.tier === t));
+  render();
+}
+
 function init() {
   // Wire up UI
   $$(".filter-tab").forEach(b => b.addEventListener("click", () => setMode(b.dataset.mode)));
   $$(".chip[data-cat]").forEach(b => b.addEventListener("click", () => setCat(b.dataset.cat)));
   $$(".chip[data-arch]").forEach(b => b.addEventListener("click", () => setArch(b.dataset.arch)));
+  $$(".chip[data-tier]").forEach(b => b.addEventListener("click", () => setPriceTier(b.dataset.tier)));
+  const sortSel = $("#sort");
+  if (sortSel) sortSel.addEventListener("change", (e) => setSort(e.target.value));
   $("#search").addEventListener("input", (e) => {
     state.query = e.target.value;
     render();
@@ -1689,6 +1878,8 @@ async function loadData() {
         regions = fresh.regions;
         families = fresh.families;
         timestamp = fresh.generated || timestamp;
+        if (fresh.currency) state.currency = fresh.currency;
+        if (fresh.priceRef) state.priceRef = fresh.priceRef;
         isFresh = true;
       }
     }

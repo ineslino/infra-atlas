@@ -1,6 +1,9 @@
 {
-  "generated": "2026-05-15T23:20:32Z",
+  "generated": "2026-05-15T23:59:19Z",
   "provider": "oci",
+  "source": "Oracle Cloud public price list — no credentials",
+  "currency": "USD",
+  "priceRef": "us-ashburn-1",
   "regions": [
     {
       "code": "us-ashburn-1",
@@ -286,7 +289,49 @@
         "64 OCPU",
         "94 OCPU"
       ],
-      "in": "*"
+      "in": "*",
+      "specs": {
+        "1 OCPU": {
+          "vcpu": 2,
+          "mem": 16,
+          "price": 0.062
+        },
+        "2 OCPU": {
+          "vcpu": 4,
+          "mem": 32,
+          "price": 0.124
+        },
+        "4 OCPU": {
+          "vcpu": 8,
+          "mem": 64,
+          "price": 0.248
+        },
+        "8 OCPU": {
+          "vcpu": 16,
+          "mem": 128,
+          "price": 0.496
+        },
+        "16 OCPU": {
+          "vcpu": 32,
+          "mem": 256,
+          "price": 0.992
+        },
+        "32 OCPU": {
+          "vcpu": 64,
+          "mem": 512,
+          "price": 1.984
+        },
+        "64 OCPU": {
+          "vcpu": 128,
+          "mem": 1024,
+          "price": 3.968
+        },
+        "94 OCPU": {
+          "vcpu": 188,
+          "mem": 1504,
+          "price": 5.828
+        }
+      }
     },
     {
       "key": "VM.Standard.E4.Flex",
@@ -303,7 +348,44 @@
         "32 OCPU",
         "64 OCPU"
       ],
-      "in": "*"
+      "in": "*",
+      "specs": {
+        "1 OCPU": {
+          "vcpu": 2,
+          "mem": 16,
+          "price": 0.049
+        },
+        "2 OCPU": {
+          "vcpu": 4,
+          "mem": 32,
+          "price": 0.098
+        },
+        "4 OCPU": {
+          "vcpu": 8,
+          "mem": 64,
+          "price": 0.196
+        },
+        "8 OCPU": {
+          "vcpu": 16,
+          "mem": 128,
+          "price": 0.392
+        },
+        "16 OCPU": {
+          "vcpu": 32,
+          "mem": 256,
+          "price": 0.784
+        },
+        "32 OCPU": {
+          "vcpu": 64,
+          "mem": 512,
+          "price": 1.568
+        },
+        "64 OCPU": {
+          "vcpu": 128,
+          "mem": 1024,
+          "price": 3.136
+        }
+      }
     },
     {
       "key": "VM.Standard.E3.Flex",
@@ -337,7 +419,44 @@
         "ap-singapore-1",
         "ap-mumbai-1",
         "ap-sydney-1"
-      ]
+      ],
+      "specs": {
+        "1 OCPU": {
+          "vcpu": 2,
+          "mem": 16,
+          "price": 0.049
+        },
+        "2 OCPU": {
+          "vcpu": 4,
+          "mem": 32,
+          "price": 0.098
+        },
+        "4 OCPU": {
+          "vcpu": 8,
+          "mem": 64,
+          "price": 0.196
+        },
+        "8 OCPU": {
+          "vcpu": 16,
+          "mem": 128,
+          "price": 0.392
+        },
+        "16 OCPU": {
+          "vcpu": 32,
+          "mem": 256,
+          "price": 0.784
+        },
+        "32 OCPU": {
+          "vcpu": 64,
+          "mem": 512,
+          "price": 1.568
+        },
+        "64 OCPU": {
+          "vcpu": 128,
+          "mem": 1024,
+          "price": 3.136
+        }
+      }
     },
     {
       "key": "VM.Standard.A1.Flex",
@@ -355,7 +474,49 @@
         "64 OCPU",
         "80 OCPU"
       ],
-      "in": "*"
+      "in": "*",
+      "specs": {
+        "1 OCPU": {
+          "vcpu": 1,
+          "mem": 16,
+          "price": 0.034
+        },
+        "2 OCPU": {
+          "vcpu": 2,
+          "mem": 32,
+          "price": 0.068
+        },
+        "4 OCPU": {
+          "vcpu": 4,
+          "mem": 64,
+          "price": 0.136
+        },
+        "8 OCPU": {
+          "vcpu": 8,
+          "mem": 128,
+          "price": 0.272
+        },
+        "16 OCPU": {
+          "vcpu": 16,
+          "mem": 256,
+          "price": 0.544
+        },
+        "32 OCPU": {
+          "vcpu": 32,
+          "mem": 512,
+          "price": 1.088
+        },
+        "64 OCPU": {
+          "vcpu": 64,
+          "mem": 1024,
+          "price": 2.176
+        },
+        "80 OCPU": {
+          "vcpu": 80,
+          "mem": 1280,
+          "price": 2.72
+        }
+      }
     },
     {
       "key": "VM.Standard.A2.Flex",
@@ -385,7 +546,49 @@
         "ap-tokyo-1",
         "ap-singapore-1",
         "ap-sydney-1"
-      ]
+      ],
+      "specs": {
+        "1 OCPU": {
+          "vcpu": 1,
+          "mem": 16,
+          "price": 0.046
+        },
+        "2 OCPU": {
+          "vcpu": 2,
+          "mem": 32,
+          "price": 0.092
+        },
+        "4 OCPU": {
+          "vcpu": 4,
+          "mem": 64,
+          "price": 0.184
+        },
+        "8 OCPU": {
+          "vcpu": 8,
+          "mem": 128,
+          "price": 0.368
+        },
+        "16 OCPU": {
+          "vcpu": 16,
+          "mem": 256,
+          "price": 0.736
+        },
+        "32 OCPU": {
+          "vcpu": 32,
+          "mem": 512,
+          "price": 1.472
+        },
+        "64 OCPU": {
+          "vcpu": 64,
+          "mem": 1024,
+          "price": 2.944
+        },
+        "78 OCPU": {
+          "vcpu": 78,
+          "mem": 1248,
+          "price": 3.588
+        }
+      }
     },
     {
       "key": "VM.Standard3.Flex",
@@ -401,7 +604,39 @@
         "16 OCPU",
         "32 OCPU"
       ],
-      "in": "*"
+      "in": "*",
+      "specs": {
+        "1 OCPU": {
+          "vcpu": 2,
+          "mem": 16,
+          "price": 0.064
+        },
+        "2 OCPU": {
+          "vcpu": 4,
+          "mem": 32,
+          "price": 0.128
+        },
+        "4 OCPU": {
+          "vcpu": 8,
+          "mem": 64,
+          "price": 0.256
+        },
+        "8 OCPU": {
+          "vcpu": 16,
+          "mem": 128,
+          "price": 0.512
+        },
+        "16 OCPU": {
+          "vcpu": 32,
+          "mem": 256,
+          "price": 1.024
+        },
+        "32 OCPU": {
+          "vcpu": 64,
+          "mem": 512,
+          "price": 2.048
+        }
+      }
     },
     {
       "key": "VM.Standard.x9",
@@ -429,7 +664,34 @@
         "ap-tokyo-1",
         "ap-singapore-1",
         "ap-sydney-1"
-      ]
+      ],
+      "specs": {
+        "VM.Standard.x9.4": {
+          "vcpu": null,
+          "mem": null,
+          "price": null
+        },
+        "VM.Standard.x9.8": {
+          "vcpu": null,
+          "mem": null,
+          "price": null
+        },
+        "VM.Standard.x9.16": {
+          "vcpu": null,
+          "mem": null,
+          "price": null
+        },
+        "VM.Standard.x9.32": {
+          "vcpu": null,
+          "mem": null,
+          "price": null
+        },
+        "VM.Standard.x9.64": {
+          "vcpu": null,
+          "mem": null,
+          "price": null
+        }
+      }
     },
     {
       "key": "VM.Optimized3.Flex",
@@ -460,7 +722,39 @@
         "ap-singapore-1",
         "ap-sydney-1",
         "ap-mumbai-1"
-      ]
+      ],
+      "specs": {
+        "1 OCPU": {
+          "vcpu": 2,
+          "mem": 16,
+          "price": 0.078
+        },
+        "2 OCPU": {
+          "vcpu": 4,
+          "mem": 32,
+          "price": 0.156
+        },
+        "4 OCPU": {
+          "vcpu": 8,
+          "mem": 64,
+          "price": 0.312
+        },
+        "8 OCPU": {
+          "vcpu": 16,
+          "mem": 128,
+          "price": 0.624
+        },
+        "16 OCPU": {
+          "vcpu": 32,
+          "mem": 256,
+          "price": 1.248
+        },
+        "18 OCPU": {
+          "vcpu": 36,
+          "mem": 288,
+          "price": 1.404
+        }
+      }
     },
     {
       "key": "VM.DenseIO.E5.Flex",
@@ -484,7 +778,29 @@
         "ap-tokyo-1",
         "ap-singapore-1",
         "ap-sydney-1"
-      ]
+      ],
+      "specs": {
+        "8 OCPU": {
+          "vcpu": 16,
+          "mem": 128,
+          "price": 0.496
+        },
+        "16 OCPU": {
+          "vcpu": 32,
+          "mem": 256,
+          "price": 0.992
+        },
+        "32 OCPU": {
+          "vcpu": 64,
+          "mem": 512,
+          "price": 1.984
+        },
+        "48 OCPU": {
+          "vcpu": 96,
+          "mem": 768,
+          "price": 2.976
+        }
+      }
     },
     {
       "key": "VM.DenseIO.E4.Flex",
@@ -499,7 +815,34 @@
         "48 OCPU",
         "64 OCPU"
       ],
-      "in": "*"
+      "in": "*",
+      "specs": {
+        "8 OCPU": {
+          "vcpu": 16,
+          "mem": 128,
+          "price": 0.392
+        },
+        "16 OCPU": {
+          "vcpu": 32,
+          "mem": 256,
+          "price": 0.784
+        },
+        "32 OCPU": {
+          "vcpu": 64,
+          "mem": 512,
+          "price": 1.568
+        },
+        "48 OCPU": {
+          "vcpu": 96,
+          "mem": 768,
+          "price": 2.352
+        },
+        "64 OCPU": {
+          "vcpu": 128,
+          "mem": 1024,
+          "price": 3.136
+        }
+      }
     },
     {
       "key": "BM.Standard.E5.192",
@@ -510,7 +853,14 @@
       "sizes": [
         "BM.Standard.E5.192"
       ],
-      "in": "*"
+      "in": "*",
+      "specs": {
+        "BM.Standard.E5.192": {
+          "vcpu": null,
+          "mem": null,
+          "price": null
+        }
+      }
     },
     {
       "key": "BM.Standard.E4.128",
@@ -521,7 +871,14 @@
       "sizes": [
         "BM.Standard.E4.128"
       ],
-      "in": "*"
+      "in": "*",
+      "specs": {
+        "BM.Standard.E4.128": {
+          "vcpu": null,
+          "mem": null,
+          "price": null
+        }
+      }
     },
     {
       "key": "BM.Standard.A1.160",
@@ -546,7 +903,14 @@
         "ap-singapore-1",
         "ap-sydney-1",
         "ap-mumbai-1"
-      ]
+      ],
+      "specs": {
+        "BM.Standard.A1.160": {
+          "vcpu": null,
+          "mem": null,
+          "price": null
+        }
+      }
     },
     {
       "key": "BM.Standard3.64",
@@ -557,7 +921,14 @@
       "sizes": [
         "BM.Standard3.64"
       ],
-      "in": "*"
+      "in": "*",
+      "specs": {
+        "BM.Standard3.64": {
+          "vcpu": null,
+          "mem": null,
+          "price": null
+        }
+      }
     },
     {
       "key": "BM.DenseIO.E5.128",
@@ -578,7 +949,14 @@
         "ap-tokyo-1",
         "ap-singapore-1",
         "ap-sydney-1"
-      ]
+      ],
+      "specs": {
+        "BM.DenseIO.E5.128": {
+          "vcpu": null,
+          "mem": null,
+          "price": null
+        }
+      }
     },
     {
       "key": "BM.HPC2.36",
@@ -595,7 +973,14 @@
         "uk-london-1",
         "eu-frankfurt-1",
         "ap-tokyo-1"
-      ]
+      ],
+      "specs": {
+        "BM.HPC2.36": {
+          "vcpu": null,
+          "mem": null,
+          "price": null
+        }
+      }
     },
     {
       "key": "BM.HPC.E5.128",
@@ -614,7 +999,14 @@
         "eu-frankfurt-1",
         "eu-amsterdam-1",
         "ap-tokyo-1"
-      ]
+      ],
+      "specs": {
+        "BM.HPC.E5.128": {
+          "vcpu": null,
+          "mem": null,
+          "price": null
+        }
+      }
     },
     {
       "key": "VM.GPU3.Flex",
@@ -634,7 +1026,24 @@
         "eu-frankfurt-1",
         "ap-tokyo-1",
         "ap-singapore-1"
-      ]
+      ],
+      "specs": {
+        "VM.GPU3.1": {
+          "vcpu": null,
+          "mem": null,
+          "price": null
+        },
+        "VM.GPU3.2": {
+          "vcpu": null,
+          "mem": null,
+          "price": null
+        },
+        "VM.GPU3.4": {
+          "vcpu": null,
+          "mem": null,
+          "price": null
+        }
+      }
     },
     {
       "key": "VM.GPU.A10",
@@ -656,7 +1065,19 @@
         "ap-tokyo-1",
         "ap-singapore-1",
         "ap-sydney-1"
-      ]
+      ],
+      "specs": {
+        "VM.GPU.A10.1": {
+          "vcpu": null,
+          "mem": null,
+          "price": null
+        },
+        "VM.GPU.A10.2": {
+          "vcpu": null,
+          "mem": null,
+          "price": null
+        }
+      }
     },
     {
       "key": "BM.GPU.A10.4",
@@ -677,7 +1098,14 @@
         "ap-tokyo-1",
         "ap-singapore-1",
         "ap-sydney-1"
-      ]
+      ],
+      "specs": {
+        "BM.GPU.A10.4": {
+          "vcpu": null,
+          "mem": null,
+          "price": null
+        }
+      }
     },
     {
       "key": "BM.GPU.A100-v2.8",
@@ -697,7 +1125,14 @@
         "eu-amsterdam-1",
         "ap-tokyo-1",
         "ap-singapore-1"
-      ]
+      ],
+      "specs": {
+        "BM.GPU.A100-v2.8": {
+          "vcpu": null,
+          "mem": null,
+          "price": null
+        }
+      }
     },
     {
       "key": "BM.GPU.H100.8",
@@ -714,7 +1149,14 @@
         "us-phoenix-1",
         "eu-frankfurt-1",
         "ap-tokyo-1"
-      ]
+      ],
+      "specs": {
+        "BM.GPU.H100.8": {
+          "vcpu": null,
+          "mem": null,
+          "price": null
+        }
+      }
     },
     {
       "key": "BM.GPU.B200.8",
@@ -728,7 +1170,14 @@
       "in": [
         "us-ashburn-1",
         "us-chicago-1"
-      ]
+      ],
+      "specs": {
+        "BM.GPU.B200.8": {
+          "vcpu": null,
+          "mem": null,
+          "price": null
+        }
+      }
     }
   ]
 }
