@@ -6,6 +6,20 @@
 <title>APIM · Feature Matrix · Infra Atlas</title>
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <meta name="description" content="Cross-vendor API management feature comparison. Every major APIM platform against every capability — OAuth, mTLS, rate limiting, GraphQL, self-hosted, FedRAMP. With the asterisks intact.">
+<link rel="canonical" href="https://infraatlas.dev/apim-matrix/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Infra Atlas">
+<meta property="og:title" content="APIM · Feature Matrix · Infra Atlas">
+<meta property="og:description" content="Cross-vendor API management feature comparison. Every major APIM platform against every capability — OAuth, mTLS, rate limiting, GraphQL, self-hosted, FedRAMP. With the asterisks intact.">
+<meta property="og:url" content="https://infraatlas.dev/apim-matrix/">
+<meta property="og:image" content="https://infraatlas.dev/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Infra Atlas — a reference for the infrastructure stack">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="APIM · Feature Matrix · Infra Atlas">
+<meta name="twitter:description" content="Cross-vendor API management feature comparison. Every major APIM platform against every capability — OAuth, mTLS, rate limiting, GraphQL, self-hosted, FedRAMP. With the asterisks intact.">
+<meta name="twitter:image" content="https://infraatlas.dev/og.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@300;400;500;600&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -838,6 +852,35 @@ const state = {
 const $ = (s) => document.querySelector(s);
 const $$ = (s) => Array.from(document.querySelectorAll(s));
 
+// ─── Permalinks — filter state ⇄ URL hash ───
+function writeHash() {
+  const keys = VENDORS.map(v => v.key);
+  const p = new URLSearchParams();
+  if (state.vendors.size < keys.length) p.set("vendors", keys.filter(k => state.vendors.has(k)).join(","));
+  if (state.category !== "all") p.set("cat", state.category);
+  if (state.query.trim())       p.set("q", state.query.trim());
+  const h = p.toString();
+  history.replaceState(null, "", h ? "#" + h : location.pathname + location.search);
+}
+function applyHash() {
+  const keys = VENDORS.map(v => v.key);
+  const p = new URLSearchParams(location.hash.slice(1));
+  const vd = p.get("vendors");
+  if (vd) {
+    const valid = vd.split(",").filter(x => keys.includes(x));
+    if (valid.length) state.vendors = new Set(valid);
+  }
+  const cat = p.get("cat"); if (cat) state.category = cat;
+  state.query = p.get("q") || "";
+  const allV = state.vendors.size === keys.length;
+  $$('.chip[data-v]').forEach(b => {
+    if (b.dataset.v === "all") b.classList.toggle("is-active", allV);
+    else b.classList.toggle("is-active", !allV && state.vendors.has(b.dataset.v));
+  });
+  $$('.chip[data-cat]').forEach(b => b.classList.toggle("is-active", b.dataset.cat === state.category));
+  const sb = $("#search"); if (sb) sb.value = state.query;
+}
+
 function init() {
   // Counts
   $("#count-features").textContent = FEATURES.length;
@@ -856,8 +899,10 @@ function init() {
     <button class="chip is-active" data-v="all">All</button>` +
     VENDORS.map(v => `<button class="chip" data-v="${v.key}"><span class="swatch" style="background:${v.swatch}"></span>${v.short}</button>`).join("");
 
+  applyHash();
   renderMatrix();
   wireEvents();
+  window.addEventListener("hashchange", () => { applyHash(); applyFilter(); });
 }
 
 function renderMatrix() {
@@ -920,6 +965,7 @@ function applyFilter() {
     const catRow = $(`.matrix tbody tr.category-row[data-cat="${cat.key}"]`);
     if (catRow) catRow.classList.toggle("is-hidden", !visible);
   });
+  writeHash();
 }
 
 // ─── Drawer ───

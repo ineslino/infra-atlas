@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>OG card</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&family=Manrope:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #2a2a2a; }
+  .card {
+    width: 1200px;
+    height: 630px;
+    position: relative;
+    overflow: hidden;
+    background:
+      radial-gradient(ellipse at 108% -20%, rgba(255,120,73,0.16), transparent 52%),
+      radial-gradient(ellipse at -12% 120%, rgba(124,215,241,0.08), transparent 60%),
+      #0A0907;
+    font-family: 'Manrope', sans-serif;
+    color: #F4EFE6;
+    padding: 68px 76px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  /* corner marks */
+  .cm { position: absolute; width: 30px; height: 30px; opacity: 0.5; }
+  .cm::before, .cm::after { content:''; position:absolute; background: rgba(244,239,230,0.42); }
+  .cm::before { width:100%; height:1px; top:50%; }
+  .cm::after  { width:1px; height:100%; left:50%; }
+  .cm.tl { top:34px; left:34px; } .cm.tr { top:34px; right:34px; }
+  .cm.bl { bottom:34px; left:34px; } .cm.br { bottom:34px; right:34px; }
+
+  .top { display: flex; align-items: center; gap: 13px; }
+  .top svg { width: 30px; height: 30px; display: block; }
+  .top .wm {
+    font-family: 'JetBrains Mono', monospace; font-size: 17px;
+    letter-spacing: 0.26em; text-transform: uppercase; font-weight: 500;
+  }
+  .top .sep { color: rgba(244,239,230,0.20); }
+  .top .tag {
+    font-family: 'JetBrains Mono', monospace; font-size: 13px;
+    letter-spacing: 0.16em; text-transform: uppercase; color: rgba(244,239,230,0.42);
+  }
+
+  .mid { }
+  .eyebrow {
+    font-family: 'JetBrains Mono', monospace; font-size: 14px;
+    letter-spacing: 0.24em; text-transform: uppercase; color: #FF7849;
+    display: flex; align-items: center; gap: 16px; margin-bottom: 18px;
+  }
+  .eyebrow::before { content:''; width: 34px; height: 1px; background: #FF7849; }
+  .title {
+    font-family: 'Instrument Serif', serif; font-weight: 400;
+    font-size: 150px; line-height: 0.92; letter-spacing: -0.022em;
+  }
+  .title em { font-style: italic; color: #FF7849; }
+  .lead {
+    margin-top: 26px; font-size: 23px; line-height: 1.5;
+    color: rgba(244,239,230,0.66); max-width: 760px;
+  }
+  .lead em { font-family: 'Instrument Serif', serif; font-style: italic; color: #F4EFE6; font-size: 27px; }
+
+  .foot {
+    display: flex; gap: 30px; align-items: center;
+    font-family: 'JetBrains Mono', monospace; font-size: 14px;
+    letter-spacing: 0.1em; color: rgba(244,239,230,0.66);
+  }
+  .foot .dot { width: 6px; height: 6px; border-radius: 50%; background: #FF7849; }
+  .foot b { color: #F4EFE6; font-weight: 500; }
+  .foot .item { display: flex; align-items: center; gap: 10px; }
+</style>
+</head>
+<body>
+  <div class="card">
+    <div class="cm tl"></div><div class="cm tr"></div>
+    <div class="cm bl"></div><div class="cm br"></div>
+
+    <div class="top">
+      <svg viewBox="0 0 32 32" aria-hidden="true">
+        <circle cx="16" cy="6.2" r="3.1" fill="#FF7849"/>
+        <path d="M16 9.3 L5.8 27.2 M16 9.3 L26.2 27.2 M10.4 20.6 L21.6 20.6" fill="none" stroke="#FF7849" stroke-width="3.1" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      <span class="wm">Infra Atlas</span>
+      <span class="sep">·</span>
+      <span class="tag">A new periodical of infrastructure</span>
+    </div>
+
+    <div class="mid">
+      <div class="eyebrow">Reference, cross-referenced</div>
+      <div class="title">Infra <em>Atlas.</em></div>
+      <div class="lead">
+        Every cloud region, instance type and API-gateway capability — across <em>AWS, Azure, GCP, OCI, OVH</em> and every major APIM vendor. Free, open, updated daily.
+      </div>
+    </div>
+
+    <div class="foot">
+      <div class="item"><span class="dot"></span><b>11</b>&nbsp;instruments</div>
+      <div class="item"><span class="dot"></span><b>5</b>&nbsp;clouds</div>
+      <div class="item"><span class="dot"></span><b>7</b>&nbsp;APIM vendors</div>
+      <div class="item"><span class="dot"></span>infraatlas.dev</div>
+    </div>
+  </div>
+</body>
+</html>

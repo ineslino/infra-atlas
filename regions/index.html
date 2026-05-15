@@ -6,6 +6,20 @@
 <title>Multi-Cloud Region Map · Infra Atlas</title>
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <meta name="description" content="Every region from AWS, Azure, GCP, OCI, and OVHcloud — on a single chart. Compare geographies, surface clusters, find the closest data to your users.">
+<link rel="canonical" href="https://infraatlas.dev/regions/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Infra Atlas">
+<meta property="og:title" content="Multi-Cloud Region Map · Infra Atlas">
+<meta property="og:description" content="Every region from AWS, Azure, GCP, OCI, and OVHcloud — on a single chart. Compare geographies, surface clusters, find the closest data to your users.">
+<meta property="og:url" content="https://infraatlas.dev/regions/">
+<meta property="og:image" content="https://infraatlas.dev/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Infra Atlas — a reference for the infrastructure stack">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Multi-Cloud Region Map · Infra Atlas">
+<meta name="twitter:description" content="Every region from AWS, Azure, GCP, OCI, and OVHcloud — on a single chart. Compare geographies, surface clusters, find the closest data to your users.">
+<meta name="twitter:image" content="https://infraatlas.dev/og.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@300;400;500;600&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -828,6 +842,181 @@ a.masthead__eyebrow:hover .masthead__eyebrow-arrow { transform: translateX(-4px)
   .chart-frame.map-open .world-chart-wrap { display: block; }
 }
 
+/* ─────────────── RECOMMENDER ─────────────── */
+.recommender {
+  background: linear-gradient(180deg, var(--surface) 0%, var(--ink-2) 100%);
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  padding: 20px 22px;
+  margin-bottom: 28px;
+}
+.rec__head {
+  display: flex;
+  align-items: baseline;
+  gap: 14px;
+  flex-wrap: wrap;
+  margin-bottom: 16px;
+}
+.rec__title {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 22px;
+  color: var(--paper);
+}
+.rec__hint {
+  font-family: var(--mono);
+  font-size: 10.5px;
+  letter-spacing: 0.04em;
+  color: var(--paper-3);
+}
+.rec__controls {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  align-items: flex-end;
+}
+.rec__field {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+.rec__field > span {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--paper-3);
+}
+.rec__select {
+  background: var(--ink);
+  border: 1px solid var(--line-2);
+  color: var(--paper);
+  font-family: var(--mono);
+  font-size: 13px;
+  padding: 11px 14px;
+  border-radius: 3px;
+  outline: none;
+  min-width: 268px;
+  cursor: pointer;
+  transition: border-color 0.2s ease;
+}
+.rec__select:focus { border-color: var(--accent); }
+.rec__clear {
+  background: transparent;
+  border: 1px solid var(--line-2);
+  color: var(--paper-3);
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 11px 14px;
+  border-radius: 3px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+.rec__clear:hover { border-color: var(--paper-3); color: var(--paper); }
+.rec__results { margin-top: 4px; }
+.rec__placeholder {
+  font-family: var(--mono);
+  font-size: 11.5px;
+  letter-spacing: 0.04em;
+  color: var(--paper-3);
+  padding: 6px 0;
+}
+.rec__resulthead {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--paper-3);
+  margin: 4px 0 10px;
+}
+.rec__resulthead em { font-style: normal; color: var(--accent); }
+.rec-row {
+  display: grid;
+  grid-template-columns: 26px auto 1fr auto;
+  gap: 14px;
+  align-items: center;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 3px;
+  padding: 12px 16px;
+  margin-bottom: 6px;
+}
+.rec-row.is-top {
+  border-color: rgba(255, 120, 73, 0.4);
+  background: var(--surface-2);
+}
+.rec-row__rank {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--paper-4);
+}
+.rec-row.is-top .rec-row__rank { color: var(--accent); }
+.rec-row__provider {
+  font-family: var(--mono);
+  font-size: 9.5px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  font-weight: 500;
+  padding: 4px 8px;
+  border-radius: 2px;
+  border: 1px solid var(--line-2);
+  white-space: nowrap;
+}
+.rec-row__provider[data-p="aws"]   { color: var(--aws);   border-color: rgba(255,159,102,0.3); }
+.rec-row__provider[data-p="azure"] { color: var(--azure); border-color: rgba(124,215,241,0.3); }
+.rec-row__provider[data-p="gcp"]   { color: var(--gcp);   border-color: rgba(244,123,123,0.3); }
+.rec-row__provider[data-p="oci"]   { color: var(--oci);   border-color: rgba(226,100,100,0.3); }
+.rec-row__provider[data-p="ovh"]   { color: var(--ovh);   border-color: rgba(197,134,232,0.3); }
+.rec-row__main { min-width: 0; }
+.rec-row__code {
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--paper);
+  font-weight: 500;
+}
+.rec-row__badge {
+  font-size: 8.5px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--accent);
+  border: 1px solid rgba(255, 120, 73, 0.4);
+  border-radius: 2px;
+  padding: 1px 5px;
+  margin-left: 8px;
+  vertical-align: middle;
+}
+.rec-row__loc {
+  font-family: var(--sans);
+  font-size: 11px;
+  color: var(--paper-3);
+  margin-top: 2px;
+}
+.rec-row__stats { text-align: right; white-space: nowrap; }
+.rec-row__dist { font-family: var(--mono); font-size: 11px; color: var(--paper-2); }
+.rec-row__dist strong { color: var(--paper); font-weight: 600; font-size: 13px; }
+.rec-row__lat { font-family: var(--mono); font-size: 10px; color: var(--paper-3); margin-top: 2px; }
+.rec__note {
+  font-family: var(--mono);
+  font-size: 9.5px;
+  letter-spacing: 0.03em;
+  line-height: 1.6;
+  color: var(--paper-4);
+  margin-top: 10px;
+}
+@media (max-width: 560px) {
+  .rec-row { grid-template-columns: auto 1fr auto; }
+  .rec-row__rank { display: none; }
+  .rec__select { min-width: 0; width: 100%; }
+  .rec__field { width: 100%; }
+}
+/* origin pin on the map */
+.origin-line   { stroke: var(--paper-3); stroke-width: 0.7; stroke-dasharray: 2.4 2.4; fill: none; }
+.origin-ring   { fill: none; stroke: var(--paper); stroke-width: 1.1; }
+.origin-pulse  { fill: none; stroke: var(--paper); stroke-width: 0.7; opacity: 0.4; }
+.origin-core   { fill: var(--paper); }
+
 </style>
 </head>
 <body>
@@ -923,6 +1112,25 @@ a.masthead__eyebrow:hover .masthead__eyebrow-arrow { transform: translateX(-4px)
         <button class="chip" data-p="oci"><span class="swatch"></span>Oracle Cloud <span class="chip__count" id="count-oci"></span></button>
         <button class="chip" data-p="ovh"><span class="swatch"></span>OVHcloud <span class="chip__count" id="count-ovh"></span></button>
       </div>
+    </div>
+  </section>
+
+  <section class="recommender" id="recommender">
+    <div class="rec__head">
+      <div class="rec__title">Nearest region.</div>
+      <div class="rec__hint">Tell it where your users are — it ranks the closest region on every cloud.</div>
+    </div>
+    <div class="rec__controls">
+      <label class="rec__field">
+        <span>Your users are near</span>
+        <select class="rec__select" id="rec-metro">
+          <option value="">Select a city…</option>
+        </select>
+      </label>
+      <button class="rec__clear" id="rec-clear" type="button" hidden>Clear</button>
+    </div>
+    <div class="rec__results" id="rec-results">
+      <div class="rec__placeholder">Pick a city above to see the nearest cloud regions.</div>
     </div>
   </section>
 
@@ -1371,7 +1579,7 @@ async function loadData() {
 // STATE + RENDER
 // ───────────────────────────────────────────────────────────────────
 
-const state = { providers: new Set(["aws","azure","gcp","oci","ovh"]), area: "all", query: "" };
+const state = { providers: new Set(["aws","azure","gcp","oci","ovh"]), area: "all", query: "", origin: null };
 
 const $  = (s) => document.querySelector(s);
 const $$ = (s) => Array.from(document.querySelectorAll(s));
@@ -1394,12 +1602,50 @@ async function init() {
     if (el) el.textContent = `(${c})`;
   });
 
+  buildMetroSelect();
+  applyHash();
   renderMarkers();
   renderList();
+  renderRecommender();
   wireEvents();
+  window.addEventListener("hashchange", () => {
+    applyHash(); renderMarkers(); renderList(); renderRecommender();
+  });
 }
 
 const SVGNS = "http://www.w3.org/2000/svg";
+
+// ─── Permalinks — filter state ⇄ URL hash ───
+const PROV_ALL = ["aws","azure","gcp","oci","ovh"];
+function writeHash() {
+  const p = new URLSearchParams();
+  if (state.providers.size < 5) p.set("providers", PROV_ALL.filter(x => state.providers.has(x)).join(","));
+  if (state.area !== "all")     p.set("area", state.area);
+  if (state.query.trim())       p.set("q", state.query.trim());
+  if (state.origin)             p.set("o", state.origin.name);
+  const h = p.toString();
+  history.replaceState(null, "", h ? "#" + h : location.pathname + location.search);
+}
+function applyHash() {
+  const p = new URLSearchParams(location.hash.slice(1));
+  const prov = p.get("providers");
+  if (prov) {
+    const valid = prov.split(",").filter(x => PROV_ALL.includes(x));
+    if (valid.length) state.providers = new Set(valid);
+  }
+  const area = p.get("area"); if (area) state.area = area;
+  state.query = p.get("q") || "";
+  const o = p.get("o");
+  state.origin = o ? (METROS.find(m => m.name === o) || null) : null;
+  const allOn = state.providers.size === 5;
+  $$('.chip[data-p]').forEach(b => {
+    if (b.dataset.p === "all") b.classList.toggle("is-active", allOn);
+    else b.classList.toggle("is-active", !allOn && state.providers.has(b.dataset.p));
+  });
+  $$('.chip[data-area]').forEach(b => b.classList.toggle("is-active", b.dataset.area === state.area));
+  const sb = $("#search"); if (sb) sb.value = state.query;
+  const ms = $("#rec-metro"); if (ms) ms.value = state.origin ? state.origin.name : "";
+}
 
 // One marker per city: a pie segmented by the providers present there.
 // Re-rendered on every filter change — filtered-out cities simply aren't drawn.
@@ -1466,6 +1712,41 @@ function renderMarkers() {
 
     layer.appendChild(g);
   });
+
+  // origin pin — drawn last so it sits above the region markers
+  if (state.origin) {
+    const ox = lngToX(state.origin.lng), oy = latToY(state.origin.lat);
+    const g = document.createElementNS(SVGNS, "g");
+    g.classList.add("origin");
+    const ranked = recommend(state.origin);
+    const visible = ranked.filter(e => state.providers.has(e.region.p));
+    const target = (visible[0] || ranked[0]);
+    if (target) {
+      const line = document.createElementNS(SVGNS, "line");
+      line.setAttribute("x1", ox.toFixed(1));
+      line.setAttribute("y1", oy.toFixed(1));
+      line.setAttribute("x2", lngToX(target.region.lng).toFixed(1));
+      line.setAttribute("y2", latToY(target.region.lat).toFixed(1));
+      line.classList.add("origin-line");
+      g.appendChild(line);
+    }
+    const pulse = document.createElementNS(SVGNS, "circle");
+    pulse.setAttribute("cx", ox.toFixed(1)); pulse.setAttribute("cy", oy.toFixed(1));
+    pulse.setAttribute("r", "6.6");
+    pulse.classList.add("origin-pulse");
+    g.appendChild(pulse);
+    const ring = document.createElementNS(SVGNS, "circle");
+    ring.setAttribute("cx", ox.toFixed(1)); ring.setAttribute("cy", oy.toFixed(1));
+    ring.setAttribute("r", "4.1");
+    ring.classList.add("origin-ring");
+    g.appendChild(ring);
+    const core = document.createElementNS(SVGNS, "circle");
+    core.setAttribute("cx", ox.toFixed(1)); core.setAttribute("cy", oy.toFixed(1));
+    core.setAttribute("r", "1.7");
+    core.classList.add("origin-core");
+    g.appendChild(core);
+    layer.appendChild(g);
+  }
 }
 
 function getProviderColor(p) {
@@ -1550,6 +1831,132 @@ function renderList() {
 // Filters re-render the markers from scratch (kept the name for call sites).
 function applyDotFilter() {
   renderMarkers();
+  writeHash();
+}
+
+// ───────────────────────────────────────────────────────────────────
+// RECOMMENDER — nearest region to where a service's users actually are
+// ───────────────────────────────────────────────────────────────────
+const METROS = [
+  { name: "New York, US",        area: "Americas",     lat: 40.71,  lng: -74.01 },
+  { name: "Los Angeles, US",     area: "Americas",     lat: 34.05,  lng: -118.24 },
+  { name: "Chicago, US",         area: "Americas",     lat: 41.88,  lng: -87.63 },
+  { name: "Toronto, Canada",     area: "Americas",     lat: 43.65,  lng: -79.38 },
+  { name: "Mexico City, Mexico", area: "Americas",     lat: 19.43,  lng: -99.13 },
+  { name: "Bogotá, Colombia",    area: "Americas",     lat: 4.71,   lng: -74.07 },
+  { name: "Lima, Peru",          area: "Americas",     lat: -12.05, lng: -77.04 },
+  { name: "São Paulo, Brazil",   area: "Americas",     lat: -23.55, lng: -46.63 },
+  { name: "Buenos Aires, Argentina", area: "Americas", lat: -34.60, lng: -58.38 },
+  { name: "Santiago, Chile",     area: "Americas",     lat: -33.45, lng: -70.67 },
+  { name: "London, UK",          area: "Europe",       lat: 51.51,  lng: -0.13 },
+  { name: "Paris, France",       area: "Europe",       lat: 48.86,  lng: 2.35 },
+  { name: "Madrid, Spain",       area: "Europe",       lat: 40.42,  lng: -3.70 },
+  { name: "Berlin, Germany",     area: "Europe",       lat: 52.52,  lng: 13.40 },
+  { name: "Rome, Italy",         area: "Europe",       lat: 41.90,  lng: 12.50 },
+  { name: "Amsterdam, Netherlands", area: "Europe",    lat: 52.37,  lng: 4.90 },
+  { name: "Stockholm, Sweden",   area: "Europe",       lat: 59.33,  lng: 18.07 },
+  { name: "Warsaw, Poland",      area: "Europe",       lat: 52.23,  lng: 21.01 },
+  { name: "Istanbul, Türkiye",   area: "Europe",       lat: 41.01,  lng: 28.98 },
+  { name: "Moscow, Russia",      area: "Europe",       lat: 55.76,  lng: 37.62 },
+  { name: "Dubai, UAE",          area: "Middle East",  lat: 25.20,  lng: 55.27 },
+  { name: "Riyadh, Saudi Arabia",area: "Middle East",  lat: 24.71,  lng: 46.68 },
+  { name: "Tel Aviv, Israel",    area: "Middle East",  lat: 32.08,  lng: 34.78 },
+  { name: "Doha, Qatar",         area: "Middle East",  lat: 25.29,  lng: 51.53 },
+  { name: "Tehran, Iran",        area: "Middle East",  lat: 35.69,  lng: 51.39 },
+  { name: "Lagos, Nigeria",      area: "Africa",       lat: 6.52,   lng: 3.38 },
+  { name: "Cairo, Egypt",        area: "Africa",       lat: 30.04,  lng: 31.24 },
+  { name: "Johannesburg, South Africa", area: "Africa",lat: -26.20, lng: 28.05 },
+  { name: "Nairobi, Kenya",      area: "Africa",       lat: -1.29,  lng: 36.82 },
+  { name: "Casablanca, Morocco", area: "Africa",       lat: 33.57,  lng: -7.59 },
+  { name: "Tokyo, Japan",        area: "Asia Pacific", lat: 35.68,  lng: 139.69 },
+  { name: "Mumbai, India",       area: "Asia Pacific", lat: 19.08,  lng: 72.88 },
+  { name: "Delhi, India",        area: "Asia Pacific", lat: 28.61,  lng: 77.21 },
+  { name: "Singapore",           area: "Asia Pacific", lat: 1.35,   lng: 103.82 },
+  { name: "Jakarta, Indonesia",  area: "Asia Pacific", lat: -6.21,  lng: 106.85 },
+  { name: "Seoul, South Korea",  area: "Asia Pacific", lat: 37.57,  lng: 126.98 },
+  { name: "Shanghai, China",     area: "Asia Pacific", lat: 31.23,  lng: 121.47 },
+  { name: "Beijing, China",      area: "Asia Pacific", lat: 39.90,  lng: 116.41 },
+  { name: "Hong Kong",           area: "Asia Pacific", lat: 22.32,  lng: 114.17 },
+  { name: "Bangkok, Thailand",   area: "Asia Pacific", lat: 13.76,  lng: 100.50 },
+  { name: "Manila, Philippines", area: "Asia Pacific", lat: 14.60,  lng: 120.98 },
+  { name: "Sydney, Australia",   area: "Asia Pacific", lat: -33.87, lng: 151.21 }
+];
+
+// great-circle distance in km
+function haversine(lat1, lng1, lat2, lng2) {
+  const R = 6371, toRad = d => d * Math.PI / 180;
+  const dLat = toRad(lat2 - lat1), dLng = toRad(lng2 - lng1);
+  const a = Math.sin(dLat / 2) ** 2 +
+            Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) * Math.sin(dLng / 2) ** 2;
+  return 2 * R * Math.asin(Math.sqrt(a));
+}
+// rough RTT floor: light-in-fibre round trip + ~50% routing overhead + switching
+function estRttMs(km) { return Math.max(2, Math.round(km / 100 * 1.5 + 2)); }
+function fmtKm(km) { return Math.round(km).toLocaleString("en-US"); }
+
+function buildMetroSelect() {
+  const sel = $("#rec-metro");
+  if (!sel) return;
+  ["Americas","Europe","Middle East","Africa","Asia Pacific"].forEach(area => {
+    const inArea = METROS.filter(m => m.area === area);
+    if (!inArea.length) return;
+    const og = document.createElement("optgroup");
+    og.label = area;
+    inArea.forEach(m => {
+      const o = document.createElement("option");
+      o.value = m.name;
+      o.textContent = m.name;
+      og.appendChild(o);
+    });
+    sel.appendChild(og);
+  });
+}
+
+// closest region for each provider, ranked by distance
+function recommend(origin) {
+  const best = {};
+  ALL_REGIONS.forEach(r => {
+    const d = haversine(origin.lat, origin.lng, r.lat, r.lng);
+    if (!best[r.p] || d < best[r.p].dist) best[r.p] = { region: r, dist: d };
+  });
+  return PROV_ALL.map(p => best[p]).filter(Boolean).sort((a, b) => a.dist - b.dist);
+}
+
+function renderRecommender() {
+  const box = $("#rec-results");
+  const clearBtn = $("#rec-clear");
+  if (!box) return;
+  if (!state.origin) {
+    box.innerHTML = '<div class="rec__placeholder">Pick a city above to see the nearest cloud regions.</div>';
+    if (clearBtn) clearBtn.hidden = true;
+    return;
+  }
+  if (clearBtn) clearBtn.hidden = false;
+  const ranked = recommend(state.origin);
+  if (!ranked.length) {
+    box.innerHTML = '<div class="rec__placeholder">No region data available.</div>';
+    return;
+  }
+  let html = `<div class="rec__resulthead">Nearest region to <em>${state.origin.name}</em></div>`;
+  ranked.forEach((entry, i) => {
+    const r = entry.region;
+    const badge = i === 0 ? '<span class="rec-row__badge">Closest</span>' : "";
+    html += `
+      <div class="rec-row${i === 0 ? " is-top" : ""}">
+        <span class="rec-row__rank">${String(i + 1).padStart(2, "0")}</span>
+        <span class="rec-row__provider" data-p="${r.p}">${PROVIDERS[r.p].name}</span>
+        <div class="rec-row__main">
+          <div class="rec-row__code">${r.code}${badge}</div>
+          <div class="rec-row__loc">${r.name} · ${r.city.split(",")[0]}, ${r.country}</div>
+        </div>
+        <div class="rec-row__stats">
+          <div class="rec-row__dist"><strong>${fmtKm(entry.dist)}</strong> km</div>
+          <div class="rec-row__lat">≈ ${estRttMs(entry.dist)} ms RTT</div>
+        </div>
+      </div>`;
+  });
+  html += '<div class="rec__note">Great-circle distance. Latency is estimated from distance — a theoretical floor; real RTT depends on routing and peering.</div>';
+  box.innerHTML = html;
 }
 
 // ─── Tooltip ───
@@ -1684,6 +2091,26 @@ function wireEvents() {
     applyDotFilter();
     renderList();
   });
+  // Recommender — metro picker
+  const metroSel = $("#rec-metro");
+  if (metroSel) {
+    metroSel.addEventListener("change", () => {
+      state.origin = METROS.find(m => m.name === metroSel.value) || null;
+      renderRecommender();
+      renderMarkers();
+      writeHash();
+    });
+  }
+  const recClear = $("#rec-clear");
+  if (recClear) {
+    recClear.addEventListener("click", () => {
+      state.origin = null;
+      if (metroSel) metroSel.value = "";
+      renderRecommender();
+      renderMarkers();
+      writeHash();
+    });
+  }
   // Mobile map toggle
   const mapToggle = $("#map-toggle");
   if (mapToggle) {

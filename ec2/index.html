@@ -5,6 +5,21 @@
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>AWS · EC2 Observatory · Infra Atlas</title>
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<meta name="description" content="Every Amazon EC2 instance type, charted against the AWS regions that offer it. Families, vCPU, memory, architecture — filterable, cross-referenced, updated daily.">
+<link rel="canonical" href="https://infraatlas.dev/ec2/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Infra Atlas">
+<meta property="og:title" content="AWS · EC2 Observatory · Infra Atlas">
+<meta property="og:description" content="Every Amazon EC2 instance type, charted against the AWS regions that offer it. Families, vCPU, memory, architecture — filterable, cross-referenced, updated daily.">
+<meta property="og:url" content="https://infraatlas.dev/ec2/">
+<meta property="og:image" content="https://infraatlas.dev/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Infra Atlas — a reference for the infrastructure stack">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="AWS · EC2 Observatory · Infra Atlas">
+<meta name="twitter:description" content="Every Amazon EC2 instance type, charted against the AWS regions that offer it. Families, vCPU, memory, architecture — filterable, cross-referenced, updated daily.">
+<meta name="twitter:image" content="https://infraatlas.dev/og.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@300;400;500;600&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -901,6 +916,59 @@ a.masthead__back::before { display: none; }
   .colophon { grid-template-columns: 1fr; gap: 24px; }
 }
 
+/* CMP-MODE-START */
+.cmp-dock{position:fixed;left:50%;bottom:0;transform:translateX(-50%);z-index:80;display:none;padding:0 12px 18px;width:max-content;max-width:100vw;}
+.cmp-dock.is-visible{display:block;}
+.cmp-fab{display:inline-flex;align-items:center;gap:9px;background:var(--paper);color:var(--ink);border:none;font-family:var(--mono);font-size:11px;letter-spacing:0.12em;text-transform:uppercase;font-weight:500;padding:11px 18px;border-radius:99px;cursor:pointer;box-shadow:0 12px 32px rgba(0,0,0,0.5);transition:transform .14s ease;}
+.cmp-fab:hover{transform:translateY(-2px);}
+.cmp-fab__ico{font-size:13px;}
+.cmp-tray{display:flex;align-items:center;gap:13px;background:var(--ink-2);border:1px solid var(--line-2);border-radius:8px;padding:10px 14px;box-shadow:0 18px 44px rgba(0,0,0,0.55);max-width:min(900px,calc(100vw - 24px));}
+.cmp-tray__label{font-family:var(--mono);font-size:10px;letter-spacing:0.14em;text-transform:uppercase;color:var(--paper-2);white-space:nowrap;}
+.cmp-tray__label span{color:var(--paper-3);margin-left:2px;}
+.cmp-tray__chips{display:flex;gap:6px;flex-wrap:wrap;flex:1;min-width:130px;}
+.cmp-tray__hint{font-family:var(--mono);font-size:10.5px;color:var(--paper-3);}
+.cmp-chip{display:inline-flex;align-items:center;gap:5px;background:var(--surface-2);border:1px solid var(--line-2);border-radius:99px;padding:4px 5px 4px 11px;font-family:var(--mono);font-size:11px;color:var(--paper);}
+.cmp-chip__x{background:none;border:none;color:var(--paper-3);cursor:pointer;font-size:10px;line-height:1;padding:3px;border-radius:50%;}
+.cmp-chip__x:hover{color:var(--accent);}
+.cmp-tray__go{background:var(--accent);color:var(--ink);border:none;font-family:var(--mono);font-size:10px;letter-spacing:0.1em;text-transform:uppercase;font-weight:600;padding:9px 14px;border-radius:5px;cursor:pointer;white-space:nowrap;}
+.cmp-tray__go:disabled{background:var(--surface-3);color:var(--paper-3);cursor:not-allowed;}
+.cmp-tray__exit{background:transparent;border:1px solid var(--line-2);color:var(--paper-3);font-family:var(--mono);font-size:10px;letter-spacing:0.1em;text-transform:uppercase;padding:9px 12px;border-radius:5px;cursor:pointer;white-space:nowrap;}
+.cmp-tray__exit:hover{border-color:var(--paper-3);color:var(--paper);}
+.is-compare-mode .region-card{position:relative;cursor:pointer;}
+.is-compare-mode .region-card__flag{opacity:0;}
+.is-compare-mode .region-card::after{content:"";position:absolute;top:13px;right:13px;width:21px;height:21px;display:flex;align-items:center;justify-content:center;border:1.5px solid var(--line-3);border-radius:6px;background:var(--ink);font-size:12px;font-weight:700;color:var(--ink);transition:border-color .12s ease,background .12s ease;}
+.is-compare-mode .region-card:hover::after{border-color:var(--paper-3);}
+.is-compare-mode .region-card.is-comparing{border-color:var(--accent);}
+.is-compare-mode .region-card.is-comparing::after{content:"\2713";border-color:var(--accent);background:var(--accent);}
+.cmp-overlay{position:fixed;inset:0;z-index:150;display:none;align-items:flex-start;justify-content:center;padding:6vh 16px 16px;background:rgba(10,9,7,0.8);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);}
+.cmp-overlay.is-open{display:flex;}
+.cmp-modal{width:min(960px,100%);max-height:88vh;overflow:auto;background:var(--ink-2);border:1px solid var(--line-2);border-radius:10px;box-shadow:0 30px 80px rgba(0,0,0,0.6);padding:24px 26px;position:relative;}
+.cmp-modal__close{position:absolute;top:18px;right:20px;background:transparent;border:1px solid var(--line-2);color:var(--paper-3);font-family:var(--mono);font-size:10px;letter-spacing:0.1em;text-transform:uppercase;padding:7px 11px;border-radius:5px;cursor:pointer;}
+.cmp-modal__close:hover{border-color:var(--paper-3);color:var(--paper);}
+.cmp-modal__title{font-family:var(--serif);font-style:italic;font-size:26px;color:var(--paper);margin-bottom:16px;padding-right:90px;}
+.cmp-modal__title--sub{font-size:20px;margin-top:30px;padding-right:0;}
+.cmp-modal__title--sub span{font-family:var(--mono);font-style:normal;font-size:9.5px;letter-spacing:0.08em;text-transform:uppercase;color:var(--paper-3);}
+.cmp-tablewrap{overflow-x:auto;}
+.cmp-table{display:grid;gap:1px;background:var(--line-2);border:1px solid var(--line-2);border-radius:6px;overflow:hidden;min-width:440px;}
+.cmp-cell{background:var(--ink-2);padding:11px 12px;font-family:var(--mono);font-size:13px;color:var(--paper-2);display:flex;align-items:center;justify-content:center;text-align:center;}
+.cmp-cell--rowhead{justify-content:flex-start;gap:8px;color:var(--paper-3);font-size:11px;background:var(--ink);}
+.cmp-cell--colhead{flex-direction:column;gap:3px;background:var(--surface);padding:14px 8px;}
+.cmp-col__flag{font-size:18px;}
+.cmp-col__code{font-size:12.5px;color:var(--paper);font-weight:500;}
+.cmp-col__name{font-family:var(--sans);font-size:10.5px;color:var(--paper-2);line-height:1.3;}
+.cmp-col__meta{font-size:8.5px;letter-spacing:0.08em;text-transform:uppercase;color:var(--paper-4);}
+.cmp-cell--total{font-family:var(--serif);font-style:italic;font-size:19px;color:var(--paper);}
+.cmp-cell.is-lead{color:var(--accent);background:var(--surface-2);}
+.cmp-cell.is-zero{color:var(--paper-4);}
+.cmp-dot{width:7px;height:7px;border-radius:50%;flex:none;}
+.cmp-unique{display:grid;gap:10px;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));}
+.cmp-unique__col{background:var(--surface);border:1px solid var(--line);border-radius:5px;padding:12px 14px;}
+.cmp-unique__head{font-family:var(--mono);font-size:12px;color:var(--paper);font-weight:500;margin-bottom:9px;}
+.cmp-unique__list{display:flex;flex-wrap:wrap;gap:5px;}
+.cmp-fampill{font-family:var(--mono);font-size:10px;color:var(--accent-2);background:var(--ink);border:1px solid var(--line-2);border-radius:3px;padding:3px 7px;}
+.cmp-unique__none{font-family:var(--mono);font-size:10.5px;color:var(--paper-4);}
+@media(max-width:560px){.cmp-tray{flex-wrap:wrap;}.cmp-modal{padding:20px 15px;}.cmp-modal__title{padding-right:70px;}}
+/* CMP-MODE-END */
 </style>
 </head>
 <body>
@@ -1805,9 +1873,37 @@ function openInstanceDrawer(family, size) {
 //  CONTROLLER
 // ─────────────────────────────────────────────────────────────────
 
+// ─── Permalinks — filter state ⇄ URL hash ───
+function writeHash() {
+  const p = new URLSearchParams();
+  if (state.mode !== "region") p.set("mode", state.mode);
+  if (state.cat !== "all")     p.set("cat", state.cat);
+  if (state.arch !== "all")    p.set("arch", state.arch);
+  if (state.query.trim())      p.set("q", state.query.trim());
+  const h = p.toString();
+  history.replaceState(null, "", h ? "#" + h : location.pathname + location.search);
+}
+function applyHash() {
+  const p = new URLSearchParams(location.hash.slice(1));
+  const m = p.get("mode"); if (m === "region" || m === "instance") state.mode = m;
+  const c = p.get("cat");  if (c) state.cat = c;
+  const a = p.get("arch"); if (a) state.arch = a;
+  state.query = p.get("q") || "";
+  $$(".filter-tab").forEach(b => {
+    const on = b.dataset.mode === state.mode;
+    b.classList.toggle("is-active", on);
+    b.setAttribute("aria-selected", on);
+  });
+  $$('.chip[data-cat]').forEach(b => b.classList.toggle("is-active", b.dataset.cat === state.cat));
+  $$('.chip[data-arch]').forEach(b => b.classList.toggle("is-active", b.dataset.arch === state.arch));
+  const s = $("#search"); if (s) s.value = state.query;
+}
+
 function render() {
+  if (!state.data) return;   // guard: keyboard shortcut may fire before data.json loads
   if (state.mode === "region") renderRegionView();
   else renderInstanceView();
+  writeHash();
 }
 
 function setMode(m) {
@@ -1888,7 +1984,200 @@ async function loadData() {
 (async () => {
   init();
   await loadData();
+  applyHash();
   render();
+  window.addEventListener("hashchange", () => { applyHash(); render(); });
+})();
+</script>
+<script data-cmp>
+/* Infra Atlas · Compare mode — region comparison */
+(function () {
+  "use strict";
+  if (typeof state === "undefined" || typeof CAT_LABEL === "undefined") return;
+  var results = document.getElementById("results");
+  if (!results) return;
+
+  state.compare = new Set();
+  state.compareMode = false;
+  var MAX = 4;
+
+  var dock = document.createElement("div");
+  dock.className = "cmp-dock";
+  dock.id = "cmp-dock";
+  document.body.appendChild(dock);
+
+  var overlay = document.createElement("div");
+  overlay.className = "cmp-overlay";
+  overlay.id = "cmp-overlay";
+  overlay.setAttribute("role", "dialog");
+  overlay.setAttribute("aria-modal", "true");
+  overlay.innerHTML = '<div class="cmp-modal">'
+    + '<button class="cmp-modal__close" id="cmp-close" type="button">Close ✕</button>'
+    + '<div class="cmp-modal__body" id="cmp-body"></div></div>';
+  document.body.appendChild(overlay);
+
+  function regionByCode(code) {
+    return (state.data && state.data.regions)
+      ? state.data.regions.find(function (r) { return r.code === code; }) : null;
+  }
+  function cardCode(card) {
+    var el = card.querySelector(".region-card__code");
+    return el ? el.textContent.trim() : null;
+  }
+  function toggleCompare(code) {
+    if (!code) return;
+    if (state.compare.has(code)) state.compare.delete(code);
+    else if (state.compare.size < MAX) state.compare.add(code);
+    syncCompare();
+  }
+  function setCompareMode(on) {
+    state.compareMode = on;
+    if (!on) state.compare.clear();
+    syncCompare();
+  }
+
+  results.addEventListener("click", function (e) {
+    if (!state.compareMode || state.mode !== "region") return;
+    var card = e.target.closest(".region-card");
+    if (!card) return;
+    e.stopPropagation();
+    toggleCompare(cardCode(card));
+  }, true);
+
+  function syncCompare() {
+    var inRegion = state.mode === "region";
+    results.classList.toggle("is-compare-mode", inRegion && state.compareMode);
+    var cards = results.querySelectorAll(".region-card");
+    for (var i = 0; i < cards.length; i++) {
+      var code = cardCode(cards[i]);
+      cards[i].classList.toggle("is-comparing", !!code && state.compare.has(code));
+    }
+    renderDock();
+  }
+
+  function renderDock() {
+    if (state.mode !== "region") { dock.className = "cmp-dock"; dock.innerHTML = ""; return; }
+    if (!state.compareMode) {
+      dock.className = "cmp-dock is-visible";
+      dock.innerHTML = '<button class="cmp-fab" id="cmp-enter" type="button">'
+        + '<span class="cmp-fab__ico">▥</span> Compare regions</button>';
+      document.getElementById("cmp-enter").addEventListener("click", function () { setCompareMode(true); });
+      return;
+    }
+    dock.className = "cmp-dock is-visible is-tray";
+    var chips = "";
+    state.compare.forEach(function (code) {
+      var r = regionByCode(code);
+      chips += '<span class="cmp-chip">' + (r ? r.flag + " " : "") + code
+        + '<button class="cmp-chip__x" data-code="' + code + '" type="button" aria-label="Remove">✕</button></span>';
+    });
+    if (!chips) chips = '<span class="cmp-tray__hint">Pick regions on the cards ↑</span>';
+    var n = state.compare.size;
+    dock.innerHTML = '<div class="cmp-tray">'
+      + '<div class="cmp-tray__label">Compare<span>' + n + '/' + MAX + '</span></div>'
+      + '<div class="cmp-tray__chips">' + chips + '</div>'
+      + '<button class="cmp-tray__go" id="cmp-go" type="button"' + (n < 2 ? " disabled" : "") + '>'
+      + (n < 2 ? "Compare regions" : "Compare " + n + " regions") + '</button>'
+      + '<button class="cmp-tray__exit" id="cmp-exit" type="button">Done</button>'
+      + '</div>';
+    var xs = dock.querySelectorAll(".cmp-chip__x");
+    for (var i = 0; i < xs.length; i++) {
+      (function (b) {
+        b.addEventListener("click", function () { toggleCompare(b.getAttribute("data-code")); });
+      })(xs[i]);
+    }
+    var go = document.getElementById("cmp-go");
+    if (go) go.addEventListener("click", openComparison);
+    document.getElementById("cmp-exit").addEventListener("click", function () { setCompareMode(false); });
+  }
+
+  function openComparison() {
+    if (state.compare.size < 2 || !state.data) return;
+    var regions = Array.from(state.compare).map(regionByCode).filter(Boolean);
+    if (regions.length < 2) return;
+
+    var info = regions.map(function (r) {
+      var fams = filterFamilies().filter(function (f) {
+        return state.data.familyRegions.get(f.key).has(r.code);
+      });
+      return {
+        region: r,
+        total: familyCountForRegion(r),
+        breakdown: categoryBreakdownForRegion(r),
+        fams: new Set(fams.map(function (f) { return f.key; }))
+      };
+    });
+
+    var cats = Object.keys(CAT_LABEL).filter(function (c) {
+      return info.some(function (i) { return (i.breakdown[c] || 0) > 0; });
+    });
+
+    var html = '<div class="cmp-modal__title">Region comparison</div>';
+    html += '<div class="cmp-tablewrap"><div class="cmp-table" style="grid-template-columns:170px repeat('
+      + regions.length + ',minmax(94px,1fr));">';
+    html += '<div class="cmp-cell cmp-cell--rowhead"></div>';
+    info.forEach(function (i) {
+      html += '<div class="cmp-cell cmp-cell--colhead">'
+        + '<div class="cmp-col__flag">' + i.region.flag + '</div>'
+        + '<div class="cmp-col__code">' + i.region.code + '</div>'
+        + '<div class="cmp-col__name">' + i.region.name + '</div>'
+        + '<div class="cmp-col__meta">' + i.region.area + '</div></div>';
+    });
+    var maxTotal = Math.max.apply(null, info.map(function (i) { return i.total; }));
+    html += '<div class="cmp-cell cmp-cell--rowhead">Instance types</div>';
+    info.forEach(function (i) {
+      html += '<div class="cmp-cell cmp-cell--total' + (i.total === maxTotal && maxTotal > 0 ? " is-lead" : "")
+        + '">' + i.total + '</div>';
+    });
+    cats.forEach(function (c) {
+      var vals = info.map(function (i) { return i.breakdown[c] || 0; });
+      var mx = Math.max.apply(null, vals);
+      html += '<div class="cmp-cell cmp-cell--rowhead"><span class="cmp-dot" style="background:'
+        + (CAT_COLOR[c] || "var(--paper-3)") + '"></span>' + (CAT_LABEL[c] || c) + '</div>';
+      vals.forEach(function (v) {
+        html += '<div class="cmp-cell' + (v === mx && mx > 0 ? " is-lead" : "")
+          + (v === 0 ? " is-zero" : "") + '">' + (v || "—") + '</div>';
+      });
+    });
+    html += '</div></div>';
+
+    html += '<div class="cmp-modal__title cmp-modal__title--sub">Families unique to one region'
+      + ' <span>within this set · current filters</span></div>';
+    html += '<div class="cmp-unique">';
+    info.forEach(function (i) {
+      var uniq = Array.from(i.fams).filter(function (k) {
+        return info.every(function (o) { return o === i || !o.fams.has(k); });
+      }).sort();
+      html += '<div class="cmp-unique__col"><div class="cmp-unique__head">' + i.region.code + '</div>'
+        + (uniq.length
+            ? '<div class="cmp-unique__list">' + uniq.map(function (k) {
+                return '<span class="cmp-fampill">' + k + '</span>'; }).join("") + '</div>'
+            : '<div class="cmp-unique__none">No exclusive families</div>')
+        + '</div>';
+    });
+    html += '</div>';
+
+    document.getElementById("cmp-body").innerHTML = html;
+    overlay.classList.add("is-open");
+  }
+  function closeComparison() { overlay.classList.remove("is-open"); }
+  document.getElementById("cmp-close").addEventListener("click", closeComparison);
+  overlay.addEventListener("mousedown", function (e) { if (e.target === overlay) closeComparison(); });
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "Escape" && overlay.classList.contains("is-open")) {
+      e.stopPropagation();
+      closeComparison();
+    }
+  }, true);
+
+  var scheduled = false;
+  new MutationObserver(function () {
+    if (scheduled) return;
+    scheduled = true;
+    requestAnimationFrame(function () { scheduled = false; syncCompare(); });
+  }).observe(results, { childList: true, subtree: true });
+
+  syncCompare();
 })();
 </script>
 <script src="/nav.js" defer></script>
