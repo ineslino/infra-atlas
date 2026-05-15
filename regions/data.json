@@ -1,0 +1,1965 @@
+{
+  "generated": "2026-05-15T11:13:29Z",
+  "cities": [
+    {
+      "city": "Ashburn, Virginia",
+      "area": "Americas",
+      "country": "United States",
+      "flag": "🇺🇸",
+      "lat": 39.05,
+      "lng": -77.49,
+      "regions": [
+        {
+          "p": "aws",
+          "code": "us-east-1",
+          "name": "N. Virginia",
+          "az": 6,
+          "since": 2006
+        },
+        {
+          "p": "azure",
+          "code": "eastus",
+          "name": "East US",
+          "az": 3,
+          "since": 2010
+        }
+      ]
+    },
+    {
+      "city": "Boydton, Virginia",
+      "area": "Americas",
+      "country": "United States",
+      "flag": "🇺🇸",
+      "lat": 36.66,
+      "lng": -78.4,
+      "regions": [
+        {
+          "p": "azure",
+          "code": "eastus2",
+          "name": "East US 2",
+          "az": 3,
+          "since": 2014
+        }
+      ]
+    },
+    {
+      "city": "Columbus, Ohio",
+      "area": "Americas",
+      "country": "United States",
+      "flag": "🇺🇸",
+      "lat": 39.96,
+      "lng": -83.0,
+      "regions": [
+        {
+          "p": "aws",
+          "code": "us-east-2",
+          "name": "Ohio",
+          "az": 3,
+          "since": 2016
+        }
+      ]
+    },
+    {
+      "city": "Chicago, Illinois",
+      "area": "Americas",
+      "country": "United States",
+      "flag": "🇺🇸",
+      "lat": 41.88,
+      "lng": -87.62,
+      "regions": [
+        {
+          "p": "azure",
+          "code": "northcentralus",
+          "name": "North Central US",
+          "az": 3,
+          "since": 2009
+        },
+        {
+          "p": "oci",
+          "code": "us-chicago-1",
+          "name": "Chicago",
+          "az": 3,
+          "since": 2023
+        }
+      ]
+    },
+    {
+      "city": "Des Moines, Iowa",
+      "area": "Americas",
+      "country": "United States",
+      "flag": "🇺🇸",
+      "lat": 41.59,
+      "lng": -93.62,
+      "regions": [
+        {
+          "p": "azure",
+          "code": "centralus",
+          "name": "Central US",
+          "az": 3,
+          "since": 2014
+        },
+        {
+          "p": "gcp",
+          "code": "us-central1",
+          "name": "Iowa",
+          "az": 4,
+          "since": 2014
+        }
+      ]
+    },
+    {
+      "city": "Council Bluffs, Iowa",
+      "area": "Americas",
+      "country": "United States",
+      "flag": "🇺🇸",
+      "lat": 41.26,
+      "lng": -95.86,
+      "regions": [
+        {
+          "p": "gcp",
+          "code": "us-central1",
+          "name": "Iowa",
+          "az": 4,
+          "since": 2014
+        }
+      ]
+    },
+    {
+      "city": "San Antonio, Texas",
+      "area": "Americas",
+      "country": "United States",
+      "flag": "🇺🇸",
+      "lat": 29.42,
+      "lng": -98.49,
+      "regions": [
+        {
+          "p": "azure",
+          "code": "southcentralus",
+          "name": "South Central US",
+          "az": 3,
+          "since": 2014
+        },
+        {
+          "p": "gcp",
+          "code": "us-south1",
+          "name": "Dallas",
+          "az": 3,
+          "since": 2022
+        }
+      ]
+    },
+    {
+      "city": "Moncks Corner, S. Carolina",
+      "area": "Americas",
+      "country": "United States",
+      "flag": "🇺🇸",
+      "lat": 33.2,
+      "lng": -80.01,
+      "regions": [
+        {
+          "p": "gcp",
+          "code": "us-east1",
+          "name": "S. Carolina",
+          "az": 3,
+          "since": 2015
+        }
+      ]
+    },
+    {
+      "city": "N. Virginia",
+      "area": "Americas",
+      "country": "United States",
+      "flag": "🇺🇸",
+      "lat": 38.83,
+      "lng": -77.31,
+      "regions": [
+        {
+          "p": "gcp",
+          "code": "us-east4",
+          "name": "N. Virginia",
+          "az": 3,
+          "since": 2017
+        }
+      ]
+    },
+    {
+      "city": "Quincy, Washington",
+      "area": "Americas",
+      "country": "United States",
+      "flag": "🇺🇸",
+      "lat": 47.23,
+      "lng": -119.85,
+      "regions": [
+        {
+          "p": "azure",
+          "code": "westus2",
+          "name": "West US 2",
+          "az": 3,
+          "since": 2017
+        }
+      ]
+    },
+    {
+      "city": "The Dalles, Oregon",
+      "area": "Americas",
+      "country": "United States",
+      "flag": "🇺🇸",
+      "lat": 45.59,
+      "lng": -121.18,
+      "regions": [
+        {
+          "p": "gcp",
+          "code": "us-west1",
+          "name": "Oregon",
+          "az": 3,
+          "since": 2016
+        }
+      ]
+    },
+    {
+      "city": "Boardman, Oregon",
+      "area": "Americas",
+      "country": "United States",
+      "flag": "🇺🇸",
+      "lat": 45.86,
+      "lng": -119.69,
+      "regions": [
+        {
+          "p": "aws",
+          "code": "us-west-2",
+          "name": "Oregon",
+          "az": 4,
+          "since": 2011
+        }
+      ]
+    },
+    {
+      "city": "Los Angeles, California",
+      "area": "Americas",
+      "country": "United States",
+      "flag": "🇺🇸",
+      "lat": 34.05,
+      "lng": -118.24,
+      "regions": [
+        {
+          "p": "gcp",
+          "code": "us-west2",
+          "name": "Los Angeles",
+          "az": 3,
+          "since": 2018
+        }
+      ]
+    },
+    {
+      "city": "Salt Lake City, Utah",
+      "area": "Americas",
+      "country": "United States",
+      "flag": "🇺🇸",
+      "lat": 40.76,
+      "lng": -111.89,
+      "regions": [
+        {
+          "p": "gcp",
+          "code": "us-west3",
+          "name": "Salt Lake City",
+          "az": 3,
+          "since": 2020
+        }
+      ]
+    },
+    {
+      "city": "Las Vegas, Nevada",
+      "area": "Americas",
+      "country": "United States",
+      "flag": "🇺🇸",
+      "lat": 36.17,
+      "lng": -115.14,
+      "regions": [
+        {
+          "p": "gcp",
+          "code": "us-west4",
+          "name": "Las Vegas",
+          "az": 3,
+          "since": 2020
+        }
+      ]
+    },
+    {
+      "city": "Phoenix, Arizona",
+      "area": "Americas",
+      "country": "United States",
+      "flag": "🇺🇸",
+      "lat": 33.45,
+      "lng": -112.07,
+      "regions": [
+        {
+          "p": "azure",
+          "code": "westus3",
+          "name": "West US 3",
+          "az": 3,
+          "since": 2021
+        },
+        {
+          "p": "oci",
+          "code": "us-phoenix-1",
+          "name": "Phoenix",
+          "az": 3,
+          "since": 2018
+        }
+      ]
+    },
+    {
+      "city": "San Jose, California",
+      "area": "Americas",
+      "country": "United States",
+      "flag": "🇺🇸",
+      "lat": 37.34,
+      "lng": -121.89,
+      "regions": [
+        {
+          "p": "aws",
+          "code": "us-west-1",
+          "name": "N. California",
+          "az": 3,
+          "since": 2009
+        },
+        {
+          "p": "azure",
+          "code": "westus",
+          "name": "West US",
+          "az": 3,
+          "since": 2010
+        },
+        {
+          "p": "oci",
+          "code": "us-sanjose-1",
+          "name": "San Jose",
+          "az": 3,
+          "since": 2020
+        }
+      ]
+    },
+    {
+      "city": "Toronto",
+      "area": "Americas",
+      "country": "Canada",
+      "flag": "🇨🇦",
+      "lat": 43.65,
+      "lng": -79.38,
+      "regions": [
+        {
+          "p": "azure",
+          "code": "canadacentral",
+          "name": "Canada Central",
+          "az": 3,
+          "since": 2016
+        },
+        {
+          "p": "gcp",
+          "code": "northamerica-northeast2",
+          "name": "Toronto",
+          "az": 3,
+          "since": 2021
+        },
+        {
+          "p": "oci",
+          "code": "ca-toronto-1",
+          "name": "Toronto",
+          "az": 1,
+          "since": 2019
+        }
+      ]
+    },
+    {
+      "city": "Montreal",
+      "area": "Americas",
+      "country": "Canada",
+      "flag": "🇨🇦",
+      "lat": 45.5,
+      "lng": -73.57,
+      "regions": [
+        {
+          "p": "aws",
+          "code": "ca-central-1",
+          "name": "Canada Central",
+          "az": 3,
+          "since": 2016
+        },
+        {
+          "p": "gcp",
+          "code": "northamerica-northeast1",
+          "name": "Montréal",
+          "az": 3,
+          "since": 2018
+        },
+        {
+          "p": "oci",
+          "code": "ca-montreal-1",
+          "name": "Montreal",
+          "az": 1,
+          "since": 2018
+        }
+      ]
+    },
+    {
+      "city": "Quebec City",
+      "area": "Americas",
+      "country": "Canada",
+      "flag": "🇨🇦",
+      "lat": 46.81,
+      "lng": -71.21,
+      "regions": [
+        {
+          "p": "azure",
+          "code": "canadaeast",
+          "name": "Canada East",
+          "az": 3,
+          "since": 2016
+        }
+      ]
+    },
+    {
+      "city": "Calgary",
+      "area": "Americas",
+      "country": "Canada",
+      "flag": "🇨🇦",
+      "lat": 51.05,
+      "lng": -114.07,
+      "regions": [
+        {
+          "p": "aws",
+          "code": "ca-west-1",
+          "name": "Calgary",
+          "az": 3,
+          "since": 2023
+        }
+      ]
+    },
+    {
+      "city": "Mexico City",
+      "area": "Americas",
+      "country": "Mexico",
+      "flag": "🇲🇽",
+      "lat": 19.43,
+      "lng": -99.13,
+      "regions": [
+        {
+          "p": "aws",
+          "code": "mx-central-1",
+          "name": "Mexico Central",
+          "az": 3,
+          "since": 2025
+        },
+        {
+          "p": "azure",
+          "code": "mexicocentral",
+          "name": "Mexico Central",
+          "az": 3,
+          "since": 2025
+        },
+        {
+          "p": "oci",
+          "code": "mx-queretaro-1",
+          "name": "Querétaro",
+          "az": 1,
+          "since": 2021
+        }
+      ]
+    },
+    {
+      "city": "Monterrey",
+      "area": "Americas",
+      "country": "Mexico",
+      "flag": "🇲🇽",
+      "lat": 25.69,
+      "lng": -100.32,
+      "regions": [
+        {
+          "p": "oci",
+          "code": "mx-monterrey-1",
+          "name": "Monterrey",
+          "az": 1,
+          "since": 2024
+        }
+      ]
+    },
+    {
+      "city": "São Paulo",
+      "area": "Americas",
+      "country": "Brazil",
+      "flag": "🇧🇷",
+      "lat": -23.55,
+      "lng": -46.63,
+      "regions": [
+        {
+          "p": "aws",
+          "code": "sa-east-1",
+          "name": "São Paulo",
+          "az": 3,
+          "since": 2011
+        },
+        {
+          "p": "azure",
+          "code": "brazilsouth",
+          "name": "Brazil South",
+          "az": 3,
+          "since": 2014
+        },
+        {
+          "p": "gcp",
+          "code": "southamerica-east1",
+          "name": "São Paulo",
+          "az": 3,
+          "since": 2017
+        },
+        {
+          "p": "oci",
+          "code": "sa-saopaulo-1",
+          "name": "São Paulo",
+          "az": 1,
+          "since": 2018
+        },
+        {
+          "p": "ovh",
+          "code": "BHS5",
+          "name": "São Paulo",
+          "az": 1,
+          "since": 2024
+        }
+      ]
+    },
+    {
+      "city": "Vinhedo",
+      "area": "Americas",
+      "country": "Brazil",
+      "flag": "🇧🇷",
+      "lat": -23.03,
+      "lng": -46.99,
+      "regions": [
+        {
+          "p": "oci",
+          "code": "sa-vinhedo-1",
+          "name": "Vinhedo",
+          "az": 1,
+          "since": 2021
+        }
+      ]
+    },
+    {
+      "city": "Rio de Janeiro",
+      "area": "Americas",
+      "country": "Brazil",
+      "flag": "🇧🇷",
+      "lat": -22.91,
+      "lng": -43.2,
+      "regions": [
+        {
+          "p": "azure",
+          "code": "brazilsoutheast",
+          "name": "Brazil Southeast",
+          "az": 1,
+          "since": 2020
+        }
+      ]
+    },
+    {
+      "city": "Santiago",
+      "area": "Americas",
+      "country": "Chile",
+      "flag": "🇨🇱",
+      "lat": -33.45,
+      "lng": -70.65,
+      "regions": [
+        {
+          "p": "azure",
+          "code": "chilecentral",
+          "name": "Chile Central",
+          "az": 3,
+          "since": 2024
+        },
+        {
+          "p": "gcp",
+          "code": "southamerica-west1",
+          "name": "Santiago",
+          "az": 3,
+          "since": 2021
+        },
+        {
+          "p": "oci",
+          "code": "sa-santiago-1",
+          "name": "Santiago",
+          "az": 1,
+          "since": 2021
+        }
+      ]
+    },
+    {
+      "city": "Bogotá",
+      "area": "Americas",
+      "country": "Colombia",
+      "flag": "🇨🇴",
+      "lat": 4.71,
+      "lng": -74.07,
+      "regions": [
+        {
+          "p": "oci",
+          "code": "sa-bogota-1",
+          "name": "Bogotá",
+          "az": 1,
+          "since": 2022
+        }
+      ]
+    },
+    {
+      "city": "Dublin",
+      "area": "Europe",
+      "country": "Ireland",
+      "flag": "🇮🇪",
+      "lat": 53.35,
+      "lng": -6.26,
+      "regions": [
+        {
+          "p": "aws",
+          "code": "eu-west-1",
+          "name": "Ireland",
+          "az": 3,
+          "since": 2007
+        },
+        {
+          "p": "azure",
+          "code": "northeurope",
+          "name": "North Europe",
+          "az": 3,
+          "since": 2009
+        }
+      ]
+    },
+    {
+      "city": "London",
+      "area": "Europe",
+      "country": "United Kingdom",
+      "flag": "🇬🇧",
+      "lat": 51.51,
+      "lng": -0.13,
+      "regions": [
+        {
+          "p": "aws",
+          "code": "eu-west-2",
+          "name": "London",
+          "az": 3,
+          "since": 2016
+        },
+        {
+          "p": "azure",
+          "code": "uksouth",
+          "name": "UK South",
+          "az": 3,
+          "since": 2016
+        },
+        {
+          "p": "gcp",
+          "code": "europe-west2",
+          "name": "London",
+          "az": 3,
+          "since": 2017
+        },
+        {
+          "p": "oci",
+          "code": "uk-london-1",
+          "name": "London",
+          "az": 3,
+          "since": 2018
+        },
+        {
+          "p": "ovh",
+          "code": "UK1",
+          "name": "London",
+          "az": 1,
+          "since": 2017
+        }
+      ]
+    },
+    {
+      "city": "Cardiff / Newport",
+      "area": "Europe",
+      "country": "United Kingdom",
+      "flag": "🇬🇧",
+      "lat": 51.48,
+      "lng": -3.18,
+      "regions": [
+        {
+          "p": "azure",
+          "code": "ukwest",
+          "name": "UK West",
+          "az": 3,
+          "since": 2016
+        },
+        {
+          "p": "oci",
+          "code": "uk-cardiff-1",
+          "name": "Newport",
+          "az": 1,
+          "since": 2020
+        }
+      ]
+    },
+    {
+      "city": "Paris",
+      "area": "Europe",
+      "country": "France",
+      "flag": "🇫🇷",
+      "lat": 48.86,
+      "lng": 2.35,
+      "regions": [
+        {
+          "p": "aws",
+          "code": "eu-west-3",
+          "name": "Paris",
+          "az": 3,
+          "since": 2017
+        },
+        {
+          "p": "azure",
+          "code": "francecentral",
+          "name": "France Central",
+          "az": 3,
+          "since": 2018
+        },
+        {
+          "p": "gcp",
+          "code": "europe-west9",
+          "name": "Paris",
+          "az": 3,
+          "since": 2022
+        },
+        {
+          "p": "oci",
+          "code": "eu-paris-1",
+          "name": "Paris",
+          "az": 1,
+          "since": 2021
+        },
+        {
+          "p": "ovh",
+          "code": "GRA",
+          "name": "Gravelines",
+          "az": 3,
+          "since": 2016
+        }
+      ]
+    },
+    {
+      "city": "Marseille",
+      "area": "Europe",
+      "country": "France",
+      "flag": "🇫🇷",
+      "lat": 43.3,
+      "lng": 5.37,
+      "regions": [
+        {
+          "p": "azure",
+          "code": "francesouth",
+          "name": "France South",
+          "az": 1,
+          "since": 2018
+        },
+        {
+          "p": "oci",
+          "code": "eu-marseille-1",
+          "name": "Marseille",
+          "az": 1,
+          "since": 2021
+        }
+      ]
+    },
+    {
+      "city": "Roubaix",
+      "area": "Europe",
+      "country": "France",
+      "flag": "🇫🇷",
+      "lat": 50.69,
+      "lng": 3.18,
+      "regions": [
+        {
+          "p": "ovh",
+          "code": "RBX",
+          "name": "Roubaix",
+          "az": 7,
+          "since": 2010
+        }
+      ]
+    },
+    {
+      "city": "Strasbourg",
+      "area": "Europe",
+      "country": "France",
+      "flag": "🇫🇷",
+      "lat": 48.58,
+      "lng": 7.75,
+      "regions": [
+        {
+          "p": "ovh",
+          "code": "SBG",
+          "name": "Strasbourg",
+          "az": 4,
+          "since": 2012
+        }
+      ]
+    },
+    {
+      "city": "Frankfurt",
+      "area": "Europe",
+      "country": "Germany",
+      "flag": "🇩🇪",
+      "lat": 50.11,
+      "lng": 8.68,
+      "regions": [
+        {
+          "p": "aws",
+          "code": "eu-central-1",
+          "name": "Frankfurt",
+          "az": 3,
+          "since": 2014
+        },
+        {
+          "p": "azure",
+          "code": "germanywestcentral",
+          "name": "Germany West Central",
+          "az": 3,
+          "since": 2020
+        },
+        {
+          "p": "gcp",
+          "code": "europe-west3",
+          "name": "Frankfurt",
+          "az": 3,
+          "since": 2017
+        },
+        {
+          "p": "oci",
+          "code": "eu-frankfurt-1",
+          "name": "Frankfurt",
+          "az": 3,
+          "since": 2018
+        },
+        {
+          "p": "ovh",
+          "code": "DE",
+          "name": "Frankfurt",
+          "az": 1,
+          "since": 2016
+        }
+      ]
+    },
+    {
+      "city": "Berlin",
+      "area": "Europe",
+      "country": "Germany",
+      "flag": "🇩🇪",
+      "lat": 52.52,
+      "lng": 13.41,
+      "regions": [
+        {
+          "p": "azure",
+          "code": "germanynorth",
+          "name": "Germany North",
+          "az": 1,
+          "since": 2020
+        }
+      ]
+    },
+    {
+      "city": "Amsterdam",
+      "area": "Europe",
+      "country": "Netherlands",
+      "flag": "🇳🇱",
+      "lat": 52.37,
+      "lng": 4.9,
+      "regions": [
+        {
+          "p": "azure",
+          "code": "westeurope",
+          "name": "West Europe",
+          "az": 3,
+          "since": 2010
+        },
+        {
+          "p": "gcp",
+          "code": "europe-west4",
+          "name": "Eemshaven",
+          "az": 3,
+          "since": 2018
+        },
+        {
+          "p": "oci",
+          "code": "eu-amsterdam-1",
+          "name": "Amsterdam",
+          "az": 1,
+          "since": 2020
+        }
+      ]
+    },
+    {
+      "city": "Zurich",
+      "area": "Europe",
+      "country": "Switzerland",
+      "flag": "🇨🇭",
+      "lat": 47.38,
+      "lng": 8.54,
+      "regions": [
+        {
+          "p": "aws",
+          "code": "eu-central-2",
+          "name": "Zurich",
+          "az": 3,
+          "since": 2022
+        },
+        {
+          "p": "azure",
+          "code": "switzerlandnorth",
+          "name": "Switzerland N",
+          "az": 3,
+          "since": 2019
+        },
+        {
+          "p": "gcp",
+          "code": "europe-west6",
+          "name": "Zurich",
+          "az": 3,
+          "since": 2019
+        },
+        {
+          "p": "oci",
+          "code": "eu-zurich-1",
+          "name": "Zurich",
+          "az": 1,
+          "since": 2019
+        }
+      ]
+    },
+    {
+      "city": "Geneva",
+      "area": "Europe",
+      "country": "Switzerland",
+      "flag": "🇨🇭",
+      "lat": 46.2,
+      "lng": 6.15,
+      "regions": [
+        {
+          "p": "azure",
+          "code": "switzerlandwest",
+          "name": "Switzerland W",
+          "az": 1,
+          "since": 2019
+        }
+      ]
+    },
+    {
+      "city": "Milan",
+      "area": "Europe",
+      "country": "Italy",
+      "flag": "🇮🇹",
+      "lat": 45.46,
+      "lng": 9.19,
+      "regions": [
+        {
+          "p": "aws",
+          "code": "eu-south-1",
+          "name": "Milan",
+          "az": 3,
+          "since": 2020
+        },
+        {
+          "p": "azure",
+          "code": "italynorth",
+          "name": "Italy North",
+          "az": 3,
+          "since": 2023
+        },
+        {
+          "p": "gcp",
+          "code": "europe-west8",
+          "name": "Milan",
+          "az": 3,
+          "since": 2022
+        },
+        {
+          "p": "oci",
+          "code": "eu-milan-1",
+          "name": "Milan",
+          "az": 1,
+          "since": 2022
+        }
+      ]
+    },
+    {
+      "city": "Madrid",
+      "area": "Europe",
+      "country": "Spain",
+      "flag": "🇪🇸",
+      "lat": 40.42,
+      "lng": -3.7,
+      "regions": [
+        {
+          "p": "aws",
+          "code": "eu-south-2",
+          "name": "Spain",
+          "az": 3,
+          "since": 2022
+        },
+        {
+          "p": "azure",
+          "code": "spaincentral",
+          "name": "Spain Central",
+          "az": 3,
+          "since": 2024
+        },
+        {
+          "p": "gcp",
+          "code": "europe-southwest1",
+          "name": "Madrid",
+          "az": 3,
+          "since": 2022
+        },
+        {
+          "p": "oci",
+          "code": "eu-madrid-1",
+          "name": "Madrid",
+          "az": 1,
+          "since": 2022
+        }
+      ]
+    },
+    {
+      "city": "Stockholm",
+      "area": "Europe",
+      "country": "Sweden",
+      "flag": "🇸🇪",
+      "lat": 59.33,
+      "lng": 18.07,
+      "regions": [
+        {
+          "p": "aws",
+          "code": "eu-north-1",
+          "name": "Stockholm",
+          "az": 3,
+          "since": 2018
+        },
+        {
+          "p": "azure",
+          "code": "swedencentral",
+          "name": "Sweden Central",
+          "az": 3,
+          "since": 2021
+        },
+        {
+          "p": "gcp",
+          "code": "europe-north1",
+          "name": "Hamina (FI)",
+          "az": 3,
+          "since": 2018
+        },
+        {
+          "p": "oci",
+          "code": "eu-stockholm-1",
+          "name": "Stockholm",
+          "az": 1,
+          "since": 2020
+        }
+      ]
+    },
+    {
+      "city": "Warsaw",
+      "area": "Europe",
+      "country": "Poland",
+      "flag": "🇵🇱",
+      "lat": 52.23,
+      "lng": 21.01,
+      "regions": [
+        {
+          "p": "azure",
+          "code": "polandcentral",
+          "name": "Poland Central",
+          "az": 3,
+          "since": 2023
+        },
+        {
+          "p": "gcp",
+          "code": "europe-central2",
+          "name": "Warsaw",
+          "az": 3,
+          "since": 2021
+        },
+        {
+          "p": "ovh",
+          "code": "WAW",
+          "name": "Warsaw",
+          "az": 1,
+          "since": 2018
+        }
+      ]
+    },
+    {
+      "city": "Oslo",
+      "area": "Europe",
+      "country": "Norway",
+      "flag": "🇳🇴",
+      "lat": 59.91,
+      "lng": 10.75,
+      "regions": [
+        {
+          "p": "azure",
+          "code": "norwayeast",
+          "name": "Norway East",
+          "az": 3,
+          "since": 2019
+        }
+      ]
+    },
+    {
+      "city": "Hamina",
+      "area": "Europe",
+      "country": "Finland",
+      "flag": "🇫🇮",
+      "lat": 60.57,
+      "lng": 27.2,
+      "regions": [
+        {
+          "p": "gcp",
+          "code": "europe-north1",
+          "name": "Hamina",
+          "az": 3,
+          "since": 2018
+        }
+      ]
+    },
+    {
+      "city": "Turin",
+      "area": "Europe",
+      "country": "Italy",
+      "flag": "🇮🇹",
+      "lat": 45.07,
+      "lng": 7.69,
+      "regions": [
+        {
+          "p": "gcp",
+          "code": "europe-west12",
+          "name": "Turin",
+          "az": 3,
+          "since": 2024
+        }
+      ]
+    },
+    {
+      "city": "Berlin / Brandenburg",
+      "area": "Europe",
+      "country": "Germany",
+      "flag": "🇩🇪",
+      "lat": 52.4,
+      "lng": 13.06,
+      "regions": [
+        {
+          "p": "gcp",
+          "code": "europe-west10",
+          "name": "Berlin",
+          "az": 3,
+          "since": 2023
+        }
+      ]
+    },
+    {
+      "city": "Tel Aviv",
+      "area": "Middle East",
+      "country": "Israel",
+      "flag": "🇮🇱",
+      "lat": 32.08,
+      "lng": 34.78,
+      "regions": [
+        {
+          "p": "aws",
+          "code": "il-central-1",
+          "name": "Tel Aviv",
+          "az": 3,
+          "since": 2023
+        },
+        {
+          "p": "azure",
+          "code": "israelcentral",
+          "name": "Israel Central",
+          "az": 3,
+          "since": 2023
+        },
+        {
+          "p": "gcp",
+          "code": "me-west1",
+          "name": "Tel Aviv",
+          "az": 3,
+          "since": 2022
+        }
+      ]
+    },
+    {
+      "city": "Jerusalem",
+      "area": "Middle East",
+      "country": "Israel",
+      "flag": "🇮🇱",
+      "lat": 31.77,
+      "lng": 35.21,
+      "regions": [
+        {
+          "p": "oci",
+          "code": "il-jerusalem-1",
+          "name": "Jerusalem",
+          "az": 1,
+          "since": 2021
+        }
+      ]
+    },
+    {
+      "city": "Manama",
+      "area": "Middle East",
+      "country": "Bahrain",
+      "flag": "🇧🇭",
+      "lat": 26.07,
+      "lng": 50.55,
+      "regions": [
+        {
+          "p": "aws",
+          "code": "me-south-1",
+          "name": "Bahrain",
+          "az": 3,
+          "since": 2019
+        }
+      ]
+    },
+    {
+      "city": "Dubai",
+      "area": "Middle East",
+      "country": "United Arab Emirates",
+      "flag": "🇦🇪",
+      "lat": 25.2,
+      "lng": 55.27,
+      "regions": [
+        {
+          "p": "aws",
+          "code": "me-central-1",
+          "name": "UAE",
+          "az": 3,
+          "since": 2022
+        },
+        {
+          "p": "azure",
+          "code": "uaenorth",
+          "name": "UAE North",
+          "az": 3,
+          "since": 2019
+        },
+        {
+          "p": "oci",
+          "code": "me-dubai-1",
+          "name": "Dubai",
+          "az": 1,
+          "since": 2021
+        }
+      ]
+    },
+    {
+      "city": "Abu Dhabi",
+      "area": "Middle East",
+      "country": "United Arab Emirates",
+      "flag": "🇦🇪",
+      "lat": 24.45,
+      "lng": 54.37,
+      "regions": [
+        {
+          "p": "azure",
+          "code": "uaecentral",
+          "name": "UAE Central",
+          "az": 1,
+          "since": 2019
+        },
+        {
+          "p": "oci",
+          "code": "me-abudhabi-1",
+          "name": "Abu Dhabi",
+          "az": 1,
+          "since": 2022
+        }
+      ]
+    },
+    {
+      "city": "Riyadh",
+      "area": "Middle East",
+      "country": "Saudi Arabia",
+      "flag": "🇸🇦",
+      "lat": 24.71,
+      "lng": 46.68,
+      "regions": [
+        {
+          "p": "gcp",
+          "code": "me-central2",
+          "name": "Dammam",
+          "az": 3,
+          "since": 2023
+        },
+        {
+          "p": "oci",
+          "code": "me-riyadh-1",
+          "name": "Riyadh",
+          "az": 1,
+          "since": 2023
+        }
+      ]
+    },
+    {
+      "city": "Jeddah",
+      "area": "Middle East",
+      "country": "Saudi Arabia",
+      "flag": "🇸🇦",
+      "lat": 21.49,
+      "lng": 39.19,
+      "regions": [
+        {
+          "p": "gcp",
+          "code": "me-central1",
+          "name": "Doha (QA)",
+          "az": 3,
+          "since": 2023
+        },
+        {
+          "p": "oci",
+          "code": "me-jeddah-1",
+          "name": "Jeddah",
+          "az": 1,
+          "since": 2020
+        }
+      ]
+    },
+    {
+      "city": "Doha",
+      "area": "Middle East",
+      "country": "Qatar",
+      "flag": "🇶🇦",
+      "lat": 25.29,
+      "lng": 51.53,
+      "regions": [
+        {
+          "p": "azure",
+          "code": "qatarcentral",
+          "name": "Qatar Central",
+          "az": 3,
+          "since": 2022
+        }
+      ]
+    },
+    {
+      "city": "Cape Town",
+      "area": "Africa",
+      "country": "South Africa",
+      "flag": "🇿🇦",
+      "lat": -33.92,
+      "lng": 18.42,
+      "regions": [
+        {
+          "p": "aws",
+          "code": "af-south-1",
+          "name": "Cape Town",
+          "az": 3,
+          "since": 2020
+        },
+        {
+          "p": "azure",
+          "code": "southafricawest",
+          "name": "South Africa West",
+          "az": 1,
+          "since": 2019
+        }
+      ]
+    },
+    {
+      "city": "Johannesburg",
+      "area": "Africa",
+      "country": "South Africa",
+      "flag": "🇿🇦",
+      "lat": -26.2,
+      "lng": 28.05,
+      "regions": [
+        {
+          "p": "azure",
+          "code": "southafricanorth",
+          "name": "South Africa N.",
+          "az": 3,
+          "since": 2019
+        },
+        {
+          "p": "gcp",
+          "code": "africa-south1",
+          "name": "Johannesburg",
+          "az": 3,
+          "since": 2024
+        },
+        {
+          "p": "oci",
+          "code": "af-johannesburg-1",
+          "name": "Johannesburg",
+          "az": 1,
+          "since": 2022
+        }
+      ]
+    },
+    {
+      "city": "Hong Kong",
+      "area": "Asia Pacific",
+      "country": "Hong Kong",
+      "flag": "🇭🇰",
+      "lat": 22.32,
+      "lng": 114.17,
+      "regions": [
+        {
+          "p": "aws",
+          "code": "ap-east-1",
+          "name": "Hong Kong",
+          "az": 3,
+          "since": 2019
+        },
+        {
+          "p": "azure",
+          "code": "eastasia",
+          "name": "East Asia",
+          "az": 3,
+          "since": 2010
+        },
+        {
+          "p": "gcp",
+          "code": "asia-east2",
+          "name": "Hong Kong",
+          "az": 3,
+          "since": 2018
+        }
+      ]
+    },
+    {
+      "city": "Taipei",
+      "area": "Asia Pacific",
+      "country": "Taiwan",
+      "flag": "🇹🇼",
+      "lat": 25.03,
+      "lng": 121.57,
+      "regions": [
+        {
+          "p": "azure",
+          "code": "taiwannorth",
+          "name": "Taiwan North",
+          "az": 3,
+          "since": 2025
+        },
+        {
+          "p": "gcp",
+          "code": "asia-east1",
+          "name": "Changhua",
+          "az": 3,
+          "since": 2016
+        }
+      ]
+    },
+    {
+      "city": "Tokyo",
+      "area": "Asia Pacific",
+      "country": "Japan",
+      "flag": "🇯🇵",
+      "lat": 35.68,
+      "lng": 139.69,
+      "regions": [
+        {
+          "p": "aws",
+          "code": "ap-northeast-1",
+          "name": "Tokyo",
+          "az": 4,
+          "since": 2011
+        },
+        {
+          "p": "azure",
+          "code": "japaneast",
+          "name": "Japan East",
+          "az": 3,
+          "since": 2014
+        },
+        {
+          "p": "gcp",
+          "code": "asia-northeast1",
+          "name": "Tokyo",
+          "az": 3,
+          "since": 2016
+        },
+        {
+          "p": "oci",
+          "code": "ap-tokyo-1",
+          "name": "Tokyo",
+          "az": 1,
+          "since": 2019
+        }
+      ]
+    },
+    {
+      "city": "Osaka",
+      "area": "Asia Pacific",
+      "country": "Japan",
+      "flag": "🇯🇵",
+      "lat": 34.69,
+      "lng": 135.5,
+      "regions": [
+        {
+          "p": "aws",
+          "code": "ap-northeast-3",
+          "name": "Osaka",
+          "az": 3,
+          "since": 2018
+        },
+        {
+          "p": "azure",
+          "code": "japanwest",
+          "name": "Japan West",
+          "az": 3,
+          "since": 2014
+        },
+        {
+          "p": "gcp",
+          "code": "asia-northeast2",
+          "name": "Osaka",
+          "az": 3,
+          "since": 2019
+        },
+        {
+          "p": "oci",
+          "code": "ap-osaka-1",
+          "name": "Osaka",
+          "az": 1,
+          "since": 2020
+        }
+      ]
+    },
+    {
+      "city": "Seoul",
+      "area": "Asia Pacific",
+      "country": "South Korea",
+      "flag": "🇰🇷",
+      "lat": 37.57,
+      "lng": 126.98,
+      "regions": [
+        {
+          "p": "aws",
+          "code": "ap-northeast-2",
+          "name": "Seoul",
+          "az": 4,
+          "since": 2016
+        },
+        {
+          "p": "azure",
+          "code": "koreacentral",
+          "name": "Korea Central",
+          "az": 3,
+          "since": 2016
+        },
+        {
+          "p": "gcp",
+          "code": "asia-northeast3",
+          "name": "Seoul",
+          "az": 3,
+          "since": 2020
+        },
+        {
+          "p": "oci",
+          "code": "ap-seoul-1",
+          "name": "Seoul",
+          "az": 1,
+          "since": 2019
+        }
+      ]
+    },
+    {
+      "city": "Busan",
+      "area": "Asia Pacific",
+      "country": "South Korea",
+      "flag": "🇰🇷",
+      "lat": 35.18,
+      "lng": 129.08,
+      "regions": [
+        {
+          "p": "azure",
+          "code": "koreasouth",
+          "name": "Korea South",
+          "az": 1,
+          "since": 2016
+        }
+      ]
+    },
+    {
+      "city": "Chuncheon",
+      "area": "Asia Pacific",
+      "country": "South Korea",
+      "flag": "🇰🇷",
+      "lat": 37.87,
+      "lng": 127.73,
+      "regions": [
+        {
+          "p": "oci",
+          "code": "ap-chuncheon-1",
+          "name": "Chuncheon",
+          "az": 1,
+          "since": 2020
+        }
+      ]
+    },
+    {
+      "city": "Singapore",
+      "area": "Asia Pacific",
+      "country": "Singapore",
+      "flag": "🇸🇬",
+      "lat": 1.35,
+      "lng": 103.82,
+      "regions": [
+        {
+          "p": "aws",
+          "code": "ap-southeast-1",
+          "name": "Singapore",
+          "az": 3,
+          "since": 2010
+        },
+        {
+          "p": "azure",
+          "code": "southeastasia",
+          "name": "SE Asia",
+          "az": 3,
+          "since": 2010
+        },
+        {
+          "p": "gcp",
+          "code": "asia-southeast1",
+          "name": "Jurong West",
+          "az": 3,
+          "since": 2017
+        },
+        {
+          "p": "oci",
+          "code": "ap-singapore-1",
+          "name": "Singapore",
+          "az": 1,
+          "since": 2020
+        },
+        {
+          "p": "ovh",
+          "code": "SGP",
+          "name": "Singapore",
+          "az": 1,
+          "since": 2017
+        }
+      ]
+    },
+    {
+      "city": "Mumbai",
+      "area": "Asia Pacific",
+      "country": "India",
+      "flag": "🇮🇳",
+      "lat": 19.08,
+      "lng": 72.88,
+      "regions": [
+        {
+          "p": "aws",
+          "code": "ap-south-1",
+          "name": "Mumbai",
+          "az": 3,
+          "since": 2016
+        },
+        {
+          "p": "azure",
+          "code": "westindia",
+          "name": "West India",
+          "az": 3,
+          "since": 2015
+        },
+        {
+          "p": "gcp",
+          "code": "asia-south1",
+          "name": "Mumbai",
+          "az": 3,
+          "since": 2017
+        },
+        {
+          "p": "oci",
+          "code": "ap-mumbai-1",
+          "name": "Mumbai",
+          "az": 1,
+          "since": 2019
+        }
+      ]
+    },
+    {
+      "city": "Hyderabad",
+      "area": "Asia Pacific",
+      "country": "India",
+      "flag": "🇮🇳",
+      "lat": 17.39,
+      "lng": 78.49,
+      "regions": [
+        {
+          "p": "aws",
+          "code": "ap-south-2",
+          "name": "Hyderabad",
+          "az": 3,
+          "since": 2022
+        },
+        {
+          "p": "gcp",
+          "code": "asia-south2",
+          "name": "Delhi",
+          "az": 3,
+          "since": 2021
+        },
+        {
+          "p": "oci",
+          "code": "ap-hyderabad-1",
+          "name": "Hyderabad",
+          "az": 1,
+          "since": 2020
+        }
+      ]
+    },
+    {
+      "city": "Pune",
+      "area": "Asia Pacific",
+      "country": "India",
+      "flag": "🇮🇳",
+      "lat": 18.52,
+      "lng": 73.86,
+      "regions": [
+        {
+          "p": "azure",
+          "code": "centralindia",
+          "name": "Central India",
+          "az": 3,
+          "since": 2015
+        }
+      ]
+    },
+    {
+      "city": "Chennai",
+      "area": "Asia Pacific",
+      "country": "India",
+      "flag": "🇮🇳",
+      "lat": 13.08,
+      "lng": 80.27,
+      "regions": [
+        {
+          "p": "azure",
+          "code": "southindia",
+          "name": "South India",
+          "az": 1,
+          "since": 2015
+        }
+      ]
+    },
+    {
+      "city": "Jakarta",
+      "area": "Asia Pacific",
+      "country": "Indonesia",
+      "flag": "🇮🇩",
+      "lat": -6.21,
+      "lng": 106.85,
+      "regions": [
+        {
+          "p": "aws",
+          "code": "ap-southeast-3",
+          "name": "Jakarta",
+          "az": 3,
+          "since": 2021
+        },
+        {
+          "p": "azure",
+          "code": "indonesiacentral",
+          "name": "Indonesia Central",
+          "az": 3,
+          "since": 2025
+        },
+        {
+          "p": "gcp",
+          "code": "asia-southeast2",
+          "name": "Jakarta",
+          "az": 3,
+          "since": 2020
+        }
+      ]
+    },
+    {
+      "city": "Bangkok",
+      "area": "Asia Pacific",
+      "country": "Thailand",
+      "flag": "🇹🇭",
+      "lat": 13.76,
+      "lng": 100.5,
+      "regions": [
+        {
+          "p": "aws",
+          "code": "ap-southeast-7",
+          "name": "Thailand",
+          "az": 3,
+          "since": 2025
+        },
+        {
+          "p": "gcp",
+          "code": "asia-southeast3",
+          "name": "Bangkok",
+          "az": 3,
+          "since": 2024
+        }
+      ]
+    },
+    {
+      "city": "Kuala Lumpur",
+      "area": "Asia Pacific",
+      "country": "Malaysia",
+      "flag": "🇲🇾",
+      "lat": 3.14,
+      "lng": 101.69,
+      "regions": [
+        {
+          "p": "aws",
+          "code": "ap-southeast-5",
+          "name": "Malaysia",
+          "az": 3,
+          "since": 2024
+        },
+        {
+          "p": "azure",
+          "code": "malaysiawest",
+          "name": "Malaysia West",
+          "az": 3,
+          "since": 2024
+        },
+        {
+          "p": "gcp",
+          "code": "asia-southeast4",
+          "name": "Kuala Lumpur",
+          "az": 3,
+          "since": 2024
+        }
+      ]
+    },
+    {
+      "city": "Sydney",
+      "area": "Asia Pacific",
+      "country": "Australia",
+      "flag": "🇦🇺",
+      "lat": -33.87,
+      "lng": 151.21,
+      "regions": [
+        {
+          "p": "aws",
+          "code": "ap-southeast-2",
+          "name": "Sydney",
+          "az": 3,
+          "since": 2012
+        },
+        {
+          "p": "azure",
+          "code": "australiaeast",
+          "name": "Australia East",
+          "az": 3,
+          "since": 2014
+        },
+        {
+          "p": "gcp",
+          "code": "australia-southeast1",
+          "name": "Sydney",
+          "az": 3,
+          "since": 2017
+        },
+        {
+          "p": "oci",
+          "code": "ap-sydney-1",
+          "name": "Sydney",
+          "az": 1,
+          "since": 2019
+        },
+        {
+          "p": "ovh",
+          "code": "SYD",
+          "name": "Sydney",
+          "az": 1,
+          "since": 2018
+        }
+      ]
+    },
+    {
+      "city": "Melbourne",
+      "area": "Asia Pacific",
+      "country": "Australia",
+      "flag": "🇦🇺",
+      "lat": -37.81,
+      "lng": 144.96,
+      "regions": [
+        {
+          "p": "aws",
+          "code": "ap-southeast-4",
+          "name": "Melbourne",
+          "az": 3,
+          "since": 2023
+        },
+        {
+          "p": "azure",
+          "code": "australiasoutheast",
+          "name": "Australia SE",
+          "az": 3,
+          "since": 2014
+        },
+        {
+          "p": "gcp",
+          "code": "australia-southeast2",
+          "name": "Melbourne",
+          "az": 3,
+          "since": 2021
+        },
+        {
+          "p": "oci",
+          "code": "ap-melbourne-1",
+          "name": "Melbourne",
+          "az": 1,
+          "since": 2020
+        }
+      ]
+    },
+    {
+      "city": "Canberra",
+      "area": "Asia Pacific",
+      "country": "Australia",
+      "flag": "🇦🇺",
+      "lat": -35.31,
+      "lng": 149.13,
+      "regions": [
+        {
+          "p": "azure",
+          "code": "australiacentral",
+          "name": "Australia Central",
+          "az": 1,
+          "since": 2018
+        }
+      ]
+    },
+    {
+      "city": "Auckland",
+      "area": "Asia Pacific",
+      "country": "New Zealand",
+      "flag": "🇳🇿",
+      "lat": -36.85,
+      "lng": 174.76,
+      "regions": [
+        {
+          "p": "azure",
+          "code": "newzealandnorth",
+          "name": "New Zealand N.",
+          "az": 3,
+          "since": 2024
+        }
+      ]
+    }
+  ]
+}

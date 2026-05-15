@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Self-Hosted APIM · Kong · Gravitee · IBM · Infra Atlas</title>
+<meta name="description" content="Kong vs Gravitee vs IBM API Connect — the three self-hostable APIMs compared on OSS editions, K8s nativity, plugins, and operating costs.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@300;400;500;600&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+:root {
+  --ink: #0A0907; --ink-2: #100E0C; --surface: #161310; --surface-2: #1E1A15; --surface-3: #2A241C;
+  --line: rgba(244, 239, 230, 0.06); --line-2: rgba(244, 239, 230, 0.14); --line-3: rgba(244, 239, 230, 0.28);
+  --paper: #F4EFE6; --paper-2: rgba(244, 239, 230, 0.66); --paper-3: rgba(244, 239, 230, 0.42); --paper-4: rgba(244, 239, 230, 0.20);
+  --accent: #FF7849; --accent-2: #FFA66E; --kong: #6FE7B5; --gravitee: #FFA66E; --ibm: #A8A39A;
+  --mint: #6FE7B5; --gold: #F4C660; --plum: #C586E8; --sky: #7CD7F1; --rose: #F47B7B; --teal: #5BCCC9;
+  --serif: 'Instrument Serif', 'Times New Roman', serif;
+  --mono: 'JetBrains Mono', ui-monospace, monospace;
+  --sans: 'Manrope', -apple-system, system-ui, sans-serif;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body {
+  background: var(--ink); color: var(--paper);
+  font-family: var(--sans); font-size: 15px; line-height: 1.55;
+  -webkit-font-smoothing: antialiased; min-height: 100vh;
+}
+body {
+  background:
+    radial-gradient(ellipse at 100% -10%, rgba(111, 231, 181, 0.08), transparent 55%),
+    radial-gradient(ellipse at -10% 110%, rgba(111, 231, 181, 0.04), transparent 65%),
+    var(--ink);
+  background-attachment: fixed; overflow-x: hidden;
+}
+.grain {
+  pointer-events: none; position: fixed; inset: 0; z-index: 100; opacity: 0.08; mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml;utf8,<svg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.6 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+}
+.scanlines {
+  pointer-events: none; position: fixed; inset: 0; z-index: 99;
+  background: repeating-linear-gradient(180deg, transparent, transparent 2px, rgba(244,239,230,0.012) 2px, rgba(244,239,230,0.012) 3px);
+}
+::selection { background: var(--mint); color: var(--ink); }
+
+.page { max-width: 1280px; margin: 0 auto; padding: 56px 48px 96px; position: relative; }
+
+/* MASTHEAD */
+.masthead {
+  display: grid; grid-template-columns: 1fr auto; gap: 48px; align-items: end;
+  padding-bottom: 36px; border-bottom: 1px solid var(--line); margin-bottom: 56px;
+}
+.masthead__eyebrow {
+  font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.22em;
+  color: var(--paper-3); text-transform: uppercase;
+  display: inline-flex; align-items: center; gap: 12px;
+  text-decoration: none; transition: color 0.2s ease;
+}
+.masthead__eyebrow:hover { color: var(--paper); }
+.masthead__eyebrow-arrow { color: var(--mint); transition: transform 0.2s ease; }
+.masthead__eyebrow:hover .masthead__eyebrow-arrow { transform: translateX(-4px); }
+
+.masthead__title {
+  font-family: var(--serif); font-weight: 400;
+  font-size: clamp(48px, 7vw, 108px); line-height: 0.95; letter-spacing: -0.02em;
+  margin-top: 16px;
+}
+.masthead__title em { font-style: italic; color: var(--mint); }
+.masthead__subtitle {
+  margin-top: 18px; font-size: 17px; color: var(--paper-2); max-width: 620px; line-height: 1.55;
+}
+.masthead__subtitle em {
+  font-family: var(--serif); font-style: italic; font-size: 1.12em; color: var(--paper);
+}
+
+.masthead__status {
+  text-align: right; display: flex; flex-direction: column; align-items: flex-end; gap: 14px; padding-bottom: 6px;
+}
+.status-line {
+  display: inline-flex; align-items: center; gap: 10px;
+  font-family: var(--mono); font-size: 11px; letter-spacing: 0.18em;
+  text-transform: uppercase; color: var(--mint);
+}
+.status-time { font-family: var(--mono); font-size: 12px; color: var(--paper-3); }
+
+/* SECTIONS */
+.section {
+  margin: 96px 0 64px;
+  display: grid; grid-template-columns: 220px 1fr; gap: 56px;
+}
+.section__head {
+  position: sticky; top: 32px; align-self: start;
+}
+.section__num {
+  font-family: var(--serif); font-style: italic;
+  font-size: 64px; font-weight: 400; line-height: 0.9; color: var(--paper-3);
+}
+.section__kicker {
+  font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.2em;
+  text-transform: uppercase; color: var(--paper-3); margin-top: 8px;
+}
+.section__title {
+  font-family: var(--serif); font-size: 36px; font-weight: 400;
+  letter-spacing: -0.012em; margin-top: 8px; line-height: 1.05;
+}
+.section__title em { font-style: italic; color: var(--mint); }
+.section__body { max-width: 760px; }
+.section__lead {
+  font-size: 17px; line-height: 1.65; color: var(--paper); margin-bottom: 28px; font-weight: 300;
+}
+.section__lead em { font-family: var(--serif); font-style: italic; color: var(--paper); font-size: 1.1em; }
+
+/* COMPARISON CARDS */
+.compare-grid {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 14px; margin: 24px 0;
+}
+.compare-card {
+  background: linear-gradient(180deg, var(--surface) 0%, var(--ink-2) 100%);
+  border: 1px solid var(--line); border-radius: 4px;
+  padding: 20px 22px; position: relative;
+}
+.compare-card.is-featured { border-color: var(--mint); }
+.compare-card.is-featured::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px;
+  background: linear-gradient(90deg, transparent, var(--mint), transparent);
+}
+.compare-card__tag {
+  font-family: var(--mono); font-size: 9.5px; letter-spacing: 0.16em;
+  text-transform: uppercase; color: var(--paper-3); margin-bottom: 10px;
+  display: flex; justify-content: space-between; align-items: center;
+}
+.compare-card__tag .badge {
+  font-family: var(--mono); padding: 2px 8px; border-radius: 99px;
+  border: 1px solid; font-size: 9px;
+}
+.compare-card__name {
+  font-family: var(--serif); font-style: italic; font-size: 28px;
+  letter-spacing: -0.01em; line-height: 1; color: var(--paper);
+}
+.compare-card__sub {
+  font-family: var(--mono); font-size: 11px; color: var(--paper-3);
+  letter-spacing: 0.04em; margin-top: 6px;
+}
+.compare-card__list {
+  margin-top: 16px; list-style: none;
+}
+.compare-card__list li {
+  font-size: 13px; padding: 8px 0; border-bottom: 1px dashed var(--line);
+  display: flex; justify-content: space-between; align-items: baseline; gap: 12px;
+  color: var(--paper-2);
+}
+.compare-card__list li:last-child { border-bottom: 0; }
+.compare-card__list li strong {
+  font-family: var(--mono); font-size: 11px; letter-spacing: 0.06em;
+  color: var(--paper); font-weight: 500; text-align: right;
+}
+
+/* TABLES */
+.ref-table {
+  width: 100%; margin: 18px 0 8px;
+  border-collapse: collapse; font-size: 13.5px;
+  background: var(--surface); border: 1px solid var(--line); border-radius: 4px; overflow: hidden;
+}
+.ref-table th {
+  font-family: var(--mono); font-size: 10px; font-weight: 500;
+  letter-spacing: 0.16em; text-transform: uppercase; color: var(--paper-3);
+  text-align: left; padding: 14px 16px;
+  background: var(--ink-2); border-bottom: 1px solid var(--line-2);
+}
+.ref-table td {
+  padding: 14px 16px; border-bottom: 1px solid var(--line);
+  color: var(--paper-2); line-height: 1.55; vertical-align: top;
+}
+.ref-table tr:last-child td { border-bottom: 0; }
+.ref-table td:first-child {
+  font-family: var(--mono); color: var(--paper); font-size: 13px; font-weight: 500; white-space: nowrap;
+}
+.ref-table td em {
+  font-family: var(--serif); font-style: italic; color: var(--paper); font-size: 1.05em;
+}
+.ref-table code {
+  font-family: var(--mono); font-size: 12px; background: var(--ink);
+  padding: 1px 5px; border-radius: 2px; border: 1px solid var(--line); color: var(--accent-2);
+}
+
+/* GOTCHA CALLOUT */
+.gotcha {
+  background: linear-gradient(90deg, rgba(255, 120, 73, 0.06), transparent);
+  border-left: 2px solid var(--mint);
+  padding: 18px 24px; margin: 24px 0; border-radius: 0 4px 4px 0;
+}
+.gotcha__head {
+  font-family: var(--mono); font-size: 10px; letter-spacing: 0.2em;
+  text-transform: uppercase; color: var(--mint); margin-bottom: 8px;
+}
+.gotcha__title {
+  font-family: var(--serif); font-style: italic; font-size: 22px;
+  color: var(--paper); line-height: 1.2; margin-bottom: 10px;
+}
+.gotcha__body {
+  font-size: 14.5px; color: var(--paper-2); line-height: 1.6;
+}
+.gotcha__body code {
+  font-family: var(--mono); font-size: 12.5px; background: var(--ink);
+  padding: 1px 6px; border-radius: 2px; border: 1px solid var(--line); color: var(--accent-2);
+}
+
+/* DEPLOYMENT DIAGRAM */
+.diagram {
+  background: var(--surface); border: 1px solid var(--line);
+  border-radius: 4px; padding: 28px 32px; margin: 20px 0;
+  display: flex; align-items: center; justify-content: space-between; gap: 20px;
+  font-family: var(--mono); font-size: 11px;
+}
+.diagram__node {
+  background: var(--ink-2); border: 1px solid var(--line-2);
+  padding: 12px 18px; border-radius: 4px; color: var(--paper);
+  text-align: center; min-width: 100px;
+}
+.diagram__node.is-aws { border-color: var(--mint); color: var(--mint); }
+.diagram__arrow {
+  color: var(--paper-3); font-size: 18px;
+}
+.diagram__label {
+  font-size: 9px; letter-spacing: 0.18em; color: var(--paper-3); margin-top: 4px;
+}
+
+/* PROS / CONS */
+.prosons {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin: 18px 0;
+}
+.prosons > div {
+  background: var(--surface); border: 1px solid var(--line);
+  border-radius: 4px; padding: 22px;
+}
+.prosons h5 {
+  font-family: var(--mono); font-size: 10px; letter-spacing: 0.2em;
+  text-transform: uppercase; margin-bottom: 14px;
+}
+.prosons__good h5 { color: var(--mint); }
+.prosons__bad h5 { color: var(--rose); }
+.prosons ul { list-style: none; }
+.prosons li {
+  padding: 8px 0; border-bottom: 1px dashed var(--line);
+  font-size: 13.5px; color: var(--paper-2); line-height: 1.55;
+  display: flex; gap: 10px;
+}
+.prosons li:last-child { border-bottom: 0; }
+.prosons li::before {
+  font-family: var(--mono); font-weight: 500; flex-shrink: 0;
+}
+.prosons__good li::before { content: '+'; color: var(--mint); }
+.prosons__bad  li::before { content: '−'; color: var(--rose); }
+.prosons li em { font-family: var(--serif); font-style: italic; color: var(--paper); }
+.prosons li code { font-family: var(--mono); font-size: 12.5px; background: var(--ink); padding: 1px 5px; border-radius: 2px; border: 1px solid var(--line); color: var(--accent-2); }
+
+/* COLOPHON */
+.colophon {
+  margin-top: 96px; padding-top: 32px; border-top: 1px solid var(--line);
+  display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 32px;
+  font-size: 13px; color: var(--paper-3);
+}
+.colophon h5 {
+  font-family: var(--mono); font-size: 10px; letter-spacing: 0.18em;
+  text-transform: uppercase; color: var(--paper-2); margin-bottom: 10px; font-weight: 500;
+}
+.colophon p { line-height: 1.6; }
+.colophon p a {
+  color: var(--paper-2); text-decoration: underline;
+  text-decoration-color: var(--line-2); text-underline-offset: 3px;
+}
+.colophon p a:hover { color: var(--mint); }
+.colophon code {
+  font-family: var(--mono); font-size: 11.5px; background: var(--surface);
+  padding: 1px 6px; border-radius: 2px; border: 1px solid var(--line); color: var(--accent-2);
+}
+
+@media (max-width: 900px) {
+  .page { padding: 32px 22px 72px; }
+  .masthead { grid-template-columns: 1fr; gap: 24px; }
+  .section { grid-template-columns: 1fr; gap: 18px; margin: 56px 0; }
+  .section__head { position: static; }
+  .section__num { font-size: 44px; }
+  .section__title { font-size: 28px; }
+  .prosons { grid-template-columns: 1fr; }
+  .diagram { flex-direction: column; }
+  .colophon { grid-template-columns: 1fr; gap: 24px; }
+}
+</style>
+</head>
+<body>
+
+<div class="grain"></div>
+<div class="scanlines"></div>
+
+<div class="page">
+
+  <header class="masthead">
+    <div class="masthead__brand">
+      <a class="masthead__eyebrow" href="../">
+        <span class="masthead__eyebrow-arrow">←</span>
+        Infra Atlas · API Management · Self-Hosted Almanac
+      </a>
+      <h1 class="masthead__title">Self-Hosted <em>Almanac.</em></h1>
+      <p class="masthead__subtitle">
+        Kong, Gravitee, and IBM API Connect — the three self-hostable APIMs compared head-to-head. OSS editions, Kubernetes nativity, plugin ecosystems, operating costs — <em>and which one to actually pick.</em>
+      </p>
+    </div>
+    <aside class="masthead__status">
+      <div class="status-line">
+        <span style="width:8px;height:8px;border-radius:50%;background:var(--mint);display:inline-block"></span>
+        Self-hosted · Comparison
+      </div>
+      <div class="status-time">Updated 2026-05-15</div>
+    </aside>
+  </header>
+
+  <!-- ── 01 · The Three Contenders ── -->
+  <section class="section">
+    <div class="section__head">
+      <div class="section__num">01</div>
+      <div class="section__kicker">Who they are, in one card each</div>
+      <h2 class="section__title">The three <em>contenders</em></h2>
+    </div>
+    <div class="section__body">
+      <p class="section__lead">
+        Three platforms with <em>genuinely different philosophies</em>. They look superficially similar — gateway + control plane + dev portal — but the operating model, ecosystem, and total cost diverge sharply.
+      </p>
+
+      <div class="compare-grid">
+        <div class="compare-card" style="border-color: rgba(111,231,181,0.4);">
+          <div class="compare-card__tag">Kong <span class="badge" style="color: var(--kong); border-color: rgba(111,231,181,0.4)">OSS-first</span></div>
+          <div class="compare-card__name">Kong</div>
+          <div class="compare-card__sub">Lua + Nginx, plugin-rich</div>
+          <ul class="compare-card__list">
+            <li>OSS license <strong>Apache 2.0</strong></li>
+            <li>Core runtime <strong>OpenResty / Nginx</strong></li>
+            <li>Plugin language <strong>Lua · Go · JS · Python</strong></li>
+            <li>Managed SaaS <strong>Konnect</strong></li>
+            <li>K8s native <strong>Kong Ingress Controller</strong></li>
+            <li>Plugin count <strong>~100+ official, hundreds OSS</strong></li>
+            <li>Best for <em>cloud-native, plugin-heavy</em></li>
+          </ul>
+        </div>
+
+        <div class="compare-card" style="border-color: rgba(255,166,110,0.4);">
+          <div class="compare-card__tag">Gravitee <span class="badge" style="color: var(--gravitee); border-color: rgba(255,166,110,0.4)">Full APIM</span></div>
+          <div class="compare-card__name">Gravitee</div>
+          <div class="compare-card__sub">Java + APIM + Event-driven gateway</div>
+          <ul class="compare-card__list">
+            <li>OSS license <strong>Apache 2.0</strong></li>
+            <li>Core runtime <strong>Java / Reactor</strong></li>
+            <li>Policy language <strong>Groovy · Java · Spring EL</strong></li>
+            <li>Managed SaaS <strong>Gravitee Cloud</strong></li>
+            <li>K8s native <strong>Operator + Helm</strong></li>
+            <li>Unique angle <em>Native Kafka / MQTT / Webhook gateway</em></li>
+            <li>Best for <em>full APIM + event streams</em></li>
+          </ul>
+        </div>
+
+        <div class="compare-card" style="border-color: rgba(168,163,154,0.4);">
+          <div class="compare-card__tag">IBM API Connect <span class="badge" style="color: var(--ibm); border-color: rgba(168,163,154,0.4)">Enterprise</span></div>
+          <div class="compare-card__name">IBM API Connect</div>
+          <div class="compare-card__sub">DataPower-derived, enterprise-grade</div>
+          <ul class="compare-card__list">
+            <li>OSS license <strong>None (closed)</strong></li>
+            <li>Core runtime <strong>DataPower Gateway</strong></li>
+            <li>Policy assembly <strong>GatewayScript · XSLT</strong></li>
+            <li>Managed SaaS <strong>IBM Cloud</strong></li>
+            <li>K8s native <strong>OpenShift operator</strong></li>
+            <li>Heritage <em>Decades of WebSphere ESB DNA</em></li>
+            <li>Best for <em>existing IBM shops</em></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="gotcha">
+        <div class="gotcha__head">▸ One-line summary</div>
+        <div class="gotcha__title">Kong if you want plugins. Gravitee if you want event streams. IBM if you're already on the IBM stack.</div>
+        <div class="gotcha__body">
+          The fourth answer ("don't self-host APIM") is also valid for many teams. Self-hosting buys data residency, customization, and lower per-call cost at scale — at the cost of operational burden you don't get from Apigee SaaS or AWS API Gateway.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── 02 · Open Source Story ── -->
+  <section class="section">
+    <div class="section__head">
+      <div class="section__num">02</div>
+      <div class="section__kicker">What you get for free</div>
+      <h2 class="section__title">The <em>open-source</em> story</h2>
+    </div>
+    <div class="section__body">
+      <p class="section__lead">
+        Two of these are <em>genuinely OSS</em>. One is <em>not</em>. The difference matters for both cost and ecosystem lock-in.
+      </p>
+
+      <table class="ref-table">
+        <thead><tr><th>Vendor</th><th>License</th><th>OSS scope</th><th>Production-grade on OSS alone?</th></tr></thead>
+        <tbody>
+          <tr><td>Kong</td><td>Apache 2.0</td><td>Gateway + Kong Ingress Controller + many plugins.</td><td><em>Yes.</em> Many large companies run Kong OSS in production unmodified.</td></tr>
+          <tr><td>Gravitee</td><td>Apache 2.0</td><td>Full APIM (Gateway + Console + Portal + AM) is OSS.</td><td><em>Yes.</em> OSS edition is feature-rich; Enterprise adds federation, governance, premium support.</td></tr>
+          <tr><td>IBM API Connect</td><td>None</td><td>Closed source.</td><td>N/A — license required.</td></tr>
+        </tbody>
+      </table>
+
+      <table class="ref-table" style="margin-top: 18px;">
+        <thead><tr><th>OSS-only limit</th><th>Kong</th><th>Gravitee</th></tr></thead>
+        <tbody>
+          <tr><td>Dev portal</td><td>Community-built ones only</td><td>Bundled developer portal</td></tr>
+          <tr><td>Advanced plugins</td><td>OAuth, OIDC, OPA: Enterprise</td><td>Most policies in OSS</td></tr>
+          <tr><td>Multi-cluster control plane</td><td>Enterprise / Konnect</td><td>OSS + Enterprise</td></tr>
+          <tr><td>Vault integration</td><td>Enterprise plugin</td><td>OSS</td></tr>
+          <tr><td>RBAC + audit</td><td>Enterprise</td><td>Bundled</td></tr>
+          <tr><td>Support SLA</td><td>Enterprise</td><td>Enterprise</td></tr>
+        </tbody>
+      </table>
+
+      <div class="gotcha">
+        <div class="gotcha__head">▸ Counterintuitive truth</div>
+        <div class="gotcha__title">Gravitee's OSS edition is more complete than Kong's OSS edition.</div>
+        <div class="gotcha__body">
+          Kong's OSS gateway is excellent but most enterprise features (RBAC, advanced auth, portal, multi-cluster) are paid. Gravitee bundles much more into OSS, including the developer portal and Access Management. <em>This often surprises teams who default to Kong.</em>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── 03 · K8s Nativity ── -->
+  <section class="section">
+    <div class="section__head">
+      <div class="section__num">03</div>
+      <div class="section__kicker">If you live in Kubernetes</div>
+      <h2 class="section__title">Kubernetes <em>nativity</em></h2>
+    </div>
+    <div class="section__body">
+      <p class="section__lead">
+        All three run on Kubernetes. <em>How well</em> they run on K8s varies a lot.
+      </p>
+
+      <table class="ref-table">
+        <thead><tr><th>Capability</th><th>Kong</th><th>Gravitee</th><th>IBM</th></tr></thead>
+        <tbody>
+          <tr><td>Ingress Controller</td><td><em>Best in class.</em> Implements Gateway API + Ingress.</td><td>Yes, via Kubernetes Gateway Controller.</td><td>Via OpenShift operator.</td></tr>
+          <tr><td>Helm chart</td><td>Official, mature.</td><td>Official, mature.</td><td>Operator-only; no public Helm chart.</td></tr>
+          <tr><td>Operator pattern</td><td>Kong Operator (Konnect).</td><td>Gravitee APIM Operator.</td><td>API Connect Operator for OpenShift.</td></tr>
+          <tr><td>CRDs for API config</td><td><em>Yes</em> — gitops-friendly.</td><td>Yes — full CRD support.</td><td>Limited — config still via Console UI mostly.</td></tr>
+          <tr><td>Service mesh integration</td><td>Kong Mesh (built on Kuma).</td><td>External; works with Istio.</td><td>Limited.</td></tr>
+          <tr><td>Data plane / Control plane split</td><td>Yes — DB-less data plane.</td><td>Yes — distributed gateway.</td><td>Yes.</td></tr>
+        </tbody>
+      </table>
+
+      <div class="gotcha">
+        <div class="gotcha__head">▸ Pattern</div>
+        <div class="gotcha__title">Kong wins on GitOps. Gravitee wins on bundled features. IBM wins on existing OpenShift estates.</div>
+        <div class="gotcha__body">
+          If you're running ArgoCD with everything-as-yaml, Kong's CRD story is the cleanest. If you want a turnkey APIM in K8s with portal included, Gravitee. If you already have OpenShift, IBM is the path of least resistance.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── 04 · Pricing & Operating Cost ── -->
+  <section class="section">
+    <div class="section__head">
+      <div class="section__num">04</div>
+      <div class="section__kicker">License + ops + people</div>
+      <h2 class="section__title">Total <em>cost</em></h2>
+    </div>
+    <div class="section__body">
+      <p class="section__lead">
+        Self-hosted means you pay for <em>license + infrastructure + ops people</em>. The license is the obvious part; the other two often surprise.
+      </p>
+
+      <table class="ref-table">
+        <thead><tr><th>Cost component</th><th>Kong</th><th>Gravitee</th><th>IBM</th></tr></thead>
+        <tbody>
+          <tr><td>License — OSS</td><td>$0</td><td>$0</td><td>N/A</td></tr>
+          <tr><td>License — Enterprise (indicative)</td><td>$50k–$300k/yr</td><td>$60k–$250k/yr</td><td>$150k–$500k+/yr</td></tr>
+          <tr><td>License model</td><td>Per cluster, per node, or per req in Konnect.</td><td>Per cluster + features.</td><td>Per cluster + Processor Value Units.</td></tr>
+          <tr><td>Konnect / Cloud SaaS</td><td>Konnect: req-based.</td><td>Gravitee Cloud: managed plane.</td><td>IBM Cloud: bundled with subscription.</td></tr>
+          <tr><td>Infrastructure (K8s)</td><td>Yours</td><td>Yours</td><td>Yours (or IBM Cloud)</td></tr>
+          <tr><td>Ops burden</td><td>Moderate — runtime + DB.</td><td>Moderate — runtime + ES + Mongo.</td><td><em>High</em> — DataPower expertise required.</td></tr>
+          <tr><td>Talent availability</td><td><em>High</em> — large community.</td><td>Growing — smaller community.</td><td><em>Low</em> — DataPower skills scarce.</td></tr>
+        </tbody>
+      </table>
+
+      <div class="gotcha">
+        <div class="gotcha__head">▸ Hidden cost</div>
+        <div class="gotcha__title">Self-hosting all three needs <em>at least 1 dedicated SRE</em> at any non-trivial scale.</div>
+        <div class="gotcha__body">
+          The license is the most-quoted figure. The real total includes K8s infra (~$50k–$200k/yr for prod-grade clusters), monitoring stack, DR replication, and at least one engineer who owns runtime upgrades, capacity planning, and incident response. <em>Apigee SaaS or AWS API GW absorb that.</em>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── 05 · Plugin / Policy Ecosystem ── -->
+  <section class="section">
+    <div class="section__head">
+      <div class="section__num">05</div>
+      <div class="section__kicker">What you extend with</div>
+      <h2 class="section__title">Plugin <em>ecosystems</em></h2>
+    </div>
+    <div class="section__body">
+      <p class="section__lead">
+        The extension story is what makes self-hosted compelling. <em>You can build what the vendor didn't.</em>
+      </p>
+
+      <div class="prosons">
+        <div class="prosons__good">
+          <h5>Kong</h5>
+          <ul>
+            <li>~100 official + Enterprise plugins.</li>
+            <li>Plugin SDKs in <em>Lua, Go, JS, Python</em>. Lua is fastest.</li>
+            <li>Strong community plugin marketplace (Plugin Hub).</li>
+            <li>Plugin chain composition is mature; ordering well-documented.</li>
+            <li>Native <em>OPA, OIDC, AWS Lambda, Datadog</em> plugins.</li>
+            <li>Konnect adds <em>AI Gateway</em> plugins (LLM routing, semantic caching).</li>
+          </ul>
+        </div>
+        <div class="prosons__good">
+          <h5>Gravitee</h5>
+          <ul>
+            <li>~50 built-in policies covering API + event-stream cases.</li>
+            <li>Policy authoring in <em>Groovy, Java, Spring EL</em>.</li>
+            <li><em>Unique:</em> Event-driven policies for Kafka, MQTT, AMQP, Webhooks.</li>
+            <li>Custom resource plugins (e.g., custom auth backends).</li>
+            <li>Plugin marketplace smaller than Kong's but well-curated.</li>
+            <li>Strong story for <em>"async APIs"</em> alongside REST/GraphQL.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="prosons" style="margin-top: 12px;">
+        <div class="prosons__good">
+          <h5>IBM API Connect</h5>
+          <ul>
+            <li>Assembly editor — visual policy chain construction.</li>
+            <li>Policies written in <em>GatewayScript</em> (JS dialect) or <em>XSLT</em>.</li>
+            <li>Strong heritage in <em>SOAP, MQ, IMS, CICS</em> integrations.</li>
+            <li>Tight integration with IBM MQ and IBM Cloud Pak for Integration.</li>
+            <li>Smaller community; most extension is via IBM PS or partners.</li>
+            <li>DataPower XML/XSLT performance is hard to beat for SOAP-heavy workloads.</li>
+          </ul>
+        </div>
+        <div class="prosons__bad">
+          <h5>Common pitfalls</h5>
+          <ul>
+            <li><em>Custom plugins drift.</em> Test against runtime upgrades — Kong/Gravitee bump majors regularly.</li>
+            <li>Ordering of plugins matters — auth before rate limit, not after.</li>
+            <li>Custom plugins lock you in just like vendor lock-in does.</li>
+            <li>Performance benchmarking each plugin is non-negotiable at scale.</li>
+            <li>OSS plugin maintenance often falls on the team that adopted it.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── 06 · Which to pick ── -->
+  <section class="section">
+    <div class="section__head">
+      <div class="section__num">06</div>
+      <div class="section__kicker">A decision tree</div>
+      <h2 class="section__title">When to pick <em>which</em></h2>
+    </div>
+    <div class="section__body">
+      <p class="section__lead">
+        A simple decision tree from <em>most common</em> patterns observed in 2026 procurement cycles.
+      </p>
+
+      <table class="ref-table">
+        <thead><tr><th>If your situation is…</th><th>Pick</th><th>Why</th></tr></thead>
+        <tbody>
+          <tr><td>Cloud-native shop, K8s + GitOps, lean ops team</td><td><strong>Kong</strong></td><td>Best CRD/Operator story; largest talent pool; plugin SDK is a competitive moat.</td></tr>
+          <tr><td>Mixed REST + event-streams (Kafka, MQTT)</td><td><strong>Gravitee</strong></td><td>Only vendor with first-class async / event-driven APIs in the same gateway.</td></tr>
+          <tr><td>Need full APIM (gateway + portal + AM) on OSS budget</td><td><strong>Gravitee</strong></td><td>OSS edition includes more out of the box than Kong's.</td></tr>
+          <tr><td>Existing IBM customer with OpenShift + MQ + DataPower</td><td><strong>IBM API Connect</strong></td><td>Procurement path of least resistance; existing skills transfer.</td></tr>
+          <tr><td>SOAP-heavy legacy modernization</td><td><strong>IBM API Connect</strong></td><td>DataPower XML/XSLT performance is unmatched; SOAP→REST tooling mature.</td></tr>
+          <tr><td>Want to start free, upgrade later</td><td><strong>Kong OSS</strong> or <strong>Gravitee OSS</strong></td><td>Either path; Gravitee gives more for free but Kong has more eyes.</td></tr>
+          <tr><td>Don't want to operate it at all</td><td>None — go SaaS</td><td>Apigee X, AWS API GW, Azure APIM, Konnect, Gravitee Cloud.</td></tr>
+        </tbody>
+      </table>
+
+      <div class="gotcha">
+        <div class="gotcha__head">▸ Final honest take</div>
+        <div class="gotcha__title">If you're <em>not certain</em> you need self-hosted — don't. The ops cost surprises everyone.</div>
+        <div class="gotcha__body">
+          Self-hosted makes sense when (a) data residency mandates require it, (b) per-call SaaS pricing dominates at your scale, or (c) you need extension capabilities only OSS provides. Otherwise SaaS APIM is genuinely easier and cheaper. <em>Be honest about your team's K8s operational capacity.</em>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="colophon">
+    <div>
+      <h5>About</h5>
+      <p>Instrument 11 of <a href="../">Infra Atlas</a>. Kong vs Gravitee vs IBM — the editorial reference for self-hosted APIM. Compare OSS scope, K8s nativity, plugin ecosystems, and total cost before you commit.</p>
+    </div>
+    <div>
+      <h5>Sources</h5>
+      <p>Compiled from official Kong, Gravitee, and IBM API Connect documentation, public license pages, plugin hub metrics, and field-observed operating models. Snapshot May 2026.</p>
+    </div>
+    <div>
+      <h5>See also</h5>
+      <p><a href="../apim-matrix/">APIM Feature Matrix</a> for cross-vendor capability comparison · <a href="../apigee/">Apigee Atlas</a> · <a href="../mulesoft/">Mulesoft Atlas</a> · <a href="../aws-api-gateway/">AWS API Gateway Atlas</a>.</p>
+    </div>
+  </footer>
+
+</div>
+
+</body>
+</html>

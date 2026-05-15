@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Mulesoft · Atlas · Infra Atlas</title>
+<meta name="description" content="Mulesoft Anypoint, demystified. CloudHub vs RTF vs Flex Gateway, DataWeave, vCore vs Flex Replica pricing, and the integration patterns the platform was built around.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@300;400;500;600&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+:root {
+  --ink: #0A0907; --ink-2: #100E0C; --surface: #161310; --surface-2: #1E1A15; --surface-3: #2A241C;
+  --line: rgba(244, 239, 230, 0.06); --line-2: rgba(244, 239, 230, 0.14); --line-3: rgba(244, 239, 230, 0.28);
+  --paper: #F4EFE6; --paper-2: rgba(244, 239, 230, 0.66); --paper-3: rgba(244, 239, 230, 0.42); --paper-4: rgba(244, 239, 230, 0.20);
+  --accent: #FF7849; --accent-2: #FFA66E; --mulesoft: #C586E8;
+  --mint: #6FE7B5; --gold: #F4C660; --plum: #C586E8; --sky: #7CD7F1; --rose: #F47B7B; --teal: #5BCCC9;
+  --serif: 'Instrument Serif', 'Times New Roman', serif;
+  --mono: 'JetBrains Mono', ui-monospace, monospace;
+  --sans: 'Manrope', -apple-system, system-ui, sans-serif;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body {
+  background: var(--ink); color: var(--paper);
+  font-family: var(--sans); font-size: 15px; line-height: 1.55;
+  -webkit-font-smoothing: antialiased; min-height: 100vh;
+}
+body {
+  background:
+    radial-gradient(ellipse at 100% -10%, rgba(197, 134, 232, 0.08), transparent 55%),
+    radial-gradient(ellipse at -10% 110%, rgba(197, 134, 232, 0.04), transparent 65%),
+    var(--ink);
+  background-attachment: fixed; overflow-x: hidden;
+}
+.grain {
+  pointer-events: none; position: fixed; inset: 0; z-index: 100; opacity: 0.08; mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml;utf8,<svg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.6 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+}
+.scanlines {
+  pointer-events: none; position: fixed; inset: 0; z-index: 99;
+  background: repeating-linear-gradient(180deg, transparent, transparent 2px, rgba(244,239,230,0.012) 2px, rgba(244,239,230,0.012) 3px);
+}
+::selection { background: var(--mulesoft); color: var(--ink); }
+
+.page { max-width: 1280px; margin: 0 auto; padding: 56px 48px 96px; position: relative; }
+
+/* MASTHEAD */
+.masthead {
+  display: grid; grid-template-columns: 1fr auto; gap: 48px; align-items: end;
+  padding-bottom: 36px; border-bottom: 1px solid var(--line); margin-bottom: 56px;
+}
+.masthead__eyebrow {
+  font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.22em;
+  color: var(--paper-3); text-transform: uppercase;
+  display: inline-flex; align-items: center; gap: 12px;
+  text-decoration: none; transition: color 0.2s ease;
+}
+.masthead__eyebrow:hover { color: var(--paper); }
+.masthead__eyebrow-arrow { color: var(--mulesoft); transition: transform 0.2s ease; }
+.masthead__eyebrow:hover .masthead__eyebrow-arrow { transform: translateX(-4px); }
+
+.masthead__title {
+  font-family: var(--serif); font-weight: 400;
+  font-size: clamp(48px, 7vw, 108px); line-height: 0.95; letter-spacing: -0.02em;
+  margin-top: 16px;
+}
+.masthead__title em { font-style: italic; color: var(--mulesoft); }
+.masthead__subtitle {
+  margin-top: 18px; font-size: 17px; color: var(--paper-2); max-width: 620px; line-height: 1.55;
+}
+.masthead__subtitle em {
+  font-family: var(--serif); font-style: italic; font-size: 1.12em; color: var(--paper);
+}
+
+.masthead__status {
+  text-align: right; display: flex; flex-direction: column; align-items: flex-end; gap: 14px; padding-bottom: 6px;
+}
+.status-line {
+  display: inline-flex; align-items: center; gap: 10px;
+  font-family: var(--mono); font-size: 11px; letter-spacing: 0.18em;
+  text-transform: uppercase; color: var(--mulesoft);
+}
+.status-time { font-family: var(--mono); font-size: 12px; color: var(--paper-3); }
+
+/* SECTIONS */
+.section {
+  margin: 96px 0 64px;
+  display: grid; grid-template-columns: 220px 1fr; gap: 56px;
+}
+.section__head {
+  position: sticky; top: 32px; align-self: start;
+}
+.section__num {
+  font-family: var(--serif); font-style: italic;
+  font-size: 64px; font-weight: 400; line-height: 0.9; color: var(--paper-3);
+}
+.section__kicker {
+  font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.2em;
+  text-transform: uppercase; color: var(--paper-3); margin-top: 8px;
+}
+.section__title {
+  font-family: var(--serif); font-size: 36px; font-weight: 400;
+  letter-spacing: -0.012em; margin-top: 8px; line-height: 1.05;
+}
+.section__title em { font-style: italic; color: var(--mulesoft); }
+.section__body { max-width: 760px; }
+.section__lead {
+  font-size: 17px; line-height: 1.65; color: var(--paper); margin-bottom: 28px; font-weight: 300;
+}
+.section__lead em { font-family: var(--serif); font-style: italic; color: var(--paper); font-size: 1.1em; }
+
+/* COMPARISON CARDS */
+.compare-grid {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 14px; margin: 24px 0;
+}
+.compare-card {
+  background: linear-gradient(180deg, var(--surface) 0%, var(--ink-2) 100%);
+  border: 1px solid var(--line); border-radius: 4px;
+  padding: 20px 22px; position: relative;
+}
+.compare-card.is-featured { border-color: var(--mulesoft); }
+.compare-card.is-featured::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px;
+  background: linear-gradient(90deg, transparent, var(--mulesoft), transparent);
+}
+.compare-card__tag {
+  font-family: var(--mono); font-size: 9.5px; letter-spacing: 0.16em;
+  text-transform: uppercase; color: var(--paper-3); margin-bottom: 10px;
+  display: flex; justify-content: space-between; align-items: center;
+}
+.compare-card__tag .badge {
+  font-family: var(--mono); padding: 2px 8px; border-radius: 99px;
+  border: 1px solid; font-size: 9px;
+}
+.compare-card__name {
+  font-family: var(--serif); font-style: italic; font-size: 28px;
+  letter-spacing: -0.01em; line-height: 1; color: var(--paper);
+}
+.compare-card__sub {
+  font-family: var(--mono); font-size: 11px; color: var(--paper-3);
+  letter-spacing: 0.04em; margin-top: 6px;
+}
+.compare-card__list {
+  margin-top: 16px; list-style: none;
+}
+.compare-card__list li {
+  font-size: 13px; padding: 8px 0; border-bottom: 1px dashed var(--line);
+  display: flex; justify-content: space-between; align-items: baseline; gap: 12px;
+  color: var(--paper-2);
+}
+.compare-card__list li:last-child { border-bottom: 0; }
+.compare-card__list li strong {
+  font-family: var(--mono); font-size: 11px; letter-spacing: 0.06em;
+  color: var(--paper); font-weight: 500; text-align: right;
+}
+
+/* TABLES */
+.ref-table {
+  width: 100%; margin: 18px 0 8px;
+  border-collapse: collapse; font-size: 13.5px;
+  background: var(--surface); border: 1px solid var(--line); border-radius: 4px; overflow: hidden;
+}
+.ref-table th {
+  font-family: var(--mono); font-size: 10px; font-weight: 500;
+  letter-spacing: 0.16em; text-transform: uppercase; color: var(--paper-3);
+  text-align: left; padding: 14px 16px;
+  background: var(--ink-2); border-bottom: 1px solid var(--line-2);
+}
+.ref-table td {
+  padding: 14px 16px; border-bottom: 1px solid var(--line);
+  color: var(--paper-2); line-height: 1.55; vertical-align: top;
+}
+.ref-table tr:last-child td { border-bottom: 0; }
+.ref-table td:first-child {
+  font-family: var(--mono); color: var(--paper); font-size: 13px; font-weight: 500; white-space: nowrap;
+}
+.ref-table td em {
+  font-family: var(--serif); font-style: italic; color: var(--paper); font-size: 1.05em;
+}
+.ref-table code {
+  font-family: var(--mono); font-size: 12px; background: var(--ink);
+  padding: 1px 5px; border-radius: 2px; border: 1px solid var(--line); color: var(--accent-2);
+}
+
+/* GOTCHA CALLOUT */
+.gotcha {
+  background: linear-gradient(90deg, rgba(255, 120, 73, 0.06), transparent);
+  border-left: 2px solid var(--mulesoft);
+  padding: 18px 24px; margin: 24px 0; border-radius: 0 4px 4px 0;
+}
+.gotcha__head {
+  font-family: var(--mono); font-size: 10px; letter-spacing: 0.2em;
+  text-transform: uppercase; color: var(--mulesoft); margin-bottom: 8px;
+}
+.gotcha__title {
+  font-family: var(--serif); font-style: italic; font-size: 22px;
+  color: var(--paper); line-height: 1.2; margin-bottom: 10px;
+}
+.gotcha__body {
+  font-size: 14.5px; color: var(--paper-2); line-height: 1.6;
+}
+.gotcha__body code {
+  font-family: var(--mono); font-size: 12.5px; background: var(--ink);
+  padding: 1px 6px; border-radius: 2px; border: 1px solid var(--line); color: var(--accent-2);
+}
+
+/* DEPLOYMENT DIAGRAM */
+.diagram {
+  background: var(--surface); border: 1px solid var(--line);
+  border-radius: 4px; padding: 28px 32px; margin: 20px 0;
+  display: flex; align-items: center; justify-content: space-between; gap: 20px;
+  font-family: var(--mono); font-size: 11px;
+}
+.diagram__node {
+  background: var(--ink-2); border: 1px solid var(--line-2);
+  padding: 12px 18px; border-radius: 4px; color: var(--paper);
+  text-align: center; min-width: 100px;
+}
+.diagram__node.is-aws { border-color: var(--mulesoft); color: var(--mulesoft); }
+.diagram__arrow {
+  color: var(--paper-3); font-size: 18px;
+}
+.diagram__label {
+  font-size: 9px; letter-spacing: 0.18em; color: var(--paper-3); margin-top: 4px;
+}
+
+/* PROS / CONS */
+.prosons {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin: 18px 0;
+}
+.prosons > div {
+  background: var(--surface); border: 1px solid var(--line);
+  border-radius: 4px; padding: 22px;
+}
+.prosons h5 {
+  font-family: var(--mono); font-size: 10px; letter-spacing: 0.2em;
+  text-transform: uppercase; margin-bottom: 14px;
+}
+.prosons__good h5 { color: var(--mint); }
+.prosons__bad h5 { color: var(--rose); }
+.prosons ul { list-style: none; }
+.prosons li {
+  padding: 8px 0; border-bottom: 1px dashed var(--line);
+  font-size: 13.5px; color: var(--paper-2); line-height: 1.55;
+  display: flex; gap: 10px;
+}
+.prosons li:last-child { border-bottom: 0; }
+.prosons li::before {
+  font-family: var(--mono); font-weight: 500; flex-shrink: 0;
+}
+.prosons__good li::before { content: '+'; color: var(--mint); }
+.prosons__bad  li::before { content: '−'; color: var(--rose); }
+.prosons li em { font-family: var(--serif); font-style: italic; color: var(--paper); }
+.prosons li code { font-family: var(--mono); font-size: 12.5px; background: var(--ink); padding: 1px 5px; border-radius: 2px; border: 1px solid var(--line); color: var(--accent-2); }
+
+/* COLOPHON */
+.colophon {
+  margin-top: 96px; padding-top: 32px; border-top: 1px solid var(--line);
+  display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 32px;
+  font-size: 13px; color: var(--paper-3);
+}
+.colophon h5 {
+  font-family: var(--mono); font-size: 10px; letter-spacing: 0.18em;
+  text-transform: uppercase; color: var(--paper-2); margin-bottom: 10px; font-weight: 500;
+}
+.colophon p { line-height: 1.6; }
+.colophon p a {
+  color: var(--paper-2); text-decoration: underline;
+  text-decoration-color: var(--line-2); text-underline-offset: 3px;
+}
+.colophon p a:hover { color: var(--mulesoft); }
+.colophon code {
+  font-family: var(--mono); font-size: 11.5px; background: var(--surface);
+  padding: 1px 6px; border-radius: 2px; border: 1px solid var(--line); color: var(--accent-2);
+}
+
+@media (max-width: 900px) {
+  .page { padding: 32px 22px 72px; }
+  .masthead { grid-template-columns: 1fr; gap: 24px; }
+  .section { grid-template-columns: 1fr; gap: 18px; margin: 56px 0; }
+  .section__head { position: static; }
+  .section__num { font-size: 44px; }
+  .section__title { font-size: 28px; }
+  .prosons { grid-template-columns: 1fr; }
+  .diagram { flex-direction: column; }
+  .colophon { grid-template-columns: 1fr; gap: 24px; }
+}
+</style>
+</head>
+<body>
+
+<div class="grain"></div>
+<div class="scanlines"></div>
+
+<div class="page">
+
+  <header class="masthead">
+    <div class="masthead__brand">
+      <a class="masthead__eyebrow" href="../">
+        <span class="masthead__eyebrow-arrow">←</span>
+        Infra Atlas · API Management · Mulesoft Anypoint
+      </a>
+      <h1 class="masthead__title">Mulesoft <em>Atlas.</em></h1>
+      <p class="masthead__subtitle">
+        Mulesoft Anypoint, <em>demystified</em>. CloudHub vs CloudHub 2.0 vs Runtime Fabric vs Flex Gateway, DataWeave, vCore vs Flex Replica pricing — and the integration platform DNA that makes it different from every other APIM.
+      </p>
+    </div>
+    <aside class="masthead__status">
+      <div class="status-line">
+        <span style="width:8px;height:8px;border-radius:50%;background:var(--mulesoft);display:inline-block"></span>
+        Mulesoft · Reference
+      </div>
+      <div class="status-time">Updated 2026-05-15</div>
+    </aside>
+  </header>
+
+  <!-- ── 01 · Anypoint Platform ── -->
+  <section class="section">
+    <div class="section__head">
+      <div class="section__num">01</div>
+      <div class="section__kicker">It's a platform, not a gateway</div>
+      <h2 class="section__title">The <em>Anypoint Platform</em></h2>
+    </div>
+    <div class="section__body">
+      <p class="section__lead">
+        Mulesoft is <em>not just an API gateway</em>. It's an integration platform where the gateway is one component. Get this right before evaluating: you're buying ESB-class integration tooling, with API management layered on top.
+      </p>
+
+      <table class="ref-table">
+        <thead><tr><th>Component</th><th>What it is</th><th>Why you care</th></tr></thead>
+        <tbody>
+          <tr><td>Design Center</td><td>Visual API design (RAML/OpenAPI) + Mule flow builder.</td><td>Specs live alongside flows. RAML is preferred but OpenAPI 3 is fully supported.</td></tr>
+          <tr><td>Anypoint Studio</td><td>Eclipse-based IDE for Mule developers.</td><td>The serious dev work happens here, not the browser.</td></tr>
+          <tr><td>Exchange</td><td>Internal marketplace for APIs, templates, connectors, assets.</td><td>Reuse engine — APIs are products, connectors are LEGO bricks.</td></tr>
+          <tr><td>API Manager</td><td>Apply policies, manage SLA tiers, route to upstreams.</td><td>The "API management" of Anypoint API Management.</td></tr>
+          <tr><td>Runtime Manager</td><td>Deploy + monitor Mule applications (apps = APIs + flows).</td><td>Operational pane of glass for production.</td></tr>
+          <tr><td>Anypoint Monitoring</td><td>Dashboards, alerts, log search, custom KPIs.</td><td>Built-in observability — no separate ELK setup needed.</td></tr>
+          <tr><td>Anypoint MQ</td><td>Managed message broker (Mulesoft's own SQS-like).</td><td>For async integrations between Mule apps.</td></tr>
+          <tr><td>Connectors</td><td>~300 pre-built integrations (Salesforce, SAP, NetSuite, JDBC, etc.).</td><td>The reason mid-market enterprises buy Mulesoft.</td></tr>
+        </tbody>
+      </table>
+
+      <div class="gotcha">
+        <div class="gotcha__head">▸ Critical framing</div>
+        <div class="gotcha__title">If you only need to put a gateway in front of REST services, Mulesoft is <em>over-platformed</em> for the job.</div>
+        <div class="gotcha__body">
+          The platform's strength is <em>integrating systems that don't speak HTTP</em>: Salesforce, SAP, mainframes, file shares, JDBC, AS400. If your APIs are all clean REST/gRPC microservices already, Kong or Apigee will be a better fit at a fraction of the cost.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── 02 · Deployment Targets ── -->
+  <section class="section">
+    <div class="section__head">
+      <div class="section__num">02</div>
+      <div class="section__kicker">Where Mule apps run</div>
+      <h2 class="section__title">Deployment <em>targets</em></h2>
+    </div>
+    <div class="section__body">
+      <p class="section__lead">
+        Four supported runtimes, each with different operational tradeoffs and pricing units. <em>Pick the wrong one and you'll regret it at renewal.</em>
+      </p>
+
+      <div class="compare-grid">
+        <div class="compare-card">
+          <div class="compare-card__tag">CloudHub <span class="badge" style="color: var(--rose); border-color: rgba(244,123,123,0.4)">Legacy</span></div>
+          <div class="compare-card__name">CloudHub</div>
+          <div class="compare-card__sub">The original SaaS runtime</div>
+          <ul class="compare-card__list">
+            <li>Hosted by <strong>Salesforce</strong></li>
+            <li>Pricing unit <strong>vCore</strong></li>
+            <li>Region choice <strong>Limited</strong></li>
+            <li>Status <em>Migrate to CH 2.0</em></li>
+          </ul>
+        </div>
+
+        <div class="compare-card is-featured">
+          <div class="compare-card__tag">CloudHub 2.0 <span class="badge" style="color: var(--mulesoft); border-color: rgba(197,134,232,0.4)">Current</span></div>
+          <div class="compare-card__name">CloudHub 2.0</div>
+          <div class="compare-card__sub">K8s-based managed runtime</div>
+          <ul class="compare-card__list">
+            <li>Hosted by <strong>Salesforce</strong></li>
+            <li>Pricing unit <strong>Flex Replica</strong></li>
+            <li>K8s under the hood <strong>Yes (managed)</strong></li>
+            <li>Multi-cloud regions <em>20+</em></li>
+          </ul>
+        </div>
+
+        <div class="compare-card">
+          <div class="compare-card__tag">Runtime Fabric</div>
+          <div class="compare-card__name">RTF</div>
+          <div class="compare-card__sub">Mule runtime on YOUR K8s</div>
+          <ul class="compare-card__list">
+            <li>Hosted by <strong>You</strong></li>
+            <li>Required for <em>data residency</em></li>
+            <li>Operates <em>your</em> K8s cluster</li>
+            <li>Control plane <strong>Anypoint SaaS</strong></li>
+          </ul>
+        </div>
+
+        <div class="compare-card">
+          <div class="compare-card__tag">Flex Gateway</div>
+          <div class="compare-card__name">Flex Gateway</div>
+          <div class="compare-card__sub">Envoy-based gateway-only mode</div>
+          <ul class="compare-card__list">
+            <li>Built on <strong>Envoy</strong></li>
+            <li>Runs <em>anywhere</em> (K8s, Docker, Linux)</li>
+            <li>No Mule app server <strong>Lightweight</strong></li>
+            <li>Use for <em>API GW only, no integrations</em></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="gotcha">
+        <div class="gotcha__head">▸ Decision heuristic</div>
+        <div class="gotcha__title">CH 2.0 for new SaaS work. RTF for on-prem or strict residency. Flex Gateway if you only want the gateway, not the integration platform.</div>
+        <div class="gotcha__body">
+          <em>Flex Gateway changed Mulesoft's competitive position.</em> Before it, Mulesoft was over-platformed for pure API gateway use cases. With Flex Gateway (Envoy-based, K8s-native), they can now compete with Kong on lightweight gateway deployments while keeping the option to scale up to full Anypoint later.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── 03 · DataWeave ── -->
+  <section class="section">
+    <div class="section__head">
+      <div class="section__num">03</div>
+      <div class="section__kicker">The secret weapon</div>
+      <h2 class="section__title">DataWeave</h2>
+    </div>
+    <div class="section__body">
+      <p class="section__lead">
+        DataWeave is Mulesoft's <em>transformation language</em>. It's the single biggest reason mid-market enterprises pick Mulesoft over alternatives. Once you've written DataWeave, every other gateway's transformation story feels primitive.
+      </p>
+
+      <table class="ref-table">
+        <thead><tr><th>Capability</th><th>Detail</th></tr></thead>
+        <tbody>
+          <tr><td>Format support</td><td>JSON · XML · CSV · YAML · Java · Avro · Protobuf · COBOL copybook · fixed-width · multipart · Excel</td></tr>
+          <tr><td>Type system</td><td>Strong, with schema inference and conversion. Catches errors at design time.</td></tr>
+          <tr><td>Functional model</td><td>Map, filter, reduce, group-by, etc. Pure functions, no side effects.</td></tr>
+          <tr><td>Streaming</td><td>Process multi-GB files without loading into memory.</td></tr>
+          <tr><td>Performance</td><td>Compiled to bytecode; very fast vs interpreted XSL / JS.</td></tr>
+          <tr><td>Reusability</td><td>Function libraries + custom data types shared across flows.</td></tr>
+          <tr><td>Tooling</td><td>Anypoint Studio has a DataWeave playground with live preview.</td></tr>
+        </tbody>
+      </table>
+
+      <div class="gotcha">
+        <div class="gotcha__head">▸ Strategic note</div>
+        <div class="gotcha__title">If you have many <em>"integrate two systems with different data models"</em> use cases, DataWeave is the answer no other vendor matches.</div>
+        <div class="gotcha__body">
+          Apigee has JS + XSL. Kong has plugins. AWS has VTL. None of them touch DataWeave for transformation-heavy work. <em>If you're doing ETL-meets-API patterns, this is the differentiator.</em>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── 04 · API Policies ── -->
+  <section class="section">
+    <div class="section__head">
+      <div class="section__num">04</div>
+      <div class="section__kicker">Less abundant than Apigee, still complete</div>
+      <h2 class="section__title">API <em>Policies</em></h2>
+    </div>
+    <div class="section__body">
+      <p class="section__lead">
+        Mulesoft uses a <em>policy</em> model on API Manager. Fewer policies than Apigee's library, but covers the essentials. Custom policies are written as Mule modules.
+      </p>
+
+      <table class="ref-table">
+        <thead><tr><th>Policy</th><th>Category</th><th>Notes</th></tr></thead>
+        <tbody>
+          <tr><td>Client ID Enforcement</td><td>Security</td><td>API key + secret validation against Anypoint client app.</td></tr>
+          <tr><td>OAuth 2.0 Access Token Enforcement</td><td>Security</td><td>Validate OAuth tokens from external IdP or Anypoint OAuth provider.</td></tr>
+          <tr><td>JWT Validation</td><td>Security</td><td>JWKS-based validation. Configure issuer, audience, claims.</td></tr>
+          <tr><td>Basic Authentication</td><td>Security</td><td>Username/password from LDAP or Mule config.</td></tr>
+          <tr><td>IP Allowlist / Blocklist</td><td>Security</td><td>CIDR-based at gateway.</td></tr>
+          <tr><td>Rate Limiting</td><td>Traffic</td><td>Per API or per SLA tier.</td></tr>
+          <tr><td>Spike Control</td><td>Traffic</td><td>Short-window throttle to smooth bursts.</td></tr>
+          <tr><td>Cross-Origin Resource Sharing</td><td>Web</td><td>CORS handling at gateway.</td></tr>
+          <tr><td>HTTP Caching</td><td>Performance</td><td>Response cache with configurable TTL.</td></tr>
+          <tr><td>Header Injection / Removal</td><td>Mediation</td><td>Add or strip headers in/out.</td></tr>
+          <tr><td>Compliance — Threat Protection</td><td>Security</td><td>JSON/XML threat protection, SQL injection, payload size limits.</td></tr>
+          <tr><td>Custom Policy</td><td>Anything</td><td>Mule module — full Mule flow as a policy.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ── 05 · Pricing ── -->
+  <section class="section">
+    <div class="section__head">
+      <div class="section__num">05</div>
+      <div class="section__kicker">vCore and the new Flex Replica</div>
+      <h2 class="section__title">Pricing <em>units</em></h2>
+    </div>
+    <div class="section__body">
+      <p class="section__lead">
+        Mulesoft pricing is by <em>capacity unit</em>, not API calls. The unit changes between CloudHub (vCore) and CloudHub 2.0 (Flex Replica). Both translate roughly to "how much Mule runtime are you running concurrently".
+      </p>
+
+      <table class="ref-table">
+        <thead><tr><th>Unit</th><th>What</th><th>Indicative cost</th><th>Where used</th></tr></thead>
+        <tbody>
+          <tr><td>vCore</td><td>0.1 / 0.2 / 0.5 / 1.0 / 2.0 — Mule runtime capacity unit.</td><td>~$5k–$50k / yr per vCore</td><td>CloudHub (legacy)</td></tr>
+          <tr><td>Flex Replica</td><td>Replica of Mule runtime, sized small/medium/large.</td><td>~$10k–$60k / yr per replica</td><td>CloudHub 2.0</td></tr>
+          <tr><td>RTF cores</td><td>Capacity on your K8s, billed by Anypoint license.</td><td>Negotiated</td><td>Runtime Fabric</td></tr>
+          <tr><td>Flex Gateway nodes</td><td>Per-node licensing for standalone gateway mode.</td><td>~$5k / node / yr</td><td>Flex Gateway only</td></tr>
+          <tr><td>Anypoint MQ</td><td>By message volume + storage.</td><td>Tiered</td><td>Async use cases</td></tr>
+        </tbody>
+      </table>
+
+      <div class="gotcha">
+        <div class="gotcha__head">▸ Pricing reality</div>
+        <div class="gotcha__title">Mulesoft is enterprise-priced. Total spend typically <em>$200k–$2M+ / year</em> for mid-market deployments.</div>
+        <div class="gotcha__body">
+          Salesforce account teams negotiate Titanium / Gold / Platinum bundles. <em>List price means little.</em> Real deals depend on co-term with other Salesforce products. Budget 12+ months for procurement on net-new deals.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── 06 · Strengths/Gotchas ── -->
+  <section class="section">
+    <div class="section__head">
+      <div class="section__num">06</div>
+      <div class="section__kicker">The honest summary</div>
+      <h2 class="section__title">Strengths &amp; <em>Gotchas</em></h2>
+    </div>
+    <div class="section__body">
+      <div class="prosons">
+        <div class="prosons__good">
+          <h5>What it does well</h5>
+          <ul>
+            <li><em>DataWeave.</em> Best-in-class transformation across heterogeneous data formats.</li>
+            <li><em>~300 connectors</em> — Salesforce, SAP, NetSuite, JDBC, AS400, mainframes. The mid-market ESB story.</li>
+            <li>Strong <em>SLA tier management</em> with Client ID enforcement and rate limiting per tier.</li>
+            <li><em>Anypoint Exchange</em> for asset reuse is mature and well-loved by API platform teams.</li>
+            <li>Salesforce ecosystem integration — natural fit if Salesforce CRM is already in place.</li>
+            <li>Flex Gateway as standalone Envoy-based gateway competes credibly with Kong.</li>
+          </ul>
+        </div>
+        <div class="prosons__bad">
+          <h5>What to watch for</h5>
+          <ul>
+            <li><em>Very expensive.</em> Often 5–10× the cost of Kong/Apigee for similar throughput.</li>
+            <li>Learning curve steepens fast. <em>Anypoint Studio + DataWeave + Mule DSL</em> requires real upskilling.</li>
+            <li>The platform is best when used holistically. Buying just the gateway = paying for too much.</li>
+            <li><em>Vendor lock-in</em> via DataWeave and connectors. Migration costs are very high.</li>
+            <li>vCore → Flex Replica migration is real work; pricing isn't a clean 1:1.</li>
+            <li>RAML — strongly preferred by Mulesoft tooling, but the rest of the industry has converged on OpenAPI.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── 07 · Migration ── -->
+  <section class="section">
+    <div class="section__head">
+      <div class="section__num">07</div>
+      <div class="section__kicker">In and out</div>
+      <h2 class="section__title">Migration <em>paths</em></h2>
+    </div>
+    <div class="section__body">
+      <table class="ref-table">
+        <thead><tr><th>Direction</th><th>Path</th><th>Effort</th></tr></thead>
+        <tbody>
+          <tr>
+            <td>CloudHub → CloudHub 2.0</td><td>Re-package as Flex Replica deployments. Reconfigure object stores, schedulers. Most Mule code ports cleanly.</td>
+            <td>Medium</td>
+          </tr>
+          <tr>
+            <td>CloudHub → Runtime Fabric</td><td>Need K8s + RTF installer + cluster operations. Mule apps deploy similarly.</td><td>High</td>
+          </tr>
+          <tr>
+            <td>Anypoint → Kong / Konnect</td><td>Hard. DataWeave has no equivalent — must rewrite transformations in Lua or external service. Connector reuse is lost.</td><td><em>Very high</em></td>
+          </tr>
+          <tr>
+            <td>Anypoint → Apigee</td><td>Policies map roughly. Connectors don't. Transformation rewrite to JS/XSL. Plan multi-year program.</td><td><em>Very high</em></td>
+          </tr>
+          <tr>
+            <td>API Manager-only → Flex Gateway</td><td>If only using gateway features, Flex Gateway is cheaper. Drop CloudHub runtime, redeploy policies on Flex.</td><td>Medium</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <footer class="colophon">
+    <div>
+      <h5>About</h5>
+      <p>Instrument 10 of <a href="../">Infra Atlas</a>. Mulesoft Anypoint — the editorial reference. Understand the platform DNA before signing; pick the right deployment target; budget the connector cost.</p>
+    </div>
+    <div>
+      <h5>Sources</h5>
+      <p>Compiled from Mulesoft official docs, public DataWeave language reference, customer reports on real-world spend. Snapshot May 2026.</p>
+    </div>
+    <div>
+      <h5>See also</h5>
+      <p><a href="../apim-matrix/">APIM Feature Matrix</a> for cross-vendor comparison · <a href="../apigee/">Apigee Atlas</a> · <a href="../aws-api-gateway/">AWS API Gateway Atlas</a>.</p>
+    </div>
+  </footer>
+
+</div>
+
+</body>
+</html>

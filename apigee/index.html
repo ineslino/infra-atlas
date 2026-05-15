@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Apigee · Atlas · Infra Atlas</title>
+<meta name="description" content="Apigee, demystified. X vs Hybrid vs Edge, the policy library, KVMs and shared flows, pricing tiers, and the migration paths from Edge nobody quotes accurately.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@300;400;500;600&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+:root {
+  --ink: #0A0907; --ink-2: #100E0C; --surface: #161310; --surface-2: #1E1A15; --surface-3: #2A241C;
+  --line: rgba(244, 239, 230, 0.06); --line-2: rgba(244, 239, 230, 0.14); --line-3: rgba(244, 239, 230, 0.28);
+  --paper: #F4EFE6; --paper-2: rgba(244, 239, 230, 0.66); --paper-3: rgba(244, 239, 230, 0.42); --paper-4: rgba(244, 239, 230, 0.20);
+  --accent: #FF7849; --accent-2: #FFA66E; --apigee: #F4C660;
+  --mint: #6FE7B5; --gold: #F4C660; --plum: #C586E8; --sky: #7CD7F1; --rose: #F47B7B; --teal: #5BCCC9;
+  --serif: 'Instrument Serif', 'Times New Roman', serif;
+  --mono: 'JetBrains Mono', ui-monospace, monospace;
+  --sans: 'Manrope', -apple-system, system-ui, sans-serif;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body {
+  background: var(--ink); color: var(--paper);
+  font-family: var(--sans); font-size: 15px; line-height: 1.55;
+  -webkit-font-smoothing: antialiased; min-height: 100vh;
+}
+body {
+  background:
+    radial-gradient(ellipse at 100% -10%, rgba(244, 198, 96, 0.08), transparent 55%),
+    radial-gradient(ellipse at -10% 110%, rgba(244, 198, 96, 0.04), transparent 65%),
+    var(--ink);
+  background-attachment: fixed; overflow-x: hidden;
+}
+.grain {
+  pointer-events: none; position: fixed; inset: 0; z-index: 100; opacity: 0.08; mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml;utf8,<svg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.6 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+}
+.scanlines {
+  pointer-events: none; position: fixed; inset: 0; z-index: 99;
+  background: repeating-linear-gradient(180deg, transparent, transparent 2px, rgba(244,239,230,0.012) 2px, rgba(244,239,230,0.012) 3px);
+}
+::selection { background: var(--apigee); color: var(--ink); }
+
+.page { max-width: 1280px; margin: 0 auto; padding: 56px 48px 96px; position: relative; }
+
+/* MASTHEAD */
+.masthead {
+  display: grid; grid-template-columns: 1fr auto; gap: 48px; align-items: end;
+  padding-bottom: 36px; border-bottom: 1px solid var(--line); margin-bottom: 56px;
+}
+.masthead__eyebrow {
+  font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.22em;
+  color: var(--paper-3); text-transform: uppercase;
+  display: inline-flex; align-items: center; gap: 12px;
+  text-decoration: none; transition: color 0.2s ease;
+}
+.masthead__eyebrow:hover { color: var(--paper); }
+.masthead__eyebrow-arrow { color: var(--apigee); transition: transform 0.2s ease; }
+.masthead__eyebrow:hover .masthead__eyebrow-arrow { transform: translateX(-4px); }
+
+.masthead__title {
+  font-family: var(--serif); font-weight: 400;
+  font-size: clamp(48px, 7vw, 108px); line-height: 0.95; letter-spacing: -0.02em;
+  margin-top: 16px;
+}
+.masthead__title em { font-style: italic; color: var(--apigee); }
+.masthead__subtitle {
+  margin-top: 18px; font-size: 17px; color: var(--paper-2); max-width: 620px; line-height: 1.55;
+}
+.masthead__subtitle em {
+  font-family: var(--serif); font-style: italic; font-size: 1.12em; color: var(--paper);
+}
+
+.masthead__status {
+  text-align: right; display: flex; flex-direction: column; align-items: flex-end; gap: 14px; padding-bottom: 6px;
+}
+.status-line {
+  display: inline-flex; align-items: center; gap: 10px;
+  font-family: var(--mono); font-size: 11px; letter-spacing: 0.18em;
+  text-transform: uppercase; color: var(--apigee);
+}
+.status-time { font-family: var(--mono); font-size: 12px; color: var(--paper-3); }
+
+/* SECTIONS */
+.section {
+  margin: 96px 0 64px;
+  display: grid; grid-template-columns: 220px 1fr; gap: 56px;
+}
+.section__head {
+  position: sticky; top: 32px; align-self: start;
+}
+.section__num {
+  font-family: var(--serif); font-style: italic;
+  font-size: 64px; font-weight: 400; line-height: 0.9; color: var(--paper-3);
+}
+.section__kicker {
+  font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.2em;
+  text-transform: uppercase; color: var(--paper-3); margin-top: 8px;
+}
+.section__title {
+  font-family: var(--serif); font-size: 36px; font-weight: 400;
+  letter-spacing: -0.012em; margin-top: 8px; line-height: 1.05;
+}
+.section__title em { font-style: italic; color: var(--apigee); }
+.section__body { max-width: 760px; }
+.section__lead {
+  font-size: 17px; line-height: 1.65; color: var(--paper); margin-bottom: 28px; font-weight: 300;
+}
+.section__lead em { font-family: var(--serif); font-style: italic; color: var(--paper); font-size: 1.1em; }
+
+/* COMPARISON CARDS */
+.compare-grid {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 14px; margin: 24px 0;
+}
+.compare-card {
+  background: linear-gradient(180deg, var(--surface) 0%, var(--ink-2) 100%);
+  border: 1px solid var(--line); border-radius: 4px;
+  padding: 20px 22px; position: relative;
+}
+.compare-card.is-featured { border-color: var(--apigee); }
+.compare-card.is-featured::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px;
+  background: linear-gradient(90deg, transparent, var(--apigee), transparent);
+}
+.compare-card__tag {
+  font-family: var(--mono); font-size: 9.5px; letter-spacing: 0.16em;
+  text-transform: uppercase; color: var(--paper-3); margin-bottom: 10px;
+  display: flex; justify-content: space-between; align-items: center;
+}
+.compare-card__tag .badge {
+  font-family: var(--mono); padding: 2px 8px; border-radius: 99px;
+  border: 1px solid; font-size: 9px;
+}
+.compare-card__name {
+  font-family: var(--serif); font-style: italic; font-size: 28px;
+  letter-spacing: -0.01em; line-height: 1; color: var(--paper);
+}
+.compare-card__sub {
+  font-family: var(--mono); font-size: 11px; color: var(--paper-3);
+  letter-spacing: 0.04em; margin-top: 6px;
+}
+.compare-card__list {
+  margin-top: 16px; list-style: none;
+}
+.compare-card__list li {
+  font-size: 13px; padding: 8px 0; border-bottom: 1px dashed var(--line);
+  display: flex; justify-content: space-between; align-items: baseline; gap: 12px;
+  color: var(--paper-2);
+}
+.compare-card__list li:last-child { border-bottom: 0; }
+.compare-card__list li strong {
+  font-family: var(--mono); font-size: 11px; letter-spacing: 0.06em;
+  color: var(--paper); font-weight: 500; text-align: right;
+}
+
+/* TABLES */
+.ref-table {
+  width: 100%; margin: 18px 0 8px;
+  border-collapse: collapse; font-size: 13.5px;
+  background: var(--surface); border: 1px solid var(--line); border-radius: 4px; overflow: hidden;
+}
+.ref-table th {
+  font-family: var(--mono); font-size: 10px; font-weight: 500;
+  letter-spacing: 0.16em; text-transform: uppercase; color: var(--paper-3);
+  text-align: left; padding: 14px 16px;
+  background: var(--ink-2); border-bottom: 1px solid var(--line-2);
+}
+.ref-table td {
+  padding: 14px 16px; border-bottom: 1px solid var(--line);
+  color: var(--paper-2); line-height: 1.55; vertical-align: top;
+}
+.ref-table tr:last-child td { border-bottom: 0; }
+.ref-table td:first-child {
+  font-family: var(--mono); color: var(--paper); font-size: 13px; font-weight: 500; white-space: nowrap;
+}
+.ref-table td em {
+  font-family: var(--serif); font-style: italic; color: var(--paper); font-size: 1.05em;
+}
+.ref-table code {
+  font-family: var(--mono); font-size: 12px; background: var(--ink);
+  padding: 1px 5px; border-radius: 2px; border: 1px solid var(--line); color: var(--accent-2);
+}
+
+/* GOTCHA CALLOUT */
+.gotcha {
+  background: linear-gradient(90deg, rgba(255, 120, 73, 0.06), transparent);
+  border-left: 2px solid var(--apigee);
+  padding: 18px 24px; margin: 24px 0; border-radius: 0 4px 4px 0;
+}
+.gotcha__head {
+  font-family: var(--mono); font-size: 10px; letter-spacing: 0.2em;
+  text-transform: uppercase; color: var(--apigee); margin-bottom: 8px;
+}
+.gotcha__title {
+  font-family: var(--serif); font-style: italic; font-size: 22px;
+  color: var(--paper); line-height: 1.2; margin-bottom: 10px;
+}
+.gotcha__body {
+  font-size: 14.5px; color: var(--paper-2); line-height: 1.6;
+}
+.gotcha__body code {
+  font-family: var(--mono); font-size: 12.5px; background: var(--ink);
+  padding: 1px 6px; border-radius: 2px; border: 1px solid var(--line); color: var(--accent-2);
+}
+
+/* DEPLOYMENT DIAGRAM */
+.diagram {
+  background: var(--surface); border: 1px solid var(--line);
+  border-radius: 4px; padding: 28px 32px; margin: 20px 0;
+  display: flex; align-items: center; justify-content: space-between; gap: 20px;
+  font-family: var(--mono); font-size: 11px;
+}
+.diagram__node {
+  background: var(--ink-2); border: 1px solid var(--line-2);
+  padding: 12px 18px; border-radius: 4px; color: var(--paper);
+  text-align: center; min-width: 100px;
+}
+.diagram__node.is-aws { border-color: var(--apigee); color: var(--apigee); }
+.diagram__arrow {
+  color: var(--paper-3); font-size: 18px;
+}
+.diagram__label {
+  font-size: 9px; letter-spacing: 0.18em; color: var(--paper-3); margin-top: 4px;
+}
+
+/* PROS / CONS */
+.prosons {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin: 18px 0;
+}
+.prosons > div {
+  background: var(--surface); border: 1px solid var(--line);
+  border-radius: 4px; padding: 22px;
+}
+.prosons h5 {
+  font-family: var(--mono); font-size: 10px; letter-spacing: 0.2em;
+  text-transform: uppercase; margin-bottom: 14px;
+}
+.prosons__good h5 { color: var(--mint); }
+.prosons__bad h5 { color: var(--rose); }
+.prosons ul { list-style: none; }
+.prosons li {
+  padding: 8px 0; border-bottom: 1px dashed var(--line);
+  font-size: 13.5px; color: var(--paper-2); line-height: 1.55;
+  display: flex; gap: 10px;
+}
+.prosons li:last-child { border-bottom: 0; }
+.prosons li::before {
+  font-family: var(--mono); font-weight: 500; flex-shrink: 0;
+}
+.prosons__good li::before { content: '+'; color: var(--mint); }
+.prosons__bad  li::before { content: '−'; color: var(--rose); }
+.prosons li em { font-family: var(--serif); font-style: italic; color: var(--paper); }
+.prosons li code { font-family: var(--mono); font-size: 12.5px; background: var(--ink); padding: 1px 5px; border-radius: 2px; border: 1px solid var(--line); color: var(--accent-2); }
+
+/* COLOPHON */
+.colophon {
+  margin-top: 96px; padding-top: 32px; border-top: 1px solid var(--line);
+  display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 32px;
+  font-size: 13px; color: var(--paper-3);
+}
+.colophon h5 {
+  font-family: var(--mono); font-size: 10px; letter-spacing: 0.18em;
+  text-transform: uppercase; color: var(--paper-2); margin-bottom: 10px; font-weight: 500;
+}
+.colophon p { line-height: 1.6; }
+.colophon p a {
+  color: var(--paper-2); text-decoration: underline;
+  text-decoration-color: var(--line-2); text-underline-offset: 3px;
+}
+.colophon p a:hover { color: var(--apigee); }
+.colophon code {
+  font-family: var(--mono); font-size: 11.5px; background: var(--surface);
+  padding: 1px 6px; border-radius: 2px; border: 1px solid var(--line); color: var(--accent-2);
+}
+
+@media (max-width: 900px) {
+  .page { padding: 32px 22px 72px; }
+  .masthead { grid-template-columns: 1fr; gap: 24px; }
+  .section { grid-template-columns: 1fr; gap: 18px; margin: 56px 0; }
+  .section__head { position: static; }
+  .section__num { font-size: 44px; }
+  .section__title { font-size: 28px; }
+  .prosons { grid-template-columns: 1fr; }
+  .diagram { flex-direction: column; }
+  .colophon { grid-template-columns: 1fr; gap: 24px; }
+}
+</style>
+</head>
+<body>
+
+<div class="grain"></div>
+<div class="scanlines"></div>
+
+<div class="page">
+
+  <header class="masthead">
+    <div class="masthead__brand">
+      <a class="masthead__eyebrow" href="../">
+        <span class="masthead__eyebrow-arrow">←</span>
+        Infra Atlas · API Management · Apigee
+      </a>
+      <h1 class="masthead__title">Apigee <em>Atlas.</em></h1>
+      <p class="masthead__subtitle">
+        Apigee, <em>demystified</em>. X vs Hybrid vs Edge, the policy library, KVMs and shared flows, environments and revisions, pricing tiers — and the migration paths from Edge that nobody quotes accurately.
+      </p>
+    </div>
+    <aside class="masthead__status">
+      <div class="status-line">
+        <span style="width:8px;height:8px;border-radius:50%;background:var(--apigee);display:inline-block"></span>
+        Apigee · Reference
+      </div>
+      <div class="status-time">Updated 2026-05-15</div>
+    </aside>
+  </header>
+
+  <!-- ── 01 · The Editions ── -->
+  <section class="section">
+    <div class="section__head">
+      <div class="section__num">01</div>
+      <div class="section__kicker">The choice you make first</div>
+      <h2 class="section__title">The <em>Editions</em></h2>
+    </div>
+    <div class="section__body">
+      <p class="section__lead">
+        Apigee comes in three forms with confusingly similar names. They share <em>most concepts</em> but differ in how the runtime is deployed, what it costs, and whether they're still being invested in.
+      </p>
+
+      <div class="compare-grid">
+        <div class="compare-card is-featured">
+          <div class="compare-card__tag">Apigee X <span class="badge" style="color: var(--apigee); border-color: rgba(244,198,96,0.4)">Modern</span></div>
+          <div class="compare-card__name">X</div>
+          <div class="compare-card__sub">GCP-managed, the default for new deployments</div>
+          <ul class="compare-card__list">
+            <li>Runtime location <strong>GCP</strong></li>
+            <li>Control plane <strong>Apigee SaaS</strong></li>
+            <li>Multi-region <strong>Native</strong></li>
+            <li>GraphQL/gRPC <strong>Yes</strong></li>
+            <li>OTel tracing <strong>Yes</strong></li>
+            <li>Pricing model <strong>Subscription</strong></li>
+            <li>Investment level <strong>Active</strong></li>
+          </ul>
+        </div>
+
+        <div class="compare-card">
+          <div class="compare-card__tag">Hybrid <span class="badge" style="color: var(--mint); border-color: rgba(111,231,181,0.4)">Self-host</span></div>
+          <div class="compare-card__name">Hybrid</div>
+          <div class="compare-card__sub">Runtime on your K8s, plane on GCP</div>
+          <ul class="compare-card__list">
+            <li>Runtime location <strong>Your K8s</strong></li>
+            <li>Control plane <strong>Apigee SaaS</strong></li>
+            <li>Cloud-agnostic <strong>AKS · EKS · GKE · On-prem</strong></li>
+            <li>Required for <em>data residency</em></li>
+            <li>OTel tracing <strong>Yes</strong></li>
+            <li>Pricing model <strong>Subscription</strong></li>
+            <li>Investment level <strong>Active</strong></li>
+          </ul>
+        </div>
+
+        <div class="compare-card">
+          <div class="compare-card__tag">Edge <span class="badge" style="color: var(--rose); border-color: rgba(244,123,123,0.4)">Sunset</span></div>
+          <div class="compare-card__name">Edge</div>
+          <div class="compare-card__sub">The legacy SaaS — migrate off</div>
+          <ul class="compare-card__list">
+            <li>Runtime location <strong>Apigee SaaS</strong></li>
+            <li>Control plane <strong>Same</strong></li>
+            <li>End-of-life <strong>Past dates</strong></li>
+            <li>Migration target <strong>X or Hybrid</strong></li>
+            <li>Net New deployments <em>Discouraged</em></li>
+            <li>Pricing model <strong>Legacy contracts</strong></li>
+            <li>Investment level <strong>Maintenance</strong></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="gotcha">
+        <div class="gotcha__head">▸ Decision heuristic</div>
+        <div class="gotcha__title">New deployment? Apigee X. Need on-prem or data residency? Apigee Hybrid. Already on Edge? Plan the migration <em>now</em>.</div>
+        <div class="gotcha__body">
+          Edge customers should treat migration as a 12–24 month project. The policy library is largely compatible, but environments, KVMs, and shared flows need to be re-deployed. Edge proxy bundles export cleanly; the rebuild is in CI/CD, dev portal, and analytics integrations.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── 02 · Policy Library ── -->
+  <section class="section">
+    <div class="section__head">
+      <div class="section__num">02</div>
+      <div class="section__kicker">The 40 you actually use</div>
+      <h2 class="section__title">Policy <em>Library</em></h2>
+    </div>
+    <div class="section__body">
+      <p class="section__lead">
+        Apigee has <em>~70 built-in policies</em>. Most teams use the same dozen. Here are the ones worth knowing by name.
+      </p>
+
+      <table class="ref-table">
+        <thead><tr><th>Policy</th><th>Category</th><th>What it does</th></tr></thead>
+        <tbody>
+          <tr><td>OAuthV2</td><td>Security</td><td>Issue / validate OAuth 2 tokens. Supports all four grants. The workhorse for auth.</td></tr>
+          <tr><td>VerifyAPIKey</td><td>Security</td><td>Validate an API key from a header or query. Cheap, fast, tied to developer apps.</td></tr>
+          <tr><td>VerifyJWT / GenerateJWT</td><td>Security</td><td>JWT validation against JWKS, or signing your own. Replaces external JWT services.</td></tr>
+          <tr><td>BasicAuthentication</td><td>Security</td><td>Encode / decode Basic auth headers. Use sparingly.</td></tr>
+          <tr><td>Quota</td><td>Traffic</td><td>Long-window rate limits (per day/week/month). Tied to developer apps or API products.</td></tr>
+          <tr><td>SpikeArrest</td><td>Traffic</td><td>Short-window throttle (per second/minute). Smooths burst traffic.</td></tr>
+          <tr><td>ResponseCache / LookupCache / PopulateCache</td><td>Traffic</td><td>Response caching with TTL. Skip the backend for repeated identical reads.</td></tr>
+          <tr><td>AssignMessage</td><td>Mediation</td><td>The Swiss army knife — set/get headers, query, payload, variables.</td></tr>
+          <tr><td>ExtractVariables</td><td>Mediation</td><td>Pull values out of request/response into flow variables. Pair with AssignMessage.</td></tr>
+          <tr><td>JSONToXML / XMLToJSON</td><td>Mediation</td><td>Format conversion. Essential for REST↔SOAP bridges.</td></tr>
+          <tr><td>XSL</td><td>Mediation</td><td>XSLT transformation. Pre-X teams know this one painfully well.</td></tr>
+          <tr><td>JavaScript</td><td>Extension</td><td>Custom JS (Rhino-based on Edge, V8-style on X). Escape hatch for everything.</td></tr>
+          <tr><td>JavaCallout</td><td>Extension</td><td>Run Java code. Heavier than JS, useful for crypto and complex transformations.</td></tr>
+          <tr><td>ServiceCallout</td><td>Extension</td><td>Call out to another HTTP service mid-flow. Used for token validation, lookups, etc.</td></tr>
+          <tr><td>FlowCallout</td><td>Composition</td><td>Invoke a Shared Flow. The DRY mechanism for reused policies.</td></tr>
+          <tr><td>MessageLogging</td><td>Observability</td><td>Send structured logs to Splunk, Sumo, syslog, GCP Logging.</td></tr>
+          <tr><td>StatisticsCollector</td><td>Observability</td><td>Add custom dimensions to Apigee Analytics.</td></tr>
+        </tbody>
+      </table>
+
+      <div class="gotcha">
+        <div class="gotcha__head">▸ Watch out</div>
+        <div class="gotcha__title">JavaScript and JavaCallout costs add up. Use FlowCallout to compose policies before reaching for code.</div>
+        <div class="gotcha__body">
+          Each JS execution adds 1–5 ms. Each JavaCallout adds 5–15 ms cold + JVM heap. Profile before you blame Apigee. <em>The policy library exists so you don't write code.</em>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── 03 · Shared Flows + KVMs ── -->
+  <section class="section">
+    <div class="section__head">
+      <div class="section__num">03</div>
+      <div class="section__kicker">DRY for APIs</div>
+      <h2 class="section__title">Shared Flows &amp; <em>KVMs</em></h2>
+    </div>
+    <div class="section__body">
+      <p class="section__lead">
+        Two Apigee features that <em>nobody else does this well</em>. They're how you stop repeating yourself across 200 API proxies.
+      </p>
+
+      <div class="prosons">
+        <div class="prosons__good">
+          <h5>Shared Flows</h5>
+          <ul>
+            <li><em>Reusable policy chains</em> invoked via FlowCallout from any proxy.</li>
+            <li>Common patterns: auth-and-quota, logging-standard, cors-handling, error-formatter.</li>
+            <li>Versioned independently — deploy once, all consumers get the update.</li>
+            <li>Can compose multiple SharedFlows in sequence.</li>
+            <li><em>Flow Hooks</em> apply a SharedFlow to <em>every</em> proxy in an environment automatically.</li>
+          </ul>
+        </div>
+        <div class="prosons__good">
+          <h5>Key Value Maps (KVMs)</h5>
+          <ul>
+            <li><em>Environment-scoped or org-scoped</em> key-value store accessible from policies.</li>
+            <li>Encrypted KVMs for secrets — never put credentials in proxy bundles.</li>
+            <li>Use for: feature flags per env, target URL mappings, retry config, partner whitelist.</li>
+            <li><em>Cached aggressively</em>; updates may take minutes to propagate.</li>
+            <li>Apigee X moves toward <em>Property Sets</em> for config; KVMs remain for runtime data.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="gotcha">
+        <div class="gotcha__head">▸ Pattern</div>
+        <div class="gotcha__title">"Pre-flow Shared Flow" pattern: auth + quota + logging + cors, mounted as Flow Hook.</div>
+        <div class="gotcha__body">
+          Most mature Apigee deployments have a single org-wide pre-flow SharedFlow that runs on every proxy. It enforces baseline OAuth/JWT validation, default quota, structured logging, and CORS. Per-proxy policies layer on top. <em>This is the right starting architecture.</em>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── 04 · Environments & Revisions ── -->
+  <section class="section">
+    <div class="section__head">
+      <div class="section__num">04</div>
+      <div class="section__kicker">How code becomes traffic</div>
+      <h2 class="section__title">Environments &amp; <em>Revisions</em></h2>
+    </div>
+    <div class="section__body">
+      <p class="section__lead">
+        Apigee separates <em>code</em> (proxy bundles) from <em>where it runs</em> (environments). A revision is an immutable snapshot of a proxy.
+      </p>
+
+      <table class="ref-table">
+        <thead><tr><th>Concept</th><th>What it is</th><th>Notes</th></tr></thead>
+        <tbody>
+          <tr><td>Organization</td><td>Top-level Apigee instance. Maps to GCP project on X.</td><td>One per business unit, usually.</td></tr>
+          <tr><td>Environment</td><td>Runtime instance (eval / dev / test / prod / partner).</td><td>Routing rules, target URLs, KVMs all environment-scoped.</td></tr>
+          <tr><td>Environment Group</td><td>Apigee X — groups envs behind a single hostname.</td><td>Replaces Edge's "virtual hosts".</td></tr>
+          <tr><td>Revision</td><td>Immutable snapshot of a proxy bundle.</td><td>Save = new revision. Numbers monotonic.</td></tr>
+          <tr><td>Deployment</td><td>Mapping of revision → environment.</td><td>Deploy revision 7 to dev, revision 5 to prod = totally valid.</td></tr>
+          <tr><td>Proxy bundle</td><td>The exported ZIP of a proxy + policies + resources.</td><td>What CI/CD ships.</td></tr>
+        </tbody>
+      </table>
+
+      <div class="gotcha">
+        <div class="gotcha__head">▸ Common mistake</div>
+        <div class="gotcha__title">Treating environments like namespaces. They're <em>runtime instances</em>; promoting through them requires deploying revisions, not copying configs.</div>
+        <div class="gotcha__body">
+          Mature setup: <code>apigee-cli</code> or Apigee Maven plugin in CI, automatically deploys to dev → test → prod. The proxy bundle is the build artifact; environments are deployment targets. Don't manually copy-paste configs between envs — that's how policy drift happens.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── 05 · Pricing ── -->
+  <section class="section">
+    <div class="section__head">
+      <div class="section__num">05</div>
+      <div class="section__kicker">What you actually pay</div>
+      <h2 class="section__title">Pricing <em>tiers</em></h2>
+    </div>
+    <div class="section__body">
+      <p class="section__lead">
+        Apigee X pricing is by <em>capacity tier</em>, not per-call. The tiers correspond to roughly 1M / 10M / 100M / 250M API calls per day.
+      </p>
+
+      <table class="ref-table">
+        <thead><tr><th>Tier</th><th>Capacity</th><th>Indicative cost / yr</th><th>Best for</th></tr></thead>
+        <tbody>
+          <tr><td>Evaluation</td><td>~180-day trial</td><td>$0</td><td>POCs only — not production.</td></tr>
+          <tr><td>Standard</td><td>~1M calls/day</td><td>~$25k</td><td>Single team, small public API.</td></tr>
+          <tr><td>Enterprise</td><td>~10M calls/day</td><td>~$80k–150k</td><td>Mid-size; most common starting point.</td></tr>
+          <tr><td>Enterprise Plus</td><td>~100M calls/day</td><td>~$300k+</td><td>Large public APIs, multi-region SLA.</td></tr>
+          <tr><td>Enterprise Plus Plus</td><td>>250M calls/day</td><td>Custom</td><td>Mega-scale; usually negotiated.</td></tr>
+          <tr><td>Hybrid runtime</td><td>Same tiers + your K8s costs</td><td>+ infra cost</td><td>On-prem / data residency.</td></tr>
+        </tbody>
+      </table>
+
+      <div class="gotcha">
+        <div class="gotcha__head">▸ Pricing reality</div>
+        <div class="gotcha__title">Apigee is expensive vs AWS API Gateway by an order of magnitude at small scale — but flat at large scale.</div>
+        <div class="gotcha__body">
+          AWS API GW HTTP costs $1/M calls = $1k/day at 1M calls/day = $365k/year. Apigee Standard at 1M calls/day = $25k/year. <em>Apigee is cheaper above ~3M/day</em>, and the gap widens fast. The dev portal, analytics, and shared flows are essentially free at the Apigee scale where AWS pricing dominates.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── 06 · Strengths/Gotchas ── -->
+  <section class="section">
+    <div class="section__head">
+      <div class="section__num">06</div>
+      <div class="section__kicker">The honest summary</div>
+      <h2 class="section__title">Strengths &amp; <em>Gotchas</em></h2>
+    </div>
+    <div class="section__body">
+      <div class="prosons">
+        <div class="prosons__good">
+          <h5>What it does well</h5>
+          <ul>
+            <li><em>Best-in-class developer portal</em>, customizable, with auto-generated SmartDocs.</li>
+            <li>Mature <em>policy library</em> covers ~90% of API patterns without writing code.</li>
+            <li><em>Shared Flows + KVMs</em> deliver DRY at scale. No other vendor has this exact UX.</li>
+            <li>Strong analytics with custom dimensions, drill-down dashboards, anomaly detection.</li>
+            <li><em>Hybrid is genuinely cloud-agnostic</em> — control plane stays on GCP, runtime anywhere.</li>
+            <li>Edge bundles export cleanly via API; CI/CD is solid.</li>
+          </ul>
+        </div>
+        <div class="prosons__bad">
+          <h5>What to watch for</h5>
+          <ul>
+            <li><em>Expensive at small scale.</em> Standard starts at ~$25k/yr; hard to justify for low-traffic APIs.</li>
+            <li>Steep learning curve. The policy DSL is its own world.</li>
+            <li><em>Edge migration is non-trivial.</em> Plan 12–24 months for >100 proxies.</li>
+            <li>Hybrid adds K8s ops burden — you still manage runtime upgrades.</li>
+            <li>Some Edge features still missing on X (improving each release).</li>
+            <li><em>GCP-gravity.</em> X works best in GCP. Multi-cloud teams gravitate to Hybrid or Kong.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── 07 · Migration ── -->
+  <section class="section">
+    <div class="section__head">
+      <div class="section__num">07</div>
+      <div class="section__kicker">In, out, and across</div>
+      <h2 class="section__title">Migration <em>paths</em></h2>
+    </div>
+    <div class="section__body">
+      <table class="ref-table">
+        <thead><tr><th>Direction</th><th>Path</th><th>Effort</th></tr></thead>
+        <tbody>
+          <tr>
+            <td>Edge → X</td>
+            <td>Export proxy bundles, recreate environments, redeploy KVMs, rewire dev portal. Most policies are compatible.</td>
+            <td><em>High</em> · 12–24 months for &gt;100 proxies</td>
+          </tr>
+          <tr>
+            <td>Edge → Hybrid</td>
+            <td>Similar to → X, plus K8s runtime setup. Pick when you need on-prem or data residency.</td>
+            <td><em>High</em></td>
+          </tr>
+          <tr>
+            <td>X → Hybrid</td>
+            <td>Adopt Hybrid runtime in your K8s; redeploy proxies. Control plane stays the same.</td>
+            <td>Medium</td>
+          </tr>
+          <tr>
+            <td>Apigee → Kong / Konnect</td>
+            <td>Rewrite policies as plugins, replatform dev portal, migrate KVMs to env vars / Vault. Plan 3–6 months/100 proxies.</td>
+            <td><em>High</em></td>
+          </tr>
+          <tr>
+            <td>Apigee → AWS API Gateway</td>
+            <td>Major regression in dev portal + shared flows. Only justified for cost-driven moves at small scale.</td>
+            <td><em>Very high</em></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <footer class="colophon">
+    <div>
+      <h5>About</h5>
+      <p>Instrument 09 of <a href="../">Infra Atlas</a>. Apigee — the editorial reference. Decide between X, Hybrid, and Edge; understand the policy library before you need it; price the tier before you sign.</p>
+    </div>
+    <div>
+      <h5>Sources</h5>
+      <p>Compiled from Apigee X documentation, public migration guides, field observations on Edge sunset, and customer reports. Snapshot May 2026.</p>
+    </div>
+    <div>
+      <h5>See also</h5>
+      <p><a href="../apim-matrix/">APIM Feature Matrix</a> for cross-vendor comparison · <a href="../aws-api-gateway/">AWS API Gateway Atlas</a> · <a href="../">all instruments</a>.</p>
+    </div>
+  </footer>
+
+</div>
+
+</body>
+</html>

@@ -1,0 +1,1023 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>APIM · Feature Matrix · Infra Atlas</title>
+<meta name="description" content="Cross-vendor API management feature comparison. Every major APIM platform against every capability — OAuth, mTLS, rate limiting, GraphQL, self-hosted, FedRAMP. With the asterisks intact.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@300;400;500;600&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+:root {
+  --ink: #0A0907; --ink-2: #100E0C; --surface: #161310; --surface-2: #1E1A15; --surface-3: #2A241C;
+  --line: rgba(244, 239, 230, 0.06); --line-2: rgba(244, 239, 230, 0.14); --line-3: rgba(244, 239, 230, 0.28);
+  --paper: #F4EFE6; --paper-2: rgba(244, 239, 230, 0.66); --paper-3: rgba(244, 239, 230, 0.42); --paper-4: rgba(244, 239, 230, 0.20);
+  --accent: #FF7849; --accent-2: #FFA66E; --accent-glow: rgba(255, 120, 73, 0.22);
+  --mint: #6FE7B5; --gold: #F4C660; --plum: #C586E8; --sky: #7CD7F1; --rose: #F47B7B; --teal: #5BCCC9;
+  --yes:   #6FE7B5;
+  --no:    #F47B7B;
+  --part:  #F4C660;
+  --serif: 'Instrument Serif', 'Times New Roman', serif;
+  --mono: 'JetBrains Mono', ui-monospace, monospace;
+  --sans: 'Manrope', -apple-system, system-ui, sans-serif;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body {
+  background: var(--ink);
+  color: var(--paper);
+  font-family: var(--sans);
+  font-size: 15px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  min-height: 100vh;
+}
+
+body {
+  background:
+    radial-gradient(ellipse at 100% -10%, rgba(255, 120, 73, 0.07), transparent 55%),
+    radial-gradient(ellipse at -10% 110%, rgba(244, 198, 96, 0.05), transparent 65%),
+    var(--ink);
+  background-attachment: fixed;
+  overflow-x: hidden;
+}
+
+.grain {
+  pointer-events: none; position: fixed; inset: 0; z-index: 100; opacity: 0.08; mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml;utf8,<svg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.6 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+}
+.scanlines {
+  pointer-events: none; position: fixed; inset: 0; z-index: 99;
+  background: repeating-linear-gradient(180deg, transparent, transparent 2px, rgba(244,239,230,0.012) 2px, rgba(244,239,230,0.012) 3px);
+}
+::selection { background: var(--accent); color: var(--ink); }
+
+.page { max-width: 1640px; margin: 0 auto; padding: 56px 48px 96px; position: relative; }
+
+/* ─────────── MASTHEAD ─────────── */
+.masthead {
+  display: grid; grid-template-columns: 1fr auto; gap: 48px; align-items: end;
+  padding-bottom: 36px; border-bottom: 1px solid var(--line); margin-bottom: 32px;
+}
+.masthead__eyebrow {
+  font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.22em; color: var(--paper-3);
+  text-transform: uppercase; display: inline-flex; align-items: center; gap: 12px;
+  text-decoration: none; transition: color 0.2s ease;
+}
+.masthead__eyebrow:hover { color: var(--paper); }
+.masthead__eyebrow-arrow { color: var(--accent); transition: transform 0.2s ease; }
+.masthead__eyebrow:hover .masthead__eyebrow-arrow { transform: translateX(-4px); }
+.masthead__title {
+  font-family: var(--serif); font-weight: 400;
+  font-size: clamp(48px, 7vw, 108px); line-height: 0.95; letter-spacing: -0.02em;
+  margin-top: 16px; color: var(--paper);
+}
+.masthead__title em { font-style: italic; color: var(--accent); }
+.masthead__subtitle {
+  margin-top: 18px; font-size: 16px; color: var(--paper-2); max-width: 620px; line-height: 1.55;
+}
+.masthead__subtitle span {
+  font-family: var(--serif); font-style: italic; color: var(--paper);
+}
+
+.masthead__status {
+  text-align: right; display: flex; flex-direction: column; align-items: flex-end; gap: 14px; padding-bottom: 6px;
+}
+.status-line {
+  display: inline-flex; align-items: center; gap: 10px;
+  font-family: var(--mono); font-size: 11px; letter-spacing: 0.18em;
+  text-transform: uppercase; color: var(--gold);
+}
+.status-dot {
+  width: 8px; height: 8px; border-radius: 50%; background: var(--gold);
+  animation: pulse 2.4s infinite;
+}
+@keyframes pulse {
+  0% { box-shadow: 0 0 0 0 rgba(244,198,96,0.5); }
+  70% { box-shadow: 0 0 0 14px rgba(244,198,96,0); }
+  100% { box-shadow: 0 0 0 0 rgba(244,198,96,0); }
+}
+.status-time { font-family: var(--mono); font-size: 12px; color: var(--paper-3); }
+.status-counts { display: flex; gap: 24px; margin-top: 4px; }
+.status-counts > div {
+  text-align: right; font-family: var(--mono); font-size: 11px; letter-spacing: 0.12em;
+  text-transform: uppercase; color: var(--paper-3); display: flex; flex-direction: column; gap: 2px;
+}
+.status-counts strong {
+  font-family: var(--serif); font-style: italic; font-weight: 400; font-size: 28px;
+  color: var(--paper); letter-spacing: -0.01em; text-transform: none;
+}
+
+/* ─────────── FILTERS ─────────── */
+.filters {
+  display: grid; grid-template-columns: auto 1fr; gap: 18px 32px; align-items: center;
+  padding: 18px 22px; background: linear-gradient(180deg, var(--surface) 0%, var(--ink-2) 100%);
+  border: 1px solid var(--line); border-radius: 4px;
+  position: sticky; top: 16px; z-index: 50; backdrop-filter: blur(12px); margin-bottom: 28px;
+}
+.filter-search {
+  flex: 1; position: relative; grid-column: 1 / -1;
+}
+.filter-search input {
+  width: 100%; background: var(--ink); border: 1px solid var(--line); color: var(--paper);
+  font-family: var(--mono); font-size: 13px; padding: 12px 16px 12px 42px;
+  border-radius: 3px; outline: none; transition: border-color 0.2s ease;
+}
+.filter-search input::placeholder { color: var(--paper-3); }
+.filter-search input:focus { border-color: var(--accent); }
+.filter-search::before {
+  content: '⌕'; position: absolute; left: 16px; top: 50%; transform: translateY(-50%);
+  color: var(--paper-3); font-size: 18px; pointer-events: none;
+}
+.filter-chips {
+  grid-column: 1 / -1; display: flex; flex-wrap: wrap; gap: 6px; align-items: center;
+}
+.filter-chips__label {
+  font-family: var(--mono); font-size: 10px; letter-spacing: 0.16em;
+  text-transform: uppercase; color: var(--paper-3); margin-right: 4px;
+}
+.chip {
+  background: transparent; border: 1px solid var(--line-2); color: var(--paper-2);
+  font-family: var(--mono); font-size: 11px; letter-spacing: 0.06em;
+  padding: 6px 12px; border-radius: 99px; cursor: pointer; transition: all 0.15s ease;
+  display: inline-flex; align-items: center; gap: 8px; white-space: nowrap;
+}
+.chip:hover { border-color: var(--paper-3); color: var(--paper); }
+.chip.is-active { background: var(--paper); border-color: var(--paper); color: var(--ink); }
+.chip .swatch {
+  width: 8px; height: 8px; border-radius: 2px;
+}
+
+/* ─────────── MATRIX ─────────── */
+.matrix-wrap {
+  overflow-x: auto; margin-bottom: 48px;
+  border: 1px solid var(--line); border-radius: 6px;
+  background: linear-gradient(180deg, var(--ink-2) 0%, var(--ink) 100%);
+}
+.matrix {
+  width: 100%; border-collapse: collapse; min-width: 1000px;
+  font-family: var(--sans); font-size: 13px;
+}
+.matrix thead th {
+  position: sticky; top: 0; z-index: 10; background: var(--ink-2);
+  font-family: var(--mono); font-weight: 500; font-size: 10.5px;
+  letter-spacing: 0.14em; text-transform: uppercase; color: var(--paper-2);
+  padding: 18px 12px 12px; vertical-align: bottom; text-align: center;
+  border-bottom: 1px solid var(--line-2);
+  white-space: nowrap;
+}
+.matrix thead th.feature-col {
+  text-align: left; padding-left: 22px; min-width: 280px;
+  font-family: var(--serif); font-style: italic; font-size: 16px;
+  letter-spacing: 0; text-transform: none; color: var(--paper);
+  font-weight: 400;
+}
+.matrix th .vendor-tag {
+  display: inline-flex; align-items: center; gap: 6px;
+}
+.matrix th .swatch {
+  width: 6px; height: 6px; border-radius: 1px;
+}
+
+.matrix tbody tr.category-row td {
+  padding: 22px 22px 10px;
+  border-top: 1px dashed var(--line);
+  background: linear-gradient(180deg, rgba(0,0,0,0.2), transparent);
+}
+.matrix tbody tr.category-row td .cat-label {
+  font-family: var(--mono); font-size: 10px; letter-spacing: 0.22em;
+  text-transform: uppercase; color: var(--paper-3);
+  display: flex; align-items: center; gap: 10px;
+}
+.matrix tbody tr.category-row td .cat-label::after {
+  content: ''; flex: 1; height: 1px; background: var(--line);
+}
+.matrix tbody tr.feature-row td {
+  padding: 12px 12px; border-bottom: 1px solid var(--line);
+  vertical-align: middle;
+}
+.matrix tbody tr.feature-row td.feature-col {
+  padding-left: 22px; color: var(--paper); font-size: 14px;
+  text-align: left;
+  border-right: 1px solid var(--line);
+}
+.matrix tbody tr.feature-row td.cell {
+  text-align: center; min-width: 90px; cursor: pointer;
+  transition: background 0.15s ease;
+  position: relative;
+}
+.matrix tbody tr.feature-row td.cell:hover {
+  background: rgba(255, 120, 73, 0.04);
+}
+.matrix tbody tr.feature-row:hover {
+  background: linear-gradient(90deg, transparent, rgba(255, 120, 73, 0.02), transparent);
+}
+
+.cell-mark {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 24px; height: 24px; border-radius: 50%;
+  font-family: var(--mono); font-size: 14px; font-weight: 500;
+  position: relative;
+}
+.cell-mark--yes  { background: rgba(111, 231, 181, 0.15); color: var(--yes); }
+.cell-mark--no   { background: rgba(244, 123, 123, 0.12); color: var(--no); opacity: 0.65; }
+.cell-mark--part { background: rgba(244, 198, 96, 0.15); color: var(--part); }
+.cell-mark__star {
+  position: absolute; top: -3px; right: -6px;
+  font-size: 10px; color: var(--accent);
+  background: var(--ink-2); border-radius: 50%; width: 12px; height: 12px;
+  display: inline-flex; align-items: center; justify-content: center;
+}
+
+/* Hide columns when vendor filtered out */
+.matrix.hide-apigee   .col-apigee,
+.matrix.hide-aws      .col-aws,
+.matrix.hide-azure    .col-azure,
+.matrix.hide-mulesoft .col-mulesoft,
+.matrix.hide-kong     .col-kong,
+.matrix.hide-gravitee .col-gravitee,
+.matrix.hide-ibm      .col-ibm { display: none; }
+
+/* Hide rows when filtered/searched */
+.matrix tbody tr.feature-row.is-hidden,
+.matrix tbody tr.category-row.is-hidden { display: none; }
+
+/* ─────────── LEGEND ─────────── */
+.legend {
+  display: flex; flex-wrap: wrap; gap: 18px; align-items: center;
+  margin-bottom: 28px; padding: 16px 22px;
+  background: var(--surface); border: 1px solid var(--line); border-radius: 4px;
+  font-family: var(--mono); font-size: 11px; color: var(--paper-2);
+}
+.legend__label {
+  font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--paper-3);
+}
+.legend__item { display: inline-flex; align-items: center; gap: 8px; }
+
+/* ─────────── DRAWER ─────────── */
+.drawer-backdrop {
+  position: fixed; inset: 0; background: rgba(10, 9, 7, 0.7); backdrop-filter: blur(8px);
+  z-index: 200; opacity: 0; pointer-events: none; transition: opacity 0.25s ease;
+}
+.drawer-backdrop.is-open { opacity: 1; pointer-events: auto; }
+.drawer {
+  position: fixed; top: 0; right: 0; bottom: 0; width: min(640px, 100%);
+  background: var(--ink-2); border-left: 1px solid var(--line-2); z-index: 201;
+  transform: translateX(100%); transition: transform 0.32s cubic-bezier(0.2, 0.8, 0.2, 1);
+  display: flex; flex-direction: column;
+}
+.drawer.is-open { transform: translateX(0); }
+.drawer__head {
+  padding: 28px 32px 22px; border-bottom: 1px solid var(--line); position: relative; flex-shrink: 0;
+}
+.drawer__close {
+  position: absolute; top: 20px; right: 20px;
+  background: transparent; border: 1px solid var(--line-2); color: var(--paper-2);
+  font-family: var(--mono); font-size: 11px; padding: 6px 10px; cursor: pointer;
+  border-radius: 2px; letter-spacing: 0.1em; text-transform: uppercase;
+}
+.drawer__close:hover { border-color: var(--paper); color: var(--paper); }
+.drawer__eyebrow {
+  font-family: var(--mono); font-size: 10px; letter-spacing: 0.22em;
+  text-transform: uppercase; color: var(--accent);
+}
+.drawer__title {
+  font-family: var(--serif); font-size: 32px; font-weight: 400;
+  letter-spacing: -0.012em; line-height: 1.05; margin-top: 8px;
+}
+.drawer__desc {
+  margin-top: 12px; font-size: 14px; color: var(--paper-2); line-height: 1.6;
+}
+.drawer__body { padding: 22px 32px 32px; overflow-y: auto; flex: 1; }
+.drawer__section { margin-bottom: 24px; }
+.drawer__section h4 {
+  font-family: var(--mono); font-size: 10.5px; font-weight: 500;
+  letter-spacing: 0.18em; text-transform: uppercase; color: var(--paper-3);
+  margin-bottom: 12px; display: flex; align-items: center; gap: 10px;
+}
+.drawer__section h4::after { content: ''; flex: 1; height: 1px; background: var(--line); }
+
+.vendor-row {
+  display: grid; grid-template-columns: auto 1fr auto; gap: 14px;
+  padding: 14px 16px; background: var(--surface);
+  border: 1px solid var(--line); border-radius: 3px; margin-bottom: 6px;
+  align-items: center;
+}
+.vendor-row__name {
+  font-family: var(--mono); font-size: 12.5px; font-weight: 500; color: var(--paper);
+  display: flex; align-items: center; gap: 9px;
+}
+.vendor-row__name .swatch { width: 8px; height: 8px; border-radius: 2px; }
+.vendor-row__note {
+  font-family: var(--sans); font-size: 12.5px; color: var(--paper-2); line-height: 1.55;
+}
+.vendor-row__mark {
+  font-family: var(--mono); font-size: 18px; font-weight: 500;
+  width: 30px; height: 30px; border-radius: 50%;
+  display: inline-flex; align-items: center; justify-content: center;
+}
+.vendor-row__mark--yes  { background: rgba(111, 231, 181, 0.15); color: var(--yes); }
+.vendor-row__mark--no   { background: rgba(244, 123, 123, 0.12); color: var(--no); opacity: 0.65; }
+.vendor-row__mark--part { background: rgba(244, 198, 96, 0.15); color: var(--part); }
+
+/* ─────────── COLOPHON ─────────── */
+.colophon {
+  margin-top: 64px; padding-top: 32px; border-top: 1px solid var(--line);
+  display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 32px;
+  font-size: 13px; color: var(--paper-3);
+}
+.colophon h5 {
+  font-family: var(--mono); font-size: 10px; letter-spacing: 0.18em;
+  text-transform: uppercase; color: var(--paper-2); margin-bottom: 10px; font-weight: 500;
+}
+.colophon p { font-size: 13px; line-height: 1.6; }
+.colophon p a {
+  color: var(--paper-2); text-decoration: underline;
+  text-decoration-color: var(--line-2); text-underline-offset: 3px;
+}
+.colophon p a:hover { color: var(--accent); }
+.colophon code {
+  font-family: var(--mono); font-size: 11.5px; background: var(--surface);
+  padding: 1px 6px; border-radius: 2px; border: 1px solid var(--line); color: var(--accent-2);
+}
+
+@media (max-width: 900px) {
+  .page { padding: 32px 22px 72px; }
+  .masthead { grid-template-columns: 1fr; gap: 24px; }
+  .masthead__status { text-align: left; align-items: flex-start; }
+  .filters { position: static; padding: 14px; }
+  .colophon { grid-template-columns: 1fr; gap: 24px; }
+}
+</style>
+</head>
+<body>
+
+<div class="grain"></div>
+<div class="scanlines"></div>
+
+<div class="page">
+
+  <header class="masthead">
+    <div class="masthead__brand">
+      <a class="masthead__eyebrow" href="../">
+        <span class="masthead__eyebrow-arrow">←</span>
+        Infra Atlas · API Management · Feature Matrix
+      </a>
+      <h1 class="masthead__title">Feature <em>Matrix.</em></h1>
+      <p class="masthead__subtitle">
+        Every major API management platform against <span>every meaningful capability</span> — OAuth flavours, mTLS, rate limiting, GraphQL, gRPC, multi-region, self-hosted, FedRAMP. <span>With the asterisks intact.</span>
+      </p>
+    </div>
+    <aside class="masthead__status">
+      <div class="status-line">
+        <span class="status-dot"></span>
+        <span class="status-text">Curated · v1</span>
+      </div>
+      <div class="status-time">Issue 01 · 2026-05-15</div>
+      <div class="status-counts">
+        <div>Vendors<strong id="count-vendors">7</strong></div>
+        <div>Capabilities<strong id="count-features">—</strong></div>
+        <div>Asterisks<strong id="count-stars">—</strong></div>
+      </div>
+    </aside>
+  </header>
+
+  <section class="filters">
+    <div class="filter-search">
+      <input id="search" type="search" autocomplete="off" spellcheck="false" placeholder="Filter capabilities — search by name, category, vendor…">
+    </div>
+    <div class="filter-chips" id="cat-chips"></div>
+    <div class="filter-chips" id="vendor-chips"></div>
+  </section>
+
+  <div class="legend">
+    <span class="legend__label">Legend</span>
+    <span class="legend__item"><span class="cell-mark cell-mark--yes">✓</span> Native support</span>
+    <span class="legend__item"><span class="cell-mark cell-mark--part">◐</span> Partial / via workaround</span>
+    <span class="legend__item"><span class="cell-mark cell-mark--no">✗</span> Not supported</span>
+    <span class="legend__item"><span class="cell-mark cell-mark--yes" style="position:relative">✓<span class="cell-mark__star">*</span></span> Click for footnote</span>
+  </div>
+
+  <div class="matrix-wrap">
+    <table class="matrix" id="matrix"></table>
+  </div>
+
+  <footer class="colophon">
+    <div>
+      <h5>About</h5>
+      <p>Instrument 07 of <a href="../">Infra Atlas</a>. The cross-vendor APIM comparator — every major capability against every major platform. Click any cell for the footnote (and there are <em style="font-family: var(--serif); font-style: italic;">many</em> footnotes).</p>
+    </div>
+    <div>
+      <h5>Sources</h5>
+      <p>Curated from official vendor documentation (Apigee, AWS, Azure, Mulesoft, Kong, Gravitee, IBM), public release notes, and pricing pages. Snapshot as of May 2026. <em>If you spot a stale fact, <a href="#">open an issue</a>.</em></p>
+    </div>
+    <div>
+      <h5>Shortcuts</h5>
+      <p><code>/</code> search · <code>Esc</code> close drawer · click cell for footnote, click feature name for full per-vendor breakdown.</p>
+    </div>
+  </footer>
+
+</div>
+
+<!-- DRAWER -->
+<div class="drawer-backdrop" id="drawer-backdrop"></div>
+<aside class="drawer" id="drawer" aria-hidden="true">
+  <div class="drawer__head" id="drawer-head"></div>
+  <div class="drawer__body" id="drawer-body"></div>
+</aside>
+
+<script>
+// ───────────────────────────────────────────────────────────────────
+// VENDORS
+// ───────────────────────────────────────────────────────────────────
+const VENDORS = [
+  { key: "apigee",   name: "Apigee",            short: "Apigee",   color: "var(--gold)",  swatch: "#F4C660" },
+  { key: "aws",      name: "AWS API Gateway",   short: "AWS",      color: "var(--aws, #FF9F66)", swatch: "#FF9F66" },
+  { key: "azure",    name: "Azure APIM",        short: "Azure",    color: "var(--sky)",   swatch: "#7CD7F1" },
+  { key: "mulesoft", name: "Mulesoft Anypoint", short: "Mulesoft", color: "var(--plum)",  swatch: "#C586E8" },
+  { key: "kong",     name: "Kong / Konnect",    short: "Kong",     color: "var(--mint)",  swatch: "#6FE7B5" },
+  { key: "gravitee", name: "Gravitee",          short: "Gravitee", color: "var(--accent-2)", swatch: "#FFA66E" },
+  { key: "ibm",      name: "IBM API Connect",   short: "IBM",      color: "var(--paper-2)", swatch: "#A8A39A" }
+];
+
+// ───────────────────────────────────────────────────────────────────
+// CATEGORIES + FEATURES
+// "level" is one of: yes | part | no
+// "note" appears if user clicks the cell or the row
+// ───────────────────────────────────────────────────────────────────
+const CATEGORIES = [
+  { key: "auth",          label: "Authentication / Authorization" },
+  { key: "traffic",       label: "Traffic Management" },
+  { key: "transform",     label: "Transformation / Mediation" },
+  { key: "observability", label: "Observability" },
+  { key: "deploy",        label: "Deployment / Operations" },
+  { key: "devex",         label: "Developer Experience" },
+  { key: "pricing",       label: "Pricing / Tiers" },
+  { key: "compliance",    label: "Standards / Compliance" }
+];
+
+const FEATURES = [
+  // ── Authentication ──
+  { id:"oauth-cc", category:"auth", name:"OAuth 2.0 Client Credentials",
+    desc:"Service-to-service token issuance via client_id / client_secret. Table stakes for B2B APIs.",
+    support: {
+      apigee:  { level:"yes",  note:"Native via OAuthV2 policy; supports password, client_credentials, authorization_code flows out of the box." },
+      aws:     { level:"part", note:"Not native — implement via Cognito User Pool or Lambda authorizer. JWT validation built in." },
+      azure:   { level:"yes",  note:"Native OAuth2 with Entra ID, Auth0, Okta, etc. via inbound policies." },
+      mulesoft:{ level:"yes",  note:"Built into Anypoint Identity Manager and Anypoint API Manager OAuth provider." },
+      kong:    { level:"yes",  note:"oauth2 plugin (OSS + Enterprise). Konnect adds managed cluster." },
+      gravitee:{ level:"yes",  note:"Native — Gravitee AM included as identity manager, or plug external IdP." },
+      ibm:     { level:"yes",  note:"Built-in OAuth provider, plus integration with IBM Security Verify." }
+    }
+  },
+  { id:"oauth-ac", category:"auth", name:"OAuth 2.0 Authorization Code + PKCE",
+    desc:"User-facing flow with PKCE for SPAs and mobile. The expected default for public clients in 2026.",
+    support: {
+      apigee:  { level:"yes",  note:"OAuthV2 policy supports authorization_code with PKCE." },
+      aws:     { level:"part", note:"Via Cognito Hosted UI; not directly handled by API Gateway itself." },
+      azure:   { level:"yes",  note:"Full PKCE support with Entra ID and 3rd-party IdPs." },
+      mulesoft:{ level:"yes",  note:"Anypoint OAuth provider supports authorization_code + PKCE." },
+      kong:    { level:"yes",  note:"oauth2 plugin (Enterprise) or via Konnect Auth." },
+      gravitee:{ level:"yes",  note:"Gravitee AM native support." },
+      ibm:     { level:"yes",  note:"OAuth provider supports authorization_code, refresh, PKCE." }
+    }
+  },
+  { id:"jwt", category:"auth", name:"JWT validation (JWKS)",
+    desc:"Validate signed JWTs against a JWKS endpoint, with claim extraction for downstream routing/auth.",
+    support: {
+      apigee:  { level:"yes",  note:"VerifyJWT policy with JWKS." },
+      aws:     { level:"yes",  note:"HTTP API has native JWT authorizer; REST API needs Lambda authorizer (slower)." },
+      azure:   { level:"yes",  note:"validate-jwt policy." },
+      mulesoft:{ level:"yes",  note:"JWT Validation policy in Anypoint." },
+      kong:    { level:"yes",  note:"jwt plugin (OSS) + jwt-signer (Enterprise)." },
+      gravitee:{ level:"yes",  note:"JWT policy with JWKS." },
+      ibm:     { level:"yes",  note:"jwt-validate policy." }
+    }
+  },
+  { id:"mtls", category:"auth", name:"mTLS (client cert auth)",
+    desc:"Verify client certificates at the gateway. Increasingly required for B2B and zero-trust setups.",
+    support: {
+      apigee:  { level:"yes",  note:"TwoWaySSL on northbound (X). On Hybrid, configured at runtime envoy." },
+      aws:     { level:"part", note:"Custom domain mTLS only (not via authorizer). HTTP API since 2021." },
+      azure:   { level:"yes",  note:"Custom domain + inbound mTLS policy." },
+      mulesoft:{ level:"yes",  note:"Configurable at HTTP listener level; Flex Gateway also supports." },
+      kong:    { level:"yes",  note:"mtls-auth plugin (Enterprise) — OSS has SSL/TLS termination only." },
+      gravitee:{ level:"yes",  note:"Built-in mTLS authentication." },
+      ibm:     { level:"yes",  note:"Native two-way TLS at gateway." }
+    }
+  },
+  { id:"api-keys", category:"auth", name:"API keys",
+    desc:"Simple shared-secret identification (not authentication). Still common for partner-tier consumption.",
+    support: {
+      apigee:  { level:"yes",  note:"VerifyAPIKey policy; tied to developer apps." },
+      aws:     { level:"yes",  note:"x-api-key header with usage plans." },
+      azure:   { level:"yes",  note:"Subscription keys (header or query)." },
+      mulesoft:{ level:"yes",  note:"Client ID / secret enforcement policy." },
+      kong:    { level:"yes",  note:"key-auth plugin." },
+      gravitee:{ level:"yes",  note:"API key plan native." },
+      ibm:     { level:"yes",  note:"Client ID enforcement at gateway." }
+    }
+  },
+  { id:"opa", category:"auth", name:"External authorization (OPA / custom)",
+    desc:"Delegate authz decisions to an external policy engine — OPA, custom service, etc.",
+    support: {
+      apigee:  { level:"part", note:"Via ServiceCallout to external policy service; no native OPA integration." },
+      aws:     { level:"yes",  note:"Lambda authorizer can call anything, including OPA." },
+      azure:   { level:"yes",  note:"send-request policy to external endpoint." },
+      mulesoft:{ level:"yes",  note:"Custom policy or HTTP Request to OPA." },
+      kong:    { level:"yes",  note:"opa plugin (Enterprise) — native OPA integration." },
+      gravitee:{ level:"yes",  note:"Policy chain can call external authz service." },
+      ibm:     { level:"part", note:"Custom policy via gatewayscript; no OPA template." }
+    }
+  },
+
+  // ── Traffic Management ──
+  { id:"rate-limit-api", category:"traffic", name:"Rate limiting per API",
+    desc:"Throttle requests at the API level — protect backends from sudden spikes.",
+    support: {
+      apigee:  { level:"yes",  note:"Quota and SpikeArrest policies." },
+      aws:     { level:"yes",  note:"Stage-level throttling + usage plans." },
+      azure:   { level:"yes",  note:"rate-limit and quota policies." },
+      mulesoft:{ level:"yes",  note:"Rate limiting policy at API Manager level." },
+      kong:    { level:"yes",  note:"rate-limiting plugin." },
+      gravitee:{ level:"yes",  note:"Rate Limit, Quota, Spike Arrest policies." },
+      ibm:     { level:"yes",  note:"rate-limit policy with assembly." }
+    }
+  },
+  { id:"rate-limit-consumer", category:"traffic", name:"Rate limiting per consumer / tier",
+    desc:"Different quotas for different consumers (free tier vs pro vs enterprise).",
+    support: {
+      apigee:  { level:"yes",  note:"Quota policy keyed to developer app or product." },
+      aws:     { level:"yes",  note:"Usage plans bound to API keys." },
+      azure:   { level:"yes",  note:"Product-level rate limits; per-subscription quotas." },
+      mulesoft:{ level:"yes",  note:"SLA tiers in API Manager." },
+      kong:    { level:"yes",  note:"rate-limiting plugin with consumer-scoped limits." },
+      gravitee:{ level:"yes",  note:"Plans with different rate-limit configurations." },
+      ibm:     { level:"yes",  note:"Plans + rate-limit assembly." }
+    }
+  },
+  { id:"circuit-breaker", category:"traffic", name:"Circuit breaker",
+    desc:"Stop hitting an unhealthy backend before it cascades. Often paired with retries + timeouts.",
+    support: {
+      apigee:  { level:"part", note:"No first-class policy — implement via FaultRules + KVM state." },
+      aws:     { level:"no",   note:"Not native. AWS recommends App Mesh / service mesh for this." },
+      azure:   { level:"part", note:"retry policy with conditions, but no true circuit-breaker primitive." },
+      mulesoft:{ level:"yes",  note:"Circuit breaker pattern available in Anypoint Connectors / Until Successful with state." },
+      kong:    { level:"part", note:"proxy-cache + healthchecks; circuit-breaker is via passive health checks." },
+      gravitee:{ level:"part", note:"Health checks pull endpoints out of rotation; no explicit circuit primitive." },
+      ibm:     { level:"part", note:"redact + retry assemblies; no dedicated circuit-breaker policy." }
+    }
+  },
+  { id:"retry", category:"traffic", name:"Retry policies (with backoff)",
+    desc:"Retry idempotent calls with exponential backoff. Hide transient backend hiccups.",
+    support: {
+      apigee:  { level:"part", note:"Implement via JS / FaultRules; no declarative retry policy." },
+      aws:     { level:"yes",  note:"Integration timeout + Step Functions or SDK-level retries." },
+      azure:   { level:"yes",  note:"retry policy is built-in." },
+      mulesoft:{ level:"yes",  note:"Until Successful scope with retry strategies." },
+      kong:    { level:"yes",  note:"proxy retries on idempotent methods." },
+      gravitee:{ level:"yes",  note:"Retry policy with configurable strategy." },
+      ibm:     { level:"yes",  note:"retry policy in assembly." }
+    }
+  },
+
+  // ── Transformation ──
+  { id:"req-resp-transform", category:"transform", name:"Request / response transformation",
+    desc:"Modify headers, body, query strings on the way through. The classic gateway job.",
+    support: {
+      apigee:  { level:"yes",  note:"AssignMessage, JavaScript, Python, XSLT, JSONtoXML policies." },
+      aws:     { level:"part", note:"Mapping templates (VTL) on REST APIs; HTTP APIs are limited." },
+      azure:   { level:"yes",  note:"set-body, set-header, rewrite-uri, choose / when XML-style policies." },
+      mulesoft:{ level:"yes",  note:"DataWeave is best-in-class for transformation." },
+      kong:    { level:"yes",  note:"request-transformer, response-transformer plugins (multiple variants)." },
+      gravitee:{ level:"yes",  note:"Transform Headers / Body, Groovy script, Assign Attributes policies." },
+      ibm:     { level:"yes",  note:"gatewayscript / xslt assemblies." }
+    }
+  },
+  { id:"graphql-passthru", category:"transform", name:"GraphQL passthrough",
+    desc:"Proxy GraphQL queries without inspection. Minimum baseline for GraphQL APIs.",
+    support: {
+      apigee:  { level:"yes",  note:"GraphQL policy can validate/route; passthrough trivial." },
+      aws:     { level:"yes",  note:"Treat as opaque POST; AppSync is the real GraphQL story." },
+      azure:   { level:"yes",  note:"Native GraphQL support since 2023, including synthetic GraphQL." },
+      mulesoft:{ level:"yes",  note:"HTTP listener handles GraphQL transparently." },
+      kong:    { level:"yes",  note:"Native; graphql-rate-limiting-advanced plugin." },
+      gravitee:{ level:"yes",  note:"GraphQL APIs supported natively in v4." },
+      ibm:     { level:"yes",  note:"Passthrough supported; no native GraphQL schema mgmt." }
+    }
+  },
+  { id:"graphql-resolve", category:"transform", name:"GraphQL resolver / synthetic schema",
+    desc:"Compose multiple REST/gRPC backends into a single GraphQL schema at the gateway.",
+    support: {
+      apigee:  { level:"part", note:"GraphQL policy enforces; resolver composition via OperationBundle." },
+      aws:     { level:"no",   note:"Not API Gateway — use AWS AppSync for this." },
+      azure:   { level:"yes",  note:"Synthetic GraphQL feature (2023): compose from OpenAPI sources." },
+      mulesoft:{ level:"part", note:"DataGraph for GraphQL composition; separate product, additional cost." },
+      kong:    { level:"part", note:"Resolver via custom plugin; no first-class composition UX." },
+      gravitee:{ level:"yes",  note:"Native GraphQL proxy + resolver in v4." },
+      ibm:     { level:"no",   note:"Not native; would require external GraphQL server." }
+    }
+  },
+  { id:"grpc", category:"transform", name:"gRPC support",
+    desc:"Proxy gRPC or transcode HTTP/JSON ↔ gRPC. Important for internal services.",
+    support: {
+      apigee:  { level:"part", note:"gRPC proxy (X) — recent; no full HTTP transcoding." },
+      aws:     { level:"part", note:"VPC Link can route gRPC; transcoding not native." },
+      azure:   { level:"part", note:"Pass-through gRPC supported in self-hosted gateway; transcoding limited." },
+      mulesoft:{ level:"yes",  note:"gRPC connector + transcoding in Anypoint." },
+      kong:    { level:"yes",  note:"grpc-gateway + grpc-web plugins." },
+      gravitee:{ level:"yes",  note:"gRPC native in v4 (REST → gRPC transcoding)." },
+      ibm:     { level:"no",   note:"No native gRPC support." }
+    }
+  },
+
+  // ── Observability ──
+  { id:"otel", category:"observability", name:"OpenTelemetry tracing",
+    desc:"Export traces in OTel format. Required for modern observability stacks.",
+    support: {
+      apigee:  { level:"yes",  note:"OTel collector integration since 2023." },
+      aws:     { level:"yes",  note:"X-Ray native; OTel via ADOT collector." },
+      azure:   { level:"yes",  note:"App Insights native; OTel collector supported." },
+      mulesoft:{ level:"yes",  note:"OTel exporters supported." },
+      kong:    { level:"yes",  note:"opentelemetry plugin." },
+      gravitee:{ level:"yes",  note:"Distributed tracing with OTel since v4." },
+      ibm:     { level:"part", note:"OTel via assembly customization; not first-class UI." }
+    }
+  },
+  { id:"analytics", category:"observability", name:"Built-in analytics dashboard",
+    desc:"Out-of-the-box dashboards for API traffic, latency, errors. No-setup observability.",
+    support: {
+      apigee:  { level:"yes",  note:"Apigee Analytics — one of the strongest in the market." },
+      aws:     { level:"part", note:"CloudWatch metrics + dashboards (DIY). Better via X-Ray." },
+      azure:   { level:"yes",  note:"Built-in Analytics + Application Insights integration." },
+      mulesoft:{ level:"yes",  note:"Anypoint Monitoring dashboards." },
+      kong:    { level:"part", note:"Konnect has analytics; OSS needs Prometheus + Grafana." },
+      gravitee:{ level:"yes",  note:"Analytics dashboards in APIM Console." },
+      ibm:     { level:"yes",  note:"Analytics service with default dashboards." }
+    }
+  },
+  { id:"audit-logs", category:"observability", name:"Audit logs (config changes)",
+    desc:"Track who changed what in the API config — required for many compliance regimes.",
+    support: {
+      apigee:  { level:"yes",  note:"Audit Logs in Cloud Console; also exportable." },
+      aws:     { level:"yes",  note:"CloudTrail for all API Gateway management actions." },
+      azure:   { level:"yes",  note:"Activity Log + Diagnostic settings." },
+      mulesoft:{ level:"yes",  note:"Audit Logging Service in Anypoint." },
+      kong:    { level:"part", note:"Konnect: full audit. OSS: limited." },
+      gravitee:{ level:"yes",  note:"Audit module in APIM Console." },
+      ibm:     { level:"yes",  note:"Configuration audit logs included." }
+    }
+  },
+
+  // ── Deployment ──
+  { id:"self-hosted", category:"deploy", name:"Self-hosted / on-prem",
+    desc:"Run the gateway in your own infrastructure (not just SaaS). Often required for regulated industries.",
+    support: {
+      apigee:  { level:"part", note:"Apigee Hybrid runs runtime on K8s; Edge legacy is fully on-prem (sunsetting)." },
+      aws:     { level:"no",   note:"AWS API Gateway is AWS-only. Outposts doesn't include it." },
+      azure:   { level:"yes",  note:"Self-hosted gateway (container) for on-prem / multi-cloud." },
+      mulesoft:{ level:"yes",  note:"Flex Gateway (K8s) and Hybrid runtime for on-prem." },
+      kong:    { level:"yes",  note:"OSS, Enterprise, Konnect data plane — all self-hostable." },
+      gravitee:{ level:"yes",  note:"Self-hosted is the default; fully open-source available." },
+      ibm:     { level:"yes",  note:"On-prem, K8s, OpenShift, Cloud — all deployment models." }
+    }
+  },
+  { id:"k8s-op", category:"deploy", name:"Kubernetes operator / GitOps",
+    desc:"Declarative config via CRDs. Integrates cleanly with ArgoCD / Flux.",
+    support: {
+      apigee:  { level:"part", note:"Hybrid uses K8s but no first-class Operator pattern for API config." },
+      aws:     { level:"no",   note:"Not applicable — AWS-managed only." },
+      azure:   { level:"part", note:"Self-hosted gateway runs on K8s, but config still via portal/ARM." },
+      mulesoft:{ level:"yes",  note:"Flex Gateway operator on K8s." },
+      kong:    { level:"yes",  note:"Kong Ingress Controller + Gateway API; Kong Operator for full stack." },
+      gravitee:{ level:"yes",  note:"Operator + Helm chart with CRDs." },
+      ibm:     { level:"yes",  note:"API Connect Operator for OpenShift / K8s." }
+    }
+  },
+  { id:"multi-region", category:"deploy", name:"Multi-region active-active",
+    desc:"Run the same APIs across multiple regions with automatic routing / failover.",
+    support: {
+      apigee:  { level:"yes",  note:"Multi-region routing via Google Cloud Load Balancer." },
+      aws:     { level:"yes",  note:"Edge-optimized endpoints + Route 53 latency routing." },
+      azure:   { level:"yes",  note:"Premium tier supports multi-region active-active." },
+      mulesoft:{ level:"yes",  note:"Anypoint deploys to multiple Cloudhub regions." },
+      kong:    { level:"yes",  note:"Konnect global routing; OSS DIY with DNS." },
+      gravitee:{ level:"yes",  note:"Multi-DC / multi-region clustering." },
+      ibm:     { level:"yes",  note:"Multi-cluster deployment supported." }
+    }
+  },
+  { id:"canary", category:"deploy", name:"Canary / weighted traffic",
+    desc:"Route N% of traffic to a new version. Crucial for safe rollouts.",
+    support: {
+      apigee:  { level:"yes",  note:"TargetServer weights or Conditional flows." },
+      aws:     { level:"yes",  note:"Stage canary deployments (10/20/50/100%)." },
+      azure:   { level:"part", note:"Revisions support, but weight-based routing is manual via policies." },
+      mulesoft:{ level:"yes",  note:"Anypoint Runtime Manager supports weighted load balancing." },
+      kong:    { level:"yes",  note:"Canary plugin (Enterprise) or upstream weights (OSS)." },
+      gravitee:{ level:"yes",  note:"Weight-based routing in v4." },
+      ibm:     { level:"part", note:"No first-class canary primitive — implement via assembly + upstream config." }
+    }
+  },
+
+  // ── Developer Experience ──
+  { id:"dev-portal", category:"devex", name:"Built-in developer portal",
+    desc:"Customer-facing portal for API discovery, key request, docs. Marketing surface for API products.",
+    support: {
+      apigee:  { level:"yes",  note:"Integrated portal — Apigee is famously strong here." },
+      aws:     { level:"part", note:"No native; must use 3rd-party (Stoplight, Backstage, Redocly)." },
+      azure:   { level:"yes",  note:"Built-in dev portal, customizable React-based." },
+      mulesoft:{ level:"yes",  note:"Anypoint Exchange with auto-generated portal." },
+      kong:    { level:"yes",  note:"Konnect Portal (Enterprise); OSS has community portals." },
+      gravitee:{ level:"yes",  note:"Bundled developer portal with theming." },
+      ibm:     { level:"yes",  note:"Developer Portal Drupal-based, customizable." }
+    }
+  },
+  { id:"openapi", category:"devex", name:"OpenAPI / Swagger import",
+    desc:"Bootstrap an API from an OpenAPI spec. Quality varies — round-tripping is the real test.",
+    support: {
+      apigee:  { level:"yes",  note:"Import OpenAPI to generate proxy; round-trip OK." },
+      aws:     { level:"yes",  note:"OpenAPI 3 import via console / CLI." },
+      azure:   { level:"yes",  note:"OpenAPI import + export." },
+      mulesoft:{ level:"yes",  note:"RAML preferred but OpenAPI 3 supported in Anypoint." },
+      kong:    { level:"yes",  note:"deck (decK) CLI does GitOps-style declarative config from OpenAPI." },
+      gravitee:{ level:"yes",  note:"OpenAPI import to bootstrap APIs." },
+      ibm:     { level:"yes",  note:"OpenAPI 2/3 import + export." }
+    }
+  },
+
+  // ── Pricing ──
+  { id:"free-tier", category:"pricing", name:"Free tier (production-grade)",
+    desc:"Can you actually ship a small product without paying? Some vendors say 'free' but limit so harshly it's effectively a trial.",
+    support: {
+      apigee:  { level:"part", note:"Evaluation org only; production needs paid plan ($$$)." },
+      aws:     { level:"yes",  note:"Pay-per-request, first 1M REST calls/month free for 12 months." },
+      azure:   { level:"yes",  note:"Consumption tier is pay-per-call; Developer tier is cheap." },
+      mulesoft:{ level:"no",   note:"No real free tier — trial only." },
+      kong:    { level:"yes",  note:"Kong OSS is fully free, including production use." },
+      gravitee:{ level:"yes",  note:"OSS edition is feature-rich and production-grade." },
+      ibm:     { level:"no",   note:"No free tier — trial only via IBM Cloud lite." }
+    }
+  },
+  { id:"oss", category:"pricing", name:"True open-source edition",
+    desc:"Apache 2 / MIT / similar permissive license, with a viable production path on the OSS edition alone.",
+    support: {
+      apigee:  { level:"no",   note:"Closed source." },
+      aws:     { level:"no",   note:"Closed source SaaS." },
+      azure:   { level:"no",   note:"Closed source SaaS." },
+      mulesoft:{ level:"no",   note:"Closed source (some SDK pieces OSS)." },
+      kong:    { level:"yes",  note:"Apache 2 — the OSS gateway is fully featured." },
+      gravitee:{ level:"yes",  note:"Apache 2 — full APIM stack open-source." },
+      ibm:     { level:"no",   note:"Closed source." }
+    }
+  },
+  { id:"per-call", category:"pricing", name:"Pay-per-call pricing model",
+    desc:"Linear scaling with traffic (rather than seats / instances / enterprise contracts).",
+    support: {
+      apigee:  { level:"part", note:"Standard / Enterprise tiers are seat / capacity based, not pay-per-call." },
+      aws:     { level:"yes",  note:"Pure pay-per-request: ~$3.50 / million calls (REST)." },
+      azure:   { level:"yes",  note:"Consumption tier is pay-per-call." },
+      mulesoft:{ level:"no",   note:"Enterprise contract, vCore / Flex Replica based." },
+      kong:    { level:"part", note:"Konnect SaaS pricing has request-based component." },
+      gravitee:{ level:"part", note:"Enterprise license + support; OSS is free." },
+      ibm:     { level:"no",   note:"Enterprise license, not per-call." }
+    }
+  },
+
+  // ── Compliance ──
+  { id:"fedramp", category:"compliance", name:"FedRAMP compliance",
+    desc:"Required for US federal agency workloads. Lengthy authorization process — vendors that have it have it.",
+    support: {
+      apigee:  { level:"yes",  note:"FedRAMP Moderate via Google Cloud." },
+      aws:     { level:"yes",  note:"FedRAMP High via AWS GovCloud." },
+      azure:   { level:"yes",  note:"FedRAMP High via Azure Government." },
+      mulesoft:{ level:"yes",  note:"FedRAMP Moderate authorization." },
+      kong:    { level:"part", note:"Kong runs in FedRAMP environments via customer's account; Konnect not directly FedRAMP." },
+      gravitee:{ level:"no",   note:"Not FedRAMP authorized." },
+      ibm:     { level:"yes",  note:"FedRAMP via IBM Cloud for Government." }
+    }
+  },
+  { id:"hipaa", category:"compliance", name:"HIPAA-eligible",
+    desc:"BAA available; can be used for PHI workloads. Healthcare and adjacent industries.",
+    support: {
+      apigee:  { level:"yes",  note:"HIPAA-eligible via Google Cloud BAA." },
+      aws:     { level:"yes",  note:"HIPAA-eligible via AWS BAA." },
+      azure:   { level:"yes",  note:"HIPAA BAA available." },
+      mulesoft:{ level:"yes",  note:"BAA available via Salesforce." },
+      kong:    { level:"yes",  note:"Konnect has SOC 2; HIPAA via self-hosted in BAA-eligible cloud." },
+      gravitee:{ level:"part", note:"Self-hosted in BAA-eligible cloud OK; SaaS not directly BAA'd." },
+      ibm:     { level:"yes",  note:"BAA available via IBM Cloud." }
+    }
+  },
+  { id:"soc2", category:"compliance", name:"SOC 2 Type II",
+    desc:"Annual SOC 2 attestation. Table stakes for most B2B SaaS sales.",
+    support: {
+      apigee:  { level:"yes",  note:"Via Google Cloud." },
+      aws:     { level:"yes",  note:"Via AWS." },
+      azure:   { level:"yes",  note:"Via Microsoft Azure." },
+      mulesoft:{ level:"yes",  note:"Salesforce SOC 2." },
+      kong:    { level:"yes",  note:"Konnect SOC 2 Type II." },
+      gravitee:{ level:"yes",  note:"SOC 2 Type II since 2022." },
+      ibm:     { level:"yes",  note:"Via IBM Cloud." }
+    }
+  }
+];
+
+// ───────────────────────────────────────────────────────────────────
+// STATE + RENDER
+// ───────────────────────────────────────────────────────────────────
+const state = {
+  vendors: new Set(VENDORS.map(v => v.key)),
+  category: "all",
+  query: ""
+};
+
+const $ = (s) => document.querySelector(s);
+const $$ = (s) => Array.from(document.querySelectorAll(s));
+
+function init() {
+  // Counts
+  $("#count-features").textContent = FEATURES.length;
+  const stars = FEATURES.reduce((acc, f) => acc + Object.values(f.support).filter(s => s.note && s.note.length > 0).length, 0);
+  $("#count-stars").textContent = stars;
+
+  // Category chips
+  const catChips = $("#cat-chips");
+  catChips.innerHTML = `<span class="filter-chips__label">Category</span>
+    <button class="chip is-active" data-cat="all">All</button>` +
+    CATEGORIES.map(c => `<button class="chip" data-cat="${c.key}">${c.label}</button>`).join("");
+
+  // Vendor chips
+  const vChips = $("#vendor-chips");
+  vChips.innerHTML = `<span class="filter-chips__label">Vendors</span>
+    <button class="chip is-active" data-v="all">All</button>` +
+    VENDORS.map(v => `<button class="chip" data-v="${v.key}"><span class="swatch" style="background:${v.swatch}"></span>${v.short}</button>`).join("");
+
+  renderMatrix();
+  wireEvents();
+}
+
+function renderMatrix() {
+  const table = $("#matrix");
+  let html = "<thead><tr>";
+  html += '<th class="feature-col">Capability</th>';
+  VENDORS.forEach(v => {
+    html += `<th class="col-${v.key}"><span class="vendor-tag"><span class="swatch" style="background:${v.swatch}"></span>${v.short}</span></th>`;
+  });
+  html += "</tr></thead><tbody>";
+
+  CATEGORIES.forEach(cat => {
+    const features = FEATURES.filter(f => f.category === cat.key);
+    if (features.length === 0) return;
+    html += `<tr class="category-row" data-cat="${cat.key}"><td colspan="${VENDORS.length + 1}"><span class="cat-label">▸ ${cat.label}</span></td></tr>`;
+    features.forEach(f => {
+      html += `<tr class="feature-row" data-feature="${f.id}" data-cat="${cat.key}">`;
+      html += `<td class="feature-col" data-action="open-feature">${f.name}</td>`;
+      VENDORS.forEach(v => {
+        const s = f.support[v.key] || { level: "no", note: "" };
+        const sym = s.level === "yes" ? "✓" : s.level === "part" ? "◐" : "✗";
+        const hasNote = s.note && s.note.length > 0;
+        html += `<td class="cell col-${v.key}" data-feature="${f.id}" data-vendor="${v.key}">`;
+        html += `<span class="cell-mark cell-mark--${s.level}">${sym}${hasNote ? '<span class="cell-mark__star">*</span>' : ''}</span>`;
+        html += `</td>`;
+      });
+      html += `</tr>`;
+    });
+  });
+
+  html += "</tbody>";
+  table.innerHTML = html;
+  applyFilter();
+}
+
+function applyFilter() {
+  const q = state.query.trim().toLowerCase();
+  const table = $("#matrix");
+
+  // Vendor visibility (via class on table)
+  VENDORS.forEach(v => {
+    table.classList.toggle(`hide-${v.key}`, !state.vendors.has(v.key));
+  });
+
+  // Row visibility
+  $$(".matrix tbody tr.feature-row").forEach(row => {
+    const f = FEATURES.find(x => x.id === row.dataset.feature);
+    if (!f) return;
+    let matches = state.category === "all" || f.category === state.category;
+    if (matches && q) {
+      const hay = `${f.name} ${f.desc} ${f.category}`.toLowerCase();
+      matches = hay.includes(q);
+    }
+    row.classList.toggle("is-hidden", !matches);
+  });
+
+  // Hide category rows that have no visible features
+  CATEGORIES.forEach(cat => {
+    const visible = $$(`.matrix tbody tr.feature-row[data-cat="${cat.key}"]`).some(r => !r.classList.contains("is-hidden"));
+    const catRow = $(`.matrix tbody tr.category-row[data-cat="${cat.key}"]`);
+    if (catRow) catRow.classList.toggle("is-hidden", !visible);
+  });
+}
+
+// ─── Drawer ───
+function openDrawer() {
+  $("#drawer-backdrop").classList.add("is-open");
+  $("#drawer").classList.add("is-open");
+  $("#drawer").setAttribute("aria-hidden", "false");
+}
+function closeDrawer() {
+  $("#drawer-backdrop").classList.remove("is-open");
+  $("#drawer").classList.remove("is-open");
+  $("#drawer").setAttribute("aria-hidden", "true");
+}
+
+function openFeatureDrawer(feature, focusVendor) {
+  $("#drawer-head").innerHTML = `
+    <div class="drawer__eyebrow">${(CATEGORIES.find(c => c.key === feature.category) || {}).label || ""}</div>
+    <h3 class="drawer__title">${feature.name}</h3>
+    <p class="drawer__desc">${feature.desc}</p>
+    <button class="drawer__close" onclick="closeDrawer()">Close ⤬</button>
+  `;
+  const body = VENDORS.map(v => {
+    const s = feature.support[v.key] || { level: "no", note: "" };
+    const sym = s.level === "yes" ? "✓" : s.level === "part" ? "◐" : "✗";
+    const isFocus = focusVendor === v.key;
+    return `<div class="vendor-row" ${isFocus ? 'style="border-color: var(--accent); background: rgba(255,120,73,0.05);"' : ''}>
+      <span class="vendor-row__mark vendor-row__mark--${s.level}">${sym}</span>
+      <div>
+        <div class="vendor-row__name"><span class="swatch" style="background:${v.swatch}"></span>${v.name}</div>
+        <div class="vendor-row__note">${s.note || (s.level === "no" ? "Not supported." : "—")}</div>
+      </div>
+      <span></span>
+    </div>`;
+  }).join("");
+  $("#drawer-body").innerHTML = `<div class="drawer__section"><h4>Per-vendor support</h4>${body}</div>`;
+  openDrawer();
+}
+
+function wireEvents() {
+  // Category chips
+  document.addEventListener("click", (e) => {
+    const c = e.target.closest(".chip[data-cat]");
+    if (c) {
+      state.category = c.dataset.cat;
+      $$('.chip[data-cat]').forEach(b => b.classList.toggle("is-active", b.dataset.cat === state.category));
+      applyFilter();
+      return;
+    }
+    const v = e.target.closest(".chip[data-v]");
+    if (v) {
+      const key = v.dataset.v;
+      if (key === "all") {
+        state.vendors = new Set(VENDORS.map(x => x.key));
+        $$('.chip[data-v]').forEach(b => b.classList.toggle("is-active", b.dataset.v === "all"));
+      } else {
+        if ($('.chip[data-v="all"]').classList.contains("is-active")) {
+          state.vendors = new Set([key]);
+          $$('.chip[data-v]').forEach(b => b.classList.toggle("is-active", b.dataset.v === key));
+        } else {
+          if (state.vendors.has(key) && state.vendors.size === 1) {
+            state.vendors = new Set(VENDORS.map(x => x.key));
+            $$('.chip[data-v]').forEach(b => b.classList.toggle("is-active", b.dataset.v === "all"));
+          } else {
+            state.vendors.has(key) ? state.vendors.delete(key) : state.vendors.add(key);
+            v.classList.toggle("is-active");
+            $('.chip[data-v="all"]').classList.remove("is-active");
+          }
+        }
+      }
+      applyFilter();
+      return;
+    }
+    const cell = e.target.closest("td.cell");
+    if (cell) {
+      const f = FEATURES.find(x => x.id === cell.dataset.feature);
+      if (f) openFeatureDrawer(f, cell.dataset.vendor);
+      return;
+    }
+    const featureCol = e.target.closest("td.feature-col[data-action='open-feature']");
+    if (featureCol) {
+      const row = featureCol.closest("tr.feature-row");
+      const f = FEATURES.find(x => x.id === row.dataset.feature);
+      if (f) openFeatureDrawer(f, null);
+      return;
+    }
+  });
+
+  $("#drawer-backdrop").addEventListener("click", closeDrawer);
+  $("#search").addEventListener("input", (e) => {
+    state.query = e.target.value;
+    applyFilter();
+  });
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") closeDrawer();
+    if (e.key === "/" && e.target.tagName !== "INPUT") { e.preventDefault(); $("#search").focus(); }
+  });
+}
+
+init();
+</script>
+</body>
+</html>

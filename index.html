@@ -1,0 +1,1150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Infra Atlas — A reference for the infrastructure stack</title>
+<meta name="description" content="Infra Atlas is an open reference for cloud and API management infrastructure — across AWS, Azure, GCP, OCI, OVH, and every major APIM vendor. Cross-referenced, updated daily, free to read.">
+<meta property="og:title" content="Infra Atlas">
+<meta property="og:description" content="A reference for the infrastructure stack. Multi-cloud regions, instance types, API gateway features — cross-referenced and updated daily.">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary_large_image">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@300;400;500;600&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+:root {
+  --ink: #0A0907;
+  --ink-2: #100E0C;
+  --surface: #161310;
+  --surface-2: #1E1A15;
+  --surface-3: #2A241C;
+  --line: rgba(244, 239, 230, 0.06);
+  --line-2: rgba(244, 239, 230, 0.14);
+  --line-3: rgba(244, 239, 230, 0.28);
+  --paper: #F4EFE6;
+  --paper-2: rgba(244, 239, 230, 0.66);
+  --paper-3: rgba(244, 239, 230, 0.42);
+  --paper-4: rgba(244, 239, 230, 0.20);
+  --accent: #FF7849;
+  --accent-2: #FFA66E;
+  --accent-glow: rgba(255, 120, 73, 0.22);
+  --mint: #6FE7B5;
+  --gold: #F4C660;
+  --plum: #C586E8;
+  --sky: #7CD7F1;
+  --rose: #F47B7B;
+  --serif: 'Instrument Serif', 'Times New Roman', serif;
+  --mono: 'JetBrains Mono', ui-monospace, monospace;
+  --sans: 'Manrope', -apple-system, system-ui, sans-serif;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body {
+  background: var(--ink);
+  color: var(--paper);
+  font-family: var(--sans);
+  font-size: 15px;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  min-height: 100vh;
+}
+
+body {
+  background:
+    radial-gradient(ellipse at 100% -10%, rgba(255, 120, 73, 0.07), transparent 55%),
+    radial-gradient(ellipse at -10% 110%, rgba(124, 215, 241, 0.05), transparent 65%),
+    var(--ink);
+  background-attachment: fixed;
+  overflow-x: hidden;
+}
+
+.grain {
+  pointer-events: none;
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  opacity: 0.08;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml;utf8,<svg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.6 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+}
+
+.scanlines {
+  pointer-events: none;
+  position: fixed;
+  inset: 0;
+  z-index: 99;
+  background: repeating-linear-gradient(
+    180deg,
+    transparent,
+    transparent 2px,
+    rgba(244,239,230,0.012) 2px,
+    rgba(244,239,230,0.012) 3px
+  );
+}
+
+::selection { background: var(--accent); color: var(--ink); }
+
+.corner-mark {
+  position: fixed;
+  width: 28px;
+  height: 28px;
+  z-index: 5;
+  pointer-events: none;
+  opacity: 0.4;
+}
+.corner-mark::before, .corner-mark::after {
+  content: '';
+  position: absolute;
+  background: var(--paper-3);
+}
+.corner-mark::before { width: 100%; height: 1px; top: 50%; }
+.corner-mark::after  { width: 1px; height: 100%; left: 50%; }
+.corner-mark.tl { top: 28px; left: 28px; }
+.corner-mark.tr { top: 28px; right: 28px; }
+.corner-mark.bl { bottom: 28px; left: 28px; }
+.corner-mark.br { bottom: 28px; right: 28px; }
+
+.page {
+  max-width: 1340px;
+  margin: 0 auto;
+  padding: 64px 56px 96px;
+  position: relative;
+}
+
+/* ─────────────── TOP RULE ─────────────── */
+.top-rule {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 18px;
+  border-bottom: 1px solid var(--line);
+  font-family: var(--mono);
+  font-size: 10.5px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--paper-3);
+}
+
+.top-rule__mark {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--paper);
+  font-weight: 500;
+}
+
+.top-rule__mark-glyph {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  border: 1px solid var(--accent);
+  position: relative;
+}
+.top-rule__mark-glyph::before {
+  content: '';
+  position: absolute;
+  inset: 4px;
+  border-radius: 50%;
+  background: var(--accent);
+}
+
+.top-rule__center { text-align: center; }
+
+.top-rule__sync {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--mint);
+}
+.top-rule__sync .pulse {
+  width: 7px; height: 7px; border-radius: 50%;
+  background: var(--mint);
+  animation: pulse 2.4s infinite;
+}
+@keyframes pulse {
+  0% { box-shadow: 0 0 0 0 rgba(111,231,181,0.5); }
+  70% { box-shadow: 0 0 0 12px rgba(111,231,181,0); }
+  100% { box-shadow: 0 0 0 0 rgba(111,231,181,0); }
+}
+
+/* ─────────────── HERO ─────────────── */
+.hero {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr;
+  gap: 80px;
+  padding: 80px 0 90px;
+  border-bottom: 1px solid var(--line);
+  align-items: end;
+}
+
+.hero__eyebrow {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--accent);
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 24px;
+}
+.hero__eyebrow::before {
+  content: '';
+  width: 28px;
+  height: 1px;
+  background: var(--accent);
+}
+
+.hero__title {
+  font-family: var(--serif);
+  font-weight: 400;
+  font-size: clamp(72px, 12vw, 184px);
+  line-height: 0.88;
+  letter-spacing: -0.025em;
+  color: var(--paper);
+}
+.hero__title em {
+  font-style: italic;
+  color: var(--accent);
+  display: block;
+  margin-left: 0.08em;
+}
+
+.hero__lead {
+  max-width: 580px;
+  margin-top: 32px;
+  font-family: var(--sans);
+  font-size: 18px;
+  line-height: 1.55;
+  color: var(--paper-2);
+}
+.hero__lead em {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 22px;
+  color: var(--paper);
+}
+
+.hero__status {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  padding-bottom: 18px;
+}
+
+.hero__stat {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 18px;
+  padding: 18px 0;
+  border-bottom: 1px dashed var(--line);
+  align-items: baseline;
+}
+.hero__stat:first-child { padding-top: 0; }
+.hero__stat:last-child { border-bottom: 0; padding-bottom: 0; }
+
+.hero__stat-label {
+  font-family: var(--mono);
+  font-size: 10.5px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--paper-3);
+  line-height: 1.45;
+}
+
+.hero__stat-value {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 44px;
+  font-weight: 400;
+  line-height: 1;
+  letter-spacing: -0.015em;
+  color: var(--paper);
+}
+.hero__stat-value .unit {
+  font-family: var(--mono);
+  font-style: normal;
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--paper-3);
+  margin-left: 4px;
+}
+
+/* ─────────────── PROVIDERS STRIP ─────────────── */
+.providers {
+  padding: 56px 0;
+  border-bottom: 1px solid var(--line);
+  display: grid;
+  grid-template-columns: 220px 1fr;
+  gap: 48px;
+  align-items: center;
+}
+
+.providers__label {
+  font-family: var(--mono);
+  font-size: 10.5px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--paper-3);
+}
+.providers__label strong {
+  display: block;
+  font-family: var(--serif);
+  font-style: italic;
+  font-weight: 400;
+  font-size: 16px;
+  letter-spacing: 0;
+  text-transform: none;
+  color: var(--paper);
+  margin-top: 4px;
+}
+
+.providers__list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 12px;
+  align-items: center;
+}
+
+.provider {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  color: var(--paper-2);
+  padding: 7px 13px;
+  border: 1px solid var(--line-2);
+  border-radius: 99px;
+  background: var(--surface);
+}
+
+.provider__glyph {
+  width: 8px;
+  height: 8px;
+  border-radius: 1px;
+}
+
+.provider--divider {
+  border: 0;
+  background: transparent;
+  color: var(--paper-4);
+  padding: 0 4px;
+}
+
+/* ─────────────── MANIFESTO ─────────────── */
+.manifesto {
+  display: grid;
+  grid-template-columns: 220px 1fr;
+  gap: 80px;
+  padding: 96px 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.manifesto__label {
+  font-family: var(--mono);
+  font-size: 10.5px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--paper-3);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.manifesto__label strong {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 16px;
+  letter-spacing: 0;
+  text-transform: none;
+  color: var(--paper);
+  font-weight: 400;
+}
+
+.manifesto__body { max-width: 720px; }
+
+.manifesto__body p {
+  font-size: 19px;
+  line-height: 1.65;
+  color: var(--paper);
+  margin-bottom: 22px;
+  font-weight: 300;
+}
+.manifesto__body p:last-child { margin-bottom: 0; color: var(--paper-2); font-size: 16px; }
+.manifesto__body em {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 1.12em;
+  color: var(--paper);
+}
+
+.manifesto__body .dropcap {
+  font-family: var(--serif);
+  font-size: 92px;
+  line-height: 0.82;
+  float: left;
+  margin: 6px 14px 0 -2px;
+  color: var(--accent);
+  font-style: italic;
+  font-weight: 400;
+}
+
+.manifesto__body code {
+  font-family: var(--mono);
+  font-size: 0.9em;
+  color: var(--accent-2);
+  background: var(--surface);
+  padding: 1px 6px;
+  border-radius: 2px;
+  border: 1px solid var(--line);
+}
+
+/* ─────────────── INSTRUMENTS ─────────────── */
+.instruments {
+  padding: 96px 0 64px;
+}
+
+.section-head {
+  display: grid;
+  grid-template-columns: 220px 1fr auto;
+  gap: 40px;
+  align-items: baseline;
+  margin-bottom: 56px;
+  padding-bottom: 22px;
+  border-bottom: 1px solid var(--line);
+}
+
+.section-head__num {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 64px;
+  font-weight: 400;
+  line-height: 0.9;
+  color: var(--paper-3);
+  letter-spacing: -0.02em;
+}
+
+.section-head__title {
+  font-family: var(--serif);
+  font-size: 42px;
+  font-weight: 400;
+  letter-spacing: -0.015em;
+}
+.section-head__title em { font-style: italic; color: var(--accent); }
+
+.section-head__meta {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--paper-3);
+  text-align: right;
+}
+.section-head__meta strong { color: var(--paper); font-weight: 500; }
+
+.department {
+  margin-top: 56px;
+  display: grid;
+  grid-template-columns: 220px 1fr;
+  gap: 48px;
+  padding-top: 36px;
+  border-top: 1px dashed var(--line);
+}
+.department:first-of-type { margin-top: 0; border-top: 0; padding-top: 0; }
+
+.department__title {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  position: sticky;
+  top: 32px;
+  height: max-content;
+}
+
+.department__kicker {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--paper-3);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.department__kicker .dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+.department[data-dept="cloud"] .department__kicker .dot { background: var(--sky); }
+.department[data-dept="apim"]  .department__kicker .dot { background: var(--gold); }
+
+.department__name {
+  font-family: var(--serif);
+  font-size: 36px;
+  font-weight: 400;
+  line-height: 1;
+  letter-spacing: -0.012em;
+  color: var(--paper);
+}
+.department__name em { font-style: italic; color: var(--accent); }
+
+.department__desc {
+  font-family: var(--sans);
+  font-size: 13px;
+  color: var(--paper-3);
+  line-height: 1.55;
+  max-width: 200px;
+}
+
+.department__items { display: flex; flex-direction: column; }
+
+.instrument {
+  display: grid;
+  grid-template-columns: 44px 1fr 220px;
+  gap: 30px;
+  padding: 26px 0;
+  border-bottom: 1px solid var(--line);
+  transition: background 0.2s ease;
+  position: relative;
+  cursor: default;
+  text-decoration: none;
+  color: inherit;
+}
+.instrument:first-child { padding-top: 0; }
+
+.instrument.is-live { cursor: pointer; }
+
+.instrument.is-live:hover {
+  background: linear-gradient(90deg, transparent, rgba(255,120,73,0.04) 50%, transparent);
+}
+.instrument.is-live:hover .instrument__title em {
+  color: var(--accent);
+}
+.instrument.is-live:hover .instrument__cta {
+  color: var(--accent);
+  gap: 14px;
+}
+
+.instrument__num {
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--paper-3);
+  letter-spacing: 0.06em;
+  padding-top: 6px;
+}
+
+.instrument__main {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.instrument__head {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.instrument__vendor {
+  font-family: var(--mono);
+  font-size: 9.5px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--paper-3);
+  padding: 3px 8px;
+  border-radius: 2px;
+  border: 1px solid var(--line-2);
+  background: var(--surface);
+  white-space: nowrap;
+  font-weight: 500;
+}
+
+.instrument__vendor[data-v="aws"]      { color: #FF9F66; border-color: rgba(255,159,102,0.3); }
+.instrument__vendor[data-v="azure"]    { color: var(--sky); border-color: rgba(124,215,241,0.3); }
+.instrument__vendor[data-v="gcp"]      { color: var(--rose); border-color: rgba(244,123,123,0.3); }
+.instrument__vendor[data-v="oci"]      { color: #E26464; border-color: rgba(226,100,100,0.3); }
+.instrument__vendor[data-v="ovh"]      { color: var(--plum); border-color: rgba(197,134,232,0.3); }
+.instrument__vendor[data-v="multi"]    { color: var(--mint); border-color: rgba(111,231,181,0.3); }
+.instrument__vendor[data-v="apim"]     { color: var(--gold); border-color: rgba(244,198,96,0.3); }
+.instrument__vendor[data-v="apigee"]   { color: var(--gold); border-color: rgba(244,198,96,0.3); }
+.instrument__vendor[data-v="mulesoft"] { color: #C586E8; border-color: rgba(197,134,232,0.3); }
+
+.instrument__title {
+  font-family: var(--serif);
+  font-size: 30px;
+  font-weight: 400;
+  letter-spacing: -0.012em;
+  line-height: 1;
+  color: var(--paper);
+  transition: color 0.2s ease;
+}
+.instrument__title em {
+  font-style: italic;
+  transition: color 0.2s ease;
+}
+
+.instrument__status {
+  font-family: var(--mono);
+  font-size: 9.5px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  padding: 4px 10px;
+  border-radius: 99px;
+  border: 1px solid var(--line-2);
+  margin-left: auto;
+}
+
+.instrument__status.is-live {
+  color: var(--mint);
+  border-color: rgba(111,231,181,0.4);
+  background: rgba(111,231,181,0.05);
+}
+.instrument__status.is-dev {
+  color: var(--gold);
+  border-color: rgba(244,198,96,0.3);
+  background: rgba(244,198,96,0.04);
+}
+.instrument__status.is-planned { color: var(--paper-3); }
+
+.instrument__desc {
+  font-size: 14.5px;
+  color: var(--paper-2);
+  line-height: 1.6;
+  max-width: 600px;
+}
+.instrument__desc em {
+  font-family: var(--serif);
+  font-style: italic;
+  color: var(--paper);
+  font-size: 1.08em;
+}
+
+.instrument__tags {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--paper-3);
+  margin-top: 2px;
+}
+.instrument__tags span:not(:last-child)::after {
+  content: '·';
+  margin-left: 12px;
+  color: var(--line-3);
+}
+
+.instrument__side {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: flex-end;
+  gap: 18px;
+  padding-top: 6px;
+}
+
+.instrument__cta {
+  font-family: var(--mono);
+  font-size: 12px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--paper-2);
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  transition: gap 0.2s ease, color 0.2s ease;
+}
+.instrument__cta.is-disabled {
+  color: var(--paper-4);
+  cursor: not-allowed;
+}
+.instrument__cta-arrow {
+  font-family: var(--mono);
+  color: var(--accent);
+}
+.instrument__cta.is-disabled .instrument__cta-arrow {
+  color: var(--paper-4);
+}
+
+.instrument.is-planned { opacity: 0.55; }
+.instrument.is-planned .instrument__title { color: var(--paper-2); }
+
+/* ─────────────── COLOPHON ─────────────── */
+.colophon {
+  display: grid;
+  grid-template-columns: 220px 1fr 1fr 1fr;
+  gap: 40px;
+  padding: 64px 0 32px;
+  margin-top: 64px;
+  border-top: 1px solid var(--line);
+}
+
+.colophon__head {
+  font-family: var(--mono);
+  font-size: 10.5px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--paper-3);
+}
+
+.colophon__col h5 {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--paper-2);
+  font-weight: 500;
+  margin-bottom: 12px;
+}
+
+.colophon__col p {
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--paper-3);
+}
+.colophon__col p a {
+  color: var(--paper-2);
+  text-decoration: underline;
+  text-decoration-color: var(--line-2);
+  text-underline-offset: 3px;
+  transition: color 0.15s ease;
+}
+.colophon__col p a:hover { color: var(--accent); }
+
+.colophon__col p code {
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--accent-2);
+  background: var(--surface);
+  padding: 1px 6px;
+  border-radius: 2px;
+  border: 1px solid var(--line);
+}
+
+.signature {
+  margin-top: 64px;
+  text-align: center;
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 22px;
+  color: var(--paper-3);
+  letter-spacing: -0.01em;
+}
+.signature::before, .signature::after {
+  content: '✦';
+  margin: 0 12px;
+  color: var(--accent);
+  font-size: 14px;
+  vertical-align: middle;
+  font-style: normal;
+}
+
+@media (max-width: 980px) {
+  .page { padding: 36px 24px 64px; }
+  .corner-mark { display: none; }
+  .hero { grid-template-columns: 1fr; gap: 48px; padding: 56px 0; }
+  .providers { grid-template-columns: 1fr; gap: 16px; padding: 36px 0; }
+  .manifesto { grid-template-columns: 1fr; gap: 24px; padding: 64px 0; }
+  .section-head { grid-template-columns: 1fr; gap: 16px; }
+  .section-head__num { font-size: 44px; }
+  .section-head__title { font-size: 32px; }
+  .department { grid-template-columns: 1fr; gap: 18px; }
+  .department__title { position: static; }
+  .instrument { grid-template-columns: 1fr; gap: 14px; padding: 24px 0; }
+  .instrument__num { padding-top: 0; }
+  .instrument__side { align-items: flex-start; flex-direction: row; justify-content: flex-start; }
+  .colophon { grid-template-columns: 1fr; gap: 28px; }
+}
+</style>
+</head>
+<body>
+
+<div class="grain"></div>
+<div class="scanlines"></div>
+<div class="corner-mark tl"></div>
+<div class="corner-mark tr"></div>
+<div class="corner-mark bl"></div>
+<div class="corner-mark br"></div>
+
+<div class="page">
+
+  <div class="top-rule">
+    <div class="top-rule__mark">
+      <span class="top-rule__mark-glyph"></span>
+      Infra Atlas
+    </div>
+    <div class="top-rule__center">Issue No. 01 · A reference for the infrastructure stack</div>
+    <div class="top-rule__sync">
+      <span class="pulse"></span>
+      Synced 14 May 2026 · 06:00 UTC
+    </div>
+  </div>
+
+  <!-- ───────── HERO ───────── -->
+  <section class="hero">
+    <div class="hero__brand">
+      <div class="hero__eyebrow">A New Periodical of Infrastructure</div>
+      <h1 class="hero__title">Infra<em>Atlas.</em></h1>
+      <p class="hero__lead">
+        Reference data for the infrastructure stack — <em>cloud regions, instance types, API gateways, service quotas</em> — cross-referenced across every major vendor and laid out the way the documentation always should have been. Free, open, and updated daily from the source.
+      </p>
+    </div>
+    <aside class="hero__status">
+      <div class="hero__stat">
+        <div class="hero__stat-label">Instruments<br>shipping today</div>
+        <div class="hero__stat-value">11<span class="unit">/ 11</span></div>
+      </div>
+      <div class="hero__stat">
+        <div class="hero__stat-label">Cloud providers<br>tracked</div>
+        <div class="hero__stat-value">5</div>
+      </div>
+      <div class="hero__stat">
+        <div class="hero__stat-label">APIM platforms<br>compared</div>
+        <div class="hero__stat-value">7</div>
+      </div>
+      <div class="hero__stat">
+        <div class="hero__stat-label">Cost to<br>read</div>
+        <div class="hero__stat-value">€0</div>
+      </div>
+    </aside>
+  </section>
+
+  <!-- ───────── PROVIDERS STRIP ───────── -->
+  <section class="providers">
+    <div class="providers__label">
+      Tracked vendors
+      <strong>Across the stack</strong>
+    </div>
+    <div class="providers__list">
+      <span class="provider"><span class="provider__glyph" style="background:#FF9F66"></span>AWS</span>
+      <span class="provider"><span class="provider__glyph" style="background:var(--sky)"></span>Azure</span>
+      <span class="provider"><span class="provider__glyph" style="background:var(--rose)"></span>Google Cloud</span>
+      <span class="provider"><span class="provider__glyph" style="background:#E26464"></span>Oracle Cloud</span>
+      <span class="provider"><span class="provider__glyph" style="background:var(--plum)"></span>OVHcloud</span>
+      <span class="provider provider--divider">/</span>
+      <span class="provider"><span class="provider__glyph" style="background:var(--gold)"></span>Apigee</span>
+      <span class="provider"><span class="provider__glyph" style="background:#C586E8"></span>Mulesoft</span>
+      <span class="provider"><span class="provider__glyph" style="background:#FF9F66"></span>AWS API Gateway</span>
+      <span class="provider"><span class="provider__glyph" style="background:var(--sky)"></span>Azure APIM</span>
+      <span class="provider"><span class="provider__glyph" style="background:var(--mint)"></span>Kong</span>
+      <span class="provider"><span class="provider__glyph" style="background:var(--accent-2)"></span>Gravitee</span>
+      <span class="provider"><span class="provider__glyph" style="background:var(--paper-2)"></span>IBM API Connect</span>
+    </div>
+  </section>
+
+  <!-- ───────── MANIFESTO ───────── -->
+  <section class="manifesto">
+    <div class="manifesto__label">
+      <strong>A note from the cartographer</strong>
+      <span>—</span>
+      <span>Editor's letter · Issue 01</span>
+    </div>
+    <div class="manifesto__body">
+      <p>
+        <span class="dropcap">M</span>ost infrastructure reference data lives in three places: deep inside vendor documentation pages that change paths every two months, scattered across spreadsheets in engineering Notion workspaces, and trapped in the heads of senior engineers who've memorized it by accident. None of those places are searchable. None of them are cross-referenced. None of them are quick.
+      </p>
+      <p>
+        <em>Infra Atlas</em> is the version that should have existed all along. Pull up a region — see every instance type across AWS, Azure, GCP, OCI and OVH. Pull up an API gateway capability — see which vendors support it, where the asterisks hide, and what it actually costs once you exit the marketing page. Cross-reference, filter, share. Then close the tab and get back to building.
+      </p>
+      <p>
+        Each instrument refreshes daily from public APIs and curated vendor documentation. The source is open. Corrections welcome at <code>github.com/infraatlas</code>.
+      </p>
+    </div>
+  </section>
+
+  <!-- ───────── INSTRUMENTS ───────── -->
+  <section class="instruments">
+    <header class="section-head">
+      <div class="section-head__num">01</div>
+      <div class="section-head__title">The <em>Instruments</em></div>
+      <div class="section-head__meta">
+        <strong>11</strong> Live · <strong>0</strong> In Dev · <strong>0</strong> Planned
+      </div>
+    </header>
+
+    <!-- ───── DEPARTMENT I: CLOUD COMPUTE ───── -->
+    <div class="department" data-dept="cloud">
+      <div class="department__title">
+        <div class="department__kicker"><span class="dot"></span>Department I</div>
+        <div class="department__name">Cloud <em>Compute</em></div>
+        <p class="department__desc">Regions, instance types, and the geography behind every hyperscaler.</p>
+      </div>
+      <div class="department__items">
+
+        <a class="instrument is-live" href="./ec2/">
+          <div class="instrument__num">01</div>
+          <div class="instrument__main">
+            <div class="instrument__head">
+              <span class="instrument__vendor" data-v="aws">AWS</span>
+              <h3 class="instrument__title">EC2 <em>Observatory</em></h3>
+              <span class="instrument__status is-live">● Live</span>
+            </div>
+            <p class="instrument__desc">
+              <em>The instrument that started it all.</em> Cross-reference Amazon EC2 instance types against AWS regions. Filter by family, architecture, vendor. See which regions offer your instance type — and which instance types live in your region.
+            </p>
+            <div class="instrument__tags">
+              <span>32 regions</span><span>~700 types</span><span>x86 + arm64</span><span>Daily refresh</span>
+            </div>
+          </div>
+          <div class="instrument__side">
+            <div class="instrument__cta"><span>Open</span><span class="instrument__cta-arrow">→</span></div>
+          </div>
+        </a>
+
+        <a class="instrument is-live" href="./regions/">
+          <div class="instrument__num">02</div>
+          <div class="instrument__main">
+            <div class="instrument__head">
+              <span class="instrument__vendor" data-v="multi">MULTI</span>
+              <h3 class="instrument__title">Multi-Cloud <em>Region Map</em></h3>
+              <span class="instrument__status is-live">● Live</span>
+            </div>
+            <p class="instrument__desc">
+              Every region from every provider on a single chart. <em>Where is closest to your users — really?</em> Surface clusters, compare hyperscaler geographies, and see the actual market overlap at a glance.
+            </p>
+            <div class="instrument__tags">
+              <span>5 providers</span><span>~95 cities</span><span>~150 regions</span><span>Equirectangular chart</span>
+            </div>
+          </div>
+          <div class="instrument__side">
+            <div class="instrument__cta"><span>Open</span><span class="instrument__cta-arrow">→</span></div>
+          </div>
+        </a>
+
+        <a class="instrument is-live" href="./azure-vm/">
+          <div class="instrument__num">03</div>
+          <div class="instrument__main">
+            <div class="instrument__head">
+              <span class="instrument__vendor" data-v="azure">AZURE</span>
+              <h3 class="instrument__title">VM <em>Atlas</em></h3>
+              <span class="instrument__status is-live">● Live</span>
+            </div>
+            <p class="instrument__desc">
+              Azure VM sizes by region — the EC2 Observatory equivalent for the Microsoft cloud. Filter by series (Dsv5, Easv5, Lasv3), arch (Intel · AMD · Ampere · Cobalt), GPU class (T4 · A10 · A100 · H100 · H200), and confidential-compute capability.
+            </p>
+            <div class="instrument__tags">
+              <span>52 regions</span><span>51 series</span><span>325 VM sizes</span><span>SGX + SEV-SNP</span>
+            </div>
+          </div>
+          <div class="instrument__side">
+            <div class="instrument__cta"><span>Open</span><span class="instrument__cta-arrow">→</span></div>
+          </div>
+        </a>
+
+        <a class="instrument is-live" href="./gcp-compute/">
+          <div class="instrument__num">04</div>
+          <div class="instrument__main">
+            <div class="instrument__head">
+              <span class="instrument__vendor" data-v="gcp">GCP</span>
+              <h3 class="instrument__title">Compute <em>Index</em></h3>
+              <span class="instrument__status is-live">● Live</span>
+            </div>
+            <p class="instrument__desc">
+              Google Cloud machine types by region — E2 (cost) · N2/N4 (Intel) · N2D/T2D (AMD) · T2A/C4A (ARM) · C2/C3/C3D/C4 (compute) · H3 (HPC) · M1–M3/X4 (memory) · A2/A3/A4/G2 (NVIDIA T4 → L4 → A100 → H100 → B200).
+            </p>
+            <div class="instrument__tags">
+              <span>41 regions</span><span>22 families</span><span>291 machine types</span><span>Intel · AMD · Ampere · Axion</span>
+            </div>
+          </div>
+          <div class="instrument__side">
+            <div class="instrument__cta"><span>Open</span><span class="instrument__cta-arrow">→</span></div>
+          </div>
+        </a>
+
+        <a class="instrument is-live" href="./oci-compute/">
+          <div class="instrument__num">05</div>
+          <div class="instrument__main">
+            <div class="instrument__head">
+              <span class="instrument__vendor" data-v="oci">ORACLE</span>
+              <h3 class="instrument__title">OCI <em>Compute Observatory</em></h3>
+              <span class="instrument__status is-live">● Live</span>
+            </div>
+            <p class="instrument__desc">
+              Oracle Cloud's shape catalogue — E5/E4 Flex (AMD) · A1/A2 Flex (ARM Ampere) · Standard3 (Intel) · DenseIO (NVMe) · BM bare metal across all vendors · HPC2 + HPC.E5 with RDMA · GPU progression V100 → A10 → A100 → H100 → B200.
+            </p>
+            <div class="instrument__tags">
+              <span>38 regions</span><span>23 shape families</span><span>VM + Bare Metal</span><span>Intel · AMD · Ampere</span>
+            </div>
+          </div>
+          <div class="instrument__side">
+            <div class="instrument__cta"><span>Open</span><span class="instrument__cta-arrow">→</span></div>
+          </div>
+        </a>
+
+        <a class="instrument is-live" href="./ovh-instances/">
+          <div class="instrument__num">06</div>
+          <div class="instrument__main">
+            <div class="instrument__head">
+              <span class="instrument__vendor" data-v="ovh">OVH</span>
+              <h3 class="instrument__title">OVH <em>Instance Catalogue</em></h3>
+              <span class="instrument__status is-live">● Live</span>
+            </div>
+            <p class="instrument__desc">
+              The European alternative. Public Cloud (b3/c3/r3/i1/t-series), Bare Metal (HGR/Advance/Rise/Scale), HPC, and GPU H100 — mapped across 14 datacenters from Gravelines to Sydney. EU-sovereign by default.
+            </p>
+            <div class="instrument__tags">
+              <span>14 datacenters</span><span>15 families</span><span>73 instance types</span><span>VM + Bare Metal</span>
+            </div>
+          </div>
+          <div class="instrument__side">
+            <div class="instrument__cta"><span>Open</span><span class="instrument__cta-arrow">→</span></div>
+          </div>
+        </a>
+
+      </div>
+    </div>
+
+    <!-- ───── DEPARTMENT II: API MANAGEMENT ───── -->
+    <div class="department" data-dept="apim">
+      <div class="department__title">
+        <div class="department__kicker"><span class="dot"></span>Department II</div>
+        <div class="department__name">API <em>Management</em></div>
+        <p class="department__desc">Gateways, brokers, and the long footnotes that separate the marketing pages from production.</p>
+      </div>
+      <div class="department__items">
+
+        <a class="instrument is-live" href="./apim-matrix/">
+          <div class="instrument__num">07</div>
+          <div class="instrument__main">
+            <div class="instrument__head">
+              <span class="instrument__vendor" data-v="apim">APIM</span>
+              <h3 class="instrument__title">Feature <em>Matrix</em></h3>
+              <span class="instrument__status is-live">● Live</span>
+            </div>
+            <p class="instrument__desc">
+              <em>The cross-vendor comparator.</em> Apigee · AWS API Gateway · Azure APIM · Mulesoft · Kong · Gravitee · IBM API Connect, all on one grid. OAuth flavours, mTLS, GraphQL, rate-limiting, self-hosted, FedRAMP — with the asterisks intact and a footnote on every nuance.
+            </p>
+            <div class="instrument__tags">
+              <span>7 vendors</span><span>28 capabilities</span><span>~190 annotated cells</span><span>8 categories</span>
+            </div>
+          </div>
+          <div class="instrument__side">
+            <div class="instrument__cta"><span>Open</span><span class="instrument__cta-arrow">→</span></div>
+          </div>
+        </a>
+
+        <a class="instrument is-live" href="./aws-api-gateway/">
+          <div class="instrument__num">08</div>
+          <div class="instrument__main">
+            <div class="instrument__head">
+              <span class="instrument__vendor" data-v="aws">AWS</span>
+              <h3 class="instrument__title">API Gateway <em>Atlas</em></h3>
+              <span class="instrument__status is-live">● Live</span>
+            </div>
+            <p class="instrument__desc">
+              AWS API Gateway, demystified. REST vs HTTP vs WebSocket, the authorizer zoo, deployment modes, pricing — and the gotchas nobody explains until you hit them in production (29-second timeout, anyone?).
+            </p>
+            <div class="instrument__tags">
+              <span>REST · HTTP · WS</span><span>7 sections</span><span>Pricing breakdown</span><span>Migration paths</span>
+            </div>
+          </div>
+          <div class="instrument__side">
+            <div class="instrument__cta"><span>Open</span><span class="instrument__cta-arrow">→</span></div>
+          </div>
+        </a>
+
+        <a class="instrument is-live" href="./apigee/">
+          <div class="instrument__num">09</div>
+          <div class="instrument__main">
+            <div class="instrument__head">
+              <span class="instrument__vendor" data-v="apigee">APIGEE</span>
+              <h3 class="instrument__title">Apigee <em>Atlas</em></h3>
+              <span class="instrument__status is-live">● Live</span>
+            </div>
+            <p class="instrument__desc">
+              Apigee X, Hybrid, and Edge demystified. Policy library, Shared Flows + KVMs, environment topology, pricing tiers, migration paths — and a 12–24 month plan for getting off Edge before it sunsets.
+            </p>
+            <div class="instrument__tags">
+              <span>X · Hybrid · Edge</span><span>17 policies</span><span>Pricing tiers</span><span>5 migration paths</span>
+            </div>
+          </div>
+          <div class="instrument__side">
+            <div class="instrument__cta"><span>Open</span><span class="instrument__cta-arrow">→</span></div>
+          </div>
+        </a>
+
+        <a class="instrument is-live" href="./mulesoft/">
+          <div class="instrument__num">10</div>
+          <div class="instrument__main">
+            <div class="instrument__head">
+              <span class="instrument__vendor" data-v="mulesoft">MULESOFT</span>
+              <h3 class="instrument__title">Mulesoft <em>Atlas</em></h3>
+              <span class="instrument__status is-live">● Live</span>
+            </div>
+            <p class="instrument__desc">
+              Mulesoft Anypoint demystified. CloudHub 2.0 vs RTF vs Flex Gateway, the connector ecosystem, DataWeave (the secret weapon), pricing in vCore vs Flex Replica — and the integration platform DNA that sets it apart.
+            </p>
+            <div class="instrument__tags">
+              <span>4 deployment targets</span><span>DataWeave</span><span>~300 connectors</span><span>5 migration paths</span>
+            </div>
+          </div>
+          <div class="instrument__side">
+            <div class="instrument__cta"><span>Open</span><span class="instrument__cta-arrow">→</span></div>
+          </div>
+        </a>
+
+        <a class="instrument is-live" href="./self-hosted-apim/">
+          <div class="instrument__num">11</div>
+          <div class="instrument__main">
+            <div class="instrument__head">
+              <span class="instrument__vendor" data-v="apim">SELF-HOSTED</span>
+              <h3 class="instrument__title">Kong · Gravitee · IBM <em>Almanac</em></h3>
+              <span class="instrument__status is-live">● Live</span>
+            </div>
+            <p class="instrument__desc">
+              The three self-hostable contenders compared head-to-head. OSS scope, Kubernetes nativity, plugin ecosystems, total cost (license + ops + people) — and a decision tree for when to pick which (or none).
+            </p>
+            <div class="instrument__tags">
+              <span>3 vendors</span><span>OSS vs Enterprise</span><span>K8s nativity</span><span>Decision tree</span>
+            </div>
+          </div>
+          <div class="instrument__side">
+            <div class="instrument__cta"><span>Open</span><span class="instrument__cta-arrow">→</span></div>
+          </div>
+        </a>
+
+      </div>
+    </div>
+
+  </section>
+
+  <!-- ───────── COLOPHON ───────── -->
+  <footer class="colophon">
+    <div class="colophon__head">
+      <strong style="font-family: var(--serif); font-style: italic; font-size: 18px; color: var(--paper); font-weight: 400; letter-spacing: 0; text-transform: none; display: block; margin-bottom: 4px;">Colophon</strong>
+      Issue No. 01 · 2026
+    </div>
+    <div class="colophon__col">
+      <h5>The Atlas</h5>
+      <p>An open reference for the infrastructure stack. Built and maintained by independent engineers who got tired of grepping vendor documentation across five tabs.</p>
+    </div>
+    <div class="colophon__col">
+      <h5>Data</h5>
+      <p>Every instrument refreshes daily from public APIs (<code>describe-*</code>, Azure Resource Graph, GCP Compute API, etc.) and curated vendor documentation. Last sync visible on each tool. Stale data is a bug.</p>
+    </div>
+    <div class="colophon__col">
+      <h5>Contribute</h5>
+      <p>Source is MIT-licensed on <a href="#">GitHub</a>. Spotted something wrong? <a href="#">Open an issue</a>. Want to ship an instrument? <a href="#">Read the contributor guide</a>.</p>
+    </div>
+  </footer>
+
+  <div class="signature">A publication maintained at <span style="color: var(--paper);">infraatlas.dev</span></div>
+
+</div>
+
+</body>
+</html>

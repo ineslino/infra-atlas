@@ -1,0 +1,1752 @@
+{
+  "generated": "2026-05-14T20:41:06Z",
+  "provider": "azure",
+  "regions": [
+    {
+      "code": "eastus",
+      "name": "Virginia",
+      "area": "Americas",
+      "flag": "🇺🇸",
+      "since": 2010
+    },
+    {
+      "code": "eastus2",
+      "name": "Virginia",
+      "area": "Americas",
+      "flag": "🇺🇸",
+      "since": 2014
+    },
+    {
+      "code": "centralus",
+      "name": "Iowa",
+      "area": "Americas",
+      "flag": "🇺🇸",
+      "since": 2014
+    },
+    {
+      "code": "northcentralus",
+      "name": "Illinois",
+      "area": "Americas",
+      "flag": "🇺🇸",
+      "since": 2009
+    },
+    {
+      "code": "southcentralus",
+      "name": "Texas",
+      "area": "Americas",
+      "flag": "🇺🇸",
+      "since": 2014
+    },
+    {
+      "code": "westus",
+      "name": "California",
+      "area": "Americas",
+      "flag": "🇺🇸",
+      "since": 2010
+    },
+    {
+      "code": "westus2",
+      "name": "Washington",
+      "area": "Americas",
+      "flag": "🇺🇸",
+      "since": 2017
+    },
+    {
+      "code": "westus3",
+      "name": "Phoenix",
+      "area": "Americas",
+      "flag": "🇺🇸",
+      "since": 2021
+    },
+    {
+      "code": "canadacentral",
+      "name": "Toronto",
+      "area": "Americas",
+      "flag": "🇨🇦",
+      "since": 2016
+    },
+    {
+      "code": "canadaeast",
+      "name": "Quebec City",
+      "area": "Americas",
+      "flag": "🇨🇦",
+      "since": 2016
+    },
+    {
+      "code": "brazilsouth",
+      "name": "São Paulo",
+      "area": "Americas",
+      "flag": "🇧🇷",
+      "since": 2014
+    },
+    {
+      "code": "brazilsoutheast",
+      "name": "Rio de Janeiro",
+      "area": "Americas",
+      "flag": "🇧🇷",
+      "since": 2020
+    },
+    {
+      "code": "mexicocentral",
+      "name": "Querétaro",
+      "area": "Americas",
+      "flag": "🇲🇽",
+      "since": 2025
+    },
+    {
+      "code": "chilecentral",
+      "name": "Santiago",
+      "area": "Americas",
+      "flag": "🇨🇱",
+      "since": 2024
+    },
+    {
+      "code": "northeurope",
+      "name": "Dublin",
+      "area": "Europe",
+      "flag": "🇮🇪",
+      "since": 2009
+    },
+    {
+      "code": "westeurope",
+      "name": "Amsterdam",
+      "area": "Europe",
+      "flag": "🇳🇱",
+      "since": 2010
+    },
+    {
+      "code": "uksouth",
+      "name": "London",
+      "area": "Europe",
+      "flag": "🇬🇧",
+      "since": 2016
+    },
+    {
+      "code": "ukwest",
+      "name": "Cardiff",
+      "area": "Europe",
+      "flag": "🇬🇧",
+      "since": 2016
+    },
+    {
+      "code": "francecentral",
+      "name": "Paris",
+      "area": "Europe",
+      "flag": "🇫🇷",
+      "since": 2018
+    },
+    {
+      "code": "francesouth",
+      "name": "Marseille",
+      "area": "Europe",
+      "flag": "🇫🇷",
+      "since": 2018
+    },
+    {
+      "code": "germanywestcentral",
+      "name": "Frankfurt",
+      "area": "Europe",
+      "flag": "🇩🇪",
+      "since": 2020
+    },
+    {
+      "code": "germanynorth",
+      "name": "Berlin",
+      "area": "Europe",
+      "flag": "🇩🇪",
+      "since": 2020
+    },
+    {
+      "code": "switzerlandnorth",
+      "name": "Zurich",
+      "area": "Europe",
+      "flag": "🇨🇭",
+      "since": 2019
+    },
+    {
+      "code": "switzerlandwest",
+      "name": "Geneva",
+      "area": "Europe",
+      "flag": "🇨🇭",
+      "since": 2019
+    },
+    {
+      "code": "swedencentral",
+      "name": "Gävle",
+      "area": "Europe",
+      "flag": "🇸🇪",
+      "since": 2021
+    },
+    {
+      "code": "norwayeast",
+      "name": "Oslo",
+      "area": "Europe",
+      "flag": "🇳🇴",
+      "since": 2019
+    },
+    {
+      "code": "norwaywest",
+      "name": "Stavanger",
+      "area": "Europe",
+      "flag": "🇳🇴",
+      "since": 2019
+    },
+    {
+      "code": "italynorth",
+      "name": "Milan",
+      "area": "Europe",
+      "flag": "🇮🇹",
+      "since": 2023
+    },
+    {
+      "code": "spaincentral",
+      "name": "Madrid",
+      "area": "Europe",
+      "flag": "🇪🇸",
+      "since": 2024
+    },
+    {
+      "code": "polandcentral",
+      "name": "Warsaw",
+      "area": "Europe",
+      "flag": "🇵🇱",
+      "since": 2023
+    },
+    {
+      "code": "israelcentral",
+      "name": "Tel Aviv",
+      "area": "Middle East",
+      "flag": "🇮🇱",
+      "since": 2023
+    },
+    {
+      "code": "uaenorth",
+      "name": "Dubai",
+      "area": "Middle East",
+      "flag": "🇦🇪",
+      "since": 2019
+    },
+    {
+      "code": "uaecentral",
+      "name": "Abu Dhabi",
+      "area": "Middle East",
+      "flag": "🇦🇪",
+      "since": 2019
+    },
+    {
+      "code": "qatarcentral",
+      "name": "Doha",
+      "area": "Middle East",
+      "flag": "🇶🇦",
+      "since": 2022
+    },
+    {
+      "code": "southafricanorth",
+      "name": "Johannesburg",
+      "area": "Africa",
+      "flag": "🇿🇦",
+      "since": 2019
+    },
+    {
+      "code": "southafricawest",
+      "name": "Cape Town",
+      "area": "Africa",
+      "flag": "🇿🇦",
+      "since": 2019
+    },
+    {
+      "code": "eastasia",
+      "name": "Hong Kong",
+      "area": "Asia Pacific",
+      "flag": "🇭🇰",
+      "since": 2010
+    },
+    {
+      "code": "southeastasia",
+      "name": "Singapore",
+      "area": "Asia Pacific",
+      "flag": "🇸🇬",
+      "since": 2010
+    },
+    {
+      "code": "japaneast",
+      "name": "Tokyo",
+      "area": "Asia Pacific",
+      "flag": "🇯🇵",
+      "since": 2014
+    },
+    {
+      "code": "japanwest",
+      "name": "Osaka",
+      "area": "Asia Pacific",
+      "flag": "🇯🇵",
+      "since": 2014
+    },
+    {
+      "code": "koreacentral",
+      "name": "Seoul",
+      "area": "Asia Pacific",
+      "flag": "🇰🇷",
+      "since": 2016
+    },
+    {
+      "code": "koreasouth",
+      "name": "Busan",
+      "area": "Asia Pacific",
+      "flag": "🇰🇷",
+      "since": 2016
+    },
+    {
+      "code": "centralindia",
+      "name": "Pune",
+      "area": "Asia Pacific",
+      "flag": "🇮🇳",
+      "since": 2015
+    },
+    {
+      "code": "southindia",
+      "name": "Chennai",
+      "area": "Asia Pacific",
+      "flag": "🇮🇳",
+      "since": 2015
+    },
+    {
+      "code": "westindia",
+      "name": "Mumbai",
+      "area": "Asia Pacific",
+      "flag": "🇮🇳",
+      "since": 2015
+    },
+    {
+      "code": "australiaeast",
+      "name": "Sydney",
+      "area": "Asia Pacific",
+      "flag": "🇦🇺",
+      "since": 2014
+    },
+    {
+      "code": "australiasoutheast",
+      "name": "Melbourne",
+      "area": "Asia Pacific",
+      "flag": "🇦🇺",
+      "since": 2014
+    },
+    {
+      "code": "australiacentral",
+      "name": "Canberra",
+      "area": "Asia Pacific",
+      "flag": "🇦🇺",
+      "since": 2018
+    },
+    {
+      "code": "malaysiawest",
+      "name": "Kuala Lumpur",
+      "area": "Asia Pacific",
+      "flag": "🇲🇾",
+      "since": 2024
+    },
+    {
+      "code": "indonesiacentral",
+      "name": "Jakarta",
+      "area": "Asia Pacific",
+      "flag": "🇮🇩",
+      "since": 2025
+    },
+    {
+      "code": "newzealandnorth",
+      "name": "Auckland",
+      "area": "Asia Pacific",
+      "flag": "🇳🇿",
+      "since": 2024
+    },
+    {
+      "code": "taiwannorth",
+      "name": "Taipei",
+      "area": "Asia Pacific",
+      "flag": "🇹🇼",
+      "since": 2025
+    }
+  ],
+  "families": [
+    {
+      "key": "B",
+      "cat": "general",
+      "arch": "x86",
+      "vendor": "Intel",
+      "desc": "Burstable, baseline + credits, low cost",
+      "sizes": [
+        "B1ls",
+        "B1s",
+        "B1ms",
+        "B2s",
+        "B2ms",
+        "B4ms",
+        "B8ms",
+        "B12ms",
+        "B16ms",
+        "B20ms"
+      ],
+      "in": "*"
+    },
+    {
+      "key": "Bsv2",
+      "cat": "general",
+      "arch": "x86",
+      "vendor": "Intel",
+      "desc": "Newer burstable, premium storage",
+      "sizes": [
+        "B2s_v2",
+        "B4s_v2",
+        "B8s_v2",
+        "B16s_v2",
+        "B32s_v2",
+        "B48s_v2"
+      ],
+      "in": [
+        "eastus",
+        "eastus2",
+        "westus2",
+        "westus3",
+        "centralus",
+        "northeurope",
+        "westeurope",
+        "uksouth",
+        "francecentral",
+        "germanywestcentral",
+        "swedencentral",
+        "japaneast",
+        "koreacentral",
+        "southeastasia",
+        "australiaeast"
+      ]
+    },
+    {
+      "key": "Dv3",
+      "cat": "general",
+      "arch": "x86",
+      "vendor": "Intel",
+      "desc": "2nd gen Broadwell/Skylake (legacy)",
+      "sizes": [
+        "D2_v3",
+        "D4_v3",
+        "D8_v3",
+        "D16_v3",
+        "D32_v3",
+        "D48_v3",
+        "D64_v3"
+      ],
+      "in": "*"
+    },
+    {
+      "key": "Dsv3",
+      "cat": "general",
+      "arch": "x86",
+      "vendor": "Intel",
+      "desc": "Dv3 + premium storage (legacy)",
+      "sizes": [
+        "D2s_v3",
+        "D4s_v3",
+        "D8s_v3",
+        "D16s_v3",
+        "D32s_v3",
+        "D48s_v3",
+        "D64s_v3"
+      ],
+      "in": "*"
+    },
+    {
+      "key": "Dsv4",
+      "cat": "general",
+      "arch": "x86",
+      "vendor": "Intel",
+      "desc": "Cascade Lake Xeon Platinum",
+      "sizes": [
+        "D2s_v4",
+        "D4s_v4",
+        "D8s_v4",
+        "D16s_v4",
+        "D32s_v4",
+        "D48s_v4",
+        "D64s_v4"
+      ],
+      "in": "*"
+    },
+    {
+      "key": "Ddsv4",
+      "cat": "general",
+      "arch": "x86",
+      "vendor": "Intel",
+      "desc": "Dsv4 + local NVMe SSD",
+      "sizes": [
+        "D2ds_v4",
+        "D4ds_v4",
+        "D8ds_v4",
+        "D16ds_v4",
+        "D32ds_v4",
+        "D48ds_v4",
+        "D64ds_v4"
+      ],
+      "in": "*"
+    },
+    {
+      "key": "Dsv5",
+      "cat": "general",
+      "arch": "x86",
+      "vendor": "Intel",
+      "desc": "3rd gen Ice Lake, premium storage",
+      "sizes": [
+        "D2s_v5",
+        "D4s_v5",
+        "D8s_v5",
+        "D16s_v5",
+        "D32s_v5",
+        "D48s_v5",
+        "D64s_v5",
+        "D96s_v5"
+      ],
+      "in": "*"
+    },
+    {
+      "key": "Ddsv5",
+      "cat": "general",
+      "arch": "x86",
+      "vendor": "Intel",
+      "desc": "Dsv5 + local NVMe SSD",
+      "sizes": [
+        "D2ds_v5",
+        "D4ds_v5",
+        "D8ds_v5",
+        "D16ds_v5",
+        "D32ds_v5",
+        "D48ds_v5",
+        "D64ds_v5",
+        "D96ds_v5"
+      ],
+      "in": "*"
+    },
+    {
+      "key": "Dasv4",
+      "cat": "general",
+      "arch": "x86",
+      "vendor": "AMD",
+      "desc": "AMD EPYC Rome (2nd gen)",
+      "sizes": [
+        "D2as_v4",
+        "D4as_v4",
+        "D8as_v4",
+        "D16as_v4",
+        "D32as_v4",
+        "D48as_v4",
+        "D64as_v4",
+        "D96as_v4"
+      ],
+      "in": [
+        "eastus",
+        "eastus2",
+        "westus",
+        "westus2",
+        "westus3",
+        "centralus",
+        "northcentralus",
+        "southcentralus",
+        "canadacentral",
+        "northeurope",
+        "westeurope",
+        "uksouth",
+        "ukwest",
+        "francecentral",
+        "germanywestcentral",
+        "swedencentral",
+        "switzerlandnorth",
+        "norwayeast",
+        "japaneast",
+        "koreacentral",
+        "southeastasia",
+        "eastasia",
+        "australiaeast",
+        "centralindia",
+        "southafricanorth",
+        "uaenorth",
+        "brazilsouth"
+      ]
+    },
+    {
+      "key": "Dasv5",
+      "cat": "general",
+      "arch": "x86",
+      "vendor": "AMD",
+      "desc": "AMD EPYC Milan (3rd gen)",
+      "sizes": [
+        "D2as_v5",
+        "D4as_v5",
+        "D8as_v5",
+        "D16as_v5",
+        "D32as_v5",
+        "D48as_v5",
+        "D64as_v5",
+        "D96as_v5"
+      ],
+      "in": [
+        "eastus",
+        "eastus2",
+        "westus2",
+        "westus3",
+        "centralus",
+        "southcentralus",
+        "northeurope",
+        "westeurope",
+        "uksouth",
+        "francecentral",
+        "germanywestcentral",
+        "swedencentral",
+        "switzerlandnorth",
+        "japaneast",
+        "koreacentral",
+        "southeastasia",
+        "eastasia",
+        "australiaeast",
+        "centralindia",
+        "brazilsouth",
+        "uaenorth"
+      ]
+    },
+    {
+      "key": "Dadsv5",
+      "cat": "general",
+      "arch": "x86",
+      "vendor": "AMD",
+      "desc": "AMD Milan + local NVMe",
+      "sizes": [
+        "D2ads_v5",
+        "D4ads_v5",
+        "D8ads_v5",
+        "D16ads_v5",
+        "D32ads_v5",
+        "D48ads_v5",
+        "D64ads_v5",
+        "D96ads_v5"
+      ],
+      "in": [
+        "eastus",
+        "eastus2",
+        "westus2",
+        "westus3",
+        "northeurope",
+        "westeurope",
+        "uksouth",
+        "francecentral",
+        "germanywestcentral",
+        "swedencentral",
+        "japaneast",
+        "southeastasia",
+        "australiaeast"
+      ]
+    },
+    {
+      "key": "Dpsv5",
+      "cat": "general",
+      "arch": "arm",
+      "vendor": "Ampere",
+      "desc": "Ampere Altra ARM, premium storage",
+      "sizes": [
+        "D2ps_v5",
+        "D4ps_v5",
+        "D8ps_v5",
+        "D16ps_v5",
+        "D32ps_v5",
+        "D48ps_v5",
+        "D64ps_v5"
+      ],
+      "in": [
+        "eastus",
+        "eastus2",
+        "westus2",
+        "westus3",
+        "centralus",
+        "northeurope",
+        "westeurope",
+        "uksouth",
+        "francecentral",
+        "germanywestcentral",
+        "swedencentral",
+        "japaneast",
+        "koreacentral",
+        "southeastasia",
+        "australiaeast"
+      ]
+    },
+    {
+      "key": "Dpdsv5",
+      "cat": "general",
+      "arch": "arm",
+      "vendor": "Ampere",
+      "desc": "Dpsv5 + local NVMe",
+      "sizes": [
+        "D2pds_v5",
+        "D4pds_v5",
+        "D8pds_v5",
+        "D16pds_v5",
+        "D32pds_v5",
+        "D48pds_v5",
+        "D64pds_v5"
+      ],
+      "in": [
+        "eastus",
+        "eastus2",
+        "westus2",
+        "westus3",
+        "northeurope",
+        "westeurope",
+        "uksouth",
+        "francecentral",
+        "germanywestcentral",
+        "japaneast",
+        "southeastasia",
+        "australiaeast"
+      ]
+    },
+    {
+      "key": "Dpsv6",
+      "cat": "general",
+      "arch": "arm",
+      "vendor": "Cobalt",
+      "desc": "Microsoft Cobalt 100 ARM (newest)",
+      "sizes": [
+        "D2ps_v6",
+        "D4ps_v6",
+        "D8ps_v6",
+        "D16ps_v6",
+        "D32ps_v6",
+        "D48ps_v6",
+        "D64ps_v6",
+        "D96ps_v6"
+      ],
+      "in": [
+        "eastus",
+        "eastus2",
+        "westus2",
+        "westus3",
+        "northeurope",
+        "westeurope",
+        "japaneast",
+        "southeastasia",
+        "australiaeast"
+      ]
+    },
+    {
+      "key": "Esv3",
+      "cat": "memory",
+      "arch": "x86",
+      "vendor": "Intel",
+      "desc": "2nd gen memory-optimized (legacy)",
+      "sizes": [
+        "E2s_v3",
+        "E4s_v3",
+        "E8s_v3",
+        "E16s_v3",
+        "E20s_v3",
+        "E32s_v3",
+        "E48s_v3",
+        "E64s_v3"
+      ],
+      "in": "*"
+    },
+    {
+      "key": "Esv4",
+      "cat": "memory",
+      "arch": "x86",
+      "vendor": "Intel",
+      "desc": "Cascade Lake memory",
+      "sizes": [
+        "E2s_v4",
+        "E4s_v4",
+        "E8s_v4",
+        "E16s_v4",
+        "E20s_v4",
+        "E32s_v4",
+        "E48s_v4",
+        "E64s_v4"
+      ],
+      "in": "*"
+    },
+    {
+      "key": "Esv5",
+      "cat": "memory",
+      "arch": "x86",
+      "vendor": "Intel",
+      "desc": "Ice Lake memory, premium storage",
+      "sizes": [
+        "E2s_v5",
+        "E4s_v5",
+        "E8s_v5",
+        "E16s_v5",
+        "E20s_v5",
+        "E32s_v5",
+        "E48s_v5",
+        "E64s_v5",
+        "E96s_v5",
+        "E104s_v5"
+      ],
+      "in": "*"
+    },
+    {
+      "key": "Edsv5",
+      "cat": "memory",
+      "arch": "x86",
+      "vendor": "Intel",
+      "desc": "Esv5 + local NVMe",
+      "sizes": [
+        "E2ds_v5",
+        "E4ds_v5",
+        "E8ds_v5",
+        "E16ds_v5",
+        "E20ds_v5",
+        "E32ds_v5",
+        "E48ds_v5",
+        "E64ds_v5",
+        "E96ds_v5",
+        "E104ids_v5"
+      ],
+      "in": "*"
+    },
+    {
+      "key": "Easv4",
+      "cat": "memory",
+      "arch": "x86",
+      "vendor": "AMD",
+      "desc": "AMD Rome memory",
+      "sizes": [
+        "E2as_v4",
+        "E4as_v4",
+        "E8as_v4",
+        "E16as_v4",
+        "E20as_v4",
+        "E32as_v4",
+        "E48as_v4",
+        "E64as_v4",
+        "E96as_v4"
+      ],
+      "in": [
+        "eastus",
+        "eastus2",
+        "westus",
+        "westus2",
+        "westus3",
+        "centralus",
+        "northcentralus",
+        "southcentralus",
+        "canadacentral",
+        "northeurope",
+        "westeurope",
+        "uksouth",
+        "ukwest",
+        "francecentral",
+        "germanywestcentral",
+        "swedencentral",
+        "switzerlandnorth",
+        "norwayeast",
+        "japaneast",
+        "koreacentral",
+        "southeastasia",
+        "eastasia",
+        "australiaeast",
+        "centralindia",
+        "southafricanorth",
+        "uaenorth",
+        "brazilsouth"
+      ]
+    },
+    {
+      "key": "Easv5",
+      "cat": "memory",
+      "arch": "x86",
+      "vendor": "AMD",
+      "desc": "AMD Milan memory",
+      "sizes": [
+        "E2as_v5",
+        "E4as_v5",
+        "E8as_v5",
+        "E16as_v5",
+        "E20as_v5",
+        "E32as_v5",
+        "E48as_v5",
+        "E64as_v5",
+        "E96as_v5"
+      ],
+      "in": [
+        "eastus",
+        "eastus2",
+        "westus2",
+        "westus3",
+        "centralus",
+        "southcentralus",
+        "northeurope",
+        "westeurope",
+        "uksouth",
+        "francecentral",
+        "germanywestcentral",
+        "swedencentral",
+        "japaneast",
+        "koreacentral",
+        "southeastasia",
+        "eastasia",
+        "australiaeast",
+        "centralindia",
+        "brazilsouth",
+        "uaenorth"
+      ]
+    },
+    {
+      "key": "Eadsv5",
+      "cat": "memory",
+      "arch": "x86",
+      "vendor": "AMD",
+      "desc": "AMD Milan memory + NVMe",
+      "sizes": [
+        "E2ads_v5",
+        "E4ads_v5",
+        "E8ads_v5",
+        "E16ads_v5",
+        "E20ads_v5",
+        "E32ads_v5",
+        "E48ads_v5",
+        "E64ads_v5",
+        "E96ads_v5"
+      ],
+      "in": [
+        "eastus",
+        "eastus2",
+        "westus2",
+        "westus3",
+        "northeurope",
+        "westeurope",
+        "uksouth",
+        "francecentral",
+        "germanywestcentral",
+        "japaneast",
+        "southeastasia",
+        "australiaeast"
+      ]
+    },
+    {
+      "key": "Epsv5",
+      "cat": "memory",
+      "arch": "arm",
+      "vendor": "Ampere",
+      "desc": "Ampere Altra memory-optimized",
+      "sizes": [
+        "E2ps_v5",
+        "E4ps_v5",
+        "E8ps_v5",
+        "E16ps_v5",
+        "E20ps_v5",
+        "E32ps_v5"
+      ],
+      "in": [
+        "eastus",
+        "eastus2",
+        "westus2",
+        "westus3",
+        "northeurope",
+        "westeurope",
+        "uksouth",
+        "francecentral",
+        "germanywestcentral",
+        "japaneast",
+        "southeastasia",
+        "australiaeast"
+      ]
+    },
+    {
+      "key": "Epdsv5",
+      "cat": "memory",
+      "arch": "arm",
+      "vendor": "Ampere",
+      "desc": "Epsv5 + local NVMe",
+      "sizes": [
+        "E2pds_v5",
+        "E4pds_v5",
+        "E8pds_v5",
+        "E16pds_v5",
+        "E20pds_v5",
+        "E32pds_v5"
+      ],
+      "in": [
+        "eastus",
+        "eastus2",
+        "westus2",
+        "westus3",
+        "northeurope",
+        "westeurope",
+        "japaneast",
+        "southeastasia",
+        "australiaeast"
+      ]
+    },
+    {
+      "key": "Mv2",
+      "cat": "memory",
+      "arch": "x86",
+      "vendor": "Intel",
+      "desc": "Extreme memory — up to 12 TB",
+      "sizes": [
+        "M208ms_v2",
+        "M208s_v2",
+        "M416ms_v2",
+        "M416s_v2"
+      ],
+      "in": [
+        "eastus",
+        "eastus2",
+        "westus2",
+        "westus3",
+        "southcentralus",
+        "centralus",
+        "northeurope",
+        "westeurope",
+        "uksouth",
+        "francecentral",
+        "germanywestcentral",
+        "japaneast",
+        "southeastasia",
+        "australiaeast"
+      ]
+    },
+    {
+      "key": "Msv3",
+      "cat": "memory",
+      "arch": "x86",
+      "vendor": "Intel",
+      "desc": "Ice Lake extreme memory (newer)",
+      "sizes": [
+        "M8s_v3",
+        "M16s_v3",
+        "M32s_v3",
+        "M64s_v3",
+        "M96s_v3",
+        "M128s_v3",
+        "M176s_v3",
+        "M192is_v3",
+        "M192ims_v3"
+      ],
+      "in": [
+        "eastus",
+        "eastus2",
+        "westus2",
+        "westus3",
+        "northeurope",
+        "westeurope",
+        "uksouth",
+        "francecentral",
+        "germanywestcentral",
+        "japaneast",
+        "southeastasia"
+      ]
+    },
+    {
+      "key": "Mbdsv2",
+      "cat": "memory",
+      "arch": "x86",
+      "vendor": "Intel",
+      "desc": "M-series + NVMe (bare metal-ish)",
+      "sizes": [
+        "M16bds_v2",
+        "M32bds_v2",
+        "M64bds_v2",
+        "M128bds_v2",
+        "M192bds_v2"
+      ],
+      "in": [
+        "eastus",
+        "eastus2",
+        "westus2",
+        "westus3",
+        "northeurope",
+        "westeurope",
+        "japaneast",
+        "southeastasia"
+      ]
+    },
+    {
+      "key": "Fsv2",
+      "cat": "compute",
+      "arch": "x86",
+      "vendor": "Intel",
+      "desc": "High CPU-to-memory ratio (Skylake)",
+      "sizes": [
+        "F2s_v2",
+        "F4s_v2",
+        "F8s_v2",
+        "F16s_v2",
+        "F32s_v2",
+        "F48s_v2",
+        "F64s_v2",
+        "F72s_v2"
+      ],
+      "in": "*"
+    },
+    {
+      "key": "Fxsv5",
+      "cat": "compute",
+      "arch": "x86",
+      "vendor": "Intel",
+      "desc": "Ice Lake high-frequency (4.5 GHz)",
+      "sizes": [
+        "FX4s_v5",
+        "FX12s_v5",
+        "FX24s_v5",
+        "FX36s_v5",
+        "FX48s_v5"
+      ],
+      "in": [
+        "eastus",
+        "eastus2",
+        "westus2",
+        "westus3",
+        "centralus",
+        "southcentralus",
+        "northeurope",
+        "westeurope",
+        "uksouth",
+        "francecentral",
+        "germanywestcentral",
+        "swedencentral",
+        "japaneast",
+        "koreacentral",
+        "southeastasia",
+        "eastasia",
+        "australiaeast"
+      ]
+    },
+    {
+      "key": "Lsv2",
+      "cat": "storage",
+      "arch": "x86",
+      "vendor": "AMD",
+      "desc": "AMD Rome + local NVMe (legacy)",
+      "sizes": [
+        "L8s_v2",
+        "L16s_v2",
+        "L32s_v2",
+        "L48s_v2",
+        "L64s_v2",
+        "L80s_v2"
+      ],
+      "in": [
+        "eastus",
+        "eastus2",
+        "westus2",
+        "westus3",
+        "centralus",
+        "northcentralus",
+        "southcentralus",
+        "canadacentral",
+        "northeurope",
+        "westeurope",
+        "uksouth",
+        "francecentral",
+        "germanywestcentral",
+        "swedencentral",
+        "japaneast",
+        "koreacentral",
+        "southeastasia",
+        "eastasia",
+        "australiaeast",
+        "centralindia",
+        "brazilsouth"
+      ]
+    },
+    {
+      "key": "Lsv3",
+      "cat": "storage",
+      "arch": "x86",
+      "vendor": "Intel",
+      "desc": "Ice Lake + local NVMe SSD",
+      "sizes": [
+        "L8s_v3",
+        "L16s_v3",
+        "L32s_v3",
+        "L48s_v3",
+        "L64s_v3",
+        "L80s_v3"
+      ],
+      "in": [
+        "eastus",
+        "eastus2",
+        "westus2",
+        "westus3",
+        "centralus",
+        "southcentralus",
+        "northeurope",
+        "westeurope",
+        "uksouth",
+        "francecentral",
+        "germanywestcentral",
+        "swedencentral",
+        "japaneast",
+        "koreacentral",
+        "southeastasia",
+        "eastasia",
+        "australiaeast"
+      ]
+    },
+    {
+      "key": "Lasv3",
+      "cat": "storage",
+      "arch": "x86",
+      "vendor": "AMD",
+      "desc": "AMD Milan + local NVMe SSD",
+      "sizes": [
+        "L8as_v3",
+        "L16as_v3",
+        "L32as_v3",
+        "L48as_v3",
+        "L64as_v3",
+        "L80as_v3"
+      ],
+      "in": [
+        "eastus",
+        "eastus2",
+        "westus2",
+        "westus3",
+        "centralus",
+        "southcentralus",
+        "northeurope",
+        "westeurope",
+        "uksouth",
+        "francecentral",
+        "germanywestcentral",
+        "japaneast",
+        "southeastasia",
+        "australiaeast"
+      ]
+    },
+    {
+      "key": "NVv3",
+      "cat": "accelerated",
+      "arch": "x86",
+      "vendor": "Intel",
+      "desc": "NVIDIA M60 GPU (graphics, legacy)",
+      "sizes": [
+        "NV12s_v3",
+        "NV24s_v3",
+        "NV48s_v3"
+      ],
+      "in": [
+        "eastus",
+        "eastus2",
+        "westus2",
+        "centralus",
+        "southcentralus",
+        "northeurope",
+        "westeurope",
+        "uksouth",
+        "japaneast",
+        "southeastasia",
+        "australiaeast"
+      ]
+    },
+    {
+      "key": "NVv4",
+      "cat": "accelerated",
+      "arch": "x86",
+      "vendor": "AMD",
+      "desc": "AMD Radeon MI25 (graphics)",
+      "sizes": [
+        "NV4as_v4",
+        "NV8as_v4",
+        "NV16as_v4",
+        "NV32as_v4"
+      ],
+      "in": [
+        "eastus",
+        "eastus2",
+        "westus2",
+        "westus3",
+        "centralus",
+        "southcentralus",
+        "northeurope",
+        "westeurope",
+        "uksouth",
+        "francecentral",
+        "germanywestcentral",
+        "japaneast",
+        "southeastasia",
+        "australiaeast"
+      ]
+    },
+    {
+      "key": "NVadsA10v5",
+      "cat": "accelerated",
+      "arch": "x86",
+      "vendor": "AMD",
+      "desc": "NVIDIA A10 GPU (graphics + ML)",
+      "sizes": [
+        "NV6ads_A10_v5",
+        "NV12ads_A10_v5",
+        "NV18ads_A10_v5",
+        "NV36ads_A10_v5",
+        "NV36adms_A10_v5",
+        "NV72ads_A10_v5"
+      ],
+      "in": [
+        "eastus",
+        "eastus2",
+        "westus2",
+        "westus3",
+        "northeurope",
+        "westeurope",
+        "uksouth",
+        "francecentral",
+        "germanywestcentral",
+        "japaneast",
+        "southeastasia",
+        "australiaeast"
+      ]
+    },
+    {
+      "key": "NCv3",
+      "cat": "accelerated",
+      "arch": "x86",
+      "vendor": "Intel",
+      "desc": "NVIDIA V100 (ML training, legacy)",
+      "sizes": [
+        "NC6s_v3",
+        "NC12s_v3",
+        "NC24s_v3",
+        "NC24rs_v3"
+      ],
+      "in": [
+        "eastus",
+        "eastus2",
+        "westus2",
+        "centralus",
+        "southcentralus",
+        "northeurope",
+        "westeurope",
+        "uksouth",
+        "japaneast",
+        "southeastasia",
+        "australiaeast",
+        "centralindia"
+      ]
+    },
+    {
+      "key": "NCasT4v3",
+      "cat": "accelerated",
+      "arch": "x86",
+      "vendor": "AMD",
+      "desc": "NVIDIA T4 (inference, ML)",
+      "sizes": [
+        "NC4as_T4_v3",
+        "NC8as_T4_v3",
+        "NC16as_T4_v3",
+        "NC64as_T4_v3"
+      ],
+      "in": [
+        "eastus",
+        "eastus2",
+        "westus2",
+        "westus3",
+        "northeurope",
+        "westeurope",
+        "uksouth",
+        "francecentral",
+        "germanywestcentral",
+        "japaneast",
+        "koreacentral",
+        "southeastasia",
+        "australiaeast",
+        "centralindia",
+        "brazilsouth"
+      ]
+    },
+    {
+      "key": "NCadsA100v4",
+      "cat": "accelerated",
+      "arch": "x86",
+      "vendor": "AMD",
+      "desc": "NVIDIA A100 80GB",
+      "sizes": [
+        "NC24ads_A100_v4",
+        "NC48ads_A100_v4",
+        "NC96ads_A100_v4"
+      ],
+      "in": [
+        "eastus",
+        "eastus2",
+        "westus2",
+        "westus3",
+        "centralus",
+        "southcentralus",
+        "northeurope",
+        "westeurope",
+        "uksouth",
+        "francecentral",
+        "germanywestcentral",
+        "swedencentral",
+        "japaneast",
+        "koreacentral",
+        "southeastasia",
+        "australiaeast",
+        "centralindia"
+      ]
+    },
+    {
+      "key": "NCadsH100v5",
+      "cat": "accelerated",
+      "arch": "x86",
+      "vendor": "AMD",
+      "desc": "NVIDIA H100 (LLM training, newest)",
+      "sizes": [
+        "NC40ads_H100_v5",
+        "NC80adis_H100_v5"
+      ],
+      "in": [
+        "eastus",
+        "eastus2",
+        "westus3",
+        "southcentralus",
+        "westeurope",
+        "uksouth",
+        "francecentral",
+        "germanywestcentral",
+        "swedencentral",
+        "japaneast",
+        "koreacentral",
+        "australiaeast"
+      ]
+    },
+    {
+      "key": "NDv4",
+      "cat": "accelerated",
+      "arch": "x86",
+      "vendor": "Intel",
+      "desc": "NVIDIA A100 ×8 + NVLink (DL training)",
+      "sizes": [
+        "ND96asr_v4"
+      ],
+      "in": [
+        "eastus",
+        "eastus2",
+        "westus2",
+        "westus3",
+        "southcentralus",
+        "northeurope",
+        "westeurope",
+        "uksouth",
+        "francecentral",
+        "japaneast",
+        "southeastasia",
+        "australiaeast"
+      ]
+    },
+    {
+      "key": "NDH100v5",
+      "cat": "accelerated",
+      "arch": "x86",
+      "vendor": "Intel",
+      "desc": "NVIDIA H100 ×8 (LLM training)",
+      "sizes": [
+        "ND96isr_H100_v5"
+      ],
+      "in": [
+        "eastus",
+        "eastus2",
+        "westus3",
+        "southcentralus",
+        "westeurope",
+        "uksouth",
+        "swedencentral",
+        "japaneast",
+        "australiaeast"
+      ]
+    },
+    {
+      "key": "NDH200v5",
+      "cat": "accelerated",
+      "arch": "x86",
+      "vendor": "Intel",
+      "desc": "NVIDIA H200 ×8 (newest, scarce)",
+      "sizes": [
+        "ND96isr_H200_v5"
+      ],
+      "in": [
+        "eastus",
+        "westus3",
+        "southcentralus",
+        "westeurope",
+        "swedencentral"
+      ]
+    },
+    {
+      "key": "HBv2",
+      "cat": "hpc",
+      "arch": "x86",
+      "vendor": "AMD",
+      "desc": "AMD Rome HPC + InfiniBand HDR (legacy)",
+      "sizes": [
+        "HB120-16rs_v2",
+        "HB120-32rs_v2",
+        "HB120-64rs_v2",
+        "HB120-96rs_v2",
+        "HB120rs_v2"
+      ],
+      "in": [
+        "eastus",
+        "eastus2",
+        "southcentralus",
+        "westeurope",
+        "northeurope",
+        "francecentral",
+        "japaneast",
+        "southeastasia"
+      ]
+    },
+    {
+      "key": "HBv3",
+      "cat": "hpc",
+      "arch": "x86",
+      "vendor": "AMD",
+      "desc": "AMD Milan HPC + InfiniBand HDR",
+      "sizes": [
+        "HB120-16rs_v3",
+        "HB120-32rs_v3",
+        "HB120-64rs_v3",
+        "HB120-96rs_v3",
+        "HB120rs_v3"
+      ],
+      "in": [
+        "eastus",
+        "eastus2",
+        "southcentralus",
+        "westus3",
+        "westeurope",
+        "northeurope",
+        "francecentral",
+        "japaneast",
+        "southeastasia"
+      ]
+    },
+    {
+      "key": "HBv4",
+      "cat": "hpc",
+      "arch": "x86",
+      "vendor": "AMD",
+      "desc": "AMD Genoa HPC + InfiniBand NDR (newest)",
+      "sizes": [
+        "HB176-24rs_v4",
+        "HB176-48rs_v4",
+        "HB176-96rs_v4",
+        "HB176-144rs_v4",
+        "HB176rs_v4"
+      ],
+      "in": [
+        "eastus2",
+        "southcentralus",
+        "westus3",
+        "westeurope",
+        "northeurope",
+        "francecentral",
+        "japaneast"
+      ]
+    },
+    {
+      "key": "HXv5",
+      "cat": "hpc",
+      "arch": "x86",
+      "vendor": "AMD",
+      "desc": "AMD EPYC 9V64H — extreme HPC (newest)",
+      "sizes": [
+        "HX176-24rs",
+        "HX176-48rs",
+        "HX176-96rs",
+        "HX176-144rs",
+        "HX176rs"
+      ],
+      "in": [
+        "eastus2",
+        "southcentralus",
+        "westus3",
+        "westeurope",
+        "francecentral"
+      ]
+    },
+    {
+      "key": "DCsv2",
+      "cat": "confidential",
+      "arch": "x86",
+      "vendor": "Intel",
+      "desc": "Intel SGX enclaves (legacy)",
+      "sizes": [
+        "DC1s_v2",
+        "DC2s_v2",
+        "DC4s_v2",
+        "DC8_v2"
+      ],
+      "in": [
+        "eastus",
+        "westus",
+        "ukwest",
+        "westeurope",
+        "canadacentral",
+        "japaneast",
+        "southeastasia"
+      ]
+    },
+    {
+      "key": "DCsv3",
+      "cat": "confidential",
+      "arch": "x86",
+      "vendor": "Intel",
+      "desc": "Intel SGX — Ice Lake, larger EPC",
+      "sizes": [
+        "DC1s_v3",
+        "DC2s_v3",
+        "DC4s_v3",
+        "DC8s_v3",
+        "DC16s_v3",
+        "DC24s_v3",
+        "DC32s_v3",
+        "DC48s_v3"
+      ],
+      "in": [
+        "eastus",
+        "eastus2",
+        "westus",
+        "westus3",
+        "westeurope",
+        "northeurope",
+        "uksouth",
+        "canadacentral",
+        "japaneast",
+        "southeastasia",
+        "australiaeast"
+      ]
+    },
+    {
+      "key": "DCasv5",
+      "cat": "confidential",
+      "arch": "x86",
+      "vendor": "AMD",
+      "desc": "AMD SEV-SNP — whole-VM confidential",
+      "sizes": [
+        "DC2as_v5",
+        "DC4as_v5",
+        "DC8as_v5",
+        "DC16as_v5",
+        "DC32as_v5",
+        "DC48as_v5",
+        "DC64as_v5",
+        "DC96as_v5"
+      ],
+      "in": [
+        "eastus",
+        "eastus2",
+        "westus2",
+        "westus3",
+        "northeurope",
+        "westeurope",
+        "uksouth",
+        "francecentral",
+        "germanywestcentral",
+        "swedencentral",
+        "japaneast",
+        "southeastasia",
+        "australiaeast"
+      ]
+    },
+    {
+      "key": "DCadsv5",
+      "cat": "confidential",
+      "arch": "x86",
+      "vendor": "AMD",
+      "desc": "DCasv5 + local NVMe",
+      "sizes": [
+        "DC2ads_v5",
+        "DC4ads_v5",
+        "DC8ads_v5",
+        "DC16ads_v5",
+        "DC32ads_v5",
+        "DC48ads_v5",
+        "DC64ads_v5",
+        "DC96ads_v5"
+      ],
+      "in": [
+        "eastus",
+        "eastus2",
+        "westus2",
+        "westus3",
+        "northeurope",
+        "westeurope",
+        "uksouth",
+        "francecentral",
+        "germanywestcentral",
+        "japaneast",
+        "southeastasia"
+      ]
+    },
+    {
+      "key": "ECasv5",
+      "cat": "confidential",
+      "arch": "x86",
+      "vendor": "AMD",
+      "desc": "AMD SEV-SNP — memory-optimized confidential",
+      "sizes": [
+        "EC2as_v5",
+        "EC4as_v5",
+        "EC8as_v5",
+        "EC16as_v5",
+        "EC20as_v5",
+        "EC32as_v5",
+        "EC48as_v5",
+        "EC64as_v5",
+        "EC96as_v5"
+      ],
+      "in": [
+        "eastus",
+        "eastus2",
+        "westus2",
+        "westus3",
+        "northeurope",
+        "westeurope",
+        "uksouth",
+        "francecentral",
+        "germanywestcentral",
+        "swedencentral",
+        "japaneast",
+        "southeastasia",
+        "australiaeast"
+      ]
+    },
+    {
+      "key": "ECadsv5",
+      "cat": "confidential",
+      "arch": "x86",
+      "vendor": "AMD",
+      "desc": "ECasv5 + local NVMe",
+      "sizes": [
+        "EC2ads_v5",
+        "EC4ads_v5",
+        "EC8ads_v5",
+        "EC16ads_v5",
+        "EC20ads_v5",
+        "EC32ads_v5",
+        "EC48ads_v5",
+        "EC64ads_v5",
+        "EC96ads_v5"
+      ],
+      "in": [
+        "eastus",
+        "eastus2",
+        "westus3",
+        "northeurope",
+        "westeurope",
+        "francecentral",
+        "germanywestcentral",
+        "japaneast",
+        "southeastasia"
+      ]
+    }
+  ]
+}

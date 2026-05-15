@@ -1,0 +1,453 @@
+{
+  "generated": "2026-05-14T23:23:55Z",
+  "provider": "ovh",
+  "regions": [
+    {
+      "code": "GRA",
+      "name": "Gravelines",
+      "area": "Europe",
+      "flag": "🇫🇷",
+      "since": 2016
+    },
+    {
+      "code": "RBX",
+      "name": "Roubaix",
+      "area": "Europe",
+      "flag": "🇫🇷",
+      "since": 2003
+    },
+    {
+      "code": "SBG",
+      "name": "Strasbourg",
+      "area": "Europe",
+      "flag": "🇫🇷",
+      "since": 2012
+    },
+    {
+      "code": "LIM",
+      "name": "Limburg",
+      "area": "Europe",
+      "flag": "🇩🇪",
+      "since": 2016
+    },
+    {
+      "code": "ERI",
+      "name": "Erith",
+      "area": "Europe",
+      "flag": "🇬🇧",
+      "since": 2017
+    },
+    {
+      "code": "WAW",
+      "name": "Warsaw",
+      "area": "Europe",
+      "flag": "🇵🇱",
+      "since": 2018
+    },
+    {
+      "code": "MIL",
+      "name": "Milan",
+      "area": "Europe",
+      "flag": "🇮🇹",
+      "since": 2024
+    },
+    {
+      "code": "MAD",
+      "name": "Madrid",
+      "area": "Europe",
+      "flag": "🇪🇸",
+      "since": 2025
+    },
+    {
+      "code": "BHS",
+      "name": "Beauharnois",
+      "area": "Americas",
+      "flag": "🇨🇦",
+      "since": 2012
+    },
+    {
+      "code": "US-EAST-VA-1",
+      "name": "Vint Hill",
+      "area": "Americas",
+      "flag": "🇺🇸",
+      "since": 2018
+    },
+    {
+      "code": "US-WEST-OR-1",
+      "name": "Hillsboro",
+      "area": "Americas",
+      "flag": "🇺🇸",
+      "since": 2018
+    },
+    {
+      "code": "SGP",
+      "name": "Singapore",
+      "area": "Asia Pacific",
+      "flag": "🇸🇬",
+      "since": 2017
+    },
+    {
+      "code": "SYD",
+      "name": "Sydney",
+      "area": "Asia Pacific",
+      "flag": "🇦🇺",
+      "since": 2018
+    },
+    {
+      "code": "MUM",
+      "name": "Mumbai",
+      "area": "Asia Pacific",
+      "flag": "🇮🇳",
+      "since": 2024
+    }
+  ],
+  "families": [
+    {
+      "key": "d2",
+      "cat": "general",
+      "arch": "x86",
+      "vendor": "AMD/Intel",
+      "desc": "Discovery — sandbox tier, low cost",
+      "sizes": [
+        "d2-2",
+        "d2-4",
+        "d2-8"
+      ],
+      "in": [
+        "GRA",
+        "RBX",
+        "SBG",
+        "BHS",
+        "WAW",
+        "LIM",
+        "ERI",
+        "SGP",
+        "SYD",
+        "US-EAST-VA-1",
+        "US-WEST-OR-1"
+      ]
+    },
+    {
+      "key": "b3",
+      "cat": "general",
+      "arch": "x86",
+      "vendor": "AMD",
+      "desc": "Balanced general — AMD EPYC + premium NVMe",
+      "sizes": [
+        "b3-8",
+        "b3-16",
+        "b3-32",
+        "b3-64",
+        "b3-128",
+        "b3-256"
+      ],
+      "in": [
+        "GRA",
+        "RBX",
+        "SBG",
+        "BHS",
+        "WAW",
+        "LIM",
+        "ERI",
+        "SGP",
+        "SYD",
+        "US-EAST-VA-1",
+        "US-WEST-OR-1",
+        "MIL"
+      ]
+    },
+    {
+      "key": "c3",
+      "cat": "compute",
+      "arch": "x86",
+      "vendor": "AMD",
+      "desc": "CPU-optimized — high-freq AMD EPYC",
+      "sizes": [
+        "c3-8",
+        "c3-16",
+        "c3-32",
+        "c3-64",
+        "c3-128",
+        "c3-256"
+      ],
+      "in": [
+        "GRA",
+        "RBX",
+        "SBG",
+        "BHS",
+        "WAW",
+        "LIM",
+        "SGP",
+        "SYD",
+        "US-EAST-VA-1",
+        "US-WEST-OR-1"
+      ]
+    },
+    {
+      "key": "r3",
+      "cat": "memory",
+      "arch": "x86",
+      "vendor": "AMD",
+      "desc": "RAM-optimized — up to 512 GB",
+      "sizes": [
+        "r3-32",
+        "r3-64",
+        "r3-128",
+        "r3-256",
+        "r3-512"
+      ],
+      "in": [
+        "GRA",
+        "RBX",
+        "SBG",
+        "BHS",
+        "WAW",
+        "LIM",
+        "SGP",
+        "US-EAST-VA-1",
+        "US-WEST-OR-1"
+      ]
+    },
+    {
+      "key": "i1",
+      "cat": "storage",
+      "arch": "x86",
+      "vendor": "Intel/AMD",
+      "desc": "IOPS-optimized — NVMe-heavy, 1.5 TB to 18 TB",
+      "sizes": [
+        "i1-15",
+        "i1-30",
+        "i1-45",
+        "i1-60",
+        "i1-90",
+        "i1-180"
+      ],
+      "in": [
+        "GRA",
+        "RBX",
+        "SBG",
+        "BHS",
+        "WAW",
+        "SGP",
+        "US-EAST-VA-1"
+      ]
+    },
+    {
+      "key": "t1",
+      "cat": "accelerated",
+      "arch": "x86",
+      "vendor": "Intel",
+      "desc": "NVIDIA Tesla V100 (legacy)",
+      "sizes": [
+        "t1-45",
+        "t1-90",
+        "t1-180"
+      ],
+      "in": [
+        "GRA",
+        "BHS",
+        "SGP"
+      ]
+    },
+    {
+      "key": "t2",
+      "cat": "accelerated",
+      "arch": "x86",
+      "vendor": "AMD",
+      "desc": "NVIDIA A100 / L4 / L40s (current)",
+      "sizes": [
+        "t2-le-45",
+        "t2-le-90",
+        "t2-le-180",
+        "t2-180",
+        "t2-le-360"
+      ],
+      "in": [
+        "GRA",
+        "BHS",
+        "ERI",
+        "US-EAST-VA-1"
+      ]
+    },
+    {
+      "key": "h100",
+      "cat": "accelerated",
+      "arch": "x86",
+      "vendor": "AMD",
+      "desc": "NVIDIA H100 80GB — LLM training",
+      "sizes": [
+        "h100-1-380",
+        "h100-2-380",
+        "h100-4-380",
+        "h100-8-380"
+      ],
+      "in": [
+        "GRA",
+        "BHS"
+      ]
+    },
+    {
+      "key": "HGR-HCI",
+      "cat": "baremetal",
+      "arch": "x86",
+      "vendor": "Intel/AMD",
+      "desc": "High Grade — hyperconverged + GPU options",
+      "sizes": [
+        "HGR-HCI-i2",
+        "HGR-HCI-i5",
+        "HGR-HCI-a1",
+        "HGR-HCI-a2"
+      ],
+      "in": [
+        "GRA",
+        "RBX",
+        "SBG",
+        "BHS",
+        "LIM",
+        "ERI",
+        "SGP",
+        "SYD"
+      ]
+    },
+    {
+      "key": "HGR-SDS",
+      "cat": "baremetal",
+      "arch": "x86",
+      "vendor": "Intel/AMD",
+      "desc": "High Grade — software-defined storage configs",
+      "sizes": [
+        "HGR-SDS-1",
+        "HGR-SDS-2",
+        "HGR-SDS-3"
+      ],
+      "in": [
+        "GRA",
+        "RBX",
+        "SBG",
+        "BHS",
+        "ERI"
+      ]
+    },
+    {
+      "key": "Advance",
+      "cat": "baremetal",
+      "arch": "x86",
+      "vendor": "AMD/Intel",
+      "desc": "Mid-range bare metal — virtualization workloads",
+      "sizes": [
+        "Advance-1",
+        "Advance-2",
+        "Advance-3",
+        "Advance-4",
+        "Advance-5",
+        "Advance-6",
+        "Advance-Gen2"
+      ],
+      "in": [
+        "GRA",
+        "RBX",
+        "SBG",
+        "BHS",
+        "LIM",
+        "ERI",
+        "WAW",
+        "SGP",
+        "SYD",
+        "US-EAST-VA-1",
+        "US-WEST-OR-1"
+      ]
+    },
+    {
+      "key": "Rise",
+      "cat": "baremetal",
+      "arch": "x86",
+      "vendor": "Intel/AMD",
+      "desc": "Entry-level bare metal — web/app workloads",
+      "sizes": [
+        "Rise-1",
+        "Rise-2",
+        "Rise-3",
+        "Rise-4",
+        "Rise-LE-1",
+        "Rise-LE-2"
+      ],
+      "in": [
+        "GRA",
+        "RBX",
+        "SBG",
+        "BHS",
+        "WAW",
+        "LIM",
+        "ERI",
+        "SGP",
+        "SYD",
+        "US-EAST-VA-1",
+        "US-WEST-OR-1"
+      ]
+    },
+    {
+      "key": "Scale",
+      "cat": "baremetal",
+      "arch": "x86",
+      "vendor": "AMD",
+      "desc": "Scale-out bare metal — high density",
+      "sizes": [
+        "Scale-GPU",
+        "Scale-LE-1",
+        "Scale-LE-2",
+        "Scale-1",
+        "Scale-2",
+        "Scale-3",
+        "Scale-4"
+      ],
+      "in": [
+        "GRA",
+        "RBX",
+        "SBG",
+        "BHS",
+        "LIM",
+        "ERI",
+        "SGP",
+        "SYD"
+      ]
+    },
+    {
+      "key": "Storage",
+      "cat": "storage",
+      "arch": "x86",
+      "vendor": "AMD",
+      "desc": "Bare metal storage-dense — large HDD arrays",
+      "sizes": [
+        "FS-12T",
+        "FS-24T",
+        "FS-48T",
+        "FS-72T",
+        "FS-96T"
+      ],
+      "in": [
+        "GRA",
+        "RBX",
+        "SBG",
+        "BHS",
+        "ERI"
+      ]
+    },
+    {
+      "key": "HPC",
+      "cat": "hpc",
+      "arch": "x86",
+      "vendor": "AMD",
+      "desc": "HPC bare metal — AMD EPYC + InfiniBand",
+      "sizes": [
+        "HPC-1",
+        "HPC-2",
+        "HPC-3"
+      ],
+      "in": [
+        "GRA",
+        "RBX",
+        "SBG"
+      ]
+    }
+  ]
+}

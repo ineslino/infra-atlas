@@ -1,0 +1,23 @@
+# Cloudflare Pages headers
+# https://developers.cloudflare.com/pages/configuration/headers/
+
+# HTML — short cache, revalidate often (data freshness matters)
+/*.html
+  Cache-Control: public, max-age=300, s-maxage=300, stale-while-revalidate=86400
+
+# Instrument data — cached an hour, served stale up to a day if the cron fails
+/*/data.json
+  Cache-Control: public, max-age=3600, s-maxage=3600, stale-while-revalidate=86400
+  Access-Control-Allow-Origin: *
+
+# Future static assets bucket — immutable, year-long
+/assets/*
+  Cache-Control: public, max-age=31536000, immutable
+
+# Security headers (apply to all responses)
+/*
+  X-Content-Type-Options: nosniff
+  X-Frame-Options: DENY
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: camera=(), microphone=(), geolocation=(), interest-cohort=()
+  Strict-Transport-Security: max-age=31536000; includeSubDomains; preload

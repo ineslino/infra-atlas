@@ -1,0 +1,1741 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Multi-Cloud Region Map · Infra Atlas</title>
+<meta name="description" content="Every region from AWS, Azure, GCP, OCI, and OVHcloud — on a single chart. Compare geographies, surface clusters, find the closest data to your users.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@300;400;500;600&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+:root {
+  --ink: #0A0907;
+  --ink-2: #100E0C;
+  --surface: #161310;
+  --surface-2: #1E1A15;
+  --surface-3: #2A241C;
+  --line: rgba(244, 239, 230, 0.06);
+  --line-2: rgba(244, 239, 230, 0.14);
+  --line-3: rgba(244, 239, 230, 0.28);
+  --paper: #F4EFE6;
+  --paper-2: rgba(244, 239, 230, 0.66);
+  --paper-3: rgba(244, 239, 230, 0.42);
+  --paper-4: rgba(244, 239, 230, 0.20);
+  --accent: #FF7849;
+  --accent-2: #FFA66E;
+  --accent-glow: rgba(255, 120, 73, 0.22);
+  --mint: #6FE7B5;
+  --gold: #F4C660;
+  --plum: #C586E8;
+  --sky: #7CD7F1;
+  --rose: #F47B7B;
+  --aws: #FF9F66;
+  --azure: #7CD7F1;
+  --gcp: #F47B7B;
+  --oci: #E26464;
+  --ovh: #C586E8;
+  --serif: 'Instrument Serif', 'Times New Roman', serif;
+  --mono: 'JetBrains Mono', ui-monospace, monospace;
+  --sans: 'Manrope', -apple-system, system-ui, sans-serif;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body {
+  background: var(--ink);
+  color: var(--paper);
+  font-family: var(--sans);
+  font-size: 15px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  min-height: 100vh;
+}
+
+body {
+  background:
+    radial-gradient(ellipse at 100% -10%, rgba(255, 120, 73, 0.07), transparent 55%),
+    radial-gradient(ellipse at -10% 110%, rgba(124, 215, 241, 0.05), transparent 65%),
+    var(--ink);
+  background-attachment: fixed;
+  overflow-x: hidden;
+}
+
+.grain {
+  pointer-events: none;
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  opacity: 0.08;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml;utf8,<svg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.6 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+}
+
+.scanlines {
+  pointer-events: none;
+  position: fixed;
+  inset: 0;
+  z-index: 99;
+  background: repeating-linear-gradient(
+    180deg,
+    transparent,
+    transparent 2px,
+    rgba(244,239,230,0.012) 2px,
+    rgba(244,239,230,0.012) 3px
+  );
+}
+
+::selection { background: var(--accent); color: var(--ink); }
+
+.page {
+  max-width: 1480px;
+  margin: 0 auto;
+  padding: 56px 48px 96px;
+  position: relative;
+}
+
+/* ─────────────── MASTHEAD ─────────────── */
+.masthead {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 48px;
+  align-items: end;
+  padding-bottom: 36px;
+  border-bottom: 1px solid var(--line);
+  margin-bottom: 40px;
+}
+
+.masthead__eyebrow {
+  font-family: var(--mono);
+  font-size: 10.5px;
+  letter-spacing: 0.22em;
+  color: var(--paper-3);
+  text-transform: uppercase;
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+a.masthead__eyebrow:hover { color: var(--paper); }
+.masthead__eyebrow-arrow {
+  color: var(--accent);
+  transition: transform 0.2s ease;
+}
+a.masthead__eyebrow:hover .masthead__eyebrow-arrow { transform: translateX(-4px); }
+
+.masthead__title {
+  font-family: var(--serif);
+  font-weight: 400;
+  font-size: clamp(48px, 7vw, 108px);
+  line-height: 0.95;
+  letter-spacing: -0.02em;
+  margin-top: 16px;
+  color: var(--paper);
+}
+.masthead__title em { font-style: italic; color: var(--accent); }
+
+.masthead__subtitle {
+  margin-top: 18px;
+  font-size: 16px;
+  color: var(--paper-2);
+  max-width: 600px;
+  line-height: 1.55;
+}
+.masthead__subtitle span {
+  font-family: var(--serif);
+  font-style: italic;
+  color: var(--paper);
+}
+
+.masthead__status {
+  text-align: right;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 14px;
+  padding-bottom: 6px;
+}
+.status-line {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--mint);
+}
+.status-dot {
+  width: 8px; height: 8px; border-radius: 50%;
+  background: var(--mint);
+  animation: pulse 2.4s infinite;
+}
+@keyframes pulse {
+  0% { box-shadow: 0 0 0 0 rgba(111,231,181,0.5); }
+  70% { box-shadow: 0 0 0 14px rgba(111,231,181,0); }
+  100% { box-shadow: 0 0 0 0 rgba(111,231,181,0); }
+}
+.status-time {
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--paper-3);
+  letter-spacing: 0.04em;
+}
+.status-counts {
+  display: flex;
+  gap: 24px;
+  margin-top: 4px;
+}
+.status-counts > div {
+  text-align: right;
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--paper-3);
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.status-counts strong {
+  font-family: var(--serif);
+  font-style: italic;
+  font-weight: 400;
+  font-size: 28px;
+  color: var(--paper);
+  letter-spacing: -0.01em;
+  text-transform: none;
+}
+
+/* ─────────────── CHART ─────────────── */
+.chart-section {
+  margin-bottom: 48px;
+}
+
+.chart-frame {
+  position: relative;
+  background: linear-gradient(180deg, var(--ink-2) 0%, var(--ink) 100%);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  padding: 28px 32px 32px;
+  overflow: hidden;
+}
+
+.chart-frame::before {
+  content: '';
+  position: absolute;
+  inset: 8px;
+  border: 1px dashed var(--line);
+  border-radius: 4px;
+  pointer-events: none;
+}
+
+.chart-frame__corner {
+  position: absolute;
+  font-family: var(--mono);
+  font-size: 9.5px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--paper-3);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.chart-frame__corner.tl { top: 18px; left: 22px; }
+.chart-frame__corner.tr { top: 18px; right: 22px; }
+.chart-frame__corner.bl { bottom: 18px; left: 22px; }
+.chart-frame__corner.br { bottom: 18px; right: 22px; }
+.chart-frame__corner-tag {
+  color: var(--accent);
+}
+
+.world-chart-wrap {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 2 / 1;
+  margin: 36px 0 8px;
+}
+
+.world-chart {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.world-chart .grid line {
+  stroke: rgba(244, 239, 230, 0.05);
+  stroke-width: 0.5;
+}
+.world-chart .grid line.major {
+  stroke: rgba(244, 239, 230, 0.10);
+  stroke-width: 0.7;
+}
+.world-chart .grid line.equator {
+  stroke: rgba(255, 120, 73, 0.15);
+  stroke-width: 0.7;
+  stroke-dasharray: 2 3;
+}
+.world-chart .grid text {
+  font-family: var(--mono);
+  font-size: 7px;
+  fill: var(--paper-4);
+  letter-spacing: 0.1em;
+}
+
+.world-chart .continent-label {
+  font-family: var(--mono);
+  font-size: 8px;
+  letter-spacing: 0.32em;
+  fill: rgba(244, 239, 230, 0.18);
+  text-transform: uppercase;
+  pointer-events: none;
+}
+
+.world-chart .land path {
+  fill: rgba(244, 239, 230, 0.025);
+  stroke: rgba(244, 239, 230, 0.10);
+  stroke-width: 0.4;
+}
+
+.world-chart .region-dot {
+  cursor: pointer;
+  transition: r 0.15s ease, opacity 0.2s ease;
+  stroke: var(--ink-2);
+  stroke-width: 0.5;
+}
+.world-chart .region-dot:hover { r: 6; }
+.world-chart .region-dot.dim { opacity: 0.15; }
+
+/* ─────────────── CHART LEGEND ─────────────── */
+.chart-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 18px;
+  align-items: center;
+  justify-content: center;
+  padding-top: 14px;
+  border-top: 1px dashed var(--line);
+}
+.chart-legend__label {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--paper-3);
+  margin-right: 6px;
+}
+
+/* ─────────────── FILTERS ─────────────── */
+.filters {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 18px 32px;
+  align-items: center;
+  padding: 18px 22px;
+  background: linear-gradient(180deg, var(--surface) 0%, var(--ink-2) 100%);
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  position: sticky;
+  top: 16px;
+  z-index: 50;
+  backdrop-filter: blur(12px);
+  margin-bottom: 28px;
+}
+.filter-search {
+  flex: 1;
+  position: relative;
+  grid-column: 1 / -1;
+}
+.filter-search input {
+  width: 100%;
+  background: var(--ink);
+  border: 1px solid var(--line);
+  color: var(--paper);
+  font-family: var(--mono);
+  font-size: 13px;
+  padding: 12px 16px 12px 42px;
+  border-radius: 3px;
+  outline: none;
+  transition: border-color 0.2s ease;
+}
+.filter-search input::placeholder { color: var(--paper-3); }
+.filter-search input:focus { border-color: var(--accent); }
+.filter-search::before {
+  content: '⌕';
+  position: absolute;
+  left: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--paper-3);
+  font-size: 18px;
+  pointer-events: none;
+}
+
+.filter-chips {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  align-items: center;
+}
+.filter-chips__label {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--paper-3);
+  margin-right: 4px;
+  align-self: center;
+}
+
+.chip {
+  background: transparent;
+  border: 1px solid var(--line-2);
+  color: var(--paper-2);
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  padding: 6px 12px;
+  border-radius: 99px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  white-space: nowrap;
+}
+.chip:hover { border-color: var(--paper-3); color: var(--paper); }
+.chip.is-active { background: var(--paper); border-color: var(--paper); color: var(--ink); }
+.chip .swatch {
+  width: 8px; height: 8px; border-radius: 2px;
+}
+
+.chip[data-p="aws"]   .swatch { background: var(--aws); }
+.chip[data-p="azure"] .swatch { background: var(--azure); }
+.chip[data-p="gcp"]   .swatch { background: var(--gcp); }
+.chip[data-p="oci"]   .swatch { background: var(--oci); }
+.chip[data-p="ovh"]   .swatch { background: var(--ovh); }
+
+.chip__count {
+  font-size: 10px;
+  color: var(--paper-3);
+  margin-left: 2px;
+}
+.chip.is-active .chip__count { color: var(--ink); opacity: 0.55; }
+
+/* ─────────────── RESULT META ─────────────── */
+.result-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin: 36px 0 18px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--line);
+}
+.result-meta__title {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 26px;
+  letter-spacing: -0.01em;
+  font-weight: 400;
+}
+.result-meta__count {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--paper-3);
+}
+.result-meta__count strong { color: var(--accent); font-weight: 500; }
+
+/* ─────────────── AREAS / REGION LIST ─────────────── */
+.area-block {
+  margin-bottom: 36px;
+}
+
+.area-block__head {
+  display: flex;
+  align-items: baseline;
+  gap: 14px;
+  margin-bottom: 14px;
+  padding-bottom: 10px;
+  border-bottom: 1px dashed var(--line);
+}
+.area-block__title {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 22px;
+  font-weight: 400;
+  letter-spacing: -0.01em;
+  color: var(--paper);
+}
+.area-block__count {
+  font-family: var(--mono);
+  font-size: 10.5px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--paper-3);
+}
+
+.region-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 8px;
+}
+
+.region-card {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 3px;
+  padding: 14px 16px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: 12px;
+  align-items: center;
+}
+.region-card:hover {
+  border-color: var(--line-3);
+  background: var(--surface-2);
+}
+
+.region-card__provider {
+  font-family: var(--mono);
+  font-size: 9.5px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  font-weight: 500;
+  padding: 4px 8px;
+  border-radius: 2px;
+  border: 1px solid var(--line-2);
+  white-space: nowrap;
+}
+.region-card__provider[data-p="aws"]   { color: var(--aws); border-color: rgba(255,159,102,0.3); }
+.region-card__provider[data-p="azure"] { color: var(--azure); border-color: rgba(124,215,241,0.3); }
+.region-card__provider[data-p="gcp"]   { color: var(--gcp); border-color: rgba(244,123,123,0.3); }
+.region-card__provider[data-p="oci"]   { color: var(--oci); border-color: rgba(226,100,100,0.3); }
+.region-card__provider[data-p="ovh"]   { color: var(--ovh); border-color: rgba(197,134,232,0.3); }
+
+.region-card__main { min-width: 0; }
+.region-card__code {
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--paper);
+  font-weight: 500;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.region-card__name {
+  font-family: var(--sans);
+  font-size: 11px;
+  color: var(--paper-3);
+  margin-top: 2px;
+}
+
+.region-card__meta {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--paper-3);
+  letter-spacing: 0.08em;
+  white-space: nowrap;
+  text-align: right;
+}
+.region-card__flag { font-size: 16px; }
+
+/* ─────────────── TOOLTIP ─────────────── */
+.tooltip {
+  position: fixed;
+  background: var(--ink-2);
+  border: 1px solid var(--line-2);
+  padding: 12px 14px;
+  border-radius: 4px;
+  pointer-events: none;
+  z-index: 200;
+  opacity: 0;
+  transition: opacity 0.15s ease;
+  min-width: 200px;
+  box-shadow: 0 12px 32px rgba(0,0,0,0.4);
+}
+.tooltip.is-visible { opacity: 1; }
+.tooltip__head {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  margin-bottom: 6px;
+}
+.tooltip__flag { font-size: 18px; }
+.tooltip__city {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 18px;
+  color: var(--paper);
+  line-height: 1;
+}
+.tooltip__country {
+  font-family: var(--mono);
+  font-size: 9.5px;
+  color: var(--paper-3);
+  letter-spacing: 0.1em;
+}
+.tooltip__provider {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: 8px;
+  padding: 4px 0;
+  align-items: center;
+  font-family: var(--mono);
+  font-size: 11px;
+}
+.tooltip__provider .swatch {
+  width: 8px; height: 8px; border-radius: 2px;
+}
+.tooltip__provider .code { color: var(--paper); }
+.tooltip__provider .meta { color: var(--paper-3); font-size: 9.5px; }
+
+/* ─────────────── DRAWER ─────────────── */
+.drawer-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(10, 9, 7, 0.7);
+  backdrop-filter: blur(8px);
+  z-index: 200;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease;
+}
+.drawer-backdrop.is-open { opacity: 1; pointer-events: auto; }
+.drawer {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: min(560px, 100%);
+  background: var(--ink-2);
+  border-left: 1px solid var(--line-2);
+  z-index: 201;
+  transform: translateX(100%);
+  transition: transform 0.32s cubic-bezier(0.2, 0.8, 0.2, 1);
+  display: flex;
+  flex-direction: column;
+}
+.drawer.is-open { transform: translateX(0); }
+.drawer__head {
+  padding: 28px 32px 22px;
+  border-bottom: 1px solid var(--line);
+  position: relative;
+  flex-shrink: 0;
+}
+.drawer__close {
+  position: absolute;
+  top: 20px; right: 20px;
+  background: transparent;
+  border: 1px solid var(--line-2);
+  color: var(--paper-2);
+  font-family: var(--mono);
+  font-size: 11px;
+  padding: 6px 10px;
+  cursor: pointer;
+  border-radius: 2px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+.drawer__close:hover { border-color: var(--paper); color: var(--paper); }
+.drawer__eyebrow {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+.drawer__title {
+  font-family: var(--serif);
+  font-size: 40px;
+  font-weight: 400;
+  letter-spacing: -0.015em;
+  line-height: 1;
+  margin-top: 8px;
+  display: flex;
+  align-items: baseline;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+.drawer__flag { font-size: 32px; }
+.drawer__meta {
+  display: flex;
+  gap: 24px;
+  margin-top: 18px;
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--paper-3);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  flex-wrap: wrap;
+}
+.drawer__meta strong { color: var(--paper); font-weight: 500; }
+.drawer__body {
+  padding: 22px 32px 32px;
+  overflow-y: auto;
+  flex: 1;
+}
+.drawer__section { margin-bottom: 28px; }
+.drawer__section h4 {
+  font-family: var(--mono);
+  font-size: 10.5px;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--paper-3);
+  margin-bottom: 14px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.drawer__section h4::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--line);
+}
+
+.drawer-region {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: 14px;
+  padding: 12px 14px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 3px;
+  margin-bottom: 6px;
+  align-items: center;
+}
+.drawer-region__provider {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  padding: 4px 8px;
+  border-radius: 2px;
+  border: 1px solid;
+  font-weight: 500;
+}
+.drawer-region__code {
+  font-family: var(--mono);
+  font-size: 13px;
+  color: var(--paper);
+  font-weight: 500;
+}
+.drawer-region__name {
+  font-family: var(--sans);
+  font-size: 11px;
+  color: var(--paper-3);
+  margin-top: 2px;
+}
+.drawer-region__meta {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--paper-3);
+  letter-spacing: 0.06em;
+  text-align: right;
+  white-space: nowrap;
+}
+
+/* ─────────────── COLOPHON ─────────────── */
+.colophon {
+  margin-top: 80px;
+  padding-top: 32px;
+  border-top: 1px solid var(--line);
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 32px;
+  font-size: 13px;
+  color: var(--paper-3);
+}
+.colophon h5 {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--paper-2);
+  margin-bottom: 10px;
+  font-weight: 500;
+}
+.colophon p { font-size: 13px; line-height: 1.6; }
+.colophon p a {
+  color: var(--paper-2);
+  text-decoration: underline;
+  text-decoration-color: var(--line-2);
+  text-underline-offset: 3px;
+}
+.colophon p a:hover { color: var(--accent); }
+.colophon code {
+  font-family: var(--mono);
+  font-size: 11.5px;
+  background: var(--surface);
+  padding: 1px 6px;
+  border-radius: 2px;
+  border: 1px solid var(--line);
+  color: var(--accent-2);
+}
+
+/* ─────────────── RESPONSIVE ─────────────── */
+@media (max-width: 900px) {
+  .page { padding: 32px 22px 72px; }
+  .masthead { grid-template-columns: 1fr; gap: 24px; }
+  .masthead__status { text-align: left; align-items: flex-start; }
+  .filters { position: static; padding: 14px; }
+  .colophon { grid-template-columns: 1fr; gap: 24px; }
+  .chart-frame { padding: 18px 14px 22px; }
+  .chart-frame__corner { display: none; }
+}
+
+</style>
+</head>
+<body>
+
+<div class="grain"></div>
+<div class="scanlines"></div>
+
+<div class="page">
+
+  <header class="masthead">
+    <div class="masthead__brand">
+      <a class="masthead__eyebrow" href="../">
+        <span class="masthead__eyebrow-arrow">←</span>
+        Infra Atlas · Cloud · Multi-Cloud · Region Map
+      </a>
+      <h1 class="masthead__title">Region <em>Map.</em></h1>
+      <p class="masthead__subtitle">
+        Every region from <span>every major cloud</span> on a single chart. Surface the clusters, find the closest data to your users, and see where the actual market overlaps.
+      </p>
+    </div>
+    <aside class="masthead__status">
+      <div class="status-line">
+        <span class="status-dot"></span>
+        <span class="status-text" id="status-text">Snapshot · embedded</span>
+      </div>
+      <div class="status-time" id="status-time">14 May 2026 · 06:00 UTC</div>
+      <div class="status-counts">
+        <div>Providers<strong id="count-providers">5</strong></div>
+        <div>Cities<strong id="count-cities">—</strong></div>
+        <div>Regions<strong id="count-regions">—</strong></div>
+      </div>
+    </aside>
+  </header>
+
+  <section class="chart-section">
+    <div class="chart-frame">
+      <div class="chart-frame__corner tl">
+        <span class="chart-frame__corner-tag">▢</span>
+        Equirectangular projection
+      </div>
+      <div class="chart-frame__corner tr">
+        WGS-84 · Datum
+        <span class="chart-frame__corner-tag">◐</span>
+      </div>
+      <div class="chart-frame__corner bl">
+        <span class="chart-frame__corner-tag">↕</span>
+        90°N — 90°S
+      </div>
+      <div class="chart-frame__corner br">
+        180°W — 180°E
+        <span class="chart-frame__corner-tag">↔</span>
+      </div>
+
+      <div class="world-chart-wrap">
+        <svg class="world-chart" viewBox="0 0 720 360" preserveAspectRatio="xMidYMid meet">
+          <!-- Grid -->
+          <g class="grid">
+            <!-- Longitudes every 30° -->
+            <line x1="60"  y1="0" x2="60"  y2="360"/>
+            <line x1="120" y1="0" x2="120" y2="360" class="major"/>
+            <line x1="180" y1="0" x2="180" y2="360"/>
+            <line x1="240" y1="0" x2="240" y2="360" class="major"/>
+            <line x1="300" y1="0" x2="300" y2="360"/>
+            <line x1="360" y1="0" x2="360" y2="360" class="major"/>
+            <line x1="420" y1="0" x2="420" y2="360"/>
+            <line x1="480" y1="0" x2="480" y2="360" class="major"/>
+            <line x1="540" y1="0" x2="540" y2="360"/>
+            <line x1="600" y1="0" x2="600" y2="360" class="major"/>
+            <line x1="660" y1="0" x2="660" y2="360"/>
+            <!-- Latitudes every 30° -->
+            <line x1="0" y1="60"  x2="720" y2="60"/>
+            <line x1="0" y1="120" x2="720" y2="120" class="major"/>
+            <line x1="0" y1="180" x2="720" y2="180" class="equator"/>
+            <line x1="0" y1="240" x2="720" y2="240" class="major"/>
+            <line x1="0" y1="300" x2="720" y2="300"/>
+            <!-- Coordinate labels -->
+            <text x="6" y="60" >60°N</text>
+            <text x="6" y="120">30°N</text>
+            <text x="6" y="180">0°</text>
+            <text x="6" y="240">30°S</text>
+            <text x="6" y="300">60°S</text>
+            <text x="60"  y="356">120°W</text>
+            <text x="180" y="356">60°W</text>
+            <text x="300" y="356">0°</text>
+            <text x="420" y="356">60°E</text>
+            <text x="540" y="356">120°E</text>
+            <text x="660" y="356">180°</text>
+          </g>
+
+          <!-- Continent silhouettes — hand-tuned simplified paths (equirectangular, ~720x360) -->
+          <g class="land">
+            <!-- Greenland -->
+            <path d="M 248,28 Q 268,24 290,30 Q 305,40 305,55 Q 302,67 290,72 Q 275,73 262,68 Q 250,60 246,46 Q 244,36 248,28 Z"/>
+
+            <!-- North America: Alaska + Canada + USA -->
+            <path d="M 22,48 Q 14,38 30,32 Q 50,28 78,32 Q 95,38 110,44 Q 128,46 145,46 Q 162,46 178,44 Q 200,46 220,52 Q 240,58 252,68 Q 256,76 248,82 Q 235,82 224,80 Q 218,90 218,102 Q 220,112 216,120 Q 210,128 200,128 L 196,138 Q 186,144 178,146 Q 168,146 158,142 L 145,138 Q 135,132 128,128 Q 116,120 110,108 Q 108,96 112,84 Q 96,82 80,84 Q 60,82 44,76 Q 30,68 22,60 Z"/>
+
+            <!-- Mexico + Central America -->
+            <path d="M 135,138 Q 148,142 158,148 Q 168,156 174,165 Q 180,175 186,184 Q 192,192 196,200 Q 195,206 188,202 Q 178,194 170,184 Q 160,172 152,162 Q 142,150 135,142 Z"/>
+
+            <!-- South America -->
+            <path d="M 220,200 Q 235,200 246,210 Q 254,222 257,238 Q 260,256 256,272 Q 250,288 240,302 Q 230,310 222,310 Q 214,304 213,294 Q 210,278 213,260 Q 215,242 217,224 Q 218,210 220,200 Z"/>
+
+            <!-- Europe mainland (continental Europe, not islands) -->
+            <path d="M 338,92 Q 350,88 362,92 Q 372,96 380,96 Q 392,96 400,102 Q 402,110 396,116 L 386,124 Q 378,130 368,128 Q 358,130 350,128 Q 342,124 336,118 Q 334,108 338,98 Z"/>
+
+            <!-- Iberian peninsula (Spain + Portugal) -->
+            <path d="M 338,124 Q 346,126 354,130 Q 358,136 354,142 Q 346,144 340,140 Q 336,134 338,124 Z"/>
+
+            <!-- Italy boot -->
+            <path d="M 372,128 Q 376,132 378,140 Q 380,150 376,154 Q 372,150 372,142 Q 370,134 372,128 Z"/>
+
+            <!-- Scandinavia (Norway + Sweden + Finland) -->
+            <path d="M 376,68 Q 386,62 396,68 Q 402,80 398,94 Q 392,100 386,98 Q 378,90 374,80 Q 372,72 376,68 Z"/>
+
+            <!-- Eurasia mainland (Russia + central Asia + Mongolia + N. China) -->
+            <path d="M 400,72 Q 440,64 490,68 Q 540,72 580,80 Q 605,86 615,98 Q 612,112 600,120 Q 580,126 555,128 Q 530,132 505,130 Q 480,132 460,128 Q 440,124 420,118 Q 405,108 398,96 Q 396,82 400,72 Z"/>
+
+            <!-- Arabian peninsula -->
+            <path d="M 408,138 Q 422,142 434,150 Q 444,164 446,176 Q 440,182 430,180 Q 418,174 410,162 Q 404,150 408,138 Z"/>
+
+            <!-- India subcontinent -->
+            <path d="M 482,150 Q 494,152 502,162 Q 510,178 508,194 Q 502,208 494,210 Q 488,202 486,190 Q 482,174 480,162 Z"/>
+
+            <!-- Indochina (Thailand/Vietnam/Cambodia) -->
+            <path d="M 532,155 Q 546,158 555,170 Q 558,184 553,196 Q 545,200 538,192 Q 530,180 528,168 Z"/>
+
+            <!-- South China coast + Hong Kong area -->
+            <path d="M 555,140 Q 580,140 595,148 Q 602,160 595,168 Q 580,170 565,164 Q 552,154 555,140 Z"/>
+
+            <!-- Korea peninsula -->
+            <path d="M 608,118 Q 615,120 618,128 Q 617,136 612,138 Q 606,134 605,126 Z"/>
+
+            <!-- Japan: Hokkaido + Honshu + Kyushu -->
+            <path d="M 625,104 Q 631,102 634,108 Q 632,114 626,114 Q 623,108 625,104 Z M 622,116 Q 632,114 638,122 Q 638,128 632,130 Q 624,128 622,118 Z M 628,132 Q 635,132 638,138 Q 634,142 628,140 Z"/>
+
+            <!-- Indonesia (Sumatra + Java + Borneo + Sulawesi) -->
+            <path d="M 540,210 Q 555,210 568,212 Q 575,218 568,222 Q 555,224 545,220 Q 538,216 540,210 Z M 570,212 Q 588,210 600,214 Q 605,220 596,224 Q 580,224 568,220 Z M 580,222 Q 595,222 600,228 Q 596,232 588,232 Q 578,228 580,222 Z M 605,200 Q 612,200 615,206 Q 614,210 608,210 Q 603,206 605,200 Z"/>
+
+            <!-- Philippines -->
+            <path d="M 600,180 Q 605,178 608,184 Q 610,194 606,200 Q 602,196 600,188 Z"/>
+
+            <!-- Papua New Guinea -->
+            <path d="M 615,220 Q 630,220 640,224 Q 638,230 626,230 Q 615,226 615,220 Z"/>
+
+            <!-- Australia -->
+            <path d="M 580,250 Q 600,247 625,250 Q 650,253 662,258 Q 666,270 657,278 Q 642,284 622,284 Q 600,284 584,278 Q 570,268 572,258 Z"/>
+
+            <!-- Tasmania -->
+            <path d="M 638,286 Q 644,286 646,292 Q 643,295 638,294 Z"/>
+
+            <!-- New Zealand (North + South Island) -->
+            <path d="M 680,286 Q 686,286 688,292 Q 686,298 682,298 Q 678,294 678,288 Z M 684,300 Q 692,300 694,308 Q 690,312 685,310 Q 683,304 684,300 Z"/>
+
+            <!-- Africa (mainland) -->
+            <path d="M 358,146 Q 380,144 398,154 Q 410,166 416,180 Q 420,196 416,212 Q 412,228 405,242 Q 396,258 386,270 Q 376,278 366,274 Q 358,266 354,254 Q 350,238 350,222 Q 350,206 354,190 Q 354,170 358,146 Z"/>
+
+            <!-- Horn of Africa (Somalia) -->
+            <path d="M 416,180 Q 426,180 432,186 Q 430,194 422,196 Q 416,192 416,180 Z"/>
+
+            <!-- Madagascar -->
+            <path d="M 425,230 Q 430,232 433,244 Q 432,256 428,260 Q 423,256 422,246 Q 422,238 425,230 Z"/>
+
+            <!-- British Isles (UK + Ireland) -->
+            <path d="M 336,106 Q 345,104 350,110 Q 352,120 346,124 Q 338,122 335,116 Q 333,110 336,106 Z"/>
+
+            <!-- Iceland -->
+            <path d="M 308,82 Q 318,80 322,86 Q 320,92 314,92 Q 306,88 308,82 Z"/>
+
+            <!-- Cuba + Caribbean -->
+            <path d="M 195,142 Q 208,142 220,146 Q 222,152 212,154 Q 200,152 195,148 Z"/>
+
+            <!-- Sri Lanka -->
+            <path d="M 502,202 Q 506,204 506,210 Q 502,212 500,208 Z"/>
+          </g>
+
+          <!-- Continent labels -->
+          <text class="continent-label" x="135" y="115">N. AMERICA</text>
+          <text class="continent-label" x="225" y="265">S. AMERICA</text>
+          <text class="continent-label" x="362" y="110">EUROPE</text>
+          <text class="continent-label" x="372" y="215">AFRICA</text>
+          <text class="continent-label" x="425" y="170">M. EAST</text>
+          <text class="continent-label" x="498" y="118">ASIA</text>
+          <text class="continent-label" x="610" y="275">OCEANIA</text>
+
+          <!-- Region dots (rendered by JS) -->
+          <g id="region-dots"></g>
+        </svg>
+      </div>
+
+      <div class="chart-legend">
+        <span class="chart-legend__label">Providers</span>
+        <button class="chip is-active" data-p="all"><span class="swatch" style="background: var(--paper-2)"></span>All <span class="chip__count" id="count-all"></span></button>
+        <button class="chip" data-p="aws"><span class="swatch"></span>AWS <span class="chip__count" id="count-aws"></span></button>
+        <button class="chip" data-p="azure"><span class="swatch"></span>Azure <span class="chip__count" id="count-azure"></span></button>
+        <button class="chip" data-p="gcp"><span class="swatch"></span>Google Cloud <span class="chip__count" id="count-gcp"></span></button>
+        <button class="chip" data-p="oci"><span class="swatch"></span>Oracle Cloud <span class="chip__count" id="count-oci"></span></button>
+        <button class="chip" data-p="ovh"><span class="swatch"></span>OVHcloud <span class="chip__count" id="count-ovh"></span></button>
+      </div>
+    </div>
+  </section>
+
+  <section class="filters">
+    <div class="filter-search">
+      <input id="search" type="search" autocomplete="off" spellcheck="false" placeholder="Filter by city, region code, country, or area…">
+    </div>
+    <div class="filter-chips">
+      <span class="filter-chips__label">Area</span>
+      <button class="chip is-active" data-area="all">All</button>
+      <button class="chip" data-area="Americas">Americas</button>
+      <button class="chip" data-area="Europe">Europe</button>
+      <button class="chip" data-area="Middle East">Middle East</button>
+      <button class="chip" data-area="Africa">Africa</button>
+      <button class="chip" data-area="Asia Pacific">Asia Pacific</button>
+    </div>
+  </section>
+
+  <div class="result-meta">
+    <div class="result-meta__title" id="result-title">All regions</div>
+    <div class="result-meta__count"><strong id="result-count">0</strong> shown</div>
+  </div>
+
+  <main id="results"></main>
+
+  <footer class="colophon">
+    <div>
+      <h5>About</h5>
+      <p>Instrument 02 of <a href="../">Infra Atlas</a>. Every region from AWS, Azure, GCP, Oracle Cloud, and OVHcloud — mapped on one chart so you can see where they cluster, where they don't, and where to put your data.</p>
+    </div>
+    <div>
+      <h5>Data source</h5>
+      <p>Curated from each vendor's public regions page. AWS positions cross-checked with <code>aws ec2 describe-regions</code>. Some location coordinates are approximate (vendors don't publish exact lat/lng for security reasons).</p>
+    </div>
+    <div>
+      <h5>Shortcuts</h5>
+      <p><code>/</code> search · <code>Esc</code> close drawer · hover dots for tooltip · click for details.</p>
+    </div>
+  </footer>
+
+</div>
+
+<!-- TOOLTIP -->
+<div class="tooltip" id="tooltip">
+  <div class="tooltip__head">
+    <span class="tooltip__flag" id="tip-flag">🌐</span>
+    <div>
+      <div class="tooltip__city" id="tip-city">—</div>
+      <div class="tooltip__country" id="tip-country">—</div>
+    </div>
+  </div>
+  <div id="tip-providers"></div>
+</div>
+
+<!-- DRAWER -->
+<div class="drawer-backdrop" id="drawer-backdrop"></div>
+<aside class="drawer" id="drawer" aria-hidden="true">
+  <div class="drawer__head" id="drawer-head"></div>
+  <div class="drawer__body" id="drawer-body"></div>
+</aside>
+
+<script>
+// ───────────────────────────────────────────────────────────────────
+// DATA — snapshot of cloud regions across 5 providers
+// Cities grouped: each city has lat/lng + list of provider regions there
+// ───────────────────────────────────────────────────────────────────
+
+const PROVIDERS = {
+  aws:   { name: "AWS",           color: "var(--aws)" },
+  azure: { name: "Azure",         color: "var(--azure)" },
+  gcp:   { name: "Google Cloud",  color: "var(--gcp)" },
+  oci:   { name: "Oracle Cloud",  color: "var(--oci)" },
+  ovh:   { name: "OVHcloud",      color: "var(--ovh)" }
+};
+
+let CITIES = [
+  // ─── AMERICAS ───
+  { city: "Ashburn, Virginia", area: "Americas", country: "United States", flag: "🇺🇸", lat: 39.05, lng: -77.49, regions: [
+    { p: "aws",   code: "us-east-1",       name: "N. Virginia", az: 6, since: 2006 },
+    { p: "azure", code: "eastus",          name: "East US",     az: 3, since: 2010 }
+  ]},
+  { city: "Boydton, Virginia", area: "Americas", country: "United States", flag: "🇺🇸", lat: 36.66, lng: -78.40, regions: [
+    { p: "azure", code: "eastus2", name: "East US 2", az: 3, since: 2014 }
+  ]},
+  { city: "Columbus, Ohio", area: "Americas", country: "United States", flag: "🇺🇸", lat: 39.96, lng: -83.00, regions: [
+    { p: "aws", code: "us-east-2", name: "Ohio", az: 3, since: 2016 }
+  ]},
+  { city: "Chicago, Illinois", area: "Americas", country: "United States", flag: "🇺🇸", lat: 41.88, lng: -87.62, regions: [
+    { p: "azure", code: "northcentralus", name: "North Central US", az: 3, since: 2009 },
+    { p: "oci",   code: "us-chicago-1",   name: "Chicago",          az: 3, since: 2023 }
+  ]},
+  { city: "Des Moines, Iowa", area: "Americas", country: "United States", flag: "🇺🇸", lat: 41.59, lng: -93.62, regions: [
+    { p: "azure", code: "centralus", name: "Central US",  az: 3, since: 2014 },
+    { p: "gcp",   code: "us-central1", name: "Iowa",       az: 4, since: 2014 }
+  ]},
+  { city: "Council Bluffs, Iowa", area: "Americas", country: "United States", flag: "🇺🇸", lat: 41.26, lng: -95.86, regions: [
+    { p: "gcp", code: "us-central1", name: "Iowa", az: 4, since: 2014 }
+  ]},
+  { city: "San Antonio, Texas", area: "Americas", country: "United States", flag: "🇺🇸", lat: 29.42, lng: -98.49, regions: [
+    { p: "azure", code: "southcentralus", name: "South Central US", az: 3, since: 2014 },
+    { p: "gcp",   code: "us-south1",      name: "Dallas",           az: 3, since: 2022 }
+  ]},
+  { city: "Moncks Corner, S. Carolina", area: "Americas", country: "United States", flag: "🇺🇸", lat: 33.20, lng: -80.01, regions: [
+    { p: "gcp", code: "us-east1", name: "S. Carolina", az: 3, since: 2015 }
+  ]},
+  { city: "N. Virginia", area: "Americas", country: "United States", flag: "🇺🇸", lat: 38.83, lng: -77.31, regions: [
+    { p: "gcp", code: "us-east4", name: "N. Virginia", az: 3, since: 2017 }
+  ]},
+  { city: "Quincy, Washington", area: "Americas", country: "United States", flag: "🇺🇸", lat: 47.23, lng: -119.85, regions: [
+    { p: "azure", code: "westus2", name: "West US 2", az: 3, since: 2017 }
+  ]},
+  { city: "The Dalles, Oregon", area: "Americas", country: "United States", flag: "🇺🇸", lat: 45.59, lng: -121.18, regions: [
+    { p: "gcp", code: "us-west1", name: "Oregon", az: 3, since: 2016 }
+  ]},
+  { city: "Boardman, Oregon", area: "Americas", country: "United States", flag: "🇺🇸", lat: 45.86, lng: -119.69, regions: [
+    { p: "aws", code: "us-west-2", name: "Oregon", az: 4, since: 2011 }
+  ]},
+  { city: "Los Angeles, California", area: "Americas", country: "United States", flag: "🇺🇸", lat: 34.05, lng: -118.24, regions: [
+    { p: "gcp", code: "us-west2", name: "Los Angeles", az: 3, since: 2018 }
+  ]},
+  { city: "Salt Lake City, Utah", area: "Americas", country: "United States", flag: "🇺🇸", lat: 40.76, lng: -111.89, regions: [
+    { p: "gcp", code: "us-west3", name: "Salt Lake City", az: 3, since: 2020 }
+  ]},
+  { city: "Las Vegas, Nevada", area: "Americas", country: "United States", flag: "🇺🇸", lat: 36.17, lng: -115.14, regions: [
+    { p: "gcp", code: "us-west4", name: "Las Vegas", az: 3, since: 2020 }
+  ]},
+  { city: "Phoenix, Arizona", area: "Americas", country: "United States", flag: "🇺🇸", lat: 33.45, lng: -112.07, regions: [
+    { p: "azure", code: "westus3",      name: "West US 3", az: 3, since: 2021 },
+    { p: "oci",   code: "us-phoenix-1", name: "Phoenix",   az: 3, since: 2018 }
+  ]},
+  { city: "San Jose, California", area: "Americas", country: "United States", flag: "🇺🇸", lat: 37.34, lng: -121.89, regions: [
+    { p: "aws", code: "us-west-1",   name: "N. California", az: 3, since: 2009 },
+    { p: "azure", code: "westus",    name: "West US",       az: 3, since: 2010 },
+    { p: "oci",   code: "us-sanjose-1", name: "San Jose",   az: 3, since: 2020 }
+  ]},
+  { city: "Toronto", area: "Americas", country: "Canada", flag: "🇨🇦", lat: 43.65, lng: -79.38, regions: [
+    { p: "azure", code: "canadacentral", name: "Canada Central", az: 3, since: 2016 },
+    { p: "gcp",   code: "northamerica-northeast2", name: "Toronto", az: 3, since: 2021 },
+    { p: "oci",   code: "ca-toronto-1", name: "Toronto",       az: 1, since: 2019 }
+  ]},
+  { city: "Montreal", area: "Americas", country: "Canada", flag: "🇨🇦", lat: 45.50, lng: -73.57, regions: [
+    { p: "aws", code: "ca-central-1", name: "Canada Central", az: 3, since: 2016 },
+    { p: "gcp", code: "northamerica-northeast1", name: "Montréal", az: 3, since: 2018 },
+    { p: "oci", code: "ca-montreal-1", name: "Montreal", az: 1, since: 2018 }
+  ]},
+  { city: "Quebec City", area: "Americas", country: "Canada", flag: "🇨🇦", lat: 46.81, lng: -71.21, regions: [
+    { p: "azure", code: "canadaeast", name: "Canada East", az: 3, since: 2016 }
+  ]},
+  { city: "Calgary", area: "Americas", country: "Canada", flag: "🇨🇦", lat: 51.05, lng: -114.07, regions: [
+    { p: "aws", code: "ca-west-1", name: "Calgary", az: 3, since: 2023 }
+  ]},
+  { city: "Mexico City", area: "Americas", country: "Mexico", flag: "🇲🇽", lat: 19.43, lng: -99.13, regions: [
+    { p: "aws",   code: "mx-central-1",  name: "Mexico Central",     az: 3, since: 2025 },
+    { p: "azure", code: "mexicocentral", name: "Mexico Central",     az: 3, since: 2025 },
+    { p: "oci",   code: "mx-queretaro-1", name: "Querétaro",         az: 1, since: 2021 }
+  ]},
+  { city: "Monterrey", area: "Americas", country: "Mexico", flag: "🇲🇽", lat: 25.69, lng: -100.32, regions: [
+    { p: "oci", code: "mx-monterrey-1", name: "Monterrey", az: 1, since: 2024 }
+  ]},
+  { city: "São Paulo", area: "Americas", country: "Brazil", flag: "🇧🇷", lat: -23.55, lng: -46.63, regions: [
+    { p: "aws",   code: "sa-east-1",        name: "São Paulo",   az: 3, since: 2011 },
+    { p: "azure", code: "brazilsouth",      name: "Brazil South", az: 3, since: 2014 },
+    { p: "gcp",   code: "southamerica-east1", name: "São Paulo", az: 3, since: 2017 },
+    { p: "oci",   code: "sa-saopaulo-1",    name: "São Paulo",   az: 1, since: 2018 },
+    { p: "ovh",   code: "BHS5",             name: "São Paulo",   az: 1, since: 2024 }
+  ]},
+  { city: "Vinhedo", area: "Americas", country: "Brazil", flag: "🇧🇷", lat: -23.03, lng: -46.99, regions: [
+    { p: "oci", code: "sa-vinhedo-1", name: "Vinhedo", az: 1, since: 2021 }
+  ]},
+  { city: "Rio de Janeiro", area: "Americas", country: "Brazil", flag: "🇧🇷", lat: -22.91, lng: -43.20, regions: [
+    { p: "azure", code: "brazilsoutheast", name: "Brazil Southeast", az: 1, since: 2020 }
+  ]},
+  { city: "Santiago", area: "Americas", country: "Chile", flag: "🇨🇱", lat: -33.45, lng: -70.65, regions: [
+    { p: "azure", code: "chilecentral",      name: "Chile Central",     az: 3, since: 2024 },
+    { p: "gcp",   code: "southamerica-west1", name: "Santiago",         az: 3, since: 2021 },
+    { p: "oci",   code: "sa-santiago-1",     name: "Santiago",          az: 1, since: 2021 }
+  ]},
+  { city: "Bogotá", area: "Americas", country: "Colombia", flag: "🇨🇴", lat: 4.71, lng: -74.07, regions: [
+    { p: "oci", code: "sa-bogota-1", name: "Bogotá", az: 1, since: 2022 }
+  ]},
+
+  // ─── EUROPE ───
+  { city: "Dublin", area: "Europe", country: "Ireland", flag: "🇮🇪", lat: 53.35, lng: -6.26, regions: [
+    { p: "aws",   code: "eu-west-1",   name: "Ireland",       az: 3, since: 2007 },
+    { p: "azure", code: "northeurope", name: "North Europe",  az: 3, since: 2009 }
+  ]},
+  { city: "London", area: "Europe", country: "United Kingdom", flag: "🇬🇧", lat: 51.51, lng: -0.13, regions: [
+    { p: "aws",   code: "eu-west-2",     name: "London",          az: 3, since: 2016 },
+    { p: "azure", code: "uksouth",       name: "UK South",        az: 3, since: 2016 },
+    { p: "gcp",   code: "europe-west2",  name: "London",          az: 3, since: 2017 },
+    { p: "oci",   code: "uk-london-1",   name: "London",          az: 3, since: 2018 },
+    { p: "ovh",   code: "UK1",           name: "London",          az: 1, since: 2017 }
+  ]},
+  { city: "Cardiff / Newport", area: "Europe", country: "United Kingdom", flag: "🇬🇧", lat: 51.48, lng: -3.18, regions: [
+    { p: "azure", code: "ukwest",      name: "UK West",   az: 3, since: 2016 },
+    { p: "oci",   code: "uk-cardiff-1", name: "Newport",  az: 1, since: 2020 }
+  ]},
+  { city: "Paris", area: "Europe", country: "France", flag: "🇫🇷", lat: 48.86, lng: 2.35, regions: [
+    { p: "aws",   code: "eu-west-3",     name: "Paris",         az: 3, since: 2017 },
+    { p: "azure", code: "francecentral", name: "France Central", az: 3, since: 2018 },
+    { p: "gcp",   code: "europe-west9",  name: "Paris",         az: 3, since: 2022 },
+    { p: "oci",   code: "eu-paris-1",    name: "Paris",         az: 1, since: 2021 },
+    { p: "ovh",   code: "GRA",           name: "Gravelines",    az: 3, since: 2016 }
+  ]},
+  { city: "Marseille", area: "Europe", country: "France", flag: "🇫🇷", lat: 43.30, lng: 5.37, regions: [
+    { p: "azure", code: "francesouth",     name: "France South", az: 1, since: 2018 },
+    { p: "oci",   code: "eu-marseille-1", name: "Marseille",    az: 1, since: 2021 }
+  ]},
+  { city: "Roubaix", area: "Europe", country: "France", flag: "🇫🇷", lat: 50.69, lng: 3.18, regions: [
+    { p: "ovh", code: "RBX", name: "Roubaix", az: 7, since: 2010 }
+  ]},
+  { city: "Strasbourg", area: "Europe", country: "France", flag: "🇫🇷", lat: 48.58, lng: 7.75, regions: [
+    { p: "ovh", code: "SBG", name: "Strasbourg", az: 4, since: 2012 }
+  ]},
+  { city: "Frankfurt", area: "Europe", country: "Germany", flag: "🇩🇪", lat: 50.11, lng: 8.68, regions: [
+    { p: "aws",   code: "eu-central-1",         name: "Frankfurt",            az: 3, since: 2014 },
+    { p: "azure", code: "germanywestcentral",   name: "Germany West Central", az: 3, since: 2020 },
+    { p: "gcp",   code: "europe-west3",         name: "Frankfurt",            az: 3, since: 2017 },
+    { p: "oci",   code: "eu-frankfurt-1",       name: "Frankfurt",            az: 3, since: 2018 },
+    { p: "ovh",   code: "DE",                   name: "Frankfurt",            az: 1, since: 2016 }
+  ]},
+  { city: "Berlin", area: "Europe", country: "Germany", flag: "🇩🇪", lat: 52.52, lng: 13.41, regions: [
+    { p: "azure", code: "germanynorth", name: "Germany North", az: 1, since: 2020 }
+  ]},
+  { city: "Amsterdam", area: "Europe", country: "Netherlands", flag: "🇳🇱", lat: 52.37, lng: 4.90, regions: [
+    { p: "azure", code: "westeurope",      name: "West Europe",  az: 3, since: 2010 },
+    { p: "gcp",   code: "europe-west4",    name: "Eemshaven",    az: 3, since: 2018 },
+    { p: "oci",   code: "eu-amsterdam-1",  name: "Amsterdam",    az: 1, since: 2020 }
+  ]},
+  { city: "Zurich", area: "Europe", country: "Switzerland", flag: "🇨🇭", lat: 47.38, lng: 8.54, regions: [
+    { p: "aws",   code: "eu-central-2",      name: "Zurich",       az: 3, since: 2022 },
+    { p: "azure", code: "switzerlandnorth",  name: "Switzerland N", az: 3, since: 2019 },
+    { p: "gcp",   code: "europe-west6",      name: "Zurich",       az: 3, since: 2019 },
+    { p: "oci",   code: "eu-zurich-1",       name: "Zurich",       az: 1, since: 2019 }
+  ]},
+  { city: "Geneva", area: "Europe", country: "Switzerland", flag: "🇨🇭", lat: 46.20, lng: 6.15, regions: [
+    { p: "azure", code: "switzerlandwest", name: "Switzerland W", az: 1, since: 2019 }
+  ]},
+  { city: "Milan", area: "Europe", country: "Italy", flag: "🇮🇹", lat: 45.46, lng: 9.19, regions: [
+    { p: "aws",   code: "eu-south-1",     name: "Milan",      az: 3, since: 2020 },
+    { p: "azure", code: "italynorth",     name: "Italy North", az: 3, since: 2023 },
+    { p: "gcp",   code: "europe-west8",   name: "Milan",      az: 3, since: 2022 },
+    { p: "oci",   code: "eu-milan-1",     name: "Milan",      az: 1, since: 2022 }
+  ]},
+  { city: "Madrid", area: "Europe", country: "Spain", flag: "🇪🇸", lat: 40.42, lng: -3.70, regions: [
+    { p: "aws",   code: "eu-south-2",     name: "Spain",        az: 3, since: 2022 },
+    { p: "azure", code: "spaincentral",   name: "Spain Central", az: 3, since: 2024 },
+    { p: "gcp",   code: "europe-southwest1", name: "Madrid",   az: 3, since: 2022 },
+    { p: "oci",   code: "eu-madrid-1",    name: "Madrid",       az: 1, since: 2022 }
+  ]},
+  { city: "Stockholm", area: "Europe", country: "Sweden", flag: "🇸🇪", lat: 59.33, lng: 18.07, regions: [
+    { p: "aws",   code: "eu-north-1",      name: "Stockholm",       az: 3, since: 2018 },
+    { p: "azure", code: "swedencentral",   name: "Sweden Central",  az: 3, since: 2021 },
+    { p: "gcp",   code: "europe-north1",   name: "Hamina (FI)",     az: 3, since: 2018 },
+    { p: "oci",   code: "eu-stockholm-1",  name: "Stockholm",       az: 1, since: 2020 }
+  ]},
+  { city: "Warsaw", area: "Europe", country: "Poland", flag: "🇵🇱", lat: 52.23, lng: 21.01, regions: [
+    { p: "azure", code: "polandcentral",  name: "Poland Central", az: 3, since: 2023 },
+    { p: "gcp",   code: "europe-central2", name: "Warsaw",        az: 3, since: 2021 },
+    { p: "ovh",   code: "WAW",            name: "Warsaw",         az: 1, since: 2018 }
+  ]},
+  { city: "Oslo", area: "Europe", country: "Norway", flag: "🇳🇴", lat: 59.91, lng: 10.75, regions: [
+    { p: "azure", code: "norwayeast", name: "Norway East", az: 3, since: 2019 }
+  ]},
+  { city: "Hamina", area: "Europe", country: "Finland", flag: "🇫🇮", lat: 60.57, lng: 27.20, regions: [
+    { p: "gcp", code: "europe-north1", name: "Hamina", az: 3, since: 2018 }
+  ]},
+  { city: "Turin", area: "Europe", country: "Italy", flag: "🇮🇹", lat: 45.07, lng: 7.69, regions: [
+    { p: "gcp", code: "europe-west12", name: "Turin", az: 3, since: 2024 }
+  ]},
+  { city: "Berlin / Brandenburg", area: "Europe", country: "Germany", flag: "🇩🇪", lat: 52.40, lng: 13.06, regions: [
+    { p: "gcp", code: "europe-west10", name: "Berlin", az: 3, since: 2023 }
+  ]},
+
+  // ─── MIDDLE EAST ───
+  { city: "Tel Aviv", area: "Middle East", country: "Israel", flag: "🇮🇱", lat: 32.08, lng: 34.78, regions: [
+    { p: "aws",   code: "il-central-1",   name: "Tel Aviv",       az: 3, since: 2023 },
+    { p: "azure", code: "israelcentral", name: "Israel Central",  az: 3, since: 2023 },
+    { p: "gcp",   code: "me-west1",       name: "Tel Aviv",       az: 3, since: 2022 }
+  ]},
+  { city: "Jerusalem", area: "Middle East", country: "Israel", flag: "🇮🇱", lat: 31.77, lng: 35.21, regions: [
+    { p: "oci", code: "il-jerusalem-1", name: "Jerusalem", az: 1, since: 2021 }
+  ]},
+  { city: "Manama", area: "Middle East", country: "Bahrain", flag: "🇧🇭", lat: 26.07, lng: 50.55, regions: [
+    { p: "aws", code: "me-south-1", name: "Bahrain", az: 3, since: 2019 }
+  ]},
+  { city: "Dubai", area: "Middle East", country: "United Arab Emirates", flag: "🇦🇪", lat: 25.20, lng: 55.27, regions: [
+    { p: "aws",   code: "me-central-1", name: "UAE",         az: 3, since: 2022 },
+    { p: "azure", code: "uaenorth",     name: "UAE North",    az: 3, since: 2019 },
+    { p: "oci",   code: "me-dubai-1",   name: "Dubai",        az: 1, since: 2021 }
+  ]},
+  { city: "Abu Dhabi", area: "Middle East", country: "United Arab Emirates", flag: "🇦🇪", lat: 24.45, lng: 54.37, regions: [
+    { p: "azure", code: "uaecentral",     name: "UAE Central", az: 1, since: 2019 },
+    { p: "oci",   code: "me-abudhabi-1", name: "Abu Dhabi",   az: 1, since: 2022 }
+  ]},
+  { city: "Riyadh", area: "Middle East", country: "Saudi Arabia", flag: "🇸🇦", lat: 24.71, lng: 46.68, regions: [
+    { p: "gcp", code: "me-central2",  name: "Dammam",       az: 3, since: 2023 },
+    { p: "oci", code: "me-riyadh-1",  name: "Riyadh",       az: 1, since: 2023 }
+  ]},
+  { city: "Jeddah", area: "Middle East", country: "Saudi Arabia", flag: "🇸🇦", lat: 21.49, lng: 39.19, regions: [
+    { p: "gcp", code: "me-central1",  name: "Doha (QA)",    az: 3, since: 2023 },
+    { p: "oci", code: "me-jeddah-1",  name: "Jeddah",       az: 1, since: 2020 }
+  ]},
+  { city: "Doha", area: "Middle East", country: "Qatar", flag: "🇶🇦", lat: 25.29, lng: 51.53, regions: [
+    { p: "azure", code: "qatarcentral", name: "Qatar Central", az: 3, since: 2022 }
+  ]},
+
+  // ─── AFRICA ───
+  { city: "Cape Town", area: "Africa", country: "South Africa", flag: "🇿🇦", lat: -33.92, lng: 18.42, regions: [
+    { p: "aws",   code: "af-south-1",       name: "Cape Town",         az: 3, since: 2020 },
+    { p: "azure", code: "southafricawest",  name: "South Africa West", az: 1, since: 2019 }
+  ]},
+  { city: "Johannesburg", area: "Africa", country: "South Africa", flag: "🇿🇦", lat: -26.20, lng: 28.05, regions: [
+    { p: "azure", code: "southafricanorth",    name: "South Africa N.",   az: 3, since: 2019 },
+    { p: "gcp",   code: "africa-south1",       name: "Johannesburg",      az: 3, since: 2024 },
+    { p: "oci",   code: "af-johannesburg-1",   name: "Johannesburg",      az: 1, since: 2022 }
+  ]},
+
+  // ─── ASIA PACIFIC ───
+  { city: "Hong Kong", area: "Asia Pacific", country: "Hong Kong", flag: "🇭🇰", lat: 22.32, lng: 114.17, regions: [
+    { p: "aws",   code: "ap-east-1",       name: "Hong Kong",       az: 3, since: 2019 },
+    { p: "azure", code: "eastasia",        name: "East Asia",       az: 3, since: 2010 },
+    { p: "gcp",   code: "asia-east2",      name: "Hong Kong",       az: 3, since: 2018 }
+  ]},
+  { city: "Taipei", area: "Asia Pacific", country: "Taiwan", flag: "🇹🇼", lat: 25.03, lng: 121.57, regions: [
+    { p: "azure", code: "taiwannorth",  name: "Taiwan North", az: 3, since: 2025 },
+    { p: "gcp",   code: "asia-east1",   name: "Changhua",     az: 3, since: 2016 }
+  ]},
+  { city: "Tokyo", area: "Asia Pacific", country: "Japan", flag: "🇯🇵", lat: 35.68, lng: 139.69, regions: [
+    { p: "aws",   code: "ap-northeast-1", name: "Tokyo",       az: 4, since: 2011 },
+    { p: "azure", code: "japaneast",     name: "Japan East",   az: 3, since: 2014 },
+    { p: "gcp",   code: "asia-northeast1", name: "Tokyo",     az: 3, since: 2016 },
+    { p: "oci",   code: "ap-tokyo-1",    name: "Tokyo",        az: 1, since: 2019 }
+  ]},
+  { city: "Osaka", area: "Asia Pacific", country: "Japan", flag: "🇯🇵", lat: 34.69, lng: 135.50, regions: [
+    { p: "aws",   code: "ap-northeast-3", name: "Osaka",       az: 3, since: 2018 },
+    { p: "azure", code: "japanwest",     name: "Japan West",   az: 3, since: 2014 },
+    { p: "gcp",   code: "asia-northeast2", name: "Osaka",     az: 3, since: 2019 },
+    { p: "oci",   code: "ap-osaka-1",    name: "Osaka",        az: 1, since: 2020 }
+  ]},
+  { city: "Seoul", area: "Asia Pacific", country: "South Korea", flag: "🇰🇷", lat: 37.57, lng: 126.98, regions: [
+    { p: "aws",   code: "ap-northeast-2",  name: "Seoul",         az: 4, since: 2016 },
+    { p: "azure", code: "koreacentral",   name: "Korea Central",  az: 3, since: 2016 },
+    { p: "gcp",   code: "asia-northeast3", name: "Seoul",        az: 3, since: 2020 },
+    { p: "oci",   code: "ap-seoul-1",     name: "Seoul",         az: 1, since: 2019 }
+  ]},
+  { city: "Busan", area: "Asia Pacific", country: "South Korea", flag: "🇰🇷", lat: 35.18, lng: 129.08, regions: [
+    { p: "azure", code: "koreasouth", name: "Korea South", az: 1, since: 2016 }
+  ]},
+  { city: "Chuncheon", area: "Asia Pacific", country: "South Korea", flag: "🇰🇷", lat: 37.87, lng: 127.73, regions: [
+    { p: "oci", code: "ap-chuncheon-1", name: "Chuncheon", az: 1, since: 2020 }
+  ]},
+  { city: "Singapore", area: "Asia Pacific", country: "Singapore", flag: "🇸🇬", lat: 1.35, lng: 103.82, regions: [
+    { p: "aws",   code: "ap-southeast-1",   name: "Singapore",    az: 3, since: 2010 },
+    { p: "azure", code: "southeastasia",   name: "SE Asia",      az: 3, since: 2010 },
+    { p: "gcp",   code: "asia-southeast1", name: "Jurong West",  az: 3, since: 2017 },
+    { p: "oci",   code: "ap-singapore-1", name: "Singapore",    az: 1, since: 2020 },
+    { p: "ovh",   code: "SGP",            name: "Singapore",    az: 1, since: 2017 }
+  ]},
+  { city: "Mumbai", area: "Asia Pacific", country: "India", flag: "🇮🇳", lat: 19.08, lng: 72.88, regions: [
+    { p: "aws",   code: "ap-south-1",     name: "Mumbai",       az: 3, since: 2016 },
+    { p: "azure", code: "westindia",      name: "West India",    az: 3, since: 2015 },
+    { p: "gcp",   code: "asia-south1",    name: "Mumbai",       az: 3, since: 2017 },
+    { p: "oci",   code: "ap-mumbai-1",    name: "Mumbai",       az: 1, since: 2019 }
+  ]},
+  { city: "Hyderabad", area: "Asia Pacific", country: "India", flag: "🇮🇳", lat: 17.39, lng: 78.49, regions: [
+    { p: "aws",   code: "ap-south-2",      name: "Hyderabad",   az: 3, since: 2022 },
+    { p: "gcp",   code: "asia-south2",    name: "Delhi",        az: 3, since: 2021 },
+    { p: "oci",   code: "ap-hyderabad-1", name: "Hyderabad",    az: 1, since: 2020 }
+  ]},
+  { city: "Pune", area: "Asia Pacific", country: "India", flag: "🇮🇳", lat: 18.52, lng: 73.86, regions: [
+    { p: "azure", code: "centralindia", name: "Central India", az: 3, since: 2015 }
+  ]},
+  { city: "Chennai", area: "Asia Pacific", country: "India", flag: "🇮🇳", lat: 13.08, lng: 80.27, regions: [
+    { p: "azure", code: "southindia", name: "South India", az: 1, since: 2015 }
+  ]},
+  { city: "Jakarta", area: "Asia Pacific", country: "Indonesia", flag: "🇮🇩", lat: -6.21, lng: 106.85, regions: [
+    { p: "aws",   code: "ap-southeast-3", name: "Jakarta",     az: 3, since: 2021 },
+    { p: "azure", code: "indonesiacentral", name: "Indonesia Central", az: 3, since: 2025 },
+    { p: "gcp",   code: "asia-southeast2", name: "Jakarta",   az: 3, since: 2020 }
+  ]},
+  { city: "Bangkok", area: "Asia Pacific", country: "Thailand", flag: "🇹🇭", lat: 13.76, lng: 100.50, regions: [
+    { p: "aws", code: "ap-southeast-7", name: "Thailand", az: 3, since: 2025 },
+    { p: "gcp", code: "asia-southeast3", name: "Bangkok", az: 3, since: 2024 }
+  ]},
+  { city: "Kuala Lumpur", area: "Asia Pacific", country: "Malaysia", flag: "🇲🇾", lat: 3.14, lng: 101.69, regions: [
+    { p: "aws",   code: "ap-southeast-5",  name: "Malaysia",       az: 3, since: 2024 },
+    { p: "azure", code: "malaysiawest",   name: "Malaysia West",   az: 3, since: 2024 },
+    { p: "gcp",   code: "asia-southeast4", name: "Kuala Lumpur",   az: 3, since: 2024 }
+  ]},
+  { city: "Sydney", area: "Asia Pacific", country: "Australia", flag: "🇦🇺", lat: -33.87, lng: 151.21, regions: [
+    { p: "aws",   code: "ap-southeast-2",   name: "Sydney",      az: 3, since: 2012 },
+    { p: "azure", code: "australiaeast",   name: "Australia East", az: 3, since: 2014 },
+    { p: "gcp",   code: "australia-southeast1", name: "Sydney", az: 3, since: 2017 },
+    { p: "oci",   code: "ap-sydney-1",     name: "Sydney",      az: 1, since: 2019 },
+    { p: "ovh",   code: "SYD",             name: "Sydney",      az: 1, since: 2018 }
+  ]},
+  { city: "Melbourne", area: "Asia Pacific", country: "Australia", flag: "🇦🇺", lat: -37.81, lng: 144.96, regions: [
+    { p: "aws",   code: "ap-southeast-4",       name: "Melbourne",     az: 3, since: 2023 },
+    { p: "azure", code: "australiasoutheast",  name: "Australia SE",   az: 3, since: 2014 },
+    { p: "gcp",   code: "australia-southeast2", name: "Melbourne",    az: 3, since: 2021 },
+    { p: "oci",   code: "ap-melbourne-1",     name: "Melbourne",     az: 1, since: 2020 }
+  ]},
+  { city: "Canberra", area: "Asia Pacific", country: "Australia", flag: "🇦🇺", lat: -35.31, lng: 149.13, regions: [
+    { p: "azure", code: "australiacentral", name: "Australia Central", az: 1, since: 2018 }
+  ]},
+  { city: "Auckland", area: "Asia Pacific", country: "New Zealand", flag: "🇳🇿", lat: -36.85, lng: 174.76, regions: [
+    { p: "azure", code: "newzealandnorth", name: "New Zealand N.", az: 3, since: 2024 }
+  ]}
+];
+
+// Flatten regions for filtering / list rendering. Rebuilt after each data load.
+let ALL_REGIONS = [];
+function buildRegions() {
+  ALL_REGIONS = [];
+  CITIES.forEach(city => {
+    city.regions.forEach(r => ALL_REGIONS.push({ ...r, city: city.city, area: city.area, country: city.country, flag: city.flag, lat: city.lat, lng: city.lng }));
+  });
+}
+buildRegions();
+
+// Try to load fresh data from ./data.json (generated by ./refresh.sh)
+async function loadData() {
+  try {
+    const res = await fetch("./data.json", { cache: "no-cache" });
+    if (!res.ok) return;
+    const json = await res.json();
+    if (Array.isArray(json.cities) && json.cities.length > 0) {
+      CITIES = json.cities;
+      buildRegions();
+      $("#status-text").textContent = "Live · data.json";
+      if (json.generated) {
+        const d = new Date(json.generated);
+        if (!isNaN(d)) {
+          $("#status-time").textContent = d.toLocaleString("en-GB", {
+            day: "2-digit", month: "short", year: "numeric",
+            hour: "2-digit", minute: "2-digit", timeZone: "UTC"
+          }) + " UTC";
+        }
+      }
+    }
+  } catch (e) { /* keep embedded fallback */ }
+}
+
+// ───────────────────────────────────────────────────────────────────
+// STATE + RENDER
+// ───────────────────────────────────────────────────────────────────
+
+const state = { providers: new Set(["aws","azure","gcp","oci","ovh"]), area: "all", query: "" };
+
+const $  = (s) => document.querySelector(s);
+const $$ = (s) => Array.from(document.querySelectorAll(s));
+
+function lngToX(lng) { return (lng + 180) * 2; }
+function latToY(lat) { return (90 - lat) * 2; }
+
+async function init() {
+  await loadData();
+
+  // Render counts
+  const totalRegions = ALL_REGIONS.length;
+  const totalCities = CITIES.length;
+  $("#count-cities").textContent = totalCities;
+  $("#count-regions").textContent = totalRegions;
+  $("#count-all").textContent = `(${totalRegions})`;
+  ["aws","azure","gcp","oci","ovh"].forEach(p => {
+    const c = ALL_REGIONS.filter(r => r.p === p).length;
+    const el = document.getElementById(`count-${p}`);
+    if (el) el.textContent = `(${c})`;
+  });
+
+  renderDots();
+  renderList();
+  wireEvents();
+}
+
+function renderDots() {
+  const layer = $("#region-dots");
+  layer.innerHTML = "";
+
+  // Slight offset per provider when stacked at same city
+  const offsets = { aws: [-1.5,-1.5], azure: [1.5,-1.5], gcp: [-1.5,1.5], oci: [1.5,1.5], ovh: [0,2.5] };
+
+  CITIES.forEach(city => {
+    const cx = lngToX(city.lng);
+    const cy = latToY(city.lat);
+    city.regions.forEach(r => {
+      const [dx, dy] = offsets[r.p] || [0,0];
+      const dot = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+      dot.setAttribute("cx", cx + dx);
+      dot.setAttribute("cy", cy + dy);
+      dot.setAttribute("r", 3.2);
+      dot.setAttribute("fill", getProviderColor(r.p));
+      dot.setAttribute("opacity", 0.85);
+      dot.classList.add("region-dot");
+      dot.dataset.provider = r.p;
+      dot.dataset.city = city.city;
+      dot.dataset.code = r.code;
+      dot.addEventListener("mouseenter", (e) => showTooltip(e, city));
+      dot.addEventListener("mousemove", moveTooltip);
+      dot.addEventListener("mouseleave", hideTooltip);
+      dot.addEventListener("click", () => openCityDrawer(city));
+      layer.appendChild(dot);
+    });
+  });
+
+  applyDotFilter();
+}
+
+function getProviderColor(p) {
+  const styles = getComputedStyle(document.documentElement);
+  return styles.getPropertyValue(`--${p}`).trim() || '#999';
+}
+
+function renderList() {
+  const q = state.query.trim().toLowerCase();
+  const results = $("#results");
+  results.innerHTML = "";
+
+  // Filter regions
+  const filtered = ALL_REGIONS.filter(r => {
+    if (!state.providers.has(r.p)) return false;
+    if (state.area !== "all" && r.area !== state.area) return false;
+    if (q) {
+      const hay = `${r.code} ${r.name} ${r.city} ${r.country} ${r.area} ${r.p}`.toLowerCase();
+      if (!hay.includes(q)) return false;
+    }
+    return true;
+  });
+
+  $("#result-count").textContent = filtered.length;
+  $("#result-title").textContent = q
+    ? `Regions matching "${state.query}"`
+    : state.area === "all" ? "All regions"
+    : `Regions in ${state.area}`;
+
+  // Group by area
+  const areaOrder = ["Americas","Europe","Middle East","Africa","Asia Pacific"];
+  const byArea = {};
+  filtered.forEach(r => {
+    if (!byArea[r.area]) byArea[r.area] = [];
+    byArea[r.area].push(r);
+  });
+
+  areaOrder.forEach(area => {
+    if (!byArea[area]) return;
+    const rows = byArea[area].sort((a,b) => a.city.localeCompare(b.city) || a.p.localeCompare(b.p));
+    const block = document.createElement("div");
+    block.className = "area-block";
+    block.innerHTML = `
+      <div class="area-block__head">
+        <div class="area-block__title">${area}</div>
+        <div class="area-block__count">${rows.length} regions · ${new Set(rows.map(r => r.city)).size} cities</div>
+      </div>
+      <div class="region-grid"></div>
+    `;
+    const grid = block.querySelector(".region-grid");
+    rows.forEach(r => {
+      const card = document.createElement("div");
+      card.className = "region-card";
+      card.innerHTML = `
+        <span class="region-card__provider" data-p="${r.p}">${PROVIDERS[r.p].name}</span>
+        <div class="region-card__main">
+          <div class="region-card__code">${r.code}</div>
+          <div class="region-card__name">${r.name} · ${r.city.split(",")[0]}</div>
+        </div>
+        <div class="region-card__meta">
+          <div class="region-card__flag">${r.flag}</div>
+          <div>${r.az} AZ · ${r.since}</div>
+        </div>
+      `;
+      card.addEventListener("click", () => {
+        const city = CITIES.find(c => c.city === r.city);
+        if (city) openCityDrawer(city);
+      });
+      grid.appendChild(card);
+    });
+    results.appendChild(block);
+  });
+
+  if (filtered.length === 0) {
+    results.innerHTML = `<div style="text-align:center; padding: 80px 20px; color: var(--paper-3);">
+      <div style="font-family: var(--serif); font-style: italic; font-size: 36px; color: var(--paper-2); margin-bottom: 8px;">Nothing here.</div>
+      <div style="font-family: var(--mono); font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase;">Try clearing filters or a different search.</div>
+    </div>`;
+  }
+}
+
+function applyDotFilter() {
+  const q = state.query.trim().toLowerCase();
+  $$(".region-dot").forEach(dot => {
+    const p = dot.dataset.provider;
+    const city = dot.dataset.city;
+    const code = dot.dataset.code;
+    const cityObj = CITIES.find(c => c.city === city);
+    const matchProvider = state.providers.has(p);
+    const matchArea = state.area === "all" || (cityObj && cityObj.area === state.area);
+    const matchQuery = !q || `${code} ${city}`.toLowerCase().includes(q);
+    dot.classList.toggle("dim", !(matchProvider && matchArea && matchQuery));
+  });
+}
+
+// ─── Tooltip ───
+function showTooltip(e, city) {
+  const tip = $("#tooltip");
+  $("#tip-flag").textContent = city.flag;
+  $("#tip-city").textContent = city.city;
+  $("#tip-country").textContent = city.country.toUpperCase();
+  const pList = $("#tip-providers");
+  pList.innerHTML = city.regions.map(r => `
+    <div class="tooltip__provider">
+      <span class="swatch" style="background: var(--${r.p})"></span>
+      <span class="code">${PROVIDERS[r.p].name} <span class="meta">· ${r.code}</span></span>
+      <span class="meta">${r.az} AZ</span>
+    </div>
+  `).join("");
+  tip.classList.add("is-visible");
+  moveTooltip(e);
+}
+function moveTooltip(e) {
+  const tip = $("#tooltip");
+  const x = e.clientX + 16;
+  const y = e.clientY + 16;
+  const tw = tip.offsetWidth;
+  const th = tip.offsetHeight;
+  tip.style.left = Math.min(x, window.innerWidth - tw - 16) + "px";
+  tip.style.top  = Math.min(y, window.innerHeight - th - 16) + "px";
+}
+function hideTooltip() {
+  $("#tooltip").classList.remove("is-visible");
+}
+
+// ─── Drawer ───
+function openDrawer() {
+  $("#drawer-backdrop").classList.add("is-open");
+  $("#drawer").classList.add("is-open");
+  $("#drawer").setAttribute("aria-hidden","false");
+}
+function closeDrawer() {
+  $("#drawer-backdrop").classList.remove("is-open");
+  $("#drawer").classList.remove("is-open");
+  $("#drawer").setAttribute("aria-hidden","true");
+}
+
+function openCityDrawer(city) {
+  $("#drawer-head").innerHTML = `
+    <div class="drawer__eyebrow">${city.area} · ${city.country}</div>
+    <h3 class="drawer__title"><span class="drawer__flag">${city.flag}</span>${city.city}</h3>
+    <div class="drawer__meta">
+      <span><strong>${city.regions.length}</strong> regions present</span>
+      <span><strong>${new Set(city.regions.map(r => r.p)).size}</strong> providers</span>
+      <span>${city.lat.toFixed(2)}°, ${city.lng.toFixed(2)}°</span>
+    </div>
+    <button class="drawer__close" onclick="closeDrawer()">Close ⤬</button>
+  `;
+  const earliest = Math.min(...city.regions.map(r => r.since));
+  const azTotal  = city.regions.reduce((acc, r) => acc + r.az, 0);
+  $("#drawer-body").innerHTML = `
+    <div class="drawer__section">
+      <h4>Cloud regions here</h4>
+      ${city.regions.sort((a,b) => a.p.localeCompare(b.p)).map(r => `
+        <div class="drawer-region">
+          <span class="drawer-region__provider" data-p="${r.p}" style="color: var(--${r.p}); border-color: var(--${r.p});">${PROVIDERS[r.p].name}</span>
+          <div>
+            <div class="drawer-region__code">${r.code}</div>
+            <div class="drawer-region__name">${r.name}</div>
+          </div>
+          <div class="drawer-region__meta">${r.az} AZ<br>${r.since}</div>
+        </div>
+      `).join("")}
+    </div>
+    <div class="drawer__section">
+      <h4>City fingerprint</h4>
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 18px; font-family: var(--mono); font-size: 12px;">
+        <div>
+          <div style="color: var(--paper-3); font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; margin-bottom: 6px;">First cloud presence</div>
+          <div style="font-family: var(--serif); font-style: italic; font-size: 28px; color: var(--paper);">${earliest}</div>
+        </div>
+        <div>
+          <div style="color: var(--paper-3); font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; margin-bottom: 6px;">Total AZs across providers</div>
+          <div style="font-family: var(--serif); font-style: italic; font-size: 28px; color: var(--paper);">${azTotal}</div>
+        </div>
+      </div>
+    </div>
+  `;
+  openDrawer();
+}
+
+// ─── Events ───
+function wireEvents() {
+  // Provider chips (legend)
+  $$('.chip[data-p]').forEach(btn => {
+    btn.addEventListener("click", () => {
+      const p = btn.dataset.p;
+      if (p === "all") {
+        state.providers = new Set(["aws","azure","gcp","oci","ovh"]);
+        $$('.chip[data-p]').forEach(b => b.classList.toggle("is-active", b.dataset.p === "all"));
+      } else {
+        // Toggle this provider on/off
+        if (state.providers.has(p) && state.providers.size === 1) {
+          // turning off the last → switch back to all
+          state.providers = new Set(["aws","azure","gcp","oci","ovh"]);
+          $$('.chip[data-p]').forEach(b => b.classList.toggle("is-active", b.dataset.p === "all"));
+        } else {
+          // If 'all' was active and user clicks specific, switch to single
+          if ($('.chip[data-p="all"]').classList.contains("is-active")) {
+            state.providers = new Set([p]);
+            $$('.chip[data-p]').forEach(b => b.classList.toggle("is-active", b.dataset.p === p));
+          } else {
+            state.providers.has(p) ? state.providers.delete(p) : state.providers.add(p);
+            btn.classList.toggle("is-active");
+            $('.chip[data-p="all"]').classList.remove("is-active");
+          }
+        }
+      }
+      applyDotFilter();
+      renderList();
+    });
+  });
+  // Area chips
+  $$('.chip[data-area]').forEach(btn => {
+    btn.addEventListener("click", () => {
+      state.area = btn.dataset.area;
+      $$('.chip[data-area]').forEach(b => b.classList.toggle("is-active", b.dataset.area === state.area));
+      applyDotFilter();
+      renderList();
+    });
+  });
+  // Search
+  $("#search").addEventListener("input", (e) => {
+    state.query = e.target.value;
+    applyDotFilter();
+    renderList();
+  });
+  // Drawer close
+  $("#drawer-backdrop").addEventListener("click", closeDrawer);
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") closeDrawer();
+    if (e.key === "/" && e.target.tagName !== "INPUT") { e.preventDefault(); $("#search").focus(); }
+  });
+}
+
+init();
+</script>
+</body>
+</html>

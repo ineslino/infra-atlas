@@ -1,0 +1,686 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>AWS · API Gateway Atlas · Infra Atlas</title>
+<meta name="description" content="AWS API Gateway, demystified. REST vs HTTP vs WebSocket, authorizers, deployment modes, pricing, and the gotchas nobody explains until you hit them.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@300;400;500;600&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+:root {
+  --ink: #0A0907; --ink-2: #100E0C; --surface: #161310; --surface-2: #1E1A15; --surface-3: #2A241C;
+  --line: rgba(244, 239, 230, 0.06); --line-2: rgba(244, 239, 230, 0.14); --line-3: rgba(244, 239, 230, 0.28);
+  --paper: #F4EFE6; --paper-2: rgba(244, 239, 230, 0.66); --paper-3: rgba(244, 239, 230, 0.42); --paper-4: rgba(244, 239, 230, 0.20);
+  --accent: #FF7849; --accent-2: #FFA66E; --aws: #FF9F66;
+  --mint: #6FE7B5; --gold: #F4C660; --plum: #C586E8; --sky: #7CD7F1; --rose: #F47B7B; --teal: #5BCCC9;
+  --serif: 'Instrument Serif', 'Times New Roman', serif;
+  --mono: 'JetBrains Mono', ui-monospace, monospace;
+  --sans: 'Manrope', -apple-system, system-ui, sans-serif;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body {
+  background: var(--ink); color: var(--paper);
+  font-family: var(--sans); font-size: 15px; line-height: 1.55;
+  -webkit-font-smoothing: antialiased; min-height: 100vh;
+}
+body {
+  background:
+    radial-gradient(ellipse at 100% -10%, rgba(255, 159, 102, 0.08), transparent 55%),
+    radial-gradient(ellipse at -10% 110%, rgba(244, 198, 96, 0.04), transparent 65%),
+    var(--ink);
+  background-attachment: fixed; overflow-x: hidden;
+}
+.grain {
+  pointer-events: none; position: fixed; inset: 0; z-index: 100; opacity: 0.08; mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml;utf8,<svg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.6 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+}
+.scanlines {
+  pointer-events: none; position: fixed; inset: 0; z-index: 99;
+  background: repeating-linear-gradient(180deg, transparent, transparent 2px, rgba(244,239,230,0.012) 2px, rgba(244,239,230,0.012) 3px);
+}
+::selection { background: var(--aws); color: var(--ink); }
+
+.page { max-width: 1280px; margin: 0 auto; padding: 56px 48px 96px; position: relative; }
+
+/* MASTHEAD */
+.masthead {
+  display: grid; grid-template-columns: 1fr auto; gap: 48px; align-items: end;
+  padding-bottom: 36px; border-bottom: 1px solid var(--line); margin-bottom: 56px;
+}
+.masthead__eyebrow {
+  font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.22em;
+  color: var(--paper-3); text-transform: uppercase;
+  display: inline-flex; align-items: center; gap: 12px;
+  text-decoration: none; transition: color 0.2s ease;
+}
+.masthead__eyebrow:hover { color: var(--paper); }
+.masthead__eyebrow-arrow { color: var(--aws); transition: transform 0.2s ease; }
+.masthead__eyebrow:hover .masthead__eyebrow-arrow { transform: translateX(-4px); }
+
+.masthead__title {
+  font-family: var(--serif); font-weight: 400;
+  font-size: clamp(48px, 7vw, 108px); line-height: 0.95; letter-spacing: -0.02em;
+  margin-top: 16px;
+}
+.masthead__title em { font-style: italic; color: var(--aws); }
+.masthead__subtitle {
+  margin-top: 18px; font-size: 17px; color: var(--paper-2); max-width: 620px; line-height: 1.55;
+}
+.masthead__subtitle em {
+  font-family: var(--serif); font-style: italic; font-size: 1.12em; color: var(--paper);
+}
+
+.masthead__status {
+  text-align: right; display: flex; flex-direction: column; align-items: flex-end; gap: 14px; padding-bottom: 6px;
+}
+.status-line {
+  display: inline-flex; align-items: center; gap: 10px;
+  font-family: var(--mono); font-size: 11px; letter-spacing: 0.18em;
+  text-transform: uppercase; color: var(--aws);
+}
+.status-time { font-family: var(--mono); font-size: 12px; color: var(--paper-3); }
+
+/* SECTIONS */
+.section {
+  margin: 96px 0 64px;
+  display: grid; grid-template-columns: 220px 1fr; gap: 56px;
+}
+.section__head {
+  position: sticky; top: 32px; align-self: start;
+}
+.section__num {
+  font-family: var(--serif); font-style: italic;
+  font-size: 64px; font-weight: 400; line-height: 0.9; color: var(--paper-3);
+}
+.section__kicker {
+  font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.2em;
+  text-transform: uppercase; color: var(--paper-3); margin-top: 8px;
+}
+.section__title {
+  font-family: var(--serif); font-size: 36px; font-weight: 400;
+  letter-spacing: -0.012em; margin-top: 8px; line-height: 1.05;
+}
+.section__title em { font-style: italic; color: var(--aws); }
+.section__body { max-width: 760px; }
+.section__lead {
+  font-size: 17px; line-height: 1.65; color: var(--paper); margin-bottom: 28px; font-weight: 300;
+}
+.section__lead em { font-family: var(--serif); font-style: italic; color: var(--paper); font-size: 1.1em; }
+
+/* COMPARISON CARDS */
+.compare-grid {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 14px; margin: 24px 0;
+}
+.compare-card {
+  background: linear-gradient(180deg, var(--surface) 0%, var(--ink-2) 100%);
+  border: 1px solid var(--line); border-radius: 4px;
+  padding: 20px 22px; position: relative;
+}
+.compare-card.is-featured { border-color: var(--aws); }
+.compare-card.is-featured::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px;
+  background: linear-gradient(90deg, transparent, var(--aws), transparent);
+}
+.compare-card__tag {
+  font-family: var(--mono); font-size: 9.5px; letter-spacing: 0.16em;
+  text-transform: uppercase; color: var(--paper-3); margin-bottom: 10px;
+  display: flex; justify-content: space-between; align-items: center;
+}
+.compare-card__tag .badge {
+  font-family: var(--mono); padding: 2px 8px; border-radius: 99px;
+  border: 1px solid; font-size: 9px;
+}
+.compare-card__name {
+  font-family: var(--serif); font-style: italic; font-size: 28px;
+  letter-spacing: -0.01em; line-height: 1; color: var(--paper);
+}
+.compare-card__sub {
+  font-family: var(--mono); font-size: 11px; color: var(--paper-3);
+  letter-spacing: 0.04em; margin-top: 6px;
+}
+.compare-card__list {
+  margin-top: 16px; list-style: none;
+}
+.compare-card__list li {
+  font-size: 13px; padding: 8px 0; border-bottom: 1px dashed var(--line);
+  display: flex; justify-content: space-between; align-items: baseline; gap: 12px;
+  color: var(--paper-2);
+}
+.compare-card__list li:last-child { border-bottom: 0; }
+.compare-card__list li strong {
+  font-family: var(--mono); font-size: 11px; letter-spacing: 0.06em;
+  color: var(--paper); font-weight: 500; text-align: right;
+}
+
+/* TABLES */
+.ref-table {
+  width: 100%; margin: 18px 0 8px;
+  border-collapse: collapse; font-size: 13.5px;
+  background: var(--surface); border: 1px solid var(--line); border-radius: 4px; overflow: hidden;
+}
+.ref-table th {
+  font-family: var(--mono); font-size: 10px; font-weight: 500;
+  letter-spacing: 0.16em; text-transform: uppercase; color: var(--paper-3);
+  text-align: left; padding: 14px 16px;
+  background: var(--ink-2); border-bottom: 1px solid var(--line-2);
+}
+.ref-table td {
+  padding: 14px 16px; border-bottom: 1px solid var(--line);
+  color: var(--paper-2); line-height: 1.55; vertical-align: top;
+}
+.ref-table tr:last-child td { border-bottom: 0; }
+.ref-table td:first-child {
+  font-family: var(--mono); color: var(--paper); font-size: 13px; font-weight: 500; white-space: nowrap;
+}
+.ref-table td em {
+  font-family: var(--serif); font-style: italic; color: var(--paper); font-size: 1.05em;
+}
+.ref-table code {
+  font-family: var(--mono); font-size: 12px; background: var(--ink);
+  padding: 1px 5px; border-radius: 2px; border: 1px solid var(--line); color: var(--accent-2);
+}
+
+/* GOTCHA CALLOUT */
+.gotcha {
+  background: linear-gradient(90deg, rgba(255, 120, 73, 0.06), transparent);
+  border-left: 2px solid var(--aws);
+  padding: 18px 24px; margin: 24px 0; border-radius: 0 4px 4px 0;
+}
+.gotcha__head {
+  font-family: var(--mono); font-size: 10px; letter-spacing: 0.2em;
+  text-transform: uppercase; color: var(--aws); margin-bottom: 8px;
+}
+.gotcha__title {
+  font-family: var(--serif); font-style: italic; font-size: 22px;
+  color: var(--paper); line-height: 1.2; margin-bottom: 10px;
+}
+.gotcha__body {
+  font-size: 14.5px; color: var(--paper-2); line-height: 1.6;
+}
+.gotcha__body code {
+  font-family: var(--mono); font-size: 12.5px; background: var(--ink);
+  padding: 1px 6px; border-radius: 2px; border: 1px solid var(--line); color: var(--accent-2);
+}
+
+/* DEPLOYMENT DIAGRAM */
+.diagram {
+  background: var(--surface); border: 1px solid var(--line);
+  border-radius: 4px; padding: 28px 32px; margin: 20px 0;
+  display: flex; align-items: center; justify-content: space-between; gap: 20px;
+  font-family: var(--mono); font-size: 11px;
+}
+.diagram__node {
+  background: var(--ink-2); border: 1px solid var(--line-2);
+  padding: 12px 18px; border-radius: 4px; color: var(--paper);
+  text-align: center; min-width: 100px;
+}
+.diagram__node.is-aws { border-color: var(--aws); color: var(--aws); }
+.diagram__arrow {
+  color: var(--paper-3); font-size: 18px;
+}
+.diagram__label {
+  font-size: 9px; letter-spacing: 0.18em; color: var(--paper-3); margin-top: 4px;
+}
+
+/* PROS / CONS */
+.prosons {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin: 18px 0;
+}
+.prosons > div {
+  background: var(--surface); border: 1px solid var(--line);
+  border-radius: 4px; padding: 22px;
+}
+.prosons h5 {
+  font-family: var(--mono); font-size: 10px; letter-spacing: 0.2em;
+  text-transform: uppercase; margin-bottom: 14px;
+}
+.prosons__good h5 { color: var(--mint); }
+.prosons__bad h5 { color: var(--rose); }
+.prosons ul { list-style: none; }
+.prosons li {
+  padding: 8px 0; border-bottom: 1px dashed var(--line);
+  font-size: 13.5px; color: var(--paper-2); line-height: 1.55;
+  display: flex; gap: 10px;
+}
+.prosons li:last-child { border-bottom: 0; }
+.prosons li::before {
+  font-family: var(--mono); font-weight: 500; flex-shrink: 0;
+}
+.prosons__good li::before { content: '+'; color: var(--mint); }
+.prosons__bad  li::before { content: '−'; color: var(--rose); }
+.prosons li em { font-family: var(--serif); font-style: italic; color: var(--paper); }
+.prosons li code { font-family: var(--mono); font-size: 12.5px; background: var(--ink); padding: 1px 5px; border-radius: 2px; border: 1px solid var(--line); color: var(--accent-2); }
+
+/* COLOPHON */
+.colophon {
+  margin-top: 96px; padding-top: 32px; border-top: 1px solid var(--line);
+  display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 32px;
+  font-size: 13px; color: var(--paper-3);
+}
+.colophon h5 {
+  font-family: var(--mono); font-size: 10px; letter-spacing: 0.18em;
+  text-transform: uppercase; color: var(--paper-2); margin-bottom: 10px; font-weight: 500;
+}
+.colophon p { line-height: 1.6; }
+.colophon p a {
+  color: var(--paper-2); text-decoration: underline;
+  text-decoration-color: var(--line-2); text-underline-offset: 3px;
+}
+.colophon p a:hover { color: var(--aws); }
+.colophon code {
+  font-family: var(--mono); font-size: 11.5px; background: var(--surface);
+  padding: 1px 6px; border-radius: 2px; border: 1px solid var(--line); color: var(--accent-2);
+}
+
+@media (max-width: 900px) {
+  .page { padding: 32px 22px 72px; }
+  .masthead { grid-template-columns: 1fr; gap: 24px; }
+  .section { grid-template-columns: 1fr; gap: 18px; margin: 56px 0; }
+  .section__head { position: static; }
+  .section__num { font-size: 44px; }
+  .section__title { font-size: 28px; }
+  .prosons { grid-template-columns: 1fr; }
+  .diagram { flex-direction: column; }
+  .colophon { grid-template-columns: 1fr; gap: 24px; }
+}
+</style>
+</head>
+<body>
+
+<div class="grain"></div>
+<div class="scanlines"></div>
+
+<div class="page">
+
+  <header class="masthead">
+    <div class="masthead__brand">
+      <a class="masthead__eyebrow" href="../">
+        <span class="masthead__eyebrow-arrow">←</span>
+        Infra Atlas · API Management · AWS API Gateway
+      </a>
+      <h1 class="masthead__title">API Gateway <em>Atlas.</em></h1>
+      <p class="masthead__subtitle">
+        AWS API Gateway, <em>demystified</em>. REST vs HTTP vs WebSocket, the authorizer zoo, deployment modes, pricing — and the gotchas nobody explains until you hit them in production.
+      </p>
+    </div>
+    <aside class="masthead__status">
+      <div class="status-line">
+        <span style="width:8px;height:8px;border-radius:50%;background:var(--aws);display:inline-block"></span>
+        AWS · Reference
+      </div>
+      <div class="status-time">Updated 2026-05-15</div>
+    </aside>
+  </header>
+
+  <!-- ── 01 · The Three APIs ── -->
+  <section class="section">
+    <div class="section__head">
+      <div class="section__num">01</div>
+      <div class="section__kicker">The choice you make first</div>
+      <h2 class="section__title">The <em>Three APIs</em></h2>
+    </div>
+    <div class="section__body">
+      <p class="section__lead">
+        Before anything else, you pick an <em>API type</em>. They're three separate products that share a console. Pick wrong and you'll be migrating later — or paying 3.5× more than you need to.
+      </p>
+
+      <div class="compare-grid">
+        <div class="compare-card is-featured">
+          <div class="compare-card__tag">REST API <span class="badge" style="color: var(--aws); border-color: rgba(255,159,102,0.4)">Classic</span></div>
+          <div class="compare-card__name">REST</div>
+          <div class="compare-card__sub">The full-featured original</div>
+          <ul class="compare-card__list">
+            <li>VTL mapping templates <strong>Yes</strong></li>
+            <li>Resource policies <strong>Yes</strong></li>
+            <li>Per-API throttling <strong>Yes</strong></li>
+            <li>X-Ray tracing <strong>Yes</strong></li>
+            <li>WAF integration <strong>Yes</strong></li>
+            <li>Pricing per 1M calls <strong>$3.50</strong></li>
+            <li>p99 latency <strong>~80 ms</strong></li>
+          </ul>
+        </div>
+
+        <div class="compare-card">
+          <div class="compare-card__tag">HTTP API <span class="badge" style="color: var(--mint); border-color: rgba(111,231,181,0.4)">Cheaper</span></div>
+          <div class="compare-card__name">HTTP</div>
+          <div class="compare-card__sub">~70% cheaper, ~60% faster</div>
+          <ul class="compare-card__list">
+            <li>VTL mapping templates <strong>No</strong></li>
+            <li>Native JWT authorizer <strong>Yes</strong></li>
+            <li>CORS built-in <strong>Yes</strong></li>
+            <li>X-Ray tracing <strong>No</strong></li>
+            <li>WAF integration <strong>No</strong></li>
+            <li>Pricing per 1M calls <strong>$1.00</strong></li>
+            <li>p99 latency <strong>~50 ms</strong></li>
+          </ul>
+        </div>
+
+        <div class="compare-card">
+          <div class="compare-card__tag">WebSocket API <span class="badge" style="color: var(--plum); border-color: rgba(197,134,232,0.4)">Stateful</span></div>
+          <div class="compare-card__name">WebSocket</div>
+          <div class="compare-card__sub">For chat, notifications, streaming</div>
+          <ul class="compare-card__list">
+            <li>Persistent connections <strong>Yes</strong></li>
+            <li>Connection routing <strong>Yes</strong></li>
+            <li>2-hour max connection <strong>Yes</strong></li>
+            <li>10-min idle timeout <strong>Yes</strong></li>
+            <li>Pricing per 1M msgs <strong>$1.00</strong></li>
+            <li>+ Connection minutes <strong>$0.25/M</strong></li>
+            <li>Max payload <strong>128 KB</strong></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="gotcha">
+        <div class="gotcha__head">▸ Decision Heuristic</div>
+        <div class="gotcha__title">Use HTTP unless you need VTL, WAF, or resource policies.</div>
+        <div class="gotcha__body">
+          HTTP API is the modern default. The only reasons to pick REST in 2026: you need <em>request/response transformation</em> via VTL templates, <em>resource policies</em> for cross-account access, <em>X-Ray tracing</em> on the gateway itself, or <em>WAF</em> in front. Otherwise HTTP is faster and ~3.5× cheaper.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── 02 · The Authorizer Zoo ── -->
+  <section class="section">
+    <div class="section__head">
+      <div class="section__num">02</div>
+      <div class="section__kicker">The other choice you make first</div>
+      <h2 class="section__title">The <em>Authorizer Zoo</em></h2>
+    </div>
+    <div class="section__body">
+      <p class="section__lead">
+        There are five different ways to authenticate a request to API Gateway. They <em>do not work the same way</em> across REST and HTTP APIs.
+      </p>
+
+      <table class="ref-table">
+        <thead>
+          <tr><th>Authorizer</th><th>REST</th><th>HTTP</th><th>Notes</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>IAM (SigV4)</td>
+            <td>Yes</td><td>Yes</td>
+            <td>Internal AWS-to-AWS only. Requires SigV4 signing on every request.</td>
+          </tr>
+          <tr>
+            <td>Cognito User Pools</td>
+            <td>Yes</td><td>No</td>
+            <td>REST-only. Validates Cognito-issued JWTs. For HTTP, use the JWT authorizer with Cognito as IdP.</td>
+          </tr>
+          <tr>
+            <td>JWT (native)</td>
+            <td>No</td><td>Yes</td>
+            <td>HTTP-only. JWKS-based, no Lambda needed. <em>The reason to choose HTTP for OAuth/OIDC.</em></td>
+          </tr>
+          <tr>
+            <td>Lambda authorizer (REQUEST)</td>
+            <td>Yes</td><td>Yes</td>
+            <td>Custom Lambda; can authorize on any header/query/path/IP. <code>~10ms cold-start cost</code>.</td>
+          </tr>
+          <tr>
+            <td>Lambda authorizer (TOKEN)</td>
+            <td>Yes</td><td>No</td>
+            <td>REST-only legacy variant: receives a single header value. Use REQUEST type for new APIs.</td>
+          </tr>
+          <tr>
+            <td>API keys + usage plans</td>
+            <td>Yes</td><td>No</td>
+            <td><em>Not authentication</em> — identification + throttling only. Pair with another authorizer.</td>
+          </tr>
+          <tr>
+            <td>mTLS (client cert)</td>
+            <td>Yes</td><td>Yes</td>
+            <td>Custom domain only. Truststore in S3. Doesn't replace another authorizer for app-level identity.</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="gotcha">
+        <div class="gotcha__head">▸ Watch out</div>
+        <div class="gotcha__title">Lambda authorizers cache by identity-source. Get it wrong and authz looks broken in tests but works in prod (or worse).</div>
+        <div class="gotcha__body">
+          Cache TTL is 5 min by default. Identity source is what gets used as the cache key — typically <code>$request.header.Authorization</code>. If two users send the same Authorization value during the TTL, the second one gets the first one's allow/deny decision. Set TTL to 0 for sensitive ops.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── 03 · Deployment Modes ── -->
+  <section class="section">
+    <div class="section__head">
+      <div class="section__num">03</div>
+      <div class="section__kicker">Where the endpoint lives</div>
+      <h2 class="section__title">Deployment <em>Modes</em></h2>
+    </div>
+    <div class="section__body">
+      <p class="section__lead">
+        REST APIs offer <em>three deployment modes</em>; HTTP APIs are always Regional. Pick based on who's calling.
+      </p>
+
+      <div class="compare-grid">
+        <div class="compare-card">
+          <div class="compare-card__tag">Edge-optimized</div>
+          <div class="compare-card__name">Edge</div>
+          <div class="compare-card__sub">CloudFront in front</div>
+          <ul class="compare-card__list">
+            <li>Caller location <strong>Global</strong></li>
+            <li>Backend latency <strong>+30 ms</strong></li>
+            <li>TLS termination <strong>CloudFront</strong></li>
+            <li>Best for <em>public APIs, mobile</em></li>
+          </ul>
+        </div>
+
+        <div class="compare-card is-featured">
+          <div class="compare-card__tag">Regional <span class="badge" style="color: var(--aws); border-color: rgba(255,159,102,0.4)">Default</span></div>
+          <div class="compare-card__name">Regional</div>
+          <div class="compare-card__sub">Direct to API GW endpoint</div>
+          <ul class="compare-card__list">
+            <li>Caller location <strong>Same region</strong></li>
+            <li>Backend latency <strong>Direct</strong></li>
+            <li>TLS termination <strong>API GW</strong></li>
+            <li>Best for <em>B2B, internal services</em></li>
+          </ul>
+        </div>
+
+        <div class="compare-card">
+          <div class="compare-card__tag">Private</div>
+          <div class="compare-card__name">Private</div>
+          <div class="compare-card__sub">VPC endpoint only</div>
+          <ul class="compare-card__list">
+            <li>Caller location <strong>Same VPC</strong></li>
+            <li>Backend latency <strong>Direct</strong></li>
+            <li>Resource policy <strong>Required</strong></li>
+            <li>Best for <em>internal-only APIs</em></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="diagram">
+        <div class="diagram__node">
+          Client
+          <div class="diagram__label">Public internet</div>
+        </div>
+        <div class="diagram__arrow">→</div>
+        <div class="diagram__node">CloudFront</div>
+        <div class="diagram__arrow">→</div>
+        <div class="diagram__node is-aws">API Gateway<br><span style="font-size: 9px; color: var(--paper-3)">edge-optimized</span></div>
+        <div class="diagram__arrow">→</div>
+        <div class="diagram__node">
+          Backend
+          <div class="diagram__label">Lambda · ALB · NLB</div>
+        </div>
+      </div>
+
+      <div class="gotcha">
+        <div class="gotcha__head">▸ Pricing surprise</div>
+        <div class="gotcha__title">Edge-optimized APIs incur CloudFront data transfer costs <em>on top of</em> the per-call price.</div>
+        <div class="gotcha__body">
+          The advertised $3.50/M calls is just the request count. Edge-optimized adds CloudFront data egress (~$0.085/GB) and request fees. For high-throughput public APIs, often cheaper to use Regional + your own CloudFront if you need caching.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── 04 · Throttling & Quotas ── -->
+  <section class="section">
+    <div class="section__head">
+      <div class="section__num">04</div>
+      <div class="section__kicker">Limits and how to dodge them</div>
+      <h2 class="section__title">Throttling &amp; <em>Quotas</em></h2>
+    </div>
+    <div class="section__body">
+      <p class="section__lead">
+        API Gateway throttles in <em>three places</em> — account, stage, and usage plan. Hit any of them and you get HTTP 429. Hit them in production and you find out which.
+      </p>
+
+      <table class="ref-table">
+        <thead><tr><th>Limit</th><th>Default</th><th>Hard limit?</th><th>Adjustable</th></tr></thead>
+        <tbody>
+          <tr><td>Account RPS (steady)</td><td>10,000 RPS</td><td>Soft</td><td>Yes — open ticket</td></tr>
+          <tr><td>Account burst</td><td>5,000 requests</td><td>Soft</td><td>Yes — open ticket</td></tr>
+          <tr><td>Per-stage RPS</td><td>Inherits account</td><td>—</td><td>In stage settings</td></tr>
+          <tr><td>Per-method RPS</td><td>Inherits stage</td><td>—</td><td>In method settings</td></tr>
+          <tr><td>Usage plan throttle</td><td>Configurable</td><td>Custom</td><td>Per usage plan</td></tr>
+          <tr><td>Integration timeout</td><td>29 s</td><td><em>Hard</em></td><td>No — REST cap. HTTP API: 30 s.</td></tr>
+          <tr><td>Payload size</td><td>10 MB</td><td><em>Hard</em></td><td>No</td></tr>
+        </tbody>
+      </table>
+
+      <div class="gotcha">
+        <div class="gotcha__head">▸ The hard 29-second cap bites</div>
+        <div class="gotcha__title">There is no way to have an API Gateway endpoint hold a connection longer than 29 seconds (REST) or 30 seconds (HTTP).</div>
+        <div class="gotcha__body">
+          For long-running operations you have three options: <em>async with polling</em> (return 202 + status URL), <em>WebSocket API</em> (push when ready), or <em>Lambda Function URL</em> (15 min timeout, no API GW in front). The 29-second limit catches every team eventually.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── 05 · Pricing in Practice ── -->
+  <section class="section">
+    <div class="section__head">
+      <div class="section__num">05</div>
+      <div class="section__kicker">What you actually pay</div>
+      <h2 class="section__title">Pricing in <em>practice</em></h2>
+    </div>
+    <div class="section__body">
+      <p class="section__lead">
+        Headline pricing is <em>requests</em>. Real bill is requests + data transfer + Lambda invocation + CloudWatch logs + (sometimes) WAF + X-Ray + Cognito.
+      </p>
+
+      <table class="ref-table">
+        <thead><tr><th>Component</th><th>Rate</th><th>Notes</th></tr></thead>
+        <tbody>
+          <tr><td>REST API requests</td><td>$3.50 / 1M</td><td>First 333M/mo at this rate; tiered down to $1.51 above 20B.</td></tr>
+          <tr><td>HTTP API requests</td><td>$1.00 / 1M</td><td>First 300M; tiered to $0.90 above. <em>~3.5× cheaper than REST.</em></td></tr>
+          <tr><td>WebSocket messages</td><td>$1.00 / 1M</td><td>Plus $0.25 per million connection-minutes.</td></tr>
+          <tr><td>Caching (REST)</td><td>~$15–500 / month</td><td>By cache size (0.5 GB → 237 GB). Adds latency improvement at fixed cost.</td></tr>
+          <tr><td>Data transfer out</td><td>$0.09 / GB</td><td>Standard AWS egress; same-region to VPC is free.</td></tr>
+          <tr><td>X-Ray traces</td><td>$5.00 / 1M</td><td>Sample to keep this in check.</td></tr>
+          <tr><td>CloudWatch logs</td><td>$0.50 / GB ingest</td><td>Easy to forget; access logs at scale add up.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ── 06 · Strengths & Gotchas ── -->
+  <section class="section">
+    <div class="section__head">
+      <div class="section__num">06</div>
+      <div class="section__kicker">The honest summary</div>
+      <h2 class="section__title">Strengths &amp; <em>Gotchas</em></h2>
+    </div>
+    <div class="section__body">
+      <div class="prosons">
+        <div class="prosons__good">
+          <h5>What it does well</h5>
+          <ul>
+            <li><em>Tight AWS integration.</em> Lambda, IAM, Cognito, VPC link, Direct Connect, EventBridge — all native.</li>
+            <li><em>No infrastructure to manage.</em> Serverless gateway, scales automatically up to account limits.</li>
+            <li><em>Cheap at small scale.</em> HTTP API at $1/M is hard to beat for &lt;100M requests/month.</li>
+            <li>Mature <code>SAM</code> + <code>CDK</code> + <code>Terraform</code> tooling for declarative API definition.</li>
+            <li><em>Per-stage canary deployments</em> with weighted traffic split, built in.</li>
+          </ul>
+        </div>
+        <div class="prosons__bad">
+          <h5>What to watch for</h5>
+          <ul>
+            <li><em>No native dev portal.</em> Stoplight, Backstage, Redocly, or roll your own.</li>
+            <li><em>VTL templates are arcane.</em> Apache Velocity in 2026 still feels like a hostage situation.</li>
+            <li><em>No real rate-limit per consumer.</em> Usage plans + API keys is the workaround; not as clean as Apigee/Kong.</li>
+            <li><em>29-second hard timeout</em> on REST API integrations — affects long-running ops.</li>
+            <li>AWS lock-in. Migration to another gateway means rewriting authorizers, mappings, custom domains.</li>
+            <li><em>Cold starts on Lambda authorizers</em> add 50–800 ms p99 latency on first call.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── 07 · Migration paths ── -->
+  <section class="section">
+    <div class="section__head">
+      <div class="section__num">07</div>
+      <div class="section__kicker">In or out</div>
+      <h2 class="section__title">Migration <em>paths</em></h2>
+    </div>
+    <div class="section__body">
+      <table class="ref-table">
+        <thead><tr><th>Direction</th><th>Path</th><th>Effort</th></tr></thead>
+        <tbody>
+          <tr>
+            <td>REST → HTTP</td>
+            <td>Strip VTL, rebuild authorizers as JWT/Lambda. Most apps can swap if they don't use mapping templates.</td>
+            <td>Medium</td>
+          </tr>
+          <tr>
+            <td>HTTP → REST</td>
+            <td>Rare. Usually because team needs WAF/X-Ray/resource policies. Rebuild routes, add stages, configure throttling.</td>
+            <td>Medium</td>
+          </tr>
+          <tr>
+            <td>API GW → Kong / Apigee</td>
+            <td>OpenAPI export + rewrite authorizers + new dev portal. Plan for <code>3–6 weeks</code> per ~100 endpoints.</td>
+            <td>High</td>
+          </tr>
+          <tr>
+            <td>ALB-only → API GW</td>
+            <td>Common pattern. Put API GW in front of existing ALB via VPC Link (REST) or VPC link v2 (HTTP).</td>
+            <td>Low</td>
+          </tr>
+          <tr>
+            <td>API GW → Lambda Function URLs</td>
+            <td>For single-Lambda APIs, drop API GW and use Function URLs. Loses authorizers / mappings / routing.</td>
+            <td>Low</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <footer class="colophon">
+    <div>
+      <h5>About</h5>
+      <p>Instrument 08 of <a href="../">Infra Atlas</a>. AWS API Gateway — the editorial reference. Use it to decide which API type fits your use case, which authorizer to wire, and what bill you'll get at month-end.</p>
+    </div>
+    <div>
+      <h5>Sources</h5>
+      <p>Compiled from AWS official docs, re:Invent talks, public pricing pages, and field-observed gotchas. Snapshot May 2026. <a href="#">Spotted a stale fact?</a></p>
+    </div>
+    <div>
+      <h5>See also</h5>
+      <p><a href="../apim-matrix/">APIM Feature Matrix</a> for cross-vendor comparison · <a href="../ec2/">EC2 Observatory</a> for compute · <a href="../regions/">Region Map</a> for geography.</p>
+    </div>
+  </footer>
+
+</div>
+
+</body>
+</html>

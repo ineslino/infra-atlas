@@ -1,0 +1,8 @@
+# Cloudflare Pages redirects
+# https://developers.cloudflare.com/pages/configuration/redirects/
+
+# Redirect www to apex
+https://www.infraatlas.dev/*  https://infraatlas.dev/:splat  301!
+
+# Tidy URLs — directory index served as path without trailing slash
+/ec2/index.html               /ec2/                          301

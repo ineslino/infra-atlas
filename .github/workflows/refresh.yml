@@ -1,0 +1,82 @@
+name: Refresh data
+
+# Runs daily at 06:00 UTC. Every data-driven instrument has a refresh.sh that
+# pulls from PUBLIC sources — no cloud account, no credentials, no OIDC.
+#  · ec2          → ec2instances.info public dataset (Vantage)
+#  · regions      → curated, bootstrapped from index.html
+#  · azure-vm     → curated, bootstrapped from index.html
+#  · gcp-compute  → curated, bootstrapped from index.html
+#  · oci-compute  → curated, bootstrapped from index.html
+#  · ovh-instances→ curated, bootstrapped from index.html
+# The APIM instruments (matrix + vendor deep-dives) are static — no refresh.
+
+on:
+  schedule:
+    - cron: '0 6 * * *'
+  workflow_dispatch:
+    inputs:
+      instrument:
+        description: 'Single instrument to refresh (leave blank for all)'
+        required: false
+        type: choice
+        default: ''
+        options:
+          - ''
+          - ec2
+          - regions
+          - azure-vm
+          - gcp-compute
+          - oci-compute
+          - ovh-instances
+
+concurrency:
+  group: refresh
+  cancel-in-progress: false
+
+permissions:
+  contents: write   # to commit updated data.json — that is all this needs
+
+jobs:
+  refresh:
+    name: Refresh ${{ matrix.instrument }}
+    runs-on: ubuntu-latest
+    strategy:
+      max-parallel: 1          # serialise to avoid push races on main
+      fail-fast: false
+      matrix:
+        instrument: [ec2, regions, azure-vm, gcp-compute, oci-compute, ovh-instances]
+    steps:
+      - name: Skip if a single different instrument was requested
+        id: gate
+        run: |
+          if [[ -n "${{ inputs.instrument }}" && "${{ inputs.instrument }}" != "${{ matrix.instrument }}" ]]; then
+            echo "run=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "run=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - if: steps.gate.outputs.run == 'true'
+        uses: actions/checkout@v4
+        with: { ref: main }
+
+      - if: steps.gate.outputs.run == 'true'
+        name: Install deps
+        run: sudo apt-get update && sudo apt-get install -y --no-install-recommends jq python3 curl
+
+      - if: steps.gate.outputs.run == 'true'
+        name: Refresh ${{ matrix.instrument }}
+        run: ./${{ matrix.instrument }}/refresh.sh
+
+      - if: steps.gate.outputs.run == 'true'
+        name: Commit and push if changed
+        run: |
+          git pull --rebase --autostash
+          git config user.name "infraatlas-bot"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add ${{ matrix.instrument }}/data.json
+          if git diff --cached --quiet; then
+            echo "::notice::${{ matrix.instrument }}: no data changes — skipping commit."
+          else
+            git commit -m "chore(${{ matrix.instrument }}): refresh data $(date -u +%Y-%m-%d)"
+            git push
+          fi
