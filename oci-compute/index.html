@@ -1044,8 +1044,8 @@ a.masthead__back::before { display: none; }
       <p>Instrument 05 of <a href="../" style="color: var(--paper-2); text-decoration: underline; text-decoration-color: var(--line-2); text-underline-offset: 3px;">Infra Atlas</a>. Oracle Cloud's compute catalogue — E5/E4 Flex (AMD), A1/A2 Flex (ARM), Standard3 (Intel), DenseIO (NVMe-dense), BM bare metal across all vendor lines, HPC2 + HPC.E5 with RDMA, and the GPU progression from V100 up to B200 on bare metal.</p>
     </div>
     <div>
-      <h5>Keep it fresh</h5>
-      <p>Run <code>./refresh.sh</code> to regenerate <code>data.json</code> from <code>oci compute shape list</code>. <em>v1 note:</em> OCI CLI auth via OIDC isn't wired yet — data is hand-curated for now.</p>
+      <h5>Data source</h5>
+      <p>Oracle Cloud compute shapes and their regional availability, compiled from OCI's public shape and region documentation. The status line above carries the current data date.</p>
     </div>
     <div>
       <h5>Shortcuts</h5>
@@ -1067,7 +1067,7 @@ a.masthead__back::before { display: none; }
 <script>
 // ───────────────────────────────────────────────────────────────────
 //  EMBEDDED FALLBACK DATA (snapshot · 2026-05-14)
-//  Refresh with ./refresh.sh to (eventually) generate ./data.json. v1 = hand-curated.
+//  The page upgrades to ./data.json when that file is available.
 // ───────────────────────────────────────────────────────────────────
 
 const SNAPSHOT_DATE = "2026-05-15T06:00:00Z";

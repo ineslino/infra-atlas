@@ -1042,8 +1042,8 @@ a.masthead__back::before { display: none; }
       <p>Instrument 04 of <a href="../" style="color: var(--paper-2); text-decoration: underline; text-decoration-color: var(--line-2); text-underline-offset: 3px;">Infra Atlas</a>. Google Cloud's compute catalogue — E2 (cost), N2/N4 (Intel general), N2D/T2D (AMD), T2A/C4A (ARM), C2/C3/C3D/C4 (compute), H3 (HPC), M1–M3/X4 (memory), A2/A3/A4/G2 (GPUs). The console's view, without the console.</p>
     </div>
     <div>
-      <h5>Keep it fresh</h5>
-      <p>Run <code>./refresh.sh</code> to regenerate <code>data.json</code> from <code>gcloud compute machine-types list</code>. <em>v1 note:</em> GCP OIDC auth via Workload Identity Federation isn't wired yet — data is hand-curated for now.</p>
+      <h5>Data source</h5>
+      <p>Google Cloud machine families and their regional availability, compiled from GCP's public Compute Engine documentation. The status line above carries the current data date.</p>
     </div>
     <div>
       <h5>Shortcuts</h5>
@@ -1065,7 +1065,7 @@ a.masthead__back::before { display: none; }
 <script>
 // ───────────────────────────────────────────────────────────────────
 //  EMBEDDED FALLBACK DATA (snapshot · 2026-05-14)
-//  Refresh with ./refresh.sh to (eventually) generate ./data.json. v1 = hand-curated.
+//  The page upgrades to ./data.json when that file is available.
 // ───────────────────────────────────────────────────────────────────
 
 const SNAPSHOT_DATE = "2026-05-14T14:32:00Z";

@@ -1044,8 +1044,8 @@ a.masthead__back::before { display: none; }
       <p>Instrument 03 of <a href="../" style="color: var(--paper-2); text-decoration: underline; text-decoration-color: var(--line-2); text-underline-offset: 3px;">Infra Atlas</a>. The Microsoft cloud's compute catalogue — D-series, E-series, F-series, NC/ND for GPUs, HBv4 for HPC, DCasv5 for confidential, and the ARM Cobalt v6 newcomer. Filter by series, vendor, architecture; see which regions actually have what you need.</p>
     </div>
     <div>
-      <h5>Keep it fresh</h5>
-      <p>Run <code>./refresh.sh</code> to regenerate <code>data.json</code> from <code>az vm list-skus</code>. <em>v1 note:</em> Azure CLI OIDC auth isn't wired yet — for now the data is hand-curated; AWS-style auto-refresh comes in a follow-up.</p>
+      <h5>Data source</h5>
+      <p>Azure VM series and their regional availability, compiled from Microsoft's public VM size documentation and SKU listings. The status line above carries the current data date.</p>
     </div>
     <div>
       <h5>Shortcuts</h5>
@@ -1067,7 +1067,7 @@ a.masthead__back::before { display: none; }
 <script>
 // ───────────────────────────────────────────────────────────────────
 //  EMBEDDED FALLBACK DATA (snapshot · 2026-05-14)
-//  Refresh with ./refresh.sh to (eventually) generate ./data.json. v1 = hand-curated.
+//  The page upgrades to ./data.json when that file is available.
 // ───────────────────────────────────────────────────────────────────
 
 const SNAPSHOT_DATE = "2026-05-14T14:32:00Z";

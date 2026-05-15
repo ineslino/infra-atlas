@@ -1044,8 +1044,8 @@ a.masthead__back::before { display: none; }
       <p>Instrument 06 of <a href="../" style="color: var(--paper-2); text-decoration: underline; text-decoration-color: var(--line-2); text-underline-offset: 3px;">Infra Atlas</a>. OVHcloud's compute catalogue — the European-sovereign alternative. Public Cloud Instances (b3/c3/r3/i1/t-series), Bare Metal Servers (HGR/Advance/Rise/Scale), GPU H100, all mapped against 40+ datacenters from Gravelines and Roubaix to Sydney and Vint Hill.</p>
     </div>
     <div>
-      <h5>Keep it fresh</h5>
-      <p>Run <code>./refresh.sh</code> to regenerate <code>data.json</code> from the OVHcloud public catalogue API (<code>/cloud/project/{id}/flavor</code>). <em>v1 note:</em> OVH API auth via consumer keys isn't wired yet — data is hand-curated for now.</p>
+      <h5>Data source</h5>
+      <p>OVHcloud instance ranges and bare-metal lines mapped against its datacenters, compiled from the OVHcloud public catalogue. The status line above carries the current data date.</p>
     </div>
     <div>
       <h5>Shortcuts</h5>
@@ -1067,7 +1067,7 @@ a.masthead__back::before { display: none; }
 <script>
 // ───────────────────────────────────────────────────────────────────
 //  EMBEDDED FALLBACK DATA (snapshot · 2026-05-14)
-//  Refresh with ./refresh.sh to (eventually) generate ./data.json. v1 = hand-curated.
+//  The page upgrades to ./data.json when that file is available.
 // ───────────────────────────────────────────────────────────────────
 
 const SNAPSHOT_DATE = "2026-05-15T06:00:00Z";
