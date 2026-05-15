@@ -617,6 +617,22 @@ body {
 }
 .instrument__status.is-planned { color: var(--paper-3); }
 
+/* Type badge — signals what kind of instrument this is before the click */
+.instrument__type {
+  font-family: var(--mono);
+  font-size: 9.5px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  padding: 4px 10px;
+  border-radius: 99px;
+  border: 1px solid var(--line-2);
+  margin-left: auto;
+  white-space: nowrap;
+}
+.instrument__type[data-type="tool"]   { color: var(--mint); border-color: rgba(111,231,181,0.38); }
+.instrument__type[data-type="matrix"] { color: var(--sky);  border-color: rgba(124,215,241,0.38); }
+.instrument__type[data-type="guide"]  { color: var(--gold); border-color: rgba(244,198,96,0.38); }
+
 .instrument__desc {
   font-size: 14.5px;
   color: var(--paper-2);
@@ -823,6 +839,262 @@ body {
     </aside>
   </section>
 
+  <!-- ───────── INSTRUMENTS ───────── -->
+  <section class="instruments">
+    <header class="section-head">
+      <div class="section-head__num">01</div>
+      <div class="section-head__title">The <em>Instruments</em></div>
+      <div class="section-head__meta">
+        <strong>11</strong> Live · <strong>0</strong> In Dev · <strong>0</strong> Planned
+      </div>
+    </header>
+
+    <!-- ───── DEPARTMENT I: CLOUD COMPUTE ───── -->
+    <div class="department" data-dept="cloud">
+      <div class="department__title">
+        <div class="department__kicker"><span class="dot"></span>Department I</div>
+        <div class="department__name">Cloud <em>Compute</em></div>
+        <p class="department__desc">Regions, instance types, and the geography behind every hyperscaler.</p>
+      </div>
+      <div class="department__items">
+
+        <a class="instrument is-live" href="./ec2/">
+          <div class="instrument__num">01</div>
+          <div class="instrument__main">
+            <div class="instrument__head">
+              <span class="instrument__vendor" data-v="aws">AWS</span>
+              <h3 class="instrument__title">EC2 <em>Observatory</em></h3>
+              <span class="instrument__type" data-type="tool">Tool</span>
+            </div>
+            <p class="instrument__desc">
+              <em>The instrument that started it all.</em> Cross-reference Amazon EC2 instance types against AWS regions. Filter by family, architecture, vendor. See which regions offer your instance type — and which instance types live in your region.
+            </p>
+            <div class="instrument__tags">
+              <span>32 regions</span><span>~700 types</span><span>x86 + arm64</span><span>Daily refresh</span>
+            </div>
+          </div>
+          <div class="instrument__side">
+            <div class="instrument__cta"><span>Open</span><span class="instrument__cta-arrow">→</span></div>
+          </div>
+        </a>
+
+        <a class="instrument is-live" href="./regions/">
+          <div class="instrument__num">02</div>
+          <div class="instrument__main">
+            <div class="instrument__head">
+              <span class="instrument__vendor" data-v="multi">MULTI</span>
+              <h3 class="instrument__title">Multi-Cloud <em>Region Map</em></h3>
+              <span class="instrument__type" data-type="tool">Tool</span>
+            </div>
+            <p class="instrument__desc">
+              Every region from every provider on a single chart. <em>Where is closest to your users — really?</em> Surface clusters, compare hyperscaler geographies, and see the actual market overlap at a glance.
+            </p>
+            <div class="instrument__tags">
+              <span>5 providers</span><span>~95 cities</span><span>~150 regions</span><span>Equirectangular chart</span>
+            </div>
+          </div>
+          <div class="instrument__side">
+            <div class="instrument__cta"><span>Open</span><span class="instrument__cta-arrow">→</span></div>
+          </div>
+        </a>
+
+        <a class="instrument is-live" href="./azure-vm/">
+          <div class="instrument__num">03</div>
+          <div class="instrument__main">
+            <div class="instrument__head">
+              <span class="instrument__vendor" data-v="azure">AZURE</span>
+              <h3 class="instrument__title">VM <em>Atlas</em></h3>
+              <span class="instrument__type" data-type="tool">Tool</span>
+            </div>
+            <p class="instrument__desc">
+              Azure VM sizes by region — the EC2 Observatory equivalent for the Microsoft cloud. Filter by series (Dsv5, Easv5, Lasv3), arch (Intel · AMD · Ampere · Cobalt), GPU class (T4 · A10 · A100 · H100 · H200), and confidential-compute capability.
+            </p>
+            <div class="instrument__tags">
+              <span>52 regions</span><span>51 series</span><span>325 VM sizes</span><span>SGX + SEV-SNP</span>
+            </div>
+          </div>
+          <div class="instrument__side">
+            <div class="instrument__cta"><span>Open</span><span class="instrument__cta-arrow">→</span></div>
+          </div>
+        </a>
+
+        <a class="instrument is-live" href="./gcp-compute/">
+          <div class="instrument__num">04</div>
+          <div class="instrument__main">
+            <div class="instrument__head">
+              <span class="instrument__vendor" data-v="gcp">GCP</span>
+              <h3 class="instrument__title">Compute <em>Index</em></h3>
+              <span class="instrument__type" data-type="tool">Tool</span>
+            </div>
+            <p class="instrument__desc">
+              Google Cloud machine types by region — E2 (cost) · N2/N4 (Intel) · N2D/T2D (AMD) · T2A/C4A (ARM) · C2/C3/C3D/C4 (compute) · H3 (HPC) · M1–M3/X4 (memory) · A2/A3/A4/G2 (NVIDIA T4 → L4 → A100 → H100 → B200).
+            </p>
+            <div class="instrument__tags">
+              <span>41 regions</span><span>22 families</span><span>291 machine types</span><span>Intel · AMD · Ampere · Axion</span>
+            </div>
+          </div>
+          <div class="instrument__side">
+            <div class="instrument__cta"><span>Open</span><span class="instrument__cta-arrow">→</span></div>
+          </div>
+        </a>
+
+        <a class="instrument is-live" href="./oci-compute/">
+          <div class="instrument__num">05</div>
+          <div class="instrument__main">
+            <div class="instrument__head">
+              <span class="instrument__vendor" data-v="oci">ORACLE</span>
+              <h3 class="instrument__title">OCI <em>Compute Observatory</em></h3>
+              <span class="instrument__type" data-type="tool">Tool</span>
+            </div>
+            <p class="instrument__desc">
+              Oracle Cloud's shape catalogue — E5/E4 Flex (AMD) · A1/A2 Flex (ARM Ampere) · Standard3 (Intel) · DenseIO (NVMe) · BM bare metal across all vendors · HPC2 + HPC.E5 with RDMA · GPU progression V100 → A10 → A100 → H100 → B200.
+            </p>
+            <div class="instrument__tags">
+              <span>38 regions</span><span>23 shape families</span><span>VM + Bare Metal</span><span>Intel · AMD · Ampere</span>
+            </div>
+          </div>
+          <div class="instrument__side">
+            <div class="instrument__cta"><span>Open</span><span class="instrument__cta-arrow">→</span></div>
+          </div>
+        </a>
+
+        <a class="instrument is-live" href="./ovh-instances/">
+          <div class="instrument__num">06</div>
+          <div class="instrument__main">
+            <div class="instrument__head">
+              <span class="instrument__vendor" data-v="ovh">OVH</span>
+              <h3 class="instrument__title">OVH <em>Instance Catalogue</em></h3>
+              <span class="instrument__type" data-type="tool">Tool</span>
+            </div>
+            <p class="instrument__desc">
+              The European alternative. Public Cloud (b3/c3/r3/i1/t-series), Bare Metal (HGR/Advance/Rise/Scale), HPC, and GPU H100 — mapped across 14 datacenters from Gravelines to Sydney. EU-sovereign by default.
+            </p>
+            <div class="instrument__tags">
+              <span>14 datacenters</span><span>15 families</span><span>73 instance types</span><span>VM + Bare Metal</span>
+            </div>
+          </div>
+          <div class="instrument__side">
+            <div class="instrument__cta"><span>Open</span><span class="instrument__cta-arrow">→</span></div>
+          </div>
+        </a>
+
+      </div>
+    </div>
+
+    <!-- ───── DEPARTMENT II: API MANAGEMENT ───── -->
+    <div class="department" data-dept="apim">
+      <div class="department__title">
+        <div class="department__kicker"><span class="dot"></span>Department II</div>
+        <div class="department__name">API <em>Management</em></div>
+        <p class="department__desc">Gateways, brokers, and the long footnotes that separate the marketing pages from production.</p>
+      </div>
+      <div class="department__items">
+
+        <a class="instrument is-live" href="./apim-matrix/">
+          <div class="instrument__num">07</div>
+          <div class="instrument__main">
+            <div class="instrument__head">
+              <span class="instrument__vendor" data-v="apim">APIM</span>
+              <h3 class="instrument__title">Feature <em>Matrix</em></h3>
+              <span class="instrument__type" data-type="matrix">Matrix</span>
+            </div>
+            <p class="instrument__desc">
+              <em>The cross-vendor comparator.</em> Apigee · AWS API Gateway · Azure APIM · Mulesoft · Kong · Gravitee · IBM API Connect, all on one grid. OAuth flavours, mTLS, GraphQL, rate-limiting, self-hosted, FedRAMP — with the asterisks intact and a footnote on every nuance.
+            </p>
+            <div class="instrument__tags">
+              <span>7 vendors</span><span>28 capabilities</span><span>~190 annotated cells</span><span>8 categories</span>
+            </div>
+          </div>
+          <div class="instrument__side">
+            <div class="instrument__cta"><span>Open</span><span class="instrument__cta-arrow">→</span></div>
+          </div>
+        </a>
+
+        <a class="instrument is-live" href="./aws-api-gateway/">
+          <div class="instrument__num">08</div>
+          <div class="instrument__main">
+            <div class="instrument__head">
+              <span class="instrument__vendor" data-v="aws">AWS</span>
+              <h3 class="instrument__title">API Gateway <em>Atlas</em></h3>
+              <span class="instrument__type" data-type="guide">Guide</span>
+            </div>
+            <p class="instrument__desc">
+              AWS API Gateway, demystified. REST vs HTTP vs WebSocket, the authorizer zoo, deployment modes, pricing — and the gotchas nobody explains until you hit them in production (29-second timeout, anyone?).
+            </p>
+            <div class="instrument__tags">
+              <span>REST · HTTP · WS</span><span>7 sections</span><span>Pricing breakdown</span><span>Migration paths</span>
+            </div>
+          </div>
+          <div class="instrument__side">
+            <div class="instrument__cta"><span>Open</span><span class="instrument__cta-arrow">→</span></div>
+          </div>
+        </a>
+
+        <a class="instrument is-live" href="./apigee/">
+          <div class="instrument__num">09</div>
+          <div class="instrument__main">
+            <div class="instrument__head">
+              <span class="instrument__vendor" data-v="apigee">APIGEE</span>
+              <h3 class="instrument__title">Apigee <em>Atlas</em></h3>
+              <span class="instrument__type" data-type="guide">Guide</span>
+            </div>
+            <p class="instrument__desc">
+              Apigee X, Hybrid, and Edge demystified. Policy library, Shared Flows + KVMs, environment topology, pricing tiers, migration paths — and a 12–24 month plan for getting off Edge before it sunsets.
+            </p>
+            <div class="instrument__tags">
+              <span>X · Hybrid · Edge</span><span>17 policies</span><span>Pricing tiers</span><span>5 migration paths</span>
+            </div>
+          </div>
+          <div class="instrument__side">
+            <div class="instrument__cta"><span>Open</span><span class="instrument__cta-arrow">→</span></div>
+          </div>
+        </a>
+
+        <a class="instrument is-live" href="./mulesoft/">
+          <div class="instrument__num">10</div>
+          <div class="instrument__main">
+            <div class="instrument__head">
+              <span class="instrument__vendor" data-v="mulesoft">MULESOFT</span>
+              <h3 class="instrument__title">Mulesoft <em>Atlas</em></h3>
+              <span class="instrument__type" data-type="guide">Guide</span>
+            </div>
+            <p class="instrument__desc">
+              Mulesoft Anypoint demystified. CloudHub 2.0 vs RTF vs Flex Gateway, the connector ecosystem, DataWeave (the secret weapon), pricing in vCore vs Flex Replica — and the integration platform DNA that sets it apart.
+            </p>
+            <div class="instrument__tags">
+              <span>4 deployment targets</span><span>DataWeave</span><span>~300 connectors</span><span>5 migration paths</span>
+            </div>
+          </div>
+          <div class="instrument__side">
+            <div class="instrument__cta"><span>Open</span><span class="instrument__cta-arrow">→</span></div>
+          </div>
+        </a>
+
+        <a class="instrument is-live" href="./self-hosted-apim/">
+          <div class="instrument__num">11</div>
+          <div class="instrument__main">
+            <div class="instrument__head">
+              <span class="instrument__vendor" data-v="apim">SELF-HOSTED</span>
+              <h3 class="instrument__title">Kong · Gravitee · IBM <em>Almanac</em></h3>
+              <span class="instrument__type" data-type="guide">Guide</span>
+            </div>
+            <p class="instrument__desc">
+              The three self-hostable contenders compared head-to-head. OSS scope, Kubernetes nativity, plugin ecosystems, total cost (license + ops + people) — and a decision tree for when to pick which (or none).
+            </p>
+            <div class="instrument__tags">
+              <span>3 vendors</span><span>OSS vs Enterprise</span><span>K8s nativity</span><span>Decision tree</span>
+            </div>
+          </div>
+          <div class="instrument__side">
+            <div class="instrument__cta"><span>Open</span><span class="instrument__cta-arrow">→</span></div>
+          </div>
+        </a>
+
+      </div>
+    </div>
+
+  </section>
+
   <!-- ───────── PROVIDERS STRIP ───────── -->
   <section class="providers">
     <div class="providers__label">
@@ -866,262 +1138,6 @@ body {
     </div>
   </section>
 
-  <!-- ───────── INSTRUMENTS ───────── -->
-  <section class="instruments">
-    <header class="section-head">
-      <div class="section-head__num">01</div>
-      <div class="section-head__title">The <em>Instruments</em></div>
-      <div class="section-head__meta">
-        <strong>11</strong> Live · <strong>0</strong> In Dev · <strong>0</strong> Planned
-      </div>
-    </header>
-
-    <!-- ───── DEPARTMENT I: CLOUD COMPUTE ───── -->
-    <div class="department" data-dept="cloud">
-      <div class="department__title">
-        <div class="department__kicker"><span class="dot"></span>Department I</div>
-        <div class="department__name">Cloud <em>Compute</em></div>
-        <p class="department__desc">Regions, instance types, and the geography behind every hyperscaler.</p>
-      </div>
-      <div class="department__items">
-
-        <a class="instrument is-live" href="./ec2/">
-          <div class="instrument__num">01</div>
-          <div class="instrument__main">
-            <div class="instrument__head">
-              <span class="instrument__vendor" data-v="aws">AWS</span>
-              <h3 class="instrument__title">EC2 <em>Observatory</em></h3>
-              <span class="instrument__status is-live">● Live</span>
-            </div>
-            <p class="instrument__desc">
-              <em>The instrument that started it all.</em> Cross-reference Amazon EC2 instance types against AWS regions. Filter by family, architecture, vendor. See which regions offer your instance type — and which instance types live in your region.
-            </p>
-            <div class="instrument__tags">
-              <span>32 regions</span><span>~700 types</span><span>x86 + arm64</span><span>Daily refresh</span>
-            </div>
-          </div>
-          <div class="instrument__side">
-            <div class="instrument__cta"><span>Open</span><span class="instrument__cta-arrow">→</span></div>
-          </div>
-        </a>
-
-        <a class="instrument is-live" href="./regions/">
-          <div class="instrument__num">02</div>
-          <div class="instrument__main">
-            <div class="instrument__head">
-              <span class="instrument__vendor" data-v="multi">MULTI</span>
-              <h3 class="instrument__title">Multi-Cloud <em>Region Map</em></h3>
-              <span class="instrument__status is-live">● Live</span>
-            </div>
-            <p class="instrument__desc">
-              Every region from every provider on a single chart. <em>Where is closest to your users — really?</em> Surface clusters, compare hyperscaler geographies, and see the actual market overlap at a glance.
-            </p>
-            <div class="instrument__tags">
-              <span>5 providers</span><span>~95 cities</span><span>~150 regions</span><span>Equirectangular chart</span>
-            </div>
-          </div>
-          <div class="instrument__side">
-            <div class="instrument__cta"><span>Open</span><span class="instrument__cta-arrow">→</span></div>
-          </div>
-        </a>
-
-        <a class="instrument is-live" href="./azure-vm/">
-          <div class="instrument__num">03</div>
-          <div class="instrument__main">
-            <div class="instrument__head">
-              <span class="instrument__vendor" data-v="azure">AZURE</span>
-              <h3 class="instrument__title">VM <em>Atlas</em></h3>
-              <span class="instrument__status is-live">● Live</span>
-            </div>
-            <p class="instrument__desc">
-              Azure VM sizes by region — the EC2 Observatory equivalent for the Microsoft cloud. Filter by series (Dsv5, Easv5, Lasv3), arch (Intel · AMD · Ampere · Cobalt), GPU class (T4 · A10 · A100 · H100 · H200), and confidential-compute capability.
-            </p>
-            <div class="instrument__tags">
-              <span>52 regions</span><span>51 series</span><span>325 VM sizes</span><span>SGX + SEV-SNP</span>
-            </div>
-          </div>
-          <div class="instrument__side">
-            <div class="instrument__cta"><span>Open</span><span class="instrument__cta-arrow">→</span></div>
-          </div>
-        </a>
-
-        <a class="instrument is-live" href="./gcp-compute/">
-          <div class="instrument__num">04</div>
-          <div class="instrument__main">
-            <div class="instrument__head">
-              <span class="instrument__vendor" data-v="gcp">GCP</span>
-              <h3 class="instrument__title">Compute <em>Index</em></h3>
-              <span class="instrument__status is-live">● Live</span>
-            </div>
-            <p class="instrument__desc">
-              Google Cloud machine types by region — E2 (cost) · N2/N4 (Intel) · N2D/T2D (AMD) · T2A/C4A (ARM) · C2/C3/C3D/C4 (compute) · H3 (HPC) · M1–M3/X4 (memory) · A2/A3/A4/G2 (NVIDIA T4 → L4 → A100 → H100 → B200).
-            </p>
-            <div class="instrument__tags">
-              <span>41 regions</span><span>22 families</span><span>291 machine types</span><span>Intel · AMD · Ampere · Axion</span>
-            </div>
-          </div>
-          <div class="instrument__side">
-            <div class="instrument__cta"><span>Open</span><span class="instrument__cta-arrow">→</span></div>
-          </div>
-        </a>
-
-        <a class="instrument is-live" href="./oci-compute/">
-          <div class="instrument__num">05</div>
-          <div class="instrument__main">
-            <div class="instrument__head">
-              <span class="instrument__vendor" data-v="oci">ORACLE</span>
-              <h3 class="instrument__title">OCI <em>Compute Observatory</em></h3>
-              <span class="instrument__status is-live">● Live</span>
-            </div>
-            <p class="instrument__desc">
-              Oracle Cloud's shape catalogue — E5/E4 Flex (AMD) · A1/A2 Flex (ARM Ampere) · Standard3 (Intel) · DenseIO (NVMe) · BM bare metal across all vendors · HPC2 + HPC.E5 with RDMA · GPU progression V100 → A10 → A100 → H100 → B200.
-            </p>
-            <div class="instrument__tags">
-              <span>38 regions</span><span>23 shape families</span><span>VM + Bare Metal</span><span>Intel · AMD · Ampere</span>
-            </div>
-          </div>
-          <div class="instrument__side">
-            <div class="instrument__cta"><span>Open</span><span class="instrument__cta-arrow">→</span></div>
-          </div>
-        </a>
-
-        <a class="instrument is-live" href="./ovh-instances/">
-          <div class="instrument__num">06</div>
-          <div class="instrument__main">
-            <div class="instrument__head">
-              <span class="instrument__vendor" data-v="ovh">OVH</span>
-              <h3 class="instrument__title">OVH <em>Instance Catalogue</em></h3>
-              <span class="instrument__status is-live">● Live</span>
-            </div>
-            <p class="instrument__desc">
-              The European alternative. Public Cloud (b3/c3/r3/i1/t-series), Bare Metal (HGR/Advance/Rise/Scale), HPC, and GPU H100 — mapped across 14 datacenters from Gravelines to Sydney. EU-sovereign by default.
-            </p>
-            <div class="instrument__tags">
-              <span>14 datacenters</span><span>15 families</span><span>73 instance types</span><span>VM + Bare Metal</span>
-            </div>
-          </div>
-          <div class="instrument__side">
-            <div class="instrument__cta"><span>Open</span><span class="instrument__cta-arrow">→</span></div>
-          </div>
-        </a>
-
-      </div>
-    </div>
-
-    <!-- ───── DEPARTMENT II: API MANAGEMENT ───── -->
-    <div class="department" data-dept="apim">
-      <div class="department__title">
-        <div class="department__kicker"><span class="dot"></span>Department II</div>
-        <div class="department__name">API <em>Management</em></div>
-        <p class="department__desc">Gateways, brokers, and the long footnotes that separate the marketing pages from production.</p>
-      </div>
-      <div class="department__items">
-
-        <a class="instrument is-live" href="./apim-matrix/">
-          <div class="instrument__num">07</div>
-          <div class="instrument__main">
-            <div class="instrument__head">
-              <span class="instrument__vendor" data-v="apim">APIM</span>
-              <h3 class="instrument__title">Feature <em>Matrix</em></h3>
-              <span class="instrument__status is-live">● Live</span>
-            </div>
-            <p class="instrument__desc">
-              <em>The cross-vendor comparator.</em> Apigee · AWS API Gateway · Azure APIM · Mulesoft · Kong · Gravitee · IBM API Connect, all on one grid. OAuth flavours, mTLS, GraphQL, rate-limiting, self-hosted, FedRAMP — with the asterisks intact and a footnote on every nuance.
-            </p>
-            <div class="instrument__tags">
-              <span>7 vendors</span><span>28 capabilities</span><span>~190 annotated cells</span><span>8 categories</span>
-            </div>
-          </div>
-          <div class="instrument__side">
-            <div class="instrument__cta"><span>Open</span><span class="instrument__cta-arrow">→</span></div>
-          </div>
-        </a>
-
-        <a class="instrument is-live" href="./aws-api-gateway/">
-          <div class="instrument__num">08</div>
-          <div class="instrument__main">
-            <div class="instrument__head">
-              <span class="instrument__vendor" data-v="aws">AWS</span>
-              <h3 class="instrument__title">API Gateway <em>Atlas</em></h3>
-              <span class="instrument__status is-live">● Live</span>
-            </div>
-            <p class="instrument__desc">
-              AWS API Gateway, demystified. REST vs HTTP vs WebSocket, the authorizer zoo, deployment modes, pricing — and the gotchas nobody explains until you hit them in production (29-second timeout, anyone?).
-            </p>
-            <div class="instrument__tags">
-              <span>REST · HTTP · WS</span><span>7 sections</span><span>Pricing breakdown</span><span>Migration paths</span>
-            </div>
-          </div>
-          <div class="instrument__side">
-            <div class="instrument__cta"><span>Open</span><span class="instrument__cta-arrow">→</span></div>
-          </div>
-        </a>
-
-        <a class="instrument is-live" href="./apigee/">
-          <div class="instrument__num">09</div>
-          <div class="instrument__main">
-            <div class="instrument__head">
-              <span class="instrument__vendor" data-v="apigee">APIGEE</span>
-              <h3 class="instrument__title">Apigee <em>Atlas</em></h3>
-              <span class="instrument__status is-live">● Live</span>
-            </div>
-            <p class="instrument__desc">
-              Apigee X, Hybrid, and Edge demystified. Policy library, Shared Flows + KVMs, environment topology, pricing tiers, migration paths — and a 12–24 month plan for getting off Edge before it sunsets.
-            </p>
-            <div class="instrument__tags">
-              <span>X · Hybrid · Edge</span><span>17 policies</span><span>Pricing tiers</span><span>5 migration paths</span>
-            </div>
-          </div>
-          <div class="instrument__side">
-            <div class="instrument__cta"><span>Open</span><span class="instrument__cta-arrow">→</span></div>
-          </div>
-        </a>
-
-        <a class="instrument is-live" href="./mulesoft/">
-          <div class="instrument__num">10</div>
-          <div class="instrument__main">
-            <div class="instrument__head">
-              <span class="instrument__vendor" data-v="mulesoft">MULESOFT</span>
-              <h3 class="instrument__title">Mulesoft <em>Atlas</em></h3>
-              <span class="instrument__status is-live">● Live</span>
-            </div>
-            <p class="instrument__desc">
-              Mulesoft Anypoint demystified. CloudHub 2.0 vs RTF vs Flex Gateway, the connector ecosystem, DataWeave (the secret weapon), pricing in vCore vs Flex Replica — and the integration platform DNA that sets it apart.
-            </p>
-            <div class="instrument__tags">
-              <span>4 deployment targets</span><span>DataWeave</span><span>~300 connectors</span><span>5 migration paths</span>
-            </div>
-          </div>
-          <div class="instrument__side">
-            <div class="instrument__cta"><span>Open</span><span class="instrument__cta-arrow">→</span></div>
-          </div>
-        </a>
-
-        <a class="instrument is-live" href="./self-hosted-apim/">
-          <div class="instrument__num">11</div>
-          <div class="instrument__main">
-            <div class="instrument__head">
-              <span class="instrument__vendor" data-v="apim">SELF-HOSTED</span>
-              <h3 class="instrument__title">Kong · Gravitee · IBM <em>Almanac</em></h3>
-              <span class="instrument__status is-live">● Live</span>
-            </div>
-            <p class="instrument__desc">
-              The three self-hostable contenders compared head-to-head. OSS scope, Kubernetes nativity, plugin ecosystems, total cost (license + ops + people) — and a decision tree for when to pick which (or none).
-            </p>
-            <div class="instrument__tags">
-              <span>3 vendors</span><span>OSS vs Enterprise</span><span>K8s nativity</span><span>Decision tree</span>
-            </div>
-          </div>
-          <div class="instrument__side">
-            <div class="instrument__cta"><span>Open</span><span class="instrument__cta-arrow">→</span></div>
-          </div>
-        </a>
-
-      </div>
-    </div>
-
-  </section>
-
   <!-- ───────── COLOPHON ───────── -->
   <footer class="colophon">
     <div class="colophon__head">
@@ -1146,5 +1162,6 @@ body {
 
 </div>
 
+<script src="/nav.js" defer></script>
 </body>
 </html>
