@@ -3,9 +3,9 @@
 # Infra Atlas · Azure VM Atlas · data refresh
 #
 # v1 strategy:
-#  - On first run, bootstrap ./data.json from the FAMILIES/REGIONS
-#    consts embedded in ./index.html (Python parses the JS literals).
-#  - On every run, refresh the `generated` timestamp.
+#  - On every run, regenerate ./data.json from the FAMILIES/REGIONS
+#    consts embedded in ./index.html (Python parses the JS literals),
+#    then refresh the `generated` timestamp.
 #
 # v2 (TODO): wire `az` CLI via federated identity (Azure OIDC for
 # GitHub Actions — see https://learn.microsoft.com/azure/active-directory/workload-identities).
@@ -27,11 +27,10 @@ need jq
 need python3
 
 # ─────────────────────────────────────────────────────────────────
-# Bootstrap data.json from index.html (one-time, on first run)
+# Regenerate data.json from index.html every run (consts are source of truth)
 # ─────────────────────────────────────────────────────────────────
-if [[ ! -f data.json ]]; then
-  echo "▸ Bootstrapping data.json from index.html…"
-  python3 - <<'PYEOF'
+echo "▸ Regenerating data.json from index.html…"
+python3 - <<'PYEOF'
 import re, json, sys
 
 with open('index.html', encoding='utf-8') as f:
@@ -69,7 +68,6 @@ with open('data.json', 'w', encoding='utf-8') as f:
 n_sizes = sum(len(f.get('sizes', [])) for f in families)
 print(f"  ✓ extracted {len(regions)} regions · {len(families)} series · {n_sizes} unique VM sizes")
 PYEOF
-fi
 
 # ─────────────────────────────────────────────────────────────────
 # Update timestamp (every run)
@@ -85,5 +83,5 @@ echo "✓ data.json refreshed at $TS"
 echo "  $REGION_COUNT regions · $SERIES_COUNT series · $SIZES_COUNT VM sizes"
 echo ""
 echo "  ⚠  Note: Azure data is hand-curated in index.html. To update,"
-echo "     edit FAMILIES/REGIONS there, delete data.json, re-run this script."
+echo "     edit FAMILIES/REGIONS there and re-run this script."
 echo "     v2 will wire az CLI via OIDC for auto-refresh."

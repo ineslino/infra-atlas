@@ -2,7 +2,7 @@
 # ─────────────────────────────────────────────────────────────────
 # Infra Atlas · OCI Compute Observatory · data refresh
 #
-# v1: bootstrap data.json from index.html (FAMILIES/REGIONS),
+# v1: regenerate data.json from index.html (FAMILIES/REGIONS) every run,
 # refresh timestamp. v2 TODO: wire `oci` CLI via Resource Principals
 # or instance principals → fetch shape catalogue live.
 # ─────────────────────────────────────────────────────────────────
@@ -14,9 +14,8 @@ need() { command -v "$1" >/dev/null 2>&1 || { echo "✗ $1 not found." >&2; exit
 need jq
 need python3
 
-if [[ ! -f data.json ]]; then
-  echo "▸ Bootstrapping data.json from index.html…"
-  python3 - <<'PYEOF'
+echo "▸ Regenerating data.json from index.html…"
+python3 - <<'PYEOF'
 import re, json, sys
 with open('index.html', encoding='utf-8') as f:
     html = f.read()
@@ -35,7 +34,6 @@ with open('data.json', 'w', encoding='utf-8') as f:
               f, indent=2, ensure_ascii=False)
 print(f"  ✓ extracted {len(regions)} regions · {len(families)} shape families")
 PYEOF
-fi
 
 TS="$(date -u +"%Y-%m-%dT%H:%M:%SZ")"
 jq --arg ts "$TS" '.generated = $ts' data.json > data.json.tmp && mv data.json.tmp data.json

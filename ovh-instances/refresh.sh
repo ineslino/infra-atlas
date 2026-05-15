@@ -2,7 +2,7 @@
 # ─────────────────────────────────────────────────────────────────
 # Infra Atlas · OVH Instance Catalogue · data refresh
 #
-# v1: bootstrap data.json from index.html. v2 TODO: wire OVH API
+# v1: regenerate data.json from index.html every run. v2 TODO: wire OVH API
 # (https://api.ovh.com/) to fetch live flavors per region.
 # ─────────────────────────────────────────────────────────────────
 
@@ -13,9 +13,8 @@ need() { command -v "$1" >/dev/null 2>&1 || { echo "✗ $1 not found." >&2; exit
 need jq
 need python3
 
-if [[ ! -f data.json ]]; then
-  echo "▸ Bootstrapping data.json from index.html…"
-  python3 - <<'PYEOF'
+echo "▸ Regenerating data.json from index.html…"
+python3 - <<'PYEOF'
 import re, json, sys
 with open('index.html', encoding='utf-8') as f: html = f.read()
 def extract(name):
@@ -33,7 +32,6 @@ with open('data.json','w',encoding='utf-8') as f:
               f, indent=2, ensure_ascii=False)
 print(f"  ✓ extracted {len(regions)} regions · {len(families)} families")
 PYEOF
-fi
 
 TS="$(date -u +"%Y-%m-%dT%H:%M:%SZ")"
 jq --arg ts "$TS" '.generated = $ts' data.json > data.json.tmp && mv data.json.tmp data.json

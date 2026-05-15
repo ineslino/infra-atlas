@@ -20,11 +20,10 @@ need jq
 need python3
 
 # ─────────────────────────────────────────────────────────────────
-# Bootstrap data.json from index.html (one-time, on first run)
+# Regenerate data.json from index.html every run (CITIES is source of truth)
 # ─────────────────────────────────────────────────────────────────
-if [[ ! -f data.json ]]; then
-  echo "▸ Bootstrapping data.json from index.html…"
-  python3 - <<'PYEOF'
+echo "▸ Regenerating data.json from index.html…"
+python3 - <<'PYEOF'
 import re, json, sys
 
 with open('index.html', encoding='utf-8') as f:
@@ -65,7 +64,6 @@ with open('data.json', 'w', encoding='utf-8') as f:
 
 print(f"  ✓ extracted {len(cities)} cities ({sum(len(c['regions']) for c in cities)} regions)")
 PYEOF
-fi
 
 # ─────────────────────────────────────────────────────────────────
 # Update timestamp

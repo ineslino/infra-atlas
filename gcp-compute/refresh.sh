@@ -3,9 +3,9 @@
 # Infra Atlas · GCP Compute Index · data refresh
 #
 # v1 strategy:
-#  - On first run, bootstrap ./data.json from the FAMILIES/REGIONS
-#    consts embedded in ./index.html (Python parses the JS literals).
-#  - On every run, refresh the `generated` timestamp.
+#  - On every run, regenerate ./data.json from the FAMILIES/REGIONS
+#    consts embedded in ./index.html (Python parses the JS literals),
+#    then refresh the `generated` timestamp.
 #
 # v2 (TODO): wire `gcloud` via Workload Identity Federation
 # (https://cloud.google.com/iam/docs/workload-identity-federation-with-other-providers).
@@ -26,9 +26,8 @@ need() {
 need jq
 need python3
 
-if [[ ! -f data.json ]]; then
-  echo "▸ Bootstrapping data.json from index.html…"
-  python3 - <<'PYEOF'
+echo "▸ Regenerating data.json from index.html…"
+python3 - <<'PYEOF'
 import re, json, sys
 
 with open('index.html', encoding='utf-8') as f:
@@ -65,7 +64,6 @@ with open('data.json', 'w', encoding='utf-8') as f:
 n_sizes = sum(len(f.get('sizes', [])) for f in families)
 print(f"  ✓ extracted {len(regions)} regions · {len(families)} families · {n_sizes} unique machine types")
 PYEOF
-fi
 
 # Update timestamp every run
 TS="$(date -u +"%Y-%m-%dT%H:%M:%SZ")"
@@ -79,5 +77,5 @@ echo "✓ data.json refreshed at $TS"
 echo "  $REGION_COUNT regions · $FAMILY_COUNT families · $TYPES_COUNT machine types"
 echo ""
 echo "  ⚠  Note: GCP data is hand-curated in index.html. To update,"
-echo "     edit FAMILIES/REGIONS there, delete data.json, re-run this script."
+echo "     edit FAMILIES/REGIONS there and re-run this script."
 echo "     v2 will wire gcloud CLI via Workload Identity Federation."
