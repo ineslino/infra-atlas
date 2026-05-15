@@ -1,0 +1,55 @@
+name: Verify data
+
+# Fails the build when an instrument's committed data.json no longer matches the
+# data embedded in its index.html. data.json is a generated artifact — regenerate
+# it with ./<instrument>/refresh.sh and commit the result.
+#
+# Scope: instruments whose data.json is built purely from index.html. ec2 and
+# ovh-instances are excluded — their refresh.sh pulls a live external API, so
+# their data.json changes with upstream data and can't be checked by re-extraction
+# (the daily "Refresh data" workflow keeps those current). When azure-vm /
+# gcp-compute / oci-compute migrate to live APIs, drop them from the matrix.
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: verify-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  verify:
+    name: Verify ${{ matrix.instrument }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        instrument: [regions, azure-vm, gcp-compute, oci-compute]
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install deps
+        run: sudo apt-get update && sudo apt-get install -y --no-install-recommends jq python3
+
+      - name: Check data.json is in sync with index.html
+        env:
+          INST: ${{ matrix.instrument }}
+        run: |
+          # data.json carries a `generated` timestamp that changes every run;
+          # compare everything else against a fresh extraction from index.html.
+          before="$(jq -S 'del(.generated)' "$INST/data.json")"
+          "./$INST/refresh.sh" >/dev/null
+          after="$(jq -S 'del(.generated)' "$INST/data.json")"
+
+          if [[ "$before" != "$after" ]]; then
+            echo "::error file=$INST/data.json::$INST/data.json is out of sync with $INST/index.html — run ./$INST/refresh.sh and commit the regenerated data.json."
+            echo "▼ committed vs freshly extracted (timestamp ignored):"
+            diff <(printf '%s\n' "$before") <(printf '%s\n' "$after") || true
+            exit 1
+          fi
+          echo "✓ $INST/data.json is in sync with $INST/index.html"
