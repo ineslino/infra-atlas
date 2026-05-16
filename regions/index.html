@@ -1036,7 +1036,7 @@ a.masthead__eyebrow:hover .masthead__eyebrow-arrow { transform: translateX(-4px)
       </a>
       <h1 class="masthead__title">Region <em>Map.</em></h1>
       <p class="masthead__subtitle">
-        Every commercial region from <span>every major cloud</span> on a single chart — GovCloud, China and sovereign partitions excluded. Surface the clusters, find the closest data to your users, and see where the actual market overlaps.
+        Every region from <span>every major cloud</span> on a single chart — commercial, GovCloud, China and sovereign partitions alike. Surface the clusters, find the closest data to your users, and see where the actual market overlaps.
       </p>
     </div>
     <aside class="masthead__status">
@@ -1590,6 +1590,70 @@ let CITIES = [
   ]},
   { city: "Cheyenne", area: "Americas", country: "United States", flag: "🇺🇸", lat: 41.14, lng: -104.82, regions: [
     { p: "azure", code: "westcentralus",  name: "West Central US", az: 1, since: 2016 }
+  ]},
+
+  // ── Gated partitions: GovCloud / China / sovereign (separate account types).
+  //    az and since are best-effort; region codes are vendor-verified (see
+  //    tasks/features-2026-05/integrity/region-audit.csv).
+  { city: "Beijing", area: "Asia Pacific", country: "China", flag: "🇨🇳", lat: 39.90, lng: 116.40, regions: [
+    { p: "aws",   code: "cn-north-1",      name: "Beijing (China)",      az: 3, since: 2016 },
+    { p: "azure", code: "chinanorth",      name: "China North",          az: 1, since: 2014 },
+    { p: "azure", code: "chinanorth2",     name: "China North 2",        az: 3, since: 2017 },
+    { p: "azure", code: "chinanorth3",     name: "China North 3",        az: 3, since: 2022 }
+  ]},
+  { city: "Shanghai", area: "Asia Pacific", country: "China", flag: "🇨🇳", lat: 31.23, lng: 121.47, regions: [
+    { p: "azure", code: "chinaeast",       name: "China East",           az: 1, since: 2014 },
+    { p: "azure", code: "chinaeast2",      name: "China East 2",         az: 3, since: 2018 },
+    { p: "azure", code: "chinaeast3",      name: "China East 3",         az: 3, since: 2022 }
+  ]},
+  { city: "Ningxia", area: "Asia Pacific", country: "China", flag: "🇨🇳", lat: 37.30, lng: 106.20, regions: [
+    { p: "aws",   code: "cn-northwest-1",  name: "Ningxia (China)",      az: 3, since: 2017 }
+  ]},
+  { city: "Brandenburg", area: "Europe", country: "Germany", flag: "🇩🇪", lat: 52.41, lng: 13.52, regions: [
+    { p: "aws",   code: "eusc-de-east-1",  name: "EU Sovereign Cloud",   az: 3, since: 2026 }
+  ]},
+  { city: "GovCloud US-West", area: "Americas", country: "United States", flag: "🇺🇸", lat: 45.84, lng: -119.70, regions: [
+    { p: "aws",   code: "us-gov-west-1",   name: "GovCloud US-West",     az: 3, since: 2011 }
+  ]},
+  { city: "GovCloud US-East", area: "Americas", country: "United States", flag: "🇺🇸", lat: 38.94, lng: -77.46, regions: [
+    { p: "aws",   code: "us-gov-east-1",   name: "GovCloud US-East",     az: 3, since: 2018 }
+  ]},
+  { city: "Virginia (US Gov)", area: "Americas", country: "United States", flag: "🇺🇸", lat: 38.72, lng: -77.22, regions: [
+    { p: "azure", code: "usgovvirginia",   name: "US Gov Virginia",      az: 3, since: 2014 },
+    { p: "oci",   code: "us-langley-1",    name: "US Gov East (OC2)",    az: 1, since: 2020 },
+    { p: "oci",   code: "us-gov-ashburn-1", name: "US DoD East (OC3)",   az: 1, since: 2020 }
+  ]},
+  { city: "Arizona (US Gov)", area: "Americas", country: "United States", flag: "🇺🇸", lat: 33.45, lng: -112.07, regions: [
+    { p: "azure", code: "usgovarizona",    name: "US Gov Arizona",       az: 3, since: 2019 },
+    { p: "oci",   code: "us-luke-1",       name: "US Gov West (OC2)",    az: 1, since: 2020 },
+    { p: "oci",   code: "us-gov-phoenix-1", name: "US DoD West (OC3)",   az: 1, since: 2020 }
+  ]},
+  { city: "Texas (US Gov)", area: "Americas", country: "United States", flag: "🇺🇸", lat: 32.78, lng: -96.80, regions: [
+    { p: "azure", code: "usgovtexas",      name: "US Gov Texas",         az: 3, since: 2021 }
+  ]},
+  { city: "US DoD East", area: "Americas", country: "United States", flag: "🇺🇸", lat: 39.04, lng: -77.61, regions: [
+    { p: "azure", code: "usdodeast",       name: "US DoD East",          az: 1, since: 2016 }
+  ]},
+  { city: "US DoD Central", area: "Americas", country: "United States", flag: "🇺🇸", lat: 41.59, lng: -93.62, regions: [
+    { p: "azure", code: "usdodcentral",    name: "US DoD Central",       az: 1, since: 2016 }
+  ]},
+  { city: "Chicago (US Gov)", area: "Americas", country: "United States", flag: "🇺🇸", lat: 41.85, lng: -87.65, regions: [
+    { p: "oci",   code: "us-gov-chicago-1", name: "US DoD North (OC3)",  az: 1, since: 2022 }
+  ]},
+  { city: "London (UK Gov)", area: "Europe", country: "United Kingdom", flag: "🇬🇧", lat: 51.51, lng: -0.13, regions: [
+    { p: "oci",   code: "uk-gov-london-1", name: "UK Gov London (OC4)",  az: 1, since: 2021 }
+  ]},
+  { city: "Newport (UK Gov)", area: "Europe", country: "United Kingdom", flag: "🇬🇧", lat: 51.59, lng: -2.99, regions: [
+    { p: "oci",   code: "uk-gov-cardiff-1", name: "UK Gov Newport (OC4)", az: 1, since: 2021 }
+  ]},
+  { city: "Canberra (Gov)", area: "Asia Pacific", country: "Australia", flag: "🇦🇺", lat: -35.28, lng: 149.13, regions: [
+    { p: "oci",   code: "ap-dcc-canberra-1", name: "Australia Gov (OC10)", az: 1, since: 2022 }
+  ]},
+  { city: "Frankfurt (EU Sovereign)", area: "Europe", country: "Germany", flag: "🇩🇪", lat: 50.11, lng: 8.68, regions: [
+    { p: "oci",   code: "eu-frankfurt-2",  name: "EU Sovereign (OC19)",  az: 1, since: 2023 }
+  ]},
+  { city: "Madrid (EU Sovereign)", area: "Europe", country: "Spain", flag: "🇪🇸", lat: 40.42, lng: -3.70, regions: [
+    { p: "oci",   code: "eu-madrid-2",     name: "EU Sovereign (OC19)",  az: 1, since: 2024 }
   ]}
 ];
 

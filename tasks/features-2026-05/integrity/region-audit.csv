@@ -33,11 +33,11 @@ aws,mx-central-1,Mexico Central,yes,mx-central-1,https://docs.aws.amazon.com/glo
 aws,me-south-1,Bahrain,yes,me-south-1,https://docs.aws.amazon.com/global-infrastructure/latest/regions/aws-regions.html,2026-05-16,commercial,GA
 aws,me-central-1,UAE,yes,me-central-1,https://docs.aws.amazon.com/global-infrastructure/latest/regions/aws-regions.html,2026-05-16,commercial,GA
 aws,sa-east-1,Sao Paulo,yes,sa-east-1,https://docs.aws.amazon.com/global-infrastructure/latest/regions/aws-regions.html,2026-05-16,commercial,GA
-aws,us-gov-west-1,GovCloud US-West,no,,https://docs.aws.amazon.com/global-infrastructure/latest/regions/aws-regions.html,2026-05-16,govcloud,GA
-aws,us-gov-east-1,GovCloud US-East,no,,https://docs.aws.amazon.com/global-infrastructure/latest/regions/aws-regions.html,2026-05-16,govcloud,GA
-aws,cn-north-1,Beijing,no,,https://docs.aws.amazon.com/global-infrastructure/latest/regions/aws-regions.html,2026-05-16,china,GA
-aws,cn-northwest-1,Ningxia,no,,https://docs.aws.amazon.com/global-infrastructure/latest/regions/aws-regions.html,2026-05-16,china,GA
-aws,eusc-de-east-1,Brandenburg (Eur. Sovereign),no,,https://docs.aws.amazon.com/global-infrastructure/latest/regions/aws-regions.html,2026-05-16,sovereign,GA
+aws,us-gov-west-1,GovCloud US-West,yes,us-gov-west-1,https://docs.aws.amazon.com/global-infrastructure/latest/regions/aws-regions.html,2026-05-16,govcloud,GA
+aws,us-gov-east-1,GovCloud US-East,yes,us-gov-east-1,https://docs.aws.amazon.com/global-infrastructure/latest/regions/aws-regions.html,2026-05-16,govcloud,GA
+aws,cn-north-1,Beijing,yes,cn-north-1,https://docs.aws.amazon.com/global-infrastructure/latest/regions/aws-regions.html,2026-05-16,china,GA
+aws,cn-northwest-1,Ningxia,yes,cn-northwest-1,https://docs.aws.amazon.com/global-infrastructure/latest/regions/aws-regions.html,2026-05-16,china,GA
+aws,eusc-de-east-1,Brandenburg (Eur. Sovereign),yes,eusc-de-east-1,https://docs.aws.amazon.com/global-infrastructure/latest/regions/aws-regions.html,2026-05-16,sovereign,GA
 aws,cl-central-1,Chile (code provisional),no,,https://docs.aws.amazon.com/global-infrastructure/latest/regions/aws-regions.html,2026-05-16,commercial,announced
 aws,ksa-region,Saudi Arabia (code TBD),no,,https://docs.aws.amazon.com/global-infrastructure/latest/regions/aws-regions.html,2026-05-16,commercial,announced
 azure,australiacentral,Australia Central,yes,australiacentral,https://learn.microsoft.com/en-us/azure/reliability/regions-list,2026-05-16,commercial,GA
@@ -97,17 +97,17 @@ azure,westus,West US,yes,westus,https://learn.microsoft.com/en-us/azure/reliabil
 azure,westus2,West US 2,yes,westus2,https://learn.microsoft.com/en-us/azure/reliability/regions-list,2026-05-16,commercial,GA
 azure,westus3,West US 3,yes,westus3,https://learn.microsoft.com/en-us/azure/reliability/regions-list,2026-05-16,commercial,GA
 azure,saudiarabiaeast,Saudi Arabia East,no,,https://learn.microsoft.com/en-us/azure/reliability/regions-list,2026-05-16,commercial,announced
-azure,usgovvirginia,US Gov Virginia,no,,https://learn.microsoft.com/en-us/azure/reliability/regions-list,2026-05-16,government,GA
-azure,usgovarizona,US Gov Arizona,no,,https://learn.microsoft.com/en-us/azure/reliability/regions-list,2026-05-16,government,GA
-azure,usgovtexas,US Gov Texas,no,,https://learn.microsoft.com/en-us/azure/reliability/regions-list,2026-05-16,government,GA
-azure,usdodeast,US DoD East,no,,https://learn.microsoft.com/en-us/azure/reliability/regions-list,2026-05-16,government,GA
-azure,usdodcentral,US DoD Central,no,,https://learn.microsoft.com/en-us/azure/reliability/regions-list,2026-05-16,government,GA
-azure,chinaeast,China East,no,,https://learn.microsoft.com/en-us/azure/reliability/regions-list,2026-05-16,china,GA
-azure,chinaeast2,China East 2,no,,https://learn.microsoft.com/en-us/azure/reliability/regions-list,2026-05-16,china,GA
-azure,chinaeast3,China East 3,no,,https://learn.microsoft.com/en-us/azure/reliability/regions-list,2026-05-16,china,GA
-azure,chinanorth,China North,no,,https://learn.microsoft.com/en-us/azure/reliability/regions-list,2026-05-16,china,GA
-azure,chinanorth2,China North 2,no,,https://learn.microsoft.com/en-us/azure/reliability/regions-list,2026-05-16,china,GA
-azure,chinanorth3,China North 3,no,,https://learn.microsoft.com/en-us/azure/reliability/regions-list,2026-05-16,china,GA
+azure,usgovvirginia,US Gov Virginia,yes,usgovvirginia,https://learn.microsoft.com/en-us/azure/reliability/regions-list,2026-05-16,government,GA
+azure,usgovarizona,US Gov Arizona,yes,usgovarizona,https://learn.microsoft.com/en-us/azure/reliability/regions-list,2026-05-16,government,GA
+azure,usgovtexas,US Gov Texas,yes,usgovtexas,https://learn.microsoft.com/en-us/azure/reliability/regions-list,2026-05-16,government,GA
+azure,usdodeast,US DoD East,yes,usdodeast,https://learn.microsoft.com/en-us/azure/reliability/regions-list,2026-05-16,government,GA
+azure,usdodcentral,US DoD Central,yes,usdodcentral,https://learn.microsoft.com/en-us/azure/reliability/regions-list,2026-05-16,government,GA
+azure,chinaeast,China East,yes,chinaeast,https://learn.microsoft.com/en-us/azure/reliability/regions-list,2026-05-16,china,GA
+azure,chinaeast2,China East 2,yes,chinaeast2,https://learn.microsoft.com/en-us/azure/reliability/regions-list,2026-05-16,china,GA
+azure,chinaeast3,China East 3,yes,chinaeast3,https://learn.microsoft.com/en-us/azure/reliability/regions-list,2026-05-16,china,GA
+azure,chinanorth,China North,yes,chinanorth,https://learn.microsoft.com/en-us/azure/reliability/regions-list,2026-05-16,china,GA
+azure,chinanorth2,China North 2,yes,chinanorth2,https://learn.microsoft.com/en-us/azure/reliability/regions-list,2026-05-16,china,GA
+azure,chinanorth3,China North 3,yes,chinanorth3,https://learn.microsoft.com/en-us/azure/reliability/regions-list,2026-05-16,china,GA
 gcp,us-central1,Iowa,yes,us-central1,https://cloud.google.com/about/locations,2026-05-16,commercial,GA
 gcp,us-east1,South Carolina,yes,us-east1,https://cloud.google.com/about/locations,2026-05-16,commercial,GA
 gcp,us-east4,N. Virginia,yes,us-east4,https://cloud.google.com/about/locations,2026-05-16,commercial,GA
@@ -196,16 +196,16 @@ oci,ap-batam-1,Batam,yes,ap-batam-1,https://docs.oracle.com/en-us/iaas/Content/G
 oci,ap-kulai-2,Kulai,yes,ap-kulai-2,https://docs.oracle.com/en-us/iaas/Content/General/Concepts/regions.htm,2026-05-16,commercial,GA
 oci,mx-queretaro-1,Queretaro,yes,mx-queretaro-1,https://docs.oracle.com/en-us/iaas/Content/General/Concepts/regions.htm,2026-05-16,commercial,GA
 oci,mx-monterrey-1,Monterrey,yes,mx-monterrey-1,https://docs.oracle.com/en-us/iaas/Content/General/Concepts/regions.htm,2026-05-16,commercial,GA
-oci,us-langley-1,US Gov East (OC2),no,,https://docs.oracle.com/en-us/iaas/Content/General/Concepts/regions.htm,2026-05-16,government,GA
-oci,us-luke-1,US Gov West (OC2),no,,https://docs.oracle.com/en-us/iaas/Content/General/Concepts/regions.htm,2026-05-16,government,GA
-oci,us-gov-ashburn-1,US DoD East (OC3),no,,https://docs.oracle.com/en-us/iaas/Content/General/Concepts/regions.htm,2026-05-16,government,GA
-oci,us-gov-chicago-1,US DoD North (OC3),no,,https://docs.oracle.com/en-us/iaas/Content/General/Concepts/regions.htm,2026-05-16,government,GA
-oci,us-gov-phoenix-1,US DoD West (OC3),no,,https://docs.oracle.com/en-us/iaas/Content/General/Concepts/regions.htm,2026-05-16,government,GA
-oci,uk-gov-london-1,UK Gov London (OC4),no,,https://docs.oracle.com/en-us/iaas/Content/General/Concepts/regions.htm,2026-05-16,government,GA
-oci,uk-gov-cardiff-1,UK Gov Newport (OC4),no,,https://docs.oracle.com/en-us/iaas/Content/General/Concepts/regions.htm,2026-05-16,government,GA
-oci,ap-dcc-canberra-1,Australia Gov Canberra (OC10),no,,https://docs.oracle.com/en-us/iaas/Content/General/Concepts/regions.htm,2026-05-16,government,GA
-oci,eu-frankfurt-2,EU Sovereign Frankfurt (OC19),no,,https://docs.oracle.com/en-us/iaas/Content/General/Concepts/regions.htm,2026-05-16,sovereign,GA
-oci,eu-madrid-2,EU Sovereign Madrid (OC19),no,,https://docs.oracle.com/en-us/iaas/Content/General/Concepts/regions.htm,2026-05-16,sovereign,GA
+oci,us-langley-1,US Gov East (OC2),yes,us-langley-1,https://docs.oracle.com/en-us/iaas/Content/General/Concepts/regions.htm,2026-05-16,government,GA
+oci,us-luke-1,US Gov West (OC2),yes,us-luke-1,https://docs.oracle.com/en-us/iaas/Content/General/Concepts/regions.htm,2026-05-16,government,GA
+oci,us-gov-ashburn-1,US DoD East (OC3),yes,us-gov-ashburn-1,https://docs.oracle.com/en-us/iaas/Content/General/Concepts/regions.htm,2026-05-16,government,GA
+oci,us-gov-chicago-1,US DoD North (OC3),yes,us-gov-chicago-1,https://docs.oracle.com/en-us/iaas/Content/General/Concepts/regions.htm,2026-05-16,government,GA
+oci,us-gov-phoenix-1,US DoD West (OC3),yes,us-gov-phoenix-1,https://docs.oracle.com/en-us/iaas/Content/General/Concepts/regions.htm,2026-05-16,government,GA
+oci,uk-gov-london-1,UK Gov London (OC4),yes,uk-gov-london-1,https://docs.oracle.com/en-us/iaas/Content/General/Concepts/regions.htm,2026-05-16,government,GA
+oci,uk-gov-cardiff-1,UK Gov Newport (OC4),yes,uk-gov-cardiff-1,https://docs.oracle.com/en-us/iaas/Content/General/Concepts/regions.htm,2026-05-16,government,GA
+oci,ap-dcc-canberra-1,Australia Gov Canberra (OC10),yes,ap-dcc-canberra-1,https://docs.oracle.com/en-us/iaas/Content/General/Concepts/regions.htm,2026-05-16,government,GA
+oci,eu-frankfurt-2,EU Sovereign Frankfurt (OC19),yes,eu-frankfurt-2,https://docs.oracle.com/en-us/iaas/Content/General/Concepts/regions.htm,2026-05-16,sovereign,GA
+oci,eu-madrid-2,EU Sovereign Madrid (OC19),yes,eu-madrid-2,https://docs.oracle.com/en-us/iaas/Content/General/Concepts/regions.htm,2026-05-16,sovereign,GA
 ovh,GRA,Gravelines,yes,GRA,https://www.ovhcloud.com/en-ie/public-cloud/regions-availability/,2026-05-16,commercial,GA
 ovh,SBG,Strasbourg,yes,SBG,https://www.ovhcloud.com/en-ie/public-cloud/regions-availability/,2026-05-16,commercial,GA
 ovh,RBX,Roubaix,yes,RBX,https://www.ovhcloud.com/en-ie/public-cloud/regions-availability/,2026-05-16,commercial,GA

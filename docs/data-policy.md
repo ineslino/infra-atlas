@@ -2,43 +2,48 @@
 
 What counts as "a region", what counts as "available", where the data comes
 from, and how often it refreshes. This document exists so those are *decisions*,
-not accidents — and so "the site says 34 AWS regions but AWS says 39" can be
-answered without re-litigating it every time.
+not accidents — and so "how many regions, counting which partitions" has one
+settled answer instead of being re-litigated every time.
 
 _Last reviewed: 2026-05-16._
 
 ## 1. Region inclusion
 
-**The site counts commercial, standard-partition, generally-available (GA)
-regions only.**
+**The Region Map shows every generally-available (GA) region across all
+partitions — commercial, GovCloud/Government, China, and sovereign.** Each
+region carries its partition in its code and name, so a reader sees the full
+footprint, not just the slice their own account happens to reach.
 
-| Class | Included? | Why |
-|-------|-----------|-----|
-| Commercial / standard partition, GA | **Yes** | The default cloud every engineer can deploy to with an ordinary account. |
-| GovCloud / Government partitions (AWS GovCloud, Azure Government, OCI OC2/OC3/OC4/OC10) | No | Separate partitions, eligibility-gated, separate accounts. Not comparable in a general cross-cloud reference. |
-| China partitions (AWS China, Azure operated by 21Vianet) | No | Operated by separate legal entities; separate accounts and consoles. |
-| Sovereign / EU-sovereign partitions (AWS European Sovereign Cloud, OCI OC19) | No | Distinct partitions with their own eligibility. |
-| Announced / "coming soon" / preview regions | No | Not yet deployable. Added only when the vendor's authoritative region doc lists them as GA. |
+| Class | On the Region Map? | Notes |
+|-------|--------------------|-------|
+| Commercial / standard partition, GA | **Yes** | The default cloud, reachable with an ordinary account. |
+| GovCloud / Government (AWS GovCloud, Azure Government & DoD, OCI OC2/OC3/OC4/OC10) | **Yes** | Eligibility-gated, separate account types — labelled as such. |
+| China (AWS China, Azure operated by 21Vianet) | **Yes** | Operated by separate legal entities — labelled as such. |
+| Sovereign (AWS European Sovereign Cloud, OCI OC19 EU Sovereign) | **Yes** | Distinct partitions — labelled as such. |
+| Announced / "coming soon" / preview | No | Not yet deployable. Added only when the vendor's authoritative doc lists it GA. |
 
-**This is why the counts look lower than vendors' marketing headlines:**
+**This reconciles with vendors' headline counts:**
 
-| Provider | Site shows (commercial GA) | Vendor's "all" headline | Difference |
-|----------|----------------------------|--------------------------|------------|
-| AWS   | 34 | 39 | + 2 GovCloud, 2 China, 1 European Sovereign Cloud |
-| Azure | 56 | 67 GA | + 5 Government, 6 China |
-| GCP   | 43 | 43 | (GCP has no separate partitions) |
-| OCI   | 45 | 55 | + 8 Government, 2 EU Sovereign |
-| OVH   | 15 | — | OVH counts *datacenters* (46) separately; the site counts Public Cloud regions |
+| Provider | Region Map total | = commercial + gated partitions |
+|----------|------------------|---------------------------------|
+| AWS   | **39** | 34 commercial + 2 GovCloud + 2 China + 1 European Sovereign Cloud |
+| Azure | **67** | 56 commercial + 5 Government + 6 China |
+| GCP   | **43** | 43 commercial — GCP has no separate partitions |
+| OCI   | **55** | 45 commercial + 8 Government + 2 EU Sovereign |
+| OVH   | **15** | 15 Public Cloud regions (OVH's 46 *datacenters* are a separate physical count) |
 
-The site **labels region counts as "commercial"** — the Region Map masthead
-states the scope and names the excluded partitions. The non-commercial regions
-are recorded (in `tasks/features-2026-05/integrity/region-audit.csv`) but not
-displayed.
+> Decision (2026-05-16): show all partitions. AWS's public "39 Geographic
+> Regions" headline includes GovCloud + China + the European Sovereign Cloud;
+> the Region Map matches that and applies the same all-partitions basis to every
+> provider. Gated regions are labelled (GovCloud / China / Sovereign) so a
+> reader can tell what needs a separate account type.
 
-> Decision (2026-05-16): keep the commercial count, label it. AWS's "39"
-> headline = 34 commercial + 2 GovCloud + 2 China + 1 European Sovereign Cloud;
-> the site shows the 34 a standard AWS account can use — and the same
-> commercial-only basis for every provider.
+**Scope caveat — the compute instruments are commercial-only.** The Region Map
+covers all partitions, but the `ec2`, `azure-vm` and `oci-compute` instruments
+cover **commercial regions only**: their public data sources (the Vantage
+dataset, the Azure Retail Prices API, the Oracle price list) carry no
+GovCloud/China/sovereign pricing. This asymmetry is data-driven, not an
+oversight, and is footnoted on those instruments.
 
 OVH note: OVHcloud uses "region" and "datacenter" inconsistently. The site
 counts **OVH Public Cloud regions** (the deployment locations the Public Cloud
