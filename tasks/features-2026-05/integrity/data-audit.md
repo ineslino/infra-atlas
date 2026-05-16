@@ -96,5 +96,8 @@ not be treated as audited:
 
 - OVH Toronto vs Madrid — OVH's own surfaces disagree; needs a chosen
   authoritative OVH source before reconciling. Do not guess.
+  **Resolved 2026-05-17:** the `regions` map was aligned to the live
+  `ovh-instances` order catalogue (what OVH's API actually offers) — Toronto
+  removed, Madrid added; OVH stays 15 Public Cloud regions.
 - Azure `regions` map (56) vs `azure-vm` (52) — decide whether the map should
   equal the full region set or the priced-VM set, then document it.

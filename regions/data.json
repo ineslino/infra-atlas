@@ -1,5 +1,5 @@
 {
-  "generated": "2026-05-16T22:03:47Z",
+  "generated": "2026-05-16T23:06:12Z",
   "cities": [
     {
       "city": "Hillsboro",
@@ -425,13 +425,6 @@
           "name": "Toronto",
           "az": 1,
           "since": 2019
-        },
-        {
-          "p": "ovh",
-          "code": "TOR",
-          "name": "Toronto",
-          "az": 1,
-          "since": 2023
         }
       ]
     },
@@ -1220,6 +1213,13 @@
           "p": "oci",
           "code": "eu-madrid-3",
           "name": "Madrid 3",
+          "az": 1,
+          "since": 2025
+        },
+        {
+          "p": "ovh",
+          "code": "MAD",
+          "name": "Madrid",
           "az": 1,
           "since": 2025
         }

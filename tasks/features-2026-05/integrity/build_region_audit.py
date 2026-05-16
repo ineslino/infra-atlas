@@ -259,7 +259,7 @@ LIM|Frankfurt / Limburg|commercial|GA|Frankfurt
 ERI|London / Erith|commercial|GA|London
 WAW|Warsaw|commercial|GA|Warsaw
 BHS|Beauharnois|commercial|GA|Montreal
-TOR|Toronto|commercial|GA|Toronto
+MAD|Madrid|commercial|GA|Madrid
 HIL|Hillsboro|commercial|GA|Hillsboro
 VIN|Vint Hill|commercial|GA|Vint Hill
 SGP|Singapore|commercial|GA|Singapore

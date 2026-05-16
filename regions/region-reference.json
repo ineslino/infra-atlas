@@ -1,6 +1,6 @@
 {
   "_comment": "Verified region code set per provider. Commercial / standard-partition GA regions only — see docs/data-policy.md. Regenerate with `python3 scripts/check_region_drift.py --update` ONLY after re-verifying against the source URLs below.",
-  "verified": "2026-05-16",
+  "verified": "2026-05-17",
   "sources": {
     "aws": "https://docs.aws.amazon.com/global-infrastructure/latest/regions/aws-regions.html",
     "azure": "https://learn.microsoft.com/en-us/azure/reliability/regions-list",
@@ -14,6 +14,7 @@
       "DE",
       "GRA",
       "HIL",
+      "MAD",
       "MIL",
       "MUM",
       "PAR",
@@ -21,7 +22,6 @@
       "SBG",
       "SGP",
       "SYD",
-      "TOR",
       "UK1",
       "VIN",
       "WAW"
