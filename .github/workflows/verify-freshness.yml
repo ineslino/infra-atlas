@@ -1,0 +1,64 @@
+name: Verify freshness
+
+# The curated Cross-Cloud matrices (kubernetes, compliance, confidential-
+# computing, iam-matrix) carry no refresh.sh — their data is hand-maintained
+# from vendor docs and snapshot-dated in the masthead, inside a
+# <time datetime="…"> element within .status-time. Nothing else would catch
+# them silently going stale as time passes.
+#
+# This job reads each snapshot date and fails when one ages past the review
+# threshold — a periodic nudge to re-verify against the vendor docs and bump
+# the date. It runs on a schedule only (plus manual dispatch), never on
+# push/PR: staleness is caused by time passing, not by a code change, so it
+# must not block day-to-day work.
+
+on:
+  schedule:
+    - cron: '0 6 1 * *'   # 1st of each month, 06:00 UTC
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  freshness:
+    name: Curated snapshot freshness
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check curated snapshot dates
+        env:
+          STALE_DAYS: 180   # ~6 months — review cadence for the curated matrices
+        run: |
+          # Curated instruments with a hand-maintained snapshot date.
+          # An APIM guide can join this list once it carries a <time datetime>.
+          instruments=(kubernetes compliance confidential-computing iam-matrix)
+          now=$(date -u +%s)
+          stale=0
+
+          for inst in "${instruments[@]}"; do
+            file="$inst/index.html"
+            snapshot=$(grep -oE '<time datetime="[0-9]{4}-[0-9]{2}-[0-9]{2}"' "$file" \
+                       | head -1 | grep -oE '[0-9]{4}-[0-9]{2}-[0-9]{2}' || true)
+
+            if [[ -z "$snapshot" ]]; then
+              echo "::error file=$file::$inst — no <time datetime> snapshot date found."
+              stale=1
+              continue
+            fi
+
+            age=$(( (now - $(date -u -d "$snapshot" +%s)) / 86400 ))
+            if (( age > STALE_DAYS )); then
+              echo "::error file=$file::$inst is stale — snapshot $snapshot is $age days old (threshold ${STALE_DAYS}). Re-verify against vendor docs and bump the date."
+              stale=1
+            else
+              echo "✓ $inst — snapshot $snapshot, $age days old"
+            fi
+          done
+
+          if (( stale )); then
+            echo "::error::One or more curated matrices need a freshness review — see annotations above."
+            exit 1
+          fi
+          echo "✓ All curated matrices are within the ${STALE_DAYS}-day freshness window."
