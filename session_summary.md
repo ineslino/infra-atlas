@@ -1,37 +1,43 @@
-# Session summary — 2026-05-16 · Full review
+# Session summary — 2026-05-16 · Feature / expansion review
 
-Four-axis review of infraatlas.dev. Repo treated as source of truth.
+A 7-phase feature/expansion review of infraatlas.dev, gated on a Phase-0
+data-integrity audit. Repo treated as source of truth. Deliverables under
+`tasks/features-2026-05/`.
 
 ## What was done
 
-- Sanity-checked the repo against the mission brief (the assumed `claude.md`/`progress.md`/`tasks/` scaffold did not exist — created `tasks/review-2026-05/` + these repo-level files).
-- **Axis 1 (UI/UX):** all 12 pages; footer dead-links, a11y (skip links, landmarks, contrast), perf traces (home/EC2/APIM), 375px breakpoint.
-- **Axis 2 (Functionality):** filters/permalinks/cross-refs, the `refresh.yml` cron + `verify-data.yml`, 404, test coverage.
-- **Axis 3 (Data accuracy):** 6 parallel research agents, one per vendor area, every claim cited against upstream vendor docs.
-- **Axis 4 (Feature ideation):** 12 candidates, top 5 ranked.
+- **Phase 0 — region integrity (blocker).** Audited all 5 providers' region
+  lists against vendor docs. The briefed "AWS 34-vs-39 regression" was a
+  **misdiagnosis** — 34 = a standard AWS account's regions, 39 = all partitions
+  (the marketing headline). Found and fixed **3 real drifts**, none in AWS:
+  Azure had a phantom `taiwannorth` (announced, not GA) and was missing
+  `westcentralus`; OCI was missing `af-casablanca-1`; OVH was missing Mumbai.
+  Added a CI drift guard (`scripts/check_region_drift.py` + `region-reference.json`)
+  and a written inclusion policy (`docs/data-policy.md`). Per the user's
+  decision, the Region Map now shows **all partitions** — AWS 39, Azure 67,
+  OCI 55, GCP 43, OVH 15 (219 regions).
+- **Phase 1 — inventory.** 16 instruments mapped (data source, refresh, filters,
+  cross-refs) + the IA + the implicit layer (the `data.json` files are already a
+  public CORS API; the "What Changed" feed is built but dormant).
+- **Phase 2 — research.** 4 parallel agents — competitive landscape, user-intent
+  mining, vendor surface scan, adjacent verticals — every claim URL-cited.
+- **Phases 3–7.** 22 evidence-cited gaps → 31 scored candidates → a top-10
+  shortlist → buildable specs for the top 3.
 
-## Outcome — 43 findings
+## Outcome
 
-| Severity | Count |
-|---|---|
-| P0 | 2 |
-| P1 | 13 |
-| P2 | 18 |
-| P3 | 10 |
-
-**Two P0s:** dead footer links vs the open-source positioning; EC2 Melbourne availability ~2× over-claimed. **The data-accuracy axis carries the real risk** — a systemic staleness + mislabel pattern across every data instrument, plus invented data on the static APIM pages. UI/UX and functionality are otherwise solid (fast, responsive, real permalink + refresh infrastructure).
-
-## Deliverables
-
-- `tasks/review-2026-05/todo.md` — checklist (truthful status).
-- `tasks/review-2026-05/report.md` — findings by axis + severity, < 30-min read.
-- `tasks/review-2026-05/accuracy-audit.csv` — 39-row drift table, every row cited.
-- `tasks/review-2026-05/feature-shortlist.md` — top-5 features.
-- `tasks/lessons.md` — 6 recurring patterns.
-- `progress.md`, `session_summary.md` — repo-level.
+**Build next:** "X vs Y" decision pages · expose the `data.json` API · Egress &
+Data-Transfer Cost Map (then the Cross-Cloud Networking Primitives Matrix). The
+single biggest validated unmet pain is network/egress cost — no instrument
+covers it. Full roadmap: `tasks/features-2026-05/report.md`.
 
 ## Honest limitations
 
-- Breakpoints: verified 375px + desktop; tablet/4K assessed from responsive CSS, not screenshotted.
-- Axis 3 sampled representative slices (per the mission) — not every cell; unverifiable values are marked "unverified" in the CSV, not padded.
-- No fixes were applied — this session is review-only; findings are proposals.
+- Cloud CLIs (`aws`/`az`/`gcloud`) are installed but unauthenticated — the region
+  audit used the authoritative vendor doc pages, not the CLIs.
+- Per-region instance/SKU counts and GPU GA status were **not** independently
+  audited (credential-free constraint) — stated in `integrity/data-audit.md`.
+- Gated-region launch years (`since`) added to the Region Map are best-effort
+  estimates; the region **codes** are vendor-verified (`integrity/region-audit.csv`).
+- `cloudinfrastructuremap.com` could not be fetched (JS SPA) — flagged unverified
+  in `research/competitive.md`.
