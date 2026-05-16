@@ -1,0 +1,224 @@
+provider,upstream_region_code,upstream_region_name,in_site,site_value,upstream_url,checked_at,scope_class,status
+aws,us-east-1,N. Virginia,yes,us-east-1,https://docs.aws.amazon.com/global-infrastructure/latest/regions/aws-regions.html,2026-05-16,commercial,GA
+aws,us-east-2,Ohio,yes,us-east-2,https://docs.aws.amazon.com/global-infrastructure/latest/regions/aws-regions.html,2026-05-16,commercial,GA
+aws,us-west-1,N. California,yes,us-west-1,https://docs.aws.amazon.com/global-infrastructure/latest/regions/aws-regions.html,2026-05-16,commercial,GA
+aws,us-west-2,Oregon,yes,us-west-2,https://docs.aws.amazon.com/global-infrastructure/latest/regions/aws-regions.html,2026-05-16,commercial,GA
+aws,af-south-1,Cape Town,yes,af-south-1,https://docs.aws.amazon.com/global-infrastructure/latest/regions/aws-regions.html,2026-05-16,commercial,GA
+aws,ap-east-1,Hong Kong,yes,ap-east-1,https://docs.aws.amazon.com/global-infrastructure/latest/regions/aws-regions.html,2026-05-16,commercial,GA
+aws,ap-east-2,Taipei,yes,ap-east-2,https://docs.aws.amazon.com/global-infrastructure/latest/regions/aws-regions.html,2026-05-16,commercial,GA
+aws,ap-south-1,Mumbai,yes,ap-south-1,https://docs.aws.amazon.com/global-infrastructure/latest/regions/aws-regions.html,2026-05-16,commercial,GA
+aws,ap-south-2,Hyderabad,yes,ap-south-2,https://docs.aws.amazon.com/global-infrastructure/latest/regions/aws-regions.html,2026-05-16,commercial,GA
+aws,ap-northeast-1,Tokyo,yes,ap-northeast-1,https://docs.aws.amazon.com/global-infrastructure/latest/regions/aws-regions.html,2026-05-16,commercial,GA
+aws,ap-northeast-2,Seoul,yes,ap-northeast-2,https://docs.aws.amazon.com/global-infrastructure/latest/regions/aws-regions.html,2026-05-16,commercial,GA
+aws,ap-northeast-3,Osaka,yes,ap-northeast-3,https://docs.aws.amazon.com/global-infrastructure/latest/regions/aws-regions.html,2026-05-16,commercial,GA
+aws,ap-southeast-1,Singapore,yes,ap-southeast-1,https://docs.aws.amazon.com/global-infrastructure/latest/regions/aws-regions.html,2026-05-16,commercial,GA
+aws,ap-southeast-2,Sydney,yes,ap-southeast-2,https://docs.aws.amazon.com/global-infrastructure/latest/regions/aws-regions.html,2026-05-16,commercial,GA
+aws,ap-southeast-3,Jakarta,yes,ap-southeast-3,https://docs.aws.amazon.com/global-infrastructure/latest/regions/aws-regions.html,2026-05-16,commercial,GA
+aws,ap-southeast-4,Melbourne,yes,ap-southeast-4,https://docs.aws.amazon.com/global-infrastructure/latest/regions/aws-regions.html,2026-05-16,commercial,GA
+aws,ap-southeast-5,Malaysia,yes,ap-southeast-5,https://docs.aws.amazon.com/global-infrastructure/latest/regions/aws-regions.html,2026-05-16,commercial,GA
+aws,ap-southeast-6,New Zealand,yes,ap-southeast-6,https://docs.aws.amazon.com/global-infrastructure/latest/regions/aws-regions.html,2026-05-16,commercial,GA
+aws,ap-southeast-7,Thailand,yes,ap-southeast-7,https://docs.aws.amazon.com/global-infrastructure/latest/regions/aws-regions.html,2026-05-16,commercial,GA
+aws,ca-central-1,Canada Central,yes,ca-central-1,https://docs.aws.amazon.com/global-infrastructure/latest/regions/aws-regions.html,2026-05-16,commercial,GA
+aws,ca-west-1,Calgary,yes,ca-west-1,https://docs.aws.amazon.com/global-infrastructure/latest/regions/aws-regions.html,2026-05-16,commercial,GA
+aws,eu-central-1,Frankfurt,yes,eu-central-1,https://docs.aws.amazon.com/global-infrastructure/latest/regions/aws-regions.html,2026-05-16,commercial,GA
+aws,eu-central-2,Zurich,yes,eu-central-2,https://docs.aws.amazon.com/global-infrastructure/latest/regions/aws-regions.html,2026-05-16,commercial,GA
+aws,eu-west-1,Ireland,yes,eu-west-1,https://docs.aws.amazon.com/global-infrastructure/latest/regions/aws-regions.html,2026-05-16,commercial,GA
+aws,eu-west-2,London,yes,eu-west-2,https://docs.aws.amazon.com/global-infrastructure/latest/regions/aws-regions.html,2026-05-16,commercial,GA
+aws,eu-west-3,Paris,yes,eu-west-3,https://docs.aws.amazon.com/global-infrastructure/latest/regions/aws-regions.html,2026-05-16,commercial,GA
+aws,eu-south-1,Milan,yes,eu-south-1,https://docs.aws.amazon.com/global-infrastructure/latest/regions/aws-regions.html,2026-05-16,commercial,GA
+aws,eu-south-2,Spain,yes,eu-south-2,https://docs.aws.amazon.com/global-infrastructure/latest/regions/aws-regions.html,2026-05-16,commercial,GA
+aws,eu-north-1,Stockholm,yes,eu-north-1,https://docs.aws.amazon.com/global-infrastructure/latest/regions/aws-regions.html,2026-05-16,commercial,GA
+aws,il-central-1,Tel Aviv,yes,il-central-1,https://docs.aws.amazon.com/global-infrastructure/latest/regions/aws-regions.html,2026-05-16,commercial,GA
+aws,mx-central-1,Mexico Central,yes,mx-central-1,https://docs.aws.amazon.com/global-infrastructure/latest/regions/aws-regions.html,2026-05-16,commercial,GA
+aws,me-south-1,Bahrain,yes,me-south-1,https://docs.aws.amazon.com/global-infrastructure/latest/regions/aws-regions.html,2026-05-16,commercial,GA
+aws,me-central-1,UAE,yes,me-central-1,https://docs.aws.amazon.com/global-infrastructure/latest/regions/aws-regions.html,2026-05-16,commercial,GA
+aws,sa-east-1,Sao Paulo,yes,sa-east-1,https://docs.aws.amazon.com/global-infrastructure/latest/regions/aws-regions.html,2026-05-16,commercial,GA
+aws,us-gov-west-1,GovCloud US-West,no,,https://docs.aws.amazon.com/global-infrastructure/latest/regions/aws-regions.html,2026-05-16,govcloud,GA
+aws,us-gov-east-1,GovCloud US-East,no,,https://docs.aws.amazon.com/global-infrastructure/latest/regions/aws-regions.html,2026-05-16,govcloud,GA
+aws,cn-north-1,Beijing,no,,https://docs.aws.amazon.com/global-infrastructure/latest/regions/aws-regions.html,2026-05-16,china,GA
+aws,cn-northwest-1,Ningxia,no,,https://docs.aws.amazon.com/global-infrastructure/latest/regions/aws-regions.html,2026-05-16,china,GA
+aws,eusc-de-east-1,Brandenburg (Eur. Sovereign),no,,https://docs.aws.amazon.com/global-infrastructure/latest/regions/aws-regions.html,2026-05-16,sovereign,GA
+aws,cl-central-1,Chile (code provisional),no,,https://docs.aws.amazon.com/global-infrastructure/latest/regions/aws-regions.html,2026-05-16,commercial,announced
+aws,ksa-region,Saudi Arabia (code TBD),no,,https://docs.aws.amazon.com/global-infrastructure/latest/regions/aws-regions.html,2026-05-16,commercial,announced
+azure,australiacentral,Australia Central,yes,australiacentral,https://learn.microsoft.com/en-us/azure/reliability/regions-list,2026-05-16,commercial,GA
+azure,australiacentral2,Australia Central 2,yes,australiacentral2,https://learn.microsoft.com/en-us/azure/reliability/regions-list,2026-05-16,commercial,GA
+azure,australiaeast,Australia East,yes,australiaeast,https://learn.microsoft.com/en-us/azure/reliability/regions-list,2026-05-16,commercial,GA
+azure,australiasoutheast,Australia Southeast,yes,australiasoutheast,https://learn.microsoft.com/en-us/azure/reliability/regions-list,2026-05-16,commercial,GA
+azure,austriaeast,Austria East,yes,austriaeast,https://learn.microsoft.com/en-us/azure/reliability/regions-list,2026-05-16,commercial,GA
+azure,belgiumcentral,Belgium Central,yes,belgiumcentral,https://learn.microsoft.com/en-us/azure/reliability/regions-list,2026-05-16,commercial,GA
+azure,brazilsouth,Brazil South,yes,brazilsouth,https://learn.microsoft.com/en-us/azure/reliability/regions-list,2026-05-16,commercial,GA
+azure,brazilsoutheast,Brazil Southeast,yes,brazilsoutheast,https://learn.microsoft.com/en-us/azure/reliability/regions-list,2026-05-16,commercial,GA
+azure,canadacentral,Canada Central,yes,canadacentral,https://learn.microsoft.com/en-us/azure/reliability/regions-list,2026-05-16,commercial,GA
+azure,canadaeast,Canada East,yes,canadaeast,https://learn.microsoft.com/en-us/azure/reliability/regions-list,2026-05-16,commercial,GA
+azure,centralindia,Central India,yes,centralindia,https://learn.microsoft.com/en-us/azure/reliability/regions-list,2026-05-16,commercial,GA
+azure,centralus,Central US,yes,centralus,https://learn.microsoft.com/en-us/azure/reliability/regions-list,2026-05-16,commercial,GA
+azure,chilecentral,Chile Central,yes,chilecentral,https://learn.microsoft.com/en-us/azure/reliability/regions-list,2026-05-16,commercial,GA
+azure,denmarkeast,Denmark East,yes,denmarkeast,https://learn.microsoft.com/en-us/azure/reliability/regions-list,2026-05-16,commercial,GA
+azure,eastasia,East Asia,yes,eastasia,https://learn.microsoft.com/en-us/azure/reliability/regions-list,2026-05-16,commercial,GA
+azure,eastus,East US,yes,eastus,https://learn.microsoft.com/en-us/azure/reliability/regions-list,2026-05-16,commercial,GA
+azure,eastus2,East US 2,yes,eastus2,https://learn.microsoft.com/en-us/azure/reliability/regions-list,2026-05-16,commercial,GA
+azure,francecentral,France Central,yes,francecentral,https://learn.microsoft.com/en-us/azure/reliability/regions-list,2026-05-16,commercial,GA
+azure,francesouth,France South,yes,francesouth,https://learn.microsoft.com/en-us/azure/reliability/regions-list,2026-05-16,commercial,GA
+azure,germanynorth,Germany North,yes,germanynorth,https://learn.microsoft.com/en-us/azure/reliability/regions-list,2026-05-16,commercial,GA
+azure,germanywestcentral,Germany West Central,yes,germanywestcentral,https://learn.microsoft.com/en-us/azure/reliability/regions-list,2026-05-16,commercial,GA
+azure,indonesiacentral,Indonesia Central,yes,indonesiacentral,https://learn.microsoft.com/en-us/azure/reliability/regions-list,2026-05-16,commercial,GA
+azure,israelcentral,Israel Central,yes,israelcentral,https://learn.microsoft.com/en-us/azure/reliability/regions-list,2026-05-16,commercial,GA
+azure,italynorth,Italy North,yes,italynorth,https://learn.microsoft.com/en-us/azure/reliability/regions-list,2026-05-16,commercial,GA
+azure,japaneast,Japan East,yes,japaneast,https://learn.microsoft.com/en-us/azure/reliability/regions-list,2026-05-16,commercial,GA
+azure,japanwest,Japan West,yes,japanwest,https://learn.microsoft.com/en-us/azure/reliability/regions-list,2026-05-16,commercial,GA
+azure,koreacentral,Korea Central,yes,koreacentral,https://learn.microsoft.com/en-us/azure/reliability/regions-list,2026-05-16,commercial,GA
+azure,koreasouth,Korea South,yes,koreasouth,https://learn.microsoft.com/en-us/azure/reliability/regions-list,2026-05-16,commercial,GA
+azure,malaysiawest,Malaysia West,yes,malaysiawest,https://learn.microsoft.com/en-us/azure/reliability/regions-list,2026-05-16,commercial,GA
+azure,mexicocentral,Mexico Central,yes,mexicocentral,https://learn.microsoft.com/en-us/azure/reliability/regions-list,2026-05-16,commercial,GA
+azure,newzealandnorth,New Zealand North,yes,newzealandnorth,https://learn.microsoft.com/en-us/azure/reliability/regions-list,2026-05-16,commercial,GA
+azure,northcentralus,North Central US,yes,northcentralus,https://learn.microsoft.com/en-us/azure/reliability/regions-list,2026-05-16,commercial,GA
+azure,northeurope,North Europe,yes,northeurope,https://learn.microsoft.com/en-us/azure/reliability/regions-list,2026-05-16,commercial,GA
+azure,norwayeast,Norway East,yes,norwayeast,https://learn.microsoft.com/en-us/azure/reliability/regions-list,2026-05-16,commercial,GA
+azure,norwaywest,Norway West,yes,norwaywest,https://learn.microsoft.com/en-us/azure/reliability/regions-list,2026-05-16,commercial,GA
+azure,polandcentral,Poland Central,yes,polandcentral,https://learn.microsoft.com/en-us/azure/reliability/regions-list,2026-05-16,commercial,GA
+azure,qatarcentral,Qatar Central,yes,qatarcentral,https://learn.microsoft.com/en-us/azure/reliability/regions-list,2026-05-16,commercial,GA
+azure,southafricanorth,South Africa North,yes,southafricanorth,https://learn.microsoft.com/en-us/azure/reliability/regions-list,2026-05-16,commercial,GA
+azure,southafricawest,South Africa West,yes,southafricawest,https://learn.microsoft.com/en-us/azure/reliability/regions-list,2026-05-16,commercial,GA
+azure,southcentralus,South Central US,yes,southcentralus,https://learn.microsoft.com/en-us/azure/reliability/regions-list,2026-05-16,commercial,GA
+azure,southindia,South India,yes,southindia,https://learn.microsoft.com/en-us/azure/reliability/regions-list,2026-05-16,commercial,GA
+azure,southeastasia,Southeast Asia,yes,southeastasia,https://learn.microsoft.com/en-us/azure/reliability/regions-list,2026-05-16,commercial,GA
+azure,spaincentral,Spain Central,yes,spaincentral,https://learn.microsoft.com/en-us/azure/reliability/regions-list,2026-05-16,commercial,GA
+azure,swedencentral,Sweden Central,yes,swedencentral,https://learn.microsoft.com/en-us/azure/reliability/regions-list,2026-05-16,commercial,GA
+azure,switzerlandnorth,Switzerland North,yes,switzerlandnorth,https://learn.microsoft.com/en-us/azure/reliability/regions-list,2026-05-16,commercial,GA
+azure,switzerlandwest,Switzerland West,yes,switzerlandwest,https://learn.microsoft.com/en-us/azure/reliability/regions-list,2026-05-16,commercial,GA
+azure,uaecentral,UAE Central,yes,uaecentral,https://learn.microsoft.com/en-us/azure/reliability/regions-list,2026-05-16,commercial,GA
+azure,uaenorth,UAE North,yes,uaenorth,https://learn.microsoft.com/en-us/azure/reliability/regions-list,2026-05-16,commercial,GA
+azure,uksouth,UK South,yes,uksouth,https://learn.microsoft.com/en-us/azure/reliability/regions-list,2026-05-16,commercial,GA
+azure,ukwest,UK West,yes,ukwest,https://learn.microsoft.com/en-us/azure/reliability/regions-list,2026-05-16,commercial,GA
+azure,westcentralus,West Central US,yes,westcentralus,https://learn.microsoft.com/en-us/azure/reliability/regions-list,2026-05-16,commercial,GA
+azure,westeurope,West Europe,yes,westeurope,https://learn.microsoft.com/en-us/azure/reliability/regions-list,2026-05-16,commercial,GA
+azure,westindia,West India,yes,westindia,https://learn.microsoft.com/en-us/azure/reliability/regions-list,2026-05-16,commercial,GA
+azure,westus,West US,yes,westus,https://learn.microsoft.com/en-us/azure/reliability/regions-list,2026-05-16,commercial,GA
+azure,westus2,West US 2,yes,westus2,https://learn.microsoft.com/en-us/azure/reliability/regions-list,2026-05-16,commercial,GA
+azure,westus3,West US 3,yes,westus3,https://learn.microsoft.com/en-us/azure/reliability/regions-list,2026-05-16,commercial,GA
+azure,saudiarabiaeast,Saudi Arabia East,no,,https://learn.microsoft.com/en-us/azure/reliability/regions-list,2026-05-16,commercial,announced
+azure,usgovvirginia,US Gov Virginia,no,,https://learn.microsoft.com/en-us/azure/reliability/regions-list,2026-05-16,government,GA
+azure,usgovarizona,US Gov Arizona,no,,https://learn.microsoft.com/en-us/azure/reliability/regions-list,2026-05-16,government,GA
+azure,usgovtexas,US Gov Texas,no,,https://learn.microsoft.com/en-us/azure/reliability/regions-list,2026-05-16,government,GA
+azure,usdodeast,US DoD East,no,,https://learn.microsoft.com/en-us/azure/reliability/regions-list,2026-05-16,government,GA
+azure,usdodcentral,US DoD Central,no,,https://learn.microsoft.com/en-us/azure/reliability/regions-list,2026-05-16,government,GA
+azure,chinaeast,China East,no,,https://learn.microsoft.com/en-us/azure/reliability/regions-list,2026-05-16,china,GA
+azure,chinaeast2,China East 2,no,,https://learn.microsoft.com/en-us/azure/reliability/regions-list,2026-05-16,china,GA
+azure,chinaeast3,China East 3,no,,https://learn.microsoft.com/en-us/azure/reliability/regions-list,2026-05-16,china,GA
+azure,chinanorth,China North,no,,https://learn.microsoft.com/en-us/azure/reliability/regions-list,2026-05-16,china,GA
+azure,chinanorth2,China North 2,no,,https://learn.microsoft.com/en-us/azure/reliability/regions-list,2026-05-16,china,GA
+azure,chinanorth3,China North 3,no,,https://learn.microsoft.com/en-us/azure/reliability/regions-list,2026-05-16,china,GA
+gcp,us-central1,Iowa,yes,us-central1,https://cloud.google.com/about/locations,2026-05-16,commercial,GA
+gcp,us-east1,South Carolina,yes,us-east1,https://cloud.google.com/about/locations,2026-05-16,commercial,GA
+gcp,us-east4,N. Virginia,yes,us-east4,https://cloud.google.com/about/locations,2026-05-16,commercial,GA
+gcp,us-east5,Ohio,yes,us-east5,https://cloud.google.com/about/locations,2026-05-16,commercial,GA
+gcp,us-south1,Dallas,yes,us-south1,https://cloud.google.com/about/locations,2026-05-16,commercial,GA
+gcp,us-west1,Oregon,yes,us-west1,https://cloud.google.com/about/locations,2026-05-16,commercial,GA
+gcp,us-west2,Los Angeles,yes,us-west2,https://cloud.google.com/about/locations,2026-05-16,commercial,GA
+gcp,us-west3,Salt Lake City,yes,us-west3,https://cloud.google.com/about/locations,2026-05-16,commercial,GA
+gcp,us-west4,Las Vegas,yes,us-west4,https://cloud.google.com/about/locations,2026-05-16,commercial,GA
+gcp,northamerica-northeast1,Montreal,yes,northamerica-northeast1,https://cloud.google.com/about/locations,2026-05-16,commercial,GA
+gcp,northamerica-northeast2,Toronto,yes,northamerica-northeast2,https://cloud.google.com/about/locations,2026-05-16,commercial,GA
+gcp,northamerica-south1,Queretaro,yes,northamerica-south1,https://cloud.google.com/about/locations,2026-05-16,commercial,GA
+gcp,southamerica-east1,Sao Paulo,yes,southamerica-east1,https://cloud.google.com/about/locations,2026-05-16,commercial,GA
+gcp,southamerica-west1,Santiago,yes,southamerica-west1,https://cloud.google.com/about/locations,2026-05-16,commercial,GA
+gcp,europe-central2,Warsaw,yes,europe-central2,https://cloud.google.com/about/locations,2026-05-16,commercial,GA
+gcp,europe-north1,Hamina,yes,europe-north1,https://cloud.google.com/about/locations,2026-05-16,commercial,GA
+gcp,europe-north2,Stockholm,yes,europe-north2,https://cloud.google.com/about/locations,2026-05-16,commercial,GA
+gcp,europe-southwest1,Madrid,yes,europe-southwest1,https://cloud.google.com/about/locations,2026-05-16,commercial,GA
+gcp,europe-west1,Belgium,yes,europe-west1,https://cloud.google.com/about/locations,2026-05-16,commercial,GA
+gcp,europe-west2,London,yes,europe-west2,https://cloud.google.com/about/locations,2026-05-16,commercial,GA
+gcp,europe-west3,Frankfurt,yes,europe-west3,https://cloud.google.com/about/locations,2026-05-16,commercial,GA
+gcp,europe-west4,Netherlands,yes,europe-west4,https://cloud.google.com/about/locations,2026-05-16,commercial,GA
+gcp,europe-west6,Zurich,yes,europe-west6,https://cloud.google.com/about/locations,2026-05-16,commercial,GA
+gcp,europe-west8,Milan,yes,europe-west8,https://cloud.google.com/about/locations,2026-05-16,commercial,GA
+gcp,europe-west9,Paris,yes,europe-west9,https://cloud.google.com/about/locations,2026-05-16,commercial,GA
+gcp,europe-west10,Berlin,yes,europe-west10,https://cloud.google.com/about/locations,2026-05-16,commercial,GA
+gcp,europe-west12,Turin,yes,europe-west12,https://cloud.google.com/about/locations,2026-05-16,commercial,GA
+gcp,asia-east1,Taiwan,yes,asia-east1,https://cloud.google.com/about/locations,2026-05-16,commercial,GA
+gcp,asia-east2,Hong Kong,yes,asia-east2,https://cloud.google.com/about/locations,2026-05-16,commercial,GA
+gcp,asia-northeast1,Tokyo,yes,asia-northeast1,https://cloud.google.com/about/locations,2026-05-16,commercial,GA
+gcp,asia-northeast2,Osaka,yes,asia-northeast2,https://cloud.google.com/about/locations,2026-05-16,commercial,GA
+gcp,asia-northeast3,Seoul,yes,asia-northeast3,https://cloud.google.com/about/locations,2026-05-16,commercial,GA
+gcp,asia-south1,Mumbai,yes,asia-south1,https://cloud.google.com/about/locations,2026-05-16,commercial,GA
+gcp,asia-south2,Delhi,yes,asia-south2,https://cloud.google.com/about/locations,2026-05-16,commercial,GA
+gcp,asia-southeast1,Singapore,yes,asia-southeast1,https://cloud.google.com/about/locations,2026-05-16,commercial,GA
+gcp,asia-southeast2,Jakarta,yes,asia-southeast2,https://cloud.google.com/about/locations,2026-05-16,commercial,GA
+gcp,asia-southeast3,Bangkok,yes,asia-southeast3,https://cloud.google.com/about/locations,2026-05-16,commercial,GA
+gcp,australia-southeast1,Sydney,yes,australia-southeast1,https://cloud.google.com/about/locations,2026-05-16,commercial,GA
+gcp,australia-southeast2,Melbourne,yes,australia-southeast2,https://cloud.google.com/about/locations,2026-05-16,commercial,GA
+gcp,me-central1,Doha,yes,me-central1,https://cloud.google.com/about/locations,2026-05-16,commercial,GA
+gcp,me-central2,Dammam,yes,me-central2,https://cloud.google.com/about/locations,2026-05-16,commercial,GA
+gcp,me-west1,Tel Aviv,yes,me-west1,https://cloud.google.com/about/locations,2026-05-16,commercial,GA
+gcp,africa-south1,Johannesburg,yes,africa-south1,https://cloud.google.com/about/locations,2026-05-16,commercial,GA
+oci,us-ashburn-1,Ashburn VA,yes,us-ashburn-1,https://docs.oracle.com/en-us/iaas/Content/General/Concepts/regions.htm,2026-05-16,commercial,GA
+oci,us-chicago-1,Chicago IL,yes,us-chicago-1,https://docs.oracle.com/en-us/iaas/Content/General/Concepts/regions.htm,2026-05-16,commercial,GA
+oci,us-phoenix-1,Phoenix AZ,yes,us-phoenix-1,https://docs.oracle.com/en-us/iaas/Content/General/Concepts/regions.htm,2026-05-16,commercial,GA
+oci,us-sanjose-1,San Jose CA,yes,us-sanjose-1,https://docs.oracle.com/en-us/iaas/Content/General/Concepts/regions.htm,2026-05-16,commercial,GA
+oci,ca-montreal-1,Montreal,yes,ca-montreal-1,https://docs.oracle.com/en-us/iaas/Content/General/Concepts/regions.htm,2026-05-16,commercial,GA
+oci,ca-toronto-1,Toronto,yes,ca-toronto-1,https://docs.oracle.com/en-us/iaas/Content/General/Concepts/regions.htm,2026-05-16,commercial,GA
+oci,sa-saopaulo-1,Sao Paulo,yes,sa-saopaulo-1,https://docs.oracle.com/en-us/iaas/Content/General/Concepts/regions.htm,2026-05-16,commercial,GA
+oci,sa-vinhedo-1,Vinhedo,yes,sa-vinhedo-1,https://docs.oracle.com/en-us/iaas/Content/General/Concepts/regions.htm,2026-05-16,commercial,GA
+oci,sa-santiago-1,Santiago,yes,sa-santiago-1,https://docs.oracle.com/en-us/iaas/Content/General/Concepts/regions.htm,2026-05-16,commercial,GA
+oci,sa-valparaiso-1,Valparaiso,yes,sa-valparaiso-1,https://docs.oracle.com/en-us/iaas/Content/General/Concepts/regions.htm,2026-05-16,commercial,GA
+oci,sa-bogota-1,Bogota,yes,sa-bogota-1,https://docs.oracle.com/en-us/iaas/Content/General/Concepts/regions.htm,2026-05-16,commercial,GA
+oci,eu-frankfurt-1,Frankfurt,yes,eu-frankfurt-1,https://docs.oracle.com/en-us/iaas/Content/General/Concepts/regions.htm,2026-05-16,commercial,GA
+oci,eu-amsterdam-1,Amsterdam,yes,eu-amsterdam-1,https://docs.oracle.com/en-us/iaas/Content/General/Concepts/regions.htm,2026-05-16,commercial,GA
+oci,eu-paris-1,Paris,yes,eu-paris-1,https://docs.oracle.com/en-us/iaas/Content/General/Concepts/regions.htm,2026-05-16,commercial,GA
+oci,eu-marseille-1,Marseille,yes,eu-marseille-1,https://docs.oracle.com/en-us/iaas/Content/General/Concepts/regions.htm,2026-05-16,commercial,GA
+oci,eu-milan-1,Milan,yes,eu-milan-1,https://docs.oracle.com/en-us/iaas/Content/General/Concepts/regions.htm,2026-05-16,commercial,GA
+oci,eu-turin-1,Turin,yes,eu-turin-1,https://docs.oracle.com/en-us/iaas/Content/General/Concepts/regions.htm,2026-05-16,commercial,GA
+oci,eu-madrid-1,Madrid,yes,eu-madrid-1,https://docs.oracle.com/en-us/iaas/Content/General/Concepts/regions.htm,2026-05-16,commercial,GA
+oci,eu-madrid-3,Madrid 3,yes,eu-madrid-3,https://docs.oracle.com/en-us/iaas/Content/General/Concepts/regions.htm,2026-05-16,commercial,GA
+oci,eu-stockholm-1,Stockholm,yes,eu-stockholm-1,https://docs.oracle.com/en-us/iaas/Content/General/Concepts/regions.htm,2026-05-16,commercial,GA
+oci,eu-zurich-1,Zurich,yes,eu-zurich-1,https://docs.oracle.com/en-us/iaas/Content/General/Concepts/regions.htm,2026-05-16,commercial,GA
+oci,eu-jovanovac-1,Jovanovac (Serbia),yes,eu-jovanovac-1,https://docs.oracle.com/en-us/iaas/Content/General/Concepts/regions.htm,2026-05-16,commercial,GA
+oci,uk-london-1,London,yes,uk-london-1,https://docs.oracle.com/en-us/iaas/Content/General/Concepts/regions.htm,2026-05-16,commercial,GA
+oci,uk-cardiff-1,Newport,yes,uk-cardiff-1,https://docs.oracle.com/en-us/iaas/Content/General/Concepts/regions.htm,2026-05-16,commercial,GA
+oci,il-jerusalem-1,Jerusalem,yes,il-jerusalem-1,https://docs.oracle.com/en-us/iaas/Content/General/Concepts/regions.htm,2026-05-16,commercial,GA
+oci,me-jeddah-1,Jeddah,yes,me-jeddah-1,https://docs.oracle.com/en-us/iaas/Content/General/Concepts/regions.htm,2026-05-16,commercial,GA
+oci,me-riyadh-1,Riyadh,yes,me-riyadh-1,https://docs.oracle.com/en-us/iaas/Content/General/Concepts/regions.htm,2026-05-16,commercial,GA
+oci,me-dubai-1,Dubai,yes,me-dubai-1,https://docs.oracle.com/en-us/iaas/Content/General/Concepts/regions.htm,2026-05-16,commercial,GA
+oci,me-abudhabi-1,Abu Dhabi,yes,me-abudhabi-1,https://docs.oracle.com/en-us/iaas/Content/General/Concepts/regions.htm,2026-05-16,commercial,GA
+oci,af-johannesburg-1,Johannesburg,yes,af-johannesburg-1,https://docs.oracle.com/en-us/iaas/Content/General/Concepts/regions.htm,2026-05-16,commercial,GA
+oci,af-casablanca-1,Casablanca,yes,af-casablanca-1,https://docs.oracle.com/en-us/iaas/Content/General/Concepts/regions.htm,2026-05-16,commercial,GA
+oci,ap-tokyo-1,Tokyo,yes,ap-tokyo-1,https://docs.oracle.com/en-us/iaas/Content/General/Concepts/regions.htm,2026-05-16,commercial,GA
+oci,ap-osaka-1,Osaka,yes,ap-osaka-1,https://docs.oracle.com/en-us/iaas/Content/General/Concepts/regions.htm,2026-05-16,commercial,GA
+oci,ap-seoul-1,Seoul,yes,ap-seoul-1,https://docs.oracle.com/en-us/iaas/Content/General/Concepts/regions.htm,2026-05-16,commercial,GA
+oci,ap-chuncheon-1,Chuncheon,yes,ap-chuncheon-1,https://docs.oracle.com/en-us/iaas/Content/General/Concepts/regions.htm,2026-05-16,commercial,GA
+oci,ap-mumbai-1,Mumbai,yes,ap-mumbai-1,https://docs.oracle.com/en-us/iaas/Content/General/Concepts/regions.htm,2026-05-16,commercial,GA
+oci,ap-hyderabad-1,Hyderabad,yes,ap-hyderabad-1,https://docs.oracle.com/en-us/iaas/Content/General/Concepts/regions.htm,2026-05-16,commercial,GA
+oci,ap-singapore-1,Singapore,yes,ap-singapore-1,https://docs.oracle.com/en-us/iaas/Content/General/Concepts/regions.htm,2026-05-16,commercial,GA
+oci,ap-singapore-2,Singapore West,yes,ap-singapore-2,https://docs.oracle.com/en-us/iaas/Content/General/Concepts/regions.htm,2026-05-16,commercial,GA
+oci,ap-sydney-1,Sydney,yes,ap-sydney-1,https://docs.oracle.com/en-us/iaas/Content/General/Concepts/regions.htm,2026-05-16,commercial,GA
+oci,ap-melbourne-1,Melbourne,yes,ap-melbourne-1,https://docs.oracle.com/en-us/iaas/Content/General/Concepts/regions.htm,2026-05-16,commercial,GA
+oci,ap-batam-1,Batam,yes,ap-batam-1,https://docs.oracle.com/en-us/iaas/Content/General/Concepts/regions.htm,2026-05-16,commercial,GA
+oci,ap-kulai-2,Kulai,yes,ap-kulai-2,https://docs.oracle.com/en-us/iaas/Content/General/Concepts/regions.htm,2026-05-16,commercial,GA
+oci,mx-queretaro-1,Queretaro,yes,mx-queretaro-1,https://docs.oracle.com/en-us/iaas/Content/General/Concepts/regions.htm,2026-05-16,commercial,GA
+oci,mx-monterrey-1,Monterrey,yes,mx-monterrey-1,https://docs.oracle.com/en-us/iaas/Content/General/Concepts/regions.htm,2026-05-16,commercial,GA
+oci,us-langley-1,US Gov East (OC2),no,,https://docs.oracle.com/en-us/iaas/Content/General/Concepts/regions.htm,2026-05-16,government,GA
+oci,us-luke-1,US Gov West (OC2),no,,https://docs.oracle.com/en-us/iaas/Content/General/Concepts/regions.htm,2026-05-16,government,GA
+oci,us-gov-ashburn-1,US DoD East (OC3),no,,https://docs.oracle.com/en-us/iaas/Content/General/Concepts/regions.htm,2026-05-16,government,GA
+oci,us-gov-chicago-1,US DoD North (OC3),no,,https://docs.oracle.com/en-us/iaas/Content/General/Concepts/regions.htm,2026-05-16,government,GA
+oci,us-gov-phoenix-1,US DoD West (OC3),no,,https://docs.oracle.com/en-us/iaas/Content/General/Concepts/regions.htm,2026-05-16,government,GA
+oci,uk-gov-london-1,UK Gov London (OC4),no,,https://docs.oracle.com/en-us/iaas/Content/General/Concepts/regions.htm,2026-05-16,government,GA
+oci,uk-gov-cardiff-1,UK Gov Newport (OC4),no,,https://docs.oracle.com/en-us/iaas/Content/General/Concepts/regions.htm,2026-05-16,government,GA
+oci,ap-dcc-canberra-1,Australia Gov Canberra (OC10),no,,https://docs.oracle.com/en-us/iaas/Content/General/Concepts/regions.htm,2026-05-16,government,GA
+oci,eu-frankfurt-2,EU Sovereign Frankfurt (OC19),no,,https://docs.oracle.com/en-us/iaas/Content/General/Concepts/regions.htm,2026-05-16,sovereign,GA
+oci,eu-madrid-2,EU Sovereign Madrid (OC19),no,,https://docs.oracle.com/en-us/iaas/Content/General/Concepts/regions.htm,2026-05-16,sovereign,GA
+ovh,GRA,Gravelines,yes,GRA,https://www.ovhcloud.com/en-ie/public-cloud/regions-availability/,2026-05-16,commercial,GA
+ovh,SBG,Strasbourg,yes,SBG,https://www.ovhcloud.com/en-ie/public-cloud/regions-availability/,2026-05-16,commercial,GA
+ovh,RBX,Roubaix,yes,RBX,https://www.ovhcloud.com/en-ie/public-cloud/regions-availability/,2026-05-16,commercial,GA
+ovh,PAR,Paris (3-AZ),yes,PAR,https://www.ovhcloud.com/en-ie/public-cloud/regions-availability/,2026-05-16,commercial,GA
+ovh,MIL,Milan (3-AZ),yes,MIL,https://www.ovhcloud.com/en-ie/public-cloud/regions-availability/,2026-05-16,commercial,GA
+ovh,LIM,Frankfurt / Limburg,yes,DE,https://www.ovhcloud.com/en-ie/public-cloud/regions-availability/,2026-05-16,commercial,GA
+ovh,ERI,London / Erith,yes,UK1,https://www.ovhcloud.com/en-ie/public-cloud/regions-availability/,2026-05-16,commercial,GA
+ovh,WAW,Warsaw,yes,WAW,https://www.ovhcloud.com/en-ie/public-cloud/regions-availability/,2026-05-16,commercial,GA
+ovh,BHS,Beauharnois,yes,BHS5,https://www.ovhcloud.com/en-ie/public-cloud/regions-availability/,2026-05-16,commercial,GA
+ovh,TOR,Toronto,yes,TOR,https://www.ovhcloud.com/en-ie/public-cloud/regions-availability/,2026-05-16,commercial,GA
+ovh,HIL,Hillsboro,yes,HIL,https://www.ovhcloud.com/en-ie/public-cloud/regions-availability/,2026-05-16,commercial,GA
+ovh,VIN,Vint Hill,yes,VIN,https://www.ovhcloud.com/en-ie/public-cloud/regions-availability/,2026-05-16,commercial,GA
+ovh,SGP,Singapore,yes,SGP,https://www.ovhcloud.com/en-ie/public-cloud/regions-availability/,2026-05-16,commercial,GA
+ovh,SYD,Sydney,yes,SYD,https://www.ovhcloud.com/en-ie/public-cloud/regions-availability/,2026-05-16,commercial,GA
+ovh,BOM,Mumbai,yes,MUM,https://www.ovhcloud.com/en-ie/public-cloud/regions-availability/,2026-05-16,commercial,GA
+ovh,BER,"Berlin (3-AZ, 2027)",no,,https://www.ovhcloud.com/en-ie/public-cloud/regions-availability/,2026-05-16,commercial,announced

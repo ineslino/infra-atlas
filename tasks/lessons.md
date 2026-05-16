@@ -27,3 +27,9 @@ OVH regions live in both `regions/index.html` (has Paris) and `ovh-instances/ind
 ## L6 — Claim vs reality gaps
 "Every instrument refreshes daily" (APIM pages are static); "open / MIT-licensed on GitHub" with dead `href="#"` links (repo is private); "1,338 instance types" (counts size-variants, not AWS's "types" metric).
 **Class fix:** audit every headline/colophon claim against what the code and infra actually do — claims rot faster than data.
+
+## L7 — "34 vs 39 regions" was a definition mismatch, not a regression
+**Mistake:** the 2026-05 review and the 2026-05 feature-review brief both treated "the site shows 34 AWS regions, AWS says 39" as a stale, uncorrected undercount and a P0 regression.
+**Cause:** 34 and 39 measure different things. 34 = AWS *commercial* GA regions — verified exact against AWS's own docs, every code matching, nothing missing or phantom. 39 = AWS's all-partitions marketing headline (34 commercial + 2 GovCloud + 2 China + 1 European Sovereign Cloud). No written inclusion policy existed, so each reviewer applied a different mental model and a scope gap read as a data bug. The *real* drift was smaller and elsewhere — Azure carried a phantom `taiwannorth` (announced, not GA) and was missing `westcentralus`; OCI was missing `af-casablanca-1`; OVH was missing Mumbai — none of it visible from a headline count, only from a code-level set diff.
+**Rule:** a count that disagrees with a vendor's marketing headline is a *scope-definition* question first and a staleness question second. Never declare a regression from a count alone — diff the actual code sets and check the documented inclusion policy. (L1 already predicted the silent-drift mechanism; the fix it called for — an accuracy gate — now exists.)
+**Quick check:** `python3 scripts/check_region_drift.py` diffs every region code against the dated, vendor-verified `regions/region-reference.json`; the inclusion rules are written down in `docs/data-policy.md`.

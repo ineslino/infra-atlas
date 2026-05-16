@@ -53,3 +53,16 @@ jobs:
             exit 1
           fi
           echo "✓ $INST/data.json is in sync with $INST/index.html"
+
+  region-drift:
+    name: Region drift vs verified reference
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      # The `regions` instrument is hand-curated — verify-data above only proves
+      # data.json was copied faithfully from index.html, never that the region
+      # set is correct. This pins it to regions/region-reference.json (a dated,
+      # vendor-verified snapshot) so an accidental add/drop/rename fails loudly.
+      - name: Check region data against the verified reference
+        run: python3 scripts/check_region_drift.py
