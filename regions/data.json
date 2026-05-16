@@ -1,6 +1,23 @@
 {
-  "generated": "2026-05-15T23:23:01Z",
+  "generated": "2026-05-16T08:44:27Z",
   "cities": [
+    {
+      "city": "Valparaíso",
+      "area": "Americas",
+      "country": "Chile",
+      "flag": "🇨🇱",
+      "lat": -33.05,
+      "lng": -71.62,
+      "regions": [
+        {
+          "p": "oci",
+          "code": "sa-valparaiso-1",
+          "name": "Valparaíso",
+          "az": 1,
+          "since": 2023
+        }
+      ]
+    },
     {
       "city": "Ashburn, Virginia",
       "area": "Americas",
@@ -22,6 +39,13 @@
           "name": "East US",
           "az": 3,
           "since": 2010
+        },
+        {
+          "p": "oci",
+          "code": "us-ashburn-1",
+          "name": "Ashburn",
+          "az": 3,
+          "since": 2016
         }
       ]
     },
@@ -56,6 +80,13 @@
           "name": "Ohio",
           "az": 3,
           "since": 2016
+        },
+        {
+          "p": "gcp",
+          "code": "us-east5",
+          "name": "Columbus",
+          "az": 3,
+          "since": 2022
         }
       ]
     },
@@ -96,13 +127,6 @@
           "code": "centralus",
           "name": "Central US",
           "az": 3,
-          "since": 2014
-        },
-        {
-          "p": "gcp",
-          "code": "us-central1",
-          "name": "Iowa",
-          "az": 4,
           "since": 2014
         }
       ]
@@ -458,6 +482,13 @@
           "since": 2025
         },
         {
+          "p": "gcp",
+          "code": "northamerica-south1",
+          "name": "Querétaro",
+          "az": 3,
+          "since": 2025
+        },
+        {
           "p": "oci",
           "code": "mx-queretaro-1",
           "name": "Querétaro",
@@ -607,6 +638,98 @@
           "name": "Bogotá",
           "az": 1,
           "since": 2022
+        }
+      ]
+    },
+    {
+      "city": "Brussels",
+      "area": "Europe",
+      "country": "Belgium",
+      "flag": "🇧🇪",
+      "lat": 50.85,
+      "lng": 4.35,
+      "regions": [
+        {
+          "p": "azure",
+          "code": "belgiumcentral",
+          "name": "Belgium Central",
+          "az": 3,
+          "since": 2025
+        },
+        {
+          "p": "gcp",
+          "code": "europe-west1",
+          "name": "St. Ghislain",
+          "az": 3,
+          "since": 2015
+        }
+      ]
+    },
+    {
+      "city": "Vienna",
+      "area": "Europe",
+      "country": "Austria",
+      "flag": "🇦🇹",
+      "lat": 48.21,
+      "lng": 16.37,
+      "regions": [
+        {
+          "p": "azure",
+          "code": "austriaeast",
+          "name": "Austria East",
+          "az": 3,
+          "since": 2025
+        }
+      ]
+    },
+    {
+      "city": "Copenhagen",
+      "area": "Europe",
+      "country": "Denmark",
+      "flag": "🇩🇰",
+      "lat": 55.68,
+      "lng": 12.57,
+      "regions": [
+        {
+          "p": "azure",
+          "code": "denmarkeast",
+          "name": "Denmark East",
+          "az": 3,
+          "since": 2025
+        }
+      ]
+    },
+    {
+      "city": "Stavanger",
+      "area": "Europe",
+      "country": "Norway",
+      "flag": "🇳🇴",
+      "lat": 58.97,
+      "lng": 5.73,
+      "regions": [
+        {
+          "p": "azure",
+          "code": "norwaywest",
+          "name": "Norway West",
+          "az": 1,
+          "since": 2019
+        }
+      ]
+    },
+    {
+      "city": "Jovanovac",
+      "area": "Europe",
+      "country": "Serbia",
+      "flag": "🇷🇸",
+      "lat": 44.02,
+      "lng": 20.99,
+      "regions": [
+        {
+          "p": "oci",
+          "code": "eu-jovanovac-1",
+          "name": "Serbia Central",
+          "az": 1,
+          "since": 2025
         }
       ]
     },
@@ -1027,6 +1150,13 @@
           "name": "Madrid",
           "az": 1,
           "since": 2022
+        },
+        {
+          "p": "oci",
+          "code": "eu-madrid-3",
+          "name": "Madrid 3",
+          "az": 1,
+          "since": 2025
         }
       ]
     },
@@ -1054,10 +1184,10 @@
         },
         {
           "p": "gcp",
-          "code": "europe-north1",
-          "name": "Hamina (FI)",
+          "code": "europe-north2",
+          "name": "Stockholm",
           "az": 3,
-          "since": 2018
+          "since": 2024
         },
         {
           "p": "oci",
@@ -1147,6 +1277,13 @@
           "name": "Turin",
           "az": 3,
           "since": 2024
+        },
+        {
+          "p": "oci",
+          "code": "eu-turin-1",
+          "name": "Turin",
+          "az": 1,
+          "since": 2023
         }
       ]
     },
@@ -1408,6 +1545,40 @@
       ]
     },
     {
+      "city": "Batam",
+      "area": "Asia Pacific",
+      "country": "Indonesia",
+      "flag": "🇮🇩",
+      "lat": 1.13,
+      "lng": 104.05,
+      "regions": [
+        {
+          "p": "oci",
+          "code": "ap-batam-1",
+          "name": "Batam",
+          "az": 1,
+          "since": 2024
+        }
+      ]
+    },
+    {
+      "city": "Kulai",
+      "area": "Asia Pacific",
+      "country": "Malaysia",
+      "flag": "🇲🇾",
+      "lat": 1.66,
+      "lng": 103.6,
+      "regions": [
+        {
+          "p": "oci",
+          "code": "ap-kulai-2",
+          "name": "Kulai",
+          "az": 1,
+          "since": 2024
+        }
+      ]
+    },
+    {
       "city": "Hong Kong",
       "area": "Asia Pacific",
       "country": "Hong Kong",
@@ -1446,6 +1617,13 @@
       "lat": 25.03,
       "lng": 121.57,
       "regions": [
+        {
+          "p": "aws",
+          "code": "ap-east-2",
+          "name": "Taipei",
+          "az": 3,
+          "since": 2025
+        },
         {
           "p": "azure",
           "code": "taiwannorth",
@@ -1647,6 +1825,13 @@
           "since": 2020
         },
         {
+          "p": "oci",
+          "code": "ap-singapore-2",
+          "name": "Singapore W.",
+          "az": 1,
+          "since": 2024
+        },
+        {
           "p": "ovh",
           "code": "SGP",
           "name": "Singapore",
@@ -1834,13 +2019,6 @@
           "name": "Malaysia West",
           "az": 3,
           "since": 2024
-        },
-        {
-          "p": "gcp",
-          "code": "asia-southeast4",
-          "name": "Kuala Lumpur",
-          "az": 3,
-          "since": 2024
         }
       ]
     },
@@ -1941,6 +2119,13 @@
           "name": "Australia Central",
           "az": 1,
           "since": 2018
+        },
+        {
+          "p": "azure",
+          "code": "australiacentral2",
+          "name": "Australia Central 2",
+          "az": 1,
+          "since": 2018
         }
       ]
     },
@@ -1952,6 +2137,13 @@
       "lat": -36.85,
       "lng": 174.76,
       "regions": [
+        {
+          "p": "aws",
+          "code": "ap-southeast-6",
+          "name": "Auckland",
+          "az": 3,
+          "since": 2025
+        },
         {
           "p": "azure",
           "code": "newzealandnorth",

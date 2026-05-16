@@ -1208,23 +1208,27 @@ const PROVIDERS = {
 
 let CITIES = [
   // ─── AMERICAS ───
+  { city: "Valparaíso", area: "Americas", country: "Chile", flag: "🇨🇱", lat: -33.05, lng: -71.62, regions: [
+    { p: "oci", code: "sa-valparaiso-1", name: "Valparaíso", az: 1, since: 2023 }
+  ]},
   { city: "Ashburn, Virginia", area: "Americas", country: "United States", flag: "🇺🇸", lat: 39.05, lng: -77.49, regions: [
     { p: "aws",   code: "us-east-1",       name: "N. Virginia", az: 6, since: 2006 },
-    { p: "azure", code: "eastus",          name: "East US",     az: 3, since: 2010 }
+    { p: "azure", code: "eastus",          name: "East US",     az: 3, since: 2010 },
+    { p: "oci",   code: "us-ashburn-1",    name: "Ashburn",     az: 3, since: 2016 }
   ]},
   { city: "Boydton, Virginia", area: "Americas", country: "United States", flag: "🇺🇸", lat: 36.66, lng: -78.40, regions: [
     { p: "azure", code: "eastus2", name: "East US 2", az: 3, since: 2014 }
   ]},
   { city: "Columbus, Ohio", area: "Americas", country: "United States", flag: "🇺🇸", lat: 39.96, lng: -83.00, regions: [
-    { p: "aws", code: "us-east-2", name: "Ohio", az: 3, since: 2016 }
+    { p: "aws", code: "us-east-2", name: "Ohio",     az: 3, since: 2016 },
+    { p: "gcp", code: "us-east5",  name: "Columbus", az: 3, since: 2022 }
   ]},
   { city: "Chicago, Illinois", area: "Americas", country: "United States", flag: "🇺🇸", lat: 41.88, lng: -87.62, regions: [
     { p: "azure", code: "northcentralus", name: "North Central US", az: 3, since: 2009 },
     { p: "oci",   code: "us-chicago-1",   name: "Chicago",          az: 3, since: 2023 }
   ]},
   { city: "Des Moines, Iowa", area: "Americas", country: "United States", flag: "🇺🇸", lat: 41.59, lng: -93.62, regions: [
-    { p: "azure", code: "centralus", name: "Central US",  az: 3, since: 2014 },
-    { p: "gcp",   code: "us-central1", name: "Iowa",       az: 4, since: 2014 }
+    { p: "azure", code: "centralus", name: "Central US",  az: 3, since: 2014 }
   ]},
   { city: "Council Bluffs, Iowa", area: "Americas", country: "United States", flag: "🇺🇸", lat: 41.26, lng: -95.86, regions: [
     { p: "gcp", code: "us-central1", name: "Iowa", az: 4, since: 2014 }
@@ -1285,6 +1289,7 @@ let CITIES = [
   { city: "Mexico City", area: "Americas", country: "Mexico", flag: "🇲🇽", lat: 19.43, lng: -99.13, regions: [
     { p: "aws",   code: "mx-central-1",  name: "Mexico Central",     az: 3, since: 2025 },
     { p: "azure", code: "mexicocentral", name: "Mexico Central",     az: 3, since: 2025 },
+    { p: "gcp",   code: "northamerica-south1", name: "Querétaro",   az: 3, since: 2025 },
     { p: "oci",   code: "mx-queretaro-1", name: "Querétaro",         az: 1, since: 2021 }
   ]},
   { city: "Monterrey", area: "Americas", country: "Mexico", flag: "🇲🇽", lat: 25.69, lng: -100.32, regions: [
@@ -1313,6 +1318,22 @@ let CITIES = [
   ]},
 
   // ─── EUROPE ───
+  { city: "Brussels", area: "Europe", country: "Belgium", flag: "🇧🇪", lat: 50.85, lng: 4.35, regions: [
+    { p: "azure", code: "belgiumcentral", name: "Belgium Central", az: 3, since: 2025 },
+    { p: "gcp",   code: "europe-west1",   name: "St. Ghislain",    az: 3, since: 2015 }
+  ]},
+  { city: "Vienna", area: "Europe", country: "Austria", flag: "🇦🇹", lat: 48.21, lng: 16.37, regions: [
+    { p: "azure", code: "austriaeast", name: "Austria East", az: 3, since: 2025 }
+  ]},
+  { city: "Copenhagen", area: "Europe", country: "Denmark", flag: "🇩🇰", lat: 55.68, lng: 12.57, regions: [
+    { p: "azure", code: "denmarkeast", name: "Denmark East", az: 3, since: 2025 }
+  ]},
+  { city: "Stavanger", area: "Europe", country: "Norway", flag: "🇳🇴", lat: 58.97, lng: 5.73, regions: [
+    { p: "azure", code: "norwaywest", name: "Norway West", az: 1, since: 2019 }
+  ]},
+  { city: "Jovanovac", area: "Europe", country: "Serbia", flag: "🇷🇸", lat: 44.02, lng: 20.99, regions: [
+    { p: "oci", code: "eu-jovanovac-1", name: "Serbia Central", az: 1, since: 2025 }
+  ]},
   { city: "Dublin", area: "Europe", country: "Ireland", flag: "🇮🇪", lat: 53.35, lng: -6.26, regions: [
     { p: "aws",   code: "eu-west-1",   name: "Ireland",       az: 3, since: 2007 },
     { p: "azure", code: "northeurope", name: "North Europe",  az: 3, since: 2009 }
@@ -1379,12 +1400,13 @@ let CITIES = [
     { p: "aws",   code: "eu-south-2",     name: "Spain",        az: 3, since: 2022 },
     { p: "azure", code: "spaincentral",   name: "Spain Central", az: 3, since: 2024 },
     { p: "gcp",   code: "europe-southwest1", name: "Madrid",   az: 3, since: 2022 },
-    { p: "oci",   code: "eu-madrid-1",    name: "Madrid",       az: 1, since: 2022 }
+    { p: "oci",   code: "eu-madrid-1",    name: "Madrid",       az: 1, since: 2022 },
+    { p: "oci",   code: "eu-madrid-3",    name: "Madrid 3",     az: 1, since: 2025 }
   ]},
   { city: "Stockholm", area: "Europe", country: "Sweden", flag: "🇸🇪", lat: 59.33, lng: 18.07, regions: [
     { p: "aws",   code: "eu-north-1",      name: "Stockholm",       az: 3, since: 2018 },
     { p: "azure", code: "swedencentral",   name: "Sweden Central",  az: 3, since: 2021 },
-    { p: "gcp",   code: "europe-north1",   name: "Hamina (FI)",     az: 3, since: 2018 },
+    { p: "gcp",   code: "europe-north2",   name: "Stockholm",       az: 3, since: 2024 },
     { p: "oci",   code: "eu-stockholm-1",  name: "Stockholm",       az: 1, since: 2020 }
   ]},
   { city: "Warsaw", area: "Europe", country: "Poland", flag: "🇵🇱", lat: 52.23, lng: 21.01, regions: [
@@ -1399,7 +1421,8 @@ let CITIES = [
     { p: "gcp", code: "europe-north1", name: "Hamina", az: 3, since: 2018 }
   ]},
   { city: "Turin", area: "Europe", country: "Italy", flag: "🇮🇹", lat: 45.07, lng: 7.69, regions: [
-    { p: "gcp", code: "europe-west12", name: "Turin", az: 3, since: 2024 }
+    { p: "gcp", code: "europe-west12", name: "Turin", az: 3, since: 2024 },
+    { p: "oci", code: "eu-turin-1",    name: "Turin", az: 1, since: 2023 }
   ]},
   { city: "Berlin / Brandenburg", area: "Europe", country: "Germany", flag: "🇩🇪", lat: 52.40, lng: 13.06, regions: [
     { p: "gcp", code: "europe-west10", name: "Berlin", az: 3, since: 2023 }
@@ -1450,12 +1473,19 @@ let CITIES = [
   ]},
 
   // ─── ASIA PACIFIC ───
+  { city: "Batam", area: "Asia Pacific", country: "Indonesia", flag: "🇮🇩", lat: 1.13, lng: 104.05, regions: [
+    { p: "oci", code: "ap-batam-1", name: "Batam", az: 1, since: 2024 }
+  ]},
+  { city: "Kulai", area: "Asia Pacific", country: "Malaysia", flag: "🇲🇾", lat: 1.66, lng: 103.60, regions: [
+    { p: "oci", code: "ap-kulai-2", name: "Kulai", az: 1, since: 2024 }
+  ]},
   { city: "Hong Kong", area: "Asia Pacific", country: "Hong Kong", flag: "🇭🇰", lat: 22.32, lng: 114.17, regions: [
     { p: "aws",   code: "ap-east-1",       name: "Hong Kong",       az: 3, since: 2019 },
     { p: "azure", code: "eastasia",        name: "East Asia",       az: 3, since: 2010 },
     { p: "gcp",   code: "asia-east2",      name: "Hong Kong",       az: 3, since: 2018 }
   ]},
   { city: "Taipei", area: "Asia Pacific", country: "Taiwan", flag: "🇹🇼", lat: 25.03, lng: 121.57, regions: [
+    { p: "aws",   code: "ap-east-2",    name: "Taipei",       az: 3, since: 2025 },
     { p: "azure", code: "taiwannorth",  name: "Taiwan North", az: 3, since: 2025 },
     { p: "gcp",   code: "asia-east1",   name: "Changhua",     az: 3, since: 2016 }
   ]},
@@ -1488,6 +1518,7 @@ let CITIES = [
     { p: "azure", code: "southeastasia",   name: "SE Asia",      az: 3, since: 2010 },
     { p: "gcp",   code: "asia-southeast1", name: "Jurong West",  az: 3, since: 2017 },
     { p: "oci",   code: "ap-singapore-1", name: "Singapore",    az: 1, since: 2020 },
+    { p: "oci",   code: "ap-singapore-2", name: "Singapore W.", az: 1, since: 2024 },
     { p: "ovh",   code: "SGP",            name: "Singapore",    az: 1, since: 2017 }
   ]},
   { city: "Mumbai", area: "Asia Pacific", country: "India", flag: "🇮🇳", lat: 19.08, lng: 72.88, regions: [
@@ -1518,8 +1549,7 @@ let CITIES = [
   ]},
   { city: "Kuala Lumpur", area: "Asia Pacific", country: "Malaysia", flag: "🇲🇾", lat: 3.14, lng: 101.69, regions: [
     { p: "aws",   code: "ap-southeast-5",  name: "Malaysia",       az: 3, since: 2024 },
-    { p: "azure", code: "malaysiawest",   name: "Malaysia West",   az: 3, since: 2024 },
-    { p: "gcp",   code: "asia-southeast4", name: "Kuala Lumpur",   az: 3, since: 2024 }
+    { p: "azure", code: "malaysiawest",   name: "Malaysia West",   az: 3, since: 2024 }
   ]},
   { city: "Sydney", area: "Asia Pacific", country: "Australia", flag: "🇦🇺", lat: -33.87, lng: 151.21, regions: [
     { p: "aws",   code: "ap-southeast-2",   name: "Sydney",      az: 3, since: 2012 },
@@ -1535,9 +1565,11 @@ let CITIES = [
     { p: "oci",   code: "ap-melbourne-1",     name: "Melbourne",     az: 1, since: 2020 }
   ]},
   { city: "Canberra", area: "Asia Pacific", country: "Australia", flag: "🇦🇺", lat: -35.31, lng: 149.13, regions: [
-    { p: "azure", code: "australiacentral", name: "Australia Central", az: 1, since: 2018 }
+    { p: "azure", code: "australiacentral",  name: "Australia Central",   az: 1, since: 2018 },
+    { p: "azure", code: "australiacentral2", name: "Australia Central 2", az: 1, since: 2018 }
   ]},
   { city: "Auckland", area: "Asia Pacific", country: "New Zealand", flag: "🇳🇿", lat: -36.85, lng: 174.76, regions: [
+    { p: "aws",   code: "ap-southeast-6", name: "Auckland",      az: 3, since: 2025 },
     { p: "azure", code: "newzealandnorth", name: "New Zealand N.", az: 3, since: 2024 }
   ]}
 ];
