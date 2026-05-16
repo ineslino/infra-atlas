@@ -1,6 +1,40 @@
 {
-  "generated": "2026-05-16T08:44:27Z",
+  "generated": "2026-05-16T08:54:18Z",
   "cities": [
+    {
+      "city": "Hillsboro",
+      "area": "Americas",
+      "country": "United States",
+      "flag": "🇺🇸",
+      "lat": 45.52,
+      "lng": -122.99,
+      "regions": [
+        {
+          "p": "ovh",
+          "code": "HIL",
+          "name": "Hillsboro",
+          "az": 1,
+          "since": 2018
+        }
+      ]
+    },
+    {
+      "city": "Vint Hill",
+      "area": "Americas",
+      "country": "United States",
+      "flag": "🇺🇸",
+      "lat": 38.72,
+      "lng": -77.72,
+      "regions": [
+        {
+          "p": "ovh",
+          "code": "VIN",
+          "name": "Vint Hill",
+          "az": 1,
+          "since": 2018
+        }
+      ]
+    },
     {
       "city": "Valparaíso",
       "area": "Americas",
@@ -391,6 +425,13 @@
           "name": "Toronto",
           "az": 1,
           "since": 2019
+        },
+        {
+          "p": "ovh",
+          "code": "TOR",
+          "name": "Toronto",
+          "az": 1,
+          "since": 2023
         }
       ]
     },
@@ -422,6 +463,13 @@
           "name": "Montreal",
           "az": 1,
           "since": 2018
+        },
+        {
+          "p": "ovh",
+          "code": "BHS5",
+          "name": "Beauharnois",
+          "az": 1,
+          "since": 2013
         }
       ]
     },
@@ -549,13 +597,6 @@
           "name": "São Paulo",
           "az": 1,
           "since": 2018
-        },
-        {
-          "p": "ovh",
-          "code": "BHS5",
-          "name": "São Paulo",
-          "az": 1,
-          "since": 2024
         }
       ]
     },
@@ -638,6 +679,23 @@
           "name": "Bogotá",
           "az": 1,
           "since": 2022
+        }
+      ]
+    },
+    {
+      "city": "Gravelines",
+      "area": "Europe",
+      "country": "France",
+      "flag": "🇫🇷",
+      "lat": 50.99,
+      "lng": 2.13,
+      "regions": [
+        {
+          "p": "ovh",
+          "code": "GRA",
+          "name": "Gravelines",
+          "az": 3,
+          "since": 2016
         }
       ]
     },
@@ -864,10 +922,10 @@
         },
         {
           "p": "ovh",
-          "code": "GRA",
-          "name": "Gravelines",
+          "code": "PAR",
+          "name": "Paris",
           "az": 3,
-          "since": 2016
+          "since": 2024
         }
       ]
     },
@@ -1112,6 +1170,13 @@
           "name": "Milan",
           "az": 1,
           "since": 2022
+        },
+        {
+          "p": "ovh",
+          "code": "MIL",
+          "name": "Milan",
+          "az": 3,
+          "since": 2026
         }
       ]
     },

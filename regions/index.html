@@ -1208,6 +1208,12 @@ const PROVIDERS = {
 
 let CITIES = [
   // ─── AMERICAS ───
+  { city: "Hillsboro", area: "Americas", country: "United States", flag: "🇺🇸", lat: 45.52, lng: -122.99, regions: [
+    { p: "ovh", code: "HIL", name: "Hillsboro", az: 1, since: 2018 }
+  ]},
+  { city: "Vint Hill", area: "Americas", country: "United States", flag: "🇺🇸", lat: 38.72, lng: -77.72, regions: [
+    { p: "ovh", code: "VIN", name: "Vint Hill", az: 1, since: 2018 }
+  ]},
   { city: "Valparaíso", area: "Americas", country: "Chile", flag: "🇨🇱", lat: -33.05, lng: -71.62, regions: [
     { p: "oci", code: "sa-valparaiso-1", name: "Valparaíso", az: 1, since: 2023 }
   ]},
@@ -1273,12 +1279,14 @@ let CITIES = [
   { city: "Toronto", area: "Americas", country: "Canada", flag: "🇨🇦", lat: 43.65, lng: -79.38, regions: [
     { p: "azure", code: "canadacentral", name: "Canada Central", az: 3, since: 2016 },
     { p: "gcp",   code: "northamerica-northeast2", name: "Toronto", az: 3, since: 2021 },
-    { p: "oci",   code: "ca-toronto-1", name: "Toronto",       az: 1, since: 2019 }
+    { p: "oci",   code: "ca-toronto-1", name: "Toronto",       az: 1, since: 2019 },
+    { p: "ovh",   code: "TOR",          name: "Toronto",       az: 1, since: 2023 }
   ]},
   { city: "Montreal", area: "Americas", country: "Canada", flag: "🇨🇦", lat: 45.50, lng: -73.57, regions: [
     { p: "aws", code: "ca-central-1", name: "Canada Central", az: 3, since: 2016 },
     { p: "gcp", code: "northamerica-northeast1", name: "Montréal", az: 3, since: 2018 },
-    { p: "oci", code: "ca-montreal-1", name: "Montreal", az: 1, since: 2018 }
+    { p: "oci", code: "ca-montreal-1", name: "Montreal",    az: 1, since: 2018 },
+    { p: "ovh", code: "BHS5",          name: "Beauharnois", az: 1, since: 2013 }
   ]},
   { city: "Quebec City", area: "Americas", country: "Canada", flag: "🇨🇦", lat: 46.81, lng: -71.21, regions: [
     { p: "azure", code: "canadaeast", name: "Canada East", az: 3, since: 2016 }
@@ -1299,8 +1307,7 @@ let CITIES = [
     { p: "aws",   code: "sa-east-1",        name: "São Paulo",   az: 3, since: 2011 },
     { p: "azure", code: "brazilsouth",      name: "Brazil South", az: 3, since: 2014 },
     { p: "gcp",   code: "southamerica-east1", name: "São Paulo", az: 3, since: 2017 },
-    { p: "oci",   code: "sa-saopaulo-1",    name: "São Paulo",   az: 1, since: 2018 },
-    { p: "ovh",   code: "BHS5",             name: "São Paulo",   az: 1, since: 2024 }
+    { p: "oci",   code: "sa-saopaulo-1",    name: "São Paulo",   az: 1, since: 2018 }
   ]},
   { city: "Vinhedo", area: "Americas", country: "Brazil", flag: "🇧🇷", lat: -23.03, lng: -46.99, regions: [
     { p: "oci", code: "sa-vinhedo-1", name: "Vinhedo", az: 1, since: 2021 }
@@ -1318,6 +1325,9 @@ let CITIES = [
   ]},
 
   // ─── EUROPE ───
+  { city: "Gravelines", area: "Europe", country: "France", flag: "🇫🇷", lat: 50.99, lng: 2.13, regions: [
+    { p: "ovh", code: "GRA", name: "Gravelines", az: 3, since: 2016 }
+  ]},
   { city: "Brussels", area: "Europe", country: "Belgium", flag: "🇧🇪", lat: 50.85, lng: 4.35, regions: [
     { p: "azure", code: "belgiumcentral", name: "Belgium Central", az: 3, since: 2025 },
     { p: "gcp",   code: "europe-west1",   name: "St. Ghislain",    az: 3, since: 2015 }
@@ -1354,7 +1364,7 @@ let CITIES = [
     { p: "azure", code: "francecentral", name: "France Central", az: 3, since: 2018 },
     { p: "gcp",   code: "europe-west9",  name: "Paris",         az: 3, since: 2022 },
     { p: "oci",   code: "eu-paris-1",    name: "Paris",         az: 1, since: 2021 },
-    { p: "ovh",   code: "GRA",           name: "Gravelines",    az: 3, since: 2016 }
+    { p: "ovh",   code: "PAR",           name: "Paris",         az: 3, since: 2024 }
   ]},
   { city: "Marseille", area: "Europe", country: "France", flag: "🇫🇷", lat: 43.30, lng: 5.37, regions: [
     { p: "azure", code: "francesouth",     name: "France South", az: 1, since: 2018 },
@@ -1394,7 +1404,8 @@ let CITIES = [
     { p: "aws",   code: "eu-south-1",     name: "Milan",      az: 3, since: 2020 },
     { p: "azure", code: "italynorth",     name: "Italy North", az: 3, since: 2023 },
     { p: "gcp",   code: "europe-west8",   name: "Milan",      az: 3, since: 2022 },
-    { p: "oci",   code: "eu-milan-1",     name: "Milan",      az: 1, since: 2022 }
+    { p: "oci",   code: "eu-milan-1",     name: "Milan",      az: 1, since: 2022 },
+    { p: "ovh",   code: "MIL",            name: "Milan",      az: 3, since: 2026 }
   ]},
   { city: "Madrid", area: "Europe", country: "Spain", flag: "🇪🇸", lat: 40.42, lng: -3.70, regions: [
     { p: "aws",   code: "eu-south-2",     name: "Spain",        az: 3, since: 2022 },
