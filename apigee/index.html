@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="color-scheme" content="dark">
 <title>Apigee · Atlas · Infra Atlas</title>
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <meta name="description" content="Apigee, demystified. X vs Hybrid vs Edge, the policy library, KVMs and shared flows, pricing tiers, and the migration paths from Edge nobody quotes accurately.">
@@ -28,7 +29,7 @@
 :root {
   --ink: #0A0907; --ink-2: #100E0C; --surface: #161310; --surface-2: #1E1A15; --surface-3: #2A241C;
   --line: rgba(244, 239, 230, 0.06); --line-2: rgba(244, 239, 230, 0.14); --line-3: rgba(244, 239, 230, 0.28);
-  --paper: #F4EFE6; --paper-2: rgba(244, 239, 230, 0.66); --paper-3: rgba(244, 239, 230, 0.42); --paper-4: rgba(244, 239, 230, 0.20);
+  --paper: #F4EFE6; --paper-2: rgba(244, 239, 230, 0.66); --paper-3: rgba(244, 239, 230, 0.55); --paper-4: rgba(244, 239, 230, 0.20);
   --accent: #FF7849; --accent-2: #FFA66E; --apigee: #F4C660;
   --mint: #6FE7B5; --gold: #F4C660; --plum: #C586E8; --sky: #7CD7F1; --rose: #F47B7B; --teal: #5BCCC9;
   --serif: 'Instrument Serif', 'Times New Roman', serif;
@@ -304,6 +305,7 @@ body {
   .diagram { flex-direction: column; }
   .colophon { grid-template-columns: 1fr; gap: 24px; }
 }
+/* A1-7 focus */ a:focus-visible,button:focus-visible,[tabindex]:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:2px;}
 </style>
 </head>
 <body>
@@ -333,6 +335,8 @@ body {
     </aside>
   </header>
 
+  <main id="ia-main">
+
   <!-- ── 01 · The Editions ── -->
   <section class="section">
     <div class="section__head">
@@ -356,7 +360,7 @@ body {
             <li>Multi-region <strong>Native</strong></li>
             <li>GraphQL/gRPC <strong>Yes</strong></li>
             <li>OTel tracing <strong>Yes</strong></li>
-            <li>Pricing model <strong>Subscription</strong></li>
+            <li>Pricing model <strong>Pay-go or subscription</strong></li>
             <li>Investment level <strong>Active</strong></li>
           </ul>
         </div>
@@ -371,7 +375,7 @@ body {
             <li>Cloud-agnostic <strong>AKS · EKS · GKE · On-prem</strong></li>
             <li>Required for <em>data residency</em></li>
             <li>OTel tracing <strong>Yes</strong></li>
-            <li>Pricing model <strong>Subscription</strong></li>
+            <li>Pricing model <strong>Pay-go or subscription</strong></li>
             <li>Investment level <strong>Active</strong></li>
           </ul>
         </div>
@@ -406,12 +410,12 @@ body {
   <section class="section">
     <div class="section__head">
       <div class="section__num">02</div>
-      <div class="section__kicker">The 40 you actually use</div>
+      <div class="section__kicker">The 18 you actually use</div>
       <h2 class="section__title">Policy <em>Library</em></h2>
     </div>
     <div class="section__body">
       <p class="section__lead">
-        Apigee has <em>~70 built-in policies</em>. Most teams use the same dozen. Here are the ones worth knowing by name.
+        Apigee has <em>~85 built-in policies</em> — including a recent AI/LLM policy family. Most teams use the same dozen. Here are the ones worth knowing by name.
       </p>
 
       <table class="ref-table">
@@ -434,6 +438,7 @@ body {
           <tr><td>FlowCallout</td><td>Composition</td><td>Invoke a Shared Flow. The DRY mechanism for reused policies.</td></tr>
           <tr><td>MessageLogging</td><td>Observability</td><td>Send structured logs to Splunk, Sumo, syslog, GCP Logging.</td></tr>
           <tr><td>StatisticsCollector</td><td>Observability</td><td>Add custom dimensions to Apigee Analytics.</td></tr>
+          <tr><td>SemanticCacheLookup / SemanticCachePopulate / SanitizeUserPrompt / SanitizeModelResponse / LLMTokenQuota / PromptTokenLimit</td><td>AI / LLM</td><td>The AI policy family — semantic caching, prompt/response sanitization, and token-based quotas for LLM-backed proxies.</td></tr>
         </tbody>
       </table>
 
@@ -473,7 +478,7 @@ body {
         <div class="prosons__good">
           <h5>Key Value Maps (KVMs)</h5>
           <ul>
-            <li><em>Environment-scoped or org-scoped</em> key-value store accessible from policies.</li>
+            <li><em>Org-, environment-, or apiproxy-scoped</em> key-value store accessible from policies — apiproxy scope gives per-proxy isolation.</li>
             <li>Encrypted KVMs for secrets — never put credentials in proxy bundles.</li>
             <li>Use for: feature flags per env, target URL mappings, retry config, partner whitelist.</li>
             <li><em>Cached aggressively</em>; updates may take minutes to propagate.</li>
@@ -535,26 +540,26 @@ body {
     </div>
     <div class="section__body">
       <p class="section__lead">
-        Apigee X pricing is by <em>capacity tier</em>, not per-call. The tiers correspond to roughly 1M / 10M / 100M / 250M API calls per day.
+        Apigee has <em>two ways to pay</em>: pay-as-you-go (per API call, no commitment) and subscription (a committed annual contract). Subscription is sold as <em>capacity</em> — it is not publicly bucketed by calls per day.
       </p>
 
       <table class="ref-table">
-        <thead><tr><th>Tier</th><th>Capacity</th><th>Indicative cost / yr</th><th>Best for</th></tr></thead>
+        <thead><tr><th>Model</th><th>How it's billed</th><th>Indicative cost</th><th>Best for</th></tr></thead>
         <tbody>
-          <tr><td>Evaluation</td><td>~180-day trial</td><td>$0</td><td>POCs only — not production.</td></tr>
-          <tr><td>Standard</td><td>~1M calls/day</td><td>~$25k</td><td>Single team, small public API.</td></tr>
-          <tr><td>Enterprise</td><td>~10M calls/day</td><td>~$80k–150k</td><td>Mid-size; most common starting point.</td></tr>
-          <tr><td>Enterprise Plus</td><td>~100M calls/day</td><td>~$300k+</td><td>Large public APIs, multi-region SLA.</td></tr>
-          <tr><td>Enterprise Plus Plus</td><td>>250M calls/day</td><td>Custom</td><td>Mega-scale; usually negotiated.</td></tr>
-          <tr><td>Hybrid runtime</td><td>Same tiers + your K8s costs</td><td>+ infra cost</td><td>On-prem / data residency.</td></tr>
+          <tr><td>Evaluation</td><td>60-day trial organization, then deleted.</td><td>$0</td><td>POCs only — not production, can't convert to paid.</td></tr>
+          <tr><td>Pay-as-you-go</td><td>Per API call ($20/M for Standard proxies, $100/M for Extensible), plus per-environment and per-deployment-unit charges.</td><td>Usage-based</td><td>Getting started, spiky or low traffic, no upfront commit.</td></tr>
+          <tr><td>Subscription · Standard</td><td>Committed annual capacity. Entry tier.</td><td>~$6k/yr list</td><td>Single team, small public API.</td></tr>
+          <tr><td>Subscription · Enterprise</td><td>Committed annual capacity. Higher entitlements.</td><td>Negotiated</td><td>Mid-size; most common starting point.</td></tr>
+          <tr><td>Subscription · Enterprise Plus</td><td>Committed annual capacity. Top tier, full entitlements.</td><td>Negotiated</td><td>Large public APIs, multi-region SLA.</td></tr>
+          <tr><td>Hybrid runtime</td><td>Either model + your own K8s infrastructure cost.</td><td>+ infra cost</td><td>On-prem / data residency.</td></tr>
         </tbody>
       </table>
 
       <div class="gotcha">
         <div class="gotcha__head">▸ Pricing reality</div>
-        <div class="gotcha__title">Apigee is expensive vs AWS API Gateway by an order of magnitude at small scale — but flat at large scale.</div>
+        <div class="gotcha__title">List price is a starting point — subscription deals are negotiated, and the published tiers don't expose a calls/day number.</div>
         <div class="gotcha__body">
-          AWS API GW HTTP costs $1/M calls = $1k/day at 1M calls/day = $365k/year. Apigee Standard at 1M calls/day = $25k/year. <em>Apigee is cheaper above ~3M/day</em>, and the gap widens fast. The dev portal, analytics, and shared flows are essentially free at the Apigee scale where AWS pricing dominates.
+          Pay-as-you-go is the standard entry path: ~$20 per million calls to Standard proxies (~$500/mo at 15M calls/mo), plus per-environment and per-deployment-unit fees. Subscription tiers — Standard, Enterprise, Enterprise Plus — are sold on committed capacity, not a public per-call rate; Standard lists around <em>~$6k/yr</em> but real contracts are negotiated. The dev portal, shared flows, and analytics come with the platform either way.
         </div>
       </div>
     </div>
@@ -583,7 +588,7 @@ body {
         <div class="prosons__bad">
           <h5>What to watch for</h5>
           <ul>
-            <li><em>Expensive at small scale.</em> Standard starts at ~$25k/yr; hard to justify for low-traffic APIs.</li>
+            <li><em>Adds up at small scale.</em> Subscription Standard lists around ~$6k/yr, but per-environment and per-call charges stack on top; hard to justify for very low-traffic APIs.</li>
             <li>Steep learning curve. The policy DSL is its own world.</li>
             <li><em>Edge migration is non-trivial.</em> Plan 12–24 months for >100 proxies.</li>
             <li>Hybrid adds K8s ops burden — you still manage runtime upgrades.</li>
@@ -635,6 +640,8 @@ body {
       </table>
     </div>
   </section>
+
+  </main>
 
   <footer class="colophon">
     <div>

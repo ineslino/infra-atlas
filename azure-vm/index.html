@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="color-scheme" content="dark">
 <title>Azure · VM Atlas · Infra Atlas</title>
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <meta name="description" content="Every Azure virtual machine size, charted against the regions that offer it. Series, vCPU, memory, architecture — filterable, cross-referenced, updated daily.">
@@ -35,7 +36,7 @@
   --line-3: rgba(244, 239, 230, 0.28);
   --paper: #F4EFE6;
   --paper-2: rgba(244, 239, 230, 0.66);
-  --paper-3: rgba(244, 239, 230, 0.42);
+  --paper-3: rgba(244, 239, 230, 0.55);
   --paper-4: rgba(244, 239, 230, 0.20);
   --accent: #FF7849;
   --accent-2: #FFA66E;
@@ -1029,6 +1030,7 @@ a.masthead__back::before { display: none; }
 .cmp-unique__none{font-family:var(--mono);font-size:10.5px;color:var(--paper-4);}
 @media(max-width:560px){.cmp-tray{flex-wrap:wrap;}.cmp-modal{padding:20px 15px;}.cmp-modal__title{padding-right:70px;}}
 /* CMP-MODE-END */
+/* A1-5 CLS */ #results{min-height:80vh;}
 </style>
 </head>
 <body>
@@ -1057,7 +1059,7 @@ a.masthead__back::before { display: none; }
       <div class="status-time" id="status-time">— · —</div>
       <div class="status-counts">
         <div>Regions<strong id="count-regions">—</strong></div>
-        <div>VM sizes<strong id="count-types">—</strong></div>
+        <div>VM sizes tracked<strong id="count-types">—</strong></div>
       </div>
     </aside>
   </header>
@@ -1366,7 +1368,7 @@ const FAMILIES = [
     sizes:["NC40ads_H100_v5","NC80adis_H100_v5"],
     specs:{"NC40ads_H100_v5":{vcpu:40,mem:null,price:9.08},"NC80adis_H100_v5":{vcpu:80,mem:null,price:18.16}},
     in:["eastus","eastus2","westus3","southcentralus","westeurope","uksouth","francecentral","germanywestcentral","swedencentral","japaneast","koreacentral","australiaeast"] },
-  { key:"NDv4", cat:"accelerated", arch:"x86", vendor:"Intel", desc:"NVIDIA A100 ×8 + NVLink (DL training)",
+  { key:"NDv4", cat:"accelerated", arch:"x86", vendor:"AMD", desc:"NVIDIA A100 ×8 + NVLink (DL training)",
     sizes:["ND96asr_v4"],
     specs:{"ND96asr_v4":{vcpu:96,mem:null,price:35.357}},
     in:["eastus","eastus2","westus2","westus3","southcentralus","northeurope","westeurope","uksouth","francecentral","japaneast","southeastasia","australiaeast"] },
@@ -1419,7 +1421,11 @@ const FAMILIES = [
   { key:"ECadsv5", cat:"confidential", arch:"x86", vendor:"AMD", desc:"ECasv5 + local NVMe",
     sizes:["EC2ads_v5","EC4ads_v5","EC8ads_v5","EC16ads_v5","EC20ads_v5","EC32ads_v5","EC48ads_v5","EC64ads_v5","EC96ads_v5"],
     specs:{"EC2ads_v5":{vcpu:2,mem:null,price:0.148},"EC4ads_v5":{vcpu:4,mem:null,price:0.296},"EC8ads_v5":{vcpu:8,mem:null,price:0.592},"EC16ads_v5":{vcpu:16,mem:null,price:1.184},"EC20ads_v5":{vcpu:20,mem:null,price:1.48},"EC32ads_v5":{vcpu:32,mem:null,price:2.368},"EC48ads_v5":{vcpu:48,mem:null,price:3.552},"EC64ads_v5":{vcpu:64,mem:null,price:4.736},"EC96ads_v5":{vcpu:96,mem:null,price:7.104}},
-    in:["eastus","eastus2","westus3","northeurope","westeurope","francecentral","germanywestcentral","japaneast","southeastasia"] }
+    in:["eastus","eastus2","westus3","northeurope","westeurope","francecentral","germanywestcentral","japaneast","southeastasia"] },
+  { key:"DCesv6", cat:"confidential", arch:"x86", vendor:"Intel", desc:"Intel TDX — Emerald Rapids confidential VM",
+    sizes:["DC2es_v6","DC4es_v6","DC8es_v6","DC16es_v6","DC32es_v6","DC48es_v6","DC64es_v6","DC96es_v6","DC128es_v6"],
+    specs:{"DC2es_v6":{vcpu:2,mem:8,price:null},"DC4es_v6":{vcpu:4,mem:16,price:null},"DC8es_v6":{vcpu:8,mem:32,price:null},"DC16es_v6":{vcpu:16,mem:64,price:null},"DC32es_v6":{vcpu:32,mem:128,price:null},"DC48es_v6":{vcpu:48,mem:192,price:null},"DC64es_v6":{vcpu:64,mem:256,price:null},"DC96es_v6":{vcpu:96,mem:384,price:null},"DC128es_v6":{vcpu:128,mem:512,price:null}},
+    in:["eastus","westus","westus3","westeurope"] }
 ];
 
 

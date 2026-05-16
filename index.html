@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="color-scheme" content="dark">
 <title>Infra Atlas — A reference for the infrastructure stack</title>
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <meta name="description" content="Infra Atlas is an open reference for cloud and API management infrastructure — across AWS, Azure, GCP, OCI, OVH, and every major APIM vendor. Cross-referenced, updated daily, free to read.">
@@ -37,7 +38,7 @@
   --line-3: rgba(244, 239, 230, 0.28);
   --paper: #F4EFE6;
   --paper-2: rgba(244, 239, 230, 0.66);
-  --paper-3: rgba(244, 239, 230, 0.42);
+  --paper-3: rgba(244, 239, 230, 0.55);
   --paper-4: rgba(244, 239, 230, 0.20);
   --accent: #FF7849;
   --accent-2: #FFA66E;
@@ -838,6 +839,7 @@ body {
   .instrument__side { align-items: flex-start; flex-direction: row; justify-content: flex-start; }
   .colophon { grid-template-columns: 1fr; gap: 28px; }
 }
+/* A1-7 focus */ a:focus-visible,button:focus-visible,[tabindex]:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:2px;}
 </style>
 </head>
 <body>
@@ -866,11 +868,12 @@ body {
     <div class="top-rule__center">Issue No. 01 · A reference for the infrastructure stack</div>
     <div class="top-rule__sync">
       <span class="pulse"></span>
-      Synced 14 May 2026 · 06:00 UTC
+      Synced daily · 06:00 UTC
     </div>
   </div>
 
   <!-- ───────── HERO ───────── -->
+  <main id="ia-main">
   <section class="hero">
     <div class="hero__brand">
       <div class="hero__eyebrow">A New Periodical of Infrastructure</div>
@@ -1203,12 +1206,14 @@ body {
         <em>Infra Atlas</em> is the version that should have existed all along. Pull up a region — see every instance type across AWS, Azure, GCP, OCI and OVH. Pull up an API gateway capability — see which vendors support it, where the asterisks hide, and what it actually costs once you exit the marketing page. Cross-reference, filter, share. Then close the tab and get back to building.
       </p>
       <p>
-        Each instrument refreshes daily from public APIs and curated vendor documentation. The source is open. Corrections welcome at <code>github.com/infraatlas</code>.
+        The cloud-compute instruments refresh daily from public datasets; the API-management references are curated snapshots. The source is open — corrections welcome at <a href="https://github.com/ineslino/infraatlas"><code>github.com/ineslino/infraatlas</code></a>.
       </p>
     </div>
   </section>
 
   <!-- ───────── COLOPHON ───────── -->
+  </main>
+
   <footer class="colophon">
     <div class="colophon__head">
       <strong style="font-family: var(--serif); font-style: italic; font-size: 18px; color: var(--paper); font-weight: 400; letter-spacing: 0; text-transform: none; display: block; margin-bottom: 4px;">Colophon</strong>
@@ -1220,11 +1225,11 @@ body {
     </div>
     <div class="colophon__col">
       <h5>Data</h5>
-      <p>Every instrument refreshes daily from public APIs (<code>describe-*</code>, Azure Resource Graph, GCP Compute API, etc.) and curated vendor documentation. Last sync visible on each tool. Stale data is a bug.</p>
+      <p>The cloud-compute instruments refresh daily from public datasets and price APIs; the API-management references are curated, dated snapshots. Last sync is shown on each tool. Stale data is a bug.</p>
     </div>
     <div class="colophon__col">
       <h5>Contribute</h5>
-      <p>Source is MIT-licensed on <a href="#">GitHub</a>. Spotted something wrong? <a href="#">Open an issue</a>. Want to ship an instrument? <a href="#">Read the contributor guide</a>.</p>
+      <p>Source is MIT-licensed on <a href="https://github.com/ineslino/infraatlas" target="_blank" rel="noopener">GitHub</a>. Spotted something wrong? <a href="https://github.com/ineslino/infraatlas/issues/new" target="_blank" rel="noopener">Open an issue</a>. Want to ship an instrument? <a href="https://github.com/ineslino/infraatlas/blob/main/CONTRIBUTING.md" target="_blank" rel="noopener">Read the contributor guide</a>.</p>
     </div>
   </footer>
 

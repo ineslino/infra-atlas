@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="color-scheme" content="dark">
 <title>Multi-Cloud Region Map · Infra Atlas</title>
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <meta name="description" content="Every region from AWS, Azure, GCP, OCI, and OVHcloud — on a single chart. Compare geographies, surface clusters, find the closest data to your users.">
@@ -36,7 +37,7 @@
   --line-3: rgba(244, 239, 230, 0.28);
   --paper: #F4EFE6;
   --paper-2: rgba(244, 239, 230, 0.66);
-  --paper-3: rgba(244, 239, 230, 0.42);
+  --paper-3: rgba(244, 239, 230, 0.55);
   --paper-4: rgba(244, 239, 230, 0.20);
   --accent: #FF7849;
   --accent-2: #FFA66E;
@@ -1017,6 +1018,7 @@ a.masthead__eyebrow:hover .masthead__eyebrow-arrow { transform: translateX(-4px)
 .origin-pulse  { fill: none; stroke: var(--paper); stroke-width: 0.7; opacity: 0.4; }
 .origin-core   { fill: var(--paper); }
 
+/* A1-5 CLS */ #results{min-height:80vh;}
 </style>
 </head>
 <body>
@@ -1405,7 +1407,7 @@ let CITIES = [
     { p: "azure", code: "italynorth",     name: "Italy North", az: 3, since: 2023 },
     { p: "gcp",   code: "europe-west8",   name: "Milan",      az: 3, since: 2022 },
     { p: "oci",   code: "eu-milan-1",     name: "Milan",      az: 1, since: 2022 },
-    { p: "ovh",   code: "MIL",            name: "Milan",      az: 3, since: 2026 }
+    { p: "ovh",   code: "MIL",            name: "Milan",      az: 3, since: 2025 }
   ]},
   { city: "Madrid", area: "Europe", country: "Spain", flag: "🇪🇸", lat: 40.42, lng: -3.70, regions: [
     { p: "aws",   code: "eu-south-2",     name: "Spain",        az: 3, since: 2022 },

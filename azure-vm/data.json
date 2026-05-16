@@ -1,5 +1,5 @@
 {
-  "generated": "2026-05-15T23:51:23Z",
+  "generated": "2026-05-16T17:21:35Z",
   "provider": "azure",
   "source": "Azure Retail Prices API — public, no credentials",
   "currency": "USD",
@@ -389,7 +389,6 @@
         "B16ms",
         "B20ms"
       ],
-      "in": "*",
       "specs": {
         "B1ls": {
           "vcpu": 1,
@@ -441,7 +440,8 @@
           "mem": null,
           "price": 0.96
         }
-      }
+      },
+      "in": "*"
     },
     {
       "key": "Bsv2",
@@ -456,23 +456,6 @@
         "B16s_v2",
         "B32s_v2",
         "B48s_v2"
-      ],
-      "in": [
-        "eastus",
-        "eastus2",
-        "westus2",
-        "westus3",
-        "centralus",
-        "northeurope",
-        "westeurope",
-        "uksouth",
-        "francecentral",
-        "germanywestcentral",
-        "swedencentral",
-        "japaneast",
-        "koreacentral",
-        "southeastasia",
-        "australiaeast"
       ],
       "specs": {
         "B2s_v2": {
@@ -505,7 +488,24 @@
           "mem": null,
           "price": null
         }
-      }
+      },
+      "in": [
+        "eastus",
+        "eastus2",
+        "westus2",
+        "westus3",
+        "centralus",
+        "northeurope",
+        "westeurope",
+        "uksouth",
+        "francecentral",
+        "germanywestcentral",
+        "swedencentral",
+        "japaneast",
+        "koreacentral",
+        "southeastasia",
+        "australiaeast"
+      ]
     },
     {
       "key": "Dv3",
@@ -522,7 +522,6 @@
         "D48_v3",
         "D64_v3"
       ],
-      "in": "*",
       "specs": {
         "D2_v3": {
           "vcpu": 2,
@@ -559,7 +558,8 @@
           "mem": 256,
           "price": 3.84
         }
-      }
+      },
+      "in": "*"
     },
     {
       "key": "Dsv3",
@@ -576,7 +576,6 @@
         "D48s_v3",
         "D64s_v3"
       ],
-      "in": "*",
       "specs": {
         "D2s_v3": {
           "vcpu": 2,
@@ -613,7 +612,8 @@
           "mem": 256,
           "price": 3.84
         }
-      }
+      },
+      "in": "*"
     },
     {
       "key": "Dsv4",
@@ -630,7 +630,6 @@
         "D48s_v4",
         "D64s_v4"
       ],
-      "in": "*",
       "specs": {
         "D2s_v4": {
           "vcpu": 2,
@@ -667,7 +666,8 @@
           "mem": 256,
           "price": 3.68
         }
-      }
+      },
+      "in": "*"
     },
     {
       "key": "Ddsv4",
@@ -684,7 +684,6 @@
         "D48ds_v4",
         "D64ds_v4"
       ],
-      "in": "*",
       "specs": {
         "D2ds_v4": {
           "vcpu": 2,
@@ -721,7 +720,8 @@
           "mem": 256,
           "price": 4.352
         }
-      }
+      },
+      "in": "*"
     },
     {
       "key": "Dsv5",
@@ -739,7 +739,6 @@
         "D64s_v5",
         "D96s_v5"
       ],
-      "in": "*",
       "specs": {
         "D2s_v5": {
           "vcpu": 2,
@@ -781,7 +780,8 @@
           "mem": 384,
           "price": 5.52
         }
-      }
+      },
+      "in": "*"
     },
     {
       "key": "Ddsv5",
@@ -799,7 +799,6 @@
         "D64ds_v5",
         "D96ds_v5"
       ],
-      "in": "*",
       "specs": {
         "D2ds_v5": {
           "vcpu": 2,
@@ -841,7 +840,8 @@
           "mem": 384,
           "price": 6.528
         }
-      }
+      },
+      "in": "*"
     },
     {
       "key": "Dasv4",
@@ -858,35 +858,6 @@
         "D48as_v4",
         "D64as_v4",
         "D96as_v4"
-      ],
-      "in": [
-        "eastus",
-        "eastus2",
-        "westus",
-        "westus2",
-        "westus3",
-        "centralus",
-        "northcentralus",
-        "southcentralus",
-        "canadacentral",
-        "northeurope",
-        "westeurope",
-        "uksouth",
-        "ukwest",
-        "francecentral",
-        "germanywestcentral",
-        "swedencentral",
-        "switzerlandnorth",
-        "norwayeast",
-        "japaneast",
-        "koreacentral",
-        "southeastasia",
-        "eastasia",
-        "australiaeast",
-        "centralindia",
-        "southafricanorth",
-        "uaenorth",
-        "brazilsouth"
       ],
       "specs": {
         "D2as_v4": {
@@ -929,7 +900,36 @@
           "mem": 384,
           "price": 5.52
         }
-      }
+      },
+      "in": [
+        "eastus",
+        "eastus2",
+        "westus",
+        "westus2",
+        "westus3",
+        "centralus",
+        "northcentralus",
+        "southcentralus",
+        "canadacentral",
+        "northeurope",
+        "westeurope",
+        "uksouth",
+        "ukwest",
+        "francecentral",
+        "germanywestcentral",
+        "swedencentral",
+        "switzerlandnorth",
+        "norwayeast",
+        "japaneast",
+        "koreacentral",
+        "southeastasia",
+        "eastasia",
+        "australiaeast",
+        "centralindia",
+        "southafricanorth",
+        "uaenorth",
+        "brazilsouth"
+      ]
     },
     {
       "key": "Dasv5",
@@ -946,29 +946,6 @@
         "D48as_v5",
         "D64as_v5",
         "D96as_v5"
-      ],
-      "in": [
-        "eastus",
-        "eastus2",
-        "westus2",
-        "westus3",
-        "centralus",
-        "southcentralus",
-        "northeurope",
-        "westeurope",
-        "uksouth",
-        "francecentral",
-        "germanywestcentral",
-        "swedencentral",
-        "switzerlandnorth",
-        "japaneast",
-        "koreacentral",
-        "southeastasia",
-        "eastasia",
-        "australiaeast",
-        "centralindia",
-        "brazilsouth",
-        "uaenorth"
       ],
       "specs": {
         "D2as_v5": {
@@ -1011,7 +988,30 @@
           "mem": 384,
           "price": 4.992
         }
-      }
+      },
+      "in": [
+        "eastus",
+        "eastus2",
+        "westus2",
+        "westus3",
+        "centralus",
+        "southcentralus",
+        "northeurope",
+        "westeurope",
+        "uksouth",
+        "francecentral",
+        "germanywestcentral",
+        "swedencentral",
+        "switzerlandnorth",
+        "japaneast",
+        "koreacentral",
+        "southeastasia",
+        "eastasia",
+        "australiaeast",
+        "centralindia",
+        "brazilsouth",
+        "uaenorth"
+      ]
     },
     {
       "key": "Dadsv5",
@@ -1028,21 +1028,6 @@
         "D48ads_v5",
         "D64ads_v5",
         "D96ads_v5"
-      ],
-      "in": [
-        "eastus",
-        "eastus2",
-        "westus2",
-        "westus3",
-        "northeurope",
-        "westeurope",
-        "uksouth",
-        "francecentral",
-        "germanywestcentral",
-        "swedencentral",
-        "japaneast",
-        "southeastasia",
-        "australiaeast"
       ],
       "specs": {
         "D2ads_v5": {
@@ -1085,7 +1070,22 @@
           "mem": 384,
           "price": 6.0
         }
-      }
+      },
+      "in": [
+        "eastus",
+        "eastus2",
+        "westus2",
+        "westus3",
+        "northeurope",
+        "westeurope",
+        "uksouth",
+        "francecentral",
+        "germanywestcentral",
+        "swedencentral",
+        "japaneast",
+        "southeastasia",
+        "australiaeast"
+      ]
     },
     {
       "key": "Dpsv5",
@@ -1101,23 +1101,6 @@
         "D32ps_v5",
         "D48ps_v5",
         "D64ps_v5"
-      ],
-      "in": [
-        "eastus",
-        "eastus2",
-        "westus2",
-        "westus3",
-        "centralus",
-        "northeurope",
-        "westeurope",
-        "uksouth",
-        "francecentral",
-        "germanywestcentral",
-        "swedencentral",
-        "japaneast",
-        "koreacentral",
-        "southeastasia",
-        "australiaeast"
       ],
       "specs": {
         "D2ps_v5": {
@@ -1155,7 +1138,24 @@
           "mem": 256,
           "price": 2.944
         }
-      }
+      },
+      "in": [
+        "eastus",
+        "eastus2",
+        "westus2",
+        "westus3",
+        "centralus",
+        "northeurope",
+        "westeurope",
+        "uksouth",
+        "francecentral",
+        "germanywestcentral",
+        "swedencentral",
+        "japaneast",
+        "koreacentral",
+        "southeastasia",
+        "australiaeast"
+      ]
     },
     {
       "key": "Dpdsv5",
@@ -1171,20 +1171,6 @@
         "D32pds_v5",
         "D48pds_v5",
         "D64pds_v5"
-      ],
-      "in": [
-        "eastus",
-        "eastus2",
-        "westus2",
-        "westus3",
-        "northeurope",
-        "westeurope",
-        "uksouth",
-        "francecentral",
-        "germanywestcentral",
-        "japaneast",
-        "southeastasia",
-        "australiaeast"
       ],
       "specs": {
         "D2pds_v5": {
@@ -1222,7 +1208,21 @@
           "mem": 256,
           "price": 3.488
         }
-      }
+      },
+      "in": [
+        "eastus",
+        "eastus2",
+        "westus2",
+        "westus3",
+        "northeurope",
+        "westeurope",
+        "uksouth",
+        "francecentral",
+        "germanywestcentral",
+        "japaneast",
+        "southeastasia",
+        "australiaeast"
+      ]
     },
     {
       "key": "Dpsv6",
@@ -1239,17 +1239,6 @@
         "D48ps_v6",
         "D64ps_v6",
         "D96ps_v6"
-      ],
-      "in": [
-        "eastus",
-        "eastus2",
-        "westus2",
-        "westus3",
-        "northeurope",
-        "westeurope",
-        "japaneast",
-        "southeastasia",
-        "australiaeast"
       ],
       "specs": {
         "D2ps_v6": {
@@ -1292,7 +1281,18 @@
           "mem": 384,
           "price": 4.022
         }
-      }
+      },
+      "in": [
+        "eastus",
+        "eastus2",
+        "westus2",
+        "westus3",
+        "northeurope",
+        "westeurope",
+        "japaneast",
+        "southeastasia",
+        "australiaeast"
+      ]
     },
     {
       "key": "Esv3",
@@ -1310,7 +1310,6 @@
         "E48s_v3",
         "E64s_v3"
       ],
-      "in": "*",
       "specs": {
         "E2s_v3": {
           "vcpu": 2,
@@ -1352,7 +1351,8 @@
           "mem": 512,
           "price": 4.376
         }
-      }
+      },
+      "in": "*"
     },
     {
       "key": "Esv4",
@@ -1370,7 +1370,6 @@
         "E48s_v4",
         "E64s_v4"
       ],
-      "in": "*",
       "specs": {
         "E2s_v4": {
           "vcpu": 2,
@@ -1412,7 +1411,8 @@
           "mem": 512,
           "price": 4.864
         }
-      }
+      },
+      "in": "*"
     },
     {
       "key": "Esv5",
@@ -1432,7 +1432,6 @@
         "E96s_v5",
         "E104s_v5"
       ],
-      "in": "*",
       "specs": {
         "E2s_v5": {
           "vcpu": 2,
@@ -1484,7 +1483,8 @@
           "mem": 672,
           "price": null
         }
-      }
+      },
+      "in": "*"
     },
     {
       "key": "Edsv5",
@@ -1504,7 +1504,6 @@
         "E96ds_v5",
         "E104ids_v5"
       ],
-      "in": "*",
       "specs": {
         "E2ds_v5": {
           "vcpu": 2,
@@ -1556,7 +1555,8 @@
           "mem": 672,
           "price": 9.896
         }
-      }
+      },
+      "in": "*"
     },
     {
       "key": "Easv4",
@@ -1574,35 +1574,6 @@
         "E48as_v4",
         "E64as_v4",
         "E96as_v4"
-      ],
-      "in": [
-        "eastus",
-        "eastus2",
-        "westus",
-        "westus2",
-        "westus3",
-        "centralus",
-        "northcentralus",
-        "southcentralus",
-        "canadacentral",
-        "northeurope",
-        "westeurope",
-        "uksouth",
-        "ukwest",
-        "francecentral",
-        "germanywestcentral",
-        "swedencentral",
-        "switzerlandnorth",
-        "norwayeast",
-        "japaneast",
-        "koreacentral",
-        "southeastasia",
-        "eastasia",
-        "australiaeast",
-        "centralindia",
-        "southafricanorth",
-        "uaenorth",
-        "brazilsouth"
       ],
       "specs": {
         "E2as_v4": {
@@ -1650,7 +1621,36 @@
           "mem": 672,
           "price": 7.296
         }
-      }
+      },
+      "in": [
+        "eastus",
+        "eastus2",
+        "westus",
+        "westus2",
+        "westus3",
+        "centralus",
+        "northcentralus",
+        "southcentralus",
+        "canadacentral",
+        "northeurope",
+        "westeurope",
+        "uksouth",
+        "ukwest",
+        "francecentral",
+        "germanywestcentral",
+        "swedencentral",
+        "switzerlandnorth",
+        "norwayeast",
+        "japaneast",
+        "koreacentral",
+        "southeastasia",
+        "eastasia",
+        "australiaeast",
+        "centralindia",
+        "southafricanorth",
+        "uaenorth",
+        "brazilsouth"
+      ]
     },
     {
       "key": "Easv5",
@@ -1668,28 +1668,6 @@
         "E48as_v5",
         "E64as_v5",
         "E96as_v5"
-      ],
-      "in": [
-        "eastus",
-        "eastus2",
-        "westus2",
-        "westus3",
-        "centralus",
-        "southcentralus",
-        "northeurope",
-        "westeurope",
-        "uksouth",
-        "francecentral",
-        "germanywestcentral",
-        "swedencentral",
-        "japaneast",
-        "koreacentral",
-        "southeastasia",
-        "eastasia",
-        "australiaeast",
-        "centralindia",
-        "brazilsouth",
-        "uaenorth"
       ],
       "specs": {
         "E2as_v5": {
@@ -1737,7 +1715,29 @@
           "mem": 672,
           "price": 6.576
         }
-      }
+      },
+      "in": [
+        "eastus",
+        "eastus2",
+        "westus2",
+        "westus3",
+        "centralus",
+        "southcentralus",
+        "northeurope",
+        "westeurope",
+        "uksouth",
+        "francecentral",
+        "germanywestcentral",
+        "swedencentral",
+        "japaneast",
+        "koreacentral",
+        "southeastasia",
+        "eastasia",
+        "australiaeast",
+        "centralindia",
+        "brazilsouth",
+        "uaenorth"
+      ]
     },
     {
       "key": "Eadsv5",
@@ -1755,20 +1755,6 @@
         "E48ads_v5",
         "E64ads_v5",
         "E96ads_v5"
-      ],
-      "in": [
-        "eastus",
-        "eastus2",
-        "westus2",
-        "westus3",
-        "northeurope",
-        "westeurope",
-        "uksouth",
-        "francecentral",
-        "germanywestcentral",
-        "japaneast",
-        "southeastasia",
-        "australiaeast"
       ],
       "specs": {
         "E2ads_v5": {
@@ -1816,7 +1802,21 @@
           "mem": 672,
           "price": 7.584
         }
-      }
+      },
+      "in": [
+        "eastus",
+        "eastus2",
+        "westus2",
+        "westus3",
+        "northeurope",
+        "westeurope",
+        "uksouth",
+        "francecentral",
+        "germanywestcentral",
+        "japaneast",
+        "southeastasia",
+        "australiaeast"
+      ]
     },
     {
       "key": "Epsv5",
@@ -1831,20 +1831,6 @@
         "E16ps_v5",
         "E20ps_v5",
         "E32ps_v5"
-      ],
-      "in": [
-        "eastus",
-        "eastus2",
-        "westus2",
-        "westus3",
-        "northeurope",
-        "westeurope",
-        "uksouth",
-        "francecentral",
-        "germanywestcentral",
-        "japaneast",
-        "southeastasia",
-        "australiaeast"
       ],
       "specs": {
         "E2ps_v5": {
@@ -1877,7 +1863,21 @@
           "mem": 256,
           "price": 1.946
         }
-      }
+      },
+      "in": [
+        "eastus",
+        "eastus2",
+        "westus2",
+        "westus3",
+        "northeurope",
+        "westeurope",
+        "uksouth",
+        "francecentral",
+        "germanywestcentral",
+        "japaneast",
+        "southeastasia",
+        "australiaeast"
+      ]
     },
     {
       "key": "Epdsv5",
@@ -1892,17 +1892,6 @@
         "E16pds_v5",
         "E20pds_v5",
         "E32pds_v5"
-      ],
-      "in": [
-        "eastus",
-        "eastus2",
-        "westus2",
-        "westus3",
-        "northeurope",
-        "westeurope",
-        "japaneast",
-        "southeastasia",
-        "australiaeast"
       ],
       "specs": {
         "E2pds_v5": {
@@ -1935,7 +1924,18 @@
           "mem": 256,
           "price": 2.208
         }
-      }
+      },
+      "in": [
+        "eastus",
+        "eastus2",
+        "westus2",
+        "westus3",
+        "northeurope",
+        "westeurope",
+        "japaneast",
+        "southeastasia",
+        "australiaeast"
+      ]
     },
     {
       "key": "Mv2",
@@ -1948,22 +1948,6 @@
         "M208s_v2",
         "M416ms_v2",
         "M416s_v2"
-      ],
-      "in": [
-        "eastus",
-        "eastus2",
-        "westus2",
-        "westus3",
-        "southcentralus",
-        "centralus",
-        "northeurope",
-        "westeurope",
-        "uksouth",
-        "francecentral",
-        "germanywestcentral",
-        "japaneast",
-        "southeastasia",
-        "australiaeast"
       ],
       "specs": {
         "M208ms_v2": {
@@ -1986,7 +1970,23 @@
           "mem": null,
           "price": 59.496
         }
-      }
+      },
+      "in": [
+        "eastus",
+        "eastus2",
+        "westus2",
+        "westus3",
+        "southcentralus",
+        "centralus",
+        "northeurope",
+        "westeurope",
+        "uksouth",
+        "francecentral",
+        "germanywestcentral",
+        "japaneast",
+        "southeastasia",
+        "australiaeast"
+      ]
     },
     {
       "key": "Msv3",
@@ -2004,19 +2004,6 @@
         "M176s_v3",
         "M192is_v3",
         "M192ims_v3"
-      ],
-      "in": [
-        "eastus",
-        "eastus2",
-        "westus2",
-        "westus3",
-        "northeurope",
-        "westeurope",
-        "uksouth",
-        "francecentral",
-        "germanywestcentral",
-        "japaneast",
-        "southeastasia"
       ],
       "specs": {
         "M8s_v3": {
@@ -2064,7 +2051,20 @@
           "mem": null,
           "price": null
         }
-      }
+      },
+      "in": [
+        "eastus",
+        "eastus2",
+        "westus2",
+        "westus3",
+        "northeurope",
+        "westeurope",
+        "uksouth",
+        "francecentral",
+        "germanywestcentral",
+        "japaneast",
+        "southeastasia"
+      ]
     },
     {
       "key": "Mbdsv2",
@@ -2078,16 +2078,6 @@
         "M64bds_v2",
         "M128bds_v2",
         "M192bds_v2"
-      ],
-      "in": [
-        "eastus",
-        "eastus2",
-        "westus2",
-        "westus3",
-        "northeurope",
-        "westeurope",
-        "japaneast",
-        "southeastasia"
       ],
       "specs": {
         "M16bds_v2": {
@@ -2115,7 +2105,17 @@
           "mem": null,
           "price": null
         }
-      }
+      },
+      "in": [
+        "eastus",
+        "eastus2",
+        "westus2",
+        "westus3",
+        "northeurope",
+        "westeurope",
+        "japaneast",
+        "southeastasia"
+      ]
     },
     {
       "key": "Fsv2",
@@ -2133,7 +2133,6 @@
         "F64s_v2",
         "F72s_v2"
       ],
-      "in": "*",
       "specs": {
         "F2s_v2": {
           "vcpu": 2,
@@ -2175,7 +2174,8 @@
           "mem": 144,
           "price": 3.492
         }
-      }
+      },
+      "in": "*"
     },
     {
       "key": "Fxsv5",
@@ -2189,25 +2189,6 @@
         "FX24s_v5",
         "FX36s_v5",
         "FX48s_v5"
-      ],
-      "in": [
-        "eastus",
-        "eastus2",
-        "westus2",
-        "westus3",
-        "centralus",
-        "southcentralus",
-        "northeurope",
-        "westeurope",
-        "uksouth",
-        "francecentral",
-        "germanywestcentral",
-        "swedencentral",
-        "japaneast",
-        "koreacentral",
-        "southeastasia",
-        "eastasia",
-        "australiaeast"
       ],
       "specs": {
         "FX4s_v5": {
@@ -2235,7 +2216,26 @@
           "mem": 1008,
           "price": null
         }
-      }
+      },
+      "in": [
+        "eastus",
+        "eastus2",
+        "westus2",
+        "westus3",
+        "centralus",
+        "southcentralus",
+        "northeurope",
+        "westeurope",
+        "uksouth",
+        "francecentral",
+        "germanywestcentral",
+        "swedencentral",
+        "japaneast",
+        "koreacentral",
+        "southeastasia",
+        "eastasia",
+        "australiaeast"
+      ]
     },
     {
       "key": "Lsv2",
@@ -2250,29 +2250,6 @@
         "L48s_v2",
         "L64s_v2",
         "L80s_v2"
-      ],
-      "in": [
-        "eastus",
-        "eastus2",
-        "westus2",
-        "westus3",
-        "centralus",
-        "northcentralus",
-        "southcentralus",
-        "canadacentral",
-        "northeurope",
-        "westeurope",
-        "uksouth",
-        "francecentral",
-        "germanywestcentral",
-        "swedencentral",
-        "japaneast",
-        "koreacentral",
-        "southeastasia",
-        "eastasia",
-        "australiaeast",
-        "centralindia",
-        "brazilsouth"
       ],
       "specs": {
         "L8s_v2": {
@@ -2305,7 +2282,30 @@
           "mem": 640,
           "price": 7.44
         }
-      }
+      },
+      "in": [
+        "eastus",
+        "eastus2",
+        "westus2",
+        "westus3",
+        "centralus",
+        "northcentralus",
+        "southcentralus",
+        "canadacentral",
+        "northeurope",
+        "westeurope",
+        "uksouth",
+        "francecentral",
+        "germanywestcentral",
+        "swedencentral",
+        "japaneast",
+        "koreacentral",
+        "southeastasia",
+        "eastasia",
+        "australiaeast",
+        "centralindia",
+        "brazilsouth"
+      ]
     },
     {
       "key": "Lsv3",
@@ -2320,25 +2320,6 @@
         "L48s_v3",
         "L64s_v3",
         "L80s_v3"
-      ],
-      "in": [
-        "eastus",
-        "eastus2",
-        "westus2",
-        "westus3",
-        "centralus",
-        "southcentralus",
-        "northeurope",
-        "westeurope",
-        "uksouth",
-        "francecentral",
-        "germanywestcentral",
-        "swedencentral",
-        "japaneast",
-        "koreacentral",
-        "southeastasia",
-        "eastasia",
-        "australiaeast"
       ],
       "specs": {
         "L8s_v3": {
@@ -2371,7 +2352,26 @@
           "mem": 640,
           "price": 8.32
         }
-      }
+      },
+      "in": [
+        "eastus",
+        "eastus2",
+        "westus2",
+        "westus3",
+        "centralus",
+        "southcentralus",
+        "northeurope",
+        "westeurope",
+        "uksouth",
+        "francecentral",
+        "germanywestcentral",
+        "swedencentral",
+        "japaneast",
+        "koreacentral",
+        "southeastasia",
+        "eastasia",
+        "australiaeast"
+      ]
     },
     {
       "key": "Lasv3",
@@ -2386,22 +2386,6 @@
         "L48as_v3",
         "L64as_v3",
         "L80as_v3"
-      ],
-      "in": [
-        "eastus",
-        "eastus2",
-        "westus2",
-        "westus3",
-        "centralus",
-        "southcentralus",
-        "northeurope",
-        "westeurope",
-        "uksouth",
-        "francecentral",
-        "germanywestcentral",
-        "japaneast",
-        "southeastasia",
-        "australiaeast"
       ],
       "specs": {
         "L8as_v3": {
@@ -2434,7 +2418,23 @@
           "mem": 640,
           "price": 7.44
         }
-      }
+      },
+      "in": [
+        "eastus",
+        "eastus2",
+        "westus2",
+        "westus3",
+        "centralus",
+        "southcentralus",
+        "northeurope",
+        "westeurope",
+        "uksouth",
+        "francecentral",
+        "germanywestcentral",
+        "japaneast",
+        "southeastasia",
+        "australiaeast"
+      ]
     },
     {
       "key": "NVv3",
@@ -2446,19 +2446,6 @@
         "NV12s_v3",
         "NV24s_v3",
         "NV48s_v3"
-      ],
-      "in": [
-        "eastus",
-        "eastus2",
-        "westus2",
-        "centralus",
-        "southcentralus",
-        "northeurope",
-        "westeurope",
-        "uksouth",
-        "japaneast",
-        "southeastasia",
-        "australiaeast"
       ],
       "specs": {
         "NV12s_v3": {
@@ -2476,7 +2463,20 @@
           "mem": null,
           "price": 5.7
         }
-      }
+      },
+      "in": [
+        "eastus",
+        "eastus2",
+        "westus2",
+        "centralus",
+        "southcentralus",
+        "northeurope",
+        "westeurope",
+        "uksouth",
+        "japaneast",
+        "southeastasia",
+        "australiaeast"
+      ]
     },
     {
       "key": "NVv4",
@@ -2489,22 +2489,6 @@
         "NV8as_v4",
         "NV16as_v4",
         "NV32as_v4"
-      ],
-      "in": [
-        "eastus",
-        "eastus2",
-        "westus2",
-        "westus3",
-        "centralus",
-        "southcentralus",
-        "northeurope",
-        "westeurope",
-        "uksouth",
-        "francecentral",
-        "germanywestcentral",
-        "japaneast",
-        "southeastasia",
-        "australiaeast"
       ],
       "specs": {
         "NV4as_v4": {
@@ -2527,7 +2511,23 @@
           "mem": null,
           "price": 2.33
         }
-      }
+      },
+      "in": [
+        "eastus",
+        "eastus2",
+        "westus2",
+        "westus3",
+        "centralus",
+        "southcentralus",
+        "northeurope",
+        "westeurope",
+        "uksouth",
+        "francecentral",
+        "germanywestcentral",
+        "japaneast",
+        "southeastasia",
+        "australiaeast"
+      ]
     },
     {
       "key": "NVadsA10v5",
@@ -2542,20 +2542,6 @@
         "NV36ads_A10_v5",
         "NV36adms_A10_v5",
         "NV72ads_A10_v5"
-      ],
-      "in": [
-        "eastus",
-        "eastus2",
-        "westus2",
-        "westus3",
-        "northeurope",
-        "westeurope",
-        "uksouth",
-        "francecentral",
-        "germanywestcentral",
-        "japaneast",
-        "southeastasia",
-        "australiaeast"
       ],
       "specs": {
         "NV6ads_A10_v5": {
@@ -2588,7 +2574,21 @@
           "mem": null,
           "price": 8.476
         }
-      }
+      },
+      "in": [
+        "eastus",
+        "eastus2",
+        "westus2",
+        "westus3",
+        "northeurope",
+        "westeurope",
+        "uksouth",
+        "francecentral",
+        "germanywestcentral",
+        "japaneast",
+        "southeastasia",
+        "australiaeast"
+      ]
     },
     {
       "key": "NCv3",
@@ -2601,20 +2601,6 @@
         "NC12s_v3",
         "NC24s_v3",
         "NC24rs_v3"
-      ],
-      "in": [
-        "eastus",
-        "eastus2",
-        "westus2",
-        "centralus",
-        "southcentralus",
-        "northeurope",
-        "westeurope",
-        "uksouth",
-        "japaneast",
-        "southeastasia",
-        "australiaeast",
-        "centralindia"
       ],
       "specs": {
         "NC6s_v3": {
@@ -2637,7 +2623,21 @@
           "mem": null,
           "price": 16.821
         }
-      }
+      },
+      "in": [
+        "eastus",
+        "eastus2",
+        "westus2",
+        "centralus",
+        "southcentralus",
+        "northeurope",
+        "westeurope",
+        "uksouth",
+        "japaneast",
+        "southeastasia",
+        "australiaeast",
+        "centralindia"
+      ]
     },
     {
       "key": "NCasT4v3",
@@ -2650,23 +2650,6 @@
         "NC8as_T4_v3",
         "NC16as_T4_v3",
         "NC64as_T4_v3"
-      ],
-      "in": [
-        "eastus",
-        "eastus2",
-        "westus2",
-        "westus3",
-        "northeurope",
-        "westeurope",
-        "uksouth",
-        "francecentral",
-        "germanywestcentral",
-        "japaneast",
-        "koreacentral",
-        "southeastasia",
-        "australiaeast",
-        "centralindia",
-        "brazilsouth"
       ],
       "specs": {
         "NC4as_T4_v3": {
@@ -2689,7 +2672,24 @@
           "mem": null,
           "price": 5.44
         }
-      }
+      },
+      "in": [
+        "eastus",
+        "eastus2",
+        "westus2",
+        "westus3",
+        "northeurope",
+        "westeurope",
+        "uksouth",
+        "francecentral",
+        "germanywestcentral",
+        "japaneast",
+        "koreacentral",
+        "southeastasia",
+        "australiaeast",
+        "centralindia",
+        "brazilsouth"
+      ]
     },
     {
       "key": "NCadsA100v4",
@@ -2702,6 +2702,23 @@
         "NC48ads_A100_v4",
         "NC96ads_A100_v4"
       ],
+      "specs": {
+        "NC24ads_A100_v4": {
+          "vcpu": 24,
+          "mem": null,
+          "price": 4.775
+        },
+        "NC48ads_A100_v4": {
+          "vcpu": 48,
+          "mem": null,
+          "price": 9.55
+        },
+        "NC96ads_A100_v4": {
+          "vcpu": 96,
+          "mem": null,
+          "price": 19.1
+        }
+      },
       "in": [
         "eastus",
         "eastus2",
@@ -2720,24 +2737,7 @@
         "southeastasia",
         "australiaeast",
         "centralindia"
-      ],
-      "specs": {
-        "NC24ads_A100_v4": {
-          "vcpu": 24,
-          "mem": null,
-          "price": 4.775
-        },
-        "NC48ads_A100_v4": {
-          "vcpu": 48,
-          "mem": null,
-          "price": 9.55
-        },
-        "NC96ads_A100_v4": {
-          "vcpu": 96,
-          "mem": null,
-          "price": 19.1
-        }
-      }
+      ]
     },
     {
       "key": "NCadsH100v5",
@@ -2749,6 +2749,18 @@
         "NC40ads_H100_v5",
         "NC80adis_H100_v5"
       ],
+      "specs": {
+        "NC40ads_H100_v5": {
+          "vcpu": 40,
+          "mem": null,
+          "price": 9.08
+        },
+        "NC80adis_H100_v5": {
+          "vcpu": 80,
+          "mem": null,
+          "price": 18.16
+        }
+      },
       "in": [
         "eastus",
         "eastus2",
@@ -2762,29 +2774,24 @@
         "japaneast",
         "koreacentral",
         "australiaeast"
-      ],
-      "specs": {
-        "NC40ads_H100_v5": {
-          "vcpu": 40,
-          "mem": null,
-          "price": 9.08
-        },
-        "NC80adis_H100_v5": {
-          "vcpu": 80,
-          "mem": null,
-          "price": 18.16
-        }
-      }
+      ]
     },
     {
       "key": "NDv4",
       "cat": "accelerated",
       "arch": "x86",
-      "vendor": "Intel",
+      "vendor": "AMD",
       "desc": "NVIDIA A100 ×8 + NVLink (DL training)",
       "sizes": [
         "ND96asr_v4"
       ],
+      "specs": {
+        "ND96asr_v4": {
+          "vcpu": 96,
+          "mem": null,
+          "price": 35.357
+        }
+      },
       "in": [
         "eastus",
         "eastus2",
@@ -2798,14 +2805,7 @@
         "japaneast",
         "southeastasia",
         "australiaeast"
-      ],
-      "specs": {
-        "ND96asr_v4": {
-          "vcpu": 96,
-          "mem": null,
-          "price": 35.357
-        }
-      }
+      ]
     },
     {
       "key": "NDH100v5",
@@ -2816,6 +2816,13 @@
       "sizes": [
         "ND96isr_H100_v5"
       ],
+      "specs": {
+        "ND96isr_H100_v5": {
+          "vcpu": 96,
+          "mem": null,
+          "price": 127.816
+        }
+      },
       "in": [
         "eastus",
         "eastus2",
@@ -2826,14 +2833,7 @@
         "swedencentral",
         "japaneast",
         "australiaeast"
-      ],
-      "specs": {
-        "ND96isr_H100_v5": {
-          "vcpu": 96,
-          "mem": null,
-          "price": 127.816
-        }
-      }
+      ]
     },
     {
       "key": "NDH200v5",
@@ -2844,20 +2844,20 @@
       "sizes": [
         "ND96isr_H200_v5"
       ],
-      "in": [
-        "eastus",
-        "westus3",
-        "southcentralus",
-        "westeurope",
-        "swedencentral"
-      ],
       "specs": {
         "ND96isr_H200_v5": {
           "vcpu": 96,
           "mem": null,
           "price": null
         }
-      }
+      },
+      "in": [
+        "eastus",
+        "westus3",
+        "southcentralus",
+        "westeurope",
+        "swedencentral"
+      ]
     },
     {
       "key": "HBv2",
@@ -2871,16 +2871,6 @@
         "HB120-64rs_v2",
         "HB120-96rs_v2",
         "HB120rs_v2"
-      ],
-      "in": [
-        "eastus",
-        "eastus2",
-        "southcentralus",
-        "westeurope",
-        "northeurope",
-        "francecentral",
-        "japaneast",
-        "southeastasia"
       ],
       "specs": {
         "HB120-16rs_v2": {
@@ -2908,7 +2898,17 @@
           "mem": null,
           "price": 4.68
         }
-      }
+      },
+      "in": [
+        "eastus",
+        "eastus2",
+        "southcentralus",
+        "westeurope",
+        "northeurope",
+        "francecentral",
+        "japaneast",
+        "southeastasia"
+      ]
     },
     {
       "key": "HBv3",
@@ -2922,17 +2922,6 @@
         "HB120-64rs_v3",
         "HB120-96rs_v3",
         "HB120rs_v3"
-      ],
-      "in": [
-        "eastus",
-        "eastus2",
-        "southcentralus",
-        "westus3",
-        "westeurope",
-        "northeurope",
-        "francecentral",
-        "japaneast",
-        "southeastasia"
       ],
       "specs": {
         "HB120-16rs_v3": {
@@ -2960,7 +2949,18 @@
           "mem": null,
           "price": 4.68
         }
-      }
+      },
+      "in": [
+        "eastus",
+        "eastus2",
+        "southcentralus",
+        "westus3",
+        "westeurope",
+        "northeurope",
+        "francecentral",
+        "japaneast",
+        "southeastasia"
+      ]
     },
     {
       "key": "HBv4",
@@ -2974,15 +2974,6 @@
         "HB176-96rs_v4",
         "HB176-144rs_v4",
         "HB176rs_v4"
-      ],
-      "in": [
-        "eastus2",
-        "southcentralus",
-        "westus3",
-        "westeurope",
-        "northeurope",
-        "francecentral",
-        "japaneast"
       ],
       "specs": {
         "HB176-24rs_v4": {
@@ -3010,7 +3001,16 @@
           "mem": null,
           "price": 9.36
         }
-      }
+      },
+      "in": [
+        "eastus2",
+        "southcentralus",
+        "westus3",
+        "westeurope",
+        "northeurope",
+        "francecentral",
+        "japaneast"
+      ]
     },
     {
       "key": "HXv5",
@@ -3024,13 +3024,6 @@
         "HX176-96rs",
         "HX176-144rs",
         "HX176rs"
-      ],
-      "in": [
-        "eastus2",
-        "southcentralus",
-        "westus3",
-        "westeurope",
-        "francecentral"
       ],
       "specs": {
         "HX176-24rs": {
@@ -3058,7 +3051,14 @@
           "mem": null,
           "price": 11.232
         }
-      }
+      },
+      "in": [
+        "eastus2",
+        "southcentralus",
+        "westus3",
+        "westeurope",
+        "francecentral"
+      ]
     },
     {
       "key": "DCsv2",
@@ -3071,15 +3071,6 @@
         "DC2s_v2",
         "DC4s_v2",
         "DC8_v2"
-      ],
-      "in": [
-        "eastus",
-        "westus",
-        "ukwest",
-        "westeurope",
-        "canadacentral",
-        "japaneast",
-        "southeastasia"
       ],
       "specs": {
         "DC1s_v2": {
@@ -3102,7 +3093,16 @@
           "mem": null,
           "price": 0.92
         }
-      }
+      },
+      "in": [
+        "eastus",
+        "westus",
+        "ukwest",
+        "westeurope",
+        "canadacentral",
+        "japaneast",
+        "southeastasia"
+      ]
     },
     {
       "key": "DCsv3",
@@ -3119,19 +3119,6 @@
         "DC24s_v3",
         "DC32s_v3",
         "DC48s_v3"
-      ],
-      "in": [
-        "eastus",
-        "eastus2",
-        "westus",
-        "westus3",
-        "westeurope",
-        "northeurope",
-        "uksouth",
-        "canadacentral",
-        "japaneast",
-        "southeastasia",
-        "australiaeast"
       ],
       "specs": {
         "DC1s_v3": {
@@ -3174,7 +3161,20 @@
           "mem": null,
           "price": 5.52
         }
-      }
+      },
+      "in": [
+        "eastus",
+        "eastus2",
+        "westus",
+        "westus3",
+        "westeurope",
+        "northeurope",
+        "uksouth",
+        "canadacentral",
+        "japaneast",
+        "southeastasia",
+        "australiaeast"
+      ]
     },
     {
       "key": "DCasv5",
@@ -3191,21 +3191,6 @@
         "DC48as_v5",
         "DC64as_v5",
         "DC96as_v5"
-      ],
-      "in": [
-        "eastus",
-        "eastus2",
-        "westus2",
-        "westus3",
-        "northeurope",
-        "westeurope",
-        "uksouth",
-        "francecentral",
-        "germanywestcentral",
-        "swedencentral",
-        "japaneast",
-        "southeastasia",
-        "australiaeast"
       ],
       "specs": {
         "DC2as_v5": {
@@ -3248,7 +3233,22 @@
           "mem": null,
           "price": 4.992
         }
-      }
+      },
+      "in": [
+        "eastus",
+        "eastus2",
+        "westus2",
+        "westus3",
+        "northeurope",
+        "westeurope",
+        "uksouth",
+        "francecentral",
+        "germanywestcentral",
+        "swedencentral",
+        "japaneast",
+        "southeastasia",
+        "australiaeast"
+      ]
     },
     {
       "key": "DCadsv5",
@@ -3265,19 +3265,6 @@
         "DC48ads_v5",
         "DC64ads_v5",
         "DC96ads_v5"
-      ],
-      "in": [
-        "eastus",
-        "eastus2",
-        "westus2",
-        "westus3",
-        "northeurope",
-        "westeurope",
-        "uksouth",
-        "francecentral",
-        "germanywestcentral",
-        "japaneast",
-        "southeastasia"
       ],
       "specs": {
         "DC2ads_v5": {
@@ -3320,7 +3307,20 @@
           "mem": null,
           "price": 6.0
         }
-      }
+      },
+      "in": [
+        "eastus",
+        "eastus2",
+        "westus2",
+        "westus3",
+        "northeurope",
+        "westeurope",
+        "uksouth",
+        "francecentral",
+        "germanywestcentral",
+        "japaneast",
+        "southeastasia"
+      ]
     },
     {
       "key": "ECasv5",
@@ -3338,21 +3338,6 @@
         "EC48as_v5",
         "EC64as_v5",
         "EC96as_v5"
-      ],
-      "in": [
-        "eastus",
-        "eastus2",
-        "westus2",
-        "westus3",
-        "northeurope",
-        "westeurope",
-        "uksouth",
-        "francecentral",
-        "germanywestcentral",
-        "swedencentral",
-        "japaneast",
-        "southeastasia",
-        "australiaeast"
       ],
       "specs": {
         "EC2as_v5": {
@@ -3400,7 +3385,22 @@
           "mem": null,
           "price": 6.576
         }
-      }
+      },
+      "in": [
+        "eastus",
+        "eastus2",
+        "westus2",
+        "westus3",
+        "northeurope",
+        "westeurope",
+        "uksouth",
+        "francecentral",
+        "germanywestcentral",
+        "swedencentral",
+        "japaneast",
+        "southeastasia",
+        "australiaeast"
+      ]
     },
     {
       "key": "ECadsv5",
@@ -3418,17 +3418,6 @@
         "EC48ads_v5",
         "EC64ads_v5",
         "EC96ads_v5"
-      ],
-      "in": [
-        "eastus",
-        "eastus2",
-        "westus3",
-        "northeurope",
-        "westeurope",
-        "francecentral",
-        "germanywestcentral",
-        "japaneast",
-        "southeastasia"
       ],
       "specs": {
         "EC2ads_v5": {
@@ -3476,7 +3465,89 @@
           "mem": null,
           "price": 7.104
         }
-      }
+      },
+      "in": [
+        "eastus",
+        "eastus2",
+        "westus3",
+        "northeurope",
+        "westeurope",
+        "francecentral",
+        "germanywestcentral",
+        "japaneast",
+        "southeastasia"
+      ]
+    },
+    {
+      "key": "DCesv6",
+      "cat": "confidential",
+      "arch": "x86",
+      "vendor": "Intel",
+      "desc": "Intel TDX — Emerald Rapids confidential VM",
+      "sizes": [
+        "DC2es_v6",
+        "DC4es_v6",
+        "DC8es_v6",
+        "DC16es_v6",
+        "DC32es_v6",
+        "DC48es_v6",
+        "DC64es_v6",
+        "DC96es_v6",
+        "DC128es_v6"
+      ],
+      "specs": {
+        "DC2es_v6": {
+          "vcpu": 2,
+          "mem": null,
+          "price": 0.121
+        },
+        "DC4es_v6": {
+          "vcpu": 4,
+          "mem": null,
+          "price": 0.242
+        },
+        "DC8es_v6": {
+          "vcpu": 8,
+          "mem": null,
+          "price": 0.483
+        },
+        "DC16es_v6": {
+          "vcpu": 16,
+          "mem": null,
+          "price": 0.966
+        },
+        "DC32es_v6": {
+          "vcpu": 32,
+          "mem": null,
+          "price": 1.932
+        },
+        "DC48es_v6": {
+          "vcpu": 48,
+          "mem": null,
+          "price": 2.898
+        },
+        "DC64es_v6": {
+          "vcpu": 64,
+          "mem": null,
+          "price": 3.864
+        },
+        "DC96es_v6": {
+          "vcpu": 96,
+          "mem": null,
+          "price": 5.796
+        },
+        "DC128es_v6": {
+          "vcpu": 128,
+          "mem": null,
+          "price": 7.729
+        }
+      },
+      "in": [
+        "eastus",
+        "westus",
+        "westus3",
+        "westeurope"
+      ]
     }
   ]
 }

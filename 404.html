@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="color-scheme" content="dark">
+<title>404 — off the map · Infra Atlas</title>
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&family=Manrope:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #0A0907; --paper: #F4EFE6; --paper-2: rgba(244,239,230,0.66);
+    --paper-3: rgba(244,239,230,0.55); --accent: #FF7849;
+    --line-2: rgba(244,239,230,0.14);
+    --serif: 'Instrument Serif', serif; --mono: 'JetBrains Mono', monospace; --sans: 'Manrope', sans-serif;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background:
+      radial-gradient(ellipse at 108% -20%, rgba(255,120,73,0.14), transparent 55%),
+      var(--ink);
+    color: var(--paper); font-family: var(--sans);
+    min-height: 100vh; display: flex; align-items: center; justify-content: center;
+    padding: 48px 24px; text-align: center;
+  }
+  .wrap { max-width: 460px; }
+  .mark { width: 40px; height: 40px; margin: 0 auto 28px; display: block; }
+  .code {
+    font-family: var(--mono); font-size: 13px; letter-spacing: 0.3em;
+    text-transform: uppercase; color: var(--accent); margin-bottom: 16px;
+  }
+  h1 {
+    font-family: var(--serif); font-weight: 400; font-size: 64px;
+    line-height: 1.04; letter-spacing: -0.02em; margin-bottom: 18px;
+  }
+  h1 em { font-style: italic; color: var(--accent); }
+  p {
+    font-size: 15px; line-height: 1.6; color: var(--paper-2); margin-bottom: 30px;
+  }
+  a.home {
+    display: inline-flex; align-items: center; gap: 9px;
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.14em;
+    text-transform: uppercase; color: var(--paper); text-decoration: none;
+    border: 1px solid var(--line-2); border-radius: 99px; padding: 11px 20px;
+    transition: border-color .15s, color .15s;
+  }
+  a.home:hover { border-color: var(--accent); color: var(--accent); }
+</style>
+</head>
+<body>
+  <main class="wrap">
+    <svg class="mark" viewBox="0 0 32 32" aria-hidden="true">
+      <g fill="none" stroke="var(--accent)" stroke-width="2.1">
+        <circle cx="16" cy="16" r="12.6"/>
+        <circle cx="14.8" cy="14.8" r="8.3"/>
+        <circle cx="13.6" cy="13.6" r="4.2"/>
+      </g>
+      <circle cx="13.6" cy="13.6" r="2.6" fill="var(--accent)"/>
+    </svg>
+    <div class="code">Error 404</div>
+    <h1>This page isn't <em>on the map.</em></h1>
+    <p>No region, instance type, or instrument answers to that address. It may have been renamed, or it never existed.</p>
+    <a class="home" href="/">↑ Back to the Atlas</a>
+  </main>
+  <script src="/nav.js" defer></script>
+</body>
+</html>

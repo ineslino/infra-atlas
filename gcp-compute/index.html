@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="color-scheme" content="dark">
 <title>GCP · Compute Index · Infra Atlas</title>
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <meta name="description" content="Every Google Cloud machine type, charted against the regions that offer it. Families, vCPU, memory, architecture — filterable, cross-referenced, updated daily.">
@@ -35,7 +36,7 @@
   --line-3: rgba(244, 239, 230, 0.28);
   --paper: #F4EFE6;
   --paper-2: rgba(244, 239, 230, 0.66);
-  --paper-3: rgba(244, 239, 230, 0.42);
+  --paper-3: rgba(244, 239, 230, 0.55);
   --paper-4: rgba(244, 239, 230, 0.20);
   --accent: #FF7849;
   --accent-2: #FFA66E;
@@ -970,6 +971,7 @@ a.masthead__back::before { display: none; }
 .cmp-unique__none{font-family:var(--mono);font-size:10.5px;color:var(--paper-4);}
 @media(max-width:560px){.cmp-tray{flex-wrap:wrap;}.cmp-modal{padding:20px 15px;}.cmp-modal__title{padding-right:70px;}}
 /* CMP-MODE-END */
+/* A1-5 CLS */ #results{min-height:80vh;}
 </style>
 </head>
 <body>
@@ -1132,7 +1134,7 @@ const FAMILIES = [
   { key:"n2",   cat:"general",     arch:"x86", vendor:"Intel",     desc:"2nd gen general, Cascade Lake / Ice Lake",
     sizes:["n2-standard-2","n2-standard-4","n2-standard-8","n2-standard-16","n2-standard-32","n2-standard-48","n2-standard-64","n2-standard-80","n2-standard-96","n2-standard-128","n2-highmem-2","n2-highmem-4","n2-highmem-8","n2-highmem-16","n2-highmem-32","n2-highmem-48","n2-highmem-64","n2-highmem-80","n2-highmem-96","n2-highmem-128","n2-highcpu-2","n2-highcpu-4","n2-highcpu-8","n2-highcpu-16","n2-highcpu-32","n2-highcpu-48","n2-highcpu-64","n2-highcpu-80"],
     in:["us-central1","us-east1","us-east4","us-east5","us-south1","us-west1","us-west2","us-west3","us-west4","northamerica-northeast1","northamerica-northeast2","southamerica-east1","europe-west1","europe-west2","europe-west3","europe-west4","europe-west6","europe-west8","europe-west9","europe-southwest1","europe-central2","europe-north1","me-central1","me-west1","asia-east1","asia-east2","asia-northeast1","asia-northeast2","asia-northeast3","asia-south1","asia-south2","asia-southeast1","asia-southeast2","australia-southeast1","australia-southeast2"]},
-  { key:"n4",   cat:"general",     arch:"x86", vendor:"Intel",     desc:"Newest balanced; Sapphire Rapids + Titanium SSDs option",
+  { key:"n4",   cat:"general",     arch:"x86", vendor:"Intel",     desc:"Newest balanced; Emerald Rapids + Titanium SSDs option",
     sizes:["n4-standard-2","n4-standard-4","n4-standard-8","n4-standard-16","n4-standard-32","n4-standard-48","n4-standard-64","n4-standard-80","n4-highmem-2","n4-highmem-4","n4-highmem-8","n4-highmem-16","n4-highmem-32","n4-highmem-48","n4-highmem-64","n4-highmem-80","n4-highcpu-2","n4-highcpu-4","n4-highcpu-8","n4-highcpu-16","n4-highcpu-32","n4-highcpu-48","n4-highcpu-64","n4-highcpu-80"],
     in:["us-central1","us-east4","us-east5","us-south1","us-west1","europe-west1","europe-west2","europe-west3","europe-west4","europe-west8","asia-southeast1","asia-northeast1","australia-southeast1"]},
 
@@ -1143,6 +1145,12 @@ const FAMILIES = [
   { key:"t2d",  cat:"general",     arch:"x86", vendor:"AMD",       desc:"AMD Milan scale-out, no SMT, web tier sweet spot",
     sizes:["t2d-standard-1","t2d-standard-2","t2d-standard-4","t2d-standard-8","t2d-standard-16","t2d-standard-32","t2d-standard-48","t2d-standard-60"],
     in:["us-central1","us-east1","us-east4","us-south1","us-west1","us-west4","europe-west1","europe-west3","europe-west4","europe-west8","europe-west9","europe-southwest1","asia-east1","asia-southeast1","asia-northeast1","australia-southeast1"]},
+  { key:"c4d",  cat:"general",     arch:"x86", vendor:"AMD",       desc:"AMD EPYC Turin (5th gen) + Titanium, up to 384 vCPUs",
+    sizes:["c4d-standard-2","c4d-standard-4","c4d-standard-8","c4d-standard-16","c4d-standard-32","c4d-standard-48","c4d-standard-64","c4d-standard-96","c4d-standard-192","c4d-standard-384","c4d-highmem-2","c4d-highmem-4","c4d-highmem-8","c4d-highmem-16","c4d-highmem-32","c4d-highmem-48","c4d-highmem-64","c4d-highmem-96","c4d-highmem-192","c4d-highmem-384","c4d-highcpu-2","c4d-highcpu-4","c4d-highcpu-8","c4d-highcpu-16","c4d-highcpu-32","c4d-highcpu-48","c4d-highcpu-64","c4d-highcpu-96","c4d-highcpu-192","c4d-highcpu-384"],
+    in:["us-central1","us-east1","us-east4","us-east5","us-west1","us-west4","europe-west1","europe-west2","europe-west3","europe-west4","asia-east1","asia-northeast1","asia-southeast1"]},
+  { key:"n4d",  cat:"general",     arch:"x86", vendor:"AMD",       desc:"AMD EPYC Turin (5th gen) + Titanium, up to 96 vCPUs",
+    sizes:["n4d-standard-2","n4d-standard-4","n4d-standard-8","n4d-standard-16","n4d-standard-32","n4d-standard-48","n4d-standard-64","n4d-standard-80","n4d-standard-96","n4d-highmem-2","n4d-highmem-4","n4d-highmem-8","n4d-highmem-16","n4d-highmem-32","n4d-highmem-48","n4d-highmem-64","n4d-highmem-80","n4d-highmem-96","n4d-highcpu-2","n4d-highcpu-4","n4d-highcpu-8","n4d-highcpu-16","n4d-highcpu-32","n4d-highcpu-48","n4d-highcpu-64","n4d-highcpu-80","n4d-highcpu-96"],
+    in:["us-central1","us-east1","us-east4","us-east5","us-west1","us-west3","us-west4","europe-west1","europe-west2","europe-west3","europe-west4","asia-south1","asia-southeast1"]},
 
   // ── General purpose (ARM)
   { key:"t2a",  cat:"general",     arch:"arm", vendor:"Ampere",    desc:"Ampere Altra ARM (first gen ARM on GCP)",
@@ -1150,7 +1158,10 @@ const FAMILIES = [
     in:["us-central1","europe-west4","asia-southeast1"]},
   { key:"c4a",  cat:"general",     arch:"arm", vendor:"Axion",     desc:"Google Axion ARM (newest, GCP-designed)",
     sizes:["c4a-standard-1","c4a-standard-2","c4a-standard-4","c4a-standard-8","c4a-standard-16","c4a-standard-32","c4a-standard-48","c4a-standard-64","c4a-standard-72","c4a-highmem-1","c4a-highmem-2","c4a-highmem-4","c4a-highmem-8","c4a-highmem-16","c4a-highmem-32","c4a-highmem-48","c4a-highmem-72","c4a-highcpu-1","c4a-highcpu-2","c4a-highcpu-4","c4a-highcpu-8","c4a-highcpu-16","c4a-highcpu-32","c4a-highcpu-48","c4a-highcpu-72"],
-    in:["us-central1","us-east1","us-east4","europe-west1","europe-west4","asia-southeast1"]},
+    in:["us-central1","us-east1","us-east4","us-east5","us-south1","us-west1","us-west2","us-west4","northamerica-northeast1","northamerica-northeast2","northamerica-south1","southamerica-west1","europe-west1","europe-west2","europe-west3","europe-west4","europe-southwest1","europe-central2","europe-north1","me-central2","asia-east1","asia-northeast1","asia-south1","asia-southeast1","australia-southeast1","australia-southeast2"]},
+  { key:"n4a",  cat:"general",     arch:"arm", vendor:"Axion",     desc:"Google Axion ARM (Neoverse N3), balanced price/performance",
+    sizes:["n4a-standard-2","n4a-standard-4","n4a-standard-8","n4a-standard-16","n4a-standard-32","n4a-standard-48","n4a-standard-64","n4a-highmem-2","n4a-highmem-4","n4a-highmem-8","n4a-highmem-16","n4a-highmem-32","n4a-highmem-48","n4a-highmem-64","n4a-highcpu-2","n4a-highcpu-4","n4a-highcpu-8","n4a-highcpu-16","n4a-highcpu-32","n4a-highcpu-48","n4a-highcpu-64"],
+    in:["us-central1","us-east1","us-east4","us-west1","europe-west1","europe-west2","europe-west3","europe-west4","asia-southeast1"]},
 
   // ── Compute optimized
   { key:"c2",   cat:"compute",     arch:"x86", vendor:"Intel",     desc:"High-frequency Cascade Lake (3.8 GHz turbo)",
@@ -1187,12 +1198,15 @@ const FAMILIES = [
   { key:"x4",   cat:"memory",      arch:"x86", vendor:"Intel",     desc:"Sapphire Rapids extreme memory (SAP HANA, up to 32 TB)",
     sizes:["x4-megamem-960","x4-megamem-1440"],
     in:["us-central1","europe-west4"]},
+  { key:"m4",   cat:"memory",      arch:"x86", vendor:"Intel",     desc:"Emerald Rapids memory-optimized (SAP HANA, up to 6 TB)",
+    sizes:["m4-megamem-28","m4-megamem-56","m4-megamem-112","m4-megamem-224","m4-ultramem-56","m4-ultramem-112","m4-ultramem-224","m4-hypermem-16","m4-hypermem-32","m4-hypermem-64"],
+    in:["us-central1","us-east1","us-east4","us-east5","us-west1","us-west4","northamerica-northeast1","northamerica-northeast2","southamerica-east1","southamerica-west1","europe-west1","europe-west2","europe-west3","europe-west4","europe-west12","europe-southwest1","europe-central2","asia-south1","asia-south2","asia-southeast1","australia-southeast1","me-central2"]},
 
   // ── Accelerator optimized (GPU)
   { key:"a2",   cat:"accelerated", arch:"x86", vendor:"Intel",     desc:"NVIDIA A100 40GB / 80GB",
     sizes:["a2-highgpu-1g","a2-highgpu-2g","a2-highgpu-4g","a2-highgpu-8g","a2-megagpu-16g","a2-ultragpu-1g","a2-ultragpu-2g","a2-ultragpu-4g","a2-ultragpu-8g"],
     in:["us-central1","us-east1","us-east4","us-west1","us-west4","northamerica-northeast1","europe-west1","europe-west3","europe-west4","europe-west8","europe-west9","europe-central2","asia-east1","asia-northeast1","asia-northeast3","asia-southeast1","me-west1","australia-southeast1"]},
-  { key:"a3",   cat:"accelerated", arch:"x86", vendor:"Intel",     desc:"NVIDIA H100 80GB ×1–8, LLM training",
+  { key:"a3",   cat:"accelerated", arch:"x86", vendor:"Intel",     desc:"NVIDIA H100 80GB ×1–8, LLM training (a3-ultragpu = H200)",
     sizes:["a3-highgpu-1g","a3-highgpu-2g","a3-highgpu-4g","a3-highgpu-8g","a3-megagpu-8g","a3-ultragpu-8g","a3-edgegpu-8g"],
     in:["us-central1","us-east4","us-east5","us-west1","us-west4","europe-west1","europe-west3","europe-west4","europe-west9","asia-northeast1","asia-southeast1"]},
   { key:"a4",   cat:"accelerated", arch:"x86", vendor:"Intel",     desc:"NVIDIA B200 (Blackwell), newest scarce hardware",

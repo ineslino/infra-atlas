@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="color-scheme" content="dark">
 <title>AWS · API Gateway Atlas · Infra Atlas</title>
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <meta name="description" content="AWS API Gateway, demystified. REST vs HTTP vs WebSocket, authorizers, deployment modes, pricing, and the gotchas nobody explains until you hit them.">
@@ -28,7 +29,7 @@
 :root {
   --ink: #0A0907; --ink-2: #100E0C; --surface: #161310; --surface-2: #1E1A15; --surface-3: #2A241C;
   --line: rgba(244, 239, 230, 0.06); --line-2: rgba(244, 239, 230, 0.14); --line-3: rgba(244, 239, 230, 0.28);
-  --paper: #F4EFE6; --paper-2: rgba(244, 239, 230, 0.66); --paper-3: rgba(244, 239, 230, 0.42); --paper-4: rgba(244, 239, 230, 0.20);
+  --paper: #F4EFE6; --paper-2: rgba(244, 239, 230, 0.66); --paper-3: rgba(244, 239, 230, 0.55); --paper-4: rgba(244, 239, 230, 0.20);
   --accent: #FF7849; --accent-2: #FFA66E; --aws: #FF9F66;
   --mint: #6FE7B5; --gold: #F4C660; --plum: #C586E8; --sky: #7CD7F1; --rose: #F47B7B; --teal: #5BCCC9;
   --serif: 'Instrument Serif', 'Times New Roman', serif;
@@ -304,6 +305,7 @@ body {
   .diagram { flex-direction: column; }
   .colophon { grid-template-columns: 1fr; gap: 24px; }
 }
+/* A1-7 focus */ a:focus-visible,button:focus-visible,[tabindex]:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:2px;}
 </style>
 </head>
 <body>
@@ -332,6 +334,8 @@ body {
       <div class="status-time">Updated 2026-05-15</div>
     </aside>
   </header>
+
+  <main id="ia-main">
 
   <!-- ── 01 · The Three APIs ── -->
   <section class="section">
@@ -563,16 +567,16 @@ body {
           <tr><td>Per-stage RPS</td><td>Inherits account</td><td>—</td><td>In stage settings</td></tr>
           <tr><td>Per-method RPS</td><td>Inherits stage</td><td>—</td><td>In method settings</td></tr>
           <tr><td>Usage plan throttle</td><td>Configurable</td><td>Custom</td><td>Per usage plan</td></tr>
-          <tr><td>Integration timeout</td><td>29 s</td><td><em>Hard</em></td><td>No — REST cap. HTTP API: 30 s.</td></tr>
+          <tr><td>Integration timeout</td><td>29 s</td><td>Soft (REST)</td><td>Yes — default soft quota, raisable for Regional &amp; Private REST APIs (since Jun 2024). HTTP API: 30 s hard.</td></tr>
           <tr><td>Payload size</td><td>10 MB</td><td><em>Hard</em></td><td>No</td></tr>
         </tbody>
       </table>
 
       <div class="gotcha">
-        <div class="gotcha__head">▸ The hard 29-second cap bites</div>
-        <div class="gotcha__title">There is no way to have an API Gateway endpoint hold a connection longer than 29 seconds (REST) or 30 seconds (HTTP).</div>
+        <div class="gotcha__head">▸ The 29-second default still bites</div>
+        <div class="gotcha__title">29 seconds is the <em>default</em> integration timeout — since June 2024 it's a raisable soft quota for Regional and Private REST APIs. HTTP API stays a hard 30 s.</div>
         <div class="gotcha__body">
-          For long-running operations you have three options: <em>async with polling</em> (return 202 + status URL), <em>WebSocket API</em> (push when ready), or <em>Lambda Function URL</em> (15 min timeout, no API GW in front). The 29-second limit catches every team eventually.
+          You can request an increase beyond 29 s for <em>Regional and Private REST APIs</em> via Service Quotas — but AWS may require a matching reduction in your account-level throttle quota, and Edge-optimized REST and HTTP APIs are not eligible. For genuinely long-running work the classic patterns still apply: <em>async with polling</em> (return 202 + status URL), <em>WebSocket API</em> (push when ready), or <em>Lambda Function URL</em> (15 min timeout, no API GW in front).
         </div>
       </div>
     </div>
@@ -593,7 +597,7 @@ body {
       <table class="ref-table">
         <thead><tr><th>Component</th><th>Rate</th><th>Notes</th></tr></thead>
         <tbody>
-          <tr><td>REST API requests</td><td>$3.50 / 1M</td><td>First 333M/mo at this rate; tiered down to $1.51 above 20B.</td></tr>
+          <tr><td>REST API requests</td><td>$3.50 / 1M</td><td>First 333M/mo; $2.80 next 667M; $2.38 over 1B/mo.</td></tr>
           <tr><td>HTTP API requests</td><td>$1.00 / 1M</td><td>First 300M; tiered to $0.90 above. <em>~3.5× cheaper than REST.</em></td></tr>
           <tr><td>WebSocket messages</td><td>$1.00 / 1M</td><td>Plus $0.25 per million connection-minutes.</td></tr>
           <tr><td>Caching (REST)</td><td>~$15–500 / month</td><td>By cache size (0.5 GB → 237 GB). Adds latency improvement at fixed cost.</td></tr>
@@ -630,7 +634,7 @@ body {
             <li><em>No native dev portal.</em> Stoplight, Backstage, Redocly, or roll your own.</li>
             <li><em>VTL templates are arcane.</em> Apache Velocity in 2026 still feels like a hostage situation.</li>
             <li><em>No real rate-limit per consumer.</em> Usage plans + API keys is the workaround; not as clean as Apigee/Kong.</li>
-            <li><em>29-second hard timeout</em> on REST API integrations — affects long-running ops.</li>
+            <li><em>29-second default integration timeout</em> — raisable as a soft quota for Regional/Private REST APIs (since 2024); HTTP API stays a hard 30 s.</li>
             <li>AWS lock-in. Migration to another gateway means rewriting authorizers, mappings, custom domains.</li>
             <li><em>Cold starts on Lambda authorizers</em> add 50–800 ms p99 latency on first call.</li>
           </ul>
@@ -680,6 +684,8 @@ body {
     </div>
   </section>
 
+  </main>
+
   <footer class="colophon">
     <div>
       <h5>About</h5>
@@ -687,7 +693,7 @@ body {
     </div>
     <div>
       <h5>Sources</h5>
-      <p>Compiled from AWS official docs, re:Invent talks, public pricing pages, and field-observed gotchas. Snapshot May 2026. <a href="#">Spotted a stale fact?</a></p>
+      <p>Compiled from AWS official docs, re:Invent talks, public pricing pages, and field-observed gotchas. Snapshot May 2026. <a href="https://github.com/ineslino/infraatlas/issues/new" target="_blank" rel="noopener">Spotted a stale fact?</a></p>
     </div>
     <div>
       <h5>See also</h5>

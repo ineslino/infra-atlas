@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="color-scheme" content="dark">
 <title>AWS · EC2 Observatory · Infra Atlas</title>
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <meta name="description" content="Every Amazon EC2 instance type, charted against the AWS regions that offer it. Families, vCPU, memory, architecture — filterable, cross-referenced, updated daily.">
@@ -35,7 +36,7 @@
   --line-3: rgba(244, 239, 230, 0.28);
   --paper: #F4EFE6;
   --paper-2: rgba(244, 239, 230, 0.66);
-  --paper-3: rgba(244, 239, 230, 0.42);
+  --paper-3: rgba(244, 239, 230, 0.55);
   --paper-4: rgba(244, 239, 230, 0.20);
   --accent: #FF7849;
   --accent-2: #FFA66E;
@@ -1028,6 +1029,7 @@ a.masthead__back::before { display: none; }
 .cmp-unique__none{font-family:var(--mono);font-size:10.5px;color:var(--paper-4);}
 @media(max-width:560px){.cmp-tray{flex-wrap:wrap;}.cmp-modal{padding:20px 15px;}.cmp-modal__title{padding-right:70px;}}
 /* CMP-MODE-END */
+/* A1-5 CLS */ #results{min-height:80vh;}
 </style>
 </head>
 <body>
@@ -1057,7 +1059,8 @@ a.masthead__back::before { display: none; }
       <div class="status-time" id="status-time">— · —</div>
       <div class="status-counts">
         <div>Regions<strong id="count-regions">—</strong></div>
-        <div>Instance types<strong id="count-types">—</strong></div>
+        <div>Families<strong id="count-families">—</strong></div>
+        <div>Size variants<strong id="count-types">—</strong></div>
       </div>
     </aside>
   </header>
@@ -1173,6 +1176,7 @@ const REGIONS = [
   { code: "me-central-1",   name: "UAE",             area: "Middle East",  flag: "🇦🇪", since: 2022 },
 
   { code: "ap-east-1",      name: "Hong Kong",       area: "Asia Pacific", flag: "🇭🇰", since: 2019 },
+  { code: "ap-east-2",      name: "Taipei",          area: "Asia Pacific", flag: "🇹🇼", since: 2025 },
   { code: "ap-south-1",     name: "Mumbai",          area: "Asia Pacific", flag: "🇮🇳", since: 2016 },
   { code: "ap-south-2",     name: "Hyderabad",       area: "Asia Pacific", flag: "🇮🇳", since: 2022 },
   { code: "ap-northeast-1", name: "Tokyo",           area: "Asia Pacific", flag: "🇯🇵", since: 2011 },
@@ -1183,6 +1187,7 @@ const REGIONS = [
   { code: "ap-southeast-3", name: "Jakarta",         area: "Asia Pacific", flag: "🇮🇩", since: 2021 },
   { code: "ap-southeast-4", name: "Melbourne",       area: "Asia Pacific", flag: "🇦🇺", since: 2023 },
   { code: "ap-southeast-5", name: "Malaysia",        area: "Asia Pacific", flag: "🇲🇾", since: 2024 },
+  { code: "ap-southeast-6", name: "New Zealand",     area: "Asia Pacific", flag: "🇳🇿", since: 2025 },
   { code: "ap-southeast-7", name: "Thailand",        area: "Asia Pacific", flag: "🇹🇭", since: 2025 }
 ];
 
@@ -1193,7 +1198,7 @@ const FAMILIES = [
   { key:"t2", cat:"general", arch:"x86", vendor:"Intel", desc:"Burstable, low cost, baseline + credits",
     sizes:["nano","micro","small","medium","large","xlarge","2xlarge"],
     specs:{"nano":{vcpu:1,mem:0.5,price:0.0058},"micro":{vcpu:1,mem:1,price:0.0116},"small":{vcpu:1,mem:2,price:0.023},"medium":{vcpu:2,mem:4,price:0.0464},"large":{vcpu:2,mem:8,price:0.0928},"xlarge":{vcpu:4,mem:16,price:0.1856},"2xlarge":{vcpu:8,mem:32,price:0.3712}},
-    in:"*" },
+    in:["us-east-1","us-east-2","us-west-1","us-west-2","ca-central-1","sa-east-1","eu-west-1","eu-west-2","eu-west-3","eu-central-1","ap-south-1","ap-northeast-1","ap-northeast-2","ap-northeast-3","ap-southeast-1","ap-southeast-2"] },
   { key:"t3", cat:"general", arch:"x86", vendor:"Intel", desc:"Burstable, current x86 generation",
     sizes:["nano","micro","small","medium","large","xlarge","2xlarge"],
     specs:{"nano":{vcpu:2,mem:0.5,price:0.0052},"micro":{vcpu:2,mem:1,price:0.0104},"small":{vcpu:2,mem:2,price:0.0208},"medium":{vcpu:2,mem:4,price:0.0416},"large":{vcpu:2,mem:8,price:0.0832},"xlarge":{vcpu:4,mem:16,price:0.1664},"2xlarge":{vcpu:8,mem:32,price:0.3328}},
@@ -1213,7 +1218,7 @@ const FAMILIES = [
   { key:"m5", cat:"general", arch:"x86", vendor:"Intel", desc:"Balanced compute, memory, network",
     sizes:["large","xlarge","2xlarge","4xlarge","8xlarge","12xlarge","16xlarge","24xlarge","metal"],
     specs:{"large":{vcpu:2,mem:8,price:0.096},"xlarge":{vcpu:4,mem:16,price:0.192},"2xlarge":{vcpu:8,mem:32,price:0.384},"4xlarge":{vcpu:16,mem:64,price:0.768},"8xlarge":{vcpu:32,mem:128,price:1.536},"12xlarge":{vcpu:48,mem:192,price:2.304},"16xlarge":{vcpu:64,mem:256,price:3.072},"24xlarge":{vcpu:96,mem:384,price:4.608},"metal":{vcpu:96,mem:384,price:4.608}},
-    in:"*" },
+    in:["us-east-1","us-east-2","us-west-1","us-west-2","ca-central-1","ca-west-1","sa-east-1","eu-west-1","eu-west-2","eu-west-3","eu-central-1","eu-central-2","eu-north-1","eu-south-1","eu-south-2","il-central-1","af-south-1","me-south-1","me-central-1","ap-east-1","ap-south-1","ap-south-2","ap-northeast-1","ap-northeast-2","ap-northeast-3","ap-southeast-1","ap-southeast-2","ap-southeast-3","ap-southeast-4"] },
   { key:"m5a", cat:"general", arch:"x86", vendor:"AMD", desc:"AMD EPYC balanced",
     sizes:["large","xlarge","2xlarge","4xlarge","8xlarge","12xlarge","16xlarge","24xlarge"],
     specs:{"large":{vcpu:2,mem:8,price:0.086},"xlarge":{vcpu:4,mem:16,price:0.172},"2xlarge":{vcpu:8,mem:32,price:0.344},"4xlarge":{vcpu:16,mem:64,price:0.688},"8xlarge":{vcpu:32,mem:128,price:1.376},"12xlarge":{vcpu:48,mem:192,price:2.064},"16xlarge":{vcpu:64,mem:256,price:2.752},"24xlarge":{vcpu:96,mem:384,price:4.128}},
@@ -1298,7 +1303,7 @@ const FAMILIES = [
   { key:"c5", cat:"compute", arch:"x86", vendor:"Intel", desc:"Cost-optimized compute",
     sizes:["large","xlarge","2xlarge","4xlarge","9xlarge","12xlarge","18xlarge","24xlarge","metal"],
     specs:{"large":{vcpu:2,mem:4,price:0.085},"xlarge":{vcpu:4,mem:8,price:0.17},"2xlarge":{vcpu:8,mem:16,price:0.34},"4xlarge":{vcpu:16,mem:32,price:0.68},"9xlarge":{vcpu:36,mem:72,price:1.53},"12xlarge":{vcpu:48,mem:96,price:2.04},"18xlarge":{vcpu:72,mem:144,price:3.06},"24xlarge":{vcpu:96,mem:192,price:4.08},"metal":{vcpu:96,mem:192,price:4.08}},
-    in:"*" },
+    in:["us-east-1","us-east-2","us-west-1","us-west-2","ca-central-1","ca-west-1","sa-east-1","eu-west-1","eu-west-2","eu-west-3","eu-central-1","eu-central-2","eu-north-1","eu-south-1","eu-south-2","il-central-1","af-south-1","me-south-1","me-central-1","ap-east-1","ap-south-1","ap-south-2","ap-northeast-1","ap-northeast-2","ap-northeast-3","ap-southeast-1","ap-southeast-2","ap-southeast-3","ap-southeast-4"] },
   { key:"c5a", cat:"compute", arch:"x86", vendor:"AMD", desc:"AMD EPYC compute",
     sizes:["large","xlarge","2xlarge","4xlarge","8xlarge","12xlarge","16xlarge","24xlarge"],
     specs:{"large":{vcpu:2,mem:4,price:0.077},"xlarge":{vcpu:4,mem:8,price:0.154},"2xlarge":{vcpu:8,mem:16,price:0.308},"4xlarge":{vcpu:16,mem:32,price:0.616},"8xlarge":{vcpu:32,mem:64,price:1.232},"12xlarge":{vcpu:48,mem:96,price:1.848},"16xlarge":{vcpu:64,mem:128,price:2.464},"24xlarge":{vcpu:96,mem:192,price:3.696}},
@@ -1379,7 +1384,7 @@ const FAMILIES = [
   { key:"r5", cat:"memory", arch:"x86", vendor:"Intel", desc:"High-memory current gen",
     sizes:["large","xlarge","2xlarge","4xlarge","8xlarge","12xlarge","16xlarge","24xlarge","metal"],
     specs:{"large":{vcpu:2,mem:16,price:0.126},"xlarge":{vcpu:4,mem:32,price:0.252},"2xlarge":{vcpu:8,mem:64,price:0.504},"4xlarge":{vcpu:16,mem:128,price:1.008},"8xlarge":{vcpu:32,mem:256,price:2.016},"12xlarge":{vcpu:48,mem:384,price:3.024},"16xlarge":{vcpu:64,mem:512,price:4.032},"24xlarge":{vcpu:96,mem:768,price:6.048},"metal":{vcpu:96,mem:768,price:6.048}},
-    in:"*" },
+    in:["us-east-1","us-east-2","us-west-1","us-west-2","ca-central-1","ca-west-1","sa-east-1","eu-west-1","eu-west-2","eu-west-3","eu-central-1","eu-central-2","eu-north-1","eu-south-1","eu-south-2","il-central-1","af-south-1","me-south-1","me-central-1","ap-east-1","ap-south-1","ap-south-2","ap-northeast-1","ap-northeast-2","ap-northeast-3","ap-southeast-1","ap-southeast-2","ap-southeast-3","ap-southeast-4"] },
   { key:"r5a", cat:"memory", arch:"x86", vendor:"AMD", desc:"AMD memory optimized",
     sizes:["large","xlarge","2xlarge","4xlarge","8xlarge","12xlarge","16xlarge","24xlarge"],
     specs:{"large":{vcpu:2,mem:16,price:0.113},"xlarge":{vcpu:4,mem:32,price:0.226},"2xlarge":{vcpu:8,mem:64,price:0.452},"4xlarge":{vcpu:16,mem:128,price:0.904},"8xlarge":{vcpu:32,mem:256,price:1.808},"12xlarge":{vcpu:48,mem:384,price:2.712},"16xlarge":{vcpu:64,mem:512,price:3.616},"24xlarge":{vcpu:96,mem:768,price:5.424}},
@@ -1609,7 +1614,7 @@ const FAMILIES = [
   { key:"trn1", cat:"accelerated", arch:"x86", vendor:"Intel", desc:"AWS Trainium (LLM training)",
     sizes:["2xlarge","32xlarge"],
     specs:{"2xlarge":{vcpu:8,mem:32,price:1.3438},"32xlarge":{vcpu:128,mem:512,price:21.5}},
-    in:["us-east-1","us-east-2","us-west-2","eu-west-1","ap-northeast-1"] },
+    in:["us-east-1","us-east-2","us-west-2","ap-south-1","ap-southeast-2","ap-southeast-4"] },
   { key:"trn1n", cat:"accelerated", arch:"x86", vendor:"Intel", desc:"Trainium + 1600 Gbps EFA",
     sizes:["32xlarge"],
     specs:{"32xlarge":{vcpu:128,mem:512,price:24.78}},
@@ -1617,7 +1622,7 @@ const FAMILIES = [
   { key:"trn2", cat:"accelerated", arch:"x86", vendor:"AMD", desc:"AWS Trainium2 — newest",
     sizes:["48xlarge"],
     specs:{"48xlarge":{vcpu:192,mem:2048,price:null}},
-    in:["us-east-1","us-east-2","us-west-2"] },
+    in:["us-east-2","sa-east-1","ap-southeast-4"] },
   { key:"vt1", cat:"accelerated", arch:"x86", vendor:"Intel", desc:"Xilinx Alveo U30 (video transcode)",
     sizes:["3xlarge","6xlarge","24xlarge"],
     specs:{"3xlarge":{vcpu:12,mem:24,price:0.65},"6xlarge":{vcpu:24,mem:48,price:1.3},"24xlarge":{vcpu:96,mem:192,price:5.2}},
@@ -2257,6 +2262,7 @@ async function loadData() {
 
   state.data = buildData(regions, families);
   $("#count-regions").textContent = regions.length;
+  $("#count-families").textContent = families.length.toLocaleString();
   $("#count-types").textContent = state.data.totalInstanceTypes.toLocaleString();
 
   const date = new Date(timestamp);

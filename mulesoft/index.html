@@ -3,14 +3,15 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="color-scheme" content="dark">
 <title>Mulesoft · Atlas · Infra Atlas</title>
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
-<meta name="description" content="Mulesoft Anypoint, demystified. CloudHub vs RTF vs Flex Gateway, DataWeave, vCore vs Flex Replica pricing, and the integration patterns the platform was built around.">
+<meta name="description" content="Mulesoft Anypoint, demystified. CloudHub vs RTF vs Flex Gateway, DataWeave, vCore vs CloudHub 2.0 replica pricing, and the integration patterns the platform was built around.">
 <link rel="canonical" href="https://infraatlas.dev/mulesoft/">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Infra Atlas">
 <meta property="og:title" content="Mulesoft · Atlas · Infra Atlas">
-<meta property="og:description" content="Mulesoft Anypoint, demystified. CloudHub vs RTF vs Flex Gateway, DataWeave, vCore vs Flex Replica pricing, and the integration patterns the platform was built around.">
+<meta property="og:description" content="Mulesoft Anypoint, demystified. CloudHub vs RTF vs Flex Gateway, DataWeave, vCore vs CloudHub 2.0 replica pricing, and the integration patterns the platform was built around.">
 <meta property="og:url" content="https://infraatlas.dev/mulesoft/">
 <meta property="og:image" content="https://infraatlas.dev/og.png">
 <meta property="og:image:width" content="1200">
@@ -18,7 +19,7 @@
 <meta property="og:image:alt" content="Infra Atlas — a reference for the infrastructure stack">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Mulesoft · Atlas · Infra Atlas">
-<meta name="twitter:description" content="Mulesoft Anypoint, demystified. CloudHub vs RTF vs Flex Gateway, DataWeave, vCore vs Flex Replica pricing, and the integration patterns the platform was built around.">
+<meta name="twitter:description" content="Mulesoft Anypoint, demystified. CloudHub vs RTF vs Flex Gateway, DataWeave, vCore vs CloudHub 2.0 replica pricing, and the integration patterns the platform was built around.">
 <meta name="twitter:image" content="https://infraatlas.dev/og.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -28,7 +29,7 @@
 :root {
   --ink: #0A0907; --ink-2: #100E0C; --surface: #161310; --surface-2: #1E1A15; --surface-3: #2A241C;
   --line: rgba(244, 239, 230, 0.06); --line-2: rgba(244, 239, 230, 0.14); --line-3: rgba(244, 239, 230, 0.28);
-  --paper: #F4EFE6; --paper-2: rgba(244, 239, 230, 0.66); --paper-3: rgba(244, 239, 230, 0.42); --paper-4: rgba(244, 239, 230, 0.20);
+  --paper: #F4EFE6; --paper-2: rgba(244, 239, 230, 0.66); --paper-3: rgba(244, 239, 230, 0.55); --paper-4: rgba(244, 239, 230, 0.20);
   --accent: #FF7849; --accent-2: #FFA66E; --mulesoft: #C586E8;
   --mint: #6FE7B5; --gold: #F4C660; --plum: #C586E8; --sky: #7CD7F1; --rose: #F47B7B; --teal: #5BCCC9;
   --serif: 'Instrument Serif', 'Times New Roman', serif;
@@ -304,6 +305,7 @@ body {
   .diagram { flex-direction: column; }
   .colophon { grid-template-columns: 1fr; gap: 24px; }
 }
+/* A1-7 focus */ a:focus-visible,button:focus-visible,[tabindex]:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:2px;}
 </style>
 </head>
 <body>
@@ -321,7 +323,7 @@ body {
       </a>
       <h1 class="masthead__title">Mulesoft <em>Atlas.</em></h1>
       <p class="masthead__subtitle">
-        Mulesoft Anypoint, <em>demystified</em>. CloudHub vs CloudHub 2.0 vs Runtime Fabric vs Flex Gateway, DataWeave, vCore vs Flex Replica pricing — and the integration platform DNA that makes it different from every other APIM.
+        Mulesoft Anypoint, <em>demystified</em>. CloudHub vs CloudHub 2.0 vs Runtime Fabric vs Flex Gateway, DataWeave, vCore vs CloudHub 2.0 replica pricing — and the integration platform DNA that makes it different from every other APIM.
       </p>
     </div>
     <aside class="masthead__status">
@@ -332,6 +334,8 @@ body {
       <div class="status-time">Updated 2026-05-15</div>
     </aside>
   </header>
+
+  <main id="ia-main">
 
   <!-- ── 01 · Anypoint Platform ── -->
   <section class="section">
@@ -355,7 +359,7 @@ body {
           <tr><td>Runtime Manager</td><td>Deploy + monitor Mule applications (apps = APIs + flows).</td><td>Operational pane of glass for production.</td></tr>
           <tr><td>Anypoint Monitoring</td><td>Dashboards, alerts, log search, custom KPIs.</td><td>Built-in observability — no separate ELK setup needed.</td></tr>
           <tr><td>Anypoint MQ</td><td>Managed message broker (Mulesoft's own SQS-like).</td><td>For async integrations between Mule apps.</td></tr>
-          <tr><td>Connectors</td><td>~300 pre-built integrations (Salesforce, SAP, NetSuite, JDBC, etc.).</td><td>The reason mid-market enterprises buy Mulesoft.</td></tr>
+          <tr><td>Connectors</td><td>Hundreds of pre-built integrations — 500+ across the ecosystem, 250+ in Anypoint Exchange (Salesforce, SAP, NetSuite, JDBC, etc.).</td><td>The reason mid-market enterprises buy Mulesoft.</td></tr>
         </tbody>
       </table>
 
@@ -400,7 +404,7 @@ body {
           <div class="compare-card__sub">K8s-based managed runtime</div>
           <ul class="compare-card__list">
             <li>Hosted by <strong>Salesforce</strong></li>
-            <li>Pricing unit <strong>Flex Replica</strong></li>
+            <li>Pricing unit <strong>Replica</strong></li>
             <li>K8s under the hood <strong>Yes (managed)</strong></li>
             <li>Multi-cloud regions <em>20+</em></li>
           </ul>
@@ -512,19 +516,19 @@ body {
   <section class="section">
     <div class="section__head">
       <div class="section__num">05</div>
-      <div class="section__kicker">vCore and the new Flex Replica</div>
+      <div class="section__kicker">vCore and the CloudHub 2.0 replica</div>
       <h2 class="section__title">Pricing <em>units</em></h2>
     </div>
     <div class="section__body">
       <p class="section__lead">
-        Mulesoft pricing is by <em>capacity unit</em>, not API calls. The unit changes between CloudHub (vCore) and CloudHub 2.0 (Flex Replica). Both translate roughly to "how much Mule runtime are you running concurrently".
+        Mulesoft pricing is by <em>capacity unit</em>, not API calls. The unit changes between CloudHub (vCore) and CloudHub 2.0 (replica). Both translate roughly to "how much Mule runtime are you running concurrently".
       </p>
 
       <table class="ref-table">
         <thead><tr><th>Unit</th><th>What</th><th>Indicative cost</th><th>Where used</th></tr></thead>
         <tbody>
-          <tr><td>vCore</td><td>0.1 / 0.2 / 0.5 / 1.0 / 2.0 — Mule runtime capacity unit.</td><td>~$5k–$50k / yr per vCore</td><td>CloudHub (legacy)</td></tr>
-          <tr><td>Flex Replica</td><td>Replica of Mule runtime, sized small/medium/large.</td><td>~$10k–$60k / yr per replica</td><td>CloudHub 2.0</td></tr>
+          <tr><td>vCore</td><td>0.1 / 0.2 / 0.5 / 1.0 / 2.0 — Mule runtime capacity unit.</td><td>Negotiated — no public list price; deal-dependent estimate</td><td>CloudHub (legacy)</td></tr>
+          <tr><td>Replica</td><td>vCore-equivalent replica of Mule runtime (CloudHub 2.0), sized small/medium/large.</td><td>Negotiated — no public list price</td><td>CloudHub 2.0</td></tr>
           <tr><td>RTF cores</td><td>Capacity on your K8s, billed by Anypoint license.</td><td>Negotiated</td><td>Runtime Fabric</td></tr>
           <tr><td>Flex Gateway nodes</td><td>Per-node licensing for standalone gateway mode.</td><td>~$5k / node / yr</td><td>Flex Gateway only</td></tr>
           <tr><td>Anypoint MQ</td><td>By message volume + storage.</td><td>Tiered</td><td>Async use cases</td></tr>
@@ -554,7 +558,7 @@ body {
           <h5>What it does well</h5>
           <ul>
             <li><em>DataWeave.</em> Best-in-class transformation across heterogeneous data formats.</li>
-            <li><em>~300 connectors</em> — Salesforce, SAP, NetSuite, JDBC, AS400, mainframes. The mid-market ESB story.</li>
+            <li><em>Hundreds of connectors</em> (500+ across the ecosystem) — Salesforce, SAP, NetSuite, JDBC, AS400, mainframes. The mid-market ESB story.</li>
             <li>Strong <em>SLA tier management</em> with Client ID enforcement and rate limiting per tier.</li>
             <li><em>Anypoint Exchange</em> for asset reuse is mature and well-loved by API platform teams.</li>
             <li>Salesforce ecosystem integration — natural fit if Salesforce CRM is already in place.</li>
@@ -568,7 +572,7 @@ body {
             <li>Learning curve steepens fast. <em>Anypoint Studio + DataWeave + Mule DSL</em> requires real upskilling.</li>
             <li>The platform is best when used holistically. Buying just the gateway = paying for too much.</li>
             <li><em>Vendor lock-in</em> via DataWeave and connectors. Migration costs are very high.</li>
-            <li>vCore → Flex Replica migration is real work; pricing isn't a clean 1:1.</li>
+            <li>vCore → CloudHub 2.0 replica migration is real work; pricing isn't a clean 1:1.</li>
             <li>RAML — strongly preferred by Mulesoft tooling, but the rest of the industry has converged on OpenAPI.</li>
           </ul>
         </div>
@@ -588,7 +592,7 @@ body {
         <thead><tr><th>Direction</th><th>Path</th><th>Effort</th></tr></thead>
         <tbody>
           <tr>
-            <td>CloudHub → CloudHub 2.0</td><td>Re-package as Flex Replica deployments. Reconfigure object stores, schedulers. Most Mule code ports cleanly.</td>
+            <td>CloudHub → CloudHub 2.0</td><td>Re-package as CloudHub 2.0 replica deployments. Reconfigure object stores, schedulers. Most Mule code ports cleanly.</td>
             <td>Medium</td>
           </tr>
           <tr>
@@ -607,6 +611,8 @@ body {
       </table>
     </div>
   </section>
+
+  </main>
 
   <footer class="colophon">
     <div>

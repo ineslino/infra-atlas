@@ -1,5 +1,5 @@
 {
-  "generated": "2026-05-15T23:34:15Z",
+  "generated": "2026-05-16T17:21:37Z",
   "provider": "ovh",
   "source": "OVHcloud public order catalogue — no credentials",
   "currency": "EUR",
@@ -52,7 +52,7 @@
       "name": "Milan",
       "area": "Europe",
       "flag": "🇮🇹",
-      "since": 2024
+      "since": 2025
     },
     {
       "code": "MAD",
@@ -60,6 +60,13 @@
       "area": "Europe",
       "flag": "🇪🇸",
       "since": 2025
+    },
+    {
+      "code": "PAR",
+      "name": "Paris",
+      "area": "Europe",
+      "flag": "🇫🇷",
+      "since": 2024
     },
     {
       "code": "BHS",
@@ -116,19 +123,6 @@
         "d2-4",
         "d2-8"
       ],
-      "in": [
-        "GRA",
-        "RBX",
-        "SBG",
-        "BHS",
-        "WAW",
-        "LIM",
-        "ERI",
-        "SGP",
-        "SYD",
-        "US-EAST-VA-1",
-        "US-WEST-OR-1"
-      ],
       "specs": {
         "d2-2": {
           "vcpu": 1,
@@ -145,7 +139,20 @@
           "mem": 8,
           "price": 0.0372
         }
-      }
+      },
+      "in": [
+        "GRA",
+        "RBX",
+        "SBG",
+        "BHS",
+        "WAW",
+        "LIM",
+        "ERI",
+        "SGP",
+        "SYD",
+        "US-EAST-VA-1",
+        "US-WEST-OR-1"
+      ]
     },
     {
       "key": "b3",
@@ -162,20 +169,6 @@
         "b3-256",
         "b3-512",
         "b3-640"
-      ],
-      "in": [
-        "GRA",
-        "RBX",
-        "SBG",
-        "BHS",
-        "WAW",
-        "LIM",
-        "ERI",
-        "SGP",
-        "SYD",
-        "US-EAST-VA-1",
-        "US-WEST-OR-1",
-        "MIL"
       ],
       "specs": {
         "b3-8": {
@@ -218,7 +211,22 @@
           "mem": 640,
           "price": 4.092
         }
-      }
+      },
+      "in": [
+        "GRA",
+        "RBX",
+        "SBG",
+        "BHS",
+        "WAW",
+        "LIM",
+        "ERI",
+        "SGP",
+        "SYD",
+        "US-EAST-VA-1",
+        "US-WEST-OR-1",
+        "MIL",
+        "PAR"
+      ]
     },
     {
       "key": "c3",
@@ -235,18 +243,6 @@
         "c3-128",
         "c3-256",
         "c3-320"
-      ],
-      "in": [
-        "GRA",
-        "RBX",
-        "SBG",
-        "BHS",
-        "WAW",
-        "LIM",
-        "SGP",
-        "SYD",
-        "US-EAST-VA-1",
-        "US-WEST-OR-1"
       ],
       "specs": {
         "c3-4": {
@@ -289,7 +285,20 @@
           "mem": 320,
           "price": 3.651
         }
-      }
+      },
+      "in": [
+        "GRA",
+        "RBX",
+        "SBG",
+        "BHS",
+        "WAW",
+        "LIM",
+        "SGP",
+        "SYD",
+        "US-EAST-VA-1",
+        "US-WEST-OR-1",
+        "PAR"
+      ]
     },
     {
       "key": "r3",
@@ -305,17 +314,6 @@
         "r3-256",
         "r3-512",
         "r3-1024"
-      ],
-      "in": [
-        "GRA",
-        "RBX",
-        "SBG",
-        "BHS",
-        "WAW",
-        "LIM",
-        "SGP",
-        "US-EAST-VA-1",
-        "US-WEST-OR-1"
       ],
       "specs": {
         "r3-16": {
@@ -353,7 +351,19 @@
           "mem": 1024,
           "price": 4.236
         }
-      }
+      },
+      "in": [
+        "GRA",
+        "RBX",
+        "SBG",
+        "BHS",
+        "WAW",
+        "LIM",
+        "SGP",
+        "US-EAST-VA-1",
+        "US-WEST-OR-1",
+        "PAR"
+      ]
     },
     {
       "key": "i1",
@@ -365,15 +375,6 @@
         "i1-45",
         "i1-90",
         "i1-180"
-      ],
-      "in": [
-        "GRA",
-        "RBX",
-        "SBG",
-        "BHS",
-        "WAW",
-        "SGP",
-        "US-EAST-VA-1"
       ],
       "specs": {
         "i1-45": {
@@ -391,7 +392,64 @@
           "mem": 180,
           "price": 1.76
         }
-      }
+      },
+      "in": [
+        "GRA",
+        "RBX",
+        "SBG",
+        "BHS",
+        "WAW",
+        "SGP",
+        "US-EAST-VA-1"
+      ]
+    },
+    {
+      "key": "Storage",
+      "cat": "storage",
+      "arch": "x86",
+      "vendor": "AMD",
+      "desc": "Bare metal storage-dense — large HDD arrays",
+      "sizes": [
+        "FS-12T",
+        "FS-24T",
+        "FS-48T",
+        "FS-72T",
+        "FS-96T"
+      ],
+      "specs": {
+        "FS-12T": {
+          "vcpu": null,
+          "mem": null,
+          "price": null
+        },
+        "FS-24T": {
+          "vcpu": null,
+          "mem": null,
+          "price": null
+        },
+        "FS-48T": {
+          "vcpu": null,
+          "mem": null,
+          "price": null
+        },
+        "FS-72T": {
+          "vcpu": null,
+          "mem": null,
+          "price": null
+        },
+        "FS-96T": {
+          "vcpu": null,
+          "mem": null,
+          "price": null
+        }
+      },
+      "in": [
+        "GRA",
+        "RBX",
+        "SBG",
+        "BHS",
+        "ERI"
+      ]
     },
     {
       "key": "t1",
@@ -406,11 +464,6 @@
         "t1-le-45",
         "t1-le-90",
         "t1-le-180"
-      ],
-      "in": [
-        "GRA",
-        "BHS",
-        "SGP"
       ],
       "specs": {
         "t1-45": {
@@ -443,7 +496,12 @@
           "mem": 180,
           "price": 2.8
         }
-      }
+      },
+      "in": [
+        "GRA",
+        "BHS",
+        "SGP"
+      ]
     },
     {
       "key": "t2",
@@ -458,12 +516,6 @@
         "t2-le-45",
         "t2-le-90",
         "t2-le-180"
-      ],
-      "in": [
-        "GRA",
-        "BHS",
-        "ERI",
-        "US-EAST-VA-1"
       ],
       "specs": {
         "t2-45": {
@@ -496,7 +548,13 @@
           "mem": 180,
           "price": 3.2
         }
-      }
+      },
+      "in": [
+        "GRA",
+        "BHS",
+        "ERI",
+        "US-EAST-VA-1"
+      ]
     },
     {
       "key": "h100",
@@ -508,10 +566,6 @@
         "h100-380",
         "h100-760",
         "h100-1520"
-      ],
-      "in": [
-        "GRA",
-        "BHS"
       ],
       "specs": {
         "h100-380": {
@@ -529,7 +583,11 @@
           "mem": 1520,
           "price": 11.2
         }
-      }
+      },
+      "in": [
+        "GRA",
+        "BHS"
+      ]
     },
     {
       "key": "HGR-HCI",
@@ -542,16 +600,6 @@
         "HGR-HCI-i5",
         "HGR-HCI-a1",
         "HGR-HCI-a2"
-      ],
-      "in": [
-        "GRA",
-        "RBX",
-        "SBG",
-        "BHS",
-        "LIM",
-        "ERI",
-        "SGP",
-        "SYD"
       ],
       "specs": {
         "HGR-HCI-i2": {
@@ -574,7 +622,17 @@
           "mem": null,
           "price": null
         }
-      }
+      },
+      "in": [
+        "GRA",
+        "RBX",
+        "SBG",
+        "BHS",
+        "LIM",
+        "ERI",
+        "SGP",
+        "SYD"
+      ]
     },
     {
       "key": "HGR-SDS",
@@ -586,13 +644,6 @@
         "HGR-SDS-1",
         "HGR-SDS-2",
         "HGR-SDS-3"
-      ],
-      "in": [
-        "GRA",
-        "RBX",
-        "SBG",
-        "BHS",
-        "ERI"
       ],
       "specs": {
         "HGR-SDS-1": {
@@ -610,7 +661,14 @@
           "mem": null,
           "price": null
         }
-      }
+      },
+      "in": [
+        "GRA",
+        "RBX",
+        "SBG",
+        "BHS",
+        "ERI"
+      ]
     },
     {
       "key": "Advance",
@@ -626,19 +684,6 @@
         "Advance-5",
         "Advance-6",
         "Advance-Gen2"
-      ],
-      "in": [
-        "GRA",
-        "RBX",
-        "SBG",
-        "BHS",
-        "LIM",
-        "ERI",
-        "WAW",
-        "SGP",
-        "SYD",
-        "US-EAST-VA-1",
-        "US-WEST-OR-1"
       ],
       "specs": {
         "Advance-1": {
@@ -676,7 +721,20 @@
           "mem": null,
           "price": null
         }
-      }
+      },
+      "in": [
+        "GRA",
+        "RBX",
+        "SBG",
+        "BHS",
+        "LIM",
+        "ERI",
+        "WAW",
+        "SGP",
+        "SYD",
+        "US-EAST-VA-1",
+        "US-WEST-OR-1"
+      ]
     },
     {
       "key": "Rise",
@@ -691,19 +749,6 @@
         "Rise-4",
         "Rise-LE-1",
         "Rise-LE-2"
-      ],
-      "in": [
-        "GRA",
-        "RBX",
-        "SBG",
-        "BHS",
-        "WAW",
-        "LIM",
-        "ERI",
-        "SGP",
-        "SYD",
-        "US-EAST-VA-1",
-        "US-WEST-OR-1"
       ],
       "specs": {
         "Rise-1": {
@@ -736,7 +781,20 @@
           "mem": null,
           "price": null
         }
-      }
+      },
+      "in": [
+        "GRA",
+        "RBX",
+        "SBG",
+        "BHS",
+        "WAW",
+        "LIM",
+        "ERI",
+        "SGP",
+        "SYD",
+        "US-EAST-VA-1",
+        "US-WEST-OR-1"
+      ]
     },
     {
       "key": "Scale",
@@ -752,16 +810,6 @@
         "Scale-2",
         "Scale-3",
         "Scale-4"
-      ],
-      "in": [
-        "GRA",
-        "RBX",
-        "SBG",
-        "BHS",
-        "LIM",
-        "ERI",
-        "SGP",
-        "SYD"
       ],
       "specs": {
         "Scale-GPU": {
@@ -799,55 +847,17 @@
           "mem": null,
           "price": null
         }
-      }
-    },
-    {
-      "key": "Storage",
-      "cat": "storage",
-      "arch": "x86",
-      "vendor": "AMD",
-      "desc": "Bare metal storage-dense — large HDD arrays",
-      "sizes": [
-        "FS-12T",
-        "FS-24T",
-        "FS-48T",
-        "FS-72T",
-        "FS-96T"
-      ],
+      },
       "in": [
         "GRA",
         "RBX",
         "SBG",
         "BHS",
-        "ERI"
-      ],
-      "specs": {
-        "FS-12T": {
-          "vcpu": null,
-          "mem": null,
-          "price": null
-        },
-        "FS-24T": {
-          "vcpu": null,
-          "mem": null,
-          "price": null
-        },
-        "FS-48T": {
-          "vcpu": null,
-          "mem": null,
-          "price": null
-        },
-        "FS-72T": {
-          "vcpu": null,
-          "mem": null,
-          "price": null
-        },
-        "FS-96T": {
-          "vcpu": null,
-          "mem": null,
-          "price": null
-        }
-      }
+        "LIM",
+        "ERI",
+        "SGP",
+        "SYD"
+      ]
     },
     {
       "key": "HPC",
@@ -859,11 +869,6 @@
         "HPC-1",
         "HPC-2",
         "HPC-3"
-      ],
-      "in": [
-        "GRA",
-        "RBX",
-        "SBG"
       ],
       "specs": {
         "HPC-1": {
@@ -881,7 +886,12 @@
           "mem": null,
           "price": null
         }
-      }
+      },
+      "in": [
+        "GRA",
+        "RBX",
+        "SBG"
+      ]
     }
   ]
 }

@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="color-scheme" content="dark">
 <title>APIM · Feature Matrix · Infra Atlas</title>
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <meta name="description" content="Cross-vendor API management feature comparison. Every major APIM platform against every capability — OAuth, mTLS, rate limiting, GraphQL, self-hosted, FedRAMP. With the asterisks intact.">
@@ -28,7 +29,7 @@
 :root {
   --ink: #0A0907; --ink-2: #100E0C; --surface: #161310; --surface-2: #1E1A15; --surface-3: #2A241C;
   --line: rgba(244, 239, 230, 0.06); --line-2: rgba(244, 239, 230, 0.14); --line-3: rgba(244, 239, 230, 0.28);
-  --paper: #F4EFE6; --paper-2: rgba(244, 239, 230, 0.66); --paper-3: rgba(244, 239, 230, 0.42); --paper-4: rgba(244, 239, 230, 0.20);
+  --paper: #F4EFE6; --paper-2: rgba(244, 239, 230, 0.66); --paper-3: rgba(244, 239, 230, 0.55); --paper-4: rgba(244, 239, 230, 0.20);
   --accent: #FF7849; --accent-2: #FFA66E; --accent-glow: rgba(255, 120, 73, 0.22);
   --mint: #6FE7B5; --gold: #F4C660; --plum: #C586E8; --sky: #7CD7F1; --rose: #F47B7B; --teal: #5BCCC9;
   --yes:   #6FE7B5;
@@ -400,6 +401,8 @@ body {
     </aside>
   </header>
 
+  <main id="ia-main">
+
   <section class="filters">
     <div class="filter-search">
       <input id="search" type="search" autocomplete="off" spellcheck="false" placeholder="Filter capabilities — search by name, category, vendor…">
@@ -420,6 +423,8 @@ body {
     <table class="matrix" id="matrix"></table>
   </div>
 
+  </main>
+
   <footer class="colophon">
     <div>
       <h5>About</h5>
@@ -427,7 +432,7 @@ body {
     </div>
     <div>
       <h5>Sources</h5>
-      <p>Curated from official vendor documentation (Apigee, AWS, Azure, Mulesoft, Kong, Gravitee, IBM), public release notes, and pricing pages. Snapshot as of May 2026. <em>If you spot a stale fact, <a href="#">open an issue</a>.</em></p>
+      <p>Curated from official vendor documentation (Apigee, AWS, Azure, Mulesoft, Kong, Gravitee, IBM), public release notes, and pricing pages. Snapshot as of May 2026. <em>If you spot a stale fact, <a href="https://github.com/ineslino/infraatlas/issues/new" target="_blank" rel="noopener">open an issue</a>.</em></p>
     </div>
     <div>
       <h5>Shortcuts</h5>
@@ -495,7 +500,7 @@ const FEATURES = [
       aws:     { level:"part", note:"Via Cognito Hosted UI; not directly handled by API Gateway itself." },
       azure:   { level:"yes",  note:"Full PKCE support with Entra ID and 3rd-party IdPs." },
       mulesoft:{ level:"yes",  note:"Anypoint OAuth provider supports authorization_code + PKCE." },
-      kong:    { level:"yes",  note:"oauth2 plugin (Enterprise) or via Konnect Auth." },
+      kong:    { level:"yes",  note:"oauth2 plugin (OSS + Enterprise) or via Konnect Auth." },
       gravitee:{ level:"yes",  note:"Gravitee AM native support." },
       ibm:     { level:"yes",  note:"OAuth provider supports authorization_code, refresh, PKCE." }
     }
@@ -515,8 +520,8 @@ const FEATURES = [
   { id:"mtls", category:"auth", name:"mTLS (client cert auth)",
     desc:"Verify client certificates at the gateway. Increasingly required for B2B and zero-trust setups.",
     support: {
-      apigee:  { level:"yes",  note:"TwoWaySSL on northbound (X). On Hybrid, configured at runtime envoy." },
-      aws:     { level:"part", note:"Custom domain mTLS only (not via authorizer). HTTP API since 2021." },
+      apigee:  { level:"yes",  note:"TwoWaySSL on northbound on Apigee X. On Hybrid, configured at runtime envoy." },
+      aws:     { level:"part", note:"Custom domain mTLS only (not via authorizer). Supported on Regional REST APIs and HTTP APIs; not on private APIs." },
       azure:   { level:"yes",  note:"Custom domain + inbound mTLS policy." },
       mulesoft:{ level:"yes",  note:"Configurable at HTTP listener level; Flex Gateway also supports." },
       kong:    { level:"yes",  note:"mtls-auth plugin (Enterprise) — OSS has SSL/TLS termination only." },
@@ -590,7 +595,7 @@ const FEATURES = [
     desc:"Retry idempotent calls with exponential backoff. Hide transient backend hiccups.",
     support: {
       apigee:  { level:"part", note:"Implement via JS / FaultRules; no declarative retry policy." },
-      aws:     { level:"yes",  note:"Integration timeout + Step Functions or SDK-level retries." },
+      aws:     { level:"part", note:"No native gateway retry-with-backoff policy — rely on Step Functions or SDK-level retries." },
       azure:   { level:"yes",  note:"retry policy is built-in." },
       mulesoft:{ level:"yes",  note:"Until Successful scope with retry strategies." },
       kong:    { level:"yes",  note:"proxy retries on idempotent methods." },
@@ -691,7 +696,7 @@ const FEATURES = [
   { id:"self-hosted", category:"deploy", name:"Self-hosted / on-prem",
     desc:"Run the gateway in your own infrastructure (not just SaaS). Often required for regulated industries.",
     support: {
-      apigee:  { level:"part", note:"Apigee Hybrid runs runtime on K8s; Edge legacy is fully on-prem (sunsetting)." },
+      apigee:  { level:"part", note:"Apigee Hybrid runs runtime on K8s; Edge for Private Cloud is fully on-prem but legacy — Classic UI shut down 2025-08-29." },
       aws:     { level:"no",   note:"AWS API Gateway is AWS-only. Outposts doesn't include it." },
       azure:   { level:"yes",  note:"Self-hosted gateway (container) for on-prem / multi-cloud." },
       mulesoft:{ level:"yes",  note:"Flex Gateway (K8s) and Hybrid runtime for on-prem." },
@@ -768,7 +773,7 @@ const FEATURES = [
     desc:"Can you actually ship a small product without paying? Some vendors say 'free' but limit so harshly it's effectively a trial.",
     support: {
       apigee:  { level:"part", note:"Evaluation org only; production needs paid plan ($$$)." },
-      aws:     { level:"yes",  note:"Pay-per-request, first 1M REST calls/month free for 12 months." },
+      aws:     { level:"yes",  note:"Pay-per-request. Accounts before 2025-07-15: 1M REST calls/month free for 12 months. Accounts on/after 2025-07-15: credit-based Free Tier ($200 credits, free plan for 6 months)." },
       azure:   { level:"yes",  note:"Consumption tier is pay-per-call; Developer tier is cheap." },
       mulesoft:{ level:"no",   note:"No real free tier — trial only." },
       kong:    { level:"yes",  note:"Kong OSS is fully free, including production use." },
@@ -805,7 +810,7 @@ const FEATURES = [
   { id:"fedramp", category:"compliance", name:"FedRAMP compliance",
     desc:"Required for US federal agency workloads. Lengthy authorization process — vendors that have it have it.",
     support: {
-      apigee:  { level:"yes",  note:"FedRAMP Moderate via Google Cloud." },
+      apigee:  { level:"yes",  note:"FedRAMP High via Google Cloud (data-residency-enabled orgs)." },
       aws:     { level:"yes",  note:"FedRAMP High via AWS GovCloud." },
       azure:   { level:"yes",  note:"FedRAMP High via Azure Government." },
       mulesoft:{ level:"yes",  note:"FedRAMP Moderate authorization." },

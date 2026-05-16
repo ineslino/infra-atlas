@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="color-scheme" content="dark">
 <title>OVH · Instance Catalogue · Infra Atlas</title>
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <meta name="description" content="Every OVHcloud instance range, charted against the regions that offer it. Ranges, vCPU, memory, architecture — filterable, cross-referenced, updated daily.">
@@ -35,7 +36,7 @@
   --line-3: rgba(244, 239, 230, 0.28);
   --paper: #F4EFE6;
   --paper-2: rgba(244, 239, 230, 0.66);
-  --paper-3: rgba(244, 239, 230, 0.42);
+  --paper-3: rgba(244, 239, 230, 0.55);
   --paper-4: rgba(244, 239, 230, 0.20);
   --accent: #FF7849;
   --accent-2: #FFA66E;
@@ -1029,6 +1030,7 @@ a.masthead__back::before { display: none; }
 .cmp-unique__none{font-family:var(--mono);font-size:10.5px;color:var(--paper-4);}
 @media(max-width:560px){.cmp-tray{flex-wrap:wrap;}.cmp-modal{padding:20px 15px;}.cmp-modal__title{padding-right:70px;}}
 /* CMP-MODE-END */
+/* A1-5 CLS */ #results{min-height:80vh;}
 </style>
 </head>
 <body>
@@ -1155,8 +1157,9 @@ const REGIONS = [
   { code: "LIM",          name: "Limburg",         area: "Europe",       flag: "🇩🇪", since: 2016 },
   { code: "ERI",          name: "Erith",           area: "Europe",       flag: "🇬🇧", since: 2017 },
   { code: "WAW",          name: "Warsaw",          area: "Europe",       flag: "🇵🇱", since: 2018 },
-  { code: "MIL",          name: "Milan",           area: "Europe",       flag: "🇮🇹", since: 2024 },
+  { code: "MIL",          name: "Milan",           area: "Europe",       flag: "🇮🇹", since: 2025 },
   { code: "MAD",          name: "Madrid",          area: "Europe",       flag: "🇪🇸", since: 2025 },
+  { code: "PAR",          name: "Paris",           area: "Europe",       flag: "🇫🇷", since: 2024 },
 
   { code: "BHS",          name: "Beauharnois",     area: "Americas",     flag: "🇨🇦", since: 2012 },
   { code: "US-EAST-VA-1", name: "Vint Hill",       area: "Americas",     flag: "🇺🇸", since: 2018 },
@@ -1177,17 +1180,17 @@ const FAMILIES = [
   { key:"b3", cat:"general", arch:"x86", vendor:"AMD", desc:"Balanced general — AMD EPYC + premium NVMe",
     sizes:["b3-8","b3-16","b3-32","b3-64","b3-128","b3-256","b3-512","b3-640"],
     specs:{"b3-8":{vcpu:2,mem:8,price:0.0512},"b3-16":{vcpu:4,mem:16,price:0.1023},"b3-32":{vcpu:8,mem:32,price:0.2046},"b3-64":{vcpu:16,mem:64,price:0.4092},"b3-128":{vcpu:32,mem:128,price:0.819},"b3-256":{vcpu:64,mem:256,price:1.637},"b3-512":{vcpu:128,mem:512,price:3.274},"b3-640":{vcpu:160,mem:640,price:4.092}},
-    in:["GRA","RBX","SBG","BHS","WAW","LIM","ERI","SGP","SYD","US-EAST-VA-1","US-WEST-OR-1","MIL"] },
+    in:["GRA","RBX","SBG","BHS","WAW","LIM","ERI","SGP","SYD","US-EAST-VA-1","US-WEST-OR-1","MIL","PAR"] },
   // ── Compute optimized
   { key:"c3", cat:"compute", arch:"x86", vendor:"AMD", desc:"CPU-optimized — high-freq AMD EPYC",
     sizes:["c3-4","c3-8","c3-16","c3-32","c3-64","c3-128","c3-256","c3-320"],
     specs:{"c3-4":{vcpu:2,mem:4,price:0.0457},"c3-8":{vcpu:4,mem:8,price:0.0913},"c3-16":{vcpu:8,mem:16,price:0.1825},"c3-32":{vcpu:16,mem:32,price:0.365},"c3-64":{vcpu:32,mem:64,price:0.7301},"c3-128":{vcpu:64,mem:128,price:1.461},"c3-256":{vcpu:128,mem:256,price:2.921},"c3-320":{vcpu:160,mem:320,price:3.651}},
-    in:["GRA","RBX","SBG","BHS","WAW","LIM","SGP","SYD","US-EAST-VA-1","US-WEST-OR-1"] },
+    in:["GRA","RBX","SBG","BHS","WAW","LIM","SGP","SYD","US-EAST-VA-1","US-WEST-OR-1","PAR"] },
   // ── Memory optimized
   { key:"r3", cat:"memory", arch:"x86", vendor:"AMD", desc:"RAM-optimized — up to 512 GB",
     sizes:["r3-16","r3-32","r3-64","r3-128","r3-256","r3-512","r3-1024"],
     specs:{"r3-16":{vcpu:2,mem:16,price:0.0663},"r3-32":{vcpu:4,mem:32,price:0.1324},"r3-64":{vcpu:8,mem:64,price:0.2648},"r3-128":{vcpu:16,mem:128,price:0.53},"r3-256":{vcpu:32,mem:256,price:1.059},"r3-512":{vcpu:64,mem:512,price:2.118},"r3-1024":{vcpu:128,mem:1024,price:4.236}},
-    in:["GRA","RBX","SBG","BHS","WAW","LIM","SGP","US-EAST-VA-1","US-WEST-OR-1"] },
+    in:["GRA","RBX","SBG","BHS","WAW","LIM","SGP","US-EAST-VA-1","US-WEST-OR-1","PAR"] },
   // ── Storage optimized
   { key:"i1", cat:"storage", arch:"x86", vendor:"Intel/AMD", desc:"IOPS-optimized — NVMe-heavy, 1.5 TB to 18 TB",
     sizes:["i1-45","i1-90","i1-180"],

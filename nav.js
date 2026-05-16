@@ -115,7 +115,13 @@
     /* keep page sticky elements clear of the 46px nav bar */
     + '.filters{top:60px !important;}'
     + '.section__head{top:62px !important;}'
-    + '.matrix thead th{top:46px !important;}';
+    + '.matrix thead th{top:46px !important;}'
+    /* skip link — first focusable element on every page */
+    + '.ia-skip{position:fixed;top:8px;left:8px;z-index:300;background:var(--accent,#FF7849);'
+    + 'color:var(--ink,#0A0907);font-family:var(--mono,monospace);font-size:12px;font-weight:600;'
+    + 'letter-spacing:0.04em;padding:9px 16px;border-radius:5px;text-decoration:none;'
+    + 'transform:translateY(-160%);transition:transform .15s;}'
+    + '.ia-skip:focus{transform:translateY(0);}';
 
   var style = document.createElement("style");
   style.textContent = css;
@@ -172,6 +178,18 @@
 
   document.body.insertBefore(nav, document.body.firstChild);
   document.body.appendChild(overlay);
+
+  // ── Skip link — first focusable element, jumps past the nav ──
+  var mainEl = document.querySelector("main");
+  if (mainEl) {
+    if (!mainEl.id) mainEl.id = "ia-main";
+    mainEl.setAttribute("tabindex", "-1");
+    var skip = document.createElement("a");
+    skip.className = "ia-skip";
+    skip.href = "#" + mainEl.id;
+    skip.textContent = "Skip to content";
+    document.body.insertBefore(skip, document.body.firstChild);
+  }
 
   // ── Behaviour ────────────────────────────────────────────────────
   var btn = document.getElementById("ia-nav-btn");

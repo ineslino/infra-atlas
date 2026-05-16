@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="color-scheme" content="dark">
 <title>Self-Hosted APIM · Kong · Gravitee · IBM · Infra Atlas</title>
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <meta name="description" content="Kong vs Gravitee vs IBM API Connect — the three self-hostable APIMs compared on OSS editions, K8s nativity, plugins, and operating costs.">
@@ -28,7 +29,7 @@
 :root {
   --ink: #0A0907; --ink-2: #100E0C; --surface: #161310; --surface-2: #1E1A15; --surface-3: #2A241C;
   --line: rgba(244, 239, 230, 0.06); --line-2: rgba(244, 239, 230, 0.14); --line-3: rgba(244, 239, 230, 0.28);
-  --paper: #F4EFE6; --paper-2: rgba(244, 239, 230, 0.66); --paper-3: rgba(244, 239, 230, 0.42); --paper-4: rgba(244, 239, 230, 0.20);
+  --paper: #F4EFE6; --paper-2: rgba(244, 239, 230, 0.66); --paper-3: rgba(244, 239, 230, 0.55); --paper-4: rgba(244, 239, 230, 0.20);
   --accent: #FF7849; --accent-2: #FFA66E; --kong: #6FE7B5; --gravitee: #FFA66E; --ibm: #A8A39A;
   --mint: #6FE7B5; --gold: #F4C660; --plum: #C586E8; --sky: #7CD7F1; --rose: #F47B7B; --teal: #5BCCC9;
   --serif: 'Instrument Serif', 'Times New Roman', serif;
@@ -304,6 +305,7 @@ body {
   .diagram { flex-direction: column; }
   .colophon { grid-template-columns: 1fr; gap: 24px; }
 }
+/* A1-7 focus */ a:focus-visible,button:focus-visible,[tabindex]:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:2px;}
 </style>
 </head>
 <body>
@@ -332,6 +334,8 @@ body {
       <div class="status-time">Updated 2026-05-15</div>
     </aside>
   </header>
+
+  <main id="ia-main">
 
   <!-- ── 01 · The Three Contenders ── -->
   <section class="section">
@@ -611,6 +615,8 @@ body {
       </div>
     </div>
   </section>
+
+  </main>
 
   <footer class="colophon">
     <div>

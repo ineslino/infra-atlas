@@ -1,5 +1,5 @@
 {
-  "generated": "2026-05-16T08:54:18Z",
+  "generated": "2026-05-16T17:19:29Z",
   "cities": [
     {
       "city": "Hillsboro",
@@ -1176,7 +1176,7 @@
           "code": "MIL",
           "name": "Milan",
           "az": 3,
-          "since": 2026
+          "since": 2025
         }
       ]
     },

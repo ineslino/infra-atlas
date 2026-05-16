@@ -144,6 +144,40 @@ for inst in raw:
         "price": price,
     }
 
+# ── Authoritative per-region availability overrides ──
+# The upstream dataset's per-region data (both its `pricing` and `regions`
+# maps) is inaccurate for some newer/smaller regions — it over-claims
+# availability and omits Trainium. ap-southeast-4 (Melbourne) is the worst
+# case: ~59 families claimed vs AWS's 31, with trn1/trn2 missing entirely.
+# The dataset is third-party (Vantage) and cannot be fixed here, so the
+# membership for affected regions is pinned to the AWS regional doc:
+#   https://docs.aws.amazon.com/ec2/latest/instancetypes/ec2-instance-regions.html
+# Any family key listed here is set to exactly the named regions for that
+# region; family keys absent from a region's set have it removed.
+REGION_FAMILY_OVERRIDES = {
+  # Asia Pacific (Melbourne) — verified against the AWS regional doc.
+  "ap-southeast-4": {
+    "m5","m5d","m6g","m6gd","m7g","m7i","m7i-flex","m8g","t3","t4g",
+    "c5","c5d","c6g","c6in","c7i","c8g","c8gn",
+    "r5","r5d","r6g","r7g","r7i","r8g","x2idn",
+    "i3","i3en","i4i","i7i","i7ie",
+    "trn1","trn2",
+  },
+}
+for region_code, true_keys in REGION_FAMILY_OVERRIDES.items():
+    for key, f in fams.items():
+        if key in true_keys:
+            f["in"].add(region_code)
+        else:
+            f["in"].discard(region_code)
+    # Families AWS lists for the region but the upstream dataset omits
+    # entirely (e.g. trn1/trn2 for Melbourne) cannot be added — they have
+    # no spec/pricing rows. Surface them so the gap is visible.
+    missing = sorted(true_keys - set(fams.keys()))
+    if missing:
+        print(f"  ::warning:: {region_code}: AWS lists families absent from "
+              f"the upstream dataset (not added): {', '.join(missing)}")
+
 families = []
 for key in sorted(fams.keys()):
     f = fams[key]
