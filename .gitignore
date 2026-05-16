@@ -27,3 +27,7 @@ build/
 
 # Node (in case we add anything later)
 node_modules/
+
+# Python (refresh / feed scripts)
+__pycache__/
+*.pyc

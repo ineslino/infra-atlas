@@ -4,11 +4,11 @@ name: Verify data
 # data embedded in its index.html. data.json is a generated artifact — regenerate
 # it with ./<instrument>/refresh.sh and commit the result.
 #
-# Scope: instruments whose data.json is built purely from index.html. ec2 and
-# ovh-instances are excluded — their refresh.sh pulls a live external API, so
-# their data.json changes with upstream data and can't be checked by re-extraction
-# (the daily "Refresh data" workflow keeps those current). When azure-vm /
-# gcp-compute / oci-compute migrate to live APIs, drop them from the matrix.
+# Scope: instruments whose data.json is built purely from index.html. ec2,
+# azure-vm, oci-compute and ovh-instances are excluded — their refresh.sh pulls
+# a live external API, so their data.json changes with upstream data and can't
+# be checked by re-extraction (the daily "Refresh data" workflow keeps those
+# current). When gcp-compute migrates to a live API, drop it from the matrix too.
 
 on:
   push:
@@ -29,7 +29,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        instrument: [regions, azure-vm, gcp-compute, oci-compute]
+        instrument: [regions, gcp-compute]
     steps:
       - uses: actions/checkout@v4
 
