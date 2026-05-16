@@ -132,10 +132,12 @@
   nav.innerHTML =
       '<a class="ia-nav__brand" href="/">'
     +   '<svg class="ia-nav__glyph" viewBox="0 0 32 32" aria-hidden="true">'
-    +     '<circle cx="16" cy="6.2" r="3.1" fill="var(--accent,#FF7849)"/>'
-    +     '<path d="M16 9.3 L5.8 27.2 M16 9.3 L26.2 27.2 M10.4 20.6 L21.6 20.6" '
-    +       'fill="none" stroke="var(--accent,#FF7849)" stroke-width="3.1" '
-    +       'stroke-linecap="round" stroke-linejoin="round"/>'
+    +     '<g fill="none" stroke="var(--accent,#FF7849)" stroke-width="2.1">'
+    +       '<circle cx="16" cy="16" r="12.6"/>'
+    +       '<circle cx="14.8" cy="14.8" r="8.3"/>'
+    +       '<circle cx="13.6" cy="13.6" r="4.2"/>'
+    +     '</g>'
+    +     '<circle cx="13.6" cy="13.6" r="2.6" fill="var(--accent,#FF7849)"/>'
     +   '</svg>'
     +   '<span class="ia-nav__word">Infra Atlas</span>'
     +   hereHtml
