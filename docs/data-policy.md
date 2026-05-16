@@ -30,9 +30,15 @@ regions only.**
 | OCI   | 45 | 55 | + 8 Government, 2 EU Sovereign |
 | OVH   | 15 | — | OVH counts *datacenters* (46) separately; the site counts Public Cloud regions |
 
-The site should **label region counts as "commercial regions"** in UI copy so
-the difference is self-explanatory. The non-commercial regions are recorded (in
-`tasks/features-2026-05/integrity/region-audit.csv`) but not displayed.
+The site **labels region counts as "commercial"** — the Region Map masthead
+states the scope and names the excluded partitions. The non-commercial regions
+are recorded (in `tasks/features-2026-05/integrity/region-audit.csv`) but not
+displayed.
+
+> Decision (2026-05-16): keep the commercial count, label it. AWS's "39"
+> headline = 34 commercial + 2 GovCloud + 2 China + 1 European Sovereign Cloud;
+> the site shows the 34 a standard AWS account can use — and the same
+> commercial-only basis for every provider.
 
 OVH note: OVHcloud uses "region" and "datacenter" inconsistently. The site
 counts **OVH Public Cloud regions** (the deployment locations the Public Cloud
