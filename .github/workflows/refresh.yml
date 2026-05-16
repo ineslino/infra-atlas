@@ -3,11 +3,13 @@ name: Refresh data
 # Runs daily at 06:00 UTC. Every data-driven instrument has a refresh.sh that
 # pulls from PUBLIC sources — no cloud account, no credentials, no OIDC.
 #  · ec2          → ec2instances.info public dataset (Vantage)
-#  · regions      → curated, bootstrapped from index.html
-#  · azure-vm     → curated, bootstrapped from index.html
-#  · gcp-compute  → curated, bootstrapped from index.html
-#  · oci-compute  → curated, bootstrapped from index.html
-#  · ovh-instances→ curated, bootstrapped from index.html
+#  · azure-vm     → Azure Retail Prices API (public, no auth)
+#  · oci-compute  → Oracle Cloud public price list
+#  · ovh-instances→ OVHcloud public order catalogue
+#  · gcp-compute  → curated (no credential-free price source)
+#  · regions      → curated, regenerated from index.html
+# After each refresh, scripts/diff_feed.py diffs the new data.json against the
+# previous commit and appends change entries to the shared feed.json.
 # The APIM instruments (matrix + vendor deep-dives) are static — no refresh.
 
 on:
@@ -68,12 +70,20 @@ jobs:
         run: ./${{ matrix.instrument }}/refresh.sh
 
       - if: steps.gate.outputs.run == 'true'
+        name: Update the What Changed feed
+        run: |
+          # Previous committed snapshot — missing/unreadable is handled by diff_feed.
+          git show "HEAD:${{ matrix.instrument }}/data.json" > /tmp/prev-data.json 2>/dev/null || true
+          python3 scripts/diff_feed.py "${{ matrix.instrument }}" \
+            /tmp/prev-data.json "${{ matrix.instrument }}/data.json" feed.json
+
+      - if: steps.gate.outputs.run == 'true'
         name: Commit and push if changed
         run: |
           git pull --rebase --autostash
           git config user.name "infraatlas-bot"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add ${{ matrix.instrument }}/data.json
+          git add ${{ matrix.instrument }}/data.json feed.json
           if git diff --cached --quiet; then
             echo "::notice::${{ matrix.instrument }}: no data changes — skipping commit."
           else
