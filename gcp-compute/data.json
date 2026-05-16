@@ -1,5 +1,5 @@
 {
-  "generated": "2026-05-16T17:18:32Z",
+  "generated": "2026-05-16T20:34:36Z",
   "provider": "gcp",
   "regions": [
     {
@@ -183,6 +183,13 @@
       "area": "Europe",
       "flag": "🇫🇮",
       "since": 2018
+    },
+    {
+      "code": "europe-north2",
+      "name": "Stockholm",
+      "area": "Europe",
+      "flag": "🇸🇪",
+      "since": 2024
     },
     {
       "code": "me-central1",
@@ -753,6 +760,7 @@
         "europe-southwest1",
         "europe-central2",
         "europe-north1",
+        "europe-north2",
         "me-central2",
         "asia-east1",
         "asia-northeast1",

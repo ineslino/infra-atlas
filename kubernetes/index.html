@@ -1,0 +1,1098 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="color-scheme" content="dark">
+<title>Kubernetes · Flavor Atlas · Infra Atlas</title>
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<meta name="description" content="Cross-vendor managed Kubernetes comparison — EKS, AKS, GKE, OKE, OVH Managed Kubernetes. Supported versions, control-plane SLA, node-pool capabilities, CNI, release channels. With the asterisks intact.">
+<link rel="canonical" href="https://infraatlas.dev/kubernetes/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Infra Atlas">
+<meta property="og:title" content="Kubernetes · Flavor Atlas · Infra Atlas">
+<meta property="og:description" content="Cross-vendor managed Kubernetes comparison — EKS, AKS, GKE, OKE, OVH Managed Kubernetes. Supported versions, control-plane SLA, node-pool capabilities, CNI, release channels. With the asterisks intact.">
+<meta property="og:url" content="https://infraatlas.dev/kubernetes/">
+<meta property="og:image" content="https://infraatlas.dev/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Infra Atlas — a reference for the infrastructure stack">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Kubernetes · Flavor Atlas · Infra Atlas">
+<meta name="twitter:description" content="Cross-vendor managed Kubernetes comparison — EKS, AKS, GKE, OKE, OVH Managed Kubernetes. Supported versions, control-plane SLA, node-pool capabilities, CNI, release channels. With the asterisks intact.">
+<meta name="twitter:image" content="https://infraatlas.dev/og.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@300;400;500;600&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+:root {
+  --ink: #0A0907; --ink-2: #100E0C; --surface: #161310; --surface-2: #1E1A15; --surface-3: #2A241C;
+  --line: rgba(244, 239, 230, 0.06); --line-2: rgba(244, 239, 230, 0.14); --line-3: rgba(244, 239, 230, 0.28);
+  --paper: #F4EFE6; --paper-2: rgba(244, 239, 230, 0.66); --paper-3: rgba(244, 239, 230, 0.55); --paper-4: rgba(244, 239, 230, 0.20);
+  --accent: #FF7849; --accent-2: #FFA66E; --accent-glow: rgba(255, 120, 73, 0.22);
+  --mint: #6FE7B5; --gold: #F4C660; --plum: #C586E8; --sky: #7CD7F1; --rose: #F47B7B; --teal: #5BCCC9;
+  --yes:   #6FE7B5;
+  --no:    #F47B7B;
+  --part:  #F4C660;
+  --serif: 'Instrument Serif', 'Times New Roman', serif;
+  --mono: 'JetBrains Mono', ui-monospace, monospace;
+  --sans: 'Manrope', -apple-system, system-ui, sans-serif;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body {
+  background: var(--ink);
+  color: var(--paper);
+  font-family: var(--sans);
+  font-size: 15px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  min-height: 100vh;
+}
+
+body {
+  background:
+    radial-gradient(ellipse at 100% -10%, rgba(255, 120, 73, 0.07), transparent 55%),
+    radial-gradient(ellipse at -10% 110%, rgba(244, 198, 96, 0.05), transparent 65%),
+    var(--ink);
+  background-attachment: fixed;
+  overflow-x: hidden;
+}
+
+.grain {
+  pointer-events: none; position: fixed; inset: 0; z-index: 100; opacity: 0.08; mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml;utf8,<svg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.6 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+}
+.scanlines {
+  pointer-events: none; position: fixed; inset: 0; z-index: 99;
+  background: repeating-linear-gradient(180deg, transparent, transparent 2px, rgba(244,239,230,0.012) 2px, rgba(244,239,230,0.012) 3px);
+}
+::selection { background: var(--accent); color: var(--ink); }
+
+/* ─────────── FOCUS ─────────── */
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+a:focus-visible, button:focus-visible, input:focus-visible, [tabindex]:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+.matrix tbody tr.feature-row td.cell:focus-visible,
+.matrix tbody tr.feature-row td.feature-col:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: -2px;
+}
+
+.page { max-width: 1640px; margin: 0 auto; padding: 56px 48px 96px; position: relative; }
+
+/* ─────────── MASTHEAD ─────────── */
+.masthead {
+  display: grid; grid-template-columns: 1fr auto; gap: 48px; align-items: end;
+  padding-bottom: 36px; border-bottom: 1px solid var(--line); margin-bottom: 32px;
+}
+.masthead__eyebrow {
+  font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.22em; color: var(--paper-3);
+  text-transform: uppercase; display: inline-flex; align-items: center; gap: 12px;
+  text-decoration: none; transition: color 0.2s ease;
+}
+.masthead__eyebrow:hover { color: var(--paper); }
+.masthead__eyebrow-arrow { color: var(--accent); transition: transform 0.2s ease; }
+.masthead__eyebrow:hover .masthead__eyebrow-arrow { transform: translateX(-4px); }
+.masthead__title {
+  font-family: var(--serif); font-weight: 400;
+  font-size: clamp(48px, 7vw, 108px); line-height: 0.95; letter-spacing: -0.02em;
+  margin-top: 16px; color: var(--paper);
+}
+.masthead__title em { font-style: italic; color: var(--accent); }
+.masthead__subtitle {
+  margin-top: 18px; font-size: 16px; color: var(--paper-2); max-width: 620px; line-height: 1.55;
+}
+.masthead__subtitle span {
+  font-family: var(--serif); font-style: italic; color: var(--paper);
+}
+
+.masthead__status {
+  text-align: right; display: flex; flex-direction: column; align-items: flex-end; gap: 14px; padding-bottom: 6px;
+}
+.status-line {
+  display: inline-flex; align-items: center; gap: 10px;
+  font-family: var(--mono); font-size: 11px; letter-spacing: 0.18em;
+  text-transform: uppercase; color: var(--gold);
+}
+.status-dot {
+  width: 8px; height: 8px; border-radius: 50%; background: var(--gold);
+  animation: pulse 2.4s infinite;
+}
+@keyframes pulse {
+  0% { box-shadow: 0 0 0 0 rgba(244,198,96,0.5); }
+  70% { box-shadow: 0 0 0 14px rgba(244,198,96,0); }
+  100% { box-shadow: 0 0 0 0 rgba(244,198,96,0); }
+}
+.status-time { font-family: var(--mono); font-size: 12px; color: var(--paper-3); }
+.status-counts { display: flex; gap: 24px; margin-top: 4px; }
+.status-counts > div {
+  text-align: right; font-family: var(--mono); font-size: 11px; letter-spacing: 0.12em;
+  text-transform: uppercase; color: var(--paper-3); display: flex; flex-direction: column; gap: 2px;
+}
+.status-counts strong {
+  font-family: var(--serif); font-style: italic; font-weight: 400; font-size: 28px;
+  color: var(--paper); letter-spacing: -0.01em; text-transform: none;
+}
+
+/* ─────────── FILTERS ─────────── */
+.filters {
+  display: grid; grid-template-columns: auto 1fr; gap: 18px 32px; align-items: center;
+  padding: 18px 22px; background: linear-gradient(180deg, var(--surface) 0%, var(--ink-2) 100%);
+  border: 1px solid var(--line); border-radius: 4px;
+  position: sticky; top: 16px; z-index: 50; backdrop-filter: blur(12px); margin-bottom: 28px;
+}
+.filter-search {
+  flex: 1; position: relative; grid-column: 1 / -1;
+}
+.filter-search input {
+  width: 100%; background: var(--ink); border: 1px solid var(--line); color: var(--paper);
+  font-family: var(--mono); font-size: 13px; padding: 12px 16px 12px 42px;
+  border-radius: 3px; outline: none; transition: border-color 0.2s ease;
+}
+.filter-search input::placeholder { color: var(--paper-3); }
+.filter-search input:focus { border-color: var(--accent); }
+.filter-search::before {
+  content: '⌕'; position: absolute; left: 16px; top: 50%; transform: translateY(-50%);
+  color: var(--paper-3); font-size: 18px; pointer-events: none;
+}
+.filter-chips {
+  grid-column: 1 / -1; display: flex; flex-wrap: wrap; gap: 6px; align-items: center;
+}
+.filter-chips__label {
+  font-family: var(--mono); font-size: 10px; letter-spacing: 0.16em;
+  text-transform: uppercase; color: var(--paper-3); margin-right: 4px;
+}
+.chip {
+  background: transparent; border: 1px solid var(--line-2); color: var(--paper-2);
+  font-family: var(--mono); font-size: 11px; letter-spacing: 0.06em;
+  padding: 6px 12px; border-radius: 99px; cursor: pointer; transition: all 0.15s ease;
+  display: inline-flex; align-items: center; gap: 8px; white-space: nowrap;
+}
+.chip:hover { border-color: var(--paper-3); color: var(--paper); }
+.chip.is-active { background: var(--paper); border-color: var(--paper); color: var(--ink); }
+.chip .swatch {
+  width: 8px; height: 8px; border-radius: 2px;
+}
+
+/* ─────────── MATRIX ─────────── */
+.matrix-wrap {
+  overflow-x: auto; margin-bottom: 48px;
+  border: 1px solid var(--line); border-radius: 6px;
+  background: linear-gradient(180deg, var(--ink-2) 0%, var(--ink) 100%);
+}
+.matrix {
+  width: 100%; border-collapse: collapse; min-width: 1000px;
+  font-family: var(--sans); font-size: 13px;
+}
+.matrix thead th {
+  position: sticky; top: 0; z-index: 10; background: var(--ink-2);
+  font-family: var(--mono); font-weight: 500; font-size: 10.5px;
+  letter-spacing: 0.14em; text-transform: uppercase; color: var(--paper-2);
+  padding: 18px 12px 12px; vertical-align: bottom; text-align: center;
+  border-bottom: 1px solid var(--line-2);
+  white-space: nowrap;
+}
+.matrix thead th.feature-col {
+  text-align: left; padding-left: 22px; min-width: 280px;
+  font-family: var(--serif); font-style: italic; font-size: 16px;
+  letter-spacing: 0; text-transform: none; color: var(--paper);
+  font-weight: 400;
+}
+.matrix th .vendor-tag {
+  display: inline-flex; align-items: center; gap: 6px;
+}
+.matrix th .swatch {
+  width: 6px; height: 6px; border-radius: 1px;
+}
+
+.matrix tbody tr.category-row td {
+  padding: 22px 22px 10px;
+  border-top: 1px dashed var(--line);
+  background: linear-gradient(180deg, rgba(0,0,0,0.2), transparent);
+}
+.matrix tbody tr.category-row td .cat-label {
+  font-family: var(--mono); font-size: 10px; letter-spacing: 0.22em;
+  text-transform: uppercase; color: var(--paper-3);
+  display: flex; align-items: center; gap: 10px;
+}
+.matrix tbody tr.category-row td .cat-label::after {
+  content: ''; flex: 1; height: 1px; background: var(--line);
+}
+.matrix tbody tr.feature-row td {
+  padding: 12px 12px; border-bottom: 1px solid var(--line);
+  vertical-align: middle;
+}
+.matrix tbody tr.feature-row td.feature-col {
+  padding-left: 22px; color: var(--paper); font-size: 14px;
+  text-align: left;
+  border-right: 1px solid var(--line);
+}
+.matrix tbody tr.feature-row td.cell {
+  text-align: center; min-width: 90px; cursor: pointer;
+  transition: background 0.15s ease;
+  position: relative;
+}
+.matrix tbody tr.feature-row td.cell:hover {
+  background: rgba(255, 120, 73, 0.04);
+}
+.matrix tbody tr.feature-row:hover {
+  background: linear-gradient(90deg, transparent, rgba(255, 120, 73, 0.02), transparent);
+}
+
+/* Value cells (text rather than a mark) */
+.cell-mark {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 24px; height: 24px; border-radius: 50%;
+  font-family: var(--mono); font-size: 14px; font-weight: 500;
+  position: relative;
+}
+.cell-mark--yes  { background: rgba(111, 231, 181, 0.15); color: var(--yes); }
+.cell-mark--no   { background: rgba(244, 123, 123, 0.12); color: var(--no); opacity: 0.65; }
+.cell-mark--part { background: rgba(244, 198, 96, 0.15); color: var(--part); }
+.cell-mark__star {
+  position: absolute; top: -3px; right: -6px;
+  font-size: 10px; color: var(--accent);
+  background: var(--ink-2); border-radius: 50%; width: 12px; height: 12px;
+  display: inline-flex; align-items: center; justify-content: center;
+}
+.cell-value {
+  display: inline-flex; align-items: baseline; justify-content: center; gap: 2px;
+  font-family: var(--mono); font-size: 12px; line-height: 1.35;
+  padding: 4px 8px; border-radius: 3px; position: relative;
+  max-width: 170px;
+}
+.cell-value--yes  { color: var(--paper); }
+.cell-value--part { color: var(--part); }
+.cell-value--no   { color: var(--no); opacity: 0.72; }
+.cell-value__star {
+  font-size: 10px; color: var(--accent); align-self: flex-start;
+  margin-left: 1px;
+}
+
+/* Hide columns when vendor filtered out */
+.matrix.hide-eks   .col-eks,
+.matrix.hide-aks   .col-aks,
+.matrix.hide-gke   .col-gke,
+.matrix.hide-oke   .col-oke,
+.matrix.hide-ovh   .col-ovh { display: none; }
+
+/* Hide rows when filtered/searched */
+.matrix tbody tr.feature-row.is-hidden,
+.matrix tbody tr.category-row.is-hidden { display: none; }
+
+/* ─────────── LEGEND ─────────── */
+.legend {
+  display: flex; flex-wrap: wrap; gap: 18px; align-items: center;
+  margin-bottom: 28px; padding: 16px 22px;
+  background: var(--surface); border: 1px solid var(--line); border-radius: 4px;
+  font-family: var(--mono); font-size: 11px; color: var(--paper-2);
+}
+.legend__label {
+  font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--paper-3);
+}
+.legend__item { display: inline-flex; align-items: center; gap: 8px; }
+
+/* ─────────── DRAWER ─────────── */
+.drawer-backdrop {
+  position: fixed; inset: 0; background: rgba(10, 9, 7, 0.7); backdrop-filter: blur(8px);
+  z-index: 200; opacity: 0; pointer-events: none; transition: opacity 0.25s ease;
+}
+.drawer-backdrop.is-open { opacity: 1; pointer-events: auto; }
+.drawer {
+  position: fixed; top: 0; right: 0; bottom: 0; width: min(640px, 100%);
+  background: var(--ink-2); border-left: 1px solid var(--line-2); z-index: 201;
+  transform: translateX(100%); transition: transform 0.32s cubic-bezier(0.2, 0.8, 0.2, 1);
+  display: flex; flex-direction: column;
+}
+.drawer.is-open { transform: translateX(0); }
+.drawer__head {
+  padding: 28px 32px 22px; border-bottom: 1px solid var(--line); position: relative; flex-shrink: 0;
+}
+.drawer__close {
+  position: absolute; top: 20px; right: 20px;
+  background: transparent; border: 1px solid var(--line-2); color: var(--paper-2);
+  font-family: var(--mono); font-size: 11px; padding: 6px 10px; cursor: pointer;
+  border-radius: 2px; letter-spacing: 0.1em; text-transform: uppercase;
+}
+.drawer__close:hover { border-color: var(--paper); color: var(--paper); }
+.drawer__eyebrow {
+  font-family: var(--mono); font-size: 10px; letter-spacing: 0.22em;
+  text-transform: uppercase; color: var(--accent);
+}
+.drawer__title {
+  font-family: var(--serif); font-size: 32px; font-weight: 400;
+  letter-spacing: -0.012em; line-height: 1.05; margin-top: 8px;
+}
+.drawer__desc {
+  margin-top: 12px; font-size: 14px; color: var(--paper-2); line-height: 1.6;
+}
+.drawer__body { padding: 22px 32px 32px; overflow-y: auto; flex: 1; }
+.drawer__section { margin-bottom: 24px; }
+.drawer__section h4 {
+  font-family: var(--mono); font-size: 10.5px; font-weight: 500;
+  letter-spacing: 0.18em; text-transform: uppercase; color: var(--paper-3);
+  margin-bottom: 12px; display: flex; align-items: center; gap: 10px;
+}
+.drawer__section h4::after { content: ''; flex: 1; height: 1px; background: var(--line); }
+
+.vendor-row {
+  display: grid; grid-template-columns: auto 1fr; gap: 14px;
+  padding: 14px 16px; background: var(--surface);
+  border: 1px solid var(--line); border-radius: 3px; margin-bottom: 6px;
+  align-items: start;
+}
+.vendor-row__name {
+  font-family: var(--mono); font-size: 12.5px; font-weight: 500; color: var(--paper);
+  display: flex; align-items: center; gap: 9px;
+}
+.vendor-row__name .swatch { width: 8px; height: 8px; border-radius: 2px; }
+.vendor-row__value {
+  font-family: var(--mono); font-size: 12px; color: var(--paper); margin-top: 6px;
+}
+.vendor-row__value--part { color: var(--part); }
+.vendor-row__value--no   { color: var(--no); }
+.vendor-row__note {
+  font-family: var(--sans); font-size: 12.5px; color: var(--paper-2); line-height: 1.55; margin-top: 6px;
+}
+.vendor-row__src {
+  margin-top: 8px; font-family: var(--mono); font-size: 10.5px;
+}
+.vendor-row__src a {
+  color: var(--paper-3); text-decoration: underline;
+  text-decoration-color: var(--line-2); text-underline-offset: 3px; word-break: break-all;
+}
+.vendor-row__src a:hover { color: var(--accent); }
+.vendor-row__mark {
+  font-family: var(--mono); font-size: 16px; font-weight: 500;
+  width: 30px; height: 30px; border-radius: 50%;
+  display: inline-flex; align-items: center; justify-content: center;
+}
+.vendor-row__mark--yes  { background: rgba(111, 231, 181, 0.15); color: var(--yes); }
+.vendor-row__mark--no   { background: rgba(244, 123, 123, 0.12); color: var(--no); opacity: 0.65; }
+.vendor-row__mark--part { background: rgba(244, 198, 96, 0.15); color: var(--part); }
+
+/* ─────────── COLOPHON ─────────── */
+.colophon {
+  margin-top: 64px; padding-top: 32px; border-top: 1px solid var(--line);
+  display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 32px;
+  font-size: 13px; color: var(--paper-3);
+}
+.colophon h5 {
+  font-family: var(--mono); font-size: 10px; letter-spacing: 0.18em;
+  text-transform: uppercase; color: var(--paper-2); margin-bottom: 10px; font-weight: 500;
+}
+.colophon p { font-size: 13px; line-height: 1.6; }
+.colophon p a {
+  color: var(--paper-2); text-decoration: underline;
+  text-decoration-color: var(--line-2); text-underline-offset: 3px;
+}
+.colophon p a:hover { color: var(--accent); }
+.colophon code {
+  font-family: var(--mono); font-size: 11.5px; background: var(--surface);
+  padding: 1px 6px; border-radius: 2px; border: 1px solid var(--line); color: var(--accent-2);
+}
+
+@media (max-width: 900px) {
+  .page { padding: 32px 22px 72px; }
+  .masthead { grid-template-columns: 1fr; gap: 24px; }
+  .masthead__status { text-align: left; align-items: flex-start; }
+  .filters { position: static; padding: 14px; }
+  .colophon { grid-template-columns: 1fr; gap: 24px; }
+}
+</style>
+</head>
+<body>
+
+<div class="grain"></div>
+<div class="scanlines"></div>
+
+<div class="page">
+
+  <header class="masthead">
+    <div class="masthead__brand">
+      <a class="masthead__eyebrow" href="../">
+        <span class="masthead__eyebrow-arrow">←</span>
+        Infra Atlas · Managed Kubernetes · Flavor Atlas
+      </a>
+      <h1 class="masthead__title">Flavor <em>Atlas.</em></h1>
+      <p class="masthead__subtitle">
+        Every managed Kubernetes service against <span>every meaningful capability</span> — supported versions, control-plane SLA, node pools, spot &amp; GPU &amp; ARM, CNI, release channels. <span>With the asterisks intact.</span>
+      </p>
+    </div>
+    <aside class="masthead__status">
+      <div class="status-line">
+        <span class="status-dot"></span>
+        <span class="status-text">Curated · v1</span>
+      </div>
+      <div class="status-time">Issue 01 · 2026-05-16</div>
+      <div class="status-counts">
+        <div>Services<strong id="count-vendors">5</strong></div>
+        <div>Capabilities<strong id="count-features">—</strong></div>
+        <div>Asterisks<strong id="count-stars">—</strong></div>
+      </div>
+    </aside>
+  </header>
+
+  <main id="ia-main">
+
+  <section class="filters">
+    <div class="filter-search">
+      <input id="search" type="search" autocomplete="off" spellcheck="false" placeholder="Filter capabilities — search by name, category, service…">
+    </div>
+    <div class="filter-chips" id="cat-chips"></div>
+    <div class="filter-chips" id="vendor-chips"></div>
+  </section>
+
+  <div class="legend">
+    <span class="legend__label">Legend</span>
+    <span class="legend__item"><span class="cell-mark cell-mark--yes">✓</span> Native support</span>
+    <span class="legend__item"><span class="cell-mark cell-mark--part">◐</span> Partial / with caveat</span>
+    <span class="legend__item"><span class="cell-mark cell-mark--no">✗</span> Not supported</span>
+    <span class="legend__item"><span class="cell-mark cell-mark--no">—</span> Not published / unverified</span>
+    <span class="legend__item"><span class="cell-mark cell-mark--yes" style="position:relative">✓<span class="cell-mark__star">*</span></span> Click any cell for the footnote &amp; source</span>
+  </div>
+
+  <div class="matrix-wrap">
+    <table class="matrix" id="matrix"></table>
+  </div>
+
+  </main>
+
+  <footer class="colophon">
+    <div>
+      <h5>About</h5>
+      <p>Instrument 14 of <a href="../">Infra Atlas</a>. The cross-vendor managed-Kubernetes comparator — EKS, AKS, GKE, OKE and OVH Managed Kubernetes against every control-plane and node-pool capability. Click any cell for the footnote and the source URL.</p>
+    </div>
+    <div>
+      <h5>Sources</h5>
+      <p>Every cell is backed by the provider&rsquo;s official Kubernetes documentation — the EKS User Guide, Microsoft Learn for AKS, Google Cloud GKE docs, Oracle Cloud Infrastructure docs, and the OVHcloud docs repository. Source URLs are cited inline in the page source and in each cell&rsquo;s drawer. Snapshot as of May 2026. <em>If you spot a stale fact, <a href="https://github.com/ineslino/infraatlas/issues/new" target="_blank" rel="noopener">open an issue</a>.</em></p>
+    </div>
+    <div>
+      <h5>Shortcuts</h5>
+      <p><code>/</code> search · <code>Esc</code> close drawer · click cell for footnote, click capability name for the full per-service breakdown.</p>
+    </div>
+  </footer>
+
+</div>
+
+<!-- DRAWER -->
+<div class="drawer-backdrop" id="drawer-backdrop"></div>
+<aside class="drawer" id="drawer" aria-hidden="true">
+  <div class="drawer__head" id="drawer-head"></div>
+  <div class="drawer__body" id="drawer-body"></div>
+</aside>
+
+<script>
+// ═══════════════════════════════════════════════════════════════════
+// INFRA ATLAS · MANAGED KUBERNETES FLAVOR MATRIX
+// All values verified against official vendor documentation (May 2026).
+// Source URL for each datum is in an inline comment AND in the cell's
+// `src` field, surfaced in the drawer. Unverifiable values are marked
+// level:"no" with value "—" and an explicit note — never fabricated.
+// ═══════════════════════════════════════════════════════════════════
+
+// ───────────────────────────────────────────────────────────────────
+// VENDORS (managed Kubernetes services)
+// ───────────────────────────────────────────────────────────────────
+const VENDORS = [
+  { key: "eks", name: "Amazon EKS",              short: "EKS",  cloud: "AWS",   swatch: "#FF9F66" },
+  { key: "aks", name: "Azure AKS",               short: "AKS",  cloud: "Azure", swatch: "#7CD7F1" },
+  { key: "gke", name: "Google GKE",              short: "GKE",  cloud: "GCP",   swatch: "#F4C660" },
+  { key: "oke", name: "Oracle OKE",              short: "OKE",  cloud: "OCI",   swatch: "#F47B7B" },
+  { key: "ovh", name: "OVH Managed Kubernetes",  short: "OVH",  cloud: "OVH",   swatch: "#C586E8" }
+];
+
+// ───────────────────────────────────────────────────────────────────
+// CATEGORIES
+// ───────────────────────────────────────────────────────────────────
+const CATEGORIES = [
+  { key: "versions",  label: "Kubernetes Versions" },
+  { key: "control",   label: "Control Plane — SLA & Cost" },
+  { key: "nodepool",  label: "Node Pool Capabilities" },
+  { key: "scale",     label: "Scale" },
+  { key: "network",   label: "CNI / Networking" },
+  { key: "upgrades",  label: "Release Channels & Auto-Upgrade" }
+];
+
+// ───────────────────────────────────────────────────────────────────
+// FEATURES
+//   level : yes | part | no   (drives the colour of the cell)
+//   value : the text shown in the matrix cell
+//   note  : footnote shown in the drawer
+//   src   : official documentation URL backing the value
+// ───────────────────────────────────────────────────────────────────
+const FEATURES = [
+
+  // ══ Kubernetes Versions ══
+  { id:"k8s-newest", category:"versions", name:"Newest Kubernetes minor version (GA)",
+    desc:"The most recent Kubernetes minor release generally available on the service as of the May 2026 snapshot.",
+    support: {
+      // SRC: https://docs.aws.amazon.com/eks/latest/userguide/kubernetes-versions.html — standard support lists 1.35, 1.34, 1.33
+      eks: { level:"yes", value:"1.35", note:"v1.35 is the newest version in EKS standard support; EKS released it 2026-01-27 (upstream 2025-12-17).",
+             src:"https://docs.aws.amazon.com/eks/latest/userguide/kubernetes-versions.html" },
+      // SRC: https://learn.microsoft.com/en-us/azure/aks/supported-kubernetes-versions — release calendar: 1.35 GA Mar 2026
+      aks: { level:"yes", value:"1.35", note:"v1.35 reached AKS GA in March 2026 per the AKS Kubernetes release calendar. v1.36 is in preview.",
+             src:"https://learn.microsoft.com/en-us/azure/aks/supported-kubernetes-versions" },
+      // SRC: https://cloud.google.com/kubernetes-engine/docs/release-notes — Rapid & Regular default 1.35; 1.36 available in Rapid
+      gke: { level:"yes", value:"1.35", note:"v1.35 is the default in GKE's Rapid and Regular channels; v1.36 has begun rolling out in the Rapid channel.",
+             src:"https://cloud.google.com/kubernetes-engine/docs/release-notes" },
+      // SRC: https://docs.oracle.com/en-us/iaas/Content/ContEng/Concepts/contengaboutk8sversions.htm — 1.35 released to OKE 2026-04-28
+      oke: { level:"yes", value:"1.35", note:"v1.35 is the newest version supported on OKE, released to the service on 2026-04-28.",
+             src:"https://docs.oracle.com/en-us/iaas/Content/ContEng/Concepts/contengaboutk8sversions.htm" },
+      // SRC: https://github.com/ovh/docs/blob/develop/pages/public_cloud/containers_orchestration/managed_kubernetes/software-versions-reserved-resources/guide.en-gb.md — supports 1.31–1.35
+      ovh: { level:"yes", value:"1.35", note:"v1.35 is the newest version listed in the OVHcloud Managed Kubernetes supported-releases documentation.",
+             src:"https://github.com/ovh/docs/blob/develop/pages/public_cloud/containers_orchestration/managed_kubernetes/software-versions-reserved-resources/guide.en-gb.md" }
+    }
+  },
+  { id:"k8s-window", category:"versions", name:"Minor versions kept in standard support",
+    desc:"How many Kubernetes minor versions are concurrently offered under the service's standard (non-extended) support window.",
+    support: {
+      // SRC: https://docs.aws.amazon.com/eks/latest/userguide/kubernetes-versions.html — standard support: 1.35/1.34/1.33; commitment of "at least three"
+      eks: { level:"yes", value:"3 (N → N-2)", note:"EKS commits to at least three Kubernetes versions in standard support — currently 1.35, 1.34 and 1.33. Older versions move to paid extended support.",
+             src:"https://docs.aws.amazon.com/eks/latest/userguide/kubernetes-versions.html" },
+      // SRC: https://learn.microsoft.com/en-us/azure/aks/supported-kubernetes-versions — "AKS supports three GA minor versions: N, N-1, N-2"
+      aks: { level:"yes", value:"3 (N → N-2)", note:"AKS supports the latest GA version plus the two previous minor versions (N-2). An additional N-3 version gets reduced 'platform support'.",
+             src:"https://learn.microsoft.com/en-us/azure/aks/supported-kubernetes-versions" },
+      // SRC: https://cloud.google.com/kubernetes-engine/docs/concepts/release-channels — versions vary by channel; Stable runs an older minor than Rapid
+      gke: { level:"part", value:"Channel-dependent", note:"GKE does not publish a fixed 'N-2' count — the supported set depends on the release channel. The Extended channel keeps a minor version supported for roughly 24 months.",
+             src:"https://cloud.google.com/kubernetes-engine/docs/concepts/release-channels" },
+      // SRC: https://docs.oracle.com/en-us/iaas/Content/ContEng/Concepts/contengaboutk8sversions.htm — supports the 3 newest + a 4th for 30 days after a new release
+      oke: { level:"yes", value:"3 (+1 for 30 days)", note:"OKE supports the three most recent minor versions, and keeps the fourth-oldest version supported for at least 30 days after a new version is announced.",
+             src:"https://docs.oracle.com/en-us/iaas/Content/ContEng/Concepts/contengaboutk8sversions.htm" },
+      // SRC: https://github.com/ovh/docs/blob/develop/pages/public_cloud/containers_orchestration/managed_kubernetes/software-versions-reserved-resources/guide.en-gb.md — currently lists five (1.31–1.35)
+      ovh: { level:"yes", value:"5 listed (1.31–1.35)", note:"OVHcloud currently lists five supported releases (1.31 through 1.35). Its lifecycle mirrors upstream; the third-oldest version may be force-upgraded after a 30-day notice.",
+             src:"https://github.com/ovh/docs/blob/develop/pages/public_cloud/containers_orchestration/managed_kubernetes/software-versions-reserved-resources/guide.en-gb.md" }
+    }
+  },
+  { id:"k8s-extended", category:"versions", name:"Extended / long-term support past standard window",
+    desc:"Ability to keep a cluster on a Kubernetes minor version after standard support ends — usually at an additional cost.",
+    support: {
+      // SRC: https://docs.aws.amazon.com/eks/latest/userguide/kubernetes-versions.html — 14 months standard + 12 months extended (paid)
+      eks: { level:"yes", value:"+12 months (paid)", note:"After 14 months of standard support, EKS extended support adds 12 more months at an extra per-cluster-hour charge — a 26-month total lifecycle. Enabled by default.",
+             src:"https://docs.aws.amazon.com/eks/latest/userguide/kubernetes-versions.html" },
+      // SRC: https://learn.microsoft.com/en-us/azure/aks/long-term-support — LTS adds a 2nd year; requires Premium tier
+      aks: { level:"yes", value:"+12 months (Premium)", note:"AKS Long Term Support adds a second year of backported fixes beyond the 12-month community window, but requires the Premium pricing tier.",
+             src:"https://learn.microsoft.com/en-us/azure/aks/long-term-support" },
+      // SRC: https://cloud.google.com/kubernetes-engine/docs/concepts/release-channels — Extended channel ≈ 24 months on a minor version
+      gke: { level:"yes", value:"Extended channel", note:"GKE's Extended release channel lets a cluster stay on a Kubernetes minor version for roughly 24 months — about twice the standard window.",
+             src:"https://cloud.google.com/kubernetes-engine/docs/concepts/release-channels" },
+      // SRC: https://docs.oracle.com/en-us/iaas/Content/ContEng/Concepts/contengaboutk8sversions.htm — no extended/LTS programme documented
+      oke: { level:"no", value:"✗", note:"OKE does not document an extended-support or LTS programme. A version ceases to be supported ~30 days after it becomes the fourth-oldest.",
+             src:"https://docs.oracle.com/en-us/iaas/Content/ContEng/Concepts/contengaboutk8sversions.htm" },
+      // SRC: https://github.com/ovh/docs/blob/develop/pages/public_cloud/containers_orchestration/managed_kubernetes/eos-eol-policies/guide.en-gb.md — follows upstream, no LTS
+      ovh: { level:"no", value:"✗", note:"OVHcloud Managed Kubernetes follows the upstream support lifecycle and does not offer extended or long-term support beyond it.",
+             src:"https://github.com/ovh/docs/blob/develop/pages/public_cloud/containers_orchestration/managed_kubernetes/eos-eol-policies/guide.en-gb.md" }
+    }
+  },
+
+  // ══ Control Plane — SLA & Cost ══
+  { id:"cp-sla", category:"control", name:"Control-plane uptime SLA",
+    desc:"The financially-backed monthly uptime percentage the provider commits to for the Kubernetes API server / control plane.",
+    support: {
+      // SRC: https://aws.amazon.com/eks/sla/ — Standard 99.95%, Provisioned 99.99%
+      eks: { level:"yes", value:"99.95% / 99.99%", note:"EKS commits to 99.95% monthly uptime for the standard control plane, and 99.99% for the Provisioned Control Plane tier.",
+             src:"https://aws.amazon.com/eks/sla/" },
+      // SRC: https://learn.microsoft.com/en-us/azure/aks/free-standard-pricing-tiers — Standard/Premium: 99.95% w/ AZs, 99.9% without; Free: best-effort
+      aks: { level:"yes", value:"99.95% / 99.9%", note:"AKS Standard & Premium tiers include an Uptime SLA: 99.95% with availability zones, 99.9% without. The Free tier is best-effort only (no SLA).",
+             src:"https://learn.microsoft.com/en-us/azure/aks/free-standard-pricing-tiers" },
+      // SRC: https://cloud.google.com/kubernetes-engine/sla — regional/Autopilot 99.95%, zonal 99.5%
+      gke: { level:"yes", value:"99.95% / 99.5%", note:"GKE commits to 99.95% control-plane uptime for regional clusters and Autopilot, and 99.5% for single-zone (zonal) clusters.",
+             src:"https://cloud.google.com/kubernetes-engine/sla" },
+      // SRC: https://www.oracle.com/cloud/cloud-native/container-engine-kubernetes/pricing/ — Enhanced clusters: 99.95% financially-backed SLA; Basic has none
+      oke: { level:"yes", value:"99.95% (Enhanced)", note:"OKE Enhanced clusters carry a financially-backed 99.95% control-plane SLA. Basic clusters have no control-plane SLA.",
+             src:"https://www.oracle.com/cloud/cloud-native/container-engine-kubernetes/pricing/" },
+      // SRC: https://github.com/ovh/docs/blob/develop/pages/public_cloud/containers_orchestration/managed_kubernetes/mks_plans/guide.en-gb.md — Standard 99.9% (1-AZ) / 99.99% (3-AZ); Free 99.5% SLO
+      ovh: { level:"yes", value:"99.99% / 99.9%", note:"OVHcloud Standard plan: 99.99% SLA in 3-AZ regions, 99.9% in single-AZ. The Free plan offers a 99.5% SLO (an objective, not a financially-backed SLA).",
+             src:"https://github.com/ovh/docs/blob/develop/pages/public_cloud/containers_orchestration/managed_kubernetes/mks_plans/guide.en-gb.md" }
+    }
+  },
+  { id:"cp-cost", category:"control", name:"Control-plane / cluster-management cost",
+    desc:"What the provider charges per cluster for the managed control plane itself, separate from worker-node compute.",
+    support: {
+      // SRC: https://aws.amazon.com/eks/pricing/ — $0.10 per cluster per hour for standard support
+      eks: { level:"part", value:"$0.10 / cluster-hr", note:"EKS charges $0.10 per cluster per hour for the control plane (standard support). Extended-support versions cost more per hour.",
+             src:"https://aws.amazon.com/eks/pricing/" },
+      // SRC: https://learn.microsoft.com/en-us/azure/aks/free-standard-pricing-tiers — Free tier: free management; Standard: paid (≈$0.10/hr)
+      aks: { level:"yes", value:"Free tier: $0", note:"The AKS Free tier offers free cluster management (best-effort, no SLA). The Standard tier adds a paid cluster-management fee in exchange for the Uptime SLA.",
+             src:"https://learn.microsoft.com/en-us/azure/aks/free-standard-pricing-tiers" },
+      // SRC: https://cloud.google.com/kubernetes-engine/pricing — $0.10/cluster/hr management fee; free-tier credit covers one zonal/Autopilot cluster
+      gke: { level:"part", value:"$0.10 / cluster-hr", note:"GKE charges a flat $0.10 per cluster per hour. A monthly free-tier credit ($74.40) offsets one zonal or Autopilot cluster.",
+             src:"https://cloud.google.com/kubernetes-engine/pricing" },
+      // SRC: https://www.oracle.com/cloud/cloud-native/container-engine-kubernetes/pricing/ — Basic cluster: free; Enhanced: $0.10/cluster/hr
+      oke: { level:"yes", value:"Basic: $0", note:"OKE Basic clusters have no control-plane fee. Enhanced clusters (virtual nodes, add-ons, SLA) cost $0.10 per cluster per hour.",
+             src:"https://www.oracle.com/cloud/cloud-native/container-engine-kubernetes/pricing/" },
+      // SRC: https://www.ovhcloud.com/en/public-cloud/kubernetes/ + mks_plans guide — control plane is free of charge on both plans
+      ovh: { level:"yes", value:"$0 (both plans)", note:"OVHcloud Managed Kubernetes charges nothing for the control plane on either the Free or Standard plan — you pay only for worker nodes and consumed resources.",
+             src:"https://github.com/ovh/docs/blob/develop/pages/public_cloud/containers_orchestration/managed_kubernetes/mks_plans/guide.en-gb.md" }
+    }
+  },
+
+  // ══ Node Pool Capabilities ══
+  { id:"np-autoscaler", category:"nodepool", name:"Cluster autoscaler (node pool scaling)",
+    desc:"Automatically grow and shrink node pools to fit pending pod demand, using the Kubernetes Cluster Autoscaler or an equivalent.",
+    support: {
+      // SRC: https://docs.aws.amazon.com/eks/latest/userguide/autoscaling.html — Cluster Autoscaler supported; Karpenter also supported
+      eks: { level:"yes", value:"✓ CA + Karpenter", note:"EKS supports the Kubernetes Cluster Autoscaler on managed node groups, and Karpenter for just-in-time, group-less node provisioning.",
+             src:"https://docs.aws.amazon.com/eks/latest/userguide/autoscaling.html" },
+      // SRC: https://learn.microsoft.com/en-us/azure/aks/cluster-autoscaler — CA built in; NAP (Karpenter-based) GA
+      aks: { level:"yes", value:"✓ CA + NAP", note:"AKS has a built-in cluster autoscaler per node pool, plus Node Auto-Provisioning (NAP) — a GA Karpenter-based provisioner.",
+             src:"https://learn.microsoft.com/en-us/azure/aks/cluster-autoscaler" },
+      // SRC: https://cloud.google.com/kubernetes-engine/docs/concepts/cluster-autoscaler — cluster autoscaler + node auto-provisioning
+      gke: { level:"yes", value:"✓ CA + NAP", note:"GKE includes the cluster autoscaler and node auto-provisioning, which creates and deletes node pools automatically; Autopilot autoscales by design.",
+             src:"https://cloud.google.com/kubernetes-engine/docs/concepts/cluster-autoscaler" },
+      // SRC: https://docs.oracle.com/en-us/iaas/Content/ContEng/Tasks/contengusingclusterautoscaler.htm — Cluster Autoscaler supported on managed node pools
+      oke: { level:"yes", value:"✓ Cluster Autoscaler", note:"OKE supports the Kubernetes Cluster Autoscaler to scale managed node pools based on pod demand.",
+             src:"https://docs.oracle.com/en-us/iaas/Content/ContEng/Tasks/contengusingclusterautoscaler.htm" },
+      // SRC: https://github.com/ovh/docs/blob/develop/pages/public_cloud/containers_orchestration/managed_kubernetes/using-cluster-autoscaler/guide.en-gb.md — autoscaler supported per node pool
+      ovh: { level:"yes", value:"✓ Cluster Autoscaler", note:"OVHcloud Managed Kubernetes supports the cluster autoscaler — enable autoscaling on a node pool and desired node count adjusts between min and max.",
+             src:"https://github.com/ovh/docs/blob/develop/pages/public_cloud/containers_orchestration/managed_kubernetes/using-cluster-autoscaler/guide.en-gb.md" }
+    }
+  },
+  { id:"np-spot", category:"nodepool", name:"Spot / preemptible node pools",
+    desc:"Run worker nodes on discounted, interruptible capacity for fault-tolerant or batch workloads.",
+    support: {
+      // SRC: https://docs.aws.amazon.com/eks/latest/userguide/managed-node-groups.html — managed node groups support a SPOT capacity type
+      eks: { level:"yes", value:"✓ Spot capacity type", note:"EKS managed node groups accept a SPOT capacity type, provisioning EC2 Spot Instances; Karpenter can also mix Spot and On-Demand.",
+             src:"https://docs.aws.amazon.com/eks/latest/userguide/managed-node-groups.html" },
+      // SRC: https://learn.microsoft.com/en-us/azure/aks/spot-node-pool — dedicated spot node pool type
+      aks: { level:"yes", value:"✓ Spot node pools", note:"AKS supports dedicated spot node pools backed by Azure Spot Virtual Machines (user node pools only).",
+             src:"https://learn.microsoft.com/en-us/azure/aks/spot-node-pool" },
+      // SRC: https://cloud.google.com/kubernetes-engine/docs/concepts/spot-vms — Spot VMs node pools
+      gke: { level:"yes", value:"✓ Spot VMs", note:"GKE node pools can run on Spot VMs (the successor to preemptible VMs) for stateless, batch and fault-tolerant workloads.",
+             src:"https://cloud.google.com/kubernetes-engine/docs/concepts/spot-vms" },
+      // SRC: https://docs.oracle.com/en-us/iaas/Content/ContEng/Tasks/contengcreatingpreemptiblenodepool.htm — preemptible node pools supported
+      oke: { level:"yes", value:"✓ Preemptible nodes", note:"OKE supports preemptible node pools backed by OCI preemptible compute instances for cost-optimised, interruption-tolerant workloads.",
+             src:"https://docs.oracle.com/en-us/iaas/Content/ContEng/Tasks/contengcreatingpreemptiblenodepool.htm" },
+      // SRC: https://github.com/ovh/docs/blob/develop/pages/public_cloud/containers_orchestration/managed_kubernetes/managing-nodes/guide.en-gb.md — node pools use standard Public Cloud instances; no spot/preemptible tier documented for MKS
+      ovh: { level:"no", value:"✗", note:"OVHcloud Managed Kubernetes node pools use standard Public Cloud instances (monthly or hourly billing). No spot or preemptible node-pool tier is documented for the service.",
+             src:"https://github.com/ovh/docs/blob/develop/pages/public_cloud/containers_orchestration/managed_kubernetes/managing-nodes/guide.en-gb.md" }
+    }
+  },
+  { id:"np-gpu", category:"nodepool", name:"GPU node pools",
+    desc:"Provision worker nodes with attached GPUs for ML training, inference and other accelerated workloads.",
+    support: {
+      // SRC: https://docs.aws.amazon.com/eks/latest/userguide/eks-optimized-ami.html — GPU-accelerated EKS-optimized AMIs for P/G instance families
+      eks: { level:"yes", value:"✓ GPU instances", note:"EKS publishes GPU-accelerated EKS-optimized AMIs; node groups can use NVIDIA GPU instance families such as P and G.",
+             src:"https://docs.aws.amazon.com/eks/latest/userguide/eks-optimized-ami.html" },
+      // SRC: https://learn.microsoft.com/en-us/azure/aks/gpu-cluster — GPU-enabled node pools
+      aks: { level:"yes", value:"✓ GPU node pools", note:"AKS supports GPU-enabled node pools on GPU-optimised VM sizes (N-series), with optional managed GPU driver / device-plugin installation.",
+             src:"https://learn.microsoft.com/en-us/azure/aks/gpu-cluster" },
+      // SRC: https://cloud.google.com/kubernetes-engine/docs/how-to/gpus — GPU node pools
+      gke: { level:"yes", value:"✓ GPU node pools", note:"GKE supports attaching NVIDIA GPUs to node pools, with GKE managing driver installation; Autopilot also supports GPU workloads.",
+             src:"https://cloud.google.com/kubernetes-engine/docs/how-to/gpus" },
+      // SRC: https://docs.oracle.com/en-us/iaas/Content/ContEng/Tasks/contengrunningadeploymentaccessgpu.htm — GPU shapes for node pools
+      oke: { level:"yes", value:"✓ GPU shapes", note:"OKE node pools can use OCI GPU compute shapes; the OKE GPU images bundle the NVIDIA drivers.",
+             src:"https://docs.oracle.com/en-us/iaas/Content/ContEng/Tasks/contengrunningadeploymentaccessgpu.htm" },
+      // SRC: https://github.com/ovh/docs/blob/develop/pages/public_cloud/containers_orchestration/managed_kubernetes/deploying-gpu-application/guide.en-gb.md — GPU node pools via t1/t2 flavors
+      ovh: { level:"yes", value:"✓ GPU flavors (t1/t2)", note:"OVHcloud Managed Kubernetes supports GPU node pools using the t1 and t2 instance flavors; GPU nodes can take over an hour to become Ready.",
+             src:"https://github.com/ovh/docs/blob/develop/pages/public_cloud/containers_orchestration/managed_kubernetes/deploying-gpu-application/guide.en-gb.md" }
+    }
+  },
+  { id:"np-arm", category:"nodepool", name:"ARM (arm64) node pools",
+    desc:"Run worker nodes on ARM-architecture CPUs, typically for better price-performance.",
+    support: {
+      // SRC: https://docs.aws.amazon.com/eks/latest/userguide/eks-optimized-ami.html — arm64 EKS-optimized AMIs for AWS Graviton
+      eks: { level:"yes", value:"✓ Graviton (arm64)", note:"EKS publishes arm64 EKS-optimized AMIs; node groups can run on AWS Graviton instances, and a cluster can mix arm64 and x86_64 nodes.",
+             src:"https://docs.aws.amazon.com/eks/latest/userguide/eks-optimized-ami.html" },
+      // SRC: https://learn.microsoft.com/en-us/azure/aks/use-arm64-vms — Arm64 VM node pools (Ampere Altra)
+      aks: { level:"yes", value:"✓ Arm64 VMs", note:"AKS supports Arm64 node pools on Ampere Altra Arm-based VM sizes; Node Auto-Provisioning can also provision arm64 nodes.",
+             src:"https://learn.microsoft.com/en-us/azure/aks/use-arm64-vms" },
+      // SRC: https://cloud.google.com/kubernetes-engine/docs/how-to/prepare-arm-workloads-for-deployment — Arm node pools (Axion / Tau T2A)
+      gke: { level:"yes", value:"✓ Arm node pools", note:"GKE supports Arm node pools on Google's Arm-based machine series (Axion C4A, Tau T2A).",
+             src:"https://cloud.google.com/kubernetes-engine/docs/how-to/prepare-arm-workloads-for-deployment" },
+      // SRC: https://docs.oracle.com/en-us/iaas/Content/ContEng/Concepts/contengaboutnodepools.htm — node pools support Ampere A1 (Arm) shapes
+      oke: { level:"yes", value:"✓ Ampere A1 (Arm)", note:"OKE node pools can use OCI Ampere A1 Arm-based compute shapes.",
+             src:"https://docs.oracle.com/en-us/iaas/Content/ContEng/Concepts/contengaboutnodepools.htm" },
+      // SRC: https://github.com/ovh/docs/blob/develop/pages/public_cloud/containers_orchestration/managed_kubernetes/software-versions-reserved-resources/guide.en-gb.md — reserved-resource table lists only x86 b2/b3 flavors; no Arm flavor documented for MKS
+      ovh: { level:"no", value:"✗", note:"OVHcloud Managed Kubernetes documents only x86 instance flavors (b2/b3 general-purpose, t1/t2 GPU). No ARM-based node-pool flavor is listed for the service.",
+             src:"https://github.com/ovh/docs/blob/develop/pages/public_cloud/containers_orchestration/managed_kubernetes/software-versions-reserved-resources/guide.en-gb.md" }
+    }
+  },
+
+  // ══ Scale ══
+  { id:"max-nodes", category:"scale", name:"Maximum nodes per cluster",
+    desc:"The largest node count the provider documents or recommends for a single cluster (default quota, before special increases).",
+    support: {
+      // SRC: https://docs.aws.amazon.com/general/latest/gr/eks.html — managed node group: 450 nodes; up to 100 node groups -> EKS does not publish a single hard cluster-wide node max
+      eks: { level:"part", value:"450 / node group", note:"EKS does not publish one hard cluster-wide node ceiling. The documented quotas are 450 nodes per managed node group and up to 100 managed node groups per cluster (both adjustable).",
+             src:"https://docs.aws.amazon.com/general/latest/gr/eks.html" },
+      // SRC: https://learn.microsoft.com/en-us/azure/aks/free-standard-pricing-tiers — Free up to 1,000; Standard/Premium up to 5,000
+      aks: { level:"yes", value:"5,000 (Standard)", note:"AKS supports up to 5,000 nodes per cluster on the Standard and Premium tiers. The Free tier is recommended below 10 nodes but can reach 1,000.",
+             src:"https://learn.microsoft.com/en-us/azure/aks/free-standard-pricing-tiers" },
+      // SRC: https://cloud.google.com/kubernetes-engine/quotas — default 5,000 per cluster; up to 15,000 or 65,000 by request
+      gke: { level:"yes", value:"5,000 (default)", note:"GKE Standard clusters default to a 5,000-node quota per cluster; this can be raised to 15,000, or to 65,000 for large-scale AI workloads, via Cloud Customer Care.",
+             src:"https://cloud.google.com/kubernetes-engine/quotas" },
+      // SRC: https://docs.oracle.com/en-us/iaas/Content/ContEng/Concepts/contengaboutclusterstructure.htm — Enhanced clusters support a much higher node count than Basic
+      oke: { level:"part", value:"Enhanced > Basic", note:"OKE Enhanced clusters support substantially more worker nodes per cluster than Basic clusters; exact ceilings are governed by tenancy service limits rather than a single fixed number.",
+             src:"https://docs.oracle.com/en-us/iaas/Content/ContEng/Concepts/contengaboutclusterstructure.htm" },
+      // SRC: https://github.com/ovh/docs/blob/develop/pages/public_cloud/containers_orchestration/managed_kubernetes/known-limits/guide.en-gb.md — Free 100, Standard 500
+      ovh: { level:"yes", value:"100 / 500", note:"OVHcloud Managed Kubernetes: a tested maximum of 100 nodes per cluster on the Free plan and 500 on the Standard plan.",
+             src:"https://github.com/ovh/docs/blob/develop/pages/public_cloud/containers_orchestration/managed_kubernetes/known-limits/guide.en-gb.md" }
+    }
+  },
+
+  // ══ CNI / Networking ══
+  { id:"cni-default", category:"network", name:"Default CNI / networking plugin",
+    desc:"The container-network-interface plugin the service installs by default for pod networking.",
+    support: {
+      // SRC: https://docs.aws.amazon.com/eks/latest/userguide/managing-vpc-cni.html — Amazon VPC CNI is the default
+      eks: { level:"yes", value:"Amazon VPC CNI", note:"EKS uses the Amazon VPC CNI by default — pods receive routable VPC IP addresses from ENIs attached to the worker nodes.",
+             src:"https://docs.aws.amazon.com/eks/latest/userguide/managing-vpc-cni.html" },
+      // SRC: https://learn.microsoft.com/en-us/azure/aks/concepts-network-cni-overview — Azure CNI (Overlay default for new clusters)
+      aks: { level:"yes", value:"Azure CNI", note:"AKS defaults to Azure CNI; Azure CNI Overlay is the recommended mode for new clusters, assigning pods overlay IPs while nodes get VNet IPs.",
+             src:"https://learn.microsoft.com/en-us/azure/aks/concepts-network-cni-overview" },
+      // SRC: https://cloud.google.com/kubernetes-engine/docs/concepts/dataplane-v2 — GKE Dataplane V2 (eBPF, Cilium-based) is default
+      gke: { level:"yes", value:"Dataplane V2 (Cilium)", note:"GKE Dataplane V2 — an eBPF dataplane built on Cilium — is the default for new GKE clusters.",
+             src:"https://cloud.google.com/kubernetes-engine/docs/concepts/dataplane-v2" },
+      // SRC: https://docs.oracle.com/en-us/iaas/Content/ContEng/Concepts/contengpodnetworking.htm — VCN-Native pod networking (default) or flannel overlay
+      oke: { level:"yes", value:"VCN-Native / flannel", note:"OKE offers two CNI options: VCN-Native pod networking (pods get VCN IPs) and a flannel overlay. VCN-Native is the modern default.",
+             src:"https://docs.oracle.com/en-us/iaas/Content/ContEng/Concepts/contengpodnetworking.htm" },
+      // SRC: https://github.com/ovh/docs/blob/develop/pages/public_cloud/containers_orchestration/managed_kubernetes/software-versions-reserved-resources/guide.en-gb.md — Canal (Calico + Flannel)
+      ovh: { level:"yes", value:"Canal (Calico+Flannel)", note:"OVHcloud Managed Kubernetes installs the Canal CNI — Flannel for pod networking and Calico for network policy enforcement.",
+             src:"https://github.com/ovh/docs/blob/develop/pages/public_cloud/containers_orchestration/managed_kubernetes/software-versions-reserved-resources/guide.en-gb.md" }
+    }
+  },
+  { id:"cni-choice", category:"network", name:"Alternative / pluggable CNI",
+    desc:"Whether the service lets you swap in a different CNI (e.g. Cilium) or run it bring-your-own.",
+    support: {
+      // SRC: https://docs.aws.amazon.com/eks/latest/userguide/alternate-cni-plugins.html — EKS runs upstream K8s; alternate CNIs supported on EC2 nodes
+      eks: { level:"yes", value:"✓ Alternate CNIs", note:"EKS runs upstream Kubernetes, so alternate compatible CNI plugins (Cilium, Calico, and others) can be installed on EC2 nodes.",
+             src:"https://docs.aws.amazon.com/eks/latest/userguide/alternate-cni-plugins.html" },
+      // SRC: https://learn.microsoft.com/en-us/azure/aks/azure-cni-powered-by-cilium — Azure CNI Powered by Cilium, plus BYO CNI mode
+      aks: { level:"yes", value:"✓ Cilium + BYO CNI", note:"AKS offers Azure CNI Powered by Cilium as a managed option, and a BYO CNI mode for installing your own plugin.",
+             src:"https://learn.microsoft.com/en-us/azure/aks/azure-cni-powered-by-cilium" },
+      // SRC: https://cloud.google.com/kubernetes-engine/docs/concepts/dataplane-v2 — GKE manages the dataplane; no arbitrary CNI swap on standard clusters
+      gke: { level:"part", value:"◐ Managed only", note:"GKE manages the CNI/dataplane (Dataplane V2 or the legacy Calico-based dataplane). Arbitrary third-party CNI replacement is not a supported configuration on managed GKE.",
+             src:"https://cloud.google.com/kubernetes-engine/docs/concepts/dataplane-v2" },
+      // SRC: https://docs.oracle.com/en-us/iaas/Content/ContEng/Concepts/contengpodnetworking.htm — choice between two OKE CNIs, fixed at cluster creation
+      oke: { level:"part", value:"◐ Two built-in CNIs", note:"OKE lets you choose between its two built-in CNIs (VCN-Native or flannel) at cluster creation, but does not support arbitrary third-party CNI plugins.",
+             src:"https://docs.oracle.com/en-us/iaas/Content/ContEng/Concepts/contengpodnetworking.htm" },
+      // SRC: https://github.com/ovh/docs/blob/develop/pages/public_cloud/containers_orchestration/managed_kubernetes/software-versions-reserved-resources/guide.en-gb.md — single CNI (Canal); not pluggable
+      ovh: { level:"no", value:"✗", note:"OVHcloud Managed Kubernetes installs a single CNI (Canal) and does not document support for replacing it with an alternative plugin.",
+             src:"https://github.com/ovh/docs/blob/develop/pages/public_cloud/containers_orchestration/managed_kubernetes/software-versions-reserved-resources/guide.en-gb.md" }
+    }
+  },
+
+  // ══ Release Channels & Auto-Upgrade ══
+  { id:"release-channels", category:"upgrades", name:"Release channels",
+    desc:"Named tracks (rapid / regular / stable) that govern which Kubernetes versions a cluster is offered and how quickly.",
+    support: {
+      // SRC: https://docs.aws.amazon.com/eks/latest/userguide/kubernetes-versions.html — EKS has no named release channels
+      eks: { level:"no", value:"✗", note:"EKS has no named release-channel concept — you select an explicit Kubernetes version, governed by the standard/extended support windows.",
+             src:"https://docs.aws.amazon.com/eks/latest/userguide/kubernetes-versions.html" },
+      // SRC: https://learn.microsoft.com/en-us/azure/aks/auto-upgrade-cluster — AKS uses auto-upgrade channels, not version 'release channels'
+      aks: { level:"part", value:"◐ Upgrade channels", note:"AKS has no Rapid/Regular/Stable-style release channels, but offers auto-upgrade channels (patch, stable, rapid, node-image) that control how upgrades are applied.",
+             src:"https://learn.microsoft.com/en-us/azure/aks/auto-upgrade-cluster" },
+      // SRC: https://cloud.google.com/kubernetes-engine/docs/concepts/release-channels — Rapid / Regular / Stable / Extended channels
+      gke: { level:"yes", value:"✓ Rapid/Regular/Stable/Extended", note:"GKE offers four release channels — Rapid, Regular, Stable and Extended — each trading update speed against stability and support length.",
+             src:"https://cloud.google.com/kubernetes-engine/docs/concepts/release-channels" },
+      // SRC: https://docs.oracle.com/en-us/iaas/Content/ContEng/Concepts/contengaboutk8sversions.htm — OKE has no release channels
+      oke: { level:"no", value:"✗", note:"OKE has no release-channel mechanism — you pick a specific supported Kubernetes version when creating or upgrading a cluster.",
+             src:"https://docs.oracle.com/en-us/iaas/Content/ContEng/Concepts/contengaboutk8sversions.htm" },
+      // SRC: https://github.com/ovh/docs/blob/develop/pages/public_cloud/containers_orchestration/managed_kubernetes/change-security-update/guide.en-gb.md — security-update policies, not release channels
+      ovh: { level:"no", value:"✗", note:"OVHcloud Managed Kubernetes has no release channels. It exposes per-cluster security-update policies that govern patch application instead.",
+             src:"https://github.com/ovh/docs/blob/develop/pages/public_cloud/containers_orchestration/managed_kubernetes/change-security-update/guide.en-gb.md" }
+    }
+  },
+  { id:"auto-upgrade", category:"upgrades", name:"Control-plane / node auto-upgrade",
+    desc:"Whether the provider can automatically upgrade the control plane and worker nodes to newer Kubernetes versions.",
+    support: {
+      // SRC: https://docs.aws.amazon.com/eks/latest/userguide/kubernetes-versions.html — control plane auto-upgraded only at end-of-support; node groups never auto
+      eks: { level:"part", value:"◐ End-of-support only", note:"EKS auto-upgrades a control plane only once its version reaches end of extended support. Managed node groups are never auto-upgraded — you trigger node updates yourself.",
+             src:"https://docs.aws.amazon.com/eks/latest/userguide/kubernetes-versions.html" },
+      // SRC: https://learn.microsoft.com/en-us/azure/aks/auto-upgrade-cluster — opt-in auto-upgrade channels for cluster + node image
+      aks: { level:"yes", value:"✓ Opt-in channels", note:"AKS supports opt-in auto-upgrade channels for both the cluster Kubernetes version and the node OS image, with configurable maintenance windows.",
+             src:"https://learn.microsoft.com/en-us/azure/aks/auto-upgrade-cluster" },
+      // SRC: https://cloud.google.com/kubernetes-engine/docs/concepts/release-channels — channel clusters auto-upgrade control plane AND nodes (cannot disable)
+      gke: { level:"yes", value:"✓ Automatic", note:"GKE clusters on a release channel have node auto-upgrade always on; the control plane is auto-upgraded for all clusters regardless of channel.",
+             src:"https://cloud.google.com/kubernetes-engine/docs/concepts/release-channels" },
+      // SRC: https://docs.oracle.com/en-us/iaas/Content/ContEng/Concepts/contengaboutupgradingclusters.htm — control-plane & node-pool upgrades are user-initiated
+      oke: { level:"no", value:"✗ Manual", note:"OKE control-plane and node-pool Kubernetes upgrades are user-initiated; OKE does not auto-upgrade clusters to new minor versions.",
+             src:"https://docs.oracle.com/en-us/iaas/Content/ContEng/Concepts/contengaboutupgradingclusters.htm" },
+      // SRC: https://github.com/ovh/docs/blob/develop/pages/public_cloud/containers_orchestration/managed_kubernetes/upgrading-kubernetes-version/guide.en-gb.md + change-security-update — patches auto per policy; minor upgrades manual
+      ovh: { level:"part", value:"◐ Patches auto, minors manual", note:"OVHcloud auto-applies patch versions per the chosen security-update policy, but minor-version upgrades are a manual 'Upgrade to the next minor version' action. End-of-life versions may be force-upgraded.",
+             src:"https://github.com/ovh/docs/blob/develop/pages/public_cloud/containers_orchestration/managed_kubernetes/upgrading-kubernetes-version/guide.en-gb.md" }
+    }
+  }
+];
+
+// ───────────────────────────────────────────────────────────────────
+// STATE + RENDER
+// ───────────────────────────────────────────────────────────────────
+const state = {
+  vendors: new Set(VENDORS.map(v => v.key)),
+  category: "all",
+  query: ""
+};
+
+const $ = (s) => document.querySelector(s);
+const $$ = (s) => Array.from(document.querySelectorAll(s));
+
+const escapeHtml = (s) => String(s).replace(/[&<>"']/g, (c) => ({
+  "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
+}[c]));
+
+// ─── Permalinks — filter state ⇄ URL hash ───
+function writeHash() {
+  const keys = VENDORS.map(v => v.key);
+  const p = new URLSearchParams();
+  if (state.vendors.size < keys.length) p.set("vendors", keys.filter(k => state.vendors.has(k)).join(","));
+  if (state.category !== "all") p.set("cat", state.category);
+  if (state.query.trim())       p.set("q", state.query.trim());
+  const h = p.toString();
+  history.replaceState(null, "", h ? "#" + h : location.pathname + location.search);
+}
+function applyHash() {
+  const keys = VENDORS.map(v => v.key);
+  const p = new URLSearchParams(location.hash.slice(1));
+  const vd = p.get("vendors");
+  if (vd) {
+    const valid = vd.split(",").filter(x => keys.includes(x));
+    if (valid.length) state.vendors = new Set(valid);
+  }
+  const cat = p.get("cat"); if (cat) state.category = cat;
+  state.query = p.get("q") || "";
+  const allV = state.vendors.size === keys.length;
+  $$('.chip[data-v]').forEach(b => {
+    if (b.dataset.v === "all") b.classList.toggle("is-active", allV);
+    else b.classList.toggle("is-active", !allV && state.vendors.has(b.dataset.v));
+  });
+  $$('.chip[data-cat]').forEach(b => b.classList.toggle("is-active", b.dataset.cat === state.category));
+  const sb = $("#search"); if (sb) sb.value = state.query;
+}
+
+function init() {
+  // Counts
+  $("#count-features").textContent = FEATURES.length;
+  const stars = FEATURES.reduce((acc, f) => acc + Object.values(f.support).filter(s => s.note && s.note.length > 0).length, 0);
+  $("#count-stars").textContent = stars;
+
+  // Category chips
+  const catChips = $("#cat-chips");
+  catChips.innerHTML = `<span class="filter-chips__label">Category</span>
+    <button class="chip is-active" data-cat="all">All</button>` +
+    CATEGORIES.map(c => `<button class="chip" data-cat="${c.key}">${escapeHtml(c.label)}</button>`).join("");
+
+  // Vendor chips
+  const vChips = $("#vendor-chips");
+  vChips.innerHTML = `<span class="filter-chips__label">Services</span>
+    <button class="chip is-active" data-v="all">All</button>` +
+    VENDORS.map(v => `<button class="chip" data-v="${v.key}"><span class="swatch" style="background:${v.swatch}"></span>${escapeHtml(v.short)}</button>`).join("");
+
+  applyHash();
+  renderMatrix();
+  wireEvents();
+  window.addEventListener("hashchange", () => { applyHash(); applyFilter(); });
+}
+
+function renderMatrix() {
+  const table = $("#matrix");
+  let html = "<thead><tr>";
+  html += '<th class="feature-col" scope="col">Capability</th>';
+  VENDORS.forEach(v => {
+    html += `<th class="col-${v.key}" scope="col"><span class="vendor-tag"><span class="swatch" style="background:${v.swatch}"></span>${escapeHtml(v.short)} · ${escapeHtml(v.cloud)}</span></th>`;
+  });
+  html += "</tr></thead><tbody>";
+
+  CATEGORIES.forEach(cat => {
+    const features = FEATURES.filter(f => f.category === cat.key);
+    if (features.length === 0) return;
+    html += `<tr class="category-row" data-cat="${cat.key}"><td colspan="${VENDORS.length + 1}"><span class="cat-label">▸ ${escapeHtml(cat.label)}</span></td></tr>`;
+    features.forEach(f => {
+      html += `<tr class="feature-row" data-feature="${f.id}" data-cat="${cat.key}">`;
+      html += `<td class="feature-col" data-action="open-feature" tabindex="0" role="button" aria-label="Open per-service breakdown for ${escapeHtml(f.name)}">${escapeHtml(f.name)}</td>`;
+      VENDORS.forEach(v => {
+        const s = f.support[v.key] || { level: "no", value: "—", note: "" };
+        const hasNote = s.note && s.note.length > 0;
+        const valText = s.value || (s.level === "yes" ? "✓" : s.level === "part" ? "◐" : "✗");
+        html += `<td class="cell col-${v.key}" data-feature="${f.id}" data-vendor="${v.key}" tabindex="0" role="button" aria-label="${escapeHtml(f.name)} — ${escapeHtml(v.name)}: ${escapeHtml(valText)}. Open footnote.">`;
+        html += `<span class="cell-value cell-value--${s.level}">${escapeHtml(valText)}${hasNote ? '<span class="cell-value__star">*</span>' : ''}</span>`;
+        html += `</td>`;
+      });
+      html += `</tr>`;
+    });
+  });
+
+  html += "</tbody>";
+  table.innerHTML = html;
+  applyFilter();
+}
+
+function applyFilter() {
+  const q = state.query.trim().toLowerCase();
+  const table = $("#matrix");
+
+  // Vendor visibility (via class on table)
+  VENDORS.forEach(v => {
+    table.classList.toggle(`hide-${v.key}`, !state.vendors.has(v.key));
+  });
+
+  // Row visibility
+  $$(".matrix tbody tr.feature-row").forEach(row => {
+    const f = FEATURES.find(x => x.id === row.dataset.feature);
+    if (!f) return;
+    let matches = state.category === "all" || f.category === state.category;
+    if (matches && q) {
+      const cat = (CATEGORIES.find(c => c.key === f.category) || {}).label || "";
+      const vendorHay = VENDORS
+        .filter(v => state.vendors.has(v.key))
+        .map(v => `${v.name} ${v.short} ${v.cloud}`)
+        .join(" ");
+      const hay = `${f.name} ${f.desc} ${cat} ${vendorHay}`.toLowerCase();
+      matches = hay.includes(q);
+    }
+    row.classList.toggle("is-hidden", !matches);
+  });
+
+  // Hide category rows that have no visible features
+  CATEGORIES.forEach(cat => {
+    const visible = $$(`.matrix tbody tr.feature-row[data-cat="${cat.key}"]`).some(r => !r.classList.contains("is-hidden"));
+    const catRow = $(`.matrix tbody tr.category-row[data-cat="${cat.key}"]`);
+    if (catRow) catRow.classList.toggle("is-hidden", !visible);
+  });
+  writeHash();
+}
+
+// ─── Drawer ───
+let lastFocused = null;
+function openDrawer() {
+  lastFocused = document.activeElement;
+  $("#drawer-backdrop").classList.add("is-open");
+  $("#drawer").classList.add("is-open");
+  $("#drawer").setAttribute("aria-hidden", "false");
+  const closeBtn = $("#drawer .drawer__close");
+  if (closeBtn) closeBtn.focus();
+}
+function closeDrawer() {
+  $("#drawer-backdrop").classList.remove("is-open");
+  $("#drawer").classList.remove("is-open");
+  $("#drawer").setAttribute("aria-hidden", "true");
+  if (lastFocused && typeof lastFocused.focus === "function") lastFocused.focus();
+}
+
+function openFeatureDrawer(feature, focusVendor) {
+  const cat = (CATEGORIES.find(c => c.key === feature.category) || {}).label || "";
+  $("#drawer-head").innerHTML = `
+    <div class="drawer__eyebrow">${escapeHtml(cat)}</div>
+    <h3 class="drawer__title">${escapeHtml(feature.name)}</h3>
+    <p class="drawer__desc">${escapeHtml(feature.desc)}</p>
+    <button class="drawer__close" type="button" onclick="closeDrawer()">Close ⤬</button>
+  `;
+  const body = VENDORS.map(v => {
+    const s = feature.support[v.key] || { level: "no", value: "—", note: "" };
+    const sym = s.level === "yes" ? "✓" : s.level === "part" ? "◐" : "✗";
+    const isFocus = focusVendor === v.key;
+    const valText = s.value || sym;
+    const srcHtml = s.src
+      ? `<div class="vendor-row__src">Source · <a href="${escapeHtml(s.src)}" target="_blank" rel="noopener">${escapeHtml(s.src)}</a></div>`
+      : "";
+    return `<div class="vendor-row" ${isFocus ? 'style="border-color: var(--accent); background: rgba(255,120,73,0.05);"' : ''}>
+      <span class="vendor-row__mark vendor-row__mark--${s.level}">${sym}</span>
+      <div>
+        <div class="vendor-row__name"><span class="swatch" style="background:${v.swatch}"></span>${escapeHtml(v.name)}</div>
+        <div class="vendor-row__value vendor-row__value--${s.level}">${escapeHtml(valText)}</div>
+        <div class="vendor-row__note">${escapeHtml(s.note || (s.level === "no" ? "Not supported." : "—"))}</div>
+        ${srcHtml}
+      </div>
+    </div>`;
+  }).join("");
+  $("#drawer-body").innerHTML = `<div class="drawer__section"><h4>Per-service detail &amp; sources</h4>${body}</div>`;
+  openDrawer();
+}
+
+function wireEvents() {
+  document.addEventListener("click", (e) => {
+    // Category chips
+    const c = e.target.closest(".chip[data-cat]");
+    if (c) {
+      state.category = c.dataset.cat;
+      $$('.chip[data-cat]').forEach(b => b.classList.toggle("is-active", b.dataset.cat === state.category));
+      applyFilter();
+      return;
+    }
+    // Vendor chips
+    const v = e.target.closest(".chip[data-v]");
+    if (v) {
+      const key = v.dataset.v;
+      if (key === "all") {
+        state.vendors = new Set(VENDORS.map(x => x.key));
+        $$('.chip[data-v]').forEach(b => b.classList.toggle("is-active", b.dataset.v === "all"));
+      } else {
+        if ($('.chip[data-v="all"]').classList.contains("is-active")) {
+          state.vendors = new Set([key]);
+          $$('.chip[data-v]').forEach(b => b.classList.toggle("is-active", b.dataset.v === key));
+        } else {
+          if (state.vendors.has(key) && state.vendors.size === 1) {
+            state.vendors = new Set(VENDORS.map(x => x.key));
+            $$('.chip[data-v]').forEach(b => b.classList.toggle("is-active", b.dataset.v === "all"));
+          } else {
+            state.vendors.has(key) ? state.vendors.delete(key) : state.vendors.add(key);
+            v.classList.toggle("is-active");
+            $('.chip[data-v="all"]').classList.remove("is-active");
+          }
+        }
+      }
+      applyFilter();
+      return;
+    }
+    // Cell → footnote
+    const cell = e.target.closest("td.cell");
+    if (cell) {
+      const f = FEATURES.find(x => x.id === cell.dataset.feature);
+      if (f) openFeatureDrawer(f, cell.dataset.vendor);
+      return;
+    }
+    // Capability name → full breakdown
+    const featureCol = e.target.closest("td.feature-col[data-action='open-feature']");
+    if (featureCol) {
+      const row = featureCol.closest("tr.feature-row");
+      const f = FEATURES.find(x => x.id === row.dataset.feature);
+      if (f) openFeatureDrawer(f, null);
+      return;
+    }
+  });
+
+  // Keyboard activation for cells & capability names
+  document.addEventListener("keydown", (e) => {
+    if (e.key !== "Enter" && e.key !== " ") return;
+    const cell = e.target.closest("td.cell");
+    if (cell) {
+      e.preventDefault();
+      const f = FEATURES.find(x => x.id === cell.dataset.feature);
+      if (f) openFeatureDrawer(f, cell.dataset.vendor);
+      return;
+    }
+    const featureCol = e.target.closest("td.feature-col[data-action='open-feature']");
+    if (featureCol) {
+      e.preventDefault();
+      const row = featureCol.closest("tr.feature-row");
+      const f = FEATURES.find(x => x.id === row.dataset.feature);
+      if (f) openFeatureDrawer(f, null);
+    }
+  });
+
+  $("#drawer-backdrop").addEventListener("click", closeDrawer);
+  $("#search").addEventListener("input", (e) => {
+    state.query = e.target.value;
+    applyFilter();
+  });
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") closeDrawer();
+    if (e.key === "/" && e.target.tagName !== "INPUT") { e.preventDefault(); $("#search").focus(); }
+  });
+}
+
+init();
+</script>
+<script src="/nav.js" defer></script>
+</body>
+</html>

@@ -22,6 +22,13 @@
     ["/mulesoft/",         "Mulesoft Atlas",        "Mulesoft",    "salesforce anypoint cloudhub rtf flex gateway dataweave"],
     ["/self-hosted-apim/", "Kong · Gravitee · IBM", "Self-hosted", "kong gravitee ibm api connect open source kubernetes"]
   ];
+  var XCLOUD = [
+    ["/equivalent-sku/",         "Equivalent-SKU Finder", "Cross-cloud", "translate translator equivalent sku instance type match migrate vcpu memory aws azure gcp oci ovh"],
+    ["/kubernetes/",             "Kubernetes Atlas",      "Cross-cloud", "managed kubernetes k8s eks aks gke oke ovh container control plane version sla node pool"],
+    ["/compliance/",             "Compliance Footprint",  "Cross-cloud", "compliance certification fedramp iso soc hipaa pci dss gdpr irap c5 ens audit attestation"],
+    ["/confidential-computing/", "Confidential Computing","Cross-cloud", "confidential enclave sgx sev snp tdx nitro tee trusted execution memory encryption attestation"],
+    ["/iam-matrix/",             "IAM Matrix",            "Cross-cloud", "iam identity access management rbac abac policy entra id permissions roles authorization"]
+  ];
 
   // Normalise current path → "/ec2/" form
   var here = location.pathname.replace(/index\.html$/, "");
@@ -42,6 +49,7 @@
   }
   pushGroup(CLOUD, "Cloud Compute");
   pushGroup(APIM, "API Management");
+  pushGroup(XCLOUD, "Cross-Cloud");
 
   var current = null;
   ITEMS.forEach(function (it) {

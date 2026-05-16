@@ -1,0 +1,1208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="color-scheme" content="dark">
+<title>IAM · Identity Matrix · Infra Atlas</title>
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<meta name="description" content="Cross-hyperscaler identity & access management comparison — AWS IAM, Azure (Entra ID + RBAC), GCP IAM, OCI IAM. Policy models, evaluation logic, workload identity federation, short-lived credentials, ABAC. With the asterisks intact.">
+<link rel="canonical" href="https://infraatlas.dev/iam-matrix/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Infra Atlas">
+<meta property="og:title" content="IAM · Identity Matrix · Infra Atlas">
+<meta property="og:description" content="Cross-hyperscaler identity & access management comparison — AWS IAM, Azure (Entra ID + RBAC), GCP IAM, OCI IAM. Policy models, evaluation logic, workload identity federation, short-lived credentials, ABAC. With the asterisks intact.">
+<meta property="og:url" content="https://infraatlas.dev/iam-matrix/">
+<meta property="og:image" content="https://infraatlas.dev/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Infra Atlas — a reference for the infrastructure stack">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="IAM · Identity Matrix · Infra Atlas">
+<meta name="twitter:description" content="Cross-hyperscaler identity & access management comparison — AWS IAM, Azure (Entra ID + RBAC), GCP IAM, OCI IAM. Policy models, evaluation logic, workload identity federation, short-lived credentials, ABAC. With the asterisks intact.">
+<meta name="twitter:image" content="https://infraatlas.dev/og.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@300;400;500;600&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+:root {
+  --ink: #0A0907; --ink-2: #100E0C; --surface: #161310; --surface-2: #1E1A15; --surface-3: #2A241C;
+  --line: rgba(244, 239, 230, 0.06); --line-2: rgba(244, 239, 230, 0.14); --line-3: rgba(244, 239, 230, 0.28);
+  --paper: #F4EFE6; --paper-2: rgba(244, 239, 230, 0.66); --paper-3: rgba(244, 239, 230, 0.55); --paper-4: rgba(244, 239, 230, 0.20);
+  --accent: #FF7849; --accent-2: #FFA66E; --accent-glow: rgba(255, 120, 73, 0.22);
+  --mint: #6FE7B5; --gold: #F4C660; --plum: #C586E8; --sky: #7CD7F1; --rose: #F47B7B; --teal: #5BCCC9;
+  --yes:   #6FE7B5;
+  --no:    #F47B7B;
+  --part:  #F4C660;
+  --serif: 'Instrument Serif', 'Times New Roman', serif;
+  --mono: 'JetBrains Mono', ui-monospace, monospace;
+  --sans: 'Manrope', -apple-system, system-ui, sans-serif;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body {
+  background: var(--ink);
+  color: var(--paper);
+  font-family: var(--sans);
+  font-size: 15px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  min-height: 100vh;
+}
+
+body {
+  background:
+    radial-gradient(ellipse at 100% -10%, rgba(255, 120, 73, 0.07), transparent 55%),
+    radial-gradient(ellipse at -10% 110%, rgba(244, 198, 96, 0.05), transparent 65%),
+    var(--ink);
+  background-attachment: fixed;
+  overflow-x: hidden;
+}
+
+.grain {
+  pointer-events: none; position: fixed; inset: 0; z-index: 100; opacity: 0.08; mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml;utf8,<svg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.6 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+}
+.scanlines {
+  pointer-events: none; position: fixed; inset: 0; z-index: 99;
+  background: repeating-linear-gradient(180deg, transparent, transparent 2px, rgba(244,239,230,0.012) 2px, rgba(244,239,230,0.012) 3px);
+}
+::selection { background: var(--accent); color: var(--ink); }
+
+/* Focus-visible — keyboard navigation only */
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+a:focus-visible, button:focus-visible, input:focus-visible, [tabindex]:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+.matrix tbody tr.feature-row td.cell:focus-visible,
+.matrix tbody tr.feature-row td.feature-col:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: -2px;
+}
+
+.page { max-width: 1640px; margin: 0 auto; padding: 56px 48px 96px; position: relative; }
+
+/* ─────────── MASTHEAD ─────────── */
+.masthead {
+  display: grid; grid-template-columns: 1fr auto; gap: 48px; align-items: end;
+  padding-bottom: 36px; border-bottom: 1px solid var(--line); margin-bottom: 32px;
+}
+.masthead__eyebrow {
+  font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.22em; color: var(--paper-3);
+  text-transform: uppercase; display: inline-flex; align-items: center; gap: 12px;
+  text-decoration: none; transition: color 0.2s ease;
+}
+.masthead__eyebrow:hover { color: var(--paper); }
+.masthead__eyebrow-arrow { color: var(--accent); transition: transform 0.2s ease; }
+.masthead__eyebrow:hover .masthead__eyebrow-arrow { transform: translateX(-4px); }
+.masthead__title {
+  font-family: var(--serif); font-weight: 400;
+  font-size: clamp(48px, 7vw, 108px); line-height: 0.95; letter-spacing: -0.02em;
+  margin-top: 16px; color: var(--paper);
+}
+.masthead__title em { font-style: italic; color: var(--accent); }
+.masthead__subtitle {
+  margin-top: 18px; font-size: 16px; color: var(--paper-2); max-width: 640px; line-height: 1.55;
+}
+.masthead__subtitle span {
+  font-family: var(--serif); font-style: italic; color: var(--paper);
+}
+
+.masthead__status {
+  text-align: right; display: flex; flex-direction: column; align-items: flex-end; gap: 14px; padding-bottom: 6px;
+}
+.status-line {
+  display: inline-flex; align-items: center; gap: 10px;
+  font-family: var(--mono); font-size: 11px; letter-spacing: 0.18em;
+  text-transform: uppercase; color: var(--gold);
+}
+.status-dot {
+  width: 8px; height: 8px; border-radius: 50%; background: var(--gold);
+  animation: pulse 2.4s infinite;
+}
+@keyframes pulse {
+  0% { box-shadow: 0 0 0 0 rgba(244,198,96,0.5); }
+  70% { box-shadow: 0 0 0 14px rgba(244,198,96,0); }
+  100% { box-shadow: 0 0 0 0 rgba(244,198,96,0); }
+}
+.status-time { font-family: var(--mono); font-size: 12px; color: var(--paper-3); }
+.status-counts { display: flex; gap: 24px; margin-top: 4px; }
+.status-counts > div {
+  text-align: right; font-family: var(--mono); font-size: 11px; letter-spacing: 0.12em;
+  text-transform: uppercase; color: var(--paper-3); display: flex; flex-direction: column; gap: 2px;
+}
+.status-counts strong {
+  font-family: var(--serif); font-style: italic; font-weight: 400; font-size: 28px;
+  color: var(--paper); letter-spacing: -0.01em; text-transform: none;
+}
+
+/* ─────────── FILTERS ─────────── */
+.filters {
+  display: grid; grid-template-columns: auto 1fr; gap: 18px 32px; align-items: center;
+  padding: 18px 22px; background: linear-gradient(180deg, var(--surface) 0%, var(--ink-2) 100%);
+  border: 1px solid var(--line); border-radius: 4px;
+  position: sticky; top: 16px; z-index: 50; backdrop-filter: blur(12px); margin-bottom: 28px;
+}
+.filter-search {
+  flex: 1; position: relative; grid-column: 1 / -1;
+}
+.filter-search input {
+  width: 100%; background: var(--ink); border: 1px solid var(--line); color: var(--paper);
+  font-family: var(--mono); font-size: 13px; padding: 12px 16px 12px 42px;
+  border-radius: 3px; outline: none; transition: border-color 0.2s ease;
+}
+.filter-search input::placeholder { color: var(--paper-3); }
+.filter-search input:focus { border-color: var(--accent); }
+.filter-search::before {
+  content: '⌕'; position: absolute; left: 16px; top: 50%; transform: translateY(-50%);
+  color: var(--paper-3); font-size: 18px; pointer-events: none;
+}
+.filter-chips {
+  grid-column: 1 / -1; display: flex; flex-wrap: wrap; gap: 6px; align-items: center;
+}
+.filter-chips__label {
+  font-family: var(--mono); font-size: 10px; letter-spacing: 0.16em;
+  text-transform: uppercase; color: var(--paper-3); margin-right: 4px;
+}
+.chip {
+  background: transparent; border: 1px solid var(--line-2); color: var(--paper-2);
+  font-family: var(--mono); font-size: 11px; letter-spacing: 0.06em;
+  padding: 6px 12px; border-radius: 99px; cursor: pointer; transition: all 0.15s ease;
+  display: inline-flex; align-items: center; gap: 8px; white-space: nowrap;
+}
+.chip:hover { border-color: var(--paper-3); color: var(--paper); }
+.chip.is-active { background: var(--paper); border-color: var(--paper); color: var(--ink); }
+.chip .swatch {
+  width: 8px; height: 8px; border-radius: 2px;
+}
+
+/* ─────────── MATRIX ─────────── */
+.matrix-wrap {
+  overflow-x: auto; margin-bottom: 48px;
+  border: 1px solid var(--line); border-radius: 6px;
+  background: linear-gradient(180deg, var(--ink-2) 0%, var(--ink) 100%);
+}
+.matrix {
+  width: 100%; border-collapse: collapse; min-width: 1000px;
+  font-family: var(--sans); font-size: 13px;
+}
+.matrix thead th {
+  position: sticky; top: 0; z-index: 10; background: var(--ink-2);
+  font-family: var(--mono); font-weight: 500; font-size: 10.5px;
+  letter-spacing: 0.14em; text-transform: uppercase; color: var(--paper-2);
+  padding: 18px 12px 12px; vertical-align: bottom; text-align: center;
+  border-bottom: 1px solid var(--line-2);
+  white-space: nowrap;
+}
+.matrix thead th.feature-col {
+  text-align: left; padding-left: 22px; min-width: 280px;
+  font-family: var(--serif); font-style: italic; font-size: 16px;
+  letter-spacing: 0; text-transform: none; color: var(--paper);
+  font-weight: 400;
+}
+.matrix th .vendor-tag {
+  display: inline-flex; align-items: center; gap: 6px;
+}
+.matrix th .swatch {
+  width: 6px; height: 6px; border-radius: 1px;
+}
+
+.matrix tbody tr.category-row td {
+  padding: 22px 22px 10px;
+  border-top: 1px dashed var(--line);
+  background: linear-gradient(180deg, rgba(0,0,0,0.2), transparent);
+}
+.matrix tbody tr.category-row td .cat-label {
+  font-family: var(--mono); font-size: 10px; letter-spacing: 0.22em;
+  text-transform: uppercase; color: var(--paper-3);
+  display: flex; align-items: center; gap: 10px;
+}
+.matrix tbody tr.category-row td .cat-label::after {
+  content: ''; flex: 1; height: 1px; background: var(--line);
+}
+.matrix tbody tr.feature-row td {
+  padding: 12px 12px; border-bottom: 1px solid var(--line);
+  vertical-align: middle;
+}
+.matrix tbody tr.feature-row td.feature-col {
+  padding-left: 22px; color: var(--paper); font-size: 14px;
+  text-align: left;
+  border-right: 1px solid var(--line);
+  cursor: pointer;
+}
+.matrix tbody tr.feature-row td.cell {
+  text-align: center; min-width: 110px; cursor: pointer;
+  transition: background 0.15s ease;
+  position: relative;
+}
+.matrix tbody tr.feature-row td.cell:hover {
+  background: rgba(255, 120, 73, 0.04);
+}
+.matrix tbody tr.feature-row:hover {
+  background: linear-gradient(90deg, transparent, rgba(255, 120, 73, 0.02), transparent);
+}
+/* Compact note preview inside the cell */
+.cell-note {
+  display: block; margin-top: 6px;
+  font-family: var(--mono); font-size: 9.5px; line-height: 1.4;
+  color: var(--paper-3); max-width: 200px; margin-left: auto; margin-right: auto;
+}
+
+.cell-mark {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 24px; height: 24px; border-radius: 50%;
+  font-family: var(--mono); font-size: 14px; font-weight: 500;
+  position: relative;
+}
+.cell-mark--yes  { background: rgba(111, 231, 181, 0.15); color: var(--yes); }
+.cell-mark--no   { background: rgba(244, 123, 123, 0.12); color: var(--no); opacity: 0.65; }
+.cell-mark--part { background: rgba(244, 198, 96, 0.15); color: var(--part); }
+.cell-mark--info { background: rgba(124, 215, 241, 0.13); color: var(--sky); }
+.cell-mark__star {
+  position: absolute; top: -3px; right: -6px;
+  font-size: 10px; color: var(--accent);
+  background: var(--ink-2); border-radius: 50%; width: 12px; height: 12px;
+  display: inline-flex; align-items: center; justify-content: center;
+}
+
+/* Hide columns when provider filtered out */
+.matrix.hide-aws   .col-aws,
+.matrix.hide-azure .col-azure,
+.matrix.hide-gcp   .col-gcp,
+.matrix.hide-oci   .col-oci { display: none; }
+
+/* Hide rows when filtered/searched */
+.matrix tbody tr.feature-row.is-hidden,
+.matrix tbody tr.category-row.is-hidden { display: none; }
+
+.matrix-empty {
+  display: none; padding: 40px 22px; text-align: center;
+  font-family: var(--mono); font-size: 12px; color: var(--paper-3);
+}
+.matrix-empty.is-visible { display: block; }
+
+/* ─────────── LEGEND ─────────── */
+.legend {
+  display: flex; flex-wrap: wrap; gap: 18px; align-items: center;
+  margin-bottom: 28px; padding: 16px 22px;
+  background: var(--surface); border: 1px solid var(--line); border-radius: 4px;
+  font-family: var(--mono); font-size: 11px; color: var(--paper-2);
+}
+.legend__label {
+  font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--paper-3);
+}
+.legend__item { display: inline-flex; align-items: center; gap: 8px; }
+
+/* ─────────── PREAMBLE NOTE ─────────── */
+.preamble {
+  margin-bottom: 28px; padding: 18px 22px;
+  background: linear-gradient(180deg, var(--surface) 0%, var(--ink-2) 100%);
+  border: 1px solid var(--line); border-left: 2px solid var(--accent); border-radius: 4px;
+  font-size: 13.5px; color: var(--paper-2); line-height: 1.62; max-width: 1100px;
+}
+.preamble strong { color: var(--paper); font-weight: 600; }
+.preamble em { font-family: var(--serif); font-style: italic; color: var(--paper); font-size: 15px; }
+
+/* ─────────── DRAWER ─────────── */
+.drawer-backdrop {
+  position: fixed; inset: 0; background: rgba(10, 9, 7, 0.7); backdrop-filter: blur(8px);
+  z-index: 200; opacity: 0; pointer-events: none; transition: opacity 0.25s ease;
+}
+.drawer-backdrop.is-open { opacity: 1; pointer-events: auto; }
+.drawer {
+  position: fixed; top: 0; right: 0; bottom: 0; width: min(660px, 100%);
+  background: var(--ink-2); border-left: 1px solid var(--line-2); z-index: 201;
+  transform: translateX(100%); transition: transform 0.32s cubic-bezier(0.2, 0.8, 0.2, 1);
+  display: flex; flex-direction: column;
+}
+.drawer.is-open { transform: translateX(0); }
+.drawer__head {
+  padding: 28px 32px 22px; border-bottom: 1px solid var(--line); position: relative; flex-shrink: 0;
+}
+.drawer__close {
+  position: absolute; top: 20px; right: 20px;
+  background: transparent; border: 1px solid var(--line-2); color: var(--paper-2);
+  font-family: var(--mono); font-size: 11px; padding: 6px 10px; cursor: pointer;
+  border-radius: 2px; letter-spacing: 0.1em; text-transform: uppercase;
+}
+.drawer__close:hover { border-color: var(--paper); color: var(--paper); }
+.drawer__eyebrow {
+  font-family: var(--mono); font-size: 10px; letter-spacing: 0.22em;
+  text-transform: uppercase; color: var(--accent);
+}
+.drawer__title {
+  font-family: var(--serif); font-size: 32px; font-weight: 400;
+  letter-spacing: -0.012em; line-height: 1.05; margin-top: 8px; padding-right: 80px;
+}
+.drawer__desc {
+  margin-top: 12px; font-size: 14px; color: var(--paper-2); line-height: 1.6;
+}
+.drawer__body { padding: 22px 32px 32px; overflow-y: auto; flex: 1; }
+.drawer__section { margin-bottom: 24px; }
+.drawer__section h4 {
+  font-family: var(--mono); font-size: 10.5px; font-weight: 500;
+  letter-spacing: 0.18em; text-transform: uppercase; color: var(--paper-3);
+  margin-bottom: 12px; display: flex; align-items: center; gap: 10px;
+}
+.drawer__section h4::after { content: ''; flex: 1; height: 1px; background: var(--line); }
+
+.vendor-row {
+  display: grid; grid-template-columns: auto 1fr; gap: 14px;
+  padding: 14px 16px; background: var(--surface);
+  border: 1px solid var(--line); border-radius: 3px; margin-bottom: 6px;
+  align-items: start;
+}
+.vendor-row__name {
+  font-family: var(--mono); font-size: 12.5px; font-weight: 500; color: var(--paper);
+  display: flex; align-items: center; gap: 9px;
+}
+.vendor-row__name .swatch { width: 8px; height: 8px; border-radius: 2px; flex: none; }
+.vendor-row__note {
+  font-family: var(--sans); font-size: 12.5px; color: var(--paper-2); line-height: 1.58; margin-top: 5px;
+}
+.vendor-row__src {
+  display: inline-block; margin-top: 7px;
+  font-family: var(--mono); font-size: 10px; letter-spacing: 0.04em;
+  color: var(--paper-3); text-decoration: underline;
+  text-decoration-color: var(--line-2); text-underline-offset: 3px;
+}
+.vendor-row__src:hover { color: var(--accent); }
+.vendor-row__mark {
+  font-family: var(--mono); font-size: 16px; font-weight: 500;
+  width: 30px; height: 30px; border-radius: 50%;
+  display: inline-flex; align-items: center; justify-content: center; flex: none;
+}
+.vendor-row__mark--yes  { background: rgba(111, 231, 181, 0.15); color: var(--yes); }
+.vendor-row__mark--no   { background: rgba(244, 123, 123, 0.12); color: var(--no); opacity: 0.65; }
+.vendor-row__mark--part { background: rgba(244, 198, 96, 0.15); color: var(--part); }
+.vendor-row__mark--info { background: rgba(124, 215, 241, 0.13); color: var(--sky); }
+
+/* ─────────── COLOPHON ─────────── */
+.colophon {
+  margin-top: 64px; padding-top: 32px; border-top: 1px solid var(--line);
+  display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 32px;
+  font-size: 13px; color: var(--paper-3);
+}
+.colophon h5 {
+  font-family: var(--mono); font-size: 10px; letter-spacing: 0.18em;
+  text-transform: uppercase; color: var(--paper-2); margin-bottom: 10px; font-weight: 500;
+}
+.colophon p { font-size: 13px; line-height: 1.6; }
+.colophon p a {
+  color: var(--paper-2); text-decoration: underline;
+  text-decoration-color: var(--line-2); text-underline-offset: 3px;
+}
+.colophon p a:hover { color: var(--accent); }
+.colophon code {
+  font-family: var(--mono); font-size: 11.5px; background: var(--surface);
+  padding: 1px 6px; border-radius: 2px; border: 1px solid var(--line); color: var(--accent-2);
+}
+
+@media (max-width: 900px) {
+  .page { padding: 32px 22px 72px; }
+  .masthead { grid-template-columns: 1fr; gap: 24px; }
+  .masthead__status { text-align: left; align-items: flex-start; }
+  .filters { position: static; padding: 14px; }
+  .colophon { grid-template-columns: 1fr; gap: 24px; }
+}
+</style>
+</head>
+<body>
+
+<div class="grain"></div>
+<div class="scanlines"></div>
+
+<div class="page">
+
+  <header class="masthead">
+    <div class="masthead__brand">
+      <a class="masthead__eyebrow" href="../">
+        <span class="masthead__eyebrow-arrow">←</span>
+        Infra Atlas · Identity &amp; Access · IAM Matrix
+      </a>
+      <h1 class="masthead__title">Identity <em>Matrix.</em></h1>
+      <p class="masthead__subtitle">
+        Four hyperscaler IAM systems against <span>every meaningful capability</span> — policy model, evaluation logic, workload identity federation, short-lived credentials, the account hierarchy, ABAC. <span>The models are not 1:1 — so the asterisks stay.</span>
+      </p>
+    </div>
+    <aside class="masthead__status">
+      <div class="status-line">
+        <span class="status-dot"></span>
+        <span class="status-text">Curated · v1</span>
+      </div>
+      <div class="status-time">Issue 01 · 2026-05-16</div>
+      <div class="status-counts">
+        <div>Providers<strong id="count-vendors">4</strong></div>
+        <div>Capabilities<strong id="count-features">—</strong></div>
+        <div>Footnotes<strong id="count-stars">—</strong></div>
+      </div>
+    </aside>
+  </header>
+
+  <main id="ia-main">
+
+  <p class="preamble">
+    <em>A note before the matrix.</em> Identity systems are the part of cloud that resists comparison hardest. AWS IAM, Azure&rsquo;s split of <strong>Entra ID</strong> (identity) and <strong>Azure RBAC</strong> (resource authorization), Google Cloud IAM and OCI IAM each grew from different roots — so a checkmark here means &ldquo;a real, documented equivalent exists,&rdquo; never &ldquo;identical.&rdquo; Where a capability is present but works differently enough to mislead, the cell is marked <span style="font-family:var(--mono);color:var(--sky)">≈</span> (model differs) and carries a footnote. Click any cell for the per-provider detail and its documentation source.
+  </p>
+
+  <section class="filters">
+    <div class="filter-search">
+      <input id="search" type="search" autocomplete="off" spellcheck="false" placeholder="Filter capabilities — search by name, category, provider…" aria-label="Filter capabilities">
+    </div>
+    <div class="filter-chips" id="cat-chips" role="group" aria-label="Filter by category"></div>
+    <div class="filter-chips" id="vendor-chips" role="group" aria-label="Filter by provider"></div>
+  </section>
+
+  <div class="legend">
+    <span class="legend__label">Legend</span>
+    <span class="legend__item"><span class="cell-mark cell-mark--yes">✓</span> Native / first-class</span>
+    <span class="legend__item"><span class="cell-mark cell-mark--part">◐</span> Partial / scoped / via add-on</span>
+    <span class="legend__item"><span class="cell-mark cell-mark--no">✗</span> Not supported</span>
+    <span class="legend__item"><span class="cell-mark cell-mark--info">≈</span> Exists, but model differs</span>
+    <span class="legend__item"><span class="cell-mark cell-mark--yes" style="position:relative">✓<span class="cell-mark__star">*</span></span> Click cell for footnote + source</span>
+  </div>
+
+  <div class="matrix-wrap">
+    <table class="matrix" id="matrix" aria-label="Cross-provider IAM capability matrix"></table>
+    <div class="matrix-empty" id="matrix-empty">No capabilities match the current filter.</div>
+  </div>
+
+  </main>
+
+  <footer class="colophon">
+    <div>
+      <h5>About</h5>
+      <p>Instrument 08 of <a href="../">Infra Atlas</a>. A cross-hyperscaler identity &amp; access-management comparator — AWS IAM, Azure (Entra ID + Azure RBAC), Google Cloud IAM and OCI IAM, capability by capability. Click any cell for the footnote; IAM has <em style="font-family: var(--serif); font-style: italic;">many</em> footnotes, because the models genuinely diverge.</p>
+    </div>
+    <div>
+      <h5>Sources</h5>
+      <p>Every cell is backed by the provider&rsquo;s official IAM documentation — AWS IAM User Guide, Microsoft Entra &amp; Azure RBAC docs, Google Cloud IAM docs, Oracle Cloud Infrastructure IAM docs. URLs are cited inline in the page source and in each cell&rsquo;s drawer. Snapshot as of May 2026. <em>If you spot a stale fact, <a href="https://github.com/ineslino/infraatlas/issues/new" target="_blank" rel="noopener">open an issue</a>.</em></p>
+    </div>
+    <div>
+      <h5>Shortcuts</h5>
+      <p><code>/</code> search · <code>Esc</code> close drawer · click a cell for the footnote and source, click a capability name for the full per-provider breakdown.</p>
+    </div>
+  </footer>
+
+</div>
+
+<!-- DRAWER -->
+<div class="drawer-backdrop" id="drawer-backdrop"></div>
+<aside class="drawer" id="drawer" role="dialog" aria-modal="true" aria-labelledby="drawer-title" aria-hidden="true">
+  <div class="drawer__head" id="drawer-head"></div>
+  <div class="drawer__body" id="drawer-body"></div>
+</aside>
+
+<script>
+// ════════════════════════════════════════════════════════════════════
+// INFRA ATLAS · IAM / IDENTITY MATRIX
+// Every cell below is backed by official vendor IAM documentation.
+// Source URLs are cited per-provider in the `src` field and rendered
+// in the drawer. Anything nuanced is footnoted in the `note` field;
+// "level: info" (≈) flags a real capability whose model differs enough
+// that a plain "✓" would be misleading.
+// ════════════════════════════════════════════════════════════════════
+
+// ───────────────────────────────────────────────────────────────────
+// PROVIDERS
+// ───────────────────────────────────────────────────────────────────
+const VENDORS = [
+  { key: "aws",   name: "AWS IAM",                       short: "AWS IAM",        swatch: "#FF9F66" },
+  { key: "azure", name: "Azure — Entra ID + Azure RBAC",  short: "Azure",          swatch: "#7CD7F1" },
+  { key: "gcp",   name: "Google Cloud IAM",              short: "GCP IAM",        swatch: "#6FE7B5" },
+  { key: "oci",   name: "Oracle Cloud (OCI) IAM",        short: "OCI IAM",        swatch: "#C586E8" }
+];
+
+// ───────────────────────────────────────────────────────────────────
+// CATEGORIES
+// ───────────────────────────────────────────────────────────────────
+const CATEGORIES = [
+  { key: "model",       label: "Policy Model & Language" },
+  { key: "evaluation",  label: "Permission Evaluation" },
+  { key: "hierarchy",   label: "Organisation Hierarchy" },
+  { key: "workload",    label: "Workload & Federated Identity" },
+  { key: "credentials", label: "Credentials & Service-to-Service Auth" },
+  { key: "abac",        label: "Attribute / Condition-Based Access" }
+];
+
+// ───────────────────────────────────────────────────────────────────
+// CAPABILITIES (rows)
+// level: yes | part | no | info   ·   info (≈) = real but model differs
+// ───────────────────────────────────────────────────────────────────
+const FEATURES = [
+
+  // ══════════════ POLICY MODEL & LANGUAGE ══════════════
+  { id:"identity-policy", category:"model", name:"Identity-based policies",
+    desc:"Permissions attached to a principal (user, group, role, service identity) that say what that principal may do.",
+    support: {
+      // https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies.html
+      aws:   { level:"yes",  note:"First-class. Managed or inline identity-based policies attach to IAM users, groups and roles and grant permissions to the identity they are attached to.",
+               src:"https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies.html" },
+      // https://learn.microsoft.com/en-us/azure/role-based-access-control/overview
+      azure: { level:"yes",  note:"Modelled as role assignments: a role definition (a set of Actions/DataActions) is assigned to a security principal at a scope. There is no standalone 'policy document' attached to the identity — the assignment is the grant.",
+               src:"https://learn.microsoft.com/en-us/azure/role-based-access-control/overview" },
+      // https://docs.cloud.google.com/iam/docs/overview
+      gcp:   { level:"yes",  note:"Allow policies bind a principal to a role on a resource. The binding lives on the resource, but the effect — granting a principal permissions — is the identity-based model.",
+               src:"https://docs.cloud.google.com/iam/docs/overview" },
+      // https://docs.oracle.com/en-us/iaas/Content/Identity/policiesgs/get-started-with-policies.htm
+      oci:   { level:"yes",  note:"Policies grant access to groups (and dynamic groups), not directly to individual users. A user inherits permissions through group membership; the policy statement is the grant.",
+               src:"https://docs.oracle.com/en-us/iaas/Content/Identity/policiesgs/get-started-with-policies.htm" }
+    }
+  },
+  { id:"resource-policy", category:"model", name:"Resource-based policies",
+    desc:"A policy attached to the resource itself, naming who may access it — enables cross-account / cross-tenant grants without touching the caller's identity.",
+    support: {
+      // https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies.html#policies_resource-based
+      aws:   { level:"yes",  note:"Native and widely used — S3 bucket policies, SQS/SNS access policies, KMS key policies, Lambda resource policies, IAM role trust policies. They include a Principal element and enable cross-account access.",
+               src:"https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies.html" },
+      azure: { level:"info", note:"No general resource-based policy document. Cross-tenant / cross-subscription access is instead achieved by assigning a role to an external principal at the resource scope (Azure RBAC), or via service-specific mechanisms (e.g. storage account SAS, Key Vault access). The grant is still a role assignment, not a policy on the resource.",
+               src:"https://learn.microsoft.com/en-us/azure/role-based-access-control/role-assignments-external-users" },
+      gcp:   { level:"info", note:"Allow policies are always attached to a resource (or to a folder/project/org that the resource inherits from), so in that sense every GCP policy is 'resource-attached'. But there is no separate Principal-bearing document type as in AWS; cross-project access is granted by adding the external principal to the resource's allow policy.",
+               src:"https://docs.cloud.google.com/iam/docs/overview" },
+      oci:   { level:"part", note:"Policies are attached to a compartment (or the tenancy), and cross-tenancy access uses explicit Define/Endorse/Admit policy statements between tenancies. There is no per-object Principal policy; the compartment-scoped statement is the unit of grant.",
+               src:"https://docs.oracle.com/en-us/iaas/Content/Identity/Concepts/policysyntax.htm" }
+    }
+  },
+  { id:"policy-language", category:"model", name:"Policy language format",
+    desc:"What you actually author — JSON, a DSL, a portal abstraction. Determines how readable, diffable and version-controllable your access config is.",
+    support: {
+      // https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_grammar.html
+      aws:   { level:"info", note:"JSON. Policies are JSON documents with Version, Statement, Effect (Allow/Deny), Action, Resource, Principal and Condition elements. Highly expressive and diffable, but the JSON grammar is the source of much of IAM's reputation for complexity.",
+               src:"https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_grammar.html" },
+      // https://learn.microsoft.com/en-us/azure/role-based-access-control/role-definitions
+      azure: { level:"info", note:"JSON role definitions (Actions, NotActions, DataActions, NotDataActions, AssignableScopes) — but you mostly consume built-in roles rather than author them. ABAC conditions use a separate condition language. Entra ID identity policy (Conditional Access) is configured in the portal/Graph, not as JSON you hand-write.",
+               src:"https://learn.microsoft.com/en-us/azure/role-based-access-control/role-definitions" },
+      // https://docs.cloud.google.com/iam/docs/policies
+      gcp:   { level:"info", note:"Allow/deny policies are JSON or YAML objects (bindings of role + members, optionally with a condition). IAM Conditions and PAB policies use Common Expression Language (CEL) expressions. No custom DSL — standard structured data plus CEL.",
+               src:"https://docs.cloud.google.com/iam/docs/policies" },
+      // https://docs.oracle.com/en-us/iaas/Content/Identity/Concepts/policysyntax.htm
+      oci:   { level:"info", note:"A human-readable DSL, not JSON. Statements read like sentences: 'Allow group <g> to <verb> <resource-type> in compartment <c> where <conditions>'. Easy to read; less mechanically diffable than JSON and not a general data format.",
+               src:"https://docs.oracle.com/en-us/iaas/Content/Identity/Concepts/policysyntax.htm" }
+    }
+  },
+  { id:"managed-roles", category:"model", name:"Provider-managed / built-in roles",
+    desc:"Curated permission sets maintained by the provider, so you are not assembling every permission by hand.",
+    support: {
+      // https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies_managed-vs-inline.html
+      aws:   { level:"yes",  note:"AWS managed policies (e.g. AdministratorAccess, ReadOnlyAccess, ViewOnlyAccess and hundreds of service-specific ones) are maintained and updated by AWS. Job-function managed policies provide coarse role-like bundles.",
+               src:"https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies_managed-vs-inline.html" },
+      // https://learn.microsoft.com/en-us/azure/role-based-access-control/built-in-roles
+      azure: { level:"yes",  note:"A large catalogue of built-in roles (Owner, Contributor, Reader, plus service-specific roles) maintained by Microsoft; custom roles fill the gaps. Entra ID also ships built-in directory roles (e.g. Global Administrator).",
+               src:"https://learn.microsoft.com/en-us/azure/role-based-access-control/built-in-roles" },
+      // https://docs.cloud.google.com/iam/docs/understanding-roles
+      gcp:   { level:"yes",  note:"Predefined roles maintained by Google for each service (hundreds), plus three legacy basic roles (Owner/Editor/Viewer). Custom roles let you assemble your own permission sets.",
+               src:"https://docs.cloud.google.com/iam/docs/understanding-roles" },
+      // https://docs.oracle.com/en-us/iaas/Content/Identity/policyreference/policyreference.htm
+      oci:   { level:"part", note:"No catalogue of named built-in roles. OCI ships aggregate verbs (inspect, read, use, manage) and a policy reference of resource-types/permissions; you compose access from those rather than picking a pre-built role. Tenancy admins are the one built-in privileged group.",
+               src:"https://docs.oracle.com/en-us/iaas/Content/Identity/policyreference/policyreference.htm" }
+    }
+  },
+
+  // ══════════════ PERMISSION EVALUATION ══════════════
+  { id:"default-deny", category:"evaluation", name:"Implicit default-deny",
+    desc:"With no matching grant, the request is denied. The universal baseline of least privilege.",
+    support: {
+      // https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_evaluation-logic.html
+      aws:   { level:"yes",  note:"All requests are implicitly denied by default; an explicit Allow in an applicable policy is required to permit an action.",
+               src:"https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_evaluation-logic.html" },
+      // https://learn.microsoft.com/en-us/azure/role-based-access-control/overview
+      azure: { level:"yes",  note:"If the principal has no role assignment granting the action at the requested scope, access is not allowed.",
+               src:"https://learn.microsoft.com/en-us/azure/role-based-access-control/overview" },
+      // https://docs.cloud.google.com/iam/docs/overview
+      gcp:   { level:"yes",  note:"A principal needs a role granting the permission via an allow policy; absent that, the request is denied.",
+               src:"https://docs.cloud.google.com/iam/docs/overview" },
+      // https://docs.oracle.com/en-us/iaas/Content/Identity/Concepts/policies.htm
+      oci:   { level:"yes",  note:"Access is denied unless a policy statement explicitly allows it (a few self-service actions on a user's own credentials are the exception).",
+               src:"https://docs.oracle.com/en-us/iaas/Content/Identity/Concepts/policies.htm" }
+    }
+  },
+  { id:"explicit-deny", category:"evaluation", name:"Explicit deny statements",
+    desc:"The ability to write a rule that forbids an action — and have it beat any allow. The cornerstone of guardrails.",
+    support: {
+      // https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_evaluation-logic.html
+      aws:   { level:"yes",  note:"Any policy can use \"Effect\": \"Deny\". An explicit deny in any applicable policy (identity-based, resource-based, SCP, RCP, permissions boundary, session policy) overrides every allow.",
+               src:"https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_evaluation-logic.html" },
+      // https://learn.microsoft.com/en-us/azure/role-based-access-control/deny-assignments
+      azure: { level:"part", note:"Role assignments cannot deny — they are additive only. Deny is expressed through deny assignments, which block actions and take precedence over role assignments, but customers cannot create them directly: they are produced by Azure (e.g. by Azure Blueprints, Managed Apps, Deployment Stacks). ABAC conditions also cannot deny.",
+               src:"https://learn.microsoft.com/en-us/azure/role-based-access-control/deny-assignments" },
+      // https://docs.cloud.google.com/iam/docs/deny-overview
+      gcp:   { level:"yes",  note:"IAM deny policies are author-created and attach to the org/folder/project. A deny rule prevents a principal from using a permission even where a role grants it; deny is evaluated before allow and wins.",
+               src:"https://docs.cloud.google.com/iam/docs/deny-overview" },
+      // https://docs.oracle.com/en-us/iaas/Content/Identity/Concepts/policysyntax.htm
+      oci:   { level:"no",   note:"OCI IAM is allow-only — there is no Deny verb. Access is restricted by not granting it, by narrowing the compartment, or by 'where' conditions on the allow. Removing a user from a group is how you 'revoke'.",
+               src:"https://docs.oracle.com/en-us/iaas/Content/Identity/Concepts/policysyntax.htm" }
+    }
+  },
+  { id:"deny-precedence", category:"evaluation", name:"Deny-overrides-allow precedence",
+    desc:"When an allow and a deny both match, which wins. Determines whether guardrails are actually enforceable.",
+    support: {
+      // https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_evaluation-logic.html
+      aws:   { level:"yes",  note:"Explicit deny always wins. AWS evaluates all policy types and a deny in any one of them overrides allows in all others — the rule is invariant across the whole evaluation chain.",
+               src:"https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_evaluation-logic.html" },
+      // https://learn.microsoft.com/en-us/azure/role-based-access-control/overview
+      azure: { level:"yes",  note:"Deny assignments are evaluated first: if one applies, access is blocked before role assignments are even considered. So deny-over-allow holds — but only for the Azure-generated deny assignments described above.",
+               src:"https://learn.microsoft.com/en-us/azure/role-based-access-control/overview" },
+      // https://docs.cloud.google.com/iam/docs/deny-overview
+      gcp:   { level:"yes",  note:"IAM checks deny policies before allow policies. If a deny rule matches the principal, permission and conditions, the request is denied regardless of any role grant.",
+               src:"https://docs.cloud.google.com/iam/docs/deny-overview" },
+      // https://docs.oracle.com/en-us/iaas/Content/Identity/Concepts/policysyntax.htm
+      oci:   { level:"no",   note:"Not applicable — with no deny construct there is nothing to give precedence to. Effective access is simply the union of all matching allow statements.",
+               src:"https://docs.oracle.com/en-us/iaas/Content/Identity/Concepts/policysyntax.htm" }
+    }
+  },
+  { id:"permission-boundaries", category:"evaluation", name:"Permission ceilings / boundaries",
+    desc:"An upper bound on what a principal can ever be granted — the effective permissions are the intersection of the grant and the ceiling.",
+    support: {
+      // https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies_boundaries.html
+      aws:   { level:"yes",  note:"Permissions boundaries cap an IAM user or role: effective permissions = intersection of identity-based policies and the boundary. SCPs and RCPs apply an analogous org-wide ceiling across accounts.",
+               src:"https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies_boundaries.html" },
+      // https://learn.microsoft.com/en-us/entra/identity-platform/custom-rbac-for-developers
+      azure: { level:"part", note:"No single 'permissions boundary' primitive. A custom role's AssignableScopes and its Actions/NotActions bound what it can do, and Entra PIM time-bounds activation, but there is no intersection-style ceiling layered on top of an existing assignment the way AWS boundaries work.",
+               src:"https://learn.microsoft.com/en-us/azure/role-based-access-control/custom-roles" },
+      // https://docs.cloud.google.com/iam/docs/principal-access-boundary-policies
+      gcp:   { level:"yes",  note:"Principal Access Boundary (PAB) policies define the set of resources a principal is eligible to access; access requires both a PAB allowing the resource and an allow policy granting the role — an intersection ceiling.",
+               src:"https://docs.cloud.google.com/iam/docs/principal-access-boundary-policies" },
+      // https://docs.oracle.com/en-us/iaas/Content/Identity/Concepts/policies.htm
+      oci:   { level:"no",   note:"No ceiling construct. The compartment a policy is written in scopes access, but there is no intersection-style boundary applied on top of group grants.",
+               src:"https://docs.oracle.com/en-us/iaas/Content/Identity/Concepts/policies.htm" }
+    }
+  },
+
+  // ══════════════ ORGANISATION HIERARCHY ══════════════
+  { id:"org-hierarchy", category:"hierarchy", name:"Multi-account / multi-project hierarchy",
+    desc:"A tree of accounts/projects/subscriptions above the individual workload, for blast-radius isolation and delegated administration.",
+    support: {
+      // https://docs.aws.amazon.com/organizations/latest/userguide/orgs_getting-started_concepts.html
+      aws:   { level:"yes",  note:"AWS Organizations: a root, nested Organizational Units (OUs), and member accounts. The account is the primary isolation boundary; OUs group accounts for policy.",
+               src:"https://docs.aws.amazon.com/organizations/latest/userguide/orgs_getting-started_concepts.html" },
+      // https://learn.microsoft.com/en-us/azure/governance/management-groups/overview
+      azure: { level:"yes",  note:"Management groups → subscriptions → resource groups → resources, a four-level scope tree. Management groups can nest; this hierarchy is also where Azure RBAC scopes and Azure Policy apply.",
+               src:"https://learn.microsoft.com/en-us/azure/governance/management-groups/overview" },
+      // https://docs.cloud.google.com/resource-manager/docs/cloud-platform-resource-hierarchy
+      gcp:   { level:"yes",  note:"Organisation → folders (can nest) → projects → resources. The project is the core isolation unit; folders model departments/teams.",
+               src:"https://docs.cloud.google.com/resource-manager/docs/cloud-platform-resource-hierarchy" },
+      // https://docs.oracle.com/en-us/iaas/Content/Identity/Tasks/managingcompartments.htm
+      oci:   { level:"info", note:"OCI uses compartments — a nestable tree inside a single tenancy — rather than separate accounts. Compartments isolate and meter resources and scope policy. One tenancy holds the whole tree, which differs from AWS's many-accounts model.",
+               src:"https://docs.oracle.com/en-us/iaas/Content/Identity/Tasks/managingcompartments.htm" }
+    }
+  },
+  { id:"policy-inheritance", category:"hierarchy", name:"Permission inheritance down the tree",
+    desc:"A grant or restriction made high in the hierarchy automatically applying to everything beneath it.",
+    support: {
+      // https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_evaluation-logic.html
+      aws:   { level:"part", note:"Identity-based grants do NOT inherit down accounts — each account's IAM is separate. What inherits is restriction: SCPs and RCPs attached to a root/OU apply to all accounts beneath. So downward inheritance is real for guardrails, not for grants.",
+               src:"https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies_scps.html" },
+      // https://learn.microsoft.com/en-us/azure/role-based-access-control/scope-overview
+      azure: { level:"yes",  note:"Role assignments inherit downward: a role assigned at a management group or subscription applies to every child scope. Azure Policy assigned at a higher scope likewise flows down.",
+               src:"https://learn.microsoft.com/en-us/azure/role-based-access-control/scope-overview" },
+      // https://docs.cloud.google.com/iam/docs/resource-hierarchy-access-control
+      gcp:   { level:"yes",  note:"Allow policies are inherited: a role granted on the organisation or a folder applies to all descendant folders, projects and resources. The effective policy of a resource is the union of its own and all ancestors'.",
+               src:"https://docs.cloud.google.com/iam/docs/resource-hierarchy-access-control" },
+      // https://docs.oracle.com/en-us/iaas/Content/Identity/Concepts/policies.htm
+      oci:   { level:"yes",  note:"A policy written for a parent compartment applies to its child compartments; access granted on a compartment covers the resources nested within it.",
+               src:"https://docs.oracle.com/en-us/iaas/Content/Identity/Concepts/policies.htm" }
+    }
+  },
+  { id:"directory", category:"hierarchy", name:"Distinct identity directory / tenant",
+    desc:"Whether human and app identities live in a dedicated identity service separate from the resource-permission layer.",
+    support: {
+      // https://docs.aws.amazon.com/singlesignon/latest/userguide/what-is.html
+      aws:   { level:"part", note:"IAM principals live per-account; there is no built-in cross-account directory. AWS IAM Identity Center (the successor to AWS SSO) adds a workforce directory and SSO across accounts, but it is a separate service layered on top of IAM, not IAM itself.",
+               src:"https://docs.aws.amazon.com/singlesignon/latest/userguide/what-is.html" },
+      // https://learn.microsoft.com/en-us/entra/fundamentals/whatis
+      azure: { level:"yes",  note:"Microsoft Entra ID is a full identity directory (tenant) — it owns users, groups, service principals and managed identities. Azure RBAC is a separate authorization layer that consumes Entra principals. This identity/authorization split is Azure's defining structural difference.",
+               src:"https://learn.microsoft.com/en-us/entra/fundamentals/whatis" },
+      // https://docs.cloud.google.com/iam/docs/overview
+      gcp:   { level:"part", note:"Human identities come from Google Workspace or Cloud Identity (a separate directory product); Google Cloud IAM itself manages service accounts and the role bindings. So there is a directory, but it is a sibling product rather than part of IAM.",
+               src:"https://docs.cloud.google.com/iam/docs/overview" },
+      // https://docs.oracle.com/en-us/iaas/Content/Identity/domains/overview.htm
+      oci:   { level:"yes",  note:"OCI Identity Domains are full identity directories (users, groups, SSO, MFA, lifecycle) built into IAM — based on Oracle Identity Cloud Service. Each domain is a self-contained directory within the tenancy.",
+               src:"https://docs.oracle.com/en-us/iaas/Content/Identity/domains/overview.htm" }
+    }
+  },
+
+  // ══════════════ WORKLOAD & FEDERATED IDENTITY ══════════════
+  { id:"oidc-federation", category:"workload", name:"OIDC workload identity federation",
+    desc:"Letting an external workload (CI runner, another cloud, an OIDC IdP) exchange its own token for cloud credentials — no stored secret.",
+    support: {
+      // https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_providers_oidc.html
+      aws:   { level:"yes",  note:"Register an OIDC identity provider in IAM, then the workload calls STS AssumeRoleWithWebIdentity, trading its JWT for temporary credentials of an IAM role. This is the documented pattern for GitHub Actions and any OIDC-compatible IdP.",
+               src:"https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_providers_oidc.html" },
+      // https://learn.microsoft.com/en-us/entra/workload-id/workload-identity-federation
+      azure: { level:"yes",  note:"Entra Workload Identity Federation: add a federated credential to an app registration or a user-assigned managed identity that trusts an external IdP's OIDC issuer. The workload swaps the external JWT for an Entra access token — no client secret.",
+               src:"https://learn.microsoft.com/en-us/entra/workload-id/workload-identity-federation" },
+      // https://docs.cloud.google.com/iam/docs/workload-identity-federation
+      gcp:   { level:"yes",  note:"Workload Identity Federation: a workload identity pool + provider trusts an external IdP (OIDC, SAML, AWS, Azure). External credentials are exchanged via the Security Token Service for short-lived Google Cloud access tokens, optionally impersonating a service account.",
+               src:"https://docs.cloud.google.com/iam/docs/workload-identity-federation" },
+      // https://docs.oracle.com/en-us/iaas/Content/Identity/domains/use-cases-iam-tokenexchange.htm
+      oci:   { level:"part", note:"OCI Identity Domains support OAuth2 token exchange and federation with external OIDC/SAML IdPs for SSO and for app integrations. There is no GitHub-Actions-style turnkey OIDC-to-IAM-role exchange equivalent to the other three; in-cloud workloads instead use instance/resource principals (see below).",
+               src:"https://docs.oracle.com/en-us/iaas/Content/Identity/domains/use-cases-iam-tokenexchange.htm" }
+    }
+  },
+  { id:"managed-identity", category:"workload", name:"Identity for in-cloud compute (keyless)",
+    desc:"A VM / container / function receiving an identity automatically, so application code calls cloud APIs with no credential to store.",
+    support: {
+      // https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/iam-roles-for-amazon-ec2.html
+      aws:   { level:"yes",  note:"IAM roles for compute: an instance profile on EC2, task roles on ECS, execution roles on Lambda. The platform delivers rotating temporary credentials via the instance metadata service — no keys in code.",
+               src:"https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/iam-roles-for-amazon-ec2.html" },
+      // https://learn.microsoft.com/en-us/entra/identity/managed-identities-azure-resources/overview
+      azure: { level:"yes",  note:"Managed identities (system-assigned or user-assigned) give an Azure resource an Entra identity; Azure manages and rotates the credentials, and code obtains tokens from the local identity endpoint.",
+               src:"https://learn.microsoft.com/en-us/entra/identity/managed-identities-azure-resources/overview" },
+      // https://docs.cloud.google.com/iam/docs/service-account-overview
+      gcp:   { level:"yes",  note:"Attach a service account to a VM, GKE workload, Cloud Run or Cloud Function; the metadata server supplies short-lived OAuth 2.0 access tokens automatically, with no key file.",
+               src:"https://docs.cloud.google.com/iam/docs/service-account-overview" },
+      // https://docs.oracle.com/en-us/iaas/Content/Identity/Tasks/callingservicesfrominstances.htm
+      oci:   { level:"yes",  note:"Instance principals: an OCI compute instance authenticates as an IAM principal. The instance is placed in a dynamic group via matching rules, and policies grant that dynamic group access — no keys on the instance.",
+               src:"https://docs.oracle.com/en-us/iaas/Content/Identity/Tasks/callingservicesfrominstances.htm" }
+    }
+  },
+  { id:"k8s-identity", category:"workload", name:"Kubernetes pod-level identity",
+    desc:"Per-pod cloud identity in managed Kubernetes, so each workload gets least-privilege access without sharing the node's identity.",
+    support: {
+      // https://docs.aws.amazon.com/eks/latest/userguide/pod-identities.html
+      aws:   { level:"yes",  note:"EKS Pod Identity associates an IAM role with a Kubernetes service account; the older IRSA (IAM Roles for Service Accounts) does the same via an OIDC provider. Each pod assumes its own role.",
+               src:"https://docs.aws.amazon.com/eks/latest/userguide/pod-identities.html" },
+      // https://learn.microsoft.com/en-us/azure/aks/workload-identity-overview
+      azure: { level:"yes",  note:"AKS workload identity federates a Kubernetes service account with an Entra app/managed identity through Workload Identity Federation; the pod's projected token is exchanged for an Entra access token.",
+               src:"https://learn.microsoft.com/en-us/azure/aks/workload-identity-overview" },
+      // https://docs.cloud.google.com/kubernetes-engine/docs/concepts/workload-identity
+      gcp:   { level:"yes",  note:"Workload Identity Federation for GKE lets Kubernetes service accounts act as IAM principals, so a pod authenticates to Google Cloud APIs as itself without node-level credentials.",
+               src:"https://docs.cloud.google.com/kubernetes-engine/docs/concepts/workload-identity" },
+      // https://docs.oracle.com/en-us/iaas/Content/ContEng/Tasks/contenggrantingworkloadaccesstoresources.htm
+      oci:   { level:"yes",  note:"OKE workload identity: define a policy that grants a Kubernetes service account (scoped by cluster, namespace and SA name) access to OCI resources, so a pod authenticates as a distinct principal.",
+               src:"https://docs.oracle.com/en-us/iaas/Content/ContEng/Tasks/contenggrantingworkloadaccesstoresources.htm" }
+    }
+  },
+  { id:"saml-federation", category:"workload", name:"SAML 2.0 federation for human SSO",
+    desc:"Federating an enterprise SAML IdP so workforce users sign in to the cloud without separate cloud credentials.",
+    support: {
+      // https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_providers_saml.html
+      aws:   { level:"yes",  note:"IAM supports SAML 2.0 identity providers; users authenticate at the IdP and call STS AssumeRoleWithSAML for temporary credentials. IAM Identity Center also brokers SAML for workforce SSO.",
+               src:"https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_providers_saml.html" },
+      // https://learn.microsoft.com/en-us/entra/identity/enterprise-apps/what-is-single-sign-on
+      azure: { level:"yes",  note:"Entra ID is itself a federation hub — it supports SAML 2.0 (and WS-Fed / OIDC) both as an IdP for apps and federated with external IdPs for inbound SSO.",
+               src:"https://learn.microsoft.com/en-us/entra/identity/enterprise-apps/what-is-single-sign-on" },
+      // https://docs.cloud.google.com/iam/docs/workforce-identity-federation
+      gcp:   { level:"yes",  note:"Workforce Identity Federation lets workforce users from a SAML or OIDC IdP access Google Cloud directly; Cloud Identity / Workspace can also federate with a SAML IdP.",
+               src:"https://docs.cloud.google.com/iam/docs/workforce-identity-federation" },
+      // https://docs.oracle.com/en-us/iaas/Content/Identity/federating/federation_topic-Overview_of_Federation.htm
+      oci:   { level:"yes",  note:"OCI IAM federates with SAML 2.0 identity providers (Entra ID, Okta, AD FS, and others) so users sign in with their existing enterprise credentials.",
+               src:"https://docs.oracle.com/en-us/iaas/Content/Identity/federating/federation_topic-Overview_of_Federation.htm" }
+    }
+  },
+
+  // ══════════════ CREDENTIALS & SERVICE-TO-SERVICE AUTH ══════════════
+  { id:"temp-credentials", category:"credentials", name:"Short-lived / temporary credentials",
+    desc:"Time-boxed credentials that expire on their own — the alternative to long-lived static keys.",
+    support: {
+      // https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_temp.html
+      aws:   { level:"yes",  note:"AWS STS issues temporary security credentials for every role assumption (AssumeRole, AssumeRoleWithWebIdentity, AssumeRoleWithSAML, GetSessionToken). Lifetime is configurable from 15 minutes up to 12 hours.",
+               src:"https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_temp.html" },
+      // https://learn.microsoft.com/en-us/entra/identity-platform/access-tokens
+      azure: { level:"yes",  note:"Entra ID issues short-lived OAuth 2.0 access tokens (about one hour by default), refreshed via the identity platform. Managed identities and federated credentials are token-based throughout — no static key.",
+               src:"https://learn.microsoft.com/en-us/entra/identity-platform/access-tokens" },
+      // https://docs.cloud.google.com/iam/docs/create-short-lived-credentials-direct
+      gcp:   { level:"yes",  note:"The IAM Credentials API and metadata server issue short-lived OAuth 2.0 access tokens (default ~1 hour, up to 12 hours when configured) for service accounts; impersonation and federation both yield short-lived tokens.",
+               src:"https://docs.cloud.google.com/iam/docs/create-short-lived-credentials-direct" },
+      // https://docs.oracle.com/en-us/iaas/Content/Identity/Tasks/callingservicesfrominstances.htm
+      oci:   { level:"yes",  note:"Instance, resource and workload principals authenticate with short-lived tokens that the OCI SDKs obtain and refresh automatically; no long-lived key is stored on the resource.",
+               src:"https://docs.oracle.com/en-us/iaas/Content/Identity/Tasks/callingservicesfrominstances.htm" }
+    }
+  },
+  { id:"static-keys", category:"credentials", name:"Long-lived static keys (and how to avoid them)",
+    desc:"Whether permanent access keys exist at all — and whether the provider gives you a clean keyless path so you never need them.",
+    support: {
+      // https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_access-keys.html
+      aws:   { level:"part", note:"IAM users can hold long-lived access keys, but AWS explicitly recommends roles and temporary credentials instead. Keyless paths (instance roles, OIDC federation, Identity Center) cover most needs — static keys remain available and a known liability.",
+               src:"https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_access-keys.html" },
+      // https://learn.microsoft.com/en-us/entra/identity/managed-identities-azure-resources/overview
+      azure: { level:"yes",  note:"App registrations can hold client secrets/certificates, but managed identities and workload identity federation provide fully keyless options; Microsoft recommends federated credentials over secrets. The keyless path is first-class.",
+               src:"https://learn.microsoft.com/en-us/entra/identity/managed-identities-azure-resources/overview" },
+      // https://docs.cloud.google.com/iam/docs/best-practices-for-managing-service-account-keys
+      gcp:   { level:"yes",  note:"Service account keys exist but Google strongly discourages them; attached service accounts and Workload Identity Federation are the recommended keyless alternatives, and key creation can be blocked by org policy.",
+               src:"https://docs.cloud.google.com/iam/docs/best-practices-for-managing-service-account-keys" },
+      // https://docs.oracle.com/en-us/iaas/Content/Identity/Tasks/managingcredentials.htm
+      oci:   { level:"part", note:"Users can have API signing keys and auth tokens (long-lived). For workloads, instance/resource/workload principals remove the need for keys; for users, keys remain the default credential.",
+               src:"https://docs.oracle.com/en-us/iaas/Content/Identity/Tasks/managingcredentials.htm" }
+    }
+  },
+  { id:"service-to-service", category:"credentials", name:"Service-to-service auth between cloud services",
+    desc:"How one of the provider's own services is authorised to call another on your behalf.",
+    support: {
+      // https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_terms-and-concepts.html
+      aws:   { level:"yes",  note:"Service roles and service-linked roles let an AWS service assume a role to act on your behalf; trust policies plus aws:SourceArn / aws:SourceAccount conditions scope the delegation.",
+               src:"https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_terms-and-concepts.html" },
+      // https://learn.microsoft.com/en-us/entra/identity/managed-identities-azure-resources/overview
+      azure: { level:"yes",  note:"A service that has a managed identity is granted a role on the target resource; it then calls the target as that Entra identity. Some services also use first-party service principals for built-in integrations.",
+               src:"https://learn.microsoft.com/en-us/entra/identity/managed-identities-azure-resources/overview" },
+      // https://docs.cloud.google.com/iam/docs/service-agents
+      gcp:   { level:"yes",  note:"Google-managed service agents act on a service's behalf; you can also configure service account impersonation, where one identity is granted the Service Account Token Creator role on another.",
+               src:"https://docs.cloud.google.com/iam/docs/service-agents" },
+      // https://docs.oracle.com/en-us/iaas/Content/Identity/Concepts/policies.htm
+      oci:   { level:"yes",  note:"Resource principals let an OCI service (Functions, Data Flow, and others) authenticate as itself; policies written for that service principal (e.g. 'allow service ...') authorise the cross-service call.",
+               src:"https://docs.oracle.com/en-us/iaas/Content/Functions/Tasks/functionsaccessingociresources.htm" }
+    }
+  },
+
+  // ══════════════ ATTRIBUTE / CONDITION-BASED ACCESS ══════════════
+  { id:"conditions", category:"abac", name:"Conditional access (request-context conditions)",
+    desc:"Refining a grant with conditions on the request — source IP, time, MFA, transport, tags.",
+    support: {
+      // https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_elements_condition.html
+      aws:   { level:"yes",  note:"The Condition element supports a rich set of global and service-specific condition keys (aws:SourceIp, aws:CurrentTime, aws:MultiFactorAuthPresent, aws:SecureTransport, aws:TokenIssueTime, and many more) with typed operators.",
+               src:"https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_elements_condition.html" },
+      // https://learn.microsoft.com/en-us/azure/role-based-access-control/conditions-overview
+      azure: { level:"part", note:"Two distinct mechanisms. Entra Conditional Access governs sign-in (device, location, risk, MFA) at authentication time. Azure RBAC role-assignment conditions add request/resource checks at authorization time — but only for supported data actions (see ABAC row).",
+               src:"https://learn.microsoft.com/en-us/azure/role-based-access-control/conditions-overview" },
+      // https://docs.cloud.google.com/iam/docs/conditions-overview
+      gcp:   { level:"yes",  note:"IAM Conditions attach CEL expressions to a role binding — conditions on request time, resource name/type, request attributes — so a grant applies only when they evaluate true.",
+               src:"https://docs.cloud.google.com/iam/docs/conditions-overview" },
+      // https://docs.oracle.com/en-us/iaas/Content/Identity/Concepts/policysyntax.htm
+      oci:   { level:"part", note:"Policy statements take a 'where' clause with conditions on request variables (request.user.id, request.groups.id, request.region, target.* attributes, time). Expressive, but conditions can only further restrict an allow — never deny.",
+               src:"https://docs.oracle.com/en-us/iaas/Content/Identity/Concepts/policysyntax.htm" }
+    }
+  },
+  { id:"abac-tags", category:"abac", name:"Tag / attribute-based access control (ABAC)",
+    desc:"Authorising on the attributes of the principal and the resource (e.g. matching tags) rather than enumerating identities — access that scales without editing policy.",
+    support: {
+      // https://docs.aws.amazon.com/IAM/latest/UserGuide/introduction_attribute-based-access-control.html
+      aws:   { level:"yes",  note:"Full tag-based ABAC: condition keys aws:PrincipalTag, aws:ResourceTag and aws:RequestTag let one policy compare principal tags to resource tags, so access scales as you tag rather than as you rewrite policy.",
+               src:"https://docs.aws.amazon.com/IAM/latest/UserGuide/introduction_attribute-based-access-control.html" },
+      // https://learn.microsoft.com/en-us/azure/role-based-access-control/conditions-overview
+      azure: { level:"part", note:"Azure ABAC adds attribute conditions to role assignments, comparing resource attributes (e.g. blob index tags) and principal custom security attributes. But it is scoped: conditions are supported only for specific data actions — chiefly Blob Storage and Queue Storage — not cloud-wide.",
+               src:"https://learn.microsoft.com/en-us/azure/role-based-access-control/conditions-overview" },
+      // https://docs.cloud.google.com/iam/docs/conditions-overview
+      gcp:   { level:"part", note:"IAM Conditions cover resource and request attributes (resource name, type, tags, time) via CEL, and resource-manager tags can be referenced. There is no built-in principal-tag-equals-resource-tag matching like AWS ABAC — it is attribute-conditional, but not symmetric tag-matching.",
+               src:"https://docs.cloud.google.com/iam/docs/conditions-overview" },
+      // https://docs.oracle.com/en-us/iaas/Content/Identity/Concepts/policyadvancedfeatures.htm
+      oci:   { level:"part", note:"Policies can match on tags via the 'where' clause using target.resource.tag and request.principal.group/compartment attributes; tag-based grants are supported but expressed as restricting conditions on an allow, not a dedicated ABAC engine.",
+               src:"https://docs.oracle.com/en-us/iaas/Content/Identity/Concepts/policyadvancedfeatures.htm" }
+    }
+  },
+  { id:"abac-dynamic-groups", category:"abac", name:"Rule-based dynamic principal grouping",
+    desc:"Membership of a group defined by a rule over attributes, rather than an explicit member list — so identities join and leave automatically.",
+    support: {
+      // https://docs.aws.amazon.com/IAM/latest/UserGuide/introduction_attribute-based-access-control.html
+      aws:   { level:"info", note:"No rule-defined IAM groups — IAM group membership is an explicit list. The equivalent outcome is achieved differently: tag-based ABAC and session tags from the IdP make access attribute-driven without dynamic group objects.",
+               src:"https://docs.aws.amazon.com/IAM/latest/UserGuide/introduction_attribute-based-access-control.html" },
+      // https://learn.microsoft.com/en-us/entra/identity/users/groups-dynamic-membership
+      azure: { level:"yes",  note:"Entra ID dynamic membership groups: membership is computed from a rule over user or device attributes, and roles/access assigned to the group follow automatically as attributes change.",
+               src:"https://learn.microsoft.com/en-us/entra/identity/users/groups-dynamic-membership" },
+      // https://docs.cloud.google.com/workspace/admin/topics/dynamic-groups
+      gcp:   { level:"part", note:"Cloud Identity / Workspace dynamic groups compute membership from a CEL query over user attributes, and those groups can receive IAM roles. It is a directory feature (sibling product) rather than part of Google Cloud IAM proper.",
+               src:"https://docs.cloud.google.com/identity/docs/how-to/create-dynamic-groups" },
+      // https://docs.oracle.com/en-us/iaas/Content/Identity/dynamicgroups/managingdynamicgroups.htm
+      oci:   { level:"yes",  note:"Dynamic groups are a core IAM construct: matching rules over resource attributes (compartment, tags, instance/cluster identifiers) automatically include compute instances, OKE pods and other resources as principals.",
+               src:"https://docs.oracle.com/en-us/iaas/Content/Identity/dynamicgroups/managingdynamicgroups.htm" }
+    }
+  }
+];
+
+// ───────────────────────────────────────────────────────────────────
+// STATE + RENDER
+// ───────────────────────────────────────────────────────────────────
+const state = {
+  vendors: new Set(VENDORS.map(v => v.key)),
+  category: "all",
+  query: ""
+};
+
+const $ = (s) => document.querySelector(s);
+const $$ = (s) => Array.from(document.querySelectorAll(s));
+
+const SYM = { yes: "✓", part: "◐", no: "✗", info: "≈" };
+
+function escapeHtml(str) {
+  return String(str)
+    .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;").replace(/'/g, "&#39;");
+}
+
+// ─── Permalinks — filter state <-> URL hash ───
+function writeHash() {
+  const keys = VENDORS.map(v => v.key);
+  const p = new URLSearchParams();
+  if (state.vendors.size < keys.length) p.set("providers", keys.filter(k => state.vendors.has(k)).join(","));
+  if (state.category !== "all") p.set("cat", state.category);
+  if (state.query.trim())       p.set("q", state.query.trim());
+  const h = p.toString();
+  history.replaceState(null, "", h ? "#" + h : location.pathname + location.search);
+}
+function applyHash() {
+  const keys = VENDORS.map(v => v.key);
+  const p = new URLSearchParams(location.hash.slice(1));
+  const vd = p.get("providers");
+  if (vd) {
+    const valid = vd.split(",").filter(x => keys.includes(x));
+    if (valid.length) state.vendors = new Set(valid);
+  }
+  const cat = p.get("cat"); if (cat) state.category = cat;
+  state.query = p.get("q") || "";
+  const allV = state.vendors.size === keys.length;
+  $$('.chip[data-v]').forEach(b => {
+    if (b.dataset.v === "all") b.classList.toggle("is-active", allV);
+    else b.classList.toggle("is-active", !allV && state.vendors.has(b.dataset.v));
+  });
+  $$('.chip[data-cat]').forEach(b => b.classList.toggle("is-active", b.dataset.cat === state.category));
+  const sb = $("#search"); if (sb) sb.value = state.query;
+}
+
+function init() {
+  // Counts
+  $("#count-features").textContent = FEATURES.length;
+  const stars = FEATURES.reduce((acc, f) =>
+    acc + Object.values(f.support).filter(s => s.note && s.note.length > 0).length, 0);
+  $("#count-stars").textContent = stars;
+
+  // Category chips
+  const catChips = $("#cat-chips");
+  catChips.innerHTML = `<span class="filter-chips__label">Category</span>
+    <button class="chip is-active" data-cat="all">All</button>` +
+    CATEGORIES.map(c => `<button class="chip" data-cat="${c.key}">${escapeHtml(c.label)}</button>`).join("");
+
+  // Provider chips
+  const vChips = $("#vendor-chips");
+  vChips.innerHTML = `<span class="filter-chips__label">Providers</span>
+    <button class="chip is-active" data-v="all">All</button>` +
+    VENDORS.map(v => `<button class="chip" data-v="${v.key}"><span class="swatch" style="background:${v.swatch}"></span>${escapeHtml(v.short)}</button>`).join("");
+
+  applyHash();
+  renderMatrix();
+  wireEvents();
+  window.addEventListener("hashchange", () => { applyHash(); applyFilter(); });
+}
+
+function renderMatrix() {
+  const table = $("#matrix");
+  let html = "<thead><tr>";
+  html += '<th class="feature-col" scope="col">Capability</th>';
+  VENDORS.forEach(v => {
+    html += `<th class="col-${v.key}" scope="col"><span class="vendor-tag"><span class="swatch" style="background:${v.swatch}"></span>${escapeHtml(v.short)}</span></th>`;
+  });
+  html += "</tr></thead><tbody>";
+
+  CATEGORIES.forEach(cat => {
+    const features = FEATURES.filter(f => f.category === cat.key);
+    if (features.length === 0) return;
+    html += `<tr class="category-row" data-cat="${cat.key}"><td colspan="${VENDORS.length + 1}"><span class="cat-label">▸ ${escapeHtml(cat.label)}</span></td></tr>`;
+    features.forEach(f => {
+      html += `<tr class="feature-row" data-feature="${f.id}" data-cat="${cat.key}">`;
+      html += `<td class="feature-col" data-action="open-feature" tabindex="0" role="button" aria-label="${escapeHtml(f.name)} — full breakdown">${escapeHtml(f.name)}</td>`;
+      VENDORS.forEach(v => {
+        const s = f.support[v.key] || { level: "no", note: "" };
+        const sym = SYM[s.level] || SYM.no;
+        const hasNote = s.note && s.note.length > 0;
+        const preview = hasNote ? truncate(s.note, 96) : "";
+        const aria = `${f.name} — ${v.short}: ${labelFor(s.level)}`;
+        html += `<td class="cell col-${v.key}" data-feature="${f.id}" data-vendor="${v.key}" tabindex="0" role="button" aria-label="${escapeHtml(aria)}">`;
+        html += `<span class="cell-mark cell-mark--${s.level}">${sym}${hasNote ? '<span class="cell-mark__star">*</span>' : ''}</span>`;
+        if (preview) html += `<span class="cell-note">${escapeHtml(preview)}</span>`;
+        html += `</td>`;
+      });
+      html += `</tr>`;
+    });
+  });
+
+  html += "</tbody>";
+  table.innerHTML = html;
+  applyFilter();
+}
+
+function labelFor(level) {
+  return level === "yes" ? "native support"
+    : level === "part" ? "partial or scoped support"
+    : level === "info" ? "supported but model differs"
+    : "not supported";
+}
+
+function truncate(str, n) {
+  if (str.length <= n) return str;
+  return str.slice(0, n).replace(/[\s.,;:]+\S*$/, "") + "…";
+}
+
+function applyFilter() {
+  const q = state.query.trim().toLowerCase();
+  const table = $("#matrix");
+
+  // Provider visibility (via class on table)
+  VENDORS.forEach(v => {
+    table.classList.toggle(`hide-${v.key}`, !state.vendors.has(v.key));
+  });
+
+  // Row visibility
+  let visibleCount = 0;
+  $$(".matrix tbody tr.feature-row").forEach(row => {
+    const f = FEATURES.find(x => x.id === row.dataset.feature);
+    if (!f) return;
+    let matches = state.category === "all" || f.category === state.category;
+    if (matches && q) {
+      const catLabel = (CATEGORIES.find(c => c.key === f.category) || {}).label || "";
+      const notes = Object.values(f.support).map(s => s.note || "").join(" ");
+      const hay = `${f.name} ${f.desc} ${catLabel} ${notes}`.toLowerCase();
+      matches = hay.includes(q);
+    }
+    row.classList.toggle("is-hidden", !matches);
+    if (matches) visibleCount++;
+  });
+
+  // Hide category rows that have no visible features
+  CATEGORIES.forEach(cat => {
+    const visible = $$(`.matrix tbody tr.feature-row[data-cat="${cat.key}"]`).some(r => !r.classList.contains("is-hidden"));
+    const catRow = $(`.matrix tbody tr.category-row[data-cat="${cat.key}"]`);
+    if (catRow) catRow.classList.toggle("is-hidden", !visible);
+  });
+
+  $("#matrix-empty").classList.toggle("is-visible", visibleCount === 0);
+  writeHash();
+}
+
+// ─── Drawer ───
+let lastFocused = null;
+
+function openDrawer() {
+  lastFocused = document.activeElement;
+  $("#drawer-backdrop").classList.add("is-open");
+  $("#drawer").classList.add("is-open");
+  $("#drawer").setAttribute("aria-hidden", "false");
+  const closeBtn = $("#drawer .drawer__close");
+  if (closeBtn) closeBtn.focus();
+}
+function closeDrawer() {
+  $("#drawer-backdrop").classList.remove("is-open");
+  $("#drawer").classList.remove("is-open");
+  $("#drawer").setAttribute("aria-hidden", "true");
+  if (lastFocused && typeof lastFocused.focus === "function") lastFocused.focus();
+  lastFocused = null;
+}
+
+function openFeatureDrawer(feature, focusVendor) {
+  const catLabel = (CATEGORIES.find(c => c.key === feature.category) || {}).label || "";
+  $("#drawer-head").innerHTML = `
+    <div class="drawer__eyebrow">${escapeHtml(catLabel)}</div>
+    <h3 class="drawer__title" id="drawer-title">${escapeHtml(feature.name)}</h3>
+    <p class="drawer__desc">${escapeHtml(feature.desc)}</p>
+    <button class="drawer__close" type="button" data-action="close-drawer">Close ⤬</button>
+  `;
+  const body = VENDORS.map(v => {
+    const s = feature.support[v.key] || { level: "no", note: "" };
+    const sym = SYM[s.level] || SYM.no;
+    const isFocus = focusVendor === v.key;
+    const noteText = s.note || (s.level === "no" ? "Not supported." : "—");
+    let srcHtml = "";
+    if (s.src) {
+      let host = s.src;
+      try { host = new URL(s.src).hostname.replace(/^www\./, ""); } catch (e) {}
+      srcHtml = `<a class="vendor-row__src" href="${escapeHtml(s.src)}" target="_blank" rel="noopener">Source · ${escapeHtml(host)} ↗</a>`;
+    }
+    return `<div class="vendor-row" ${isFocus ? 'style="border-color: var(--accent); background: rgba(255,120,73,0.05);"' : ''}>
+      <span class="vendor-row__mark vendor-row__mark--${s.level}">${sym}</span>
+      <div>
+        <div class="vendor-row__name"><span class="swatch" style="background:${v.swatch}"></span>${escapeHtml(v.name)}</div>
+        <div class="vendor-row__note">${escapeHtml(noteText)}</div>
+        ${srcHtml}
+      </div>
+    </div>`;
+  }).join("");
+  $("#drawer-body").innerHTML = `<div class="drawer__section"><h4>Per-provider detail</h4>${body}</div>`;
+  openDrawer();
+}
+
+function wireEvents() {
+  document.addEventListener("click", (e) => {
+    // Close drawer button
+    if (e.target.closest("[data-action='close-drawer']")) {
+      closeDrawer();
+      return;
+    }
+    // Category chips
+    const c = e.target.closest(".chip[data-cat]");
+    if (c) {
+      state.category = c.dataset.cat;
+      $$('.chip[data-cat]').forEach(b => b.classList.toggle("is-active", b.dataset.cat === state.category));
+      applyFilter();
+      return;
+    }
+    // Provider chips
+    const v = e.target.closest(".chip[data-v]");
+    if (v) {
+      const key = v.dataset.v;
+      if (key === "all") {
+        state.vendors = new Set(VENDORS.map(x => x.key));
+        $$('.chip[data-v]').forEach(b => b.classList.toggle("is-active", b.dataset.v === "all"));
+      } else {
+        if ($('.chip[data-v="all"]').classList.contains("is-active")) {
+          state.vendors = new Set([key]);
+          $$('.chip[data-v]').forEach(b => b.classList.toggle("is-active", b.dataset.v === key));
+        } else {
+          if (state.vendors.has(key) && state.vendors.size === 1) {
+            state.vendors = new Set(VENDORS.map(x => x.key));
+            $$('.chip[data-v]').forEach(b => b.classList.toggle("is-active", b.dataset.v === "all"));
+          } else {
+            state.vendors.has(key) ? state.vendors.delete(key) : state.vendors.add(key);
+            v.classList.toggle("is-active");
+            $('.chip[data-v="all"]').classList.remove("is-active");
+          }
+        }
+      }
+      applyFilter();
+      return;
+    }
+    // Cell click
+    const cell = e.target.closest("td.cell");
+    if (cell) {
+      const f = FEATURES.find(x => x.id === cell.dataset.feature);
+      if (f) openFeatureDrawer(f, cell.dataset.vendor);
+      return;
+    }
+    // Feature-name click
+    const featureCol = e.target.closest("td.feature-col[data-action='open-feature']");
+    if (featureCol) {
+      const row = featureCol.closest("tr.feature-row");
+      const f = FEATURES.find(x => x.id === row.dataset.feature);
+      if (f) openFeatureDrawer(f, null);
+      return;
+    }
+  });
+
+  // Keyboard activation for matrix cells / feature names
+  $("#matrix").addEventListener("keydown", (e) => {
+    if (e.key !== "Enter" && e.key !== " ") return;
+    const target = e.target.closest("td.cell, td.feature-col[data-action='open-feature']");
+    if (!target) return;
+    e.preventDefault();
+    if (target.classList.contains("cell")) {
+      const f = FEATURES.find(x => x.id === target.dataset.feature);
+      if (f) openFeatureDrawer(f, target.dataset.vendor);
+    } else {
+      const row = target.closest("tr.feature-row");
+      const f = FEATURES.find(x => x.id === row.dataset.feature);
+      if (f) openFeatureDrawer(f, null);
+    }
+  });
+
+  $("#drawer-backdrop").addEventListener("click", closeDrawer);
+  $("#search").addEventListener("input", (e) => {
+    state.query = e.target.value;
+    applyFilter();
+  });
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") closeDrawer();
+    if (e.key === "/" && e.target.tagName !== "INPUT" && e.target.tagName !== "TEXTAREA") {
+      e.preventDefault();
+      $("#search").focus();
+    }
+  });
+}
+
+init();
+</script>
+<script src="/nav.js" defer></script>
+</body>
+</html>

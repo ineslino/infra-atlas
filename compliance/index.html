@@ -1,0 +1,1100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="color-scheme" content="dark">
+<title>Compliance · Footprint · Infra Atlas</title>
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<meta name="description" content="Cross-cloud compliance-certification reference. Which major programs each hyperscaler holds — FedRAMP, IRAP, C5, ENS, ISO 27001, SOC 2, HIPAA, PCI DSS, EU sovereignty — across AWS, Azure, GCP, OCI, OVHcloud. With the region- and service-scope asterisks intact.">
+<link rel="canonical" href="https://infraatlas.dev/compliance/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Infra Atlas">
+<meta property="og:title" content="Compliance · Footprint · Infra Atlas">
+<meta property="og:description" content="Cross-cloud compliance-certification reference. Which major programs each hyperscaler holds — FedRAMP, IRAP, C5, ENS, ISO 27001, SOC 2, HIPAA, PCI DSS, EU sovereignty — across AWS, Azure, GCP, OCI, OVHcloud. With the region- and service-scope asterisks intact.">
+<meta property="og:url" content="https://infraatlas.dev/compliance/">
+<meta property="og:image" content="https://infraatlas.dev/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Infra Atlas — a reference for the infrastructure stack">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Compliance · Footprint · Infra Atlas">
+<meta name="twitter:description" content="Cross-cloud compliance-certification reference. Which major programs each hyperscaler holds — FedRAMP, IRAP, C5, ENS, ISO 27001, SOC 2, HIPAA, PCI DSS, EU sovereignty — across AWS, Azure, GCP, OCI, OVHcloud. With the region- and service-scope asterisks intact.">
+<meta name="twitter:image" content="https://infraatlas.dev/og.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@300;400;500;600&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+:root {
+  --ink: #0A0907; --ink-2: #100E0C; --surface: #161310; --surface-2: #1E1A15; --surface-3: #2A241C;
+  --line: rgba(244, 239, 230, 0.06); --line-2: rgba(244, 239, 230, 0.14); --line-3: rgba(244, 239, 230, 0.28);
+  --paper: #F4EFE6; --paper-2: rgba(244, 239, 230, 0.66); --paper-3: rgba(244, 239, 230, 0.55); --paper-4: rgba(244, 239, 230, 0.20);
+  --accent: #FF7849; --accent-2: #FFA66E; --accent-glow: rgba(255, 120, 73, 0.22);
+  --mint: #6FE7B5; --gold: #F4C660; --plum: #C586E8; --sky: #7CD7F1; --rose: #F47B7B; --teal: #5BCCC9;
+  --aws: #FF9F66; --azure: #7CD7F1; --gcp: #F47B7B; --oci: #E26464; --ovh: #C586E8;
+  --yes:   #6FE7B5;
+  --no:    #F47B7B;
+  --part:  #F4C660;
+  --serif: 'Instrument Serif', 'Times New Roman', serif;
+  --mono: 'JetBrains Mono', ui-monospace, monospace;
+  --sans: 'Manrope', -apple-system, system-ui, sans-serif;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body {
+  background: var(--ink);
+  color: var(--paper);
+  font-family: var(--sans);
+  font-size: 15px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  min-height: 100vh;
+}
+
+body {
+  background:
+    radial-gradient(ellipse at 100% -10%, rgba(255, 120, 73, 0.07), transparent 55%),
+    radial-gradient(ellipse at -10% 110%, rgba(244, 198, 96, 0.05), transparent 65%),
+    var(--ink);
+  background-attachment: fixed;
+  overflow-x: hidden;
+}
+
+.grain {
+  pointer-events: none; position: fixed; inset: 0; z-index: 100; opacity: 0.08; mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml;utf8,<svg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.6 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+}
+.scanlines {
+  pointer-events: none; position: fixed; inset: 0; z-index: 99;
+  background: repeating-linear-gradient(180deg, transparent, transparent 2px, rgba(244,239,230,0.012) 2px, rgba(244,239,230,0.012) 3px);
+}
+::selection { background: var(--accent); color: var(--ink); }
+
+/* Focus-visible — keyboard navigation made obvious, mouse clicks left clean */
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+.cell:focus-visible, .feature-col[data-action]:focus-visible {
+  outline-offset: -2px;
+}
+
+.page { max-width: 1640px; margin: 0 auto; padding: 56px 48px 96px; position: relative; }
+
+/* ─────────── MASTHEAD ─────────── */
+.masthead {
+  display: grid; grid-template-columns: 1fr auto; gap: 48px; align-items: end;
+  padding-bottom: 36px; border-bottom: 1px solid var(--line); margin-bottom: 32px;
+}
+.masthead__eyebrow {
+  font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.22em; color: var(--paper-3);
+  text-transform: uppercase; display: inline-flex; align-items: center; gap: 12px;
+  text-decoration: none; transition: color 0.2s ease;
+}
+.masthead__eyebrow:hover { color: var(--paper); }
+.masthead__eyebrow-arrow { color: var(--accent); transition: transform 0.2s ease; }
+.masthead__eyebrow:hover .masthead__eyebrow-arrow { transform: translateX(-4px); }
+.masthead__title {
+  font-family: var(--serif); font-weight: 400;
+  font-size: clamp(48px, 7vw, 108px); line-height: 0.95; letter-spacing: -0.02em;
+  margin-top: 16px; color: var(--paper);
+}
+.masthead__title em { font-style: italic; color: var(--accent); }
+.masthead__subtitle {
+  margin-top: 18px; font-size: 16px; color: var(--paper-2); max-width: 640px; line-height: 1.55;
+}
+.masthead__subtitle span {
+  font-family: var(--serif); font-style: italic; color: var(--paper);
+}
+
+.masthead__status {
+  text-align: right; display: flex; flex-direction: column; align-items: flex-end; gap: 14px; padding-bottom: 6px;
+}
+.status-line {
+  display: inline-flex; align-items: center; gap: 10px;
+  font-family: var(--mono); font-size: 11px; letter-spacing: 0.18em;
+  text-transform: uppercase; color: var(--gold);
+}
+.status-dot {
+  width: 8px; height: 8px; border-radius: 50%; background: var(--gold);
+  animation: pulse 2.4s infinite;
+}
+@keyframes pulse {
+  0% { box-shadow: 0 0 0 0 rgba(244,198,96,0.5); }
+  70% { box-shadow: 0 0 0 14px rgba(244,198,96,0); }
+  100% { box-shadow: 0 0 0 0 rgba(244,198,96,0); }
+}
+.status-time { font-family: var(--mono); font-size: 12px; color: var(--paper-3); }
+.status-counts { display: flex; gap: 24px; margin-top: 4px; }
+.status-counts > div {
+  text-align: right; font-family: var(--mono); font-size: 11px; letter-spacing: 0.12em;
+  text-transform: uppercase; color: var(--paper-3); display: flex; flex-direction: column; gap: 2px;
+}
+.status-counts strong {
+  font-family: var(--serif); font-style: italic; font-weight: 400; font-size: 28px;
+  color: var(--paper); letter-spacing: -0.01em; text-transform: none;
+}
+
+/* ─────────── FILTERS ─────────── */
+.filters {
+  display: grid; grid-template-columns: auto 1fr; gap: 18px 32px; align-items: center;
+  padding: 18px 22px; background: linear-gradient(180deg, var(--surface) 0%, var(--ink-2) 100%);
+  border: 1px solid var(--line); border-radius: 4px;
+  position: sticky; top: 16px; z-index: 50; backdrop-filter: blur(12px); margin-bottom: 28px;
+}
+.filter-search {
+  flex: 1; position: relative; grid-column: 1 / -1;
+}
+.filter-search input {
+  width: 100%; background: var(--ink); border: 1px solid var(--line); color: var(--paper);
+  font-family: var(--mono); font-size: 13px; padding: 12px 16px 12px 42px;
+  border-radius: 3px; outline: none; transition: border-color 0.2s ease;
+}
+.filter-search input::placeholder { color: var(--paper-3); }
+.filter-search input:focus { border-color: var(--accent); }
+.filter-search::before {
+  content: '⌕'; position: absolute; left: 16px; top: 50%; transform: translateY(-50%);
+  color: var(--paper-3); font-size: 18px; pointer-events: none;
+}
+.filter-chips {
+  grid-column: 1 / -1; display: flex; flex-wrap: wrap; gap: 6px; align-items: center;
+}
+.filter-chips__label {
+  font-family: var(--mono); font-size: 10px; letter-spacing: 0.16em;
+  text-transform: uppercase; color: var(--paper-3); margin-right: 4px;
+}
+.chip {
+  background: transparent; border: 1px solid var(--line-2); color: var(--paper-2);
+  font-family: var(--mono); font-size: 11px; letter-spacing: 0.06em;
+  padding: 6px 12px; border-radius: 99px; cursor: pointer; transition: all 0.15s ease;
+  display: inline-flex; align-items: center; gap: 8px; white-space: nowrap;
+}
+.chip:hover { border-color: var(--paper-3); color: var(--paper); }
+.chip.is-active { background: var(--paper); border-color: var(--paper); color: var(--ink); }
+.chip .swatch {
+  width: 8px; height: 8px; border-radius: 2px;
+}
+
+/* ─────────── MATRIX ─────────── */
+.matrix-wrap {
+  overflow-x: auto; margin-bottom: 48px;
+  border: 1px solid var(--line); border-radius: 6px;
+  background: linear-gradient(180deg, var(--ink-2) 0%, var(--ink) 100%);
+}
+.matrix {
+  width: 100%; border-collapse: collapse; min-width: 1000px;
+  font-family: var(--sans); font-size: 13px;
+}
+.matrix thead th {
+  position: sticky; top: 0; z-index: 10; background: var(--ink-2);
+  font-family: var(--mono); font-weight: 500; font-size: 10.5px;
+  letter-spacing: 0.14em; text-transform: uppercase; color: var(--paper-2);
+  padding: 18px 12px 12px; vertical-align: bottom; text-align: center;
+  border-bottom: 1px solid var(--line-2);
+  white-space: nowrap;
+}
+.matrix thead th.feature-col {
+  text-align: left; padding-left: 22px; min-width: 300px;
+  font-family: var(--serif); font-style: italic; font-size: 16px;
+  letter-spacing: 0; text-transform: none; color: var(--paper);
+  font-weight: 400;
+}
+.matrix th .vendor-tag {
+  display: inline-flex; align-items: center; gap: 6px;
+}
+.matrix th .swatch {
+  width: 6px; height: 6px; border-radius: 1px;
+}
+
+.matrix tbody tr.category-row td {
+  padding: 22px 22px 10px;
+  border-top: 1px dashed var(--line);
+  background: linear-gradient(180deg, rgba(0,0,0,0.2), transparent);
+}
+.matrix tbody tr.category-row td .cat-label {
+  font-family: var(--mono); font-size: 10px; letter-spacing: 0.22em;
+  text-transform: uppercase; color: var(--paper-3);
+  display: flex; align-items: center; gap: 10px;
+}
+.matrix tbody tr.category-row td .cat-label::after {
+  content: ''; flex: 1; height: 1px; background: var(--line);
+}
+.matrix tbody tr.feature-row td {
+  padding: 12px 12px; border-bottom: 1px solid var(--line);
+  vertical-align: middle;
+}
+.matrix tbody tr.feature-row td.feature-col {
+  padding-left: 22px; color: var(--paper); font-size: 14px;
+  text-align: left;
+  border-right: 1px solid var(--line);
+}
+.matrix tbody tr.feature-row td.feature-col .feature-sub {
+  display: block; font-family: var(--mono); font-size: 10.5px;
+  letter-spacing: 0.04em; color: var(--paper-3); margin-top: 3px; text-transform: uppercase;
+}
+.matrix tbody tr.feature-row td.cell {
+  text-align: center; min-width: 96px; cursor: pointer;
+  transition: background 0.15s ease;
+  position: relative;
+}
+.matrix tbody tr.feature-row td.cell:hover {
+  background: rgba(255, 120, 73, 0.04);
+}
+.matrix tbody tr.feature-row:hover {
+  background: linear-gradient(90deg, transparent, rgba(255, 120, 73, 0.02), transparent);
+}
+
+.cell-mark {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 24px; height: 24px; border-radius: 50%;
+  font-family: var(--mono); font-size: 14px; font-weight: 500;
+  position: relative;
+}
+.cell-mark--yes  { background: rgba(111, 231, 181, 0.15); color: var(--yes); }
+.cell-mark--no   { background: rgba(244, 123, 123, 0.12); color: var(--no); opacity: 0.65; }
+.cell-mark--part { background: rgba(244, 198, 96, 0.15); color: var(--part); }
+.cell-mark__star {
+  position: absolute; top: -3px; right: -6px;
+  font-size: 10px; color: var(--accent);
+  background: var(--ink-2); border-radius: 50%; width: 12px; height: 12px;
+  display: inline-flex; align-items: center; justify-content: center;
+}
+.cell-tier {
+  display: block; font-family: var(--mono); font-size: 9px;
+  letter-spacing: 0.06em; color: var(--paper-3); margin-top: 5px;
+  text-transform: uppercase; white-space: nowrap;
+}
+
+/* Hide columns when vendor filtered out */
+.matrix.hide-aws    .col-aws,
+.matrix.hide-azure  .col-azure,
+.matrix.hide-gcp    .col-gcp,
+.matrix.hide-oci    .col-oci,
+.matrix.hide-ovh    .col-ovh { display: none; }
+
+/* Hide rows when filtered/searched */
+.matrix tbody tr.feature-row.is-hidden,
+.matrix tbody tr.category-row.is-hidden { display: none; }
+
+/* ─────────── LEGEND ─────────── */
+.legend {
+  display: flex; flex-wrap: wrap; gap: 18px; align-items: center;
+  margin-bottom: 28px; padding: 16px 22px;
+  background: var(--surface); border: 1px solid var(--line); border-radius: 4px;
+  font-family: var(--mono); font-size: 11px; color: var(--paper-2);
+}
+.legend__label {
+  font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--paper-3);
+}
+.legend__item { display: inline-flex; align-items: center; gap: 8px; }
+
+/* ─────────── CAVEAT NOTE ─────────── */
+.caveat {
+  margin-bottom: 28px; padding: 18px 22px;
+  background: linear-gradient(180deg, var(--surface) 0%, var(--ink-2) 100%);
+  border: 1px solid var(--line); border-left: 2px solid var(--accent); border-radius: 4px;
+  font-size: 13.5px; color: var(--paper-2); line-height: 1.62;
+}
+.caveat strong {
+  font-family: var(--serif); font-style: italic; font-weight: 400;
+  font-size: 16px; color: var(--paper); letter-spacing: -0.01em;
+}
+.caveat em { font-family: var(--serif); font-style: italic; color: var(--paper); }
+
+/* ─────────── DRAWER ─────────── */
+.drawer-backdrop {
+  position: fixed; inset: 0; background: rgba(10, 9, 7, 0.7); backdrop-filter: blur(8px);
+  z-index: 200; opacity: 0; pointer-events: none; transition: opacity 0.25s ease;
+}
+.drawer-backdrop.is-open { opacity: 1; pointer-events: auto; }
+.drawer {
+  position: fixed; top: 0; right: 0; bottom: 0; width: min(640px, 100%);
+  background: var(--ink-2); border-left: 1px solid var(--line-2); z-index: 201;
+  transform: translateX(100%); transition: transform 0.32s cubic-bezier(0.2, 0.8, 0.2, 1);
+  display: flex; flex-direction: column;
+}
+.drawer.is-open { transform: translateX(0); }
+.drawer__head {
+  padding: 28px 32px 22px; border-bottom: 1px solid var(--line); position: relative; flex-shrink: 0;
+}
+.drawer__close {
+  position: absolute; top: 20px; right: 20px;
+  background: transparent; border: 1px solid var(--line-2); color: var(--paper-2);
+  font-family: var(--mono); font-size: 11px; padding: 6px 10px; cursor: pointer;
+  border-radius: 2px; letter-spacing: 0.1em; text-transform: uppercase;
+}
+.drawer__close:hover { border-color: var(--paper); color: var(--paper); }
+.drawer__eyebrow {
+  font-family: var(--mono); font-size: 10px; letter-spacing: 0.22em;
+  text-transform: uppercase; color: var(--accent);
+}
+.drawer__title {
+  font-family: var(--serif); font-size: 32px; font-weight: 400;
+  letter-spacing: -0.012em; line-height: 1.05; margin-top: 8px;
+}
+.drawer__desc {
+  margin-top: 12px; font-size: 14px; color: var(--paper-2); line-height: 1.6;
+}
+.drawer__body { padding: 22px 32px 32px; overflow-y: auto; flex: 1; }
+.drawer__section { margin-bottom: 24px; }
+.drawer__section h4 {
+  font-family: var(--mono); font-size: 10.5px; font-weight: 500;
+  letter-spacing: 0.18em; text-transform: uppercase; color: var(--paper-3);
+  margin-bottom: 12px; display: flex; align-items: center; gap: 10px;
+}
+.drawer__section h4::after { content: ''; flex: 1; height: 1px; background: var(--line); }
+
+.vendor-row {
+  display: grid; grid-template-columns: auto 1fr; gap: 14px;
+  padding: 14px 16px; background: var(--surface);
+  border: 1px solid var(--line); border-radius: 3px; margin-bottom: 6px;
+  align-items: start;
+}
+.vendor-row__name {
+  font-family: var(--mono); font-size: 12.5px; font-weight: 500; color: var(--paper);
+  display: flex; align-items: center; gap: 9px; flex-wrap: wrap;
+}
+.vendor-row__name .swatch { width: 8px; height: 8px; border-radius: 2px; flex: none; }
+.vendor-row__tier {
+  font-family: var(--mono); font-size: 9px; letter-spacing: 0.08em;
+  text-transform: uppercase; color: var(--ink); background: var(--paper-3);
+  padding: 2px 7px; border-radius: 99px;
+}
+.vendor-row__note {
+  font-family: var(--sans); font-size: 12.5px; color: var(--paper-2); line-height: 1.55;
+  margin-top: 7px;
+}
+.vendor-row__src {
+  display: inline-block; margin-top: 8px;
+  font-family: var(--mono); font-size: 10.5px;
+  color: var(--paper-3); text-decoration: underline;
+  text-decoration-color: var(--line-2); text-underline-offset: 3px;
+  word-break: break-all;
+}
+.vendor-row__src:hover { color: var(--accent); }
+.vendor-row__mark {
+  font-family: var(--mono); font-size: 18px; font-weight: 500;
+  width: 30px; height: 30px; border-radius: 50%;
+  display: inline-flex; align-items: center; justify-content: center; flex: none;
+}
+.vendor-row__mark--yes  { background: rgba(111, 231, 181, 0.15); color: var(--yes); }
+.vendor-row__mark--no   { background: rgba(244, 123, 123, 0.12); color: var(--no); opacity: 0.65; }
+.vendor-row__mark--part { background: rgba(244, 198, 96, 0.15); color: var(--part); }
+
+/* ─────────── COLOPHON ─────────── */
+.colophon {
+  margin-top: 64px; padding-top: 32px; border-top: 1px solid var(--line);
+  display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 32px;
+  font-size: 13px; color: var(--paper-3);
+}
+.colophon h5 {
+  font-family: var(--mono); font-size: 10px; letter-spacing: 0.18em;
+  text-transform: uppercase; color: var(--paper-2); margin-bottom: 10px; font-weight: 500;
+}
+.colophon p { font-size: 13px; line-height: 1.6; }
+.colophon p a {
+  color: var(--paper-2); text-decoration: underline;
+  text-decoration-color: var(--line-2); text-underline-offset: 3px;
+}
+.colophon p a:hover { color: var(--accent); }
+.colophon code {
+  font-family: var(--mono); font-size: 11.5px; background: var(--surface);
+  padding: 1px 6px; border-radius: 2px; border: 1px solid var(--line); color: var(--accent-2);
+}
+
+@media (max-width: 900px) {
+  .page { padding: 32px 22px 72px; }
+  .masthead { grid-template-columns: 1fr; gap: 24px; }
+  .masthead__status { text-align: left; align-items: flex-start; }
+  .filters { position: static; padding: 14px; }
+  .colophon { grid-template-columns: 1fr; gap: 24px; }
+}
+</style>
+</head>
+<body>
+
+<div class="grain"></div>
+<div class="scanlines"></div>
+
+<div class="page">
+
+  <header class="masthead">
+    <div class="masthead__brand">
+      <a class="masthead__eyebrow" href="../">
+        <span class="masthead__eyebrow-arrow">←</span>
+        Infra Atlas · Cross-Cloud · Compliance Footprint
+      </a>
+      <h1 class="masthead__title">Compliance <em>Footprint.</em></h1>
+      <p class="masthead__subtitle">
+        Which major compliance programs each hyperscaler actually holds — <span>FedRAMP, IRAP, C5, ENS, ISO 27001, SOC 2, HIPAA, PCI DSS, EU sovereignty</span> — across AWS, Azure, GCP, OCI and OVHcloud. <span>Region- and service-scoped, never blanket.</span>
+      </p>
+    </div>
+    <aside class="masthead__status">
+      <div class="status-line">
+        <span class="status-dot"></span>
+        <span class="status-text">Curated · v1</span>
+      </div>
+      <div class="status-time">Issue 01 · 2026-05-16</div>
+      <div class="status-counts">
+        <div>Clouds<strong id="count-vendors">5</strong></div>
+        <div>Programs<strong id="count-features">—</strong></div>
+        <div>Footnotes<strong id="count-stars">—</strong></div>
+      </div>
+    </aside>
+  </header>
+
+  <main id="ia-main">
+
+  <section class="filters">
+    <div class="filter-search">
+      <input id="search" type="search" autocomplete="off" spellcheck="false" placeholder="Filter programs — search by name, region, framework, cloud…">
+    </div>
+    <div class="filter-chips" id="cat-chips"></div>
+    <div class="filter-chips" id="vendor-chips"></div>
+  </section>
+
+  <div class="caveat">
+    <strong>Read the asterisks.</strong> A compliance certification is almost never a property of "the cloud" as a whole. It is scoped — to a <em>set of regions</em>, to an <em>in-scope service list</em>, sometimes to a <em>dedicated government or sovereign environment</em> that is a different product with different pricing. A "✓" here means the provider holds the attestation and publishes it; the footnote tells you the boundary. Treat the footnote, not the tick, as the answer — and always confirm scope against the vendor's current audit report before you design to it.
+  </div>
+
+  <div class="legend">
+    <span class="legend__label">Legend</span>
+    <span class="legend__item"><span class="cell-mark cell-mark--yes">✓</span> Holds the attestation</span>
+    <span class="legend__item"><span class="cell-mark cell-mark--part">◐</span> Partial — region / service scoped, or via dedicated environment</span>
+    <span class="legend__item"><span class="cell-mark cell-mark--no">✗</span> Not held</span>
+    <span class="legend__item"><span class="cell-mark cell-mark--yes" style="position:relative">✓<span class="cell-mark__star">*</span></span> Click any cell for the scoped footnote + source</span>
+  </div>
+
+  <div class="matrix-wrap">
+    <table class="matrix" id="matrix"></table>
+  </div>
+
+  </main>
+
+  <footer class="colophon">
+    <div>
+      <h5>About</h5>
+      <p>An instrument of <a href="../">Infra Atlas</a>. The cross-cloud compliance comparator — which assurance programs AWS, Azure, GCP, OCI and OVHcloud each hold, and the region- or service-scope behind every tick. Click any cell for the footnote (there are <em style="font-family: var(--serif); font-style: italic;">many</em>) and the official source.</p>
+    </div>
+    <div>
+      <h5>Sources</h5>
+      <p>Every cell is backed by the vendor's official compliance / trust-center page — AWS Artifact &amp; Compliance, Microsoft Service Trust Portal, Google Cloud Compliance Resource Center, Oracle Cloud Compliance, and OVHcloud's certifications &amp; attestations pages. Source URLs are in the page data and on each drawer row. Snapshot as of May 2026. <em>Certification scope changes often — <a href="https://github.com/ineslino/infraatlas/issues/new" target="_blank" rel="noopener">open an issue</a> if a fact is stale.</em></p>
+    </div>
+    <div>
+      <h5>Shortcuts</h5>
+      <p><code>/</code> search · <code>Esc</code> close drawer · click a cell for the scoped footnote, click a program name for the full per-cloud breakdown.</p>
+    </div>
+  </footer>
+
+</div>
+
+<!-- DRAWER -->
+<div class="drawer-backdrop" id="drawer-backdrop"></div>
+<aside class="drawer" id="drawer" aria-hidden="true">
+  <div class="drawer__head" id="drawer-head"></div>
+  <div class="drawer__body" id="drawer-body"></div>
+</aside>
+
+<script>
+// ═══════════════════════════════════════════════════════════════════
+// COMPLIANCE FOOTPRINT — cross-cloud certification reference
+//
+// DATA PROVENANCE
+// Every cell below is backed by the named cloud provider's own
+// compliance / trust-center documentation. The official source URL
+// sits in a comment beside each row's data and is also surfaced in
+// the drawer (vendor-row__src). Snapshot: May 2026.
+//
+// Primary trust centers consulted:
+//   AWS   — https://aws.amazon.com/compliance/programs/
+//   Azure — https://learn.microsoft.com/azure/compliance/  (Service Trust Portal: https://servicetrust.microsoft.com/)
+//   GCP   — https://cloud.google.com/security/compliance/compliance-reports-manager  (offerings: https://cloud.google.com/security/compliance/offerings)
+//   OCI   — https://www.oracle.com/corporate/cloud-compliance/
+//   OVH   — https://www.ovhcloud.com/en/enterprise/certification-conformity/
+//
+// "level" is one of: yes | part | no
+// "tier"  is an optional short scope tag shown under the mark
+// "note"  is the scoped footnote shown when the cell is clicked
+// "src"   is the official page that backs the cell
+// ═══════════════════════════════════════════════════════════════════
+
+const VENDORS = [
+  { key: "aws",   name: "Amazon Web Services", short: "AWS",   color: "var(--aws)",   swatch: "#FF9F66" },
+  { key: "azure", name: "Microsoft Azure",     short: "Azure", color: "var(--azure)", swatch: "#7CD7F1" },
+  { key: "gcp",   name: "Google Cloud",        short: "GCP",   color: "var(--gcp)",   swatch: "#F47B7B" },
+  { key: "oci",   name: "Oracle Cloud (OCI)",  short: "OCI",   color: "var(--oci)",   swatch: "#E26464" },
+  { key: "ovh",   name: "OVHcloud",            short: "OVH",   color: "var(--ovh)",   swatch: "#C586E8" }
+];
+
+const CATEGORIES = [
+  { key: "us-gov",    label: "US Government" },
+  { key: "regional",  label: "Regional / National Schemes" },
+  { key: "global",    label: "Global Baselines" },
+  { key: "sector",    label: "Sector-Specific" },
+  { key: "sovereign", label: "EU Data Boundary / Sovereignty" }
+];
+
+const FEATURES = [
+
+  // ════════════════ US GOVERNMENT ════════════════
+  { id:"fedramp", category:"us-gov", name:"FedRAMP",
+    sub:"authorization level",
+    desc:"FedRAMP authorizes cloud services for use by US federal agencies. Authorizations are issued at an impact level — Low, Moderate or High — and are scoped to a specific named environment and a defined in-scope service list. The level is the headline; the region is the fine print.",
+    support: {
+      // AWS — https://aws.amazon.com/compliance/fedramp/
+      aws:   { level:"yes", tier:"High",
+               note:"FedRAMP High in AWS GovCloud (US) regions; FedRAMP Moderate in the AWS US East/West commercial regions. Scope is the FedRAMP-authorized service list per environment — not every AWS service is in boundary. Authorizing agency-issued ATOs are listed in the FedRAMP Marketplace.",
+               src:"https://aws.amazon.com/compliance/fedramp/" },
+      // Azure — https://learn.microsoft.com/azure/compliance/offerings/offering-fedramp
+      azure: { level:"yes", tier:"High",
+               note:"FedRAMP High for Azure Government; FedRAMP High also achieved for Azure commercial (Azure public cloud) regions in the US. Each has its own authorization package and in-scope service list; Azure Government is a physically separate instance for US gov / contractors.",
+               src:"https://learn.microsoft.com/azure/compliance/offerings/offering-fedramp" },
+      // GCP — https://cloud.google.com/security/compliance/fedramp
+      gcp:   { level:"yes", tier:"High",
+               note:"FedRAMP High authorization covering an in-scope set of Google Cloud products and US regions; FedRAMP Moderate also held for a broader product list. Google's Assured Workloads for Government helps constrain workloads to the authorized boundary.",
+               src:"https://cloud.google.com/security/compliance/fedramp" },
+      // OCI — https://www.oracle.com/corporate/cloud-compliance/fedramp/
+      oci:   { level:"yes", tier:"High",
+               note:"FedRAMP High via the Oracle US Government Cloud regions; the commercial Oracle Cloud realm is separate. Authorization is scoped to the US Gov realm and its in-scope service list — not the commercial OCI tenancy.",
+               src:"https://www.oracle.com/corporate/cloud-compliance/fedramp/" },
+      // OVH — https://us.ovhcloud.com/about/company/security/  (OVHcloud US entity)
+      ovh:   { level:"no",
+               note:"OVHcloud does not hold a FedRAMP authorization. OVHcloud US operates as a separate US entity and publishes SOC reports, but is not in the FedRAMP Marketplace as an authorized CSP. Treat as not available for US federal agency workloads.",
+               src:"https://us.ovhcloud.com/about/company/security/" }
+    }
+  },
+
+  { id:"dod-il", category:"us-gov", name:"DoD Impact Level (IL4 / IL5)",
+    sub:"defense workloads",
+    desc:"The US Department of Defense layers its own Cloud Computing SRG impact levels (IL2, IL4, IL5, IL6) on top of FedRAMP. IL4/IL5 cover Controlled Unclassified Information and require a DISA Provisional Authorization, typically in dedicated government regions.",
+    support: {
+      // AWS — https://aws.amazon.com/compliance/dod/
+      aws:   { level:"yes", tier:"IL2–6",
+               note:"DoD SRG IL2 and IL4/IL5 in AWS GovCloud (US); IL6 (classified) in AWS Secret Region. Each impact level is a separate DISA Provisional Authorization scoped to specific regions and services.",
+               src:"https://aws.amazon.com/compliance/dod/" },
+      // Azure — https://learn.microsoft.com/azure/compliance/offerings/offering-dod-il5
+      azure: { level:"yes", tier:"IL4–6",
+               note:"DoD IL4 and IL5 Provisional Authorizations for Azure Government; IL6 for Azure Government Secret. IL5 isolation guidance applies — some services need dedicated host configuration to remain in IL5 scope.",
+               src:"https://learn.microsoft.com/azure/compliance/offerings/offering-dod-il5" },
+      // GCP — https://cloud.google.com/security/compliance/dod-srg
+      gcp:   { level:"part", tier:"IL2 / IL4",
+               note:"Google Cloud holds DoD SRG IL2 and IL4 Provisional Authorizations for an in-scope product set. IL5 coverage is narrower than AWS/Azure GovCloud — confirm the current authorized service list and regions for IL5 needs.",
+               src:"https://cloud.google.com/security/compliance/dod-srg" },
+      // OCI — https://www.oracle.com/government/  (Oracle US Government / DoD regions)
+      oci:   { level:"yes", tier:"IL4–6",
+               note:"DoD IL4 and IL5 via Oracle US Government Cloud; IL6 via dedicated Oracle National Security Regions / DoD regions. Scoped to those isolated realms, not commercial OCI.",
+               src:"https://www.oracle.com/government/" },
+      // OVH — no DoD authorization
+      ovh:   { level:"no",
+               note:"OVHcloud does not hold any DoD Cloud SRG Impact Level authorization. Not available for DoD CUI or classified workloads.",
+               src:"https://us.ovhcloud.com/about/company/security/" }
+    }
+  },
+
+  // ════════════════ REGIONAL / NATIONAL SCHEMES ════════════════
+  { id:"irap", category:"regional", name:"IRAP — Australia",
+    sub:"PROTECTED assessment",
+    desc:"The Australian Information Security Registered Assessors Program (IRAP) provides an independent assessment of a cloud service against the Australian Government's Information Security Manual (ISM). It is an assessment, not a government certification — agencies make their own risk decision against it.",
+    support: {
+      // AWS — https://aws.amazon.com/compliance/irap/
+      aws:   { level:"yes", tier:"PROTECTED",
+               note:"IRAP assessed at the PROTECTED level for an in-scope service list, primarily in the Asia Pacific (Sydney) and Melbourne regions. Reports are available via AWS Artifact. Scope is the assessed service list — verify a given service is included.",
+               src:"https://aws.amazon.com/compliance/irap/" },
+      // Azure — https://learn.microsoft.com/azure/compliance/offerings/offering-irap
+      azure: { level:"yes", tier:"PROTECTED",
+               note:"IRAP assessed up to the PROTECTED level for in-scope services in the Australia East / Australia Central regions. Microsoft publishes the IRAP assessment and an ISM control mapping via the Service Trust Portal.",
+               src:"https://learn.microsoft.com/azure/compliance/offerings/offering-irap" },
+      // GCP — https://cloud.google.com/security/compliance/irap
+      gcp:   { level:"yes", tier:"PROTECTED",
+               note:"IRAP assessed at the PROTECTED level for an in-scope product set, with the Sydney and Melbourne regions in geographic scope. Assessment letter and scope are published on the Google Cloud compliance offering page.",
+               src:"https://cloud.google.com/security/compliance/irap" },
+      // OCI — https://www.oracle.com/au/corporate/cloud-compliance/irap/
+      oci:   { level:"yes", tier:"PROTECTED",
+               note:"IRAP assessed at the PROTECTED level for OCI services in Australian regions (Sydney, Melbourne). Oracle also operates dedicated Australian government cloud regions. Confirm whether commercial or government-region scope applies.",
+               src:"https://www.oracle.com/au/corporate/cloud-compliance/irap/" },
+      // OVH — no IRAP; OVHcloud has no Australian government assessment / region
+      ovh:   { level:"no",
+               note:"OVHcloud has no IRAP assessment and no Australian region. Not positioned for Australian Government PROTECTED workloads.",
+               src:"https://www.ovhcloud.com/en-au/enterprise/certification-conformity/" }
+    }
+  },
+
+  { id:"c5", category:"regional", name:"C5 — Germany",
+    sub:"BSI cloud criteria",
+    desc:"The Cloud Computing Compliance Criteria Catalogue (C5) is issued by Germany's Federal Office for Information Security (BSI). Providers obtain a C5 attestation from an independent auditor (an ISAE 3000-style report), widely expected by German public sector and regulated buyers.",
+    support: {
+      // AWS — https://aws.amazon.com/compliance/bsi-c5/
+      aws:   { level:"yes",
+               note:"C5 attestation covering an in-scope AWS service list; report available via AWS Artifact. The attestation is renewed annually and the in-scope service list grows over time — check the current report for a specific service.",
+               src:"https://aws.amazon.com/compliance/bsi-c5/" },
+      // Azure — https://learn.microsoft.com/azure/compliance/offerings/offering-c5-germany
+      azure: { level:"yes",
+               note:"C5 attestation (type 2) for in-scope Azure services; the C5 report is published on the Service Trust Portal. Scope is the audited service list — not all Azure services are covered.",
+               src:"https://learn.microsoft.com/azure/compliance/offerings/offering-c5-germany" },
+      // GCP — https://cloud.google.com/security/compliance/bsi-c5
+      gcp:   { level:"yes",
+               note:"C5:2020 attestation for an in-scope set of Google Cloud products; the C5 report is available through the Compliance Reports Manager. Confirm a given product is in the audited scope.",
+               src:"https://cloud.google.com/security/compliance/bsi-c5" },
+      // OCI — https://www.oracle.com/corporate/cloud-compliance/c5/
+      oci:   { level:"yes",
+               note:"C5 attestation for OCI; Oracle publishes a C5 report covering in-scope OCI services. Oracle also operates Frankfurt-region capacity relevant to German data-location requirements.",
+               src:"https://www.oracle.com/corporate/cloud-compliance/c5/" },
+      // OVH — https://www.ovhcloud.com/en/enterprise/certification-conformity/  (OVHcloud lists BSI C5 type 2)
+      ovh:   { level:"part",
+               note:"OVHcloud publishes a BSI C5 type 2 attestation, but scope is narrower than the hyperscalers — bounded to specific products (e.g. parts of the Hosted Private Cloud / bare-metal range) and locations. Check OVHcloud's attestation list for the exact in-scope products before relying on it.",
+               src:"https://www.ovhcloud.com/en/enterprise/certification-conformity/" }
+    }
+  },
+
+  { id:"ens", category:"regional", name:"ENS — Spain",
+    sub:"Esquema Nacional de Seguridad",
+    desc:"The Esquema Nacional de Seguridad (ENS) is Spain's National Security Framework, mandatory for public-sector systems. Cloud providers obtain ENS certification at a category — Basic, Medium or High — from an accredited certification body.",
+    support: {
+      // AWS — https://aws.amazon.com/compliance/esquema-nacional-seguridad/
+      aws:   { level:"yes", tier:"High",
+               note:"ENS High certification for an in-scope AWS service list; certificate available via AWS Artifact. ENS High is the top category. Verify a given service is within the certified scope.",
+               src:"https://aws.amazon.com/compliance/esquema-nacional-seguridad/" },
+      // Azure — https://learn.microsoft.com/azure/compliance/offerings/offering-ens-spain
+      azure: { level:"yes", tier:"High",
+               note:"ENS High certification for in-scope Azure services; the ENS certificate and scope are published via the Service Trust Portal.",
+               src:"https://learn.microsoft.com/azure/compliance/offerings/offering-ens-spain" },
+      // GCP — https://cloud.google.com/security/compliance/ens
+      gcp:   { level:"yes", tier:"High",
+               note:"ENS High certification covering an in-scope set of Google Cloud products; certificate published on the Google Cloud compliance offering page.",
+               src:"https://cloud.google.com/security/compliance/ens" },
+      // OCI — https://www.oracle.com/es/corporate/cloud-compliance/ens/
+      oci:   { level:"yes", tier:"High",
+               note:"ENS High certification for OCI services. Oracle operates a Madrid (Spain) region relevant to Spanish public-sector data-location needs.",
+               src:"https://www.oracle.com/es/corporate/cloud-compliance/ens/" },
+      // OVH — https://www.ovhcloud.com/es-es/enterprise/certification-conformity/  (verify ENS scope; treat as unclear)
+      ovh:   { level:"part", tier:"unclear",
+               note:"UNCLEAR — OVHcloud markets to the Spanish public sector and operates EU regions, but a current, clearly published ENS certificate with a defined scope for OVHcloud is not consistently documented in its central certification list. Confirm directly with OVHcloud whether an in-scope ENS certificate exists for the products you need.",
+               src:"https://www.ovhcloud.com/es-es/enterprise/certification-conformity/" }
+    }
+  },
+
+  // ════════════════ GLOBAL BASELINES ════════════════
+  { id:"iso27001", category:"global", name:"ISO/IEC 27001",
+    sub:"information security mgmt",
+    desc:"ISO/IEC 27001 certifies an Information Security Management System (ISMS) against an international standard. The certificate has a Statement of Applicability that defines which services, locations and data centres are in scope — the scope statement is the substance.",
+    support: {
+      // AWS — https://aws.amazon.com/compliance/iso-27001-faqs/
+      aws:   { level:"yes",
+               note:"ISO/IEC 27001 certified, alongside 27017 (cloud security) and 27018 (cloud PII). The certificate covers an in-scope service list and named regions / data centres; the scope document is on AWS Artifact.",
+               src:"https://aws.amazon.com/compliance/iso-27001-faqs/" },
+      // Azure — https://learn.microsoft.com/azure/compliance/offerings/offering-iso-27001
+      azure: { level:"yes",
+               note:"ISO/IEC 27001 certified (plus 27017 / 27018 / 27701). The certificate and its Statement of Applicability — including in-scope services and regions — are published on the Service Trust Portal.",
+               src:"https://learn.microsoft.com/azure/compliance/offerings/offering-iso-27001" },
+      // GCP — https://cloud.google.com/security/compliance/iso-27001
+      gcp:   { level:"yes",
+               note:"ISO/IEC 27001 certified (plus 27017 / 27018 / 27701). The certificate covers an in-scope product set; the scope and certificate are available via the Compliance Reports Manager.",
+               src:"https://cloud.google.com/security/compliance/iso-27001" },
+      // OCI — https://www.oracle.com/corporate/cloud-compliance/iso-27001/
+      oci:   { level:"yes",
+               note:"ISO/IEC 27001 certified for OCI (with 27017 / 27018). Certificate and scope are published on Oracle's cloud compliance pages.",
+               src:"https://www.oracle.com/corporate/cloud-compliance/iso-27001/" },
+      // OVH — https://www.ovhcloud.com/en/enterprise/certification-conformity/
+      ovh:   { level:"yes",
+               note:"ISO/IEC 27001 certified (OVHcloud also holds 27017, 27018 and 27701). The certificate scope covers OVHcloud data centres / services as listed in its certification documentation — confirm the specific product and location are in scope.",
+               src:"https://www.ovhcloud.com/en/enterprise/certification-conformity/" }
+    }
+  },
+
+  { id:"soc2", category:"global", name:"SOC 2 (Type II)",
+    sub:"AICPA Trust Services",
+    desc:"A SOC 2 report is an independent auditor's attestation against the AICPA Trust Services Criteria (security, availability, confidentiality, etc.). SOC 2 reports are confidential and obtained under NDA — the provider does not publish the report itself, only the fact that it exists.",
+    support: {
+      // AWS — https://aws.amazon.com/compliance/soc-faqs/
+      aws:   { level:"yes",
+               note:"SOC 1, SOC 2 (Type II) and SOC 3 reports are produced for an in-scope AWS service list. SOC 1/2 reports are available under NDA via AWS Artifact; the SOC 3 report is public.",
+               src:"https://aws.amazon.com/compliance/soc-faqs/" },
+      // Azure — https://learn.microsoft.com/azure/compliance/offerings/offering-soc-2
+      azure: { level:"yes",
+               note:"SOC 1 / SOC 2 Type II / SOC 3 reports for in-scope Azure services. SOC 1/2 are available under NDA on the Service Trust Portal; SOC 3 is public.",
+               src:"https://learn.microsoft.com/azure/compliance/offerings/offering-soc-2" },
+      // GCP — https://cloud.google.com/security/compliance/soc-2
+      gcp:   { level:"yes",
+               note:"SOC 1 / SOC 2 / SOC 3 reports for an in-scope Google Cloud product set. SOC 1/2 are obtained under NDA via the Compliance Reports Manager; SOC 3 is public.",
+               src:"https://cloud.google.com/security/compliance/soc-2" },
+      // OCI — https://www.oracle.com/corporate/cloud-compliance/soc/
+      oci:   { level:"yes",
+               note:"SOC 1 and SOC 2 (Type II) reports are produced for in-scope OCI services and made available to customers under NDA. Confirm a given service is in the report's scope.",
+               src:"https://www.oracle.com/corporate/cloud-compliance/soc/" },
+      // OVH — https://us.ovhcloud.com/about/company/security/  (OVHcloud US publishes SOC 1 & SOC 2 Type II)
+      ovh:   { level:"part",
+               note:"SOC 2 (Type II) reporting is published primarily by the OVHcloud US entity for its US-hosted products; coverage for the EU OVHcloud entity / product range is narrower and not uniform across all services. Confirm whether a SOC 2 report exists for the specific OVHcloud product and region you need.",
+               src:"https://us.ovhcloud.com/about/company/security/" }
+    }
+  },
+
+  { id:"pci", category:"global", name:"PCI DSS",
+    sub:"payment card data",
+    desc:"PCI DSS is the Payment Card Industry Data Security Standard. A cloud provider can be certified as a compliant service provider — but PCI scope is a shared-responsibility split: the provider's Attestation of Compliance (AOC) covers in-scope services only, and the customer's own environment must still be assessed.",
+    support: {
+      // AWS — https://aws.amazon.com/compliance/pci-dss-level-1-faqs/
+      aws:   { level:"yes",
+               note:"AWS is a PCI DSS Level 1 compliant service provider. The Attestation of Compliance covers a defined in-scope service list; the AOC and Responsibility Summary are available via AWS Artifact. Your cardholder-data environment built on AWS is still separately in scope.",
+               src:"https://aws.amazon.com/compliance/pci-dss-level-1-faqs/" },
+      // Azure — https://learn.microsoft.com/azure/compliance/offerings/offering-pci-dss
+      azure: { level:"yes",
+               note:"Azure is validated as a PCI DSS compliant service provider. The Azure PCI DSS AOC and the in-scope service list are published on the Service Trust Portal. Shared responsibility applies to the customer's CDE.",
+               src:"https://learn.microsoft.com/azure/compliance/offerings/offering-pci-dss" },
+      // GCP — https://cloud.google.com/security/compliance/pci-dss
+      gcp:   { level:"yes",
+               note:"Google Cloud is a PCI DSS compliant service provider; the AOC covers an in-scope product set and is available via the Compliance Reports Manager. Customer CDE is separately assessed.",
+               src:"https://cloud.google.com/security/compliance/pci-dss" },
+      // OCI — https://www.oracle.com/corporate/cloud-compliance/pci/
+      oci:   { level:"yes",
+               note:"OCI is assessed as a PCI DSS compliant service provider; Oracle's AOC covers in-scope OCI services and is available to customers. Verify a given service is listed in the AOC scope.",
+               src:"https://www.oracle.com/corporate/cloud-compliance/pci/" },
+      // OVH — https://www.ovhcloud.com/en/enterprise/certification-conformity/  (OVHcloud lists PCI DSS for specific scoped products)
+      ovh:   { level:"part",
+               note:"OVHcloud holds PCI DSS attestation for a specific, narrow scope — particular products / infrastructure offerings rather than its whole catalogue. Check OVHcloud's certification list for the exact in-scope products before designing a cardholder-data environment on it.",
+               src:"https://www.ovhcloud.com/en/enterprise/certification-conformity/" }
+    }
+  },
+
+  // ════════════════ SECTOR-SPECIFIC ════════════════
+  { id:"hipaa", category:"sector", name:"HIPAA eligibility",
+    sub:"BAA + PHI workloads",
+    desc:"HIPAA is US health-data regulation. There is no government 'HIPAA certification' for a cloud — instead a provider signs a Business Associate Addendum (BAA) and designates which services are 'HIPAA-eligible' for processing Protected Health Information. The eligible-service list is the boundary.",
+    support: {
+      // AWS — https://aws.amazon.com/compliance/hipaa-compliance/
+      aws:   { level:"yes",
+               note:"AWS offers a BAA and publishes a list of HIPAA-eligible services. Only services on that list may be used for PHI; the list is long but not exhaustive — confirm a given service is HIPAA-eligible before placing PHI on it.",
+               src:"https://aws.amazon.com/compliance/hipaa-compliance/" },
+      // Azure — https://learn.microsoft.com/azure/compliance/offerings/offering-hipaa-us
+      azure: { level:"yes",
+               note:"Microsoft offers a HIPAA BAA covering in-scope Azure services. The BAA and the in-scope service list are surfaced via the Service Trust Portal / Microsoft licensing terms.",
+               src:"https://learn.microsoft.com/azure/compliance/offerings/offering-hipaa-us" },
+      // GCP — https://cloud.google.com/security/compliance/hipaa
+      gcp:   { level:"yes",
+               note:"Google Cloud offers a BAA and publishes a list of HIPAA-covered products. Only covered products may process PHI under the BAA; verify a given product is on the covered list.",
+               src:"https://cloud.google.com/security/compliance/hipaa" },
+      // OCI — https://www.oracle.com/corporate/cloud-compliance/hipaa/
+      oci:   { level:"yes",
+               note:"Oracle offers a HIPAA BAA for OCI; Oracle designates in-scope OCI services for PHI workloads. Confirm a service is in scope of the BAA before use.",
+               src:"https://www.oracle.com/corporate/cloud-compliance/hipaa/" },
+      // OVH — OVHcloud US targets HIPAA; EU OVHcloud does not market HIPAA. Region-dependent → partial.
+      ovh:   { level:"part",
+               note:"HIPAA is a US-market construct: the OVHcloud US entity positions products for HIPAA / healthcare and can enter a BAA for specific US-hosted offerings, while the EU OVHcloud catalogue does not market HIPAA eligibility. Availability is entity- and product-specific — confirm a BAA is offered for the exact product.",
+               src:"https://us.ovhcloud.com/" }
+    }
+  },
+
+  { id:"hds", category:"sector", name:"HDS — France (health data)",
+    sub:"Hébergeur de Données de Santé",
+    desc:"HDS (Hébergeur de Données de Santé) is the French certification required to host personal health data. It is a France-specific scheme audited by an accredited body — distinct from HIPAA, and increasingly relevant for EU health workloads.",
+    support: {
+      // AWS — https://aws.amazon.com/compliance/hds/
+      aws:   { level:"yes",
+               note:"AWS holds HDS certification; the certificate covers an in-scope service list, with the Paris (eu-west-3) region central to French health-data hosting. Verify a service is within the HDS-certified scope.",
+               src:"https://aws.amazon.com/compliance/hds/" },
+      // Azure — https://learn.microsoft.com/azure/compliance/offerings/offering-hds-france
+      azure: { level:"yes",
+               note:"Azure holds HDS certification for in-scope services; the France Central region supports French health-data residency. The HDS certificate is published via the Service Trust Portal.",
+               src:"https://learn.microsoft.com/azure/compliance/offerings/offering-hds-france" },
+      // GCP — https://cloud.google.com/security/compliance/hds
+      gcp:   { level:"yes",
+               note:"Google Cloud holds HDS certification for an in-scope product set; the Paris region supports French health-data hosting. Certificate available via the Compliance Reports Manager.",
+               src:"https://cloud.google.com/security/compliance/hds" },
+      // OCI — https://www.oracle.com/fr/corporate/cloud-compliance/hds/
+      oci:   { level:"yes",
+               note:"Oracle holds HDS certification for OCI; Oracle operates a Paris (France) region for French health-data residency. Confirm in-scope services on Oracle's HDS page.",
+               src:"https://www.oracle.com/fr/corporate/cloud-compliance/hds/" },
+      // OVH — https://www.ovhcloud.com/en/enterprise/certification-conformity/  (OVHcloud is HDS-certified, French operator)
+      ovh:   { level:"yes",
+               note:"OVHcloud holds HDS certification — as a French operator this is a long-standing strength. The certificate covers in-scope OVHcloud products hosted in eligible French / EU data centres; check the certification list for exact in-scope products.",
+               src:"https://www.ovhcloud.com/en/enterprise/certification-conformity/" }
+    }
+  },
+
+  // ════════════════ EU DATA BOUNDARY / SOVEREIGNTY ════════════════
+  { id:"eu-boundary", category:"sovereign", name:"EU Data Boundary / sovereign offering",
+    sub:"data residency + operational sovereignty",
+    desc:"A distinct, named offering that contractually keeps customer data — and ideally operations and support — within the EU/EEA, addressing the gap that ISO/SOC do not cover. Maturity varies enormously: a 'data residency' option is not the same as full operational sovereignty.",
+    support: {
+      // AWS — https://aws.amazon.com/compliance/europe-digital-sovereignty/  (AWS European Sovereign Cloud)
+      aws:   { level:"part", tier:"Sovereign Cloud",
+               note:"AWS European Sovereign Cloud is a separate sovereign cloud, operated by EU-resident personnel with an independent EU governance / parent structure, with its first region in Brandenburg, Germany. It is a distinct cloud being rolled out — not the same as the standard AWS commercial regions, which already offer EU data residency but not full operational sovereignty.",
+               src:"https://aws.amazon.com/compliance/europe-digital-sovereignty/" },
+      // Azure — https://learn.microsoft.com/industry/sovereignty/  (Microsoft Cloud for Sovereignty + EU Data Boundary)
+      azure: { level:"part", tier:"EU Data Boundary",
+               note:"Microsoft offers the EU Data Boundary (customer data + much support data stored and processed in the EU/EEA) plus Microsoft Cloud for Sovereignty with Sovereign Landing Zones and confidential-computing controls. Strong data-residency posture; full operational sovereignty depends on the configuration and on the underlying Microsoft operating model.",
+               src:"https://learn.microsoft.com/industry/sovereignty/" },
+      // GCP — https://cloud.google.com/sovereign-cloud  (Sovereign Cloud / partner-operated models)
+      gcp:   { level:"part", tier:"Sovereign Cloud",
+               note:"Google Cloud offers a Sovereign Cloud portfolio: data-residency controls, plus partner-operated sovereign clouds (e.g. with T-Systems in Germany and S3NS in France) where a local partner controls operations. Capability depends heavily on which tier / partner model is chosen.",
+               src:"https://cloud.google.com/sovereign-cloud" },
+      // OCI — https://www.oracle.com/cloud/eu-sovereign-cloud/  (Oracle EU Sovereign Cloud)
+      oci:   { level:"yes", tier:"EU Sovereign Cloud",
+               note:"Oracle operates a dedicated EU Sovereign Cloud — physically and logically separate regions (initially in Germany and Spain) operated by EU-based legal entities and EU-resident personnel, with no connectivity to Oracle's commercial cloud. One of the more clearly delineated sovereign offerings.",
+               src:"https://www.oracle.com/cloud/eu-sovereign-cloud/" },
+      // OVH — https://www.ovhcloud.com/en/enterprise/products/trusted-cloud/  (OVHcloud, EU-headquartered)
+      ovh:   { level:"yes", tier:"EU-native",
+               note:"OVHcloud is a European company headquartered in France and is structurally outside the scope of the US CLOUD Act for its EU operations — sovereignty is its core positioning rather than a bolt-on. It also offers SecNumCloud-qualified ranges (the French ANSSI sovereign-cloud qualification). Note this is a smaller service catalogue than the hyperscalers.",
+               src:"https://www.ovhcloud.com/en/enterprise/products/trusted-cloud/" }
+    }
+  }
+];
+
+// ═══════════════════════════════════════════════════════════════════
+// STATE + RENDER
+// ═══════════════════════════════════════════════════════════════════
+const state = {
+  vendors: new Set(VENDORS.map(v => v.key)),
+  category: "all",
+  query: ""
+};
+
+const $ = (s) => document.querySelector(s);
+const $$ = (s) => Array.from(document.querySelectorAll(s));
+
+// ─── Permalinks — filter state ⇄ URL hash ───
+function writeHash() {
+  const keys = VENDORS.map(v => v.key);
+  const p = new URLSearchParams();
+  if (state.vendors.size < keys.length) p.set("clouds", keys.filter(k => state.vendors.has(k)).join(","));
+  if (state.category !== "all") p.set("cat", state.category);
+  if (state.query.trim())       p.set("q", state.query.trim());
+  const h = p.toString();
+  history.replaceState(null, "", h ? "#" + h : location.pathname + location.search);
+}
+function applyHash() {
+  const keys = VENDORS.map(v => v.key);
+  const p = new URLSearchParams(location.hash.slice(1));
+  const vd = p.get("clouds");
+  if (vd) {
+    const valid = vd.split(",").filter(x => keys.includes(x));
+    if (valid.length) state.vendors = new Set(valid);
+  }
+  const cat = p.get("cat"); if (cat) state.category = cat;
+  state.query = p.get("q") || "";
+  const allV = state.vendors.size === keys.length;
+  $$('.chip[data-v]').forEach(b => {
+    if (b.dataset.v === "all") b.classList.toggle("is-active", allV);
+    else b.classList.toggle("is-active", !allV && state.vendors.has(b.dataset.v));
+  });
+  $$('.chip[data-cat]').forEach(b => b.classList.toggle("is-active", b.dataset.cat === state.category));
+  const sb = $("#search"); if (sb) sb.value = state.query;
+}
+
+function init() {
+  // Counts
+  $("#count-features").textContent = FEATURES.length;
+  const stars = FEATURES.reduce((acc, f) => acc + Object.values(f.support).filter(s => s.note && s.note.length > 0).length, 0);
+  $("#count-stars").textContent = stars;
+
+  // Category chips
+  const catChips = $("#cat-chips");
+  catChips.innerHTML = `<span class="filter-chips__label">Domain</span>
+    <button class="chip is-active" data-cat="all">All</button>` +
+    CATEGORIES.map(c => `<button class="chip" data-cat="${c.key}">${c.label}</button>`).join("");
+
+  // Cloud chips
+  const vChips = $("#vendor-chips");
+  vChips.innerHTML = `<span class="filter-chips__label">Clouds</span>
+    <button class="chip is-active" data-v="all">All</button>` +
+    VENDORS.map(v => `<button class="chip" data-v="${v.key}"><span class="swatch" style="background:${v.swatch}"></span>${v.short}</button>`).join("");
+
+  applyHash();
+  renderMatrix();
+  wireEvents();
+  window.addEventListener("hashchange", () => { applyHash(); applyFilter(); });
+}
+
+function symFor(level) {
+  return level === "yes" ? "✓" : level === "part" ? "◐" : "✗";
+}
+
+function renderMatrix() {
+  const table = $("#matrix");
+  let html = "<thead><tr>";
+  html += '<th class="feature-col" scope="col">Compliance program</th>';
+  VENDORS.forEach(v => {
+    html += `<th class="col-${v.key}" scope="col"><span class="vendor-tag"><span class="swatch" style="background:${v.swatch}"></span>${v.short}</span></th>`;
+  });
+  html += "</tr></thead><tbody>";
+
+  CATEGORIES.forEach(cat => {
+    const features = FEATURES.filter(f => f.category === cat.key);
+    if (features.length === 0) return;
+    html += `<tr class="category-row" data-cat="${cat.key}"><td colspan="${VENDORS.length + 1}"><span class="cat-label">▸ ${cat.label}</span></td></tr>`;
+    features.forEach(f => {
+      html += `<tr class="feature-row" data-feature="${f.id}" data-cat="${cat.key}">`;
+      html += `<td class="feature-col" data-action="open-feature" tabindex="0" role="button" aria-label="Per-cloud breakdown for ${f.name}">${f.name}${f.sub ? `<span class="feature-sub">${f.sub}</span>` : ""}</td>`;
+      VENDORS.forEach(v => {
+        const s = f.support[v.key] || { level: "no", note: "" };
+        const sym = symFor(s.level);
+        const hasNote = s.note && s.note.length > 0;
+        html += `<td class="cell col-${v.key}" data-feature="${f.id}" data-vendor="${v.key}" tabindex="0" role="button" aria-label="${v.short} — ${f.name}: ${s.level === 'yes' ? 'holds' : s.level === 'part' ? 'partial' : 'not held'}${s.tier ? ', ' + s.tier : ''}. Click for footnote.">`;
+        html += `<span class="cell-mark cell-mark--${s.level}">${sym}${hasNote ? '<span class="cell-mark__star">*</span>' : ''}</span>`;
+        if (s.tier) html += `<span class="cell-tier">${s.tier}</span>`;
+        html += `</td>`;
+      });
+      html += `</tr>`;
+    });
+  });
+
+  html += "</tbody>";
+  table.innerHTML = html;
+  applyFilter();
+}
+
+function applyFilter() {
+  const q = state.query.trim().toLowerCase();
+  const table = $("#matrix");
+
+  // Cloud visibility (via class on table)
+  VENDORS.forEach(v => {
+    table.classList.toggle(`hide-${v.key}`, !state.vendors.has(v.key));
+  });
+
+  // Row visibility
+  $$(".matrix tbody tr.feature-row").forEach(row => {
+    const f = FEATURES.find(x => x.id === row.dataset.feature);
+    if (!f) return;
+    let matches = state.category === "all" || f.category === state.category;
+    if (matches && q) {
+      const catLabel = (CATEGORIES.find(c => c.key === f.category) || {}).label || "";
+      const hay = `${f.name} ${f.sub || ""} ${f.desc} ${catLabel}`.toLowerCase();
+      matches = hay.includes(q);
+    }
+    row.classList.toggle("is-hidden", !matches);
+  });
+
+  // Hide category rows that have no visible features
+  CATEGORIES.forEach(cat => {
+    const visible = $$(`.matrix tbody tr.feature-row[data-cat="${cat.key}"]`).some(r => !r.classList.contains("is-hidden"));
+    const catRow = $(`.matrix tbody tr.category-row[data-cat="${cat.key}"]`);
+    if (catRow) catRow.classList.toggle("is-hidden", !visible);
+  });
+  writeHash();
+}
+
+// ─── Drawer ───
+let lastFocused = null;
+
+function openDrawer() {
+  lastFocused = document.activeElement;
+  $("#drawer-backdrop").classList.add("is-open");
+  $("#drawer").classList.add("is-open");
+  $("#drawer").setAttribute("aria-hidden", "false");
+  const closeBtn = $("#drawer .drawer__close");
+  if (closeBtn) closeBtn.focus();
+}
+function closeDrawer() {
+  $("#drawer-backdrop").classList.remove("is-open");
+  $("#drawer").classList.remove("is-open");
+  $("#drawer").setAttribute("aria-hidden", "true");
+  if (lastFocused && typeof lastFocused.focus === "function") lastFocused.focus();
+  lastFocused = null;
+}
+
+function openFeatureDrawer(feature, focusVendor) {
+  $("#drawer-head").innerHTML = `
+    <div class="drawer__eyebrow">${(CATEGORIES.find(c => c.key === feature.category) || {}).label || ""}</div>
+    <h3 class="drawer__title">${feature.name}</h3>
+    <p class="drawer__desc">${feature.desc}</p>
+    <button class="drawer__close" type="button" onclick="closeDrawer()">Close ⤬</button>
+  `;
+  const body = VENDORS.map(v => {
+    const s = feature.support[v.key] || { level: "no", note: "" };
+    const sym = symFor(s.level);
+    const isFocus = focusVendor === v.key;
+    const tier = s.tier ? `<span class="vendor-row__tier">${s.tier}</span>` : "";
+    const srcHost = s.src ? s.src.replace(/^https?:\/\//, "").replace(/\/$/, "") : "";
+    const src = s.src
+      ? `<a class="vendor-row__src" href="${s.src}" target="_blank" rel="noopener">Source — ${srcHost}</a>`
+      : "";
+    return `<div class="vendor-row" ${isFocus ? 'style="border-color: var(--accent); background: rgba(255,120,73,0.05);"' : ''}>
+      <span class="vendor-row__mark vendor-row__mark--${s.level}">${sym}</span>
+      <div>
+        <div class="vendor-row__name"><span class="swatch" style="background:${v.swatch}"></span>${v.name}${tier}</div>
+        <div class="vendor-row__note">${s.note || (s.level === "no" ? "Not held." : "—")}</div>
+        ${src}
+      </div>
+    </div>`;
+  }).join("");
+  $("#drawer-body").innerHTML = `<div class="drawer__section"><h4>Per-cloud footprint</h4>${body}</div>`;
+  openDrawer();
+}
+
+function wireEvents() {
+  document.addEventListener("click", (e) => {
+    // Category chips
+    const c = e.target.closest(".chip[data-cat]");
+    if (c) {
+      state.category = c.dataset.cat;
+      $$('.chip[data-cat]').forEach(b => b.classList.toggle("is-active", b.dataset.cat === state.category));
+      applyFilter();
+      return;
+    }
+    const v = e.target.closest(".chip[data-v]");
+    if (v) {
+      const key = v.dataset.v;
+      if (key === "all") {
+        state.vendors = new Set(VENDORS.map(x => x.key));
+        $$('.chip[data-v]').forEach(b => b.classList.toggle("is-active", b.dataset.v === "all"));
+      } else {
+        if ($('.chip[data-v="all"]').classList.contains("is-active")) {
+          state.vendors = new Set([key]);
+          $$('.chip[data-v]').forEach(b => b.classList.toggle("is-active", b.dataset.v === key));
+        } else {
+          if (state.vendors.has(key) && state.vendors.size === 1) {
+            state.vendors = new Set(VENDORS.map(x => x.key));
+            $$('.chip[data-v]').forEach(b => b.classList.toggle("is-active", b.dataset.v === "all"));
+          } else {
+            state.vendors.has(key) ? state.vendors.delete(key) : state.vendors.add(key);
+            v.classList.toggle("is-active");
+            $('.chip[data-v="all"]').classList.remove("is-active");
+          }
+        }
+      }
+      applyFilter();
+      return;
+    }
+    const cell = e.target.closest("td.cell");
+    if (cell) {
+      const f = FEATURES.find(x => x.id === cell.dataset.feature);
+      if (f) openFeatureDrawer(f, cell.dataset.vendor);
+      return;
+    }
+    const featureCol = e.target.closest("td.feature-col[data-action='open-feature']");
+    if (featureCol) {
+      const row = featureCol.closest("tr.feature-row");
+      const f = FEATURES.find(x => x.id === row.dataset.feature);
+      if (f) openFeatureDrawer(f, null);
+      return;
+    }
+  });
+
+  // Keyboard activation for matrix cells / program names (Enter or Space)
+  $("#matrix").addEventListener("keydown", (e) => {
+    if (e.key !== "Enter" && e.key !== " ") return;
+    const target = e.target.closest("td.cell, td.feature-col[data-action='open-feature']");
+    if (!target) return;
+    e.preventDefault();
+    target.click();
+  });
+
+  $("#drawer-backdrop").addEventListener("click", closeDrawer);
+  $("#search").addEventListener("input", (e) => {
+    state.query = e.target.value;
+    applyFilter();
+  });
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") closeDrawer();
+    if (e.key === "/" && e.target.tagName !== "INPUT") { e.preventDefault(); $("#search").focus(); }
+  });
+}
+
+init();
+</script>
+<script src="/nav.js" defer></script>
+</body>
+</html>

@@ -1,0 +1,1031 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="color-scheme" content="dark">
+<title>Confidential Computing · Cross-Cloud Atlas · Infra Atlas</title>
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<meta name="description" content="Cross-cloud confidential computing reference. Intel SGX, AMD SEV-SNP, Intel TDX, AWS Nitro Enclaves and confidential GPU — mapped against AWS, Azure, GCP and OCI, with the VM families and regions intact.">
+<link rel="canonical" href="https://infraatlas.dev/confidential-computing/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Infra Atlas">
+<meta property="og:title" content="Confidential Computing · Cross-Cloud Atlas · Infra Atlas">
+<meta property="og:description" content="Cross-cloud confidential computing reference. Intel SGX, AMD SEV-SNP, Intel TDX, AWS Nitro Enclaves and confidential GPU — mapped against AWS, Azure, GCP and OCI, with the VM families and regions intact.">
+<meta property="og:url" content="https://infraatlas.dev/confidential-computing/">
+<meta property="og:image" content="https://infraatlas.dev/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Infra Atlas — a reference for the infrastructure stack">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Confidential Computing · Cross-Cloud Atlas · Infra Atlas">
+<meta name="twitter:description" content="Cross-cloud confidential computing reference. Intel SGX, AMD SEV-SNP, Intel TDX, AWS Nitro Enclaves and confidential GPU — mapped against AWS, Azure, GCP and OCI.">
+<meta name="twitter:image" content="https://infraatlas.dev/og.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@300;400;500;600&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+:root {
+  --ink: #0A0907; --ink-2: #100E0C; --surface: #161310; --surface-2: #1E1A15; --surface-3: #2A241C;
+  --line: rgba(244, 239, 230, 0.06); --line-2: rgba(244, 239, 230, 0.14); --line-3: rgba(244, 239, 230, 0.28);
+  --paper: #F4EFE6; --paper-2: rgba(244, 239, 230, 0.66); --paper-3: rgba(244, 239, 230, 0.55); --paper-4: rgba(244, 239, 230, 0.20);
+  --accent: #FF7849; --accent-2: #FFA66E; --accent-glow: rgba(255, 120, 73, 0.22);
+  --mint: #6FE7B5; --gold: #F4C660; --plum: #C586E8; --sky: #7CD7F1; --rose: #F47B7B; --teal: #5BCCC9;
+  --yes:   #6FE7B5;
+  --no:    #F47B7B;
+  --part:  #F4C660;
+  --serif: 'Instrument Serif', 'Times New Roman', serif;
+  --mono: 'JetBrains Mono', ui-monospace, monospace;
+  --sans: 'Manrope', -apple-system, system-ui, sans-serif;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body {
+  background: var(--ink);
+  color: var(--paper);
+  font-family: var(--sans);
+  font-size: 15px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  min-height: 100vh;
+}
+
+body {
+  background:
+    radial-gradient(ellipse at 100% -10%, rgba(255, 120, 73, 0.07), transparent 55%),
+    radial-gradient(ellipse at -10% 110%, rgba(244, 198, 96, 0.05), transparent 65%),
+    var(--ink);
+  background-attachment: fixed;
+  overflow-x: hidden;
+}
+
+.grain {
+  pointer-events: none; position: fixed; inset: 0; z-index: 100; opacity: 0.08; mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml;utf8,<svg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.6 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+}
+.scanlines {
+  pointer-events: none; position: fixed; inset: 0; z-index: 99;
+  background: repeating-linear-gradient(180deg, transparent, transparent 2px, rgba(244,239,230,0.012) 2px, rgba(244,239,230,0.012) 3px);
+}
+::selection { background: var(--accent); color: var(--ink); }
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+.page { max-width: 1640px; margin: 0 auto; padding: 56px 48px 96px; position: relative; }
+
+/* ─────────── MASTHEAD ─────────── */
+.masthead {
+  display: grid; grid-template-columns: 1fr auto; gap: 48px; align-items: end;
+  padding-bottom: 36px; border-bottom: 1px solid var(--line); margin-bottom: 32px;
+}
+.masthead__eyebrow {
+  font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.22em; color: var(--paper-3);
+  text-transform: uppercase; display: inline-flex; align-items: center; gap: 12px;
+  text-decoration: none; transition: color 0.2s ease;
+}
+.masthead__eyebrow:hover { color: var(--paper); }
+.masthead__eyebrow-arrow { color: var(--accent); transition: transform 0.2s ease; }
+.masthead__eyebrow:hover .masthead__eyebrow-arrow { transform: translateX(-4px); }
+.masthead__title {
+  font-family: var(--serif); font-weight: 400;
+  font-size: clamp(48px, 7vw, 108px); line-height: 0.95; letter-spacing: -0.02em;
+  margin-top: 16px; color: var(--paper);
+}
+.masthead__title em { font-style: italic; color: var(--accent); }
+.masthead__subtitle {
+  margin-top: 18px; font-size: 16px; color: var(--paper-2); max-width: 640px; line-height: 1.55;
+}
+.masthead__subtitle span {
+  font-family: var(--serif); font-style: italic; color: var(--paper);
+}
+
+.masthead__status {
+  text-align: right; display: flex; flex-direction: column; align-items: flex-end; gap: 14px; padding-bottom: 6px;
+}
+.status-line {
+  display: inline-flex; align-items: center; gap: 10px;
+  font-family: var(--mono); font-size: 11px; letter-spacing: 0.18em;
+  text-transform: uppercase; color: var(--gold);
+}
+.status-dot {
+  width: 8px; height: 8px; border-radius: 50%; background: var(--gold);
+  animation: pulse 2.4s infinite;
+}
+@keyframes pulse {
+  0% { box-shadow: 0 0 0 0 rgba(244,198,96,0.5); }
+  70% { box-shadow: 0 0 0 14px rgba(244,198,96,0); }
+  100% { box-shadow: 0 0 0 0 rgba(244,198,96,0); }
+}
+.status-time { font-family: var(--mono); font-size: 12px; color: var(--paper-3); }
+.status-counts { display: flex; gap: 24px; margin-top: 4px; }
+.status-counts > div {
+  text-align: right; font-family: var(--mono); font-size: 11px; letter-spacing: 0.12em;
+  text-transform: uppercase; color: var(--paper-3); display: flex; flex-direction: column; gap: 2px;
+}
+.status-counts strong {
+  font-family: var(--serif); font-style: italic; font-weight: 400; font-size: 28px;
+  color: var(--paper); letter-spacing: -0.01em; text-transform: none;
+}
+
+/* ─────────── PRIMER ─────────── */
+.primer {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px;
+  background: var(--line); border: 1px solid var(--line); border-radius: 6px;
+  overflow: hidden; margin-bottom: 28px;
+}
+.primer__cell {
+  background: linear-gradient(180deg, var(--surface) 0%, var(--ink-2) 100%);
+  padding: 20px 22px;
+}
+.primer__cell h3 {
+  font-family: var(--mono); font-size: 10px; letter-spacing: 0.2em;
+  text-transform: uppercase; color: var(--accent-2); margin-bottom: 9px; font-weight: 500;
+}
+.primer__cell p { font-size: 13px; color: var(--paper-2); line-height: 1.6; }
+.primer__cell p strong {
+  font-family: var(--serif); font-style: italic; font-weight: 400;
+  color: var(--paper); font-size: 15px;
+}
+.primer__cell code {
+  font-family: var(--mono); font-size: 11px; background: var(--ink);
+  padding: 1px 5px; border-radius: 2px; border: 1px solid var(--line); color: var(--accent-2);
+}
+
+/* ─────────── FILTERS ─────────── */
+.filters {
+  display: grid; grid-template-columns: auto 1fr; gap: 18px 32px; align-items: center;
+  padding: 18px 22px; background: linear-gradient(180deg, var(--surface) 0%, var(--ink-2) 100%);
+  border: 1px solid var(--line); border-radius: 4px;
+  position: sticky; top: 16px; z-index: 50; backdrop-filter: blur(12px); margin-bottom: 28px;
+}
+.filter-search {
+  flex: 1; position: relative; grid-column: 1 / -1;
+}
+.filter-search input {
+  width: 100%; background: var(--ink); border: 1px solid var(--line); color: var(--paper);
+  font-family: var(--mono); font-size: 13px; padding: 12px 16px 12px 42px;
+  border-radius: 3px; outline: none; transition: border-color 0.2s ease;
+}
+.filter-search input::placeholder { color: var(--paper-3); }
+.filter-search input:focus { border-color: var(--accent); }
+.filter-search::before {
+  content: '⌕'; position: absolute; left: 16px; top: 50%; transform: translateY(-50%);
+  color: var(--paper-3); font-size: 18px; pointer-events: none;
+}
+.filter-chips {
+  grid-column: 1 / -1; display: flex; flex-wrap: wrap; gap: 6px; align-items: center;
+}
+.filter-chips__label {
+  font-family: var(--mono); font-size: 10px; letter-spacing: 0.16em;
+  text-transform: uppercase; color: var(--paper-3); margin-right: 4px;
+}
+.chip {
+  background: transparent; border: 1px solid var(--line-2); color: var(--paper-2);
+  font-family: var(--mono); font-size: 11px; letter-spacing: 0.06em;
+  padding: 6px 12px; border-radius: 99px; cursor: pointer; transition: all 0.15s ease;
+  display: inline-flex; align-items: center; gap: 8px; white-space: nowrap;
+}
+.chip:hover { border-color: var(--paper-3); color: var(--paper); }
+.chip.is-active { background: var(--paper); border-color: var(--paper); color: var(--ink); }
+.chip .swatch {
+  width: 8px; height: 8px; border-radius: 2px;
+}
+
+/* ─────────── MATRIX ─────────── */
+.matrix-wrap {
+  overflow-x: auto; margin-bottom: 28px;
+  border: 1px solid var(--line); border-radius: 6px;
+  background: linear-gradient(180deg, var(--ink-2) 0%, var(--ink) 100%);
+}
+.matrix {
+  width: 100%; border-collapse: collapse; min-width: 940px;
+  font-family: var(--sans); font-size: 13px;
+}
+.matrix thead th {
+  position: sticky; top: 0; z-index: 10; background: var(--ink-2);
+  font-family: var(--mono); font-weight: 500; font-size: 10.5px;
+  letter-spacing: 0.14em; text-transform: uppercase; color: var(--paper-2);
+  padding: 18px 14px 12px; vertical-align: bottom; text-align: center;
+  border-bottom: 1px solid var(--line-2);
+  white-space: nowrap;
+}
+.matrix thead th.tech-col {
+  text-align: left; padding-left: 22px; min-width: 280px;
+  font-family: var(--serif); font-style: italic; font-size: 16px;
+  letter-spacing: 0; text-transform: none; color: var(--paper);
+  font-weight: 400;
+}
+.matrix th .cloud-tag {
+  display: inline-flex; align-items: center; gap: 7px; flex-direction: column;
+}
+.matrix th .cloud-tag .swatch {
+  width: 22px; height: 3px; border-radius: 2px;
+}
+.matrix th .cloud-tag .cloud-sub {
+  font-size: 8.5px; letter-spacing: 0.1em; color: var(--paper-3); text-transform: none;
+}
+
+.matrix tbody tr.category-row td {
+  padding: 22px 22px 10px;
+  border-top: 1px dashed var(--line);
+  background: linear-gradient(180deg, rgba(0,0,0,0.2), transparent);
+}
+.matrix tbody tr.category-row td .cat-label {
+  font-family: var(--mono); font-size: 10px; letter-spacing: 0.22em;
+  text-transform: uppercase; color: var(--paper-3);
+  display: flex; align-items: center; gap: 10px;
+}
+.matrix tbody tr.category-row td .cat-label::after {
+  content: ''; flex: 1; height: 1px; background: var(--line);
+}
+.matrix tbody tr.tech-row td {
+  padding: 14px 12px; border-bottom: 1px solid var(--line);
+  vertical-align: middle;
+}
+.matrix tbody tr.tech-row td.tech-col {
+  padding-left: 22px; color: var(--paper); font-size: 14px;
+  text-align: left;
+  border-right: 1px solid var(--line);
+  cursor: pointer;
+}
+.matrix tbody tr.tech-row td.tech-col .tech-name {
+  font-weight: 600; display: flex; align-items: center; gap: 9px;
+}
+.matrix tbody tr.tech-row td.tech-col .tech-name .tech-swatch {
+  width: 9px; height: 9px; border-radius: 2px; flex: none;
+}
+.matrix tbody tr.tech-row td.tech-col .tech-meta {
+  font-family: var(--mono); font-size: 10px; color: var(--paper-3);
+  letter-spacing: 0.04em; margin-top: 4px; padding-left: 18px;
+}
+.matrix tbody tr.tech-row td.cell {
+  text-align: center; min-width: 130px; cursor: pointer;
+  transition: background 0.15s ease;
+  position: relative;
+}
+.matrix tbody tr.tech-row td.cell:hover {
+  background: rgba(255, 120, 73, 0.04);
+}
+.matrix tbody tr.tech-row:hover {
+  background: linear-gradient(90deg, transparent, rgba(255, 120, 73, 0.02), transparent);
+}
+
+.cell-mark {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 24px; height: 24px; border-radius: 50%;
+  font-family: var(--mono); font-size: 14px; font-weight: 500;
+  position: relative;
+}
+.cell-mark--yes  { background: rgba(111, 231, 181, 0.15); color: var(--yes); }
+.cell-mark--no   { background: rgba(244, 123, 123, 0.12); color: var(--no); opacity: 0.65; }
+.cell-mark--part { background: rgba(244, 198, 96, 0.15); color: var(--part); }
+.cell-mark__star {
+  position: absolute; top: -3px; right: -6px;
+  font-size: 10px; color: var(--accent);
+  background: var(--ink-2); border-radius: 50%; width: 12px; height: 12px;
+  display: inline-flex; align-items: center; justify-content: center;
+}
+.cell-fam {
+  display: block; font-family: var(--mono); font-size: 10px;
+  color: var(--paper-3); margin-top: 6px; letter-spacing: 0.02em;
+  line-height: 1.4;
+}
+.cell-fam em { font-style: normal; color: var(--paper-2); }
+
+/* Hide columns when cloud filtered out */
+.matrix.hide-aws   .col-aws,
+.matrix.hide-azure .col-azure,
+.matrix.hide-gcp   .col-gcp,
+.matrix.hide-oci   .col-oci,
+.matrix.hide-ovh   .col-ovh { display: none; }
+
+/* Hide rows when filtered/searched */
+.matrix tbody tr.tech-row.is-hidden,
+.matrix tbody tr.category-row.is-hidden { display: none; }
+
+/* ─────────── LEGEND ─────────── */
+.legend {
+  display: flex; flex-wrap: wrap; gap: 18px; align-items: center;
+  margin-bottom: 28px; padding: 16px 22px;
+  background: var(--surface); border: 1px solid var(--line); border-radius: 4px;
+  font-family: var(--mono); font-size: 11px; color: var(--paper-2);
+}
+.legend__label {
+  font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--paper-3);
+}
+.legend__item { display: inline-flex; align-items: center; gap: 8px; }
+
+/* ─────────── DRAWER ─────────── */
+.drawer-backdrop {
+  position: fixed; inset: 0; background: rgba(10, 9, 7, 0.7); backdrop-filter: blur(8px);
+  z-index: 200; opacity: 0; pointer-events: none; transition: opacity 0.25s ease;
+}
+.drawer-backdrop.is-open { opacity: 1; pointer-events: auto; }
+.drawer {
+  position: fixed; top: 0; right: 0; bottom: 0; width: min(680px, 100%);
+  background: var(--ink-2); border-left: 1px solid var(--line-2); z-index: 201;
+  transform: translateX(100%); transition: transform 0.32s cubic-bezier(0.2, 0.8, 0.2, 1);
+  display: flex; flex-direction: column;
+}
+.drawer.is-open { transform: translateX(0); }
+.drawer__head {
+  padding: 28px 32px 22px; border-bottom: 1px solid var(--line); position: relative; flex-shrink: 0;
+}
+.drawer__close {
+  position: absolute; top: 20px; right: 20px;
+  background: transparent; border: 1px solid var(--line-2); color: var(--paper-2);
+  font-family: var(--mono); font-size: 11px; padding: 6px 10px; cursor: pointer;
+  border-radius: 2px; letter-spacing: 0.1em; text-transform: uppercase;
+}
+.drawer__close:hover { border-color: var(--paper); color: var(--paper); }
+.drawer__eyebrow {
+  font-family: var(--mono); font-size: 10px; letter-spacing: 0.22em;
+  text-transform: uppercase; color: var(--accent);
+}
+.drawer__title {
+  font-family: var(--serif); font-size: 32px; font-weight: 400;
+  letter-spacing: -0.012em; line-height: 1.05; margin-top: 8px;
+}
+.drawer__desc {
+  margin-top: 12px; font-size: 14px; color: var(--paper-2); line-height: 1.6;
+}
+.drawer__tags { margin-top: 14px; display: flex; flex-wrap: wrap; gap: 6px; }
+.drawer__tag {
+  font-family: var(--mono); font-size: 10px; letter-spacing: 0.06em;
+  color: var(--paper-2); background: var(--surface);
+  border: 1px solid var(--line-2); border-radius: 99px; padding: 4px 10px;
+}
+.drawer__body { padding: 22px 32px 32px; overflow-y: auto; flex: 1; }
+.drawer__section { margin-bottom: 24px; }
+.drawer__section:last-child { margin-bottom: 0; }
+.drawer__section h4 {
+  font-family: var(--mono); font-size: 10.5px; font-weight: 500;
+  letter-spacing: 0.18em; text-transform: uppercase; color: var(--paper-3);
+  margin-bottom: 12px; display: flex; align-items: center; gap: 10px;
+}
+.drawer__section h4::after { content: ''; flex: 1; height: 1px; background: var(--line); }
+.drawer__prose { font-size: 13.5px; color: var(--paper-2); line-height: 1.65; }
+.drawer__prose strong { color: var(--paper); font-weight: 600; }
+
+.cloud-row {
+  display: grid; grid-template-columns: auto 1fr; gap: 14px;
+  padding: 14px 16px; background: var(--surface);
+  border: 1px solid var(--line); border-radius: 3px; margin-bottom: 6px;
+  align-items: start;
+}
+.cloud-row__mark {
+  font-family: var(--mono); font-size: 16px; font-weight: 500;
+  width: 30px; height: 30px; border-radius: 50%;
+  display: inline-flex; align-items: center; justify-content: center; flex: none;
+}
+.cloud-row__mark--yes  { background: rgba(111, 231, 181, 0.15); color: var(--yes); }
+.cloud-row__mark--no   { background: rgba(244, 123, 123, 0.12); color: var(--no); opacity: 0.65; }
+.cloud-row__mark--part { background: rgba(244, 198, 96, 0.15); color: var(--part); }
+.cloud-row__name {
+  font-family: var(--mono); font-size: 12.5px; font-weight: 500; color: var(--paper);
+  display: flex; align-items: center; gap: 9px;
+}
+.cloud-row__name .swatch { width: 8px; height: 8px; border-radius: 2px; }
+.cloud-row__note {
+  font-family: var(--sans); font-size: 12.5px; color: var(--paper-2); line-height: 1.55;
+  margin-top: 6px;
+}
+.cloud-row__fams {
+  margin-top: 8px; display: flex; flex-wrap: wrap; gap: 5px;
+}
+.cloud-row__fam {
+  font-family: var(--mono); font-size: 10px; color: var(--accent-2);
+  background: var(--ink); border: 1px solid var(--line);
+  border-radius: 2px; padding: 2px 7px;
+}
+.cloud-row__regions {
+  margin-top: 8px; font-family: var(--mono); font-size: 10.5px;
+  color: var(--paper-3); line-height: 1.6;
+}
+.cloud-row__regions strong {
+  color: var(--paper-2); font-weight: 500; letter-spacing: 0.08em;
+  text-transform: uppercase; font-size: 9px;
+}
+
+/* ─────────── COLOPHON ─────────── */
+.colophon {
+  margin-top: 64px; padding-top: 32px; border-top: 1px solid var(--line);
+  display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 32px;
+  font-size: 13px; color: var(--paper-3);
+}
+.colophon h5 {
+  font-family: var(--mono); font-size: 10px; letter-spacing: 0.18em;
+  text-transform: uppercase; color: var(--paper-2); margin-bottom: 10px; font-weight: 500;
+}
+.colophon p { font-size: 13px; line-height: 1.6; }
+.colophon p a {
+  color: var(--paper-2); text-decoration: underline;
+  text-decoration-color: var(--line-2); text-underline-offset: 3px;
+}
+.colophon p a:hover { color: var(--accent); }
+.colophon code {
+  font-family: var(--mono); font-size: 11.5px; background: var(--surface);
+  padding: 1px 6px; border-radius: 2px; border: 1px solid var(--line); color: var(--accent-2);
+}
+
+@media (max-width: 1000px) {
+  .primer { grid-template-columns: 1fr; }
+}
+@media (max-width: 900px) {
+  .page { padding: 32px 22px 72px; }
+  .masthead { grid-template-columns: 1fr; gap: 24px; }
+  .masthead__status { text-align: left; align-items: flex-start; }
+  .filters { position: static; padding: 14px; }
+  .colophon { grid-template-columns: 1fr; gap: 24px; }
+}
+</style>
+</head>
+<body>
+
+<div class="grain"></div>
+<div class="scanlines"></div>
+
+<div class="page">
+
+  <header class="masthead">
+    <div class="masthead__brand">
+      <a class="masthead__eyebrow" href="../">
+        <span class="masthead__eyebrow-arrow">←</span>
+        Infra Atlas · Confidential Computing · Cross-Cloud Atlas
+      </a>
+      <h1 class="masthead__title">Confidential <em>Computing.</em></h1>
+      <p class="masthead__subtitle">
+        Hardware-backed <span>trusted execution environments</span> mapped across the major clouds — Intel SGX, AMD SEV-SNP, Intel TDX, AWS Nitro Enclaves and confidential GPU. <span>Which cloud runs which silicon, in which families, in which regions.</span>
+      </p>
+    </div>
+    <aside class="masthead__status">
+      <div class="status-line">
+        <span class="status-dot"></span>
+        <span class="status-text">Curated · v1</span>
+      </div>
+      <div class="status-time">Issue 01 · 2026-05-16</div>
+      <div class="status-counts">
+        <div>Clouds<strong id="count-clouds">5</strong></div>
+        <div>Technologies<strong id="count-tech">—</strong></div>
+        <div>Footnotes<strong id="count-stars">—</strong></div>
+      </div>
+    </aside>
+  </header>
+
+  <main id="ia-main">
+
+  <section class="primer" aria-label="Confidential computing primer">
+    <div class="primer__cell">
+      <h3>Application enclave</h3>
+      <p><strong>Intel SGX</strong> carves a small encrypted region — the enclave — out of one process. Only code inside the enclave sees plaintext; the OS, hypervisor and the rest of the app cannot. Powerful, but the app must be re-architected to split trusted from untrusted code.</p>
+    </div>
+    <div class="primer__cell">
+      <h3>Whole-VM TEE</h3>
+      <p><strong>AMD SEV-SNP</strong> and <strong>Intel TDX</strong> encrypt and integrity-protect an entire guest VM against the host hypervisor — no code changes, the whole OS runs confidentially. SEV-SNP came with 3rd-gen EPYC; TDX with 5th-gen Xeon. Distinct designs, comparable threat model.</p>
+    </div>
+    <div class="primer__cell">
+      <h3>The asterisks</h3>
+      <p><strong>AWS Nitro Enclaves</strong> is not SGX, SEV-SNP or TDX — it is isolation by the Nitro hypervisor, processor-agnostic, no in-use memory-encryption attestation of the kind SEV-SNP/TDX give. <code>Confidential GPU</code> extends the TEE boundary onto an NVIDIA H100. Read the footnotes.</p>
+    </div>
+  </section>
+
+  <section class="filters">
+    <div class="filter-search">
+      <input id="search" type="search" autocomplete="off" spellcheck="false" placeholder="Filter technologies — search SGX, SEV-SNP, TDX, Nitro, GPU, enclave…">
+    </div>
+    <div class="filter-chips" id="cat-chips"></div>
+    <div class="filter-chips" id="cloud-chips"></div>
+  </section>
+
+  <div class="legend">
+    <span class="legend__label">Legend</span>
+    <span class="legend__item"><span class="cell-mark cell-mark--yes">✓</span> Generally available</span>
+    <span class="legend__item"><span class="cell-mark cell-mark--part">◐</span> Limited / preview / partial</span>
+    <span class="legend__item"><span class="cell-mark cell-mark--no">✗</span> Not offered</span>
+    <span class="legend__item"><span class="cell-mark cell-mark--yes" style="position:relative">✓<span class="cell-mark__star">*</span></span> Click any cell for the footnote</span>
+  </div>
+
+  <div class="matrix-wrap">
+    <table class="matrix" id="matrix"></table>
+  </div>
+
+  </main>
+
+  <footer class="colophon">
+    <div>
+      <h5>About</h5>
+      <p>Instrument 08 of <a href="../">Infra Atlas</a>. A cross-cloud confidential-computing reference — the TEE technologies against the clouds that run them. Click a cell for the VM families and regions; click a technology name for the full primer and per-cloud breakdown.</p>
+    </div>
+    <div>
+      <h5>Sources</h5>
+      <p>Curated from official vendor documentation — <a href="https://learn.microsoft.com/en-us/azure/confidential-computing/virtual-machine-options" target="_blank" rel="noopener">Azure</a>, <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/sev-snp.html" target="_blank" rel="noopener">AWS</a>, <a href="https://docs.cloud.google.com/confidential-computing/confidential-vm/docs/supported-configurations" target="_blank" rel="noopener">Google Cloud</a>, <a href="https://docs.oracle.com/en-us/iaas/Content/Compute/References/confidential_compute.htm" target="_blank" rel="noopener">OCI</a>. Snapshot as of May 2026. <em>If you spot a stale fact, <a href="https://github.com/ineslino/infraatlas/issues/new" target="_blank" rel="noopener">open an issue</a>.</em></p>
+    </div>
+    <div>
+      <h5>Shortcuts</h5>
+      <p><code>/</code> search · <code>Esc</code> close drawer · click a cell for VM families + regions, click a technology name for the full per-cloud breakdown.</p>
+    </div>
+  </footer>
+
+</div>
+
+<!-- DRAWER -->
+<div class="drawer-backdrop" id="drawer-backdrop"></div>
+<aside class="drawer" id="drawer" aria-hidden="true">
+  <div class="drawer__head" id="drawer-head"></div>
+  <div class="drawer__body" id="drawer-body"></div>
+</aside>
+
+<script>
+// ═══════════════════════════════════════════════════════════════════
+// CONFIDENTIAL-COMPUTING ATLAS — DATA
+// Every claim below is sourced from the vendor's official confidential-
+// computing documentation. URLs are cited inline. Snapshot: 2026-05-16.
+// "level" ∈ yes | part | no.  Region lists are indicative, not exhaustive
+// — confidential SKUs roll out region-by-region; always confirm with the
+// vendor's live region/SKU API before committing.
+// ═══════════════════════════════════════════════════════════════════
+
+// ─── CLOUDS ───
+const CLOUDS = [
+  { key: "aws",   name: "Amazon Web Services", short: "AWS",   swatch: "#FF9F66" },
+  { key: "azure", name: "Microsoft Azure",     short: "Azure", swatch: "#7CD7F1" },
+  { key: "gcp",   name: "Google Cloud",        short: "GCP",   swatch: "#6FE7B5" },
+  { key: "oci",   name: "Oracle Cloud (OCI)",  short: "OCI",   swatch: "#F47B7B" },
+  { key: "ovh",   name: "OVHcloud",            short: "OVH",   swatch: "#C586E8" }
+];
+
+// ─── CATEGORIES ───
+const CATEGORIES = [
+  { key: "enclave",  label: "Application Enclave" },
+  { key: "vm",       label: "Whole-VM Confidential Computing" },
+  { key: "platform", label: "Platform Isolation" },
+  { key: "gpu",      label: "Confidential GPU" }
+];
+
+// ─── TECHNOLOGIES (rows) ───
+// Each technology carries a per-cloud `support` map:
+//   level   — yes | part | no
+//   summary — one-line cell caption (shown under the mark)
+//   fams    — VM families / instance types delivering it
+//   regions — indicative region availability
+//   note    — full footnote, shown in the drawer
+const TECHNOLOGIES = [
+
+  // ───────────────── APPLICATION ENCLAVE ─────────────────
+  {
+    id: "sgx", category: "enclave", swatch: "#7CD7F1",
+    name: "Intel SGX",
+    meta: "Software Guard Extensions · per-process enclave",
+    desc: "Intel SGX protects a sub-region of a single process — the enclave — with hardware memory encryption. Code and data inside are opaque to the OS, the hypervisor and the rest of the application. The trade-off: the application must be partitioned into trusted (in-enclave) and untrusted code, and the Encrypted Page Cache (EPC) is a finite resource.",
+    tags: ["Application-level TEE", "Local + remote attestation", "Requires app re-architecture"],
+    support: {
+      // Azure DCsv2 (Coffee Lake, EPC ≤168 MiB) + DCsv3/DCdsv3 (Ice Lake SP, EPC ≤256 GB).
+      // https://learn.microsoft.com/en-us/azure/confidential-computing/confidential-computing-enclaves
+      // https://learn.microsoft.com/en-us/azure/virtual-machines/sizes/general-purpose/dcv3-series
+      azure: { level: "yes", summary: "DCsv2 · DCsv3 · DCdsv3",
+        fams: ["DCsv2-series", "DCsv3-series", "DCdsv3-series"],
+        regions: "DCsv3/DCdsv3 in East US, East US 2, West US, West Europe, North Europe, UK South, Sweden Central and others. DCsv2 (Coffee Lake) is the legacy SKU.",
+        note: "Azure is the only major cloud with a generally available, dedicated Intel SGX application-enclave VM line. DCsv2 (Coffee Lake) holds up to 168 MiB of EPC; DCsv3 / DCdsv3 (Ice Lake Scalable) scale the EPC up to 256 GB for memory-intensive enclaves. SGX here is the *application-enclave* model and is distinct from Azure's SEV-SNP / TDX confidential VMs — code must be split into trusted and untrusted halves." },
+      // AWS: no SGX. AWS chose Nitro Enclaves + SEV-SNP instead.
+      aws: { level: "no", summary: "Not offered",
+        fams: [],
+        regions: "—",
+        note: "AWS does not expose Intel SGX as an EC2 feature. Its application-isolation answer is AWS Nitro Enclaves (Nitro-hypervisor isolation), and its whole-VM confidential-computing answer is AMD SEV-SNP — neither is SGX. There is no SGX EPC surface to program against on EC2." },
+      // GCP: no SGX VM product. Confidential VM is SEV / SEV-SNP / TDX.
+      gcp: { level: "no", summary: "Not offered",
+        fams: [],
+        regions: "—",
+        note: "Google Cloud's Confidential Computing portfolio is built on whole-VM TEEs — AMD SEV, AMD SEV-SNP and Intel TDX — not Intel SGX. There is no SGX application-enclave VM family on Compute Engine." },
+      // OCI: confidential VM = AMD SEV. No SGX.
+      oci: { level: "no", summary: "Not offered",
+        fams: [],
+        regions: "—",
+        note: "OCI Confidential Computing uses AMD SEV for confidential VMs and AMD TSME for confidential bare metal. Oracle does not offer an Intel SGX application-enclave shape." },
+      // OVH: SGX exists ONLY on dedicated bare-metal servers, not public-cloud instances.
+      ovh: { level: "part", summary: "Bare-metal only*",
+        fams: ["Dedicated servers (bare metal)"],
+        regions: "Select dedicated-server ranges; not a Public Cloud instance feature.",
+        note: "OVHcloud advertises Intel SGX (and AMD SME/SEV) as a confidential-computing capability of its dedicated bare-metal servers — not as a managed Public Cloud confidential-VM instance type. For the cloud-instance comparison on this page, treat OVH SGX as a bare-metal-only, build-it-yourself option rather than a turnkey confidential VM." }
+    }
+  },
+
+  // ───────────────── WHOLE-VM — AMD SEV-SNP ─────────────────
+  {
+    id: "sev-snp", category: "vm", swatch: "#6FE7B5",
+    name: "AMD SEV-SNP",
+    meta: "Secure Encrypted Virtualization–Secure Nested Paging · whole-VM",
+    desc: "AMD SEV-SNP encrypts a whole guest VM's memory with a per-VM key held in the AMD Secure Processor, and — the SNP part — adds integrity protection against hypervisor replay, remapping and aliasing attacks, plus a signed attestation report. Introduced with 3rd-gen EPYC (Milan). The entire OS runs confidentially with no code changes.",
+    tags: ["Whole-VM memory encryption", "Integrity-protected (SNP)", "AMD-signed attestation", "No code changes"],
+    support: {
+      // AWS SEV-SNP: m6a / c6a / r6a (EPYC Milan) ONLY. Regions: us-east-2 + eu-west-1 ONLY.
+      // https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/sev-snp.html
+      aws: { level: "part", summary: "m6a · c6a · r6a — 2 regions*",
+        fams: ["m6a (general purpose)", "c6a (compute optimized)", "r6a (memory optimized)"],
+        regions: "Only US East (Ohio) / us-east-2 and Europe (Ireland) / eu-west-1. Limited size range within each family.",
+        note: "AWS supports AMD SEV-SNP as an opt-in launch flag on selected 3rd-gen EPYC (Milan) instances — specific m6a, c6a and r6a sizes only. It is geographically narrow: only us-east-2 and eu-west-1. SEV-SNP cannot be disabled once enabled, is mutually exclusive with Nitro Enclaves and Dedicated Hosts, and carries a usage fee of ~10% of the On-Demand rate. Marked partial for the limited family/region coverage." },
+      // Azure SEV-SNP: DCasv5/DCadsv5, ECasv5/ECadsv5 (Milan) + DCasv6/DCadsv6, ECasv6/ECadsv6 (Genoa). GA.
+      // https://learn.microsoft.com/en-us/azure/confidential-computing/virtual-machine-options
+      azure: { level: "yes", summary: "DCas/ECas v5 + v6",
+        fams: ["DCasv5 / DCadsv5", "ECasv5 / ECadsv5", "DCasv6 / DCadsv6", "ECasv6 / ECadsv6"],
+        regions: "v5 widely available — East US, East US 2, West US 2/3, North/West Europe, UK South, France Central, Germany West Central, Sweden Central, Japan East, Southeast Asia, Australia East. v6 (Genoa) in a growing subset.",
+        note: "Azure offers a broad, generally available SEV-SNP confidential-VM line. The v5 generation (DCasv5 / DCadsv5 general purpose, ECasv5 / ECadsv5 memory-optimized) runs on 3rd-gen EPYC; the v6 generation (DCasv6 / ECasv6 and their *ads* local-disk variants) runs on 4th-gen EPYC Genoa. The 'd' in *ads* denotes a local temporary disk. The whole guest OS is confidential — no application changes required." },
+      // GCP SEV-SNP: N2D (Milan) only. SEV (non-SNP) is broader: N2D/C2D/C3D/C4D.
+      // https://docs.cloud.google.com/confidential-computing/confidential-vm/docs/supported-configurations
+      gcp: { level: "yes", summary: "N2D (Milan)",
+        fams: ["N2D (AMD EPYC Milan)"],
+        regions: "~13 zones across asia-southeast1, europe-west3, europe-west4 and us-central1. SEV-SNP instances do not support reservations.",
+        note: "On Google Cloud, AMD SEV-SNP is offered on the N2D machine series with 3rd-gen EPYC (Milan). Note the distinction from plain AMD SEV (the older Confidential VM mode, no SNP integrity protection), which Google offers far more broadly across N2D, C2D, C3D and C4D. SEV-SNP is the integrity-protected, attestation-capable mode and is the one mapped here; it does not support reservations." },
+      // OCI: confidential VM uses AMD SEV. NOT SEV-SNP at the managed-VM layer.
+      oci: { level: "part", summary: "AMD SEV — not SNP*",
+        fams: ["VM.Standard.E3.Flex", "VM.Standard.E4.Flex"],
+        regions: "Frankfurt, Hyderabad, Mumbai, Zurich, UK Gov West, London, Ashburn, Phoenix.",
+        note: "OCI Confidential Computing encrypts confidential VMs with AMD SEV — per-VM memory encryption keyed in the AMD Secure Processor — on the E3 and E4 Flex shapes. The official OCI compute documentation describes confidential VMs as SEV, not SEV-SNP: SEV-SNP adds the integrity / anti-remapping protections that plain SEV lacks. Marked partial because OCI's managed confidential VM is SEV-generation, a weaker threat model than SEV-SNP. (SEV-SNP guest/hypervisor support does ship in Oracle's UEK kernel, but the managed confidential-VM product is documented as SEV.)" },
+      // OVH: SEV on bare metal dedicated servers only.
+      ovh: { level: "part", summary: "Bare-metal only*",
+        fams: ["Dedicated servers (bare metal)"],
+        regions: "Select dedicated-server ranges; not a Public Cloud instance feature.",
+        note: "OVHcloud offers AMD SEV / SME as part of its bare-metal dedicated-server confidential-computing story — not as a managed Public Cloud confidential-VM instance type. There is no turnkey SEV-SNP confidential VM in the OVHcloud Public Cloud instance catalogue; treat this as a bare-metal, self-managed path." }
+    }
+  },
+
+  // ───────────────── WHOLE-VM — INTEL TDX ─────────────────
+  {
+    id: "tdx", category: "vm", swatch: "#F4C660",
+    name: "Intel TDX",
+    meta: "Trust Domain Extensions · whole-VM",
+    desc: "Intel TDX places the guest in a hardware-isolated Trust Domain, encrypting and integrity-protecting its memory against the host hypervisor and VMM, with a TDX attestation quote. It is Intel's whole-VM answer to AMD SEV-SNP. TDX shipped on 5th-gen Xeon (Emerald Rapids) and is also available on 4th-gen Xeon (Sapphire Rapids) on some clouds.",
+    tags: ["Whole-VM memory encryption", "Integrity-protected Trust Domain", "Intel attestation quote", "No code changes"],
+    support: {
+      // AWS: no TDX.
+      aws: { level: "no", summary: "Not offered",
+        fams: [],
+        regions: "—",
+        note: "AWS does not offer Intel TDX. Its whole-VM confidential-computing option is AMD SEV-SNP; its application-isolation option is Nitro Enclaves. There is no Intel TDX trust-domain instance type on EC2." },
+      // Azure TDX: DCesv6/DCedsv6, ECesv6/ECedsv6 (Emerald Rapids). GA.
+      // https://learn.microsoft.com/en-us/azure/confidential-computing/virtual-machine-options
+      azure: { level: "yes", summary: "DCes/ECes v6",
+        fams: ["DCesv6 / DCedsv6", "ECesv6 / ECedsv6"],
+        regions: "Indicatively East US, West US, West US 3, West Europe — expanding. Confirm via the Azure region/SKU API.",
+        note: "Azure's Intel TDX confidential VMs are the v6 'e' SKUs — DCesv6 / DCedsv6 (general purpose) and ECesv6 / ECedsv6 (memory-optimized) — running on 5th-gen Xeon (Emerald Rapids). They sit alongside the AMD SEV-SNP v5/v6 line in the same Azure Confidential VM family; you can resize between SEV-SNP and TDX confidential sizes within a region. The 'd' variants add a local temporary disk." },
+      // GCP TDX: c3-standard (Sapphire Rapids). GA.
+      // https://docs.cloud.google.com/confidential-computing/confidential-vm/docs/supported-configurations
+      gcp: { level: "yes", summary: "C3 (Sapphire Rapids)",
+        fams: ["c3-standard-* (Intel Sapphire Rapids)"],
+        regions: "~20 zones — asia-northeast1, asia-south1, asia-southeast1, europe-west4, europe-west9, us-central1, us-east1/4/5, us-west1.",
+        note: "Google Cloud offers Intel TDX on the C3 machine series (c3-standard-* sizes) with 4th-gen Xeon (Sapphire Rapids). It is the broadest-reach TDX footprint of the clouds mapped here, and TDX is also the technology underpinning Google's confidential A3 GPU VMs. Selected as the Confidential VM 'confidential instance type' at create time." },
+      // OCI: no TDX.
+      oci: { level: "no", summary: "Not offered",
+        fams: [],
+        regions: "—",
+        note: "OCI Confidential Computing is AMD-only — SEV for confidential VMs, TSME for confidential bare metal. Oracle's compute documentation does not list an Intel TDX confidential shape." },
+      // OVH: no TDX.
+      ovh: { level: "no", summary: "Not offered",
+        fams: [],
+        regions: "—",
+        note: "OVHcloud's documented confidential-computing capabilities are Intel SGX and AMD SME/SEV on bare-metal dedicated servers. No Intel TDX confidential VM is offered in the Public Cloud instance catalogue." }
+    }
+  },
+
+  // ───────────────── PLATFORM ISOLATION — NITRO ENCLAVES ─────────────────
+  {
+    id: "nitro", category: "platform", swatch: "#FF9F66",
+    name: "AWS Nitro Enclaves",
+    meta: "Nitro-hypervisor isolation · carved-out child VM",
+    desc: "Nitro Enclaves carves an isolated, hardened child VM out of a parent EC2 instance using the same Nitro hypervisor that isolates EC2 instances from one another. The enclave has no persistent storage, no interactive access and no external network — only a vsock to the parent — and provides a signed attestation document integrated with AWS KMS.",
+    tags: ["Hypervisor-enforced isolation", "Processor-agnostic", "KMS-integrated attestation", "Not SGX / SEV-SNP / TDX"],
+    support: {
+      // AWS Nitro Enclaves: processor-agnostic, most Nitro-based instances, all regions incl GovCloud.
+      // https://docs.aws.amazon.com/enclaves/latest/user/nitro-enclave.html
+      aws: { level: "yes", summary: "Most Nitro instances",
+        fams: ["General purpose, compute-, memory-, storage-optimized & accelerated Nitro instance types (Intel / AMD / Graviton)"],
+        regions: "All AWS Regions, including AWS GovCloud (US). Not supported on Outposts, Local Zones or Wavelength Zones.",
+        note: "Nitro Enclaves is an EC2 feature, not a silicon TEE: it is processor-agnostic and runs on most Intel-, AMD- and Graviton-based instance types built on the AWS Nitro System. Enable it with --enclave-options at launch; the parent must have spare vCPUs/memory to hand to the enclave. It is NOT Intel SGX, AMD SEV-SNP or Intel TDX — isolation is enforced by the Nitro Hypervisor rather than by in-CPU memory encryption with hardware attestation of the SEV-SNP/TDX kind. Up to four enclaves per parent; mutually exclusive with SEV-SNP and with hibernation." },
+      azure: { level: "no", summary: "N/A — see TEEs",
+        fams: [],
+        regions: "—",
+        note: "Nitro Enclaves is an AWS-proprietary EC2 feature. Azure's equivalent confidential-computing surfaces are Intel SGX application enclaves and the SEV-SNP / TDX confidential VMs — there is no Nitro Enclaves on Azure." },
+      gcp: { level: "no", summary: "N/A — see TEEs",
+        fams: [],
+        regions: "—",
+        note: "Nitro Enclaves is AWS-only. Google Cloud's confidential-computing model is the whole-VM TEE (SEV / SEV-SNP / TDX); it has no Nitro-Enclaves analogue." },
+      oci: { level: "no", summary: "N/A — see TEEs",
+        fams: [],
+        regions: "—",
+        note: "Nitro Enclaves is AWS-only. OCI's confidential-computing model is AMD SEV confidential VMs and AMD TSME confidential bare metal." },
+      ovh: { level: "no", summary: "N/A",
+        fams: [],
+        regions: "—",
+        note: "Nitro Enclaves is AWS-only. OVHcloud has no equivalent carved-out-VM enclave product." }
+    }
+  },
+
+  // ───────────────── CONFIDENTIAL GPU ─────────────────
+  {
+    id: "conf-gpu", category: "gpu", swatch: "#C586E8",
+    name: "Confidential GPU (NVIDIA H100)",
+    meta: "TEE boundary extended to the GPU · NVIDIA Confidential Computing",
+    desc: "Confidential GPU extends the trusted execution environment from a confidential CPU VM onto an NVIDIA H100, which has its own confidential-computing mode. Data, models and computation can be offloaded to the GPU while staying inside the TEE — the key enabler for confidential AI training and inference. Built on NVIDIA's Hopper-generation confidential computing.",
+    tags: ["GPU-resident TEE", "NVIDIA H100 Hopper", "Confidential AI / ML", "CPU TEE + GPU TEE"],
+    support: {
+      // AWS: no confidential GPU product as of this snapshot.
+      aws: { level: "no", summary: "Not offered",
+        fams: [],
+        regions: "—",
+        note: "As of this snapshot AWS does not offer a confidential-GPU instance — Nitro Enclaves does not extend onto an attached GPU, and AWS's SEV-SNP instances are CPU-only (no GPU SKUs). There is no NVIDIA-H100-in-TEE EC2 instance type documented." },
+      // Azure: NCCadsH100v5 — AMD SEV-SNP + NVIDIA H100. GA. East US 2, West Europe.
+      // https://learn.microsoft.com/en-us/azure/confidential-computing/gpu-options
+      azure: { level: "yes", summary: "NCCadsH100v5",
+        fams: ["NCCadsH100v5-series"],
+        regions: "Generally available in East US 2 and West Europe.",
+        note: "Azure's NCCadsH100v5 confidential-GPU VM pairs an AMD SEV-SNP confidential VM (4th-gen EPYC Genoa) with an NVIDIA H100 NVL Tensor Core GPU in confidential mode — the TEE spans both CPU and GPU, so data and models can be offloaded to the GPU without leaving the trusted boundary. Generally available; East US 2 and West Europe at this snapshot. It is the most mature turnkey confidential-GPU offering of the clouds mapped here." },
+      // GCP: A3 (a3-highgpu-1g) with H100, Intel TDX CPU + NVIDIA confidential computing.
+      // https://docs.cloud.google.com/confidential-computing/confidential-vm/docs/supported-configurations
+      gcp: { level: "part", summary: "A3 + H100*",
+        fams: ["a3-highgpu-1g (A3 High, NVIDIA H100)"],
+        regions: "Narrow — europe-west4-c, us-central1-a, us-east5-a.",
+        note: "Google Cloud supports confidential GPU on the A3 High machine type (a3-highgpu-1g) — an Intel TDX confidential VM with an NVIDIA H100 GPU in confidential-computing mode. It is geographically narrow (three zones: europe-west4-c, us-central1-a, us-east5-a) and limited to the single-GPU A3 High shape, hence marked partial. Recommended images are TDX-aware (cos-tdx or Ubuntu 22.04)." },
+      oci: { level: "no", summary: "Not offered",
+        fams: [],
+        regions: "—",
+        note: "OCI Confidential Computing covers AMD SEV confidential VMs and AMD TSME confidential bare metal; the documentation does not list a confidential-GPU shape." },
+      ovh: { level: "no", summary: "Not offered",
+        fams: [],
+        regions: "—",
+        note: "OVHcloud does not offer a confidential-GPU instance. Its confidential-computing capabilities are CPU-side (SGX / SEV) on bare-metal dedicated servers." }
+    }
+  }
+];
+
+// ═══════════════════════════════════════════════════════════════════
+// STATE + RENDER
+// ═══════════════════════════════════════════════════════════════════
+const state = {
+  clouds: new Set(CLOUDS.map(c => c.key)),
+  category: "all",
+  query: ""
+};
+
+const $ = (s) => document.querySelector(s);
+const $$ = (s) => Array.from(document.querySelectorAll(s));
+
+const SYM = { yes: "✓", part: "◐", no: "✗" };
+
+// ─── Permalinks — filter state ⇄ URL hash ───
+function writeHash() {
+  const keys = CLOUDS.map(c => c.key);
+  const p = new URLSearchParams();
+  if (state.clouds.size < keys.length) p.set("clouds", keys.filter(k => state.clouds.has(k)).join(","));
+  if (state.category !== "all") p.set("cat", state.category);
+  if (state.query.trim())       p.set("q", state.query.trim());
+  const h = p.toString();
+  history.replaceState(null, "", h ? "#" + h : location.pathname + location.search);
+}
+function applyHash() {
+  const keys = CLOUDS.map(c => c.key);
+  const p = new URLSearchParams(location.hash.slice(1));
+  const cl = p.get("clouds");
+  if (cl) {
+    const valid = cl.split(",").filter(x => keys.includes(x));
+    if (valid.length) state.clouds = new Set(valid);
+  }
+  const cat = p.get("cat"); if (cat) state.category = cat;
+  state.query = p.get("q") || "";
+  const allC = state.clouds.size === keys.length;
+  $$('.chip[data-c]').forEach(b => {
+    if (b.dataset.c === "all") b.classList.toggle("is-active", allC);
+    else b.classList.toggle("is-active", !allC && state.clouds.has(b.dataset.c));
+  });
+  $$('.chip[data-cat]').forEach(b => b.classList.toggle("is-active", b.dataset.cat === state.category));
+  const sb = $("#search"); if (sb) sb.value = state.query;
+}
+
+function init() {
+  // Counts
+  $("#count-tech").textContent = TECHNOLOGIES.length;
+  const stars = TECHNOLOGIES.reduce((acc, t) =>
+    acc + Object.values(t.support).filter(s => s.note && s.note.length > 0).length, 0);
+  $("#count-stars").textContent = stars;
+
+  // Category chips
+  const catChips = $("#cat-chips");
+  catChips.innerHTML = `<span class="filter-chips__label">Layer</span>
+    <button class="chip is-active" data-cat="all">All</button>` +
+    CATEGORIES.map(c => `<button class="chip" data-cat="${c.key}">${c.label}</button>`).join("");
+
+  // Cloud chips
+  const cChips = $("#cloud-chips");
+  cChips.innerHTML = `<span class="filter-chips__label">Clouds</span>
+    <button class="chip is-active" data-c="all">All</button>` +
+    CLOUDS.map(c => `<button class="chip" data-c="${c.key}"><span class="swatch" style="background:${c.swatch}"></span>${c.short}</button>`).join("");
+
+  applyHash();
+  renderMatrix();
+  wireEvents();
+  window.addEventListener("hashchange", () => { applyHash(); applyFilter(); });
+}
+
+function renderMatrix() {
+  const table = $("#matrix");
+  let html = "<thead><tr>";
+  html += '<th class="tech-col" scope="col">Technology</th>';
+  CLOUDS.forEach(c => {
+    html += `<th class="col-${c.key}" scope="col"><span class="cloud-tag">` +
+      `<span class="swatch" style="background:${c.swatch}"></span>${c.short}` +
+      `</span></th>`;
+  });
+  html += "</tr></thead><tbody>";
+
+  CATEGORIES.forEach(cat => {
+    const techs = TECHNOLOGIES.filter(t => t.category === cat.key);
+    if (techs.length === 0) return;
+    html += `<tr class="category-row" data-cat="${cat.key}"><td colspan="${CLOUDS.length + 1}"><span class="cat-label">▸ ${cat.label}</span></td></tr>`;
+    techs.forEach(t => {
+      html += `<tr class="tech-row" data-tech="${t.id}" data-cat="${cat.key}">`;
+      html += `<td class="tech-col" data-action="open-tech">` +
+        `<span class="tech-name"><span class="tech-swatch" style="background:${t.swatch}"></span>${t.name}</span>` +
+        `<span class="tech-meta">${t.meta}</span></td>`;
+      CLOUDS.forEach(c => {
+        const s = t.support[c.key] || { level: "no", summary: "—", note: "" };
+        const hasNote = s.note && s.note.length > 0;
+        html += `<td class="cell col-${c.key}" data-tech="${t.id}" data-cloud="${c.key}">`;
+        html += `<span class="cell-mark cell-mark--${s.level}">${SYM[s.level]}` +
+          `${hasNote ? '<span class="cell-mark__star">*</span>' : ''}</span>`;
+        if (s.summary && s.summary !== "—") {
+          html += `<span class="cell-fam"><em>${s.summary}</em></span>`;
+        }
+        html += `</td>`;
+      });
+      html += `</tr>`;
+    });
+  });
+
+  html += "</tbody>";
+  table.innerHTML = html;
+  applyFilter();
+}
+
+function applyFilter() {
+  const q = state.query.trim().toLowerCase();
+  const table = $("#matrix");
+
+  // Cloud visibility (via class on table)
+  CLOUDS.forEach(c => {
+    table.classList.toggle(`hide-${c.key}`, !state.clouds.has(c.key));
+  });
+
+  // Row visibility
+  $$(".matrix tbody tr.tech-row").forEach(row => {
+    const t = TECHNOLOGIES.find(x => x.id === row.dataset.tech);
+    if (!t) return;
+    let matches = state.category === "all" || t.category === state.category;
+    if (matches && q) {
+      const supportText = Object.values(t.support)
+        .map(s => `${s.summary || ""} ${(s.fams || []).join(" ")} ${s.note || ""}`).join(" ");
+      const hay = `${t.name} ${t.meta} ${t.desc} ${t.category} ${supportText}`.toLowerCase();
+      matches = hay.includes(q);
+    }
+    row.classList.toggle("is-hidden", !matches);
+  });
+
+  // Hide category rows that have no visible technologies
+  CATEGORIES.forEach(cat => {
+    const visible = $$(`.matrix tbody tr.tech-row[data-cat="${cat.key}"]`)
+      .some(r => !r.classList.contains("is-hidden"));
+    const catRow = $(`.matrix tbody tr.category-row[data-cat="${cat.key}"]`);
+    if (catRow) catRow.classList.toggle("is-hidden", !visible);
+  });
+  writeHash();
+}
+
+// ─── Drawer ───
+let lastFocus = null;
+function openDrawer() {
+  lastFocus = document.activeElement;
+  $("#drawer-backdrop").classList.add("is-open");
+  $("#drawer").classList.add("is-open");
+  $("#drawer").setAttribute("aria-hidden", "false");
+  const btn = $("#drawer .drawer__close");
+  if (btn) btn.focus();
+}
+function closeDrawer() {
+  $("#drawer-backdrop").classList.remove("is-open");
+  $("#drawer").classList.remove("is-open");
+  $("#drawer").setAttribute("aria-hidden", "true");
+  if (lastFocus && typeof lastFocus.focus === "function") lastFocus.focus();
+}
+
+function esc(s) {
+  return String(s).replace(/[&<>"]/g, c =>
+    ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+}
+
+function openTechDrawer(tech, focusCloud) {
+  const cat = (CATEGORIES.find(c => c.key === tech.category) || {}).label || "";
+  $("#drawer-head").innerHTML = `
+    <div class="drawer__eyebrow">${esc(cat)}</div>
+    <h3 class="drawer__title">${esc(tech.name)}</h3>
+    <p class="drawer__desc">${esc(tech.desc)}</p>
+    <div class="drawer__tags">${
+      (tech.tags || []).map(t => `<span class="drawer__tag">${esc(t)}</span>`).join("")
+    }</div>
+    <button class="drawer__close" id="drawer-close-btn" type="button">Close ⤬</button>
+  `;
+  const rows = CLOUDS.map(c => {
+    const s = tech.support[c.key] || { level: "no", note: "", fams: [], regions: "" };
+    const fams = (s.fams && s.fams.length)
+      ? `<div class="cloud-row__fams">${s.fams.map(f => `<span class="cloud-row__fam">${esc(f)}</span>`).join("")}</div>`
+      : "";
+    const regions = (s.regions && s.regions !== "—")
+      ? `<div class="cloud-row__regions"><strong>Regions</strong><br>${esc(s.regions)}</div>`
+      : "";
+    const isFocus = focusCloud === c.key;
+    return `<div class="cloud-row" ${isFocus ? 'style="border-color: var(--accent); background: rgba(255,120,73,0.05);"' : ''}>
+      <span class="cloud-row__mark cloud-row__mark--${s.level}">${SYM[s.level]}</span>
+      <div>
+        <div class="cloud-row__name"><span class="swatch" style="background:${c.swatch}"></span>${esc(c.name)}</div>
+        <div class="cloud-row__note">${esc(s.note || "Not offered.")}</div>
+        ${fams}
+        ${regions}
+      </div>
+    </div>`;
+  }).join("");
+  $("#drawer-body").innerHTML = `<div class="drawer__section"><h4>Per-cloud availability</h4>${rows}</div>`;
+  openDrawer();
+  const cb = $("#drawer-close-btn");
+  if (cb) cb.addEventListener("click", closeDrawer);
+}
+
+function wireEvents() {
+  document.addEventListener("click", (e) => {
+    // Category chips
+    const cc = e.target.closest(".chip[data-cat]");
+    if (cc) {
+      state.category = cc.dataset.cat;
+      $$('.chip[data-cat]').forEach(b => b.classList.toggle("is-active", b.dataset.cat === state.category));
+      applyFilter();
+      return;
+    }
+    // Cloud chips
+    const cl = e.target.closest(".chip[data-c]");
+    if (cl) {
+      const key = cl.dataset.c;
+      if (key === "all") {
+        state.clouds = new Set(CLOUDS.map(x => x.key));
+        $$('.chip[data-c]').forEach(b => b.classList.toggle("is-active", b.dataset.c === "all"));
+      } else {
+        if ($('.chip[data-c="all"]').classList.contains("is-active")) {
+          state.clouds = new Set([key]);
+          $$('.chip[data-c]').forEach(b => b.classList.toggle("is-active", b.dataset.c === key));
+        } else {
+          if (state.clouds.has(key) && state.clouds.size === 1) {
+            state.clouds = new Set(CLOUDS.map(x => x.key));
+            $$('.chip[data-c]').forEach(b => b.classList.toggle("is-active", b.dataset.c === "all"));
+          } else {
+            state.clouds.has(key) ? state.clouds.delete(key) : state.clouds.add(key);
+            cl.classList.toggle("is-active");
+            $('.chip[data-c="all"]').classList.remove("is-active");
+          }
+        }
+      }
+      applyFilter();
+      return;
+    }
+    // Cell → drawer focused on a cloud
+    const cell = e.target.closest("td.cell");
+    if (cell) {
+      const t = TECHNOLOGIES.find(x => x.id === cell.dataset.tech);
+      if (t) openTechDrawer(t, cell.dataset.cloud);
+      return;
+    }
+    // Technology name → drawer, no focus
+    const techCol = e.target.closest("td.tech-col[data-action='open-tech']");
+    if (techCol) {
+      const row = techCol.closest("tr.tech-row");
+      const t = TECHNOLOGIES.find(x => x.id === row.dataset.tech);
+      if (t) openTechDrawer(t, null);
+      return;
+    }
+  });
+
+  $("#drawer-backdrop").addEventListener("click", closeDrawer);
+  $("#search").addEventListener("input", (e) => {
+    state.query = e.target.value;
+    applyFilter();
+  });
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") closeDrawer();
+    if (e.key === "/" && e.target.tagName !== "INPUT") { e.preventDefault(); $("#search").focus(); }
+  });
+}
+
+init();
+</script>
+<script src="/nav.js" defer></script>
+</body>
+</html>

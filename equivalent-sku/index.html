@@ -1,0 +1,2049 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="color-scheme" content="dark">
+<title>Equivalent-SKU Finder · Cross-Cloud Instance Translator · Infra Atlas</title>
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<meta name="description" content="Pick an instance type on any cloud — AWS EC2, Azure VM, Google Cloud, Oracle Cloud, OVHcloud — and see the closest-matching type on every other cloud, ranked with a transparent match score on vCPU, memory, architecture, and category.">
+<link rel="canonical" href="https://infraatlas.dev/equivalent-sku/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Infra Atlas">
+<meta property="og:title" content="Equivalent-SKU Finder · Cross-Cloud Instance Translator · Infra Atlas">
+<meta property="og:description" content="Pick an instance type on any cloud and see the closest-matching type on every other cloud, ranked with a transparent match score on vCPU, memory, architecture, and category.">
+<meta property="og:url" content="https://infraatlas.dev/equivalent-sku/">
+<meta property="og:image" content="https://infraatlas.dev/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Infra Atlas — a reference for the infrastructure stack">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Equivalent-SKU Finder · Cross-Cloud Instance Translator · Infra Atlas">
+<meta name="twitter:description" content="Pick an instance type on any cloud and see the closest-matching type on every other cloud, ranked with a transparent match score.">
+<meta name="twitter:image" content="https://infraatlas.dev/og.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@300;400;500;600&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ink: #0A0907;
+  --ink-2: #100E0C;
+  --surface: #161310;
+  --surface-2: #1E1A15;
+  --surface-3: #2A241C;
+  --line: rgba(244, 239, 230, 0.06);
+  --line-2: rgba(244, 239, 230, 0.14);
+  --line-3: rgba(244, 239, 230, 0.28);
+  --paper: #F4EFE6;
+  --paper-2: rgba(244, 239, 230, 0.66);
+  --paper-3: rgba(244, 239, 230, 0.55);
+  --paper-4: rgba(244, 239, 230, 0.20);
+  --accent: #FF7849;
+  --accent-2: #FFA66E;
+  --accent-glow: rgba(255, 120, 73, 0.22);
+  --mint: #6FE7B5;
+  --gold: #F4C660;
+  --plum: #C586E8;
+  --sky: #7CD7F1;
+  --rose: #F47B7B;
+  --aws: #FF9F66;
+  --azure: #7CD7F1;
+  --gcp: #F47B7B;
+  --oci: #E26464;
+  --ovh: #C586E8;
+  --serif: 'Instrument Serif', 'Times New Roman', serif;
+  --mono: 'JetBrains Mono', ui-monospace, monospace;
+  --sans: 'Manrope', -apple-system, system-ui, sans-serif;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body {
+  background: var(--ink);
+  color: var(--paper);
+  font-family: var(--sans);
+  font-size: 15px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  min-height: 100vh;
+}
+
+body {
+  background:
+    radial-gradient(ellipse at 100% -10%, rgba(255, 120, 73, 0.07), transparent 55%),
+    radial-gradient(ellipse at -10% 110%, rgba(124, 215, 241, 0.05), transparent 65%),
+    var(--ink);
+  background-attachment: fixed;
+  overflow-x: hidden;
+}
+
+.grain {
+  pointer-events: none;
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  opacity: 0.08;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml;utf8,<svg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.6 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+}
+
+.scanlines {
+  pointer-events: none;
+  position: fixed;
+  inset: 0;
+  z-index: 99;
+  background: repeating-linear-gradient(
+    180deg,
+    transparent,
+    transparent 2px,
+    rgba(244,239,230,0.012) 2px,
+    rgba(244,239,230,0.012) 3px
+  );
+}
+
+::selection { background: var(--accent); color: var(--ink); }
+
+a:focus-visible,
+button:focus-visible,
+select:focus-visible,
+[tabindex]:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+.page {
+  max-width: 1480px;
+  margin: 0 auto;
+  padding: 56px 48px 96px;
+  position: relative;
+}
+
+/* ─────────────── MASTHEAD ─────────────── */
+.masthead {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 48px;
+  align-items: end;
+  padding-bottom: 36px;
+  border-bottom: 1px solid var(--line);
+  margin-bottom: 40px;
+}
+
+.masthead__eyebrow {
+  font-family: var(--mono);
+  font-size: 10.5px;
+  letter-spacing: 0.22em;
+  color: var(--paper-3);
+  text-transform: uppercase;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.masthead__eyebrow::before {
+  content: '';
+  display: inline-block;
+  width: 22px;
+  height: 1px;
+  background: var(--accent);
+}
+
+a.masthead__back {
+  text-decoration: none;
+  transition: color 0.2s ease, gap 0.2s ease;
+  gap: 10px;
+}
+
+a.masthead__back:hover {
+  color: var(--paper);
+}
+
+.masthead__back-arrow {
+  display: inline-block;
+  color: var(--accent);
+  font-family: var(--mono);
+  transition: transform 0.2s ease;
+}
+
+a.masthead__back:hover .masthead__back-arrow {
+  transform: translateX(-4px);
+}
+
+a.masthead__back::before { display: none; }
+
+.masthead__title {
+  font-family: var(--serif);
+  font-weight: 400;
+  font-size: clamp(56px, 8.2vw, 124px);
+  line-height: 0.95;
+  letter-spacing: -0.02em;
+  margin-top: 18px;
+  color: var(--paper);
+}
+
+.masthead__title em {
+  font-style: italic;
+  color: var(--accent);
+}
+
+.masthead__subtitle {
+  margin-top: 18px;
+  font-size: 16px;
+  color: var(--paper-2);
+  max-width: 580px;
+  line-height: 1.55;
+}
+
+.masthead__subtitle span {
+  font-family: var(--serif);
+  font-style: italic;
+  color: var(--paper);
+}
+
+.masthead__status {
+  text-align: right;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 14px;
+  padding-bottom: 6px;
+}
+
+.status-line {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--mint);
+}
+
+.status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--mint);
+  box-shadow: 0 0 0 0 rgba(111, 231, 181, 0.55);
+  animation: pulse 2.4s infinite;
+}
+
+@keyframes pulse {
+  0% { box-shadow: 0 0 0 0 rgba(111,231,181,0.5); }
+  70% { box-shadow: 0 0 0 14px rgba(111,231,181,0); }
+  100% { box-shadow: 0 0 0 0 rgba(111,231,181,0); }
+}
+
+.status-time {
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--paper-3);
+  letter-spacing: 0.04em;
+}
+
+.status-counts {
+  display: flex;
+  gap: 24px;
+  margin-top: 4px;
+}
+
+.status-counts > div {
+  text-align: right;
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--paper-3);
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.status-counts strong {
+  font-family: var(--serif);
+  font-style: italic;
+  font-weight: 400;
+  font-size: 30px;
+  color: var(--paper);
+  letter-spacing: -0.01em;
+  text-transform: none;
+}
+
+/* ─────────────── FINDER PANEL ─────────────── */
+.finder {
+  background: linear-gradient(180deg, var(--surface) 0%, var(--ink-2) 100%);
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  padding: 22px 24px;
+  margin-bottom: 28px;
+}
+
+.finder__head {
+  display: flex;
+  align-items: baseline;
+  gap: 14px;
+  flex-wrap: wrap;
+  margin-bottom: 18px;
+}
+
+.finder__title {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 23px;
+  color: var(--paper);
+}
+
+.finder__hint {
+  font-family: var(--mono);
+  font-size: 10.5px;
+  letter-spacing: 0.04em;
+  color: var(--paper-3);
+}
+
+.finder__controls {
+  display: flex;
+  gap: 14px;
+  flex-wrap: wrap;
+  align-items: flex-end;
+}
+
+.finder__field {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.finder__field > span {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--paper-3);
+}
+
+.fnd-select {
+  background: var(--ink);
+  border: 1px solid var(--line-2);
+  color: var(--paper);
+  font-family: var(--mono);
+  font-size: 13px;
+  padding: 11px 36px 11px 14px;
+  border-radius: 3px;
+  outline: none;
+  cursor: pointer;
+  transition: border-color 0.2s ease;
+  -webkit-appearance: none;
+  appearance: none;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 10 10'><path d='M2 3.5 L5 6.5 L8 3.5' stroke='%23F4EFE6' stroke-width='1.3' fill='none' stroke-opacity='0.5'/></svg>");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+}
+
+.fnd-select:hover { border-color: var(--paper-3); }
+.fnd-select:focus { border-color: var(--accent); }
+.fnd-select:disabled { color: var(--paper-4); cursor: not-allowed; opacity: 0.6; }
+
+#fnd-cloud { min-width: 210px; }
+#fnd-type { min-width: 320px; }
+
+.fnd-clear {
+  background: transparent;
+  border: 1px solid var(--line-2);
+  color: var(--paper-3);
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 11px 14px;
+  border-radius: 3px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.fnd-clear:hover { border-color: var(--paper-3); color: var(--paper); }
+
+.fnd-swap {
+  background: transparent;
+  border: 1px solid var(--line-2);
+  color: var(--paper-2);
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 11px 14px;
+  border-radius: 3px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.fnd-swap:hover { border-color: var(--accent); color: var(--paper); }
+.fnd-swap:disabled { opacity: 0.4; cursor: not-allowed; }
+
+.fnd-swap__ico { color: var(--accent); }
+
+/* ─────────────── SOURCE CARD ─────────────── */
+.source-card {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 22px;
+  align-items: center;
+  background: var(--surface-2);
+  border: 1px solid var(--line-2);
+  border-left: 3px solid var(--accent);
+  border-radius: 4px;
+  padding: 18px 22px;
+  margin-bottom: 8px;
+}
+
+.source-card__badge {
+  font-family: var(--mono);
+  font-size: 9.5px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  font-weight: 500;
+  padding: 5px 10px;
+  border-radius: 2px;
+  border: 1px solid var(--line-2);
+  white-space: nowrap;
+}
+
+.cloud-aws   { color: var(--aws);   }
+.cloud-azure { color: var(--azure); }
+.cloud-gcp   { color: var(--gcp);   }
+.cloud-oci   { color: var(--oci);   }
+.cloud-ovh   { color: var(--ovh);   }
+
+.bd-aws   { border-color: rgba(255,159,102,0.34); }
+.bd-azure { border-color: rgba(124,215,241,0.34); }
+.bd-gcp   { border-color: rgba(244,123,123,0.34); }
+.bd-oci   { border-color: rgba(226,100,100,0.34); }
+.bd-ovh   { border-color: rgba(197,134,232,0.34); }
+
+.source-card__main { min-width: 0; }
+
+.source-card__name {
+  font-family: var(--mono);
+  font-size: 19px;
+  font-weight: 600;
+  color: var(--paper);
+  letter-spacing: 0.01em;
+  word-break: break-word;
+}
+
+.source-card__desc {
+  font-family: var(--sans);
+  font-size: 12.5px;
+  color: var(--paper-3);
+  margin-top: 4px;
+}
+
+.source-card__specs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 22px;
+  margin-top: 12px;
+}
+
+.spec {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.04em;
+  color: var(--paper-3);
+  text-transform: uppercase;
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+}
+
+.spec strong {
+  font-family: var(--serif);
+  font-style: italic;
+  font-weight: 400;
+  font-size: 19px;
+  color: var(--paper);
+  text-transform: none;
+  letter-spacing: -0.01em;
+}
+
+.spec--na strong { color: var(--paper-4); font-size: 14px; }
+
+/* ─────────────── RESULT META ─────────────── */
+.result-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin: 40px 0 18px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--line);
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.result-meta__title {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 26px;
+  letter-spacing: -0.01em;
+  font-weight: 400;
+}
+
+.result-meta__title em { font-style: normal; color: var(--accent); }
+
+.result-meta__count {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--paper-3);
+}
+
+.result-meta__count strong { color: var(--accent); font-weight: 500; }
+
+/* ─────────────── PLACEHOLDER / EMPTY ─────────────── */
+.placeholder {
+  text-align: center;
+  padding: 72px 20px;
+  border: 1px dashed var(--line-2);
+  border-radius: 4px;
+}
+
+.placeholder__title {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 32px;
+  color: var(--paper-2);
+  margin-bottom: 8px;
+}
+
+.placeholder__sub {
+  font-family: var(--mono);
+  font-size: 11.5px;
+  letter-spacing: 0.08em;
+  color: var(--paper-3);
+}
+
+/* ─────────────── CLOUD RESULT BLOCKS ─────────────── */
+.cloud-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(330px, 1fr));
+  gap: 16px;
+}
+
+.cloud-block {
+  background: linear-gradient(180deg, var(--surface) 0%, var(--ink-2) 100%);
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.cloud-block__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 15px 18px 13px;
+  border-bottom: 1px solid var(--line);
+}
+
+.cloud-block__label {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
+
+.cloud-block__swatch {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+.sw-aws   { background: var(--aws);   }
+.sw-azure { background: var(--azure); }
+.sw-gcp   { background: var(--gcp);   }
+.sw-oci   { background: var(--oci);   }
+.sw-ovh   { background: var(--ovh);   }
+
+.cloud-block__link {
+  font-family: var(--mono);
+  font-size: 9.5px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--paper-3);
+  text-decoration: none;
+  border-bottom: 1px solid var(--line-2);
+  padding-bottom: 1px;
+  transition: color 0.15s ease, border-color 0.15s ease;
+  white-space: nowrap;
+}
+
+.cloud-block__link:hover { color: var(--accent); border-color: var(--accent); }
+
+.cloud-block__body { padding: 12px 14px 14px; }
+
+/* ─────────────── MATCH ROW ─────────────── */
+.match {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 3px;
+  padding: 13px 14px;
+  margin-bottom: 7px;
+}
+
+.match:last-child { margin-bottom: 0; }
+
+.match.is-top {
+  border-color: rgba(255, 120, 73, 0.42);
+  background: var(--surface-2);
+}
+
+.match__head {
+  display: grid;
+  grid-template-columns: 24px 1fr auto;
+  gap: 10px;
+  align-items: center;
+}
+
+.match__rank {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--paper-4);
+}
+
+.match.is-top .match__rank { color: var(--accent); }
+
+.match__name {
+  font-family: var(--mono);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--paper);
+  letter-spacing: 0.01em;
+  word-break: break-word;
+}
+
+.match__badge {
+  font-size: 8px;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+  color: var(--accent);
+  border: 1px solid rgba(255, 120, 73, 0.4);
+  border-radius: 2px;
+  padding: 1px 5px;
+  margin-left: 7px;
+  vertical-align: middle;
+  white-space: nowrap;
+}
+
+.match__score {
+  text-align: right;
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 23px;
+  font-weight: 400;
+  color: var(--paper);
+  letter-spacing: -0.01em;
+  line-height: 1;
+}
+
+.match__score-unit {
+  display: block;
+  font-family: var(--mono);
+  font-style: normal;
+  font-size: 8px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--paper-4);
+  margin-top: 2px;
+}
+
+.match__score.tier-high  { color: var(--mint); }
+.match__score.tier-mid   { color: var(--gold); }
+.match__score.tier-low   { color: var(--rose); }
+
+/* score bar */
+.match__bar {
+  height: 3px;
+  border-radius: 2px;
+  background: var(--ink);
+  margin: 11px 0 10px;
+  overflow: hidden;
+}
+
+.match__bar span {
+  display: block;
+  height: 100%;
+  border-radius: 2px;
+  background: linear-gradient(90deg, var(--accent-2), var(--accent));
+}
+
+.match__bar span.tier-high { background: linear-gradient(90deg, var(--mint), #45c98e); }
+.match__bar span.tier-mid  { background: linear-gradient(90deg, var(--gold), #d6a536); }
+.match__bar span.tier-low  { background: linear-gradient(90deg, var(--rose), #d65a5a); }
+
+/* reason chips */
+.match__why {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+
+.why {
+  font-family: var(--mono);
+  font-size: 9.5px;
+  letter-spacing: 0.02em;
+  padding: 3px 7px;
+  border-radius: 2px;
+  border: 1px solid var(--line-2);
+  color: var(--paper-3);
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  white-space: nowrap;
+}
+
+.why b { font-weight: 600; color: var(--paper-2); }
+
+.why--good   { border-color: rgba(111,231,181,0.32); color: var(--mint); }
+.why--good b { color: var(--mint); }
+.why--warn   { border-color: rgba(244,198,96,0.32);  color: var(--gold); }
+.why--warn b { color: var(--gold); }
+.why--bad    { border-color: rgba(244,123,123,0.34); color: var(--rose); }
+.why--bad b  { color: var(--rose); }
+.why--muted  { border-color: var(--line); color: var(--paper-4); }
+
+.cloud-block__none {
+  font-family: var(--mono);
+  font-size: 10.5px;
+  letter-spacing: 0.04em;
+  color: var(--paper-4);
+  padding: 16px 4px;
+  text-align: center;
+}
+
+.cloud-block__more {
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--paper-4);
+  padding: 9px 4px 2px;
+  text-align: center;
+}
+
+/* ─────────────── RUBRIC ─────────────── */
+.rubric {
+  margin-top: 52px;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  background: linear-gradient(180deg, var(--surface) 0%, var(--ink-2) 100%);
+  padding: 26px 28px;
+}
+
+.rubric__head {
+  display: flex;
+  align-items: baseline;
+  gap: 14px;
+  flex-wrap: wrap;
+  margin-bottom: 8px;
+}
+
+.rubric__kicker {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+.rubric__title {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 30px;
+  color: var(--paper);
+  letter-spacing: -0.01em;
+}
+
+.rubric__intro {
+  font-size: 13.5px;
+  color: var(--paper-2);
+  line-height: 1.65;
+  max-width: 760px;
+  margin-bottom: 24px;
+}
+
+.rubric__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(248px, 1fr));
+  gap: 1px;
+  background: var(--line);
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  overflow: hidden;
+  margin-bottom: 22px;
+}
+
+.axis {
+  background: var(--ink-2);
+  padding: 17px 18px;
+}
+
+.axis__top {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 9px;
+}
+
+.axis__name {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--paper);
+  font-weight: 500;
+}
+
+.axis__weight {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 28px;
+  font-weight: 400;
+  color: var(--accent);
+  letter-spacing: -0.02em;
+  line-height: 1;
+}
+
+.axis__weight span {
+  font-family: var(--mono);
+  font-style: normal;
+  font-size: 9px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--paper-4);
+}
+
+.axis__desc {
+  font-size: 12px;
+  color: var(--paper-2);
+  line-height: 1.6;
+}
+
+.axis__formula {
+  font-family: var(--mono);
+  font-size: 10.5px;
+  color: var(--accent-2);
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 2px;
+  padding: 6px 9px;
+  margin-top: 9px;
+  display: block;
+  line-height: 1.5;
+  word-break: break-word;
+}
+
+.rubric__notes {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 22px 36px;
+}
+
+.rubric__notes h5 {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--paper-2);
+  margin-bottom: 9px;
+  font-weight: 500;
+}
+
+.rubric__notes p {
+  font-size: 12.5px;
+  color: var(--paper-3);
+  line-height: 1.65;
+}
+
+.rubric__notes code,
+.rubric__intro code {
+  font-family: var(--mono);
+  font-size: 11px;
+  background: var(--surface);
+  padding: 1px 6px;
+  border-radius: 2px;
+  border: 1px solid var(--line);
+  color: var(--accent-2);
+}
+
+.tier-key {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+  margin-top: 11px;
+}
+
+.tier-key__item {
+  font-family: var(--mono);
+  font-size: 9.5px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--paper-3);
+  border: 1px solid var(--line-2);
+  border-radius: 99px;
+  padding: 4px 10px;
+}
+
+.tier-key__dot { width: 8px; height: 8px; border-radius: 50%; }
+.tk-high { background: var(--mint); }
+.tk-mid  { background: var(--gold); }
+.tk-low  { background: var(--rose); }
+
+/* ─────────────── FOOTER ─────────────── */
+.colophon {
+  margin-top: 80px;
+  padding-top: 32px;
+  border-top: 1px solid var(--line);
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 32px;
+  font-size: 13px;
+  color: var(--paper-3);
+}
+
+.colophon h5 {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--paper-2);
+  margin-bottom: 10px;
+  font-weight: 500;
+}
+
+.colophon p {
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.colophon a {
+  color: var(--paper-2);
+  text-decoration: underline;
+  text-decoration-color: var(--line-2);
+  text-underline-offset: 3px;
+}
+
+.colophon a:hover { color: var(--paper); }
+
+.colophon code {
+  font-family: var(--mono);
+  font-size: 11.5px;
+  background: var(--surface);
+  padding: 1px 6px;
+  border-radius: 2px;
+  border: 1px solid var(--line);
+  color: var(--accent-2);
+}
+
+.fade-in { animation: fadeIn 0.4s ease forwards; }
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* responsive */
+@media (max-width: 900px) {
+  .page { padding: 32px 22px 72px; }
+  .masthead { grid-template-columns: 1fr; gap: 24px; }
+  .masthead__status { text-align: left; align-items: flex-start; }
+  .colophon { grid-template-columns: 1fr; gap: 24px; }
+  .rubric__notes { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 560px) {
+  .finder__controls { flex-direction: column; align-items: stretch; }
+  .finder__field { width: 100%; }
+  .fnd-select { width: 100%; min-width: 0; }
+  .source-card { grid-template-columns: 1fr; gap: 12px; }
+  .match__score { font-size: 20px; }
+}
+
+#sku-results { min-height: 50vh; }
+</style>
+</head>
+<body>
+
+<div class="grain"></div>
+<div class="scanlines"></div>
+
+<div class="page">
+
+  <header class="masthead">
+    <div class="masthead__brand">
+      <a href="../" class="masthead__eyebrow masthead__back">
+        <span class="masthead__back-arrow">←</span>
+        Infra Atlas · Cloud · Multi-Cloud · Equivalent-SKU Finder
+      </a>
+      <h1 class="masthead__title">Equivalent <em>SKU.</em></h1>
+      <p class="masthead__subtitle">
+        Pick an instance type on one cloud — the finder translates it to the
+        <span>closest match</span> on every other cloud. Each result carries a
+        <span>transparent match score</span>, so you can see exactly why it ranked where it did.
+      </p>
+    </div>
+    <aside class="masthead__status">
+      <div class="status-line">
+        <span class="status-dot"></span>
+        <span class="status-text" id="status-text">Snapshot · embedded</span>
+      </div>
+      <div class="status-time" id="status-time">— · —</div>
+      <div class="status-counts">
+        <div>Clouds<strong>5</strong></div>
+        <div>Instance types<strong id="count-types">—</strong></div>
+      </div>
+    </aside>
+  </header>
+
+  <section class="finder" aria-label="Equivalent-SKU finder">
+    <div class="finder__head">
+      <div class="finder__title">Translate a SKU.</div>
+      <div class="finder__hint">Pick a source cloud, then a source instance type — matches appear below.</div>
+    </div>
+    <div class="finder__controls">
+      <label class="finder__field">
+        <span>Source cloud</span>
+        <select class="fnd-select" id="fnd-cloud">
+          <option value="aws">AWS · EC2</option>
+          <option value="azure">Microsoft Azure · VM</option>
+          <option value="gcp">Google Cloud · Compute</option>
+          <option value="oci">Oracle Cloud · Compute</option>
+          <option value="ovh">OVHcloud · Public Cloud</option>
+        </select>
+      </label>
+      <label class="finder__field">
+        <span>Source instance type</span>
+        <select class="fnd-select" id="fnd-type" aria-label="Source instance type">
+          <option value="">Select an instance type…</option>
+        </select>
+      </label>
+      <button class="fnd-swap" id="fnd-swap" type="button" disabled title="Make the top match on a cloud the new source">
+        <span class="fnd-swap__ico">⇄</span> Pivot to top match
+      </button>
+      <button class="fnd-clear" id="fnd-clear" type="button" hidden>Clear</button>
+    </div>
+  </section>
+
+  <div id="source-mount"></div>
+
+  <div class="result-meta" id="result-meta" hidden>
+    <div class="result-meta__title" id="result-title">Equivalents</div>
+    <div class="result-meta__count"><strong id="result-count">0</strong> clouds matched</div>
+  </div>
+
+  <main id="ia-main">
+    <div id="sku-results">
+      <div class="placeholder">
+        <div class="placeholder__title">Pick a source instance type.</div>
+        <div class="placeholder__sub">The finder ranks the closest type on every other cloud.</div>
+      </div>
+    </div>
+  </main>
+
+  <section class="rubric" id="rubric" aria-label="Scoring rubric">
+    <div class="rubric__head">
+      <span class="rubric__kicker">Method</span>
+      <h2 class="rubric__title">How the match score is computed.</h2>
+    </div>
+    <p class="rubric__intro">
+      Three additive axes — vCPU, memory, category — sum to a <strong>100</strong>-point base. That
+      base is then multiplied by an architecture factor: <code>&times;1.0</code> when the architecture
+      matches, <code>&times;0.55</code> when it doesn't. Architecture is a multiplier rather than just
+      another delta because an image built for x86 will not boot on Arm — a cross-architecture
+      &ldquo;equivalent&rdquo; is capped at <strong>55</strong> however well its sizes line up. Sizing
+      axes use a <code>log&#8322;</code> ratio penalty, so a doubling matters the same whether you go
+      from 2&nbsp;→&nbsp;4 vCPU or 64&nbsp;→&nbsp;128. Nothing here is a black box: the chips under
+      every result spell out the exact deltas that produced its score.
+    </p>
+
+    <div class="rubric__grid">
+      <div class="axis">
+        <div class="axis__top">
+          <span class="axis__name">vCPU</span>
+          <span class="axis__weight">50<span>&nbsp;pts</span></span>
+        </div>
+        <p class="axis__desc">
+          The dominant axis. An exact vCPU match keeps all 50 points; every doubling or halving away
+          from the source costs the full weight.
+        </p>
+        <code class="axis__formula">50 &times; max(0, 1 &minus; |log&#8322;(cand &divide; src)|)</code>
+      </div>
+      <div class="axis">
+        <div class="axis__top">
+          <span class="axis__name">Memory</span>
+          <span class="axis__weight">38<span>&nbsp;pts</span></span>
+        </div>
+        <p class="axis__desc">
+          Same log-ratio shape as vCPU. If either side's memory is unknown, this axis is
+          <em>dropped</em> and the base is renormalised across the remaining axes — the result is
+          still scored, just on fewer axes.
+        </p>
+        <code class="axis__formula">38 &times; max(0, 1 &minus; |log&#8322;(cand &divide; src)|)</code>
+      </div>
+      <div class="axis">
+        <div class="axis__top">
+          <span class="axis__name">Category</span>
+          <span class="axis__weight">12<span>&nbsp;pts</span></span>
+        </div>
+        <p class="axis__desc">
+          General, compute, memory, storage, accelerated, HPC. An exact category earns 12; an
+          adjacent one — e.g. general next to compute or memory — earns 6; anything else earns 0.
+        </p>
+        <code class="axis__formula">exact &rarr; 12&nbsp;&nbsp;·&nbsp;&nbsp;adjacent &rarr; 6&nbsp;&nbsp;·&nbsp;&nbsp;else &rarr; 0</code>
+      </div>
+      <div class="axis">
+        <div class="axis__top">
+          <span class="axis__name">Architecture</span>
+          <span class="axis__weight">&times;0.55<span>&nbsp;factor</span></span>
+        </div>
+        <p class="axis__desc">
+          x86 vs Arm — applied as a multiplier on the 100-point base, not an additive axis. Same
+          architecture leaves the score untouched; a mismatch scales it to 0.55 and is flagged red.
+        </p>
+        <code class="axis__formula">same arch &rarr; &times;1.0&nbsp;&nbsp;·&nbsp;&nbsp;differs &rarr; &times;0.55</code>
+      </div>
+    </div>
+
+    <div class="rubric__notes">
+      <div>
+        <h5>Reading the score</h5>
+        <p>
+          Per cloud, the finder shows the three highest-scoring types. The top score colours by
+          confidence band, and the chips below each row break the score back down into its parts.
+        </p>
+        <div class="tier-key">
+          <span class="tier-key__item"><span class="tier-key__dot tk-high"></span>85&ndash;100 · close equivalent</span>
+          <span class="tier-key__item"><span class="tier-key__dot tk-mid"></span>65&ndash;84 · workable, check deltas</span>
+          <span class="tier-key__item"><span class="tier-key__dot tk-low"></span>&lt;&nbsp;65 · loose — sizes diverge, or arch differs</span>
+        </div>
+      </div>
+      <div>
+        <h5>Honest gaps</h5>
+        <p>
+          Google Cloud's public dataset publishes machine types but not memory, so its vCPU count is
+          read straight from the documented type-name suffix (<code>n4-standard-8</code> = 8 vCPU) and
+          its memory is left unscored. Some Azure burstable sizes and OCI / OVH bare-metal and storage
+          SKUs ship without published vCPU or memory — those are <em>excluded</em> as candidates rather
+          than guessed at. Specs come verbatim from each instrument's own dataset; none are invented
+          here.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <footer class="colophon">
+    <div>
+      <h5>About</h5>
+      <p>
+        A cross-instrument of <a href="../">Infra Atlas</a> — a public reference for the
+        infrastructure stack. It joins the five compute observatories — AWS&nbsp;EC2, Azure&nbsp;VM,
+        Google&nbsp;Cloud, Oracle&nbsp;Cloud, and OVHcloud — into one translator, so a sizing decision
+        made on one cloud can be carried to the others without leaving the browser.
+      </p>
+    </div>
+    <div>
+      <h5>Data source</h5>
+      <p>
+        Instance specifications are read directly from each compute instrument's own dataset
+        (<code>/ec2/</code>, <code>/azure-vm/</code>, <code>/gcp-compute/</code>,
+        <code>/oci-compute/</code>, <code>/ovh-instances/</code>). The page loads those live and
+        falls back to an embedded snapshot offline. The status line above carries the data date.
+      </p>
+    </div>
+    <div>
+      <h5>Shortcuts</h5>
+      <p>
+        <code>C</code> focus cloud · <code>T</code> focus type · <code>P</code> pivot to top match ·
+        <code>Esc</code> clear selection.
+      </p>
+    </div>
+  </footer>
+
+</div>
+
+<script>
+// ───────────────────────────────────────────────────────────────────
+//  Equivalent-SKU Finder
+//  Specs are reused verbatim from the existing compute instruments'
+//  data.json files. The page fetches them live and upgrades from the
+//  embedded fallback snapshot below when the network is available.
+// ───────────────────────────────────────────────────────────────────
+
+const SNAPSHOT_DATE = "2026-05-16T17:32:00Z";
+
+const CLOUD_META = {
+  aws:   { id: "aws",   label: "AWS EC2",      short: "AWS",    slug: "ec2",            instrument: "EC2 Observatory" },
+  azure: { id: "azure", label: "Azure VM",     short: "Azure",  slug: "azure-vm",       instrument: "Azure VM Sizes" },
+  gcp:   { id: "gcp",   label: "Google Cloud", short: "GCP",    slug: "gcp-compute",    instrument: "GCP Compute" },
+  oci:   { id: "oci",   label: "Oracle Cloud", short: "OCI",    slug: "oci-compute",    instrument: "OCI Compute" },
+  ovh:   { id: "ovh",   label: "OVHcloud",     short: "OVH",    slug: "ovh-instances",  instrument: "OVH Instances" },
+};
+const CLOUD_ORDER = ["aws", "azure", "gcp", "oci", "ovh"];
+
+// Compact offline fallback. The page fetches the full catalogue from each
+// instrument's data.json at runtime; this keeps it useful with no network.
+const SKU_FALLBACK = {
+  aws: [
+    {n:"c6i.large",fam:"c6i",cat:"compute",arch:"x86",v:2,m:4,vd:"Intel",d:"Intel Xeon 8375C (Ice Lake)"},
+    {n:"c6i.xlarge",fam:"c6i",cat:"compute",arch:"x86",v:4,m:8,vd:"Intel",d:"Intel Xeon 8375C (Ice Lake)"},
+    {n:"c6i.2xlarge",fam:"c6i",cat:"compute",arch:"x86",v:8,m:16,vd:"Intel",d:"Intel Xeon 8375C (Ice Lake)"},
+    {n:"c6i.4xlarge",fam:"c6i",cat:"compute",arch:"x86",v:16,m:32,vd:"Intel",d:"Intel Xeon 8375C (Ice Lake)"},
+    {n:"c6i.8xlarge",fam:"c6i",cat:"compute",arch:"x86",v:32,m:64,vd:"Intel",d:"Intel Xeon 8375C (Ice Lake)"},
+    {n:"c6i.12xlarge",fam:"c6i",cat:"compute",arch:"x86",v:48,m:96,vd:"Intel",d:"Intel Xeon 8375C (Ice Lake)"},
+    {n:"c6i.16xlarge",fam:"c6i",cat:"compute",arch:"x86",v:64,m:128,vd:"Intel",d:"Intel Xeon 8375C (Ice Lake)"},
+    {n:"c6i.24xlarge",fam:"c6i",cat:"compute",arch:"x86",v:96,m:192,vd:"Intel",d:"Intel Xeon 8375C (Ice Lake)"},
+    {n:"c6i.32xlarge",fam:"c6i",cat:"compute",arch:"x86",v:128,m:256,vd:"Intel",d:"Intel Xeon 8375C (Ice Lake)"},
+    {n:"c6i.metal",fam:"c6i",cat:"compute",arch:"x86",v:128,m:256,vd:"Intel",d:"Intel Xeon 8375C (Ice Lake)"},
+    {n:"c7g.medium",fam:"c7g",cat:"compute",arch:"arm",v:1,m:2,vd:"Graviton3",d:"AWS Graviton3 Processor"},
+    {n:"c7g.large",fam:"c7g",cat:"compute",arch:"arm",v:2,m:4,vd:"Graviton3",d:"AWS Graviton3 Processor"},
+    {n:"c7g.xlarge",fam:"c7g",cat:"compute",arch:"arm",v:4,m:8,vd:"Graviton3",d:"AWS Graviton3 Processor"},
+    {n:"c7g.2xlarge",fam:"c7g",cat:"compute",arch:"arm",v:8,m:16,vd:"Graviton3",d:"AWS Graviton3 Processor"},
+    {n:"c7g.4xlarge",fam:"c7g",cat:"compute",arch:"arm",v:16,m:32,vd:"Graviton3",d:"AWS Graviton3 Processor"},
+    {n:"c7g.8xlarge",fam:"c7g",cat:"compute",arch:"arm",v:32,m:64,vd:"Graviton3",d:"AWS Graviton3 Processor"},
+    {n:"c7g.12xlarge",fam:"c7g",cat:"compute",arch:"arm",v:48,m:96,vd:"Graviton3",d:"AWS Graviton3 Processor"},
+    {n:"c7g.16xlarge",fam:"c7g",cat:"compute",arch:"arm",v:64,m:128,vd:"Graviton3",d:"AWS Graviton3 Processor"},
+    {n:"c7g.metal",fam:"c7g",cat:"compute",arch:"arm",v:64,m:128,vd:"Graviton3",d:"AWS Graviton3 Processor"},
+    {n:"c7i.large",fam:"c7i",cat:"compute",arch:"x86",v:2,m:4,vd:"Intel",d:"Intel Xeon Scalable (Sapphire Rapids)"},
+    {n:"c7i.xlarge",fam:"c7i",cat:"compute",arch:"x86",v:4,m:8,vd:"Intel",d:"Intel Xeon Scalable (Sapphire Rapids)"},
+    {n:"c7i.2xlarge",fam:"c7i",cat:"compute",arch:"x86",v:8,m:16,vd:"Intel",d:"Intel Xeon Scalable (Sapphire Rapids)"},
+    {n:"c7i.4xlarge",fam:"c7i",cat:"compute",arch:"x86",v:16,m:32,vd:"Intel",d:"Intel Xeon Scalable (Sapphire Rapids)"},
+    {n:"c7i.8xlarge",fam:"c7i",cat:"compute",arch:"x86",v:32,m:64,vd:"Intel",d:"Intel Xeon Scalable (Sapphire Rapids)"},
+    {n:"c7i.12xlarge",fam:"c7i",cat:"compute",arch:"x86",v:48,m:96,vd:"Intel",d:"Intel Xeon Scalable (Sapphire Rapids)"},
+    {n:"c7i.16xlarge",fam:"c7i",cat:"compute",arch:"x86",v:64,m:128,vd:"Intel",d:"Intel Xeon Scalable (Sapphire Rapids)"},
+    {n:"c7i.24xlarge",fam:"c7i",cat:"compute",arch:"x86",v:96,m:192,vd:"Intel",d:"Intel Xeon Scalable (Sapphire Rapids)"},
+    {n:"c7i.48xlarge",fam:"c7i",cat:"compute",arch:"x86",v:192,m:384,vd:"Intel",d:"Intel Xeon Scalable (Sapphire Rapids)"},
+    {n:"c7i.metal-24xl",fam:"c7i",cat:"compute",arch:"x86",v:96,m:192,vd:"Intel",d:"Intel Xeon Scalable (Sapphire Rapids)"},
+    {n:"c7i.metal-48xl",fam:"c7i",cat:"compute",arch:"x86",v:192,m:384,vd:"Intel",d:"Intel Xeon Scalable (Sapphire Rapids)"},
+    {n:"m6i.large",fam:"m6i",cat:"general",arch:"x86",v:2,m:8,vd:"Intel",d:"Intel Xeon 8375C (Ice Lake)"},
+    {n:"m6i.xlarge",fam:"m6i",cat:"general",arch:"x86",v:4,m:16,vd:"Intel",d:"Intel Xeon 8375C (Ice Lake)"},
+    {n:"m6i.2xlarge",fam:"m6i",cat:"general",arch:"x86",v:8,m:32,vd:"Intel",d:"Intel Xeon 8375C (Ice Lake)"},
+    {n:"m6i.4xlarge",fam:"m6i",cat:"general",arch:"x86",v:16,m:64,vd:"Intel",d:"Intel Xeon 8375C (Ice Lake)"},
+    {n:"m6i.8xlarge",fam:"m6i",cat:"general",arch:"x86",v:32,m:128,vd:"Intel",d:"Intel Xeon 8375C (Ice Lake)"},
+    {n:"m6i.12xlarge",fam:"m6i",cat:"general",arch:"x86",v:48,m:192,vd:"Intel",d:"Intel Xeon 8375C (Ice Lake)"},
+    {n:"m6i.16xlarge",fam:"m6i",cat:"general",arch:"x86",v:64,m:256,vd:"Intel",d:"Intel Xeon 8375C (Ice Lake)"},
+    {n:"m6i.24xlarge",fam:"m6i",cat:"general",arch:"x86",v:96,m:384,vd:"Intel",d:"Intel Xeon 8375C (Ice Lake)"},
+    {n:"m6i.32xlarge",fam:"m6i",cat:"general",arch:"x86",v:128,m:512,vd:"Intel",d:"Intel Xeon 8375C (Ice Lake)"},
+    {n:"m6i.metal",fam:"m6i",cat:"general",arch:"x86",v:128,m:512,vd:"Intel",d:"Intel Xeon 8375C (Ice Lake)"},
+    {n:"m7g.medium",fam:"m7g",cat:"general",arch:"arm",v:1,m:4,vd:"Graviton3",d:"AWS Graviton3 Processor"},
+    {n:"m7g.large",fam:"m7g",cat:"general",arch:"arm",v:2,m:8,vd:"Graviton3",d:"AWS Graviton3 Processor"},
+    {n:"m7g.xlarge",fam:"m7g",cat:"general",arch:"arm",v:4,m:16,vd:"Graviton3",d:"AWS Graviton3 Processor"},
+    {n:"m7g.2xlarge",fam:"m7g",cat:"general",arch:"arm",v:8,m:32,vd:"Graviton3",d:"AWS Graviton3 Processor"},
+    {n:"m7g.4xlarge",fam:"m7g",cat:"general",arch:"arm",v:16,m:64,vd:"Graviton3",d:"AWS Graviton3 Processor"},
+    {n:"m7g.8xlarge",fam:"m7g",cat:"general",arch:"arm",v:32,m:128,vd:"Graviton3",d:"AWS Graviton3 Processor"},
+    {n:"m7g.12xlarge",fam:"m7g",cat:"general",arch:"arm",v:48,m:192,vd:"Graviton3",d:"AWS Graviton3 Processor"},
+    {n:"m7g.16xlarge",fam:"m7g",cat:"general",arch:"arm",v:64,m:256,vd:"Graviton3",d:"AWS Graviton3 Processor"},
+    {n:"m7g.metal",fam:"m7g",cat:"general",arch:"arm",v:64,m:256,vd:"Graviton3",d:"AWS Graviton3 Processor"},
+    {n:"m7i.large",fam:"m7i",cat:"general",arch:"x86",v:2,m:8,vd:"Intel",d:"Intel Xeon Scalable (Sapphire Rapids)"},
+    {n:"m7i.xlarge",fam:"m7i",cat:"general",arch:"x86",v:4,m:16,vd:"Intel",d:"Intel Xeon Scalable (Sapphire Rapids)"},
+    {n:"m7i.2xlarge",fam:"m7i",cat:"general",arch:"x86",v:8,m:32,vd:"Intel",d:"Intel Xeon Scalable (Sapphire Rapids)"},
+    {n:"m7i.4xlarge",fam:"m7i",cat:"general",arch:"x86",v:16,m:64,vd:"Intel",d:"Intel Xeon Scalable (Sapphire Rapids)"},
+    {n:"m7i.8xlarge",fam:"m7i",cat:"general",arch:"x86",v:32,m:128,vd:"Intel",d:"Intel Xeon Scalable (Sapphire Rapids)"},
+    {n:"m7i.12xlarge",fam:"m7i",cat:"general",arch:"x86",v:48,m:192,vd:"Intel",d:"Intel Xeon Scalable (Sapphire Rapids)"},
+    {n:"m7i.16xlarge",fam:"m7i",cat:"general",arch:"x86",v:64,m:256,vd:"Intel",d:"Intel Xeon Scalable (Sapphire Rapids)"},
+    {n:"m7i.24xlarge",fam:"m7i",cat:"general",arch:"x86",v:96,m:384,vd:"Intel",d:"Intel Xeon Scalable (Sapphire Rapids)"},
+    {n:"m7i.48xlarge",fam:"m7i",cat:"general",arch:"x86",v:192,m:768,vd:"Intel",d:"Intel Xeon Scalable (Sapphire Rapids)"},
+    {n:"m7i.metal-24xl",fam:"m7i",cat:"general",arch:"x86",v:96,m:384,vd:"Intel",d:"Intel Xeon Scalable (Sapphire Rapids)"},
+    {n:"m7i.metal-48xl",fam:"m7i",cat:"general",arch:"x86",v:192,m:768,vd:"Intel",d:"Intel Xeon Scalable (Sapphire Rapids)"},
+    {n:"r6i.large",fam:"r6i",cat:"memory",arch:"x86",v:2,m:16,vd:"Intel",d:"Intel Xeon 8375C (Ice Lake)"},
+    {n:"r6i.xlarge",fam:"r6i",cat:"memory",arch:"x86",v:4,m:32,vd:"Intel",d:"Intel Xeon 8375C (Ice Lake)"},
+    {n:"r6i.2xlarge",fam:"r6i",cat:"memory",arch:"x86",v:8,m:64,vd:"Intel",d:"Intel Xeon 8375C (Ice Lake)"},
+    {n:"r6i.4xlarge",fam:"r6i",cat:"memory",arch:"x86",v:16,m:128,vd:"Intel",d:"Intel Xeon 8375C (Ice Lake)"},
+    {n:"r6i.8xlarge",fam:"r6i",cat:"memory",arch:"x86",v:32,m:256,vd:"Intel",d:"Intel Xeon 8375C (Ice Lake)"},
+    {n:"r6i.12xlarge",fam:"r6i",cat:"memory",arch:"x86",v:48,m:384,vd:"Intel",d:"Intel Xeon 8375C (Ice Lake)"},
+    {n:"r6i.16xlarge",fam:"r6i",cat:"memory",arch:"x86",v:64,m:512,vd:"Intel",d:"Intel Xeon 8375C (Ice Lake)"},
+    {n:"r6i.24xlarge",fam:"r6i",cat:"memory",arch:"x86",v:96,m:768,vd:"Intel",d:"Intel Xeon 8375C (Ice Lake)"},
+    {n:"r6i.32xlarge",fam:"r6i",cat:"memory",arch:"x86",v:128,m:1024,vd:"Intel",d:"Intel Xeon 8375C (Ice Lake)"},
+    {n:"r6i.metal",fam:"r6i",cat:"memory",arch:"x86",v:128,m:1024,vd:"Intel",d:"Intel Xeon 8375C (Ice Lake)"},
+    {n:"r7g.medium",fam:"r7g",cat:"memory",arch:"arm",v:1,m:8,vd:"Graviton3",d:"AWS Graviton3 Processor"},
+    {n:"r7g.large",fam:"r7g",cat:"memory",arch:"arm",v:2,m:16,vd:"Graviton3",d:"AWS Graviton3 Processor"},
+    {n:"r7g.xlarge",fam:"r7g",cat:"memory",arch:"arm",v:4,m:32,vd:"Graviton3",d:"AWS Graviton3 Processor"},
+    {n:"r7g.2xlarge",fam:"r7g",cat:"memory",arch:"arm",v:8,m:64,vd:"Graviton3",d:"AWS Graviton3 Processor"},
+    {n:"r7g.4xlarge",fam:"r7g",cat:"memory",arch:"arm",v:16,m:128,vd:"Graviton3",d:"AWS Graviton3 Processor"},
+    {n:"r7g.8xlarge",fam:"r7g",cat:"memory",arch:"arm",v:32,m:256,vd:"Graviton3",d:"AWS Graviton3 Processor"},
+    {n:"r7g.12xlarge",fam:"r7g",cat:"memory",arch:"arm",v:48,m:384,vd:"Graviton3",d:"AWS Graviton3 Processor"},
+    {n:"r7g.16xlarge",fam:"r7g",cat:"memory",arch:"arm",v:64,m:512,vd:"Graviton3",d:"AWS Graviton3 Processor"},
+    {n:"r7g.metal",fam:"r7g",cat:"memory",arch:"arm",v:64,m:512,vd:"Graviton3",d:"AWS Graviton3 Processor"},
+    {n:"r7i.large",fam:"r7i",cat:"memory",arch:"x86",v:2,m:16,vd:"Intel",d:"Intel Xeon Scalable (Sapphire Rapids)"},
+    {n:"r7i.xlarge",fam:"r7i",cat:"memory",arch:"x86",v:4,m:32,vd:"Intel",d:"Intel Xeon Scalable (Sapphire Rapids)"},
+    {n:"r7i.2xlarge",fam:"r7i",cat:"memory",arch:"x86",v:8,m:64,vd:"Intel",d:"Intel Xeon Scalable (Sapphire Rapids)"},
+    {n:"r7i.4xlarge",fam:"r7i",cat:"memory",arch:"x86",v:16,m:128,vd:"Intel",d:"Intel Xeon Scalable (Sapphire Rapids)"},
+    {n:"r7i.8xlarge",fam:"r7i",cat:"memory",arch:"x86",v:32,m:256,vd:"Intel",d:"Intel Xeon Scalable (Sapphire Rapids)"},
+    {n:"r7i.12xlarge",fam:"r7i",cat:"memory",arch:"x86",v:48,m:384,vd:"Intel",d:"Intel Xeon Scalable (Sapphire Rapids)"},
+    {n:"r7i.16xlarge",fam:"r7i",cat:"memory",arch:"x86",v:64,m:512,vd:"Intel",d:"Intel Xeon Scalable (Sapphire Rapids)"},
+    {n:"r7i.24xlarge",fam:"r7i",cat:"memory",arch:"x86",v:96,m:768,vd:"Intel",d:"Intel Xeon Scalable (Sapphire Rapids)"},
+    {n:"r7i.48xlarge",fam:"r7i",cat:"memory",arch:"x86",v:192,m:1536,vd:"Intel",d:"Intel Xeon Scalable (Sapphire Rapids)"},
+    {n:"r7i.metal-24xl",fam:"r7i",cat:"memory",arch:"x86",v:96,m:768,vd:"Intel",d:"Intel Xeon Scalable (Sapphire Rapids)"},
+    {n:"r7i.metal-48xl",fam:"r7i",cat:"memory",arch:"x86",v:192,m:1536,vd:"Intel",d:"Intel Xeon Scalable (Sapphire Rapids)"},
+    {n:"t3.nano",fam:"t3",cat:"general",arch:"x86",v:2,m:0.5,vd:"Intel",d:"Intel Skylake E5 2686 v5"},
+    {n:"t3.micro",fam:"t3",cat:"general",arch:"x86",v:2,m:1,vd:"Intel",d:"Intel Skylake E5 2686 v5"},
+    {n:"t3.small",fam:"t3",cat:"general",arch:"x86",v:2,m:2,vd:"Intel",d:"Intel Skylake E5 2686 v5"},
+    {n:"t3.medium",fam:"t3",cat:"general",arch:"x86",v:2,m:4,vd:"Intel",d:"Intel Skylake E5 2686 v5"},
+    {n:"t3.large",fam:"t3",cat:"general",arch:"x86",v:2,m:8,vd:"Intel",d:"Intel Skylake E5 2686 v5"},
+    {n:"t3.xlarge",fam:"t3",cat:"general",arch:"x86",v:4,m:16,vd:"Intel",d:"Intel Skylake E5 2686 v5"},
+    {n:"t3.2xlarge",fam:"t3",cat:"general",arch:"x86",v:8,m:32,vd:"Intel",d:"Intel Skylake E5 2686 v5"},
+    {n:"t4g.nano",fam:"t4g",cat:"general",arch:"arm",v:2,m:0.5,vd:"Graviton2",d:"AWS Graviton2 Processor"},
+    {n:"t4g.micro",fam:"t4g",cat:"general",arch:"arm",v:2,m:1,vd:"Graviton2",d:"AWS Graviton2 Processor"},
+    {n:"t4g.small",fam:"t4g",cat:"general",arch:"arm",v:2,m:2,vd:"Graviton2",d:"AWS Graviton2 Processor"},
+    {n:"t4g.medium",fam:"t4g",cat:"general",arch:"arm",v:2,m:4,vd:"Graviton2",d:"AWS Graviton2 Processor"},
+    {n:"t4g.large",fam:"t4g",cat:"general",arch:"arm",v:2,m:8,vd:"Graviton2",d:"AWS Graviton2 Processor"},
+    {n:"t4g.xlarge",fam:"t4g",cat:"general",arch:"arm",v:4,m:16,vd:"Graviton2",d:"AWS Graviton2 Processor"},
+    {n:"t4g.2xlarge",fam:"t4g",cat:"general",arch:"arm",v:8,m:32,vd:"Graviton2",d:"AWS Graviton2 Processor"},
+  ],
+  azure: [
+    {n:"B1ls",fam:"B",cat:"general",arch:"x86",v:1,m:null,vd:"Intel",d:"Burstable, baseline + credits, low cost"},
+    {n:"B1s",fam:"B",cat:"general",arch:"x86",v:1,m:null,vd:"Intel",d:"Burstable, baseline + credits, low cost"},
+    {n:"B1ms",fam:"B",cat:"general",arch:"x86",v:1,m:null,vd:"Intel",d:"Burstable, baseline + credits, low cost"},
+    {n:"B2s",fam:"B",cat:"general",arch:"x86",v:2,m:null,vd:"Intel",d:"Burstable, baseline + credits, low cost"},
+    {n:"B2ms",fam:"B",cat:"general",arch:"x86",v:2,m:null,vd:"Intel",d:"Burstable, baseline + credits, low cost"},
+    {n:"B4ms",fam:"B",cat:"general",arch:"x86",v:4,m:null,vd:"Intel",d:"Burstable, baseline + credits, low cost"},
+    {n:"B8ms",fam:"B",cat:"general",arch:"x86",v:8,m:null,vd:"Intel",d:"Burstable, baseline + credits, low cost"},
+    {n:"B12ms",fam:"B",cat:"general",arch:"x86",v:12,m:null,vd:"Intel",d:"Burstable, baseline + credits, low cost"},
+    {n:"B16ms",fam:"B",cat:"general",arch:"x86",v:16,m:null,vd:"Intel",d:"Burstable, baseline + credits, low cost"},
+    {n:"B20ms",fam:"B",cat:"general",arch:"x86",v:20,m:null,vd:"Intel",d:"Burstable, baseline + credits, low cost"},
+    {n:"D2as_v5",fam:"Dasv5",cat:"general",arch:"x86",v:2,m:8,vd:"AMD",d:"AMD EPYC Milan (3rd gen)"},
+    {n:"D4as_v5",fam:"Dasv5",cat:"general",arch:"x86",v:4,m:16,vd:"AMD",d:"AMD EPYC Milan (3rd gen)"},
+    {n:"D8as_v5",fam:"Dasv5",cat:"general",arch:"x86",v:8,m:32,vd:"AMD",d:"AMD EPYC Milan (3rd gen)"},
+    {n:"D16as_v5",fam:"Dasv5",cat:"general",arch:"x86",v:16,m:64,vd:"AMD",d:"AMD EPYC Milan (3rd gen)"},
+    {n:"D32as_v5",fam:"Dasv5",cat:"general",arch:"x86",v:32,m:128,vd:"AMD",d:"AMD EPYC Milan (3rd gen)"},
+    {n:"D48as_v5",fam:"Dasv5",cat:"general",arch:"x86",v:48,m:192,vd:"AMD",d:"AMD EPYC Milan (3rd gen)"},
+    {n:"D64as_v5",fam:"Dasv5",cat:"general",arch:"x86",v:64,m:256,vd:"AMD",d:"AMD EPYC Milan (3rd gen)"},
+    {n:"D96as_v5",fam:"Dasv5",cat:"general",arch:"x86",v:96,m:384,vd:"AMD",d:"AMD EPYC Milan (3rd gen)"},
+    {n:"D2ps_v5",fam:"Dpsv5",cat:"general",arch:"arm",v:2,m:8,vd:"Ampere",d:"Ampere Altra ARM, premium storage"},
+    {n:"D4ps_v5",fam:"Dpsv5",cat:"general",arch:"arm",v:4,m:16,vd:"Ampere",d:"Ampere Altra ARM, premium storage"},
+    {n:"D8ps_v5",fam:"Dpsv5",cat:"general",arch:"arm",v:8,m:32,vd:"Ampere",d:"Ampere Altra ARM, premium storage"},
+    {n:"D16ps_v5",fam:"Dpsv5",cat:"general",arch:"arm",v:16,m:64,vd:"Ampere",d:"Ampere Altra ARM, premium storage"},
+    {n:"D32ps_v5",fam:"Dpsv5",cat:"general",arch:"arm",v:32,m:128,vd:"Ampere",d:"Ampere Altra ARM, premium storage"},
+    {n:"D48ps_v5",fam:"Dpsv5",cat:"general",arch:"arm",v:48,m:192,vd:"Ampere",d:"Ampere Altra ARM, premium storage"},
+    {n:"D64ps_v5",fam:"Dpsv5",cat:"general",arch:"arm",v:64,m:256,vd:"Ampere",d:"Ampere Altra ARM, premium storage"},
+    {n:"E2as_v5",fam:"Easv5",cat:"memory",arch:"x86",v:2,m:16,vd:"AMD",d:"AMD Milan memory"},
+    {n:"E4as_v5",fam:"Easv5",cat:"memory",arch:"x86",v:4,m:32,vd:"AMD",d:"AMD Milan memory"},
+    {n:"E8as_v5",fam:"Easv5",cat:"memory",arch:"x86",v:8,m:64,vd:"AMD",d:"AMD Milan memory"},
+    {n:"E16as_v5",fam:"Easv5",cat:"memory",arch:"x86",v:16,m:128,vd:"AMD",d:"AMD Milan memory"},
+    {n:"E20as_v5",fam:"Easv5",cat:"memory",arch:"x86",v:20,m:160,vd:"AMD",d:"AMD Milan memory"},
+    {n:"E32as_v5",fam:"Easv5",cat:"memory",arch:"x86",v:32,m:256,vd:"AMD",d:"AMD Milan memory"},
+    {n:"E48as_v5",fam:"Easv5",cat:"memory",arch:"x86",v:48,m:384,vd:"AMD",d:"AMD Milan memory"},
+    {n:"E64as_v5",fam:"Easv5",cat:"memory",arch:"x86",v:64,m:512,vd:"AMD",d:"AMD Milan memory"},
+    {n:"E96as_v5",fam:"Easv5",cat:"memory",arch:"x86",v:96,m:672,vd:"AMD",d:"AMD Milan memory"},
+    {n:"F2s_v2",fam:"Fsv2",cat:"compute",arch:"x86",v:2,m:4,vd:"Intel",d:"High CPU-to-memory ratio (Skylake)"},
+    {n:"F4s_v2",fam:"Fsv2",cat:"compute",arch:"x86",v:4,m:8,vd:"Intel",d:"High CPU-to-memory ratio (Skylake)"},
+    {n:"F8s_v2",fam:"Fsv2",cat:"compute",arch:"x86",v:8,m:16,vd:"Intel",d:"High CPU-to-memory ratio (Skylake)"},
+    {n:"F16s_v2",fam:"Fsv2",cat:"compute",arch:"x86",v:16,m:32,vd:"Intel",d:"High CPU-to-memory ratio (Skylake)"},
+    {n:"F32s_v2",fam:"Fsv2",cat:"compute",arch:"x86",v:32,m:64,vd:"Intel",d:"High CPU-to-memory ratio (Skylake)"},
+    {n:"F48s_v2",fam:"Fsv2",cat:"compute",arch:"x86",v:48,m:96,vd:"Intel",d:"High CPU-to-memory ratio (Skylake)"},
+    {n:"F64s_v2",fam:"Fsv2",cat:"compute",arch:"x86",v:64,m:128,vd:"Intel",d:"High CPU-to-memory ratio (Skylake)"},
+    {n:"F72s_v2",fam:"Fsv2",cat:"compute",arch:"x86",v:72,m:144,vd:"Intel",d:"High CPU-to-memory ratio (Skylake)"},
+  ],
+  gcp: [
+    {n:"e2-standard-2",fam:"e2",cat:"general",arch:"x86",v:2,m:null,vd:"Intel/AMD",d:"Cost-optimized; shared core, baseline + bursting"},
+    {n:"e2-standard-4",fam:"e2",cat:"general",arch:"x86",v:4,m:null,vd:"Intel/AMD",d:"Cost-optimized; shared core, baseline + bursting"},
+    {n:"e2-standard-8",fam:"e2",cat:"general",arch:"x86",v:8,m:null,vd:"Intel/AMD",d:"Cost-optimized; shared core, baseline + bursting"},
+    {n:"e2-standard-16",fam:"e2",cat:"general",arch:"x86",v:16,m:null,vd:"Intel/AMD",d:"Cost-optimized; shared core, baseline + bursting"},
+    {n:"e2-standard-32",fam:"e2",cat:"general",arch:"x86",v:32,m:null,vd:"Intel/AMD",d:"Cost-optimized; shared core, baseline + bursting"},
+    {n:"e2-highmem-2",fam:"e2",cat:"general",arch:"x86",v:2,m:null,vd:"Intel/AMD",d:"Cost-optimized; shared core, baseline + bursting"},
+    {n:"e2-highmem-4",fam:"e2",cat:"general",arch:"x86",v:4,m:null,vd:"Intel/AMD",d:"Cost-optimized; shared core, baseline + bursting"},
+    {n:"e2-highmem-8",fam:"e2",cat:"general",arch:"x86",v:8,m:null,vd:"Intel/AMD",d:"Cost-optimized; shared core, baseline + bursting"},
+    {n:"e2-highmem-16",fam:"e2",cat:"general",arch:"x86",v:16,m:null,vd:"Intel/AMD",d:"Cost-optimized; shared core, baseline + bursting"},
+    {n:"e2-highcpu-2",fam:"e2",cat:"general",arch:"x86",v:2,m:null,vd:"Intel/AMD",d:"Cost-optimized; shared core, baseline + bursting"},
+    {n:"e2-highcpu-4",fam:"e2",cat:"general",arch:"x86",v:4,m:null,vd:"Intel/AMD",d:"Cost-optimized; shared core, baseline + bursting"},
+    {n:"e2-highcpu-8",fam:"e2",cat:"general",arch:"x86",v:8,m:null,vd:"Intel/AMD",d:"Cost-optimized; shared core, baseline + bursting"},
+    {n:"e2-highcpu-16",fam:"e2",cat:"general",arch:"x86",v:16,m:null,vd:"Intel/AMD",d:"Cost-optimized; shared core, baseline + bursting"},
+    {n:"e2-highcpu-32",fam:"e2",cat:"general",arch:"x86",v:32,m:null,vd:"Intel/AMD",d:"Cost-optimized; shared core, baseline + bursting"},
+    {n:"n4-standard-2",fam:"n4",cat:"general",arch:"x86",v:2,m:null,vd:"Intel",d:"Newest balanced; Emerald Rapids + Titanium SSDs option"},
+    {n:"n4-standard-4",fam:"n4",cat:"general",arch:"x86",v:4,m:null,vd:"Intel",d:"Newest balanced; Emerald Rapids + Titanium SSDs option"},
+    {n:"n4-standard-8",fam:"n4",cat:"general",arch:"x86",v:8,m:null,vd:"Intel",d:"Newest balanced; Emerald Rapids + Titanium SSDs option"},
+    {n:"n4-standard-16",fam:"n4",cat:"general",arch:"x86",v:16,m:null,vd:"Intel",d:"Newest balanced; Emerald Rapids + Titanium SSDs option"},
+    {n:"n4-standard-32",fam:"n4",cat:"general",arch:"x86",v:32,m:null,vd:"Intel",d:"Newest balanced; Emerald Rapids + Titanium SSDs option"},
+    {n:"n4-highmem-2",fam:"n4",cat:"general",arch:"x86",v:2,m:null,vd:"Intel",d:"Newest balanced; Emerald Rapids + Titanium SSDs option"},
+    {n:"n4-highmem-4",fam:"n4",cat:"general",arch:"x86",v:4,m:null,vd:"Intel",d:"Newest balanced; Emerald Rapids + Titanium SSDs option"},
+    {n:"n4-highmem-8",fam:"n4",cat:"general",arch:"x86",v:8,m:null,vd:"Intel",d:"Newest balanced; Emerald Rapids + Titanium SSDs option"},
+    {n:"n4-highmem-16",fam:"n4",cat:"general",arch:"x86",v:16,m:null,vd:"Intel",d:"Newest balanced; Emerald Rapids + Titanium SSDs option"},
+    {n:"n4-highmem-32",fam:"n4",cat:"general",arch:"x86",v:32,m:null,vd:"Intel",d:"Newest balanced; Emerald Rapids + Titanium SSDs option"},
+    {n:"n4-highcpu-2",fam:"n4",cat:"general",arch:"x86",v:2,m:null,vd:"Intel",d:"Newest balanced; Emerald Rapids + Titanium SSDs option"},
+    {n:"n4-highcpu-4",fam:"n4",cat:"general",arch:"x86",v:4,m:null,vd:"Intel",d:"Newest balanced; Emerald Rapids + Titanium SSDs option"},
+    {n:"n4-highcpu-8",fam:"n4",cat:"general",arch:"x86",v:8,m:null,vd:"Intel",d:"Newest balanced; Emerald Rapids + Titanium SSDs option"},
+    {n:"n4-highcpu-16",fam:"n4",cat:"general",arch:"x86",v:16,m:null,vd:"Intel",d:"Newest balanced; Emerald Rapids + Titanium SSDs option"},
+    {n:"n4-highcpu-32",fam:"n4",cat:"general",arch:"x86",v:32,m:null,vd:"Intel",d:"Newest balanced; Emerald Rapids + Titanium SSDs option"},
+    {n:"t2d-standard-2",fam:"t2d",cat:"general",arch:"x86",v:2,m:null,vd:"AMD",d:"AMD Milan scale-out, no SMT, web tier sweet spot"},
+    {n:"t2d-standard-4",fam:"t2d",cat:"general",arch:"x86",v:4,m:null,vd:"AMD",d:"AMD Milan scale-out, no SMT, web tier sweet spot"},
+    {n:"t2d-standard-8",fam:"t2d",cat:"general",arch:"x86",v:8,m:null,vd:"AMD",d:"AMD Milan scale-out, no SMT, web tier sweet spot"},
+    {n:"t2d-standard-16",fam:"t2d",cat:"general",arch:"x86",v:16,m:null,vd:"AMD",d:"AMD Milan scale-out, no SMT, web tier sweet spot"},
+    {n:"t2d-standard-32",fam:"t2d",cat:"general",arch:"x86",v:32,m:null,vd:"AMD",d:"AMD Milan scale-out, no SMT, web tier sweet spot"},
+    {n:"t2a-standard-2",fam:"t2a",cat:"general",arch:"arm",v:2,m:null,vd:"Ampere",d:"Ampere Altra ARM (first gen ARM on GCP)"},
+    {n:"t2a-standard-4",fam:"t2a",cat:"general",arch:"arm",v:4,m:null,vd:"Ampere",d:"Ampere Altra ARM (first gen ARM on GCP)"},
+    {n:"t2a-standard-8",fam:"t2a",cat:"general",arch:"arm",v:8,m:null,vd:"Ampere",d:"Ampere Altra ARM (first gen ARM on GCP)"},
+    {n:"t2a-standard-16",fam:"t2a",cat:"general",arch:"arm",v:16,m:null,vd:"Ampere",d:"Ampere Altra ARM (first gen ARM on GCP)"},
+    {n:"t2a-standard-32",fam:"t2a",cat:"general",arch:"arm",v:32,m:null,vd:"Ampere",d:"Ampere Altra ARM (first gen ARM on GCP)"},
+    {n:"c4a-standard-2",fam:"c4a",cat:"general",arch:"arm",v:2,m:null,vd:"Axion",d:"Google Axion ARM (newest, GCP-designed)"},
+    {n:"c4a-standard-4",fam:"c4a",cat:"general",arch:"arm",v:4,m:null,vd:"Axion",d:"Google Axion ARM (newest, GCP-designed)"},
+    {n:"c4a-standard-8",fam:"c4a",cat:"general",arch:"arm",v:8,m:null,vd:"Axion",d:"Google Axion ARM (newest, GCP-designed)"},
+    {n:"c4a-standard-16",fam:"c4a",cat:"general",arch:"arm",v:16,m:null,vd:"Axion",d:"Google Axion ARM (newest, GCP-designed)"},
+    {n:"c4a-standard-32",fam:"c4a",cat:"general",arch:"arm",v:32,m:null,vd:"Axion",d:"Google Axion ARM (newest, GCP-designed)"},
+    {n:"c4a-highmem-2",fam:"c4a",cat:"general",arch:"arm",v:2,m:null,vd:"Axion",d:"Google Axion ARM (newest, GCP-designed)"},
+    {n:"c4a-highmem-4",fam:"c4a",cat:"general",arch:"arm",v:4,m:null,vd:"Axion",d:"Google Axion ARM (newest, GCP-designed)"},
+    {n:"c4a-highmem-8",fam:"c4a",cat:"general",arch:"arm",v:8,m:null,vd:"Axion",d:"Google Axion ARM (newest, GCP-designed)"},
+    {n:"c4a-highmem-16",fam:"c4a",cat:"general",arch:"arm",v:16,m:null,vd:"Axion",d:"Google Axion ARM (newest, GCP-designed)"},
+    {n:"c4a-highmem-32",fam:"c4a",cat:"general",arch:"arm",v:32,m:null,vd:"Axion",d:"Google Axion ARM (newest, GCP-designed)"},
+    {n:"c4a-highcpu-2",fam:"c4a",cat:"general",arch:"arm",v:2,m:null,vd:"Axion",d:"Google Axion ARM (newest, GCP-designed)"},
+    {n:"c4a-highcpu-4",fam:"c4a",cat:"general",arch:"arm",v:4,m:null,vd:"Axion",d:"Google Axion ARM (newest, GCP-designed)"},
+    {n:"c4a-highcpu-8",fam:"c4a",cat:"general",arch:"arm",v:8,m:null,vd:"Axion",d:"Google Axion ARM (newest, GCP-designed)"},
+    {n:"c4a-highcpu-16",fam:"c4a",cat:"general",arch:"arm",v:16,m:null,vd:"Axion",d:"Google Axion ARM (newest, GCP-designed)"},
+    {n:"c4a-highcpu-32",fam:"c4a",cat:"general",arch:"arm",v:32,m:null,vd:"Axion",d:"Google Axion ARM (newest, GCP-designed)"},
+    {n:"c4-standard-2",fam:"c4",cat:"compute",arch:"x86",v:2,m:null,vd:"Intel",d:"Newest Intel Emerald Rapids, Titanium IPU (general+compute)"},
+    {n:"c4-standard-4",fam:"c4",cat:"compute",arch:"x86",v:4,m:null,vd:"Intel",d:"Newest Intel Emerald Rapids, Titanium IPU (general+compute)"},
+    {n:"c4-standard-8",fam:"c4",cat:"compute",arch:"x86",v:8,m:null,vd:"Intel",d:"Newest Intel Emerald Rapids, Titanium IPU (general+compute)"},
+    {n:"c4-standard-16",fam:"c4",cat:"compute",arch:"x86",v:16,m:null,vd:"Intel",d:"Newest Intel Emerald Rapids, Titanium IPU (general+compute)"},
+    {n:"c4-standard-32",fam:"c4",cat:"compute",arch:"x86",v:32,m:null,vd:"Intel",d:"Newest Intel Emerald Rapids, Titanium IPU (general+compute)"},
+    {n:"c4-highmem-2",fam:"c4",cat:"compute",arch:"x86",v:2,m:null,vd:"Intel",d:"Newest Intel Emerald Rapids, Titanium IPU (general+compute)"},
+    {n:"c4-highmem-4",fam:"c4",cat:"compute",arch:"x86",v:4,m:null,vd:"Intel",d:"Newest Intel Emerald Rapids, Titanium IPU (general+compute)"},
+    {n:"c4-highmem-8",fam:"c4",cat:"compute",arch:"x86",v:8,m:null,vd:"Intel",d:"Newest Intel Emerald Rapids, Titanium IPU (general+compute)"},
+    {n:"c4-highmem-16",fam:"c4",cat:"compute",arch:"x86",v:16,m:null,vd:"Intel",d:"Newest Intel Emerald Rapids, Titanium IPU (general+compute)"},
+    {n:"c4-highmem-32",fam:"c4",cat:"compute",arch:"x86",v:32,m:null,vd:"Intel",d:"Newest Intel Emerald Rapids, Titanium IPU (general+compute)"},
+    {n:"c4-highcpu-2",fam:"c4",cat:"compute",arch:"x86",v:2,m:null,vd:"Intel",d:"Newest Intel Emerald Rapids, Titanium IPU (general+compute)"},
+    {n:"c4-highcpu-4",fam:"c4",cat:"compute",arch:"x86",v:4,m:null,vd:"Intel",d:"Newest Intel Emerald Rapids, Titanium IPU (general+compute)"},
+    {n:"c4-highcpu-8",fam:"c4",cat:"compute",arch:"x86",v:8,m:null,vd:"Intel",d:"Newest Intel Emerald Rapids, Titanium IPU (general+compute)"},
+    {n:"c4-highcpu-16",fam:"c4",cat:"compute",arch:"x86",v:16,m:null,vd:"Intel",d:"Newest Intel Emerald Rapids, Titanium IPU (general+compute)"},
+    {n:"c4-highcpu-32",fam:"c4",cat:"compute",arch:"x86",v:32,m:null,vd:"Intel",d:"Newest Intel Emerald Rapids, Titanium IPU (general+compute)"},
+  ],
+  oci: [
+    {n:"VM.Standard.E5.Flex · 1 OCPU",fam:"VM.Standard.E5.Flex",cat:"general",arch:"x86",v:2,m:16,vd:"AMD",d:"AMD EPYC Genoa (4th gen), Flex (1-94 OCPUs)"},
+    {n:"VM.Standard.E5.Flex · 2 OCPU",fam:"VM.Standard.E5.Flex",cat:"general",arch:"x86",v:4,m:32,vd:"AMD",d:"AMD EPYC Genoa (4th gen), Flex (1-94 OCPUs)"},
+    {n:"VM.Standard.E5.Flex · 4 OCPU",fam:"VM.Standard.E5.Flex",cat:"general",arch:"x86",v:8,m:64,vd:"AMD",d:"AMD EPYC Genoa (4th gen), Flex (1-94 OCPUs)"},
+    {n:"VM.Standard.E5.Flex · 8 OCPU",fam:"VM.Standard.E5.Flex",cat:"general",arch:"x86",v:16,m:128,vd:"AMD",d:"AMD EPYC Genoa (4th gen), Flex (1-94 OCPUs)"},
+    {n:"VM.Standard.E5.Flex · 16 OCPU",fam:"VM.Standard.E5.Flex",cat:"general",arch:"x86",v:32,m:256,vd:"AMD",d:"AMD EPYC Genoa (4th gen), Flex (1-94 OCPUs)"},
+    {n:"VM.Standard.E5.Flex · 32 OCPU",fam:"VM.Standard.E5.Flex",cat:"general",arch:"x86",v:64,m:512,vd:"AMD",d:"AMD EPYC Genoa (4th gen), Flex (1-94 OCPUs)"},
+    {n:"VM.Standard.E5.Flex · 64 OCPU",fam:"VM.Standard.E5.Flex",cat:"general",arch:"x86",v:128,m:1024,vd:"AMD",d:"AMD EPYC Genoa (4th gen), Flex (1-94 OCPUs)"},
+    {n:"VM.Standard.E5.Flex · 94 OCPU",fam:"VM.Standard.E5.Flex",cat:"general",arch:"x86",v:188,m:1504,vd:"AMD",d:"AMD EPYC Genoa (4th gen), Flex (1-94 OCPUs)"},
+    {n:"VM.Standard.A1.Flex · 1 OCPU",fam:"VM.Standard.A1.Flex",cat:"general",arch:"arm",v:1,m:16,vd:"Ampere",d:"Ampere Altra ARM, Flex (1-80 OCPUs)"},
+    {n:"VM.Standard.A1.Flex · 2 OCPU",fam:"VM.Standard.A1.Flex",cat:"general",arch:"arm",v:2,m:32,vd:"Ampere",d:"Ampere Altra ARM, Flex (1-80 OCPUs)"},
+    {n:"VM.Standard.A1.Flex · 4 OCPU",fam:"VM.Standard.A1.Flex",cat:"general",arch:"arm",v:4,m:64,vd:"Ampere",d:"Ampere Altra ARM, Flex (1-80 OCPUs)"},
+    {n:"VM.Standard.A1.Flex · 8 OCPU",fam:"VM.Standard.A1.Flex",cat:"general",arch:"arm",v:8,m:128,vd:"Ampere",d:"Ampere Altra ARM, Flex (1-80 OCPUs)"},
+    {n:"VM.Standard.A1.Flex · 16 OCPU",fam:"VM.Standard.A1.Flex",cat:"general",arch:"arm",v:16,m:256,vd:"Ampere",d:"Ampere Altra ARM, Flex (1-80 OCPUs)"},
+    {n:"VM.Standard.A1.Flex · 32 OCPU",fam:"VM.Standard.A1.Flex",cat:"general",arch:"arm",v:32,m:512,vd:"Ampere",d:"Ampere Altra ARM, Flex (1-80 OCPUs)"},
+    {n:"VM.Standard.A1.Flex · 64 OCPU",fam:"VM.Standard.A1.Flex",cat:"general",arch:"arm",v:64,m:1024,vd:"Ampere",d:"Ampere Altra ARM, Flex (1-80 OCPUs)"},
+    {n:"VM.Standard.A1.Flex · 80 OCPU",fam:"VM.Standard.A1.Flex",cat:"general",arch:"arm",v:80,m:1280,vd:"Ampere",d:"Ampere Altra ARM, Flex (1-80 OCPUs)"},
+    {n:"VM.Standard3.Flex · 1 OCPU",fam:"VM.Standard3.Flex",cat:"general",arch:"x86",v:2,m:16,vd:"Intel",d:"Intel Ice Lake, Flex (1-32 OCPUs)"},
+    {n:"VM.Standard3.Flex · 2 OCPU",fam:"VM.Standard3.Flex",cat:"general",arch:"x86",v:4,m:32,vd:"Intel",d:"Intel Ice Lake, Flex (1-32 OCPUs)"},
+    {n:"VM.Standard3.Flex · 4 OCPU",fam:"VM.Standard3.Flex",cat:"general",arch:"x86",v:8,m:64,vd:"Intel",d:"Intel Ice Lake, Flex (1-32 OCPUs)"},
+    {n:"VM.Standard3.Flex · 8 OCPU",fam:"VM.Standard3.Flex",cat:"general",arch:"x86",v:16,m:128,vd:"Intel",d:"Intel Ice Lake, Flex (1-32 OCPUs)"},
+    {n:"VM.Standard3.Flex · 16 OCPU",fam:"VM.Standard3.Flex",cat:"general",arch:"x86",v:32,m:256,vd:"Intel",d:"Intel Ice Lake, Flex (1-32 OCPUs)"},
+    {n:"VM.Standard3.Flex · 32 OCPU",fam:"VM.Standard3.Flex",cat:"general",arch:"x86",v:64,m:512,vd:"Intel",d:"Intel Ice Lake, Flex (1-32 OCPUs)"},
+    {n:"VM.Optimized3.Flex · 1 OCPU",fam:"VM.Optimized3.Flex",cat:"compute",arch:"x86",v:2,m:16,vd:"Intel",d:"High-frequency Intel Ice Lake (3.4 GHz), Flex (1-18)"},
+    {n:"VM.Optimized3.Flex · 2 OCPU",fam:"VM.Optimized3.Flex",cat:"compute",arch:"x86",v:4,m:32,vd:"Intel",d:"High-frequency Intel Ice Lake (3.4 GHz), Flex (1-18)"},
+    {n:"VM.Optimized3.Flex · 4 OCPU",fam:"VM.Optimized3.Flex",cat:"compute",arch:"x86",v:8,m:64,vd:"Intel",d:"High-frequency Intel Ice Lake (3.4 GHz), Flex (1-18)"},
+    {n:"VM.Optimized3.Flex · 8 OCPU",fam:"VM.Optimized3.Flex",cat:"compute",arch:"x86",v:16,m:128,vd:"Intel",d:"High-frequency Intel Ice Lake (3.4 GHz), Flex (1-18)"},
+    {n:"VM.Optimized3.Flex · 16 OCPU",fam:"VM.Optimized3.Flex",cat:"compute",arch:"x86",v:32,m:256,vd:"Intel",d:"High-frequency Intel Ice Lake (3.4 GHz), Flex (1-18)"},
+    {n:"VM.Optimized3.Flex · 18 OCPU",fam:"VM.Optimized3.Flex",cat:"compute",arch:"x86",v:36,m:288,vd:"Intel",d:"High-frequency Intel Ice Lake (3.4 GHz), Flex (1-18)"},
+  ],
+  ovh: [
+    {n:"d2-2",fam:"d2",cat:"general",arch:"x86",v:1,m:2,vd:"AMD/Intel",d:"Discovery — sandbox tier, low cost"},
+    {n:"d2-4",fam:"d2",cat:"general",arch:"x86",v:2,m:4,vd:"AMD/Intel",d:"Discovery — sandbox tier, low cost"},
+    {n:"d2-8",fam:"d2",cat:"general",arch:"x86",v:4,m:8,vd:"AMD/Intel",d:"Discovery — sandbox tier, low cost"},
+    {n:"b3-8",fam:"b3",cat:"general",arch:"x86",v:2,m:8,vd:"AMD",d:"Balanced general — AMD EPYC + premium NVMe"},
+    {n:"b3-16",fam:"b3",cat:"general",arch:"x86",v:4,m:16,vd:"AMD",d:"Balanced general — AMD EPYC + premium NVMe"},
+    {n:"b3-32",fam:"b3",cat:"general",arch:"x86",v:8,m:32,vd:"AMD",d:"Balanced general — AMD EPYC + premium NVMe"},
+    {n:"b3-64",fam:"b3",cat:"general",arch:"x86",v:16,m:64,vd:"AMD",d:"Balanced general — AMD EPYC + premium NVMe"},
+    {n:"b3-128",fam:"b3",cat:"general",arch:"x86",v:32,m:128,vd:"AMD",d:"Balanced general — AMD EPYC + premium NVMe"},
+    {n:"b3-256",fam:"b3",cat:"general",arch:"x86",v:64,m:256,vd:"AMD",d:"Balanced general — AMD EPYC + premium NVMe"},
+    {n:"b3-512",fam:"b3",cat:"general",arch:"x86",v:128,m:512,vd:"AMD",d:"Balanced general — AMD EPYC + premium NVMe"},
+    {n:"b3-640",fam:"b3",cat:"general",arch:"x86",v:160,m:640,vd:"AMD",d:"Balanced general — AMD EPYC + premium NVMe"},
+    {n:"c3-4",fam:"c3",cat:"compute",arch:"x86",v:2,m:4,vd:"AMD",d:"CPU-optimized — high-freq AMD EPYC"},
+    {n:"c3-8",fam:"c3",cat:"compute",arch:"x86",v:4,m:8,vd:"AMD",d:"CPU-optimized — high-freq AMD EPYC"},
+    {n:"c3-16",fam:"c3",cat:"compute",arch:"x86",v:8,m:16,vd:"AMD",d:"CPU-optimized — high-freq AMD EPYC"},
+    {n:"c3-32",fam:"c3",cat:"compute",arch:"x86",v:16,m:32,vd:"AMD",d:"CPU-optimized — high-freq AMD EPYC"},
+    {n:"c3-64",fam:"c3",cat:"compute",arch:"x86",v:32,m:64,vd:"AMD",d:"CPU-optimized — high-freq AMD EPYC"},
+    {n:"c3-128",fam:"c3",cat:"compute",arch:"x86",v:64,m:128,vd:"AMD",d:"CPU-optimized — high-freq AMD EPYC"},
+    {n:"c3-256",fam:"c3",cat:"compute",arch:"x86",v:128,m:256,vd:"AMD",d:"CPU-optimized — high-freq AMD EPYC"},
+    {n:"c3-320",fam:"c3",cat:"compute",arch:"x86",v:160,m:320,vd:"AMD",d:"CPU-optimized — high-freq AMD EPYC"},
+    {n:"r3-16",fam:"r3",cat:"memory",arch:"x86",v:2,m:16,vd:"AMD",d:"RAM-optimized — up to 512 GB"},
+    {n:"r3-32",fam:"r3",cat:"memory",arch:"x86",v:4,m:32,vd:"AMD",d:"RAM-optimized — up to 512 GB"},
+    {n:"r3-64",fam:"r3",cat:"memory",arch:"x86",v:8,m:64,vd:"AMD",d:"RAM-optimized — up to 512 GB"},
+    {n:"r3-128",fam:"r3",cat:"memory",arch:"x86",v:16,m:128,vd:"AMD",d:"RAM-optimized — up to 512 GB"},
+    {n:"r3-256",fam:"r3",cat:"memory",arch:"x86",v:32,m:256,vd:"AMD",d:"RAM-optimized — up to 512 GB"},
+    {n:"r3-512",fam:"r3",cat:"memory",arch:"x86",v:64,m:512,vd:"AMD",d:"RAM-optimized — up to 512 GB"},
+    {n:"r3-1024",fam:"r3",cat:"memory",arch:"x86",v:128,m:1024,vd:"AMD",d:"RAM-optimized — up to 512 GB"},
+  ],
+};
+
+// ─── Scoring rubric constants — kept here so the engine and the on-page
+//     rubric never drift apart ─────────────────────────────────────────
+//  Three additive axes sum to 100; architecture is a multiplicative
+//  factor on top, because an x86 image will not boot on Arm — it is a
+//  near-gate, not just another delta.
+const W = { vcpu: 50, mem: 38, cat: 12 };  // additive axis weights, sum = 100
+const ARCH_FACTOR = 0.55;                  // score multiplier when arch differs
+const TOP_N = 3;          // matches shown per cloud
+const CAT_LABEL = {
+  general: "General", compute: "Compute", memory: "Memory",
+  storage: "Storage", accelerated: "Accelerated", hpc: "HPC",
+  macos: "macOS", baremetal: "Bare metal", confidential: "Confidential",
+};
+// adjacency: categories that are "near" each other earn a partial category score
+const CAT_ADJ = {
+  general:     ["compute", "memory"],
+  compute:     ["general", "hpc"],
+  memory:      ["general"],
+  hpc:         ["compute"],
+  storage:     [],
+  accelerated: [],
+  macos:       [],
+  baremetal:   [],
+  confidential:["general"],
+};
+
+// ─── State ───
+const state = {
+  data: null,        // { cloudId: [instance, ...] }
+  cloud: "aws",
+  typeKey: "",       // unique key "cloud::name"
+  loaded: false,
+};
+
+const $  = (s) => document.querySelector(s);
+
+// ─── Helpers ───
+function esc(s) {
+  return String(s == null ? "" : s).replace(/[&<>"']/g, (c) => (
+    { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]
+  ));
+}
+
+function fmtMem(m) {
+  if (m == null) return "n/d";
+  if (m < 1) return m + " GB";
+  return (Number.isInteger(m) ? m : m.toFixed(1)) + " GB";
+}
+
+function archLabel(a) { return a === "arm" ? "Arm64" : "x86_64"; }
+
+// instance key, unique across clouds
+function keyOf(cloudId, inst) { return cloudId + "::" + inst.n; }
+
+// ─── Scoring engine ──────────────────────────────────────────────────
+// A candidate's score is the weighted sum of three additive axes — vCPU,
+// memory, category — renormalised to 0..100, then multiplied by an
+// architecture factor (1.0 same arch, 0.55 cross arch). Sizing axes use a
+// log2-ratio penalty so a doubling costs the same anywhere on the scale.
+// If memory is unknown on either side, the memory axis is dropped and the
+// renormalisation runs over the remaining axes only.
+function ratioScore(srcVal, candVal) {
+  // returns 0..1 — 1 == identical, decays linearly in |log2(ratio)|,
+  // reaching 0 once the values differ by 2x (a full octave) or more.
+  if (!srcVal || !candVal || srcVal <= 0 || candVal <= 0) return null;
+  const oct = Math.abs(Math.log2(candVal / srcVal));
+  return Math.max(0, 1 - oct);
+}
+
+function categoryScore(srcCat, candCat) {
+  if (srcCat === candCat) return 1;
+  if ((CAT_ADJ[srcCat] || []).includes(candCat)) return 0.5;
+  return 0;
+}
+
+// score one candidate against the source — returns { score, parts, why }
+function scoreCandidate(src, cand) {
+  const parts = {};
+  const why = [];
+
+  // --- vCPU ---
+  const vR = ratioScore(src.v, cand.v);
+  parts.vcpu = (vR == null) ? null : vR * W.vcpu;
+  if (vR == null) {
+    why.push({ k: "vCPU n/d", cls: "muted" });
+  } else {
+    const dv = cand.v - src.v;
+    const cls = dv === 0 ? "good" : (Math.abs(Math.log2(cand.v / src.v)) <= 0.585 ? "warn" : "bad");
+    why.push({
+      k: dv === 0
+        ? "vCPU exact · " + cand.v
+        : "vCPU " + cand.v + " (" + (dv > 0 ? "+" : "") + dv + ")",
+      cls,
+    });
+  }
+
+  // --- memory ---
+  const memKnown = (src.m != null && cand.m != null);
+  if (memKnown) {
+    const mR = ratioScore(src.m, cand.m);
+    parts.mem = (mR == null) ? null : mR * W.mem;
+    const dm = cand.m - src.m;
+    const cls = Math.abs(dm) < 0.01 ? "good"
+      : (Math.abs(Math.log2(cand.m / src.m)) <= 0.585 ? "warn" : "bad");
+    why.push({
+      k: Math.abs(dm) < 0.01
+        ? "Memory exact · " + fmtMem(cand.m)
+        : "Memory " + fmtMem(cand.m) + " (" + (dm > 0 ? "+" : "") + (Number.isInteger(dm) ? dm : dm.toFixed(1)) + ")",
+      cls,
+    });
+  } else {
+    parts.mem = null;   // dropped axis — weight redistributed below
+    why.push({ k: "Memory not scored", cls: "muted" });
+  }
+
+  // --- category ---
+  const cR = categoryScore(src.cat, cand.cat);
+  parts.cat = cR * W.cat;
+  why.push({
+    k: cR === 1 ? "Category " + (CAT_LABEL[cand.cat] || cand.cat)
+      : cR === 0.5 ? "Category adjacent · " + (CAT_LABEL[cand.cat] || cand.cat)
+      : "Category " + (CAT_LABEL[cand.cat] || cand.cat) + " (off)",
+    cls: cR === 1 ? "good" : cR === 0.5 ? "warn" : "bad",
+  });
+
+  // --- combine the additive axes: sum the live ones, then renormalise to
+  //     a 0..100 scale over the weight that was actually available (so a
+  //     dropped memory axis neither rewards nor punishes the candidate) ---
+  let earned = 0, available = 0;
+  [["vcpu", W.vcpu], ["mem", W.mem], ["cat", W.cat]].forEach(([k, w]) => {
+    if (parts[k] == null) return;          // axis dropped — excluded entirely
+    earned += parts[k];
+    available += w;
+  });
+  const base = available > 0 ? (earned / available) * 100 : 0;
+
+  // --- architecture: a multiplicative near-gate, not an additive delta ---
+  const archOk = src.arch === cand.arch;
+  const archMul = archOk ? 1 : ARCH_FACTOR;
+  why.push({
+    k: archOk
+      ? "Arch " + archLabel(cand.arch)
+      : "Arch differs → " + archLabel(cand.arch) + " (×" + ARCH_FACTOR + ")",
+    cls: archOk ? "good" : "bad",
+  });
+
+  const score = base * archMul;
+
+  return { score, parts, why, memScored: memKnown, archOk };
+}
+
+function tierOf(score) {
+  if (score >= 85) return "high";
+  if (score >= 65) return "mid";
+  return "low";
+}
+
+// for a chosen source, rank every other cloud's catalogue
+function findEquivalents(src, srcCloud) {
+  const out = {};
+  CLOUD_ORDER.forEach((cid) => {
+    if (cid === srcCloud) return;
+    const list = (state.data[cid] || [])
+      .filter((c) => c.v != null)               // need at least vCPU to score
+      .map((c) => {
+        const r = scoreCandidate(src, c);
+        return { inst: c, ...r };
+      })
+      // rank by score; on a tie prefer the candidate whose memory was
+      // actually scored (a full match outranks one with the memory axis
+      // dropped), then the closer vCPU, then a stable name order.
+      .sort((a, b) =>
+        b.score - a.score ||
+        (b.memScored - a.memScored) ||
+        Math.abs(a.inst.v - src.v) - Math.abs(b.inst.v - src.v) ||
+        a.inst.n.localeCompare(b.inst.n)
+      );
+    out[cid] = list;
+  });
+  return out;
+}
+
+// ─── Rendering ───
+function buildTypeSelect() {
+  const sel = $("#fnd-type");
+  const cloud = state.cloud;
+  sel.innerHTML = '<option value="">Select an instance type…</option>';
+  // a source must have a known vCPU count — otherwise it can't be scored
+  // against (the dominant axis would be missing). Such SKUs (e.g. GCP
+  // shared-core e2-micro, OCI/OVH bare-metal without published specs) are
+  // kept out of the source picker rather than offered as dead choices.
+  const list = (state.data[cloud] || []).filter((it) => it.v != null);
+  if (!list.length) {
+    sel.disabled = true;
+    return;
+  }
+  sel.disabled = false;
+
+  // group by category, ordered, then by vCPU then name
+  const order = ["general", "compute", "memory", "storage", "accelerated", "hpc", "baremetal", "confidential", "macos"];
+  const byCat = {};
+  list.forEach((it) => { (byCat[it.cat] = byCat[it.cat] || []).push(it); });
+
+  const cats = Object.keys(byCat).sort((a, b) => {
+    const ia = order.indexOf(a), ib = order.indexOf(b);
+    return (ia < 0 ? 99 : ia) - (ib < 0 ? 99 : ib);
+  });
+
+  cats.forEach((cat) => {
+    const og = document.createElement("optgroup");
+    og.label = (CAT_LABEL[cat] || cat).toUpperCase();
+    byCat[cat]
+      .sort((a, b) => (a.v || 0) - (b.v || 0) || a.n.localeCompare(b.n))
+      .forEach((it) => {
+        const o = document.createElement("option");
+        o.value = keyOf(cloud, it);
+        const specBits = [];
+        if (it.v != null) specBits.push(it.v + " vCPU");
+        if (it.m != null) specBits.push(fmtMem(it.m));
+        o.textContent = it.n + (specBits.length ? "  ·  " + specBits.join(" / ") : "");
+        og.appendChild(o);
+      });
+    sel.appendChild(og);
+  });
+}
+
+function instByKey(key) {
+  if (!key) return null;
+  const [cid] = key.split("::");
+  return (state.data[cid] || []).find((it) => keyOf(cid, it) === key) || null;
+}
+
+function renderSourceCard(src, cloudId) {
+  const meta = CLOUD_META[cloudId];
+  const specs = [];
+  specs.push(`<span class="spec">vCPU<strong>${src.v != null ? src.v : "—"}</strong></span>`);
+  specs.push(src.m != null
+    ? `<span class="spec">Memory<strong>${fmtMem(src.m)}</strong></span>`
+    : `<span class="spec spec--na">Memory<strong>n/d</strong></span>`);
+  specs.push(`<span class="spec">Arch<strong>${archLabel(src.arch)}</strong></span>`);
+  specs.push(`<span class="spec">Class<strong>${esc(CAT_LABEL[src.cat] || src.cat)}</strong></span>`);
+  if (src.vd) specs.push(`<span class="spec">CPU<strong>${esc(src.vd)}</strong></span>`);
+
+  return `
+    <div class="source-card fade-in">
+      <span class="source-card__badge cloud-${cloudId} bd-${cloudId}">Source · ${esc(meta.short)}</span>
+      <div class="source-card__main">
+        <div class="source-card__name">${esc(src.n)}</div>
+        ${src.d ? `<div class="source-card__desc">${esc(src.d)}</div>` : ""}
+        <div class="source-card__specs">${specs.join("")}</div>
+      </div>
+    </div>`;
+}
+
+function renderWhy(why) {
+  return why.map((w) =>
+    `<span class="why why--${w.cls}">${esc(w.k)}</span>`
+  ).join("");
+}
+
+function renderMatch(entry, rank) {
+  const inst = entry.inst;
+  const score = Math.round(entry.score);
+  const tier = tierOf(entry.score);
+  const isTop = rank === 0;
+  return `
+    <div class="match${isTop ? " is-top" : ""}">
+      <div class="match__head">
+        <span class="match__rank">${String(rank + 1).padStart(2, "0")}</span>
+        <div class="match__name">${esc(inst.n)}${isTop ? '<span class="match__badge">Closest</span>' : ""}</div>
+        <div class="match__score tier-${tier}">${score}<span class="match__score-unit">/ 100</span></div>
+      </div>
+      <div class="match__bar"><span class="tier-${tier}" style="width:${Math.max(3, score)}%"></span></div>
+      <div class="match__why">${renderWhy(entry.why)}</div>
+    </div>`;
+}
+
+function renderCloudBlock(cloudId, ranked) {
+  const meta = CLOUD_META[cloudId];
+  const top = ranked.slice(0, TOP_N);
+  let body;
+  if (!top.length) {
+    body = `<div class="cloud-block__none">No scorable instance types in this catalogue.</div>`;
+  } else {
+    body = top.map((e, i) => renderMatch(e, i)).join("");
+    if (ranked.length > TOP_N) {
+      body += `<div class="cloud-block__more">+ ${ranked.length - TOP_N} more types scored, lower</div>`;
+    }
+  }
+  return `
+    <section class="cloud-block fade-in">
+      <div class="cloud-block__head">
+        <span class="cloud-block__label cloud-${cloudId}">
+          <span class="cloud-block__swatch sw-${cloudId}"></span>${esc(meta.label)}
+        </span>
+        <a class="cloud-block__link" href="/${meta.slug}/">Open ${esc(meta.short)} catalogue →</a>
+      </div>
+      <div class="cloud-block__body">${body}</div>
+    </section>`;
+}
+
+function render() {
+  const meta = $("#result-meta");
+  const results = $("#sku-results");
+  const src = instByKey(state.typeKey);
+  const swapBtn = $("#fnd-swap");
+  const clearBtn = $("#fnd-clear");
+
+  if (!src) {
+    $("#source-mount").innerHTML = "";
+    meta.hidden = true;
+    swapBtn.disabled = true;
+    clearBtn.hidden = true;
+    results.innerHTML = `
+      <div class="placeholder">
+        <div class="placeholder__title">Pick a source instance type.</div>
+        <div class="placeholder__sub">The finder ranks the closest type on every other cloud.</div>
+      </div>`;
+    return;
+  }
+
+  const srcCloud = state.typeKey.split("::")[0];
+  $("#source-mount").innerHTML = renderSourceCard(src, srcCloud);
+
+  const equiv = findEquivalents(src, srcCloud);
+  const blocks = CLOUD_ORDER
+    .filter((c) => c !== srcCloud)
+    .map((c) => renderCloudBlock(c, equiv[c] || []));
+
+  meta.hidden = false;
+  $("#result-title").innerHTML = `Equivalents of <em>${esc(src.n)}</em>`;
+  $("#result-count").textContent = blocks.length;
+  clearBtn.hidden = false;
+
+  results.innerHTML = `<div class="cloud-grid">${blocks.join("")}</div>`;
+
+  // pivot target = best top-1 across all clouds
+  let bestKey = "", bestScore = -1;
+  CLOUD_ORDER.forEach((c) => {
+    if (c === srcCloud) return;
+    const t = (equiv[c] || [])[0];
+    if (t && t.score > bestScore) { bestScore = t.score; bestKey = keyOf(c, t.inst); }
+  });
+  swapBtn.disabled = !bestKey;
+  swapBtn.dataset.target = bestKey;
+}
+
+// ─── Events ───
+function onCloudChange() {
+  state.cloud = $("#fnd-cloud").value;
+  state.typeKey = "";
+  buildTypeSelect();
+  $("#fnd-type").value = "";
+  syncHash();
+  render();
+}
+
+function onTypeChange() {
+  state.typeKey = $("#fnd-type").value;
+  syncHash();
+  render();
+}
+
+function clearSelection() {
+  state.typeKey = "";
+  $("#fnd-type").value = "";
+  syncHash();
+  render();
+}
+
+function pivotToTop() {
+  const target = $("#fnd-swap").dataset.target;
+  if (!target) return;
+  const [cid] = target.split("::");
+  state.cloud = cid;
+  $("#fnd-cloud").value = cid;
+  buildTypeSelect();
+  state.typeKey = target;
+  $("#fnd-type").value = target;
+  syncHash();
+  render();
+  // keep the new source in view
+  const sc = $(".source-card");
+  if (sc && sc.scrollIntoView) sc.scrollIntoView({ behavior: "smooth", block: "center" });
+}
+
+// ─── Deep-linking via hash (#aws/m7i.2xlarge) ───
+function syncHash() {
+  if (state.typeKey) {
+    const [cid, ...rest] = state.typeKey.split("::");
+    location.replace("#" + cid + "/" + encodeURIComponent(rest.join("::")));
+  } else if (location.hash) {
+    location.replace("#");
+  }
+}
+
+function applyHash() {
+  const h = decodeURIComponent((location.hash || "").replace(/^#/, ""));
+  if (!h || h.indexOf("/") < 0) return;
+  const slash = h.indexOf("/");
+  const cid = h.slice(0, slash);
+  const name = h.slice(slash + 1);
+  if (!CLOUD_META[cid] || !state.data[cid]) return;
+  const inst = (state.data[cid]).find((it) => it.n === name);
+  if (!inst || inst.v == null) return;   // need a scorable source
+  state.cloud = cid;
+  $("#fnd-cloud").value = cid;
+  buildTypeSelect();
+  state.typeKey = keyOf(cid, inst);
+  $("#fnd-type").value = state.typeKey;
+}
+
+// ─── Data load — fetch each instrument's data.json, fall back to snapshot ───
+function gcpVcpuFromName(name) {
+  // GCP's machine-type naming encodes vCPU in the trailing integer
+  // (e.g. n4-standard-8 → 8). Shared-core legacy types have fractional
+  // vCPU, so they are left unscored rather than guessed.
+  if (/^(e2-(micro|small|medium)|f1-micro|g1-small)$/.test(name)) return null;
+  const m = name.match(/-(\d+)$/);
+  return m ? parseInt(m[1], 10) : null;
+}
+
+const CAT_NORM = {
+  general: "general", compute: "compute", memory: "memory", storage: "storage",
+  accelerated: "accelerated", hpc: "hpc", macos: "macos",
+  baremetal: "baremetal", confidential: "confidential",
+};
+
+// turn a fetched data.json (families[] with sizes/specs) into a flat
+// instance list shaped exactly like SKU_FALLBACK entries
+function flattenCatalogue(cloudId, json) {
+  if (!json || !Array.isArray(json.families)) return null;
+  const out = [];
+  json.families.forEach((fam) => {
+    const famKey = fam.key;
+    const cat = CAT_NORM[fam.cat] || fam.cat || "general";
+    const arch = fam.arch || "x86";
+    const vendor = fam.vendor || "";
+    const desc = fam.desc || "";
+    const specs = fam.specs || {};
+    (fam.sizes || []).forEach((sz) => {
+      const sp = specs[sz] || {};
+      let name, v, m;
+      if (cloudId === "aws") {
+        name = famKey + "." + sz;
+        v = sp.vcpu != null ? sp.vcpu : null;
+        m = sp.mem != null ? sp.mem : null;
+      } else if (cloudId === "gcp") {
+        name = sz;
+        v = gcpVcpuFromName(sz);
+        m = sp.mem != null ? sp.mem : null;   // GCP dataset carries no memory
+      } else if (cloudId === "oci") {
+        name = (/OCPUs?$/.test(sz)) ? (famKey + " · " + sz) : sz;
+        v = sp.vcpu != null ? sp.vcpu : null;
+        m = sp.mem != null ? sp.mem : null;
+      } else {
+        name = sz;
+        v = sp.vcpu != null ? sp.vcpu : null;
+        m = sp.mem != null ? sp.mem : null;
+      }
+      out.push({ n: name, fam: famKey, cat, arch, v, m, vd: vendor, d: desc });
+    });
+  });
+  return out.length ? out : null;
+}
+
+async function loadData() {
+  const data = {};
+  CLOUD_ORDER.forEach((c) => { data[c] = SKU_FALLBACK[c].slice(); });
+  let freshCount = 0;
+  let latest = SNAPSHOT_DATE;
+
+  const results = await Promise.allSettled(
+    CLOUD_ORDER.map(async (cid) => {
+      const res = await fetch("/" + CLOUD_META[cid].slug + "/data.json", { cache: "no-cache" });
+      if (!res.ok) throw new Error(res.status);
+      const json = await res.json();
+      return { cid, json };
+    })
+  );
+
+  results.forEach((r) => {
+    if (r.status !== "fulfilled") return;
+    const flat = flattenCatalogue(r.value.cid, r.value.json);
+    if (flat) {
+      data[r.value.cid] = flat;
+      freshCount++;
+      const g = r.value.json.generated;
+      if (g && g > latest) latest = g;
+    }
+  });
+
+  state.data = data;
+  state.loaded = true;
+
+  // status line
+  const total = CLOUD_ORDER.reduce((n, c) => n + data[c].length, 0);
+  $("#count-types").textContent = total.toLocaleString("en-US");
+  const live = freshCount === CLOUD_ORDER.length;
+  $("#status-text").textContent = freshCount === 0
+    ? "Snapshot · embedded"
+    : live ? "Live · data.json" : "Partial · " + freshCount + "/5 live";
+  const d = new Date(latest);
+  if (!isNaN(d)) {
+    const day = d.toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric" });
+    const time = d.toLocaleTimeString("en-GB", { hour: "2-digit", minute: "2-digit", timeZone: "UTC" });
+    $("#status-time").textContent = day + " · " + time + " UTC";
+  } else {
+    $("#status-time").textContent = "snapshot";
+  }
+}
+
+// ─── Keyboard shortcuts ───
+function onKey(e) {
+  if (e.metaKey || e.ctrlKey || e.altKey) return;
+  const tag = (e.target.tagName || "").toLowerCase();
+  const typing = tag === "input" || tag === "textarea";
+  if (e.key === "Escape") {
+    if (state.typeKey) { clearSelection(); }
+    else if (document.activeElement && document.activeElement.blur) document.activeElement.blur();
+    return;
+  }
+  if (typing || tag === "select") return;
+  const k = e.key.toLowerCase();
+  if (k === "c") { e.preventDefault(); $("#fnd-cloud").focus(); }
+  else if (k === "t") { e.preventDefault(); $("#fnd-type").focus(); }
+  else if (k === "p") {
+    const sw = $("#fnd-swap");
+    if (sw && !sw.disabled) { e.preventDefault(); pivotToTop(); }
+  }
+}
+
+// ─── Init ───
+(async () => {
+  await loadData();
+  // controls
+  $("#fnd-cloud").addEventListener("change", onCloudChange);
+  $("#fnd-type").addEventListener("change", onTypeChange);
+  $("#fnd-clear").addEventListener("click", clearSelection);
+  $("#fnd-swap").addEventListener("click", pivotToTop);
+  document.addEventListener("keydown", onKey);
+  window.addEventListener("hashchange", () => {
+    const before = state.typeKey;
+    applyHash();
+    if (state.typeKey !== before) render();
+  });
+
+  // first paint
+  state.cloud = $("#fnd-cloud").value || "aws";
+  buildTypeSelect();
+  applyHash();
+  $("#fnd-cloud").value = state.cloud;
+  if (state.typeKey) $("#fnd-type").value = state.typeKey;
+  render();
+})();
+</script>
+
+<script src="/nav.js" defer></script>
+</body>
+</html>
