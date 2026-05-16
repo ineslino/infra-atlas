@@ -56,5 +56,9 @@ The landing page says the cloud-compute instruments "refresh daily from public d
 
 Not "fix a big AWS bug" (there isn't one) but:
 1. **0d** — correct the 3 real drifts (Azure swap, OCI Casablanca, OVH Mumbai) and add a **drift guard** that compares site region counts/codes to a reference and fails loudly.
-2. **0e** — a written **inclusion policy** (`docs/data-policy.md`) so "commercial only" is a documented decision and "34 vs 39" can't be re-litigated.
-3. On-site: a scope label ("34 commercial regions") and honest per-instrument refresh wording.
+2. **0e** — a written **inclusion policy** (`docs/data-policy.md`) so the region-inclusion scope is a documented decision and "34 vs 39" can't be re-litigated.
+3. On-site: regions labelled by partition scope, and honest per-instrument refresh wording.
+
+> Outcome (2026-05-16): the policy decision was to show **all partitions** — the
+> Region Map now lists AWS 39, Azure 67, OCI 55, each gated region labelled by
+> scope. See `docs/data-policy.md` and `../report.md`.

@@ -6,6 +6,12 @@ rather than guessed.
 
 ## Headline finding — the site disagrees with *itself*
 
+> Snapshot note (Phase 0c, 2026-05-16): the `regions` map column below predates
+> the Phase 0d fixes and the all-partitions decision — that instrument is now
+> AWS 39 / Azure 67 / GCP 43 / OCI 55 / OVH 15. The cross-instrument divergence
+> this table documents still holds (and is wider now, since the compute
+> instruments remain commercial-only). See `report.md` / `docs/data-policy.md`.
+
 Every instrument stores its own region list. They were never cross-checked, so
 they have drifted apart. Same root cause as Phase 0b (no guard), now visible as
 **instrument-to-instrument inconsistency**:
