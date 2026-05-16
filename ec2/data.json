@@ -1,5 +1,5 @@
 {
-  "generated": "2026-05-15T11:14:28Z",
+  "generated": "2026-05-16T08:13:21Z",
   "source": "ec2instances.info (Vantage) — public dataset, no credentials",
   "regions": [
     {
@@ -4597,6 +4597,20 @@
       ]
     },
     {
+      "key": "mac-m3ultra",
+      "cat": "macos",
+      "arch": "arm",
+      "vendor": "Apple",
+      "desc": "Apple silicon M3 Ultra",
+      "sizes": [
+        "metal"
+      ],
+      "in": [
+        "us-east-1",
+        "us-west-2"
+      ]
+    },
+    {
       "key": "mac-m4",
       "cat": "macos",
       "arch": "arm",
@@ -6911,6 +6925,7 @@
         "eu-south-1",
         "eu-south-2",
         "eu-west-1",
+        "eu-west-3",
         "sa-east-1",
         "us-east-1",
         "us-east-2",
@@ -6992,6 +7007,7 @@
         "eu-central-1",
         "eu-west-1",
         "eu-west-2",
+        "eu-west-3",
         "us-east-1",
         "us-east-2",
         "us-west-2"
@@ -7265,6 +7281,7 @@
         "ap-northeast-2",
         "ap-south-1",
         "eu-north-1",
+        "eu-west-1",
         "us-west-2"
       ]
     },
