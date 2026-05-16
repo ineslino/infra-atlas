@@ -1,5 +1,5 @@
 {
-  "generated": "2026-05-16T20:34:36Z",
+  "generated": "2026-05-16T22:57:40Z",
   "provider": "gcp",
   "regions": [
     {
@@ -281,6 +281,13 @@
       "area": "Asia Pacific",
       "flag": "🇮🇩",
       "since": 2020
+    },
+    {
+      "code": "asia-southeast3",
+      "name": "Bangkok",
+      "area": "Asia Pacific",
+      "flag": "🇹🇭",
+      "since": 2026
     },
     {
       "code": "australia-southeast1",

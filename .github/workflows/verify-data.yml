@@ -66,3 +66,15 @@ jobs:
       # vendor-verified snapshot) so an accidental add/drop/rename fails loudly.
       - name: Check region data against the verified reference
         run: python3 scripts/check_region_drift.py
+
+  landing-stats:
+    name: Landing-page stats vs instrument data
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      # The landing page hard-codes a stat chip per instrument card. They are
+      # hand-typed and drift from the instruments' data.json (lessons.md L6).
+      # This derives the counts and fails if a card chip no longer matches.
+      - name: Check landing-page stat chips match data.json
+        run: python3 scripts/check_landing_stats.py
