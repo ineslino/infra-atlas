@@ -4,7 +4,7 @@ A reference periodical of cloud + API-management infrastructure. Static site
 (HTML/CSS/JS, no build), deployed via GitHub → Cloudflare. 17 pages: landing + 16
 instruments.
 
-## State — 2026-05-16
+## State — 2026-05-17
 
 - **Live & deployed.** `origin/main` == `main`; the live site reflects the repo.
 - **Instruments (16):**
@@ -36,3 +36,15 @@ The earlier UI/UX + functionality + data-accuracy review. Its P0s (footer links,
 EC2 Melbourne data) and accuracy corrections were addressed; the 5 cross-cloud
 instruments were built from its feature shortlist. Residual P2/P3 polish items
 remain logged there.
+
+## Open — marketing & positioning (`tasks/marketing-2026-05/`)
+
+The 2026-05 marketing & positioning audit. Donations-only model; reference class
+is tip-jar OSS (htmx, caniuse, ripgrep, Vantage), not SaaS. **Three blockers
+found:** the repo is private (so "open-source" is currently false and every
+GitHub link 404s), there is no donation surface anywhere, and there is no
+analytics. **Do first, this week:** make the repo public, stand up a Ko-fi page
++ `.github/FUNDING.yml`, and start the Plausible analytics install. Full
+strategy — positioning, growth, donations, measurement, a 13-entry anti-list and
+a weekly 90-day plan — with a 10-minute summary in
+`tasks/marketing-2026-05/report.md`.
