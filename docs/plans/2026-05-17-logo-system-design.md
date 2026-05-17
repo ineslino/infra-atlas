@@ -2,36 +2,36 @@
 
 _Design — 2026-05-17. Status: built._
 
-A full logo system: an **"IA" monogram** mark, the Instrument Serif wordmark,
+A full logo system: a **compass-star** mark, the Instrument Serif wordmark,
 defined lockups, colour variants, sizing rules and a file set — so the identity
 holds from a 16px favicon to a page header, and contributors don't drift it.
 
 ## Decisions
 
-Settled in the 2026-05-17 brainstorm, with one mark revision:
-
 | # | Decision | Choice |
 |---|----------|--------|
 | 1 | Scope | A full logo **system**. |
-| 2 | Mark | An **"IA" monogram** — roman "I" + italic "A", Instrument Serif. *(An earlier contour-rings mark was built and rejected — nested circles read as a generic bullseye.)* |
+| 2 | Mark | An **8-point compass star** — the cartographer's instrument. *(Two earlier marks were built and rejected: a contour-rings mark read as a generic bullseye; an "IA" monogram read as a confusing letter-junction.)* |
 | 3 | Wordmark typeface | **Instrument Serif** — a masthead / nameplate treatment. |
 | 4 | Wordmark expression | "Infra" roman + "Atlas." italic, period kept; **single-colour** — the orange accent lives in the mark only, never the word. |
 
-## 1 · The mark — the "IA" monogram
+## 1 · The mark — the compass star
 
-The mark is a two-letter monogram: a roman **"I"** and an italic **"A"**, set as
-a tight pair in Instrument Serif. It is the system's anchor and the **only**
-element that carries the orange accent (`#FF7849`).
+An **8-point compass star**: four long cardinal points and four short
+intercardinal points, sharp straight edges, solid fill. It is the cartographer's
+instrument — navigation, the compass rose engraved on an atlas — which ties it
+straight to the project's name and voice ("Atlas", "the cartographer"). It is
+the system's anchor and the **only** element that carries the orange accent
+(`#FF7849`).
 
-**Why this construction.** The roman-I / italic-A pairing is the *same move* as
-the wordmark — "Infra" roman, "Atlas." italic. The monogram therefore carries
-the brand's signature typographic device: it is the project's initials in the
-project's own typeface, which makes it ownable rather than generic.
+**Why this mark.** It is unmistakably a compass — simple, sharp, eye-catching —
+and it is *not* the iconography cloud/infra tools default to (clouds, hexagons,
+node-graphs), so it is distinctive in this space. As a solid silhouette it also
+reads cleanly at every size, down to a 16px favicon.
 
-- Built by outlining the "I" (Instrument Serif Regular) and the "A" (Instrument
-  Serif Italic) to vector paths, set ~0.05em apart.
-- Roughly square — ~753 × 730 in a 1000-unit em.
-- No font dependency — the letters ship as outlined paths.
+**Geometry.** 8 points; cardinal tip radius 100, intercardinal tip radius 50,
+inner (valley) radius 28; a 200 × 200 box, one point straight up. Pure vector —
+no font dependency.
 
 ## 2 · The wordmark
 
@@ -49,17 +49,18 @@ project's own typeface, which makes it ownable rather than generic.
 
 Four forms:
 
-1. **Horizontal** (primary) — monogram left, wordmark right, optically centred.
-2. **Stacked** — monogram above, wordmark centred below.
+1. **Horizontal** (primary) — compass star left, wordmark right, optically
+   centred.
+2. **Stacked** — compass star above, wordmark centred below.
 3. **Mark only** — favicon, nav glyph, app icon, Open Collective / GitHub avatar.
 4. **Wordmark only** — running text, or where the mark already appears nearby.
 
-**Built proportions** — monogram height = `M`:
+**Built proportions** — mark height = `M`:
 
-- **Horizontal**: wordmark cap-height `0.52·M`; monogram-to-wordmark gap
-  `0.42·M`; lockup aspect ≈ 4.1 : 1.
-- **Stacked**: wordmark cap-height `0.40·M`; vertical gap `0.24·M`; lockup
-  aspect ≈ 1.22 : 1 (w : h).
+- **Horizontal**: wordmark cap-height `0.46·M`; mark-to-wordmark gap `0.32·M`;
+  lockup aspect ≈ 3.66 : 1.
+- **Stacked**: wordmark cap-height `0.36·M`; vertical gap `0.16·M`; lockup
+  aspect ≈ 1.19 : 1 (w : h).
 
 ## 4 · Clear space
 
@@ -80,10 +81,9 @@ trusted. Same shapes, one colour, never a redraw.
 
 ## 6 · Sizing & the favicon
 
-The monogram **is** the favicon — no separate simplified variant. "IA" stays
-legible down to ~16px; at 16px the high-contrast serif strokes run fine but
-hold. `favicon.svg` (repo root) is the monogram; `favicon-16.png` /
-`favicon-32.png` are raster fallbacks.
+The compass star **is** the favicon — a solid silhouette, legible down to 16px,
+no separate simplified variant needed. `favicon.svg` (repo root) is the star;
+`favicon-16.png` / `favicon-32.png` are raster fallbacks.
 
 | Form | Minimum | Below the minimum |
 |------|---------|-------------------|
@@ -101,14 +101,13 @@ All under `brand/`:
   `apple-touch-icon.png` (180²), `favicon-16.png`, `favicon-32.png`,
   `lockup-horizontal-{ink,paper}.png`, `lockup-stacked-{ink,paper}.png`.
 - **`preview.html`** — a visual contact sheet of the whole system.
-- **`favicon.svg`** (repo root) — the monogram.
+- **`favicon.svg`** (repo root) — the compass star.
 - This spec.
 
 ## 8 · Usage — don'ts
 
 - Don't recolour the wordmark, or move the orange onto the word.
-- Don't restyle the monogram — don't re-pick fonts or change the roman/italic
-  split; it mirrors the wordmark deliberately.
+- Don't restyle the mark — don't change the point count or proportions.
 - Don't place the orange mark on a low-contrast background — use the mono
   variant instead.
 - Don't stretch, rotate, skew, or recompose a lockup.
