@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Infra Atlas — logo system preview</title>
+<style>
+  :root { --ink:#0A0907; --surface:#161310; --paper:#F4EFE6; --accent:#FF7849; --mut:#8a857c; }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--ink); color:var(--paper);
+         font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace; }
+  header { padding:46px 46px 10px; }
+  header h1 { margin:0; font-size:14px; letter-spacing:.2em; text-transform:uppercase; font-weight:700; }
+  header p { margin:7px 0 0; color:var(--mut); font-size:11.5px; letter-spacing:.04em; }
+  section { padding:30px 46px; border-top:1px solid #2a2620; }
+  h2 { font-size:11px; letter-spacing:.17em; text-transform:uppercase; color:var(--mut);
+       font-weight:700; margin:0 0 16px; }
+  .row { display:flex; flex-wrap:wrap; gap:18px; }
+  .item { flex:1; min-width:300px; }
+  .panel { border-radius:10px; padding:44px; display:flex; align-items:center;
+           justify-content:center; gap:34px; min-height:150px; }
+  .panel.ink { background:var(--ink); border:1px solid #2a2620; }
+  .panel.surface { background:var(--surface); border:1px solid #2a2620; }
+  .panel.paper { background:var(--paper); }
+  .panel img { display:block; }
+  .cap { font-size:10.5px; color:#6b665e; margin-top:9px; letter-spacing:.05em; }
+  .fav { display:flex; flex-direction:column; align-items:center; gap:9px; }
+  .fav span { font-size:10px; color:var(--mut); }
+  .note { color:var(--mut); font-size:11.5px; line-height:1.7; }
+</style>
+</head>
+<body>
+<header>
+  <h1>Infra Atlas — Logo System</h1>
+  <p>Preview · 2026-05-17 · spec: docs/plans/2026-05-17-logo-system-design.md</p>
+</header>
+
+<section>
+  <h2>Primary lockup — horizontal</h2>
+  <div class="row">
+    <div class="item">
+      <div class="panel ink"><img src="lockup-horizontal-ink.svg" width="470" alt="horizontal lockup on ink"></div>
+      <div class="cap">on ink — orange monogram + paper wordmark</div>
+    </div>
+    <div class="item">
+      <div class="panel paper"><img src="lockup-horizontal-paper.svg" width="470" alt="horizontal lockup on paper"></div>
+      <div class="cap">on paper — orange monogram + ink wordmark</div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h2>Stacked lockup</h2>
+  <div class="row">
+    <div class="item">
+      <div class="panel ink"><img src="lockup-stacked-ink.svg" width="250" alt="stacked lockup on ink"></div>
+      <div class="cap">on ink</div>
+    </div>
+    <div class="item">
+      <div class="panel paper"><img src="lockup-stacked-paper.svg" width="250" alt="stacked lockup on paper"></div>
+      <div class="cap">on paper</div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h2>The mark &amp; the wordmark</h2>
+  <div class="row">
+    <div class="item">
+      <div class="panel ink"><img src="mark.svg" width="150" alt="IA monogram"></div>
+      <div class="cap">the mark — "IA" monogram, roman I + italic A (Instrument Serif)</div>
+    </div>
+    <div class="item">
+      <div class="panel paper"><img src="wordmark.svg" width="430" alt="wordmark"></div>
+      <div class="cap">wordmark — "Infra" roman + "Atlas." italic, outlined from Instrument Serif</div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h2>Favicon — the monogram at actual pixel sizes</h2>
+  <div class="row">
+    <div class="item">
+      <div class="panel ink">
+        <div class="fav"><img src="mark.svg" width="16" alt=""><span>16 px</span></div>
+        <div class="fav"><img src="mark.svg" width="24" alt=""><span>24 px</span></div>
+        <div class="fav"><img src="mark.svg" width="32" alt=""><span>32 px</span></div>
+        <div class="fav"><img src="mark.svg" width="48" alt=""><span>48 px</span></div>
+      </div>
+      <div class="cap">the monogram is the favicon — no separate simplified variant</div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h2>Mono variant</h2>
+  <div class="row">
+    <div class="item">
+      <div class="panel paper"><img src="lockup-horizontal-mono.svg" width="470" alt="mono lockup"></div>
+      <div class="cap">mono — one ink, no orange (one-colour print, embossing, busy photos)</div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h2>Avatar — Open Collective / GitHub</h2>
+  <div class="row">
+    <div class="item">
+      <div class="panel ink"><img src="avatar.png" width="190" style="border-radius:22px" alt="avatar"></div>
+      <div class="cap">avatar.png · 1024² · the file to upload to Open Collective</div>
+    </div>
+    <div class="item">
+      <p class="note">The mark is the "IA" monogram — roman I + italic A in
+      Instrument Serif, mirroring the wordmark's own roman/italic split. The
+      horizontal lockup is the primary logo; the stacked lockup is for
+      square-ish space; the monogram alone is for favicons, nav and avatars.
+      All SVGs are vector with the letters outlined to paths — no font
+      dependency. Full rules: the spec doc.</p>
+    </div>
+  </div>
+</section>
+</body>
+</html>
