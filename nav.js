@@ -174,13 +174,8 @@
 
   nav.innerHTML =
       '<a class="ia-nav__brand" href="/">'
-    +   '<svg class="ia-nav__glyph" viewBox="0 0 32 32" aria-hidden="true">'
-    +     '<g fill="none" stroke="var(--accent,#FF7849)" stroke-width="2.1">'
-    +       '<circle cx="16" cy="16" r="12.6"/>'
-    +       '<circle cx="14.8" cy="14.8" r="8.3"/>'
-    +       '<circle cx="13.6" cy="13.6" r="4.2"/>'
-    +     '</g>'
-    +     '<circle cx="13.6" cy="13.6" r="2.6" fill="var(--accent,#FF7849)"/>'
+    +   '<svg class="ia-nav__glyph" viewBox="-116 -116 232 232" aria-hidden="true">'
+    +     '<path d="M0.00 -100.00L10.72 -25.87L35.36 -35.36L25.87 -10.72L100.00 -0.00L25.87 10.72L35.36 35.36L10.72 25.87L0.00 100.00L-10.72 25.87L-35.36 35.36L-25.87 10.72L-100.00 0.00L-25.87 -10.72L-35.36 -35.36L-10.72 -25.87Z" fill="var(--accent,#FF7849)"/>'
     +   '</svg>'
     +   '<span class="ia-nav__word">Infra Atlas</span>'
     +   hereHtml
