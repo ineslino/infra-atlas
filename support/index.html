@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="color-scheme" content="dark">
+<title>Support — Infra Atlas</title>
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<meta name="description" content="Infra Atlas is free to read, vendor-neutral, and reader-supported — no ads, no paywall, no accounts. Who runs it, what it costs, and how to support it.">
+<link rel="canonical" href="https://infraatlas.dev/support/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Infra Atlas">
+<meta property="og:title" content="Support — Infra Atlas">
+<meta property="og:description" content="Infra Atlas is free to read, vendor-neutral, and reader-supported — no ads, no paywall, no accounts.">
+<meta property="og:url" content="https://infraatlas.dev/support/">
+<meta property="og:image" content="https://infraatlas.dev/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Support — Infra Atlas">
+<meta name="twitter:description" content="Infra Atlas is free to read, vendor-neutral, and reader-supported.">
+<meta name="twitter:image" content="https://infraatlas.dev/og.png">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@300;400;500;600&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+:root {
+  --ink: #0A0907;
+  --ink-2: #100E0C;
+  --surface: #161310;
+  --surface-2: #1E1A15;
+  --line: rgba(244, 239, 230, 0.06);
+  --line-2: rgba(244, 239, 230, 0.14);
+  --paper: #F4EFE6;
+  --paper-2: rgba(244, 239, 230, 0.66);
+  --paper-3: rgba(244, 239, 230, 0.55);
+  --paper-4: rgba(244, 239, 230, 0.20);
+  --accent: #FF7849;
+  --accent-2: #FFA66E;
+  --accent-glow: rgba(255, 120, 73, 0.22);
+  --mint: #6FE7B5;
+  --serif: 'Instrument Serif', 'Times New Roman', serif;
+  --mono: 'JetBrains Mono', ui-monospace, monospace;
+  --sans: 'Manrope', -apple-system, system-ui, sans-serif;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body {
+  background: var(--ink);
+  color: var(--paper);
+  font-family: var(--sans);
+  font-size: 15px;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  min-height: 100vh;
+}
+
+body {
+  background:
+    radial-gradient(ellipse at 100% -10%, rgba(255, 120, 73, 0.07), transparent 55%),
+    radial-gradient(ellipse at -10% 110%, rgba(124, 215, 241, 0.05), transparent 65%),
+    var(--ink);
+  background-attachment: fixed;
+  overflow-x: hidden;
+}
+
+.grain {
+  pointer-events: none; position: fixed; inset: 0; z-index: 100;
+  opacity: 0.08; mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml;utf8,<svg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.6 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+}
+.scanlines {
+  pointer-events: none; position: fixed; inset: 0; z-index: 99;
+  background: repeating-linear-gradient(180deg, transparent, transparent 2px,
+    rgba(244,239,230,0.012) 2px, rgba(244,239,230,0.012) 3px);
+}
+
+::selection { background: var(--accent); color: var(--ink); }
+
+.corner-mark {
+  position: fixed; width: 28px; height: 28px; z-index: 5;
+  pointer-events: none; opacity: 0.4;
+}
+.corner-mark::before, .corner-mark::after { content: ''; position: absolute; background: var(--paper-3); }
+.corner-mark::before { width: 100%; height: 1px; top: 50%; }
+.corner-mark::after  { width: 1px; height: 100%; left: 50%; }
+.corner-mark.tl { top: 28px; left: 28px; }
+.corner-mark.tr { top: 28px; right: 28px; }
+.corner-mark.bl { bottom: 28px; left: 28px; }
+.corner-mark.br { bottom: 28px; right: 28px; }
+
+.page { max-width: 1120px; margin: 0 auto; padding: 64px 56px 96px; position: relative; }
+
+/* ─────────────── TOP RULE ─────────────── */
+.top-rule {
+  display: flex; justify-content: space-between; align-items: center;
+  padding-bottom: 18px; border-bottom: 1px solid var(--line);
+  font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.2em;
+  text-transform: uppercase; color: var(--paper-3);
+}
+.top-rule__mark { display: flex; align-items: center; gap: 10px; color: var(--paper); font-weight: 500; }
+.top-rule__mark-glyph { width: 19px; height: 19px; display: block; }
+.top-rule__center { text-align: center; }
+.top-rule__note { color: var(--paper-3); }
+@media (max-width: 720px) { .top-rule__center, .top-rule__note { display: none; } }
+
+/* ─────────────── MASTHEAD ─────────────── */
+.mast { padding: 76px 0 64px; border-bottom: 1px solid var(--line); }
+.mast__eyebrow {
+  font-family: var(--mono); font-size: 11px; letter-spacing: 0.22em;
+  text-transform: uppercase; color: var(--accent);
+  display: flex; align-items: center; gap: 14px; margin-bottom: 26px;
+}
+.mast__eyebrow::before { content: ''; width: 28px; height: 1px; background: var(--accent); }
+.mast__title {
+  font-family: var(--serif); font-weight: 400;
+  font-size: clamp(48px, 7vw, 108px); line-height: 0.92;
+  letter-spacing: -0.025em; color: var(--paper);
+}
+.mast__title em { font-style: italic; color: var(--accent); }
+.mast__lead {
+  max-width: 640px; margin-top: 30px;
+  font-size: 18px; line-height: 1.6; color: var(--paper-2);
+}
+
+/* ─────────────── ESSAY ─────────────── */
+.essay {
+  display: grid; grid-template-columns: 200px 1fr; gap: 64px;
+  padding: 72px 0; border-bottom: 1px solid var(--line);
+}
+.essay__label {
+  font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.2em;
+  text-transform: uppercase; color: var(--paper-3);
+  display: flex; flex-direction: column; gap: 6px;
+}
+.essay__label strong {
+  font-family: var(--serif); font-style: italic; font-size: 17px;
+  letter-spacing: 0; text-transform: none; color: var(--paper); font-weight: 400;
+}
+.essay__body { max-width: 660px; }
+.essay__body p {
+  font-size: 18px; line-height: 1.66; color: var(--paper);
+  margin-bottom: 20px; font-weight: 300;
+}
+.essay__body p:last-child { margin-bottom: 0; color: var(--paper-2); font-size: 16px; }
+.essay__body em { font-family: var(--serif); font-style: italic; font-size: 1.12em; color: var(--paper); }
+.essay__body .dropcap {
+  font-family: var(--serif); font-size: 86px; line-height: 0.82;
+  float: left; margin: 6px 13px 0 -2px; color: var(--accent);
+  font-style: italic; font-weight: 400;
+}
+
+/* ─────────────── GIVE ─────────────── */
+.give { padding: 72px 0; border-bottom: 1px solid var(--line); }
+.give__card {
+  border: 1px solid var(--line-2); border-radius: 12px;
+  background: var(--surface);
+  background-image: radial-gradient(ellipse at 50% -10%, var(--accent-glow), transparent 62%);
+  padding: 56px 48px; text-align: center;
+}
+.give__kicker {
+  font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.22em;
+  text-transform: uppercase; color: var(--accent); margin-bottom: 16px;
+}
+.give__title {
+  font-family: var(--serif); font-weight: 400; font-size: 40px;
+  line-height: 1.04; letter-spacing: -0.02em; color: var(--paper);
+}
+.give__title em { font-style: italic; color: var(--accent); }
+.give__line {
+  max-width: 440px; margin: 18px auto 30px;
+  font-size: 15px; line-height: 1.6; color: var(--paper-2);
+}
+.give__btn {
+  display: inline-flex; align-items: center; gap: 11px;
+  font-family: var(--mono); font-size: 13px; letter-spacing: 0.1em;
+  text-transform: uppercase; font-weight: 500;
+  color: var(--ink); background: var(--accent);
+  border-radius: 99px; padding: 17px 32px; text-decoration: none;
+  transition: background 0.15s ease, transform 0.15s ease;
+}
+.give__btn span { transition: transform 0.15s ease; }
+.give__btn:hover { background: var(--accent-2); transform: translateY(-1px); }
+.give__btn:hover span { transform: translateX(3px); }
+.give__note {
+  margin-top: 24px; font-family: var(--mono); font-size: 11px;
+  letter-spacing: 0.04em; color: var(--paper-3); line-height: 1.6;
+}
+
+/* ─────────────── LEDGER ─────────────── */
+.ledger {
+  display: grid; grid-template-columns: 200px 1fr; gap: 64px;
+  padding: 72px 0 0;
+}
+.ledger__label {
+  font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.2em;
+  text-transform: uppercase; color: var(--paper-3);
+  display: flex; flex-direction: column; gap: 6px;
+}
+.ledger__label strong {
+  font-family: var(--serif); font-style: italic; font-size: 17px;
+  letter-spacing: 0; text-transform: none; color: var(--paper); font-weight: 400;
+}
+.ledger__cols { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; }
+.ledger__col h4 {
+  font-family: var(--mono); font-size: 10px; letter-spacing: 0.16em;
+  text-transform: uppercase; color: var(--paper-2); font-weight: 500;
+  padding-bottom: 14px; margin-bottom: 16px; border-bottom: 1px solid var(--line);
+}
+.ledger__list { list-style: none; }
+.ledger__list li {
+  position: relative; padding-left: 22px; margin-bottom: 14px;
+  font-size: 14.5px; line-height: 1.6; color: var(--paper-2);
+}
+.ledger__list li::before {
+  content: ''; position: absolute; left: 0; top: 9px;
+  width: 9px; height: 1px; background: var(--accent);
+}
+.ledger__col--not .ledger__list li::before { background: var(--paper-4); }
+.ledger__note {
+  grid-column: 2; margin-top: 28px; padding-top: 24px;
+  border-top: 1px solid var(--line);
+  font-family: var(--serif); font-style: italic; font-size: 19px;
+  line-height: 1.5; color: var(--paper-3);
+}
+.ledger__note em { color: var(--paper); font-style: italic; }
+
+/* ─────────────── COLOPHON ─────────────── */
+.colophon {
+  display: grid; grid-template-columns: 200px 1fr 1fr 1fr; gap: 40px;
+  padding: 64px 0 32px; margin-top: 72px; border-top: 1px solid var(--line);
+}
+.colophon__head {
+  font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.2em;
+  text-transform: uppercase; color: var(--paper-3);
+}
+.colophon__head strong {
+  font-family: var(--serif); font-style: italic; font-size: 18px;
+  color: var(--paper); font-weight: 400; letter-spacing: 0;
+  text-transform: none; display: block; margin-bottom: 4px;
+}
+.colophon__col h5 {
+  font-family: var(--mono); font-size: 10px; letter-spacing: 0.2em;
+  text-transform: uppercase; color: var(--paper-2); font-weight: 500; margin-bottom: 12px;
+}
+.colophon__col p { font-size: 14px; line-height: 1.6; color: var(--paper-3); }
+.colophon__col p a {
+  color: var(--paper-2); text-decoration: underline;
+  text-decoration-color: var(--line-2); text-underline-offset: 3px;
+  transition: color 0.15s ease;
+}
+.colophon__col p a:hover { color: var(--accent); }
+
+.signature {
+  margin-top: 56px; text-align: center;
+  font-family: var(--serif); font-style: italic; font-size: 22px;
+  color: var(--paper-3); letter-spacing: -0.01em;
+}
+.signature::before, .signature::after {
+  content: '✦'; margin: 0 12px; color: var(--accent);
+  font-size: 14px; vertical-align: middle; font-style: normal;
+}
+.signature span { color: var(--paper); }
+
+a:focus-visible, button:focus-visible, [tabindex]:focus-visible {
+  outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 2px;
+}
+
+@media (max-width: 980px) {
+  .page { padding: 36px 24px 64px; }
+  .corner-mark { display: none; }
+  .mast { padding: 52px 0 44px; }
+  .essay, .ledger { grid-template-columns: 1fr; gap: 28px; padding: 52px 0; }
+  .ledger { padding-bottom: 0; }
+  .ledger__cols { grid-template-columns: 1fr; gap: 32px; }
+  .ledger__note { grid-column: 1; }
+  .give { padding: 52px 0; }
+  .give__card { padding: 40px 24px; }
+  .give__title { font-size: 32px; }
+  .colophon { grid-template-columns: 1fr; gap: 28px; }
+}
+</style>
+</head>
+<body>
+
+<div class="grain"></div>
+<div class="scanlines"></div>
+<div class="corner-mark tl"></div>
+<div class="corner-mark tr"></div>
+<div class="corner-mark bl"></div>
+<div class="corner-mark br"></div>
+
+<div class="page">
+
+  <div class="top-rule">
+    <div class="top-rule__mark">
+      <svg class="top-rule__mark-glyph" viewBox="0 0 32 32" aria-hidden="true">
+        <g fill="none" stroke="var(--accent)" stroke-width="2.1">
+          <circle cx="16" cy="16" r="12.6"/>
+          <circle cx="14.8" cy="14.8" r="8.3"/>
+          <circle cx="13.6" cy="13.6" r="4.2"/>
+        </g>
+        <circle cx="13.6" cy="13.6" r="2.6" fill="var(--accent)"/>
+      </svg>
+      Infra Atlas
+    </div>
+    <div class="top-rule__center">Issue No. 01 · On the upkeep of the atlas</div>
+    <div class="top-rule__note">€0 to read</div>
+  </div>
+
+  <main id="ia-main">
+
+    <!-- ───────── MASTHEAD ───────── -->
+    <section class="mast">
+      <div class="mast__eyebrow">On keeping it free</div>
+      <h1 class="mast__title">Support <em>the atlas.</em></h1>
+      <p class="mast__lead">
+        Infra Atlas is free to read, vendor-neutral, and beholden to nobody — because
+        nobody pays for a place in it. That independence costs a little to keep. If the
+        atlas has saved you time, you can help cover it.
+      </p>
+    </section>
+
+    <!-- ───────── ESSAY ───────── -->
+    <section class="essay">
+      <div class="essay__label">
+        <strong>The ask</strong>
+        <span>From the cartographer</span>
+      </div>
+      <div class="essay__body">
+        <p>
+          <span class="dropcap">I</span>nfra Atlas is made by one person, in the evenings,
+          in the EU. No investors, no ads, no vendor money, and nothing to sell you — which
+          is the whole point: with nothing to sell, nothing pulls the data off-true.
+        </p>
+        <p>
+          It does cost a little to run — a domain, hosting, and the privacy-respecting
+          analytics that keep it measurable. If the atlas saved you a morning of grepping
+          vendor documentation across five open tabs, you can cover a slice of that.
+        </p>
+        <p>
+          There is no paywall, and there never will be. <em>€0 to read, always.</em> A tip
+          is a thank-you, not a toll — give once if the atlas earned it, and nothing if it
+          didn't.
+        </p>
+      </div>
+    </section>
+
+    <!-- ───────── GIVE ───────── -->
+    <section class="give">
+      <div class="give__card">
+        <div class="give__kicker">The tip jar</div>
+        <h2 class="give__title">Support <em>Infra Atlas.</em></h2>
+        <p class="give__line">
+          A one-off contribution through Ko-fi. No account needed, no recurring charge —
+          pay what the atlas was worth to you.
+        </p>
+        <a class="give__btn" href="https://ko-fi.com/infraatlas" target="_blank"
+           rel="noopener" data-ia-cta="support_page">
+          Support via Ko-fi <span>&rarr;</span>
+        </a>
+        <p class="give__note">
+          A recurring option with a public expense ledger — Open Collective —<br>
+          is opening soon, once its fiscal host approves the collective.
+        </p>
+      </div>
+    </section>
+
+    <!-- ───────── LEDGER ───────── -->
+    <section class="ledger">
+      <div class="ledger__label">
+        <strong>The honest part</strong>
+        <span>Where it goes</span>
+      </div>
+      <div class="ledger__cols">
+        <div class="ledger__col ledger__col--for">
+          <h4>What your support pays for</h4>
+          <ul class="ledger__list">
+            <li>The domain and the hosting bill.</li>
+            <li>Privacy-respecting analytics — cookieless, no third-party tracking.</li>
+            <li>A coffee for the evenings spent keeping the data current.</li>
+          </ul>
+        </div>
+        <div class="ledger__col ledger__col--not">
+          <h4>What it will never pay for</h4>
+          <ul class="ledger__list">
+            <li>A paywall. The atlas is €0 to read, always.</li>
+            <li>Tiers, perks or "supporter" features — it stays a plain tip jar.</li>
+            <li>A vendor's place in the data. Neutrality is not for sale.</li>
+          </ul>
+        </div>
+        <p class="ledger__note">
+          Donations cover running costs and a coffee — <em>not a salary</em>. That is the
+          honest size of it, and it is enough.
+        </p>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ───────── COLOPHON ───────── -->
+  <footer class="colophon">
+    <div class="colophon__head">
+      <strong>Colophon</strong>
+      Issue No. 01 · 2026
+    </div>
+    <div class="colophon__col">
+      <h5>The Atlas</h5>
+      <p>An open reference for the infrastructure stack. Built and maintained by independent engineers who got tired of grepping vendor documentation across five tabs.</p>
+    </div>
+    <div class="colophon__col">
+      <h5>Free to read</h5>
+      <p>Every instrument is €0 to read, with no ads, no accounts and no trackers. Donations cover the running costs — nothing is ever placed behind them.</p>
+    </div>
+    <div class="colophon__col">
+      <h5>Contribute</h5>
+      <p>Source is MIT-licensed on <a href="https://github.com/ineslino/infra-atlas" target="_blank" rel="noopener">GitHub</a>. Spotted something wrong? <a href="https://github.com/ineslino/infra-atlas/issues/new" target="_blank" rel="noopener">Open an issue</a>. Want to ship an instrument? <a href="https://github.com/ineslino/infra-atlas/blob/main/CONTRIBUTING.md" target="_blank" rel="noopener">Read the contributor guide</a>.</p>
+    </div>
+  </footer>
+
+  <div class="signature">A publication maintained at <span>infraatlas.dev</span></div>
+
+</div>
+
+<script src="/nav.js" defer></script>
+</body>
+</html>

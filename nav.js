@@ -129,7 +129,36 @@
     + 'color:var(--ink,#0A0907);font-family:var(--mono,monospace);font-size:12px;font-weight:600;'
     + 'letter-spacing:0.04em;padding:9px 16px;border-radius:5px;text-decoration:none;'
     + 'transform:translateY(-160%);transition:transform .15s;}'
-    + '.ia-skip:focus{transform:translateY(0);}';
+    + '.ia-skip:focus{transform:translateY(0);}'
+    /* donation surface — gratitude module + footer support strip */
+    + '.ia-grat{margin:56px 0 4px;}'
+    + '.ia-grat__in{display:flex;align-items:center;justify-content:space-between;'
+    + 'gap:26px;flex-wrap:wrap;border:1px solid var(--line-2,rgba(244,239,230,0.14));'
+    + 'border-radius:10px;background:var(--surface,#161310);padding:26px 30px;}'
+    + '.ia-grat__kick{font-family:var(--mono,monospace);font-size:10px;'
+    + 'letter-spacing:0.18em;text-transform:uppercase;color:var(--accent,#FF7849);'
+    + 'margin-bottom:9px;}'
+    + '.ia-grat__txt p{font-family:var(--sans,sans-serif);font-size:14px;'
+    + 'line-height:1.6;color:var(--paper-2,rgba(244,239,230,0.66));'
+    + 'max-width:600px;margin:0;}'
+    + '.ia-grat__cta{flex:none;display:inline-flex;align-items:center;gap:9px;'
+    + 'font-family:var(--mono,monospace);font-size:11px;letter-spacing:0.12em;'
+    + 'text-transform:uppercase;font-weight:500;color:var(--ink,#0A0907);'
+    + 'background:var(--accent,#FF7849);border-radius:99px;padding:13px 22px;'
+    + 'text-decoration:none;transition:background .15s;}'
+    + '.ia-grat__cta span{transition:transform .15s;}'
+    + '.ia-grat__cta:hover{background:var(--accent-2,#FFA66E);}'
+    + '.ia-grat__cta:hover span{transform:translateX(3px);}'
+    + '.ia-support{border-top:1px solid var(--line,rgba(244,239,230,0.06));'
+    + 'padding:20px clamp(20px,4vw,48px);text-align:center;'
+    + 'font-family:var(--mono,monospace);font-size:10px;letter-spacing:0.13em;'
+    + 'text-transform:uppercase;color:var(--paper-3,rgba(244,239,230,0.55));}'
+    + '.ia-support a{color:var(--paper,#F4EFE6);text-decoration:none;'
+    + 'border-bottom:1px solid var(--accent,#FF7849);padding-bottom:2px;'
+    + 'transition:color .15s;}'
+    + '.ia-support a:hover{color:var(--accent,#FF7849);}'
+    + '@media(max-width:560px){.ia-grat__in{padding:22px;}'
+    + '.ia-grat__cta{width:100%;justify-content:center;}}';
 
   var style = document.createElement("style");
   style.textContent = css;
@@ -198,6 +227,52 @@
     skip.textContent = "Skip to content";
     document.body.insertBefore(skip, document.body.firstChild);
   }
+
+  // ── Donation surface — gratitude module + footer support strip ───
+  // Injected here once so all 16 instruments stay consistent without a
+  // copy-paste into every file. See tasks/marketing-2026-05/donations.md.
+  (function () {
+    var SUPPORT = "/support/";
+
+    // Gratitude module — instrument pages only, at the foot of <main>.
+    if (current && mainEl) {
+      var grat = document.createElement("aside");
+      grat.className = "ia-grat";
+      grat.innerHTML =
+          '<div class="ia-grat__in">'
+        +   '<div class="ia-grat__txt">'
+        +     '<div class="ia-grat__kick">Free to read · no ads · no vendor money</div>'
+        +     '<p>One of sixteen instruments, kept current and kept honest by one '
+        +     'person. If it saved you a detour through the vendor docs, you can '
+        +     'help keep the atlas running.</p>'
+        +   '</div>'
+        +   '<a class="ia-grat__cta" href="' + SUPPORT + '" data-ia-cta="gratitude_module">'
+        +     'Support Infra Atlas <span>→</span></a>'
+        + '</div>';
+      mainEl.appendChild(grat);
+    }
+
+    // Footer support strip — every page except /support itself.
+    if (here !== SUPPORT) {
+      var strip = document.createElement("div");
+      strip.className = "ia-support";
+      strip.innerHTML =
+          'Infra Atlas is free to read and reader-supported · '
+        + '<a href="' + SUPPORT + '" data-ia-cta="footer">Support the atlas →</a>';
+      document.body.appendChild(strip);
+    }
+
+    // Donation CTAs → analytics. No-op until Plausible is installed
+    // (analytics-install.md); fires donation_cta_click once it is.
+    document.addEventListener("click", function (e) {
+      var a = e.target && e.target.closest && e.target.closest("[data-ia-cta]");
+      if (a && typeof window.plausible === "function") {
+        window.plausible("donation_cta_click", {
+          props: { placement: a.getAttribute("data-ia-cta") }
+        });
+      }
+    });
+  })();
 
   // ── Behaviour ────────────────────────────────────────────────────
   var btn = document.getElementById("ia-nav-btn");
