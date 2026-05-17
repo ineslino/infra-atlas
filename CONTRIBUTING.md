@@ -34,7 +34,7 @@ Copy an existing instrument folder, keep the shared design tokens (`:root` CSS v
 
 ## Issues & pull requests
 
-- **Spotted wrong data?** [Open an issue](https://github.com/ineslino/infraatlas/issues/new) — include the upstream source that contradicts the site.
+- **Spotted wrong data?** [Open an issue](https://github.com/ineslino/infra-atlas/issues/new) — include the upstream source that contradicts the site.
 - PRs: keep them scoped to one instrument; include the source for any data change.
 
 MIT-licensed. Built by independent engineers who got tired of grepping vendor docs across five tabs.

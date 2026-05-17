@@ -1,6 +1,6 @@
 # Infra Atlas
 
-[![Data refresh](https://github.com/ineslino/infraatlas/actions/workflows/refresh.yml/badge.svg)](https://github.com/ineslino/infraatlas/actions/workflows/refresh.yml)
+[![Data refresh](https://github.com/ineslino/infra-atlas/actions/workflows/refresh.yml/badge.svg)](https://github.com/ineslino/infra-atlas/actions/workflows/refresh.yml)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
 > A reference periodical of cloud and API-management infrastructure — sixteen
@@ -87,7 +87,7 @@ After each refresh, `scripts/diff_feed.py` records what changed into the shared
 ## Repo layout
 
 ```
-infraatlas/
+infra-atlas/
 ├── index.html              The editorial landing index
 ├── nav.js                  Shared nav bar + ⌘K palette, injected into every page
 ├── feed.json               "What Changed" log, appended by the refresh workflow
@@ -141,7 +141,7 @@ The most valuable contribution is keeping the data right — a wrong region or a
 stale limit is a bug. [`CONTRIBUTING.md`](CONTRIBUTING.md) explains how data is
 sourced and edited; [`docs/data-policy.md`](docs/data-policy.md) defines what
 counts as a region and an authoritative source. Spotted something off?
-[Open an issue](https://github.com/ineslino/infraatlas/issues/new) with the
+[Open an issue](https://github.com/ineslino/infra-atlas/issues/new) with the
 upstream source that contradicts the site.
 
 The site is intentionally one static file per page — no framework, no build
