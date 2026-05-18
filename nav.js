@@ -83,6 +83,11 @@
     + '.ia-nav__btn svg{display:block;flex:none;}'
     + '.ia-nav__btn kbd{font-family:var(--mono,monospace);font-size:9px;letter-spacing:0.03em;'
     + 'text-transform:none;border:1px solid currentColor;border-radius:3px;padding:1px 4px;opacity:0.6;}'
+    + '.ia-nav__right{display:flex;align-items:center;gap:18px;}'
+    + '.ia-nav__support{font-family:var(--mono,monospace);font-size:10.5px;'
+    + 'letter-spacing:0.14em;text-transform:uppercase;color:var(--accent,#FF7849);'
+    + 'transition:color .15s;}'
+    + '.ia-nav__support:hover{color:var(--accent-2,#FFA66E);}'
     /* command palette */
     + '.ia-cmdk{position:fixed;inset:0;z-index:200;display:none;align-items:flex-start;'
     + 'justify-content:center;padding:13vh 16px 16px;background:rgba(10,9,7,0.74);'
@@ -180,13 +185,16 @@
     +   '<span class="ia-nav__word">Infra Atlas</span>'
     +   hereHtml
     + '</a>'
-    + '<button class="ia-nav__btn" id="ia-nav-btn" aria-haspopup="dialog" aria-expanded="false">'
-    +   '<svg viewBox="0 0 16 16" width="12" height="12" aria-hidden="true" fill="none" '
-    +     'stroke="currentColor" stroke-width="1.7">'
-    +     '<circle cx="6.8" cy="6.8" r="4.3"/><path d="M10 10 L14 14" stroke-linecap="round"/>'
-    +   '</svg>'
-    +   'Instruments <kbd>' + kLabel + '</kbd>'
-    + '</button>';
+    + '<div class="ia-nav__right">'
+    +   '<a class="ia-nav__support" href="/support/" data-ia-cta="nav">Support</a>'
+    +   '<button class="ia-nav__btn" id="ia-nav-btn" aria-haspopup="dialog" aria-expanded="false">'
+    +     '<svg viewBox="0 0 16 16" width="12" height="12" aria-hidden="true" fill="none" '
+    +       'stroke="currentColor" stroke-width="1.7">'
+    +       '<circle cx="6.8" cy="6.8" r="4.3"/><path d="M10 10 L14 14" stroke-linecap="round"/>'
+    +     '</svg>'
+    +     'Instruments <kbd>' + kLabel + '</kbd>'
+    +   '</button>'
+    + '</div>';
 
   // ── Palette ──────────────────────────────────────────────────────
   var overlay = document.createElement("div");
