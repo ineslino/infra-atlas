@@ -186,7 +186,7 @@
     +   hereHtml
     + '</a>'
     + '<div class="ia-nav__right">'
-    +   '<a class="ia-nav__support" href="/support/" data-ia-cta="nav">Support</a>'
+    +   '<a class="ia-nav__support" href="/support/" data-ia-cta="nav">Support us</a>'
     +   '<button class="ia-nav__btn" id="ia-nav-btn" aria-haspopup="dialog" aria-expanded="false">'
     +     '<svg viewBox="0 0 16 16" width="12" height="12" aria-hidden="true" fill="none" '
     +       'stroke="currentColor" stroke-width="1.7">'
