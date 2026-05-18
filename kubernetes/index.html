@@ -6,12 +6,12 @@
 <meta name="color-scheme" content="dark">
 <title>Cross-Cloud · Kubernetes Atlas · Infra Atlas</title>
 <link rel="icon" href="/favicon.svg?v=2" type="image/svg+xml">
-<meta name="description" content="Cross-vendor managed Kubernetes comparison — EKS, AKS, GKE, OKE, OVH Managed Kubernetes. Supported versions, control-plane SLA, node-pool capabilities, CNI, release channels. With the asterisks intact.">
+<meta name="description" content="Cross-vendor managed Kubernetes comparison — EKS, AKS, GKE, OKE, OVH Managed Kubernetes. Supported versions, control-plane SLA, node-pool capabilities, node autoscaling, CNI, release channels. With the asterisks intact.">
 <link rel="canonical" href="https://infraatlas.dev/kubernetes/">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Infra Atlas">
 <meta property="og:title" content="Cross-Cloud · Kubernetes Atlas · Infra Atlas">
-<meta property="og:description" content="Cross-vendor managed Kubernetes comparison — EKS, AKS, GKE, OKE, OVH Managed Kubernetes. Supported versions, control-plane SLA, node-pool capabilities, CNI, release channels. With the asterisks intact.">
+<meta property="og:description" content="Cross-vendor managed Kubernetes comparison — EKS, AKS, GKE, OKE, OVH Managed Kubernetes. Supported versions, control-plane SLA, node-pool capabilities, node autoscaling, CNI, release channels. With the asterisks intact.">
 <meta property="og:url" content="https://infraatlas.dev/kubernetes/">
 <meta property="og:image" content="https://infraatlas.dev/og.png">
 <meta property="og:image:width" content="1200">
@@ -19,7 +19,7 @@
 <meta property="og:image:alt" content="Infra Atlas — a reference for the infrastructure stack">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Cross-Cloud · Kubernetes Atlas · Infra Atlas">
-<meta name="twitter:description" content="Cross-vendor managed Kubernetes comparison — EKS, AKS, GKE, OKE, OVH Managed Kubernetes. Supported versions, control-plane SLA, node-pool capabilities, CNI, release channels. With the asterisks intact.">
+<meta name="twitter:description" content="Cross-vendor managed Kubernetes comparison — EKS, AKS, GKE, OKE, OVH Managed Kubernetes. Supported versions, control-plane SLA, node-pool capabilities, node autoscaling, CNI, release channels. With the asterisks intact.">
 <meta name="twitter:image" content="https://infraatlas.dev/og.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -425,7 +425,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, [tabindex]:focus-vis
       </a>
       <h1 class="masthead__title">Kubernetes <em>Atlas.</em></h1>
       <p class="masthead__subtitle">
-        Every managed Kubernetes service against <span>every meaningful capability</span> — supported versions, control-plane SLA, node pools, spot &amp; GPU &amp; ARM, CNI, release channels. <span>With the asterisks intact.</span>
+        Every managed Kubernetes service against <span>every meaningful capability</span> — supported versions, control-plane SLA, node pools, autoscaling, spot &amp; GPU &amp; ARM, CNI, release channels. <span>With the asterisks intact.</span>
       </p>
     </div>
     <aside class="masthead__status">
@@ -433,7 +433,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, [tabindex]:focus-vis
         <span class="status-dot"></span>
         <span class="status-text">Curated · v1</span>
       </div>
-      <div class="status-time">Issue 01 · <time datetime="2026-05-16">2026-05-16</time></div>
+      <div class="status-time">Issue 01 · <time datetime="2026-05-18">2026-05-18</time></div>
       <div class="status-counts">
         <div>Services<strong id="count-vendors">5</strong></div>
         <div>Capabilities<strong id="count-features">—</strong></div>
@@ -518,6 +518,7 @@ const CATEGORIES = [
   { key: "versions",  label: "Kubernetes Versions" },
   { key: "control",   label: "Control Plane — SLA & Cost" },
   { key: "nodepool",  label: "Node Pool Capabilities" },
+  { key: "autoscale", label: "Node Autoscaling" },
   { key: "scale",     label: "Scale" },
   { key: "network",   label: "CNI / Networking" },
   { key: "upgrades",  label: "Release Channels & Auto-Upgrade" }
@@ -637,26 +638,6 @@ const FEATURES = [
   },
 
   // ══ Node Pool Capabilities ══
-  { id:"np-autoscaler", category:"nodepool", name:"Cluster autoscaler (node pool scaling)",
-    desc:"Automatically grow and shrink node pools to fit pending pod demand, using the Kubernetes Cluster Autoscaler or an equivalent.",
-    support: {
-      // SRC: https://docs.aws.amazon.com/eks/latest/userguide/autoscaling.html — Cluster Autoscaler supported; Karpenter also supported
-      eks: { level:"yes", value:"✓ CA + Karpenter", note:"EKS supports the Kubernetes Cluster Autoscaler on managed node groups, and Karpenter for just-in-time, group-less node provisioning.",
-             src:"https://docs.aws.amazon.com/eks/latest/userguide/autoscaling.html" },
-      // SRC: https://learn.microsoft.com/en-us/azure/aks/cluster-autoscaler — CA built in; NAP (Karpenter-based) GA
-      aks: { level:"yes", value:"✓ CA + NAP", note:"AKS has a built-in cluster autoscaler per node pool, plus Node Auto-Provisioning (NAP) — a GA Karpenter-based provisioner.",
-             src:"https://learn.microsoft.com/en-us/azure/aks/cluster-autoscaler" },
-      // SRC: https://cloud.google.com/kubernetes-engine/docs/concepts/cluster-autoscaler — cluster autoscaler + node auto-provisioning
-      gke: { level:"yes", value:"✓ CA + NAP", note:"GKE includes the cluster autoscaler and node auto-provisioning, which creates and deletes node pools automatically; Autopilot autoscales by design.",
-             src:"https://cloud.google.com/kubernetes-engine/docs/concepts/cluster-autoscaler" },
-      // SRC: https://docs.oracle.com/en-us/iaas/Content/ContEng/Tasks/contengusingclusterautoscaler.htm — Cluster Autoscaler supported on managed node pools
-      oke: { level:"yes", value:"✓ Cluster Autoscaler", note:"OKE supports the Kubernetes Cluster Autoscaler to scale managed node pools based on pod demand.",
-             src:"https://docs.oracle.com/en-us/iaas/Content/ContEng/Tasks/contengusingclusterautoscaler.htm" },
-      // SRC: https://github.com/ovh/docs/blob/develop/pages/public_cloud/containers_orchestration/managed_kubernetes/using-cluster-autoscaler/guide.en-gb.md — autoscaler supported per node pool
-      ovh: { level:"yes", value:"✓ Cluster Autoscaler", note:"OVHcloud Managed Kubernetes supports the cluster autoscaler — enable autoscaling on a node pool and desired node count adjusts between min and max.",
-             src:"https://github.com/ovh/docs/blob/develop/pages/public_cloud/containers_orchestration/managed_kubernetes/using-cluster-autoscaler/guide.en-gb.md" }
-    }
-  },
   { id:"np-spot", category:"nodepool", name:"Spot / preemptible node pools",
     desc:"Run worker nodes on discounted, interruptible capacity for fault-tolerant or batch workloads.",
     support: {
@@ -715,6 +696,108 @@ const FEATURES = [
       // SRC: https://github.com/ovh/docs/blob/develop/pages/public_cloud/containers_orchestration/managed_kubernetes/software-versions-reserved-resources/guide.en-gb.md — reserved-resource table lists only x86 b2/b3 flavors; no Arm flavor documented for MKS
       ovh: { level:"no", value:"✗", note:"OVHcloud Managed Kubernetes documents only x86 instance flavors (b2/b3 general-purpose, t1/t2 GPU). No ARM-based node-pool flavor is listed for the service.",
              src:"https://github.com/ovh/docs/blob/develop/pages/public_cloud/containers_orchestration/managed_kubernetes/software-versions-reserved-resources/guide.en-gb.md" }
+    }
+  },
+
+  // ══ Node Autoscaling ══
+  { id:"np-autoscaler", category:"autoscale", name:"Cluster autoscaler (node pool scaling)",
+    desc:"Automatically grow and shrink node pools to fit pending pod demand, using the Kubernetes Cluster Autoscaler or an equivalent.",
+    support: {
+      // SRC: https://docs.aws.amazon.com/eks/latest/userguide/autoscaling.html — Cluster Autoscaler supported; Karpenter also supported
+      eks: { level:"yes", value:"✓ CA + Karpenter", note:"EKS supports the Kubernetes Cluster Autoscaler on managed node groups, and Karpenter for just-in-time, group-less node provisioning.",
+             src:"https://docs.aws.amazon.com/eks/latest/userguide/autoscaling.html" },
+      // SRC: https://learn.microsoft.com/en-us/azure/aks/cluster-autoscaler — CA built in; NAP (Karpenter-based) GA
+      aks: { level:"yes", value:"✓ CA + NAP", note:"AKS has a built-in cluster autoscaler per node pool, plus Node Auto-Provisioning (NAP) — a GA Karpenter-based provisioner.",
+             src:"https://learn.microsoft.com/en-us/azure/aks/cluster-autoscaler" },
+      // SRC: https://cloud.google.com/kubernetes-engine/docs/concepts/cluster-autoscaler — cluster autoscaler + node auto-provisioning
+      gke: { level:"yes", value:"✓ CA + NAP", note:"GKE includes the cluster autoscaler and node auto-provisioning, which creates and deletes node pools automatically; Autopilot autoscales by design.",
+             src:"https://cloud.google.com/kubernetes-engine/docs/concepts/cluster-autoscaler" },
+      // SRC: https://docs.oracle.com/en-us/iaas/Content/ContEng/Tasks/contengusingclusterautoscaler.htm — Cluster Autoscaler supported on managed node pools
+      oke: { level:"yes", value:"✓ Cluster Autoscaler", note:"OKE supports the Kubernetes Cluster Autoscaler to scale managed node pools based on pod demand.",
+             src:"https://docs.oracle.com/en-us/iaas/Content/ContEng/Tasks/contengusingclusterautoscaler.htm" },
+      // SRC: https://github.com/ovh/docs/blob/develop/pages/public_cloud/containers_orchestration/managed_kubernetes/using-cluster-autoscaler/guide.en-gb.md — autoscaler supported per node pool
+      ovh: { level:"yes", value:"✓ Cluster Autoscaler", note:"OVHcloud Managed Kubernetes supports the cluster autoscaler — enable autoscaling on a node pool and desired node count adjusts between min and max.",
+             src:"https://github.com/ovh/docs/blob/develop/pages/public_cloud/containers_orchestration/managed_kubernetes/using-cluster-autoscaler/guide.en-gb.md" }
+    }
+  },
+  { id:"as-groupless", category:"autoscale", name:"Group-less, just-in-time provisioning",
+    desc:"A Karpenter-class provisioner that launches right-sized nodes per pending pod, instead of scaling pre-defined, fixed-instance-type node pools.",
+    support: {
+      // SRC: https://docs.aws.amazon.com/eks/latest/userguide/autoscaling.html — Karpenter provisions just-in-time, group-less compute
+      eks: { level:"yes", value:"✓ Karpenter", note:"Karpenter provisions right-sized EC2 capacity in response to pending pods in under a minute, with no pre-defined node groups.",
+             src:"https://docs.aws.amazon.com/eks/latest/userguide/autoscaling.html" },
+      // SRC: https://learn.microsoft.com/en-us/azure/aks/node-auto-provisioning — NAP picks the optimal VM SKU from pending pods
+      aks: { level:"yes", value:"✓ NAP", note:"Node Auto-Provisioning — a managed, generally-available Karpenter implementation — picks and launches the optimal VM SKU from pending-pod requirements.",
+             src:"https://learn.microsoft.com/en-us/azure/aks/node-auto-provisioning" },
+      // SRC: https://cloud.google.com/kubernetes-engine/docs/concepts/node-auto-provisioning — NAP creates and deletes node pools automatically
+      gke: { level:"yes", value:"✓ Node auto-prov.", note:"GKE node auto-provisioning creates and deletes node pools automatically to satisfy pending workloads, with no operator-defined pools; Autopilot autoscales nodes by design.",
+             src:"https://cloud.google.com/kubernetes-engine/docs/concepts/node-auto-provisioning" },
+      // SRC: https://docs.oracle.com/en-us/iaas/Content/ContEng/Tasks/conteng-kpo.htm — Karpenter Provider for OCI (KPO)
+      oke: { level:"yes", value:"✓ Karpenter (KPO)", note:"Karpenter Provider for OCI (KPO) integrates Karpenter with OKE — when pods cannot be scheduled, it provisions worker nodes that meet their requirements, with no pre-defined node pools.",
+             src:"https://docs.oracle.com/en-us/iaas/Content/ContEng/Tasks/conteng-kpo.htm" },
+      // SRC: https://github.com/ovh/docs/blob/develop/pages/public_cloud/containers_orchestration/managed_kubernetes/using-cluster-autoscaler/guide.en-gb.md — only the standard CA, configured per node pool
+      ovh: { level:"no", value:"✗", note:"OVHcloud Managed Kubernetes has no Karpenter-class provisioner. Autoscaling is the standard Cluster Autoscaler, configured per node pool, and each pool has a fixed flavor set at creation.",
+             src:"https://github.com/ovh/docs/blob/develop/pages/public_cloud/containers_orchestration/managed_kubernetes/using-cluster-autoscaler/guide.en-gb.md" }
+    }
+  },
+  { id:"as-spot", category:"autoscale", name:"Spot-aware autoscaling",
+    desc:"Whether the autoscaling layer itself provisions interruptible Spot capacity and handles interruptions — beyond a hand-created static Spot node pool.",
+    support: {
+      // SRC: https://docs.aws.amazon.com/eks/latest/best-practices/karpenter.html — Karpenter native Spot interruption handling
+      eks: { level:"yes", value:"✓ Karpenter Spot", note:"Karpenter can provision EC2 Spot capacity directly, mix Spot and On-Demand in a NodePool, and natively handle Spot interruption notices.",
+             src:"https://docs.aws.amazon.com/eks/latest/best-practices/karpenter.html" },
+      // SRC: https://learn.microsoft.com/en-us/azure/aks/node-auto-provisioning-node-pools — NAP capacity-type spot
+      aks: { level:"yes", value:"✓ NAP Spot", note:"A NAP node pool can set the karpenter.sh/capacity-type selector to spot, so Node Auto-Provisioning provisions Azure Spot VMs; the cluster autoscaler can also scale a Spot node pool.",
+             src:"https://learn.microsoft.com/en-us/azure/aks/node-auto-provisioning-node-pools" },
+      // SRC: https://cloud.google.com/kubernetes-engine/docs/concepts/spot-vms — CA and node auto-provisioning both support Spot VMs
+      gke: { level:"yes", value:"✓ Spot VMs", note:"Both the cluster autoscaler and node auto-provisioning support Spot VMs — node auto-provisioning creates new node pools to satisfy Spot-requesting workloads.",
+             src:"https://cloud.google.com/kubernetes-engine/docs/concepts/spot-vms" },
+      // SRC: https://docs.oracle.com/en-us/iaas/Content/ContEng/Tasks/conteng-kpo.htm — KPO maps the spot capacity type to OCI preemptible instances
+      oke: { level:"yes", value:"✓ Spot (KPO)", note:"KPO maps the Karpenter spot capacity type to OCI preemptible instances, so the provisioner can launch interruptible capacity directly.",
+             src:"https://docs.oracle.com/en-us/iaas/Content/ContEng/Tasks/conteng-kpo.htm" },
+      // SRC: https://github.com/ovh/docs/blob/develop/pages/public_cloud/containers_orchestration/managed_kubernetes/managing-nodes/guide.en-gb.md — node pools use standard instances; no spot tier
+      ovh: { level:"no", value:"✗", note:"OVHcloud Managed Kubernetes node pools use standard Public Cloud instances; there is no Spot or preemptible tier for the autoscaler to provision.",
+             src:"https://github.com/ovh/docs/blob/develop/pages/public_cloud/containers_orchestration/managed_kubernetes/managing-nodes/guide.en-gb.md" }
+    }
+  },
+  { id:"as-zero", category:"autoscale", name:"Scale node pools to zero",
+    desc:"Whether an autoscaling node pool can scale all the way down to zero nodes when there is no demand.",
+    support: {
+      // SRC: https://docs.aws.amazon.com/eks/latest/best-practices/karpenter.html — Karpenter removes nodes when no longer needed; no minimum
+      eks: { level:"yes", value:"✓ Karpenter", note:"Karpenter sets no minimum node count and removes nodes once they are no longer needed, so an idle NodePool drops to zero; a Cluster-Autoscaler node group can likewise use a minimum of 0.",
+             src:"https://docs.aws.amazon.com/eks/latest/best-practices/karpenter.html" },
+      // SRC: https://learn.microsoft.com/en-us/azure/aks/use-system-pools — user node pools can contain zero nodes
+      aks: { level:"yes", value:"✓ User pools", note:"An autoscaled user node pool can scale to 0 nodes (cluster-autoscaler minimum count of 0). System node pools must keep at least one node for system pods such as CoreDNS.",
+             src:"https://learn.microsoft.com/en-us/azure/aks/use-system-pools" },
+      // SRC: https://cloud.google.com/kubernetes-engine/docs/concepts/cluster-autoscaler — autoscaler scales a node pool to its minimum size
+      gke: { level:"yes", value:"✓ Per node pool", note:"The cluster autoscaler scales an individual node pool down to its minimum size, which can be 0; the cluster as a whole keeps at least one node for system Pods.",
+             src:"https://cloud.google.com/kubernetes-engine/docs/concepts/cluster-autoscaler" },
+      // SRC: https://docs.oracle.com/en-us/iaas/Content/ContEng/Tasks/contengusingclusterautoscaler.htm — use the Cluster Autoscaler to scale a node pool to zero
+      oke: { level:"yes", value:"✓ CA to zero", note:"Oracle documents using the Kubernetes Cluster Autoscaler to scale a managed node pool to zero — its supported way to remove all of a pool's nodes.",
+             src:"https://docs.oracle.com/en-us/iaas/Content/ContEng/Tasks/contengusingclusterautoscaler.htm" },
+      // SRC: https://github.com/ovh/docs/blob/develop/pages/public_cloud/containers_orchestration/managed_kubernetes/managing-nodes/guide.en-gb.md — NodePools API: minNodes minimum is 0
+      ovh: { level:"yes", value:"✓ minNodes 0", note:"A node pool's minNodes can be set to 0 — the NodePools API schema permits a minimum of 0 — so an idle autoscaled pool scales fully to zero.",
+             src:"https://github.com/ovh/docs/blob/develop/pages/public_cloud/containers_orchestration/managed_kubernetes/managing-nodes/guide.en-gb.md" }
+    }
+  },
+  { id:"as-consolidation", category:"autoscale", name:"Active node consolidation",
+    desc:"Whether the platform actively repacks workloads onto fewer or cheaper nodes and removes under-utilised — not just empty — nodes.",
+    support: {
+      // SRC: https://docs.aws.amazon.com/eks/latest/best-practices/karpenter.html — Karpenter consolidation packs pods onto fewer nodes
+      eks: { level:"yes", value:"✓ Karpenter", note:"Karpenter's consolidation repacks pods onto fewer nodes and removes under-utilised capacity — more active than the Cluster Autoscaler's empty-node scale-down.",
+             src:"https://docs.aws.amazon.com/eks/latest/best-practices/karpenter.html" },
+      // SRC: https://learn.microsoft.com/en-us/azure/aks/node-auto-provisioning-disruption — NAP consolidation removes empty/underutilised nodes
+      aks: { level:"yes", value:"✓ NAP", note:"Node Auto-Provisioning's Karpenter-based consolidation removes empty and under-utilised nodes and can replace nodes with lower-priced SKUs.",
+             src:"https://learn.microsoft.com/en-us/azure/aks/node-auto-provisioning-disruption" },
+      // SRC: https://cloud.google.com/kubernetes-engine/docs/concepts/cluster-autoscaler — optimize-utilization autoscaling profile
+      gke: { level:"yes", value:"✓ optimize profile", note:"The cluster autoscaler removes under-utilised nodes down to the pool minimum; the optimize-utilization autoscaling profile scales the cluster down more aggressively.",
+             src:"https://cloud.google.com/kubernetes-engine/docs/concepts/cluster-autoscaler" },
+      // SRC: https://docs.oracle.com/en-us/iaas/Content/ContEng/Tasks/conteng-kpo.htm — KPO consolidates capacity and replaces worker nodes
+      oke: { level:"yes", value:"✓ KPO consolidation", note:"With KPO, Karpenter consolidates capacity and replaces worker nodes under configurable disruption settings — beyond the basic Cluster-Autoscaler scale-down.",
+             src:"https://docs.oracle.com/en-us/iaas/Content/ContEng/Tasks/conteng-kpo.htm" },
+      // SRC: https://github.com/ovh/docs/blob/develop/pages/public_cloud/containers_orchestration/managed_kubernetes/configuring-cluster-autoscaler/guide.en-gb.md — scale-down-utilization-threshold default 0.5
+      ovh: { level:"part", value:"◐ CA scale-down", note:"Only the standard Cluster Autoscaler scale-down: a node is removed once its utilisation stays below the scale-down threshold (default 0.5). No Karpenter-style repacking.",
+             src:"https://github.com/ovh/docs/blob/develop/pages/public_cloud/containers_orchestration/managed_kubernetes/configuring-cluster-autoscaler/guide.en-gb.md" }
     }
   },
 
