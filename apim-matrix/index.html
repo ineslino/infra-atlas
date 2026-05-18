@@ -248,6 +248,21 @@ body {
   display: inline-flex; align-items: center; justify-content: center;
 }
 
+/* Value cells — used by the Limits & Quotas category */
+.cell-value {
+  display: inline-flex; align-items: baseline; justify-content: center; gap: 2px;
+  font-family: var(--mono); font-size: 12px; line-height: 1.35;
+  padding: 4px 8px; border-radius: 3px; position: relative;
+  max-width: 170px;
+}
+.cell-value--yes  { color: var(--paper); }
+.cell-value--part { color: var(--part); }
+.cell-value--no   { color: var(--no); opacity: 0.72; }
+.cell-value__star {
+  font-size: 10px; color: var(--accent); align-self: flex-start;
+  margin-left: 1px;
+}
+
 /* Hide columns when vendor filtered out */
 .matrix.hide-apigee   .col-apigee,
 .matrix.hide-aws      .col-aws,
@@ -338,6 +353,19 @@ body {
 .vendor-row__mark--yes  { background: rgba(111, 231, 181, 0.15); color: var(--yes); }
 .vendor-row__mark--no   { background: rgba(244, 123, 123, 0.12); color: var(--no); opacity: 0.65; }
 .vendor-row__mark--part { background: rgba(244, 198, 96, 0.15); color: var(--part); }
+.vendor-row__value {
+  font-family: var(--mono); font-size: 12px; color: var(--paper); margin-top: 6px;
+}
+.vendor-row__value--part { color: var(--part); }
+.vendor-row__value--no   { color: var(--no); }
+.vendor-row__src {
+  margin-top: 8px; font-family: var(--mono); font-size: 10.5px;
+}
+.vendor-row__src a {
+  color: var(--paper-3); text-decoration: underline;
+  text-decoration-color: var(--line); text-underline-offset: 3px; word-break: break-all;
+}
+.vendor-row__src a:hover { color: var(--accent); }
 
 /* ─────────── COLOPHON ─────────── */
 .colophon {
@@ -392,7 +420,7 @@ body {
         <span class="status-dot"></span>
         <span class="status-text">Curated · v1</span>
       </div>
-      <div class="status-time">Issue 01 · 2026-05-15</div>
+      <div class="status-time">Issue 01 · 2026-05-18</div>
       <div class="status-counts">
         <div>Vendors<strong id="count-vendors">7</strong></div>
         <div>Capabilities<strong id="count-features">—</strong></div>
@@ -471,6 +499,7 @@ const VENDORS = [
 const CATEGORIES = [
   { key: "auth",          label: "Authentication / Authorization" },
   { key: "traffic",       label: "Traffic Management" },
+  { key: "limits",        label: "Limits & Quotas" },
   { key: "transform",     label: "Transformation / Mediation" },
   { key: "observability", label: "Observability" },
   { key: "deploy",        label: "Deployment / Operations" },
@@ -601,6 +630,56 @@ const FEATURES = [
       kong:    { level:"yes",  note:"proxy retries on idempotent methods." },
       gravitee:{ level:"yes",  note:"Retry policy with configurable strategy." },
       ibm:     { level:"yes",  note:"retry policy in assembly." }
+    }
+  },
+
+  // ── Limits & Quotas ──
+  { id:"lim-timeout", category:"limits", name:"Backend / integration timeout",
+    desc:"The longest the gateway waits for the upstream backend to respond before it gives up.",
+    support: {
+      apigee:  { level:"yes",  value:"55 s · 300 s max", note:"The target endpoint response timeout (io.timeout.millis) defaults to 55 seconds, set per proxy; it is raisable, but 300 seconds is the platform maximum.", src:"https://cloud.google.com/apigee/docs/api-platform/troubleshoot/playbooks/runtime/504-target-read-timeout" },
+      aws:     { level:"part", value:"29 s REST · 30 s HTTP", note:"REST APIs default to a 29-second integration timeout; since June 2024 that ceiling is a raisable soft quota for Regional and Private REST APIs (not Edge-optimized). HTTP APIs have a fixed 30-second maximum.", src:"https://docs.aws.amazon.com/apigateway/latest/developerguide/limits.html" },
+      azure:   { level:"yes",  value:"300 s, configurable", note:"The forward-request policy timeout defaults to 300 seconds and is operator-set; values above 240 seconds may not hold, as the underlying network can drop idle connections.", src:"https://learn.microsoft.com/en-us/azure/api-management/forward-request-policy" },
+      mulesoft:{ level:"yes",  value:"10 s, configurable", note:"The Mule HTTP Request connector's response timeout defaults to 10 seconds when no value is configured, and is freely operator-set per request or configuration.", src:"https://docs.mulesoft.com/http-connector/latest/http-documentation" },
+      kong:    { level:"yes",  value:"60 s, configurable", note:"Each Kong Service has connect, read and write timeouts, all defaulting to 60000 ms and freely operator-set — there is no vendor ceiling.", src:"https://developer.konghq.com/gateway/entities/service/" },
+      gravitee:{ level:"yes",  value:"Per-endpoint", note:"Backend connect and read timeouts are configured per endpoint with no vendor ceiling; the gateway-wide request timeout defaults to 30000 ms.", src:"https://documentation.gravitee.io/apim/4.1/overview/gravitee-api-definitions-and-execution-engines/timeout-management" },
+      ibm:     { level:"yes",  value:"60 s, configurable", note:"The Invoke policy's Timeout property — the time to wait for a backend reply — defaults to 60 seconds and is operator-set per API; IBM documents no hard ceiling.", src:"https://www.ibm.com/docs/en/api-connect/10.0.x_cd?topic=invoke-configuring-policy-datapower-api-gateway" }
+    }
+  },
+  { id:"lim-payload", category:"limits", name:"Maximum request payload",
+    desc:"The largest request body the gateway will accept — a hard wall on file uploads and bulk calls.",
+    support: {
+      apigee:  { level:"part", value:"30 MB buffered", note:"Buffered (non-streamed) request and response messages are capped at 30 MB. Enabling streaming allows larger payloads, with possible performance implications.", src:"https://cloud.google.com/apigee/docs/api-platform/reference/limits" },
+      aws:     { level:"part", value:"10 MB", note:"The maximum request payload is 10 MB for both REST and HTTP APIs and cannot be increased. WebSocket APIs cap at a 128 KB message instead.", src:"https://docs.aws.amazon.com/apigateway/latest/developerguide/limits.html" },
+      azure:   { level:"part", value:"Tier-dependent", note:"Classic tiers accept an unlimited request payload (500 MiB buffered); the v2 and Consumption tiers cap the payload at 1 GiB and buffer only 2 MiB.", src:"https://learn.microsoft.com/en-us/azure/azure-resource-manager/management/azure-subscription-service-limits" },
+      mulesoft:{ level:"part", value:"1 GB (CloudHub 2.0)", note:"On CloudHub 2.0 the ingress controller caps an HTTP request at 1 GB. Customer-hosted Mule runtime and Flex Gateway have no equivalent fixed body-size limit.", src:"https://docs.mulesoft.com/cloudhub-2/ch2-limits" },
+      kong:    { level:"yes",  value:"128 MB default", note:"There is no fixed vendor ceiling — the Request Size Limiting plugin's allowed payload size defaults to 128 MB, and size is also bounded by the operator-set nginx client_max_body_size.", src:"https://developer.konghq.com/plugins/request-size-limiting/reference/" },
+      gravitee:{ level:"yes",  value:"No vendor limit", note:"No default request body size limit. Operators apply the request-content-limit policy, which checks the Content-Length header against a configured maximum.", src:"https://documentation.gravitee.io/apim/create-and-configure-apis/apply-policies/policy-reference/request-content-limit" },
+      ibm:     { level:"yes",  value:"4 MB default", note:"The Parse policy's maximum document size caps parsed JSON, XML and GraphQL input, defaulting to 4 MB; it is configurable up to roughly 5 GB, where 0 means unlimited.", src:"https://www.ibm.com/docs/en/api-connect/10.0.x_cd?topic=policies-parse" }
+    }
+  },
+  { id:"lim-rate", category:"limits", name:"Default request rate limit",
+    desc:"Whether the gateway imposes an out-of-the-box request-rate ceiling before you configure any policy.",
+    support: {
+      apigee:  { level:"yes",  value:"No default", note:"Apigee imposes no default data-plane rate limit. Rate limiting is opt-in via the SpikeArrest policy, which smooths bursts rather than counting totals.", src:"https://cloud.google.com/apigee/docs/api-platform/reference/policies/spike-arrest-policy" },
+      aws:     { level:"part", value:"10k rps · 5k burst", note:"A default account-level throttle of 10,000 requests/second plus a 5,000-request burst applies per Region across all API types; it is raisable via Service Quotas. A few newer Regions default to 2,500 / 1,250.", src:"https://docs.aws.amazon.com/apigateway/latest/developerguide/limits.html" },
+      azure:   { level:"yes",  value:"No default", note:"API Management applies no out-of-the-box throughput ceiling — at capacity it behaves like an overloaded server. Rate limiting applies only when you add a rate-limit policy.", src:"https://learn.microsoft.com/en-us/azure/api-management/rate-limit-by-key-policy" },
+      mulesoft:{ level:"yes",  value:"No default", note:"There is no out-of-the-box rate ceiling. The Rate Limiting API Manager policy enforces an operator-configured request count per window, returning HTTP 429 when exhausted.", src:"https://docs.mulesoft.com/gateway/latest/policies-included-rate-limiting" },
+      kong:    { level:"yes",  value:"No default", note:"Kong applies no rate ceiling out of the box. Throttling requires the Rate Limiting plugin, whose window parameters have no defaults.", src:"https://developer.konghq.com/plugins/rate-limiting/" },
+      gravitee:{ level:"yes",  value:"No default", note:"No default rate ceiling. Rate limiting is opt-in via the Rate Limit policy, over short windows from seconds to minutes.", src:"https://documentation.gravitee.io/apim/create-and-configure-apis/apply-policies/policy-reference/rate-limit" },
+      ibm:     { level:"yes",  value:"No default", note:"API Connect ships no out-of-the-box rate ceiling. Rate limits are defined per Plan or via policy, and can be hard (call aborted) or soft (call completes, warning logged).", src:"https://www.ibm.com/docs/en/api-connect/10.0.x_cd?topic=connect-understanding-rate-limits-apis-plans" }
+    }
+  },
+  { id:"lim-quota", category:"limits", name:"Long-window quota model",
+    desc:"How the gateway enforces longer-window consumption quotas — per day, week or month.",
+    support: {
+      apigee:  { level:"yes",  value:"Quota policy", note:"The Quota policy counts request messages over a configured window from one minute up to one year. There is no platform-imposed default quota.", src:"https://cloud.google.com/apigee/docs/api-platform/reference/policies/quota-policy" },
+      aws:     { level:"yes",  value:"Usage plans", note:"Usage plans tied to API keys cap requests per day, week or month. Quotas are applied on a best-effort basis, not as a hard limit.", src:"https://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-api-usage-plans.html" },
+      azure:   { level:"yes",  value:"quota policy", note:"The quota and quota-by-key policies enforce a renewable call-count and/or bandwidth quota; the fixed window has a 300-second minimum, and 0 makes it a lifetime quota.", src:"https://learn.microsoft.com/en-us/azure/api-management/quota-by-key-policy" },
+      mulesoft:{ level:"yes",  value:"SLA-based tiers", note:"Long-window quotas are enforced per client through the SLA-based Rate Limiting policy: each SLA tier defines its own limits, bound to consumers through API contracts.", src:"https://docs.mulesoft.com/gateway/latest/policies-included-rate-limiting-sla" },
+      kong:    { level:"yes",  value:"Rate Limiting plugin", note:"Long-window quotas use day, month or year windows on the Rate Limiting plugin, or arbitrary sliding windows via Rate Limiting Advanced (Enterprise).", src:"https://developer.konghq.com/plugins/rate-limiting-advanced/" },
+      gravitee:{ level:"yes",  value:"Quota policy", note:"The Quota policy enforces a configured request count over a long window — from hours to months. There is no vendor default; operators set the limit.", src:"https://documentation.gravitee.io/apim/create-and-configure-apis/apply-policies/policy-reference/rate-limit" },
+      ibm:     { level:"yes",  value:"Plan rate limits", note:"Long-window consumption is enforced through Plan-level rate limits, checked before every call to any API in the Plan; API Connect documents no separate quota object.", src:"https://www.ibm.com/docs/en/api-connect/10.0.x_cd?topic=connect-understanding-rate-limits-apis-plans" }
     }
   },
 
@@ -931,7 +1010,11 @@ function renderMatrix() {
         const sym = s.level === "yes" ? "✓" : s.level === "part" ? "◐" : "✗";
         const hasNote = s.note && s.note.length > 0;
         html += `<td class="cell col-${v.key}" data-feature="${f.id}" data-vendor="${v.key}">`;
-        html += `<span class="cell-mark cell-mark--${s.level}">${sym}${hasNote ? '<span class="cell-mark__star">*</span>' : ''}</span>`;
+        if (s.value) {
+          html += `<span class="cell-value cell-value--${s.level}">${s.value}${hasNote ? '<span class="cell-value__star">*</span>' : ''}</span>`;
+        } else {
+          html += `<span class="cell-mark cell-mark--${s.level}">${sym}${hasNote ? '<span class="cell-mark__star">*</span>' : ''}</span>`;
+        }
         html += `</td>`;
       });
       html += `</tr>`;
@@ -996,11 +1079,16 @@ function openFeatureDrawer(feature, focusVendor) {
     const s = feature.support[v.key] || { level: "no", note: "" };
     const sym = s.level === "yes" ? "✓" : s.level === "part" ? "◐" : "✗";
     const isFocus = focusVendor === v.key;
+    const srcHtml = s.src
+      ? `<div class="vendor-row__src">Source · <a href="${s.src}" target="_blank" rel="noopener">${s.src}</a></div>`
+      : "";
     return `<div class="vendor-row" ${isFocus ? 'style="border-color: var(--accent); background: rgba(255,120,73,0.05);"' : ''}>
       <span class="vendor-row__mark vendor-row__mark--${s.level}">${sym}</span>
       <div>
         <div class="vendor-row__name"><span class="swatch" style="background:${v.swatch}"></span>${v.name}</div>
+        ${s.value ? `<div class="vendor-row__value vendor-row__value--${s.level}">${s.value}</div>` : ""}
         <div class="vendor-row__note">${s.note || (s.level === "no" ? "Not supported." : "—")}</div>
+        ${srcHtml}
       </div>
       <span></span>
     </div>`;
