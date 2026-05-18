@@ -1,0 +1,49 @@
+name: Data correction
+description: A region, limit, tier or other fact on the site looks wrong or out of date.
+title: "[Data] "
+labels: ["data"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Wrong data is a bug. Please include the source that contradicts the site — it makes the fix quick to verify.
+  - type: dropdown
+    id: instrument
+    attributes:
+      label: Which instrument?
+      options:
+        - EC2 Observatory (AWS)
+        - Region Map
+        - VM Atlas (Azure)
+        - Compute Index (GCP)
+        - Compute Observatory (OCI)
+        - Instance Catalogue (OVH)
+        - APIM Feature Matrix
+        - API Gateway Atlas (AWS)
+        - Apigee Atlas
+        - Mulesoft Atlas
+        - Kong · Gravitee · IBM
+        - Equivalent-SKU Finder
+        - Kubernetes Atlas
+        - Compliance Footprint
+        - Confidential Computing
+        - IAM Matrix
+        - Landing page / other
+    validations:
+      required: true
+  - type: textarea
+    id: whats-wrong
+    attributes:
+      label: What is wrong?
+      description: What does the site currently show, and what is the correct value?
+      placeholder: "The site lists … but it should be …"
+    validations:
+      required: true
+  - type: textarea
+    id: source
+    attributes:
+      label: Source
+      description: A link to the vendor documentation (or other authoritative source) that contradicts the site.
+      placeholder: "https://docs…"
+    validations:
+      required: true

@@ -1,0 +1,5 @@
+blank_issues_enabled: true
+contact_links:
+  - name: How the data is sourced
+    url: https://github.com/ineslino/infra-atlas/blob/main/docs/data-policy.md
+    about: How regions, sources and availability are defined — worth a look before filing a correction.
