@@ -696,6 +696,14 @@ a.masthead__back::before { display: none; }
   white-space: nowrap;
 }
 
+.instance-row__norm {
+  font-family: var(--mono);
+  font-size: 9.5px;
+  color: var(--paper-4);
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+}
+
 /* ─────────────── DRAWER (region/instance detail) ─────────────── */
 .drawer-backdrop {
   position: fixed;
@@ -1594,6 +1602,9 @@ function renderInstanceView() {
     if (entry.vcpu != null) specBits.push(`${entry.vcpu} vCPU`);
     if (entry.mem != null)  specBits.push(`${entry.mem} GB`);
     specBits.push(`${entry.availCount} reg`);
+    const normBits = [];
+    if (entry.price != null && entry.vcpu) normBits.push(`${fmtPrice(entry.price / entry.vcpu, state.currency)}/vCPU`);
+    if (entry.price != null && entry.mem)  normBits.push(`${fmtPrice(entry.price / entry.mem, state.currency)}/GB`);
     row.innerHTML = `
       <div>
         <div class="instance-row__name">${entry.full}</div>
@@ -1605,6 +1616,7 @@ function renderInstanceView() {
       <div class="instance-row__right">
         <div class="instance-row__price${priceStr ? "" : " is-na"}" title="On-demand · ${state.priceRef}">${priceStr ? `${priceStr}<span class="unit">/hr</span>` : "—"}</div>
         <div class="instance-row__spec">${specBits.join(" · ")}</div>
+        ${normBits.length ? `<div class="instance-row__norm" title="Hourly on-demand list price ÷ resource — a normalised comparison figure, not the invoiced price.">${normBits.join(" · ")}</div>` : ""}
       </div>
     `;
     row.addEventListener("click", () => openInstanceDrawer(entry.fam, entry.size));
