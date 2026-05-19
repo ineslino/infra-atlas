@@ -1970,6 +1970,7 @@ function renderInstanceView() {
     const row = document.createElement("div");
     row.className = "instance-row fade-in";
     row.style.animationDelay = Math.min(idx * 0.004, 0.6) + "s";
+    if (entry.fam.desc) row.title = entry.fam.desc;
     const priceStr = fmtPrice(entry.price, state.currency);
     const specBits = [];
     if (entry.vcpu != null) specBits.push(`${entry.vcpu} vCPU`);
@@ -2103,6 +2104,10 @@ function openInstanceDrawer(family, size) {
       <span>Arch <strong>${family.arch === "x86" ? "x86_64" : "arm64"}</strong></span>
       ${spec.vcpu != null ? `<span>vCPU <strong>${spec.vcpu}</strong></span>` : ""}
       ${spec.mem != null ? `<span>Memory <strong>${spec.mem} GB</strong></span>` : ""}
+      ${family.clock ? `<span>Clock <strong>${family.clock}</strong></span>` : ""}
+      <span>Storage <strong>${spec.storage || "EBS-only"}</strong></span>
+      ${spec.net ? `<span>Network <strong>${spec.net}</strong></span>` : ""}
+      ${spec.gpu ? `<span>GPU <strong>${spec.gpu}</strong></span>` : ""}
       <span title="On-demand Linux · ${state.priceRef}">Price <strong>${priceStr ? priceStr + "/hr" : "—"}</strong></span>
       <span><strong>${regions.length}</strong>/${state.data.regions.length} regions</span>
     </div>

@@ -8,8 +8,9 @@
 #
 # Transfer is ~18 MB gzipped (curl --compressed). Transforms into
 # Infra Atlas schema: { generated, currency, priceRef, regions[], families[] }.
-# Each family carries specs[size] = { vcpu, mem, price } — price is the
-# on-demand Linux $/hr in the reference region (us-east-1).
+# Each family carries specs[size] = { vcpu, mem, price, storage?, net?, gpu? }
+# and a family-level clock — price is the on-demand Linux $/hr in the
+# reference region (us-east-1); the hardware fields come from the upstream feed.
 #
 # Requirements: curl, python3.
 # ─────────────────────────────────────────────────────────────────
@@ -93,6 +94,27 @@ SIZE_RANK = {s:i for i,s in enumerate(
 def size_key(s):
     return (SIZE_RANK.get(s, 999), s)
 
+def fmt_storage(s):
+    """Local instance storage → display string, or None for EBS-only."""
+    if not s:
+        return None
+    size, dev = s.get("size"), s.get("devices") or 1
+    if size is None:
+        return None
+    unit = s.get("size_unit") or "GB"
+    kind = "NVMe SSD" if s.get("nvme_ssd") else ("SSD" if s.get("ssd") else "HDD")
+    return f"{size} {unit} {kind}" if dev == 1 else f"{dev} × {size} {unit} {kind}"
+
+def fmt_gpu(inst):
+    """Attached accelerators → display string, or None when there are none."""
+    n = inst.get("GPU") or 0
+    if not n:
+        return None
+    model = (inst.get("GPU_model") or "GPU").strip()
+    mem = inst.get("GPU_memory") or 0
+    base = f"{n} × {model}" if n > 1 else model
+    return f"{base} · {mem} GB" if mem else base
+
 # ── Collect regions actually offered (proper regions only) ──
 region_set = set()
 for inst in raw:
@@ -124,7 +146,11 @@ for inst in raw:
             "cat": category(inst.get("family"), key),
             "arch": arch,
             "vendor": vendor(inst.get("physical_processor")),
-            "desc": (inst.get("physical_processor") or "EC2 instance family").strip(),
+            "desc": " · ".join(x for x in [
+                (inst.get("family") or "").strip(),
+                (inst.get("physical_processor") or "").strip(),
+            ] if x) or "EC2 instance family",
+            "clock": (inst.get("clock_speed_ghz") or "").strip() or None,
             "sizes": set(),
             "specs": {},
             "in": set(),
@@ -132,17 +158,24 @@ for inst in raw:
     fams[key]["sizes"].add(size)
     fams[key]["in"] |= pricing_regions
 
-    # Per-instance-type spec: vCPU, memory (GiB), on-demand Linux $/hr at REF.
+    # Per-instance-type spec: vCPU, memory (GiB), on-demand Linux $/hr at REF,
+    # plus local storage, network performance and attached GPUs where present.
     od = (((inst.get("pricing") or {}).get(REF) or {}).get("linux") or {}).get("ondemand")
     try:
         price = round(float(od), 4)
     except (TypeError, ValueError):
         price = None
-    fams[key]["specs"][size] = {
-        "vcpu": inst.get("vCPU"),
-        "mem": inst.get("memory"),
-        "price": price,
-    }
+    spec = {"vcpu": inst.get("vCPU"), "mem": inst.get("memory"), "price": price}
+    storage = fmt_storage(inst.get("storage"))
+    if storage:
+        spec["storage"] = storage
+    net = (inst.get("network_performance") or "").strip()
+    if net:
+        spec["net"] = net
+    gpu = fmt_gpu(inst)
+    if gpu:
+        spec["gpu"] = gpu
+    fams[key]["specs"][size] = spec
 
 # ── Authoritative per-region availability overrides ──
 # The upstream dataset's per-region data (both its `pricing` and `regions`
@@ -188,6 +221,7 @@ for key in sorted(fams.keys()):
         "arch": f["arch"],
         "vendor": f["vendor"],
         "desc": f["desc"],
+        "clock": f.get("clock"),
         "sizes": ordered_sizes,
         "specs": {s: f["specs"][s] for s in ordered_sizes if s in f["specs"]},
         "in": sorted(f["in"]),

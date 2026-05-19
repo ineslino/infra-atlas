@@ -1728,6 +1728,7 @@ function renderInstanceView() {
     const row = document.createElement("div");
     row.className = "instance-row fade-in";
     row.style.animationDelay = Math.min(idx * 0.004, 0.6) + "s";
+    if (entry.fam.desc) row.title = entry.fam.desc;
     const priceStr = fmtPrice(entry.price, state.currency);
     const specBits = [];
     if (entry.vcpu != null) specBits.push(`${entry.vcpu} vCPU`);

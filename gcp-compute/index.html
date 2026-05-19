@@ -1449,6 +1449,7 @@ function renderInstanceView() {
     const row = document.createElement("div");
     row.className = "instance-row fade-in";
     row.style.animationDelay = Math.min(idx * 0.004, 0.6) + "s";
+    if (entry.fam.desc) row.title = entry.fam.desc;
     row.innerHTML = `
       <div>
         <div class="instance-row__name">${entry.full}</div>
