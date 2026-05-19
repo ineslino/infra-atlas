@@ -363,7 +363,9 @@ def render_page(d):
     for crit, cells, src in d["rows"]:
         tds = f'<td class="criterion">{esc(crit)}</td>'
         tds += "".join(f'<td class="val">{esc(c)}</td>' for c in cells)
-        trs.append(f"        <tr><!-- src: {esc(src)} -->{tds}</tr>")
+        # raw src — an HTML comment is not entity-decoded, so esc() here would
+        # corrupt a URL containing & (and these are trusted, curated URLs).
+        trs.append(f"        <tr><!-- src: {src} -->{tds}</tr>")
     table = ("\n  <section>\n    <div class=\"sec-label\">Head to head</div>\n"
              "    <div class=\"compare-wrap\"><table class=\"compare\">\n"
              f"      <thead><tr><th>Criterion</th>{ths}</tr></thead>\n"
