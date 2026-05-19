@@ -181,7 +181,11 @@
     + 'transition:color .15s;}'
     + '.ia-support a:hover{color:var(--accent,#FF7849);}'
     + '@media(max-width:560px){.ia-grat__in{padding:22px;}'
-    + '.ia-grat__cta{width:100%;justify-content:center;}}';
+    + '.ia-grat__cta{width:100%;justify-content:center;}}'
+    /* honour the OS reduced-motion setting on every page that loads nav.js */
+    + '@media(prefers-reduced-motion:reduce){*,*::before,*::after{'
+    + 'animation-duration:0.01ms !important;animation-iteration-count:1 !important;'
+    + 'transition-duration:0.01ms !important;scroll-behavior:auto !important;}}';
 
   var style = document.createElement("style");
   style.textContent = css;
@@ -225,8 +229,10 @@
       '<div class="ia-cmdk__box">'
     +   '<input class="ia-cmdk__input" id="ia-cmdk-input" type="text" '
     +     'placeholder="Search instruments — cloud, vendor, capability…" '
-    +     'autocomplete="off" spellcheck="false" aria-label="Search instruments">'
-    +   '<div class="ia-cmdk__results" id="ia-cmdk-results"></div>'
+    +     'autocomplete="off" spellcheck="false" aria-label="Search instruments" '
+    +     'role="combobox" aria-expanded="true" aria-autocomplete="list" '
+    +     'aria-controls="ia-cmdk-results">'
+    +   '<div class="ia-cmdk__results" id="ia-cmdk-results" role="listbox" aria-label="Instruments"></div>'
     +   '<div class="ia-cmdk__foot">'
     +     '<span><kbd>↑</kbd><kbd>↓</kbd>navigate</span>'
     +     '<span><kbd>↵</kbd>open</span>'
@@ -323,6 +329,7 @@
     if (!visible.length) {
       results.innerHTML = '<div class="ia-cmdk__empty">No instrument matches “'
         + esc(input.value.trim()) + '”</div>';
+      input.setAttribute("aria-activedescendant", "");
       return;
     }
     var html = "", lastGroup = "\0";
@@ -332,6 +339,8 @@
         lastGroup = it.group;
       }
       html += '<div class="ia-cmdk__row' + (i === sel ? ' is-sel' : '') + '" '
+           +    'role="option" id="ia-cmdk-opt-' + i + '" '
+           +    'aria-selected="' + (i === sel ? 'true' : 'false') + '" '
            +    'data-idx="' + i + '" data-href="' + it.href + '">'
            +    '<span class="ia-cmdk__vd">' + it.vendor + '</span>'
            +    '<span class="ia-cmdk__name">' + it.name + '</span>'
@@ -340,6 +349,7 @@
            +  '</div>';
     });
     results.innerHTML = html;
+    input.setAttribute("aria-activedescendant", "ia-cmdk-opt-" + sel);
   }
   function scrollSel() {
     var el = results.querySelector(".is-sel");
@@ -406,6 +416,10 @@
     } else if (e.key === "Escape" && overlay.classList.contains("is-open")) {
       e.preventDefault();
       closeCmdk();
+    } else if (e.key === "Tab" && overlay.classList.contains("is-open")) {
+      // focus trap — the input is the palette's only focusable control
+      e.preventDefault();
+      input.focus();
     }
   }, true);
 })();
