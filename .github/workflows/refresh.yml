@@ -104,3 +104,29 @@ jobs:
             git commit -m "chore(${{ matrix.instrument }}): refresh data $(date -u +%Y-%m-%d)"
             git push
           fi
+
+  # A scheduled refresh that fails silently is how the data rots unnoticed —
+  # surface any failure as a GitHub issue (created once, commented thereafter).
+  notify-failure:
+    name: Open an issue if the refresh failed
+    needs: refresh
+    if: failure()
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+    steps:
+      - name: Open or update a failure issue
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          title="Daily data refresh failed"
+          body="The daily data refresh failed on $(date -u +%Y-%m-%d). Run log: $RUN_URL"
+          existing=$(gh issue list --repo "$REPO" --search "$title in:title" \
+            --state open --json number --jq '.[0].number // empty')
+          if [ -n "$existing" ]; then
+            gh issue comment "$existing" --repo "$REPO" --body "$body"
+          else
+            gh issue create --repo "$REPO" --title "$title" --body "$body"
+          fi

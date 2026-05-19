@@ -72,3 +72,29 @@ jobs:
             exit 1
           fi
           echo "✓ All curated matrices are within their freshness windows."
+
+  # Staleness is invisible unless someone reads the run log — file an issue so
+  # the freshness review actually gets noticed.
+  notify-failure:
+    name: Open an issue if a snapshot is stale
+    needs: freshness
+    if: failure()
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+    steps:
+      - name: Open or update a staleness issue
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          title="Curated snapshot needs a freshness review"
+          body="A curated snapshot has aged past its review window (checked $(date -u +%Y-%m-%d)). Re-verify against the vendor docs and bump the date. Run log: $RUN_URL"
+          existing=$(gh issue list --repo "$REPO" --search "$title in:title" \
+            --state open --json number --jq '.[0].number // empty')
+          if [ -n "$existing" ]; then
+            gh issue comment "$existing" --repo "$REPO" --body "$body"
+          else
+            gh issue create --repo "$REPO" --title "$title" --body "$body"
+          fi
