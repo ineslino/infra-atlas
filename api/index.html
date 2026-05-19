@@ -127,6 +127,7 @@ pre code .c { color: var(--paper-4); }
         <tr><td class="nm">GCP Compute Index</td><td><a class="ep" href="/gcp-compute/data.json">/gcp-compute/data.json</a></td><td class="desc">Google Cloud machine families and types — vCPU, memory, price.</td><td><span class="cadence cadence--curated">Curated</span></td></tr>
         <tr><td class="nm">OCI Compute Observatory</td><td><a class="ep" href="/oci-compute/data.json">/oci-compute/data.json</a></td><td class="desc">Oracle Cloud compute shapes — OCPU, memory and computed price.</td><td><span class="cadence cadence--daily">Daily</span></td></tr>
         <tr><td class="nm">OVH Instance Catalogue</td><td><a class="ep" href="/ovh-instances/data.json">/ovh-instances/data.json</a></td><td class="desc">OVHcloud Public Cloud instance ranges — vCPU, memory, price.</td><td><span class="cadence cadence--daily">Daily</span></td></tr>
+        <tr><td class="nm">Egress Cost Map</td><td><a class="ep" href="/egress/data.json">/egress/data.json</a></td><td class="desc">Data-transfer list prices across AWS, Azure and GCP — internet egress, cross-AZ, cross-region, NAT and interconnect.</td><td><span class="cadence cadence--curated">Curated</span></td></tr>
         <tr><td class="nm">What Changed feed</td><td><a class="ep" href="/feed.json">/feed.json</a></td><td class="desc">Recent dataset changes — regions, families and prices added or moved across the data instruments.</td><td><span class="cadence cadence--daily">Daily</span></td></tr>
       </tbody>
     </table></div>
@@ -137,7 +138,7 @@ pre code .c { color: var(--paper-4); }
     <div class="contract">
       <p><strong>Best-effort, not a product.</strong> These are flat JSON files served straight off the static host. The JSON shape can change without notice as instruments evolve — do not hard-code deep field paths you cannot re-check, and read defensively.</p>
       <p>There is <strong>no uptime guarantee, no SLA, no API key and no rate limit</strong> — please be kind, and cache rather than poll. Responses are cached roughly an hour at the edge; the <code style="font-family:var(--mono);color:var(--accent-2)">generated</code> field carries the dataset's own timestamp, so a consumer can tell how fresh a copy is.</p>
-      <p>The cloud-compute endpoints refresh daily from public datasets and price APIs; <em style="font-family:var(--serif);font-style:italic;color:var(--paper)">regions</em> and <em style="font-family:var(--serif);font-style:italic;color:var(--paper)">gcp-compute</em> are curated snapshots, re-serialised on the same schedule.</p>
+      <p>The cloud-compute endpoints refresh daily from public datasets and price APIs; <em style="font-family:var(--serif);font-style:italic;color:var(--paper)">regions</em>, <em style="font-family:var(--serif);font-style:italic;color:var(--paper)">gcp-compute</em> and <em style="font-family:var(--serif);font-style:italic;color:var(--paper)">egress</em> are curated snapshots — dated and re-verified against the vendor sources rather than polled.</p>
     </div>
   </section>
 

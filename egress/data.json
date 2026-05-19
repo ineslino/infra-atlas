@@ -1,0 +1,249 @@
+{
+  "generated": "2026-05-19T10:18:23Z",
+  "schemaVersion": 1,
+  "currency": "USD",
+  "providers": [
+    {
+      "key": "aws",
+      "name": "Amazon Web Services",
+      "short": "AWS",
+      "swatch": "#FF9F66"
+    },
+    {
+      "key": "azure",
+      "name": "Microsoft Azure",
+      "short": "Azure",
+      "swatch": "#7CD7F1"
+    },
+    {
+      "key": "gcp",
+      "name": "Google Cloud",
+      "short": "GCP",
+      "swatch": "#F4C660"
+    }
+  ],
+  "groups": [
+    {
+      "key": "internet",
+      "label": "Out to the internet"
+    },
+    {
+      "key": "internal",
+      "label": "Inside one cloud"
+    },
+    {
+      "key": "links",
+      "label": "Gateways & private links"
+    }
+  ],
+  "transfers": [
+    {
+      "id": "internet-egress",
+      "group": "internet",
+      "label": "Internet egress (out)",
+      "sub": "data sent to the public internet",
+      "desc": "Data leaving the cloud for the public internet — the headline cost line, and the charge that dominates most cloud networking bills.",
+      "rates": {
+        "aws": {
+          "level": "rate",
+          "headline": "$0.09 /GB",
+          "unit": "GB",
+          "tiers": [
+            {
+              "band": "First 100 GB / month",
+              "usd": 0
+            },
+            {
+              "band": "Up to 10 TB / month",
+              "usd": 0.09
+            },
+            {
+              "band": "Next 40 TB",
+              "usd": 0.085
+            },
+            {
+              "band": "Next 100 TB",
+              "usd": 0.07
+            },
+            {
+              "band": "Beyond 150 TB",
+              "usd": 0.05
+            }
+          ],
+          "note": "First 100 GB each month is free, aggregated across AWS services and regions. Beyond that the rate steps down with volume as shown; transfers above 500 TB/month are contact-sales. Inbound data transfer from the internet is free.",
+          "src": "https://aws.amazon.com/ec2/pricing/on-demand/"
+        },
+        "azure": {
+          "level": "rate",
+          "headline": "$0.087 /GB",
+          "unit": "GB",
+          "tiers": [
+            {
+              "band": "First 100 GB / month",
+              "usd": 0
+            },
+            {
+              "band": "Up to 10 TB / month",
+              "usd": 0.087
+            },
+            {
+              "band": "Next 40 TB",
+              "usd": 0.083
+            },
+            {
+              "band": "Next 100 TB",
+              "usd": 0.07
+            },
+            {
+              "band": "Beyond 150 TB",
+              "usd": 0.05
+            }
+          ],
+          "note": "Zone 1 rate — North America and Europe — over Microsoft's global network. The first 100 GB each month is free and inbound transfer is free. A Routing Preference of Internet routing prices a little lower.",
+          "src": "https://azure.microsoft.com/en-us/pricing/details/bandwidth/"
+        },
+        "gcp": {
+          "level": "rate",
+          "headline": "$0.12 /GiB",
+          "unit": "GiB",
+          "tiers": [
+            {
+              "band": "0 to 1 TB / month",
+              "usd": 0.12
+            },
+            {
+              "band": "1 to 10 TB / month",
+              "usd": 0.11
+            },
+            {
+              "band": "10 TB and above",
+              "usd": 0.08
+            }
+          ],
+          "note": "Premium network tier, to worldwide destinations other than China and Australia. The Standard tier is cheaper — roughly $0.085 then $0.065 per GiB from a US region — and carries a 200 GB monthly free allowance per region. Google bills per GiB, slightly larger than a GB.",
+          "src": "https://cloud.google.com/network-tiers/pricing"
+        }
+      }
+    },
+    {
+      "id": "cross-az",
+      "group": "internal",
+      "label": "Cross-AZ, same region",
+      "sub": "between Availability Zones",
+      "desc": "Data moving between Availability Zones inside one region — the running cost of a multi-AZ, highly-available architecture.",
+      "rates": {
+        "aws": {
+          "level": "rate",
+          "headline": "$0.01 /GB",
+          "unit": "GB",
+          "note": "Charged at one cent per GB on both the sending and the receiving side, so a round trip between Availability Zones effectively costs about two cents per GB. Applies to private-IP traffic across AZs.",
+          "src": "https://aws.amazon.com/ec2/pricing/on-demand/"
+        },
+        "azure": {
+          "level": "free",
+          "headline": "Free",
+          "unit": "GB",
+          "note": "Azure no longer charges for data transfer between Availability Zones in the same region — inter-AZ billing was formally eliminated, announced during 2024. The raw retail-price API still exposes legacy one-cent meters that are not billed.",
+          "src": "https://azure.microsoft.com/en-us/pricing/details/bandwidth/"
+        },
+        "gcp": {
+          "level": "rate",
+          "headline": "$0.01 /GiB",
+          "unit": "GiB",
+          "note": "One cent per GiB for VM-to-VM traffic between zones of the same region, billed on the sending side. Traffic inside a single zone over internal IPs is free.",
+          "src": "https://cloud.google.com/vpc/network-pricing"
+        }
+      }
+    },
+    {
+      "id": "cross-region",
+      "group": "internal",
+      "label": "Cross-region, same cloud",
+      "sub": "region to region, one provider",
+      "desc": "Data transfer from one of the provider's regions to another — replication, multi-region failover and cross-region backups.",
+      "rates": {
+        "aws": {
+          "level": "rate",
+          "headline": "$0.02 /GB",
+          "unit": "GB",
+          "note": "Representative rate between two US regions, billed on egress from the source region with inbound free. Between the two US-East regions — N. Virginia and Ohio — it is one cent per GB. The exact rate depends on the source region, so non-US origins differ.",
+          "src": "https://aws.amazon.com/ec2/pricing/on-demand/"
+        },
+        "azure": {
+          "level": "rate",
+          "headline": "$0.02 /GB",
+          "unit": "GB",
+          "note": "Standard inter-region transfer, North America to North America, billed on egress from the source region with inbound free. The rate varies by source continent.",
+          "src": "https://azure.microsoft.com/en-us/pricing/details/bandwidth/"
+        },
+        "gcp": {
+          "level": "rate",
+          "headline": "$0.01 /GiB",
+          "unit": "GiB",
+          "note": "US or Canada region to US or Canada region, under Google Cloud's current Data Transfer pricing model, billed on the sending side. Some third-party sources cite two cents — that figure usually refers to Cloud Storage cross-region replication, a separate charge. Cross-continent transfer costs more; confirm your exact region pair on the linked page.",
+          "src": "https://cloud.google.com/vpc/network-pricing"
+        }
+      }
+    },
+    {
+      "id": "nat-processing",
+      "group": "links",
+      "label": "NAT gateway data processing",
+      "sub": "per-GB surcharge through a NAT",
+      "desc": "The per-gigabyte surcharge for traffic routed through a managed NAT gateway — separate from, and on top of, the gateway's hourly charge.",
+      "rates": {
+        "aws": {
+          "level": "rate",
+          "headline": "$0.045 /GB",
+          "unit": "GB",
+          "note": "Per-GB data-processing charge for every gigabyte through a NAT gateway, to any destination. It is on top of the separate NAT gateway hourly charge of about 4.5 cents, and on top of internet-egress charges.",
+          "src": "https://aws.amazon.com/vpc/pricing/"
+        },
+        "azure": {
+          "level": "rate",
+          "headline": "$0.045 /GB",
+          "unit": "GB",
+          "note": "Data processed through an Azure NAT Gateway, inbound and outbound. Separate from the NAT gateway hourly resource charge of about 4.5 cents per hour.",
+          "src": "https://azure.microsoft.com/en-us/pricing/details/azure-nat-gateway/"
+        },
+        "gcp": {
+          "level": "rate",
+          "headline": "$0.045 /GiB",
+          "unit": "GiB",
+          "note": "Data processed through Cloud NAT, both ingress and egress. Separate from the small hourly Cloud NAT charge billed per VM.",
+          "src": "https://cloud.google.com/nat/pricing"
+        }
+      }
+    },
+    {
+      "id": "interconnect",
+      "group": "links",
+      "label": "Private interconnect (egress)",
+      "sub": "over a dedicated private link",
+      "desc": "Outbound data over a dedicated private link — AWS Direct Connect, Azure ExpressRoute or Google Cloud Interconnect — the route to your own datacentre or another cloud that sidesteps full internet-egress rates.",
+      "rates": {
+        "aws": {
+          "level": "rate",
+          "headline": "$0.02 /GB",
+          "unit": "GB",
+          "note": "AWS Direct Connect data-transfer-out, from a US region to a US Direct Connect location — a flat rate with no tiers. Port-hour fees are billed separately.",
+          "src": "https://aws.amazon.com/directconnect/pricing/"
+        },
+        "azure": {
+          "level": "rate",
+          "headline": "$0.025 /GB",
+          "unit": "GB",
+          "note": "Azure ExpressRoute outbound on the Metered plan, Zone 1. Inbound is free; the Unlimited plan replaces metering with a higher fixed port fee.",
+          "src": "https://azure.microsoft.com/en-us/pricing/details/expressroute/"
+        },
+        "gcp": {
+          "level": "rate",
+          "headline": "$0.02 /GiB",
+          "unit": "GiB",
+          "note": "Google Cloud Interconnect — Dedicated or Partner — outbound, US to US. Inbound is not charged; VLAN-attachment and port fees are separate.",
+          "src": "https://cloud.google.com/network-connectivity/docs/interconnect/pricing"
+        }
+      }
+    }
+  ]
+}

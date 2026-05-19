@@ -1,10 +1,10 @@
 name: Verify freshness
 
 # The curated Cross-Cloud matrices (kubernetes, compliance, confidential-
-# computing, iam-matrix, ai-atlas) and the decisions/ pages carry no refresh.sh — hand-maintained
-# from vendor docs and snapshot-dated in the masthead, inside a
-# <time datetime="…"> element within .status-time. Nothing else would catch
-# them silently going stale as time passes.
+# computing, iam-matrix, ai-atlas, egress) and the decisions/ pages are
+# hand-maintained from vendor docs and snapshot-dated in the masthead, inside
+# a <time datetime="…"> element within .status-time. None pull from a live
+# API, so nothing else would catch them silently going stale as time passes.
 #
 # This job reads each snapshot date and fails when one ages past the review
 # threshold — a periodic nudge to re-verify against the vendor docs and bump
@@ -38,6 +38,7 @@ jobs:
             "confidential-computing:180"
             "iam-matrix:180"
             "ai-atlas:45"
+            "egress:180"
             "decisions:365"
           )
           now=$(date -u +%s)

@@ -1,0 +1,914 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="color-scheme" content="dark">
+<title>Cross-Cloud · Egress &amp; Data-Transfer Cost Map · Infra Atlas</title>
+<link rel="icon" href="/favicon.svg?v=2" type="image/svg+xml">
+<meta name="description" content="What it costs to move a gigabyte across AWS, Azure and Google Cloud — internet egress, cross-AZ, cross-region, NAT gateway processing and private interconnect. Sourced, dated list prices, with the footnotes intact.">
+<link rel="canonical" href="https://infraatlas.dev/egress/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Infra Atlas">
+<meta property="og:title" content="Cross-Cloud · Egress &amp; Data-Transfer Cost Map · Infra Atlas">
+<meta property="og:description" content="What it costs to move a gigabyte across AWS, Azure and Google Cloud — internet egress, cross-AZ, cross-region, NAT processing and private interconnect. Sourced, dated list prices.">
+<meta property="og:url" content="https://infraatlas.dev/egress/">
+<meta property="og:image" content="https://infraatlas.dev/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Infra Atlas — a reference for the infrastructure stack">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Cross-Cloud · Egress &amp; Data-Transfer Cost Map · Infra Atlas">
+<meta name="twitter:description" content="What it costs to move a gigabyte across AWS, Azure and Google Cloud — egress, cross-AZ, cross-region, NAT and interconnect. Sourced list prices.">
+<meta name="twitter:image" content="https://infraatlas.dev/og.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@300;400;500;600&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+:root {
+  --ink: #0A0907; --ink-2: #100E0C; --surface: #161310; --surface-2: #1E1A15; --surface-3: #2A241C;
+  --line: rgba(244, 239, 230, 0.06); --line-2: rgba(244, 239, 230, 0.14); --line-3: rgba(244, 239, 230, 0.28);
+  --paper: #F4EFE6; --paper-2: rgba(244, 239, 230, 0.66); --paper-3: rgba(244, 239, 230, 0.55); --paper-4: rgba(244, 239, 230, 0.20);
+  --accent: #FF7849; --accent-2: #FFA66E; --accent-glow: rgba(255, 120, 73, 0.22);
+  --mint: #6FE7B5; --gold: #F4C660; --plum: #C586E8; --sky: #7CD7F1; --rose: #F47B7B; --teal: #5BCCC9;
+  --serif: 'Instrument Serif', 'Times New Roman', serif;
+  --mono: 'JetBrains Mono', ui-monospace, monospace;
+  --sans: 'Manrope', -apple-system, system-ui, sans-serif;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body {
+  background: var(--ink);
+  color: var(--paper);
+  font-family: var(--sans);
+  font-size: 15px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  min-height: 100vh;
+}
+
+body {
+  background:
+    radial-gradient(ellipse at 100% -10%, rgba(255, 120, 73, 0.07), transparent 55%),
+    radial-gradient(ellipse at -10% 110%, rgba(244, 198, 96, 0.05), transparent 65%),
+    var(--ink);
+  background-attachment: fixed;
+  overflow-x: hidden;
+}
+
+.grain {
+  pointer-events: none; position: fixed; inset: 0; z-index: 100; opacity: 0.08; mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml;utf8,<svg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.6 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+}
+.scanlines {
+  pointer-events: none; position: fixed; inset: 0; z-index: 99;
+  background: repeating-linear-gradient(180deg, transparent, transparent 2px, rgba(244,239,230,0.012) 2px, rgba(244,239,230,0.012) 3px);
+}
+::selection { background: var(--accent); color: var(--ink); }
+
+/* ─────────── FOCUS ─────────── */
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+a:focus-visible, button:focus-visible, input:focus-visible, [tabindex]:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+.matrix tbody tr.transfer-row td.cell:focus-visible,
+.matrix tbody tr.transfer-row td.transfer-col:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: -2px;
+}
+
+.page { max-width: 1400px; margin: 0 auto; padding: 56px 48px 96px; position: relative; }
+
+/* ─────────── MASTHEAD ─────────── */
+.masthead {
+  display: grid; grid-template-columns: 1fr auto; gap: 48px; align-items: end;
+  padding-bottom: 36px; border-bottom: 1px solid var(--line); margin-bottom: 32px;
+}
+.masthead__eyebrow {
+  font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.22em; color: var(--paper-3);
+  text-transform: uppercase; display: inline-flex; align-items: center; gap: 12px;
+  text-decoration: none; transition: color 0.2s ease;
+}
+.masthead__eyebrow:hover { color: var(--paper); }
+.masthead__eyebrow-arrow { color: var(--accent); transition: transform 0.2s ease; }
+.masthead__eyebrow:hover .masthead__eyebrow-arrow { transform: translateX(-4px); }
+.masthead__title {
+  font-family: var(--serif); font-weight: 400;
+  font-size: clamp(48px, 7vw, 108px); line-height: 0.95; letter-spacing: -0.02em;
+  margin-top: 16px; color: var(--paper);
+}
+.masthead__title em { font-style: italic; color: var(--accent); }
+.masthead__subtitle {
+  margin-top: 18px; font-size: 16px; color: var(--paper-2); max-width: 640px; line-height: 1.55;
+}
+.masthead__subtitle span {
+  font-family: var(--serif); font-style: italic; color: var(--paper);
+}
+
+.masthead__status {
+  text-align: right; display: flex; flex-direction: column; align-items: flex-end; gap: 14px; padding-bottom: 6px;
+}
+.status-line {
+  display: inline-flex; align-items: center; gap: 10px;
+  font-family: var(--mono); font-size: 11px; letter-spacing: 0.18em;
+  text-transform: uppercase; color: var(--gold);
+}
+.status-dot {
+  width: 8px; height: 8px; border-radius: 50%; background: var(--gold);
+  animation: pulse 2.4s infinite;
+}
+@keyframes pulse {
+  0% { box-shadow: 0 0 0 0 rgba(244,198,96,0.5); }
+  70% { box-shadow: 0 0 0 14px rgba(244,198,96,0); }
+  100% { box-shadow: 0 0 0 0 rgba(244,198,96,0); }
+}
+.status-time { font-family: var(--mono); font-size: 12px; color: var(--paper-3); }
+.status-counts { display: flex; gap: 24px; margin-top: 4px; }
+.status-counts > div {
+  text-align: right; font-family: var(--mono); font-size: 11px; letter-spacing: 0.12em;
+  text-transform: uppercase; color: var(--paper-3); display: flex; flex-direction: column; gap: 2px;
+}
+.status-counts strong {
+  font-family: var(--serif); font-style: italic; font-weight: 400; font-size: 28px;
+  color: var(--paper); letter-spacing: -0.01em; text-transform: none;
+}
+
+/* ─────────── READING NOTE ─────────── */
+.readnote {
+  display: flex; gap: 18px; align-items: flex-start;
+  padding: 20px 24px; margin-bottom: 28px;
+  background: linear-gradient(180deg, rgba(255,120,73,0.075), rgba(255,120,73,0.02));
+  border: 1px solid rgba(255,120,73,0.22); border-radius: 5px;
+}
+.readnote__mark {
+  font-family: var(--serif); font-style: italic; font-size: 40px;
+  color: var(--accent); line-height: 0.7; flex-shrink: 0;
+}
+.readnote__text { font-size: 13.5px; color: var(--paper-2); line-height: 1.62; }
+.readnote__text strong { color: var(--paper); font-weight: 600; }
+.readnote__text em { font-family: var(--serif); font-style: italic; color: var(--paper); font-size: 15px; }
+
+/* ─────────── FILTERS ─────────── */
+.filters {
+  display: grid; grid-template-columns: auto 1fr; gap: 18px 32px; align-items: center;
+  padding: 18px 22px; background: linear-gradient(180deg, var(--surface) 0%, var(--ink-2) 100%);
+  border: 1px solid var(--line); border-radius: 4px;
+  position: sticky; top: 16px; z-index: 50; backdrop-filter: blur(12px); margin-bottom: 28px;
+}
+.filter-search {
+  flex: 1; position: relative; grid-column: 1 / -1;
+}
+.filter-search input {
+  width: 100%; background: var(--ink); border: 1px solid var(--line); color: var(--paper);
+  font-family: var(--mono); font-size: 13px; padding: 12px 16px 12px 42px;
+  border-radius: 3px; outline: none; transition: border-color 0.2s ease;
+}
+.filter-search input::placeholder { color: var(--paper-3); }
+.filter-search input:focus { border-color: var(--accent); }
+.filter-search::before {
+  content: '⌕'; position: absolute; left: 16px; top: 50%; transform: translateY(-50%);
+  color: var(--paper-3); font-size: 18px; pointer-events: none;
+}
+.filter-chips {
+  grid-column: 1 / -1; display: flex; flex-wrap: wrap; gap: 6px; align-items: center;
+}
+.filter-chips__label {
+  font-family: var(--mono); font-size: 10px; letter-spacing: 0.16em;
+  text-transform: uppercase; color: var(--paper-3); margin-right: 4px;
+}
+.chip {
+  background: transparent; border: 1px solid var(--line-2); color: var(--paper-2);
+  font-family: var(--mono); font-size: 11px; letter-spacing: 0.06em;
+  padding: 6px 12px; border-radius: 99px; cursor: pointer; transition: all 0.15s ease;
+  display: inline-flex; align-items: center; gap: 8px; white-space: nowrap;
+}
+.chip:hover { border-color: var(--paper-3); color: var(--paper); }
+.chip.is-active { background: var(--paper); border-color: var(--paper); color: var(--ink); }
+.chip .swatch {
+  width: 8px; height: 8px; border-radius: 2px;
+}
+
+/* ─────────── MATRIX ─────────── */
+.matrix-wrap {
+  overflow-x: auto; margin-bottom: 48px;
+  border: 1px solid var(--line); border-radius: 6px;
+  background: linear-gradient(180deg, var(--ink-2) 0%, var(--ink) 100%);
+}
+.matrix {
+  width: 100%; border-collapse: collapse; min-width: 760px;
+  font-family: var(--sans); font-size: 13px;
+}
+.matrix thead th {
+  position: sticky; top: 0; z-index: 10; background: var(--ink-2);
+  font-family: var(--mono); font-weight: 500; font-size: 10.5px;
+  letter-spacing: 0.14em; text-transform: uppercase; color: var(--paper-2);
+  padding: 18px 14px 12px; vertical-align: bottom; text-align: center;
+  border-bottom: 1px solid var(--line-2);
+  white-space: nowrap;
+}
+.matrix thead th.transfer-col {
+  text-align: left; padding-left: 22px; min-width: 280px;
+  font-family: var(--serif); font-style: italic; font-size: 16px;
+  letter-spacing: 0; text-transform: none; color: var(--paper);
+  font-weight: 400;
+}
+.matrix th .vendor-tag {
+  display: inline-flex; align-items: center; gap: 6px;
+}
+.matrix th .swatch {
+  width: 6px; height: 6px; border-radius: 1px;
+}
+
+.matrix tbody tr.group-row td {
+  padding: 22px 22px 10px;
+  border-top: 1px dashed var(--line);
+  background: linear-gradient(180deg, rgba(0,0,0,0.2), transparent);
+}
+.matrix tbody tr.group-row td .group-label {
+  font-family: var(--mono); font-size: 10px; letter-spacing: 0.22em;
+  text-transform: uppercase; color: var(--paper-3);
+  display: flex; align-items: center; gap: 10px;
+}
+.matrix tbody tr.group-row td .group-label::after {
+  content: ''; flex: 1; height: 1px; background: var(--line);
+}
+.matrix tbody tr.transfer-row td {
+  padding: 14px 14px; border-bottom: 1px solid var(--line);
+  vertical-align: middle;
+}
+.matrix tbody tr.transfer-row td.transfer-col {
+  padding-left: 22px; color: var(--paper); font-size: 14px;
+  text-align: left; cursor: pointer;
+  border-right: 1px solid var(--line);
+}
+.matrix tbody tr.transfer-row td.transfer-col:hover { color: var(--accent-2); }
+.matrix tbody tr.transfer-row td.transfer-col .transfer-name { font-weight: 500; }
+.matrix tbody tr.transfer-row td.transfer-col .transfer-sub {
+  display: block; font-family: var(--mono); font-size: 10.5px;
+  color: var(--paper-3); margin-top: 3px; letter-spacing: 0.02em;
+}
+.matrix tbody tr.transfer-row td.cell {
+  text-align: center; min-width: 140px; cursor: pointer;
+  transition: background 0.15s ease;
+  position: relative;
+}
+.matrix tbody tr.transfer-row td.cell:hover {
+  background: rgba(255, 120, 73, 0.04);
+}
+.matrix tbody tr.transfer-row:hover {
+  background: linear-gradient(90deg, transparent, rgba(255, 120, 73, 0.02), transparent);
+}
+
+.cell-value {
+  display: inline-flex; align-items: baseline; justify-content: center; gap: 2px;
+  font-family: var(--mono); font-size: 14px; line-height: 1.3;
+  padding: 4px 8px; border-radius: 3px; position: relative;
+}
+.cell-value--rate { color: var(--paper); }
+.cell-value--free { color: var(--mint); font-style: normal; }
+.cell-value--na   { color: var(--paper-3); }
+.cell-value__star {
+  font-size: 10px; color: var(--accent); align-self: flex-start;
+  margin-left: 1px;
+}
+
+/* Hide columns when a provider is filtered out */
+.matrix.hide-aws   .col-aws,
+.matrix.hide-azure .col-azure,
+.matrix.hide-gcp   .col-gcp { display: none; }
+
+/* Hide rows when filtered/searched */
+.matrix tbody tr.transfer-row.is-hidden,
+.matrix tbody tr.group-row.is-hidden { display: none; }
+
+/* ─────────── LEGEND ─────────── */
+.legend {
+  display: flex; flex-wrap: wrap; gap: 18px; align-items: center;
+  margin-bottom: 28px; padding: 16px 22px;
+  background: var(--surface); border: 1px solid var(--line); border-radius: 4px;
+  font-family: var(--mono); font-size: 11px; color: var(--paper-2);
+}
+.legend__label {
+  font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--paper-3);
+}
+.legend__item { display: inline-flex; align-items: center; gap: 8px; }
+.legend__dot { width: 9px; height: 9px; border-radius: 2px; display: inline-block; }
+.legend__star { color: var(--accent); font-size: 13px; }
+
+/* ─────────── DRAWER ─────────── */
+.drawer-backdrop {
+  position: fixed; inset: 0; background: rgba(10, 9, 7, 0.7); backdrop-filter: blur(8px);
+  z-index: 200; opacity: 0; pointer-events: none; transition: opacity 0.25s ease;
+}
+.drawer-backdrop.is-open { opacity: 1; pointer-events: auto; }
+.drawer {
+  position: fixed; top: 0; right: 0; bottom: 0; width: min(640px, 100%);
+  background: var(--ink-2); border-left: 1px solid var(--line-2); z-index: 201;
+  transform: translateX(100%); transition: transform 0.32s cubic-bezier(0.2, 0.8, 0.2, 1);
+  display: flex; flex-direction: column;
+}
+.drawer.is-open { transform: translateX(0); }
+.drawer__head {
+  padding: 28px 32px 22px; border-bottom: 1px solid var(--line); position: relative; flex-shrink: 0;
+}
+.drawer__close {
+  position: absolute; top: 20px; right: 20px;
+  background: transparent; border: 1px solid var(--line-2); color: var(--paper-2);
+  font-family: var(--mono); font-size: 11px; padding: 6px 10px; cursor: pointer;
+  border-radius: 2px; letter-spacing: 0.1em; text-transform: uppercase;
+}
+.drawer__close:hover { border-color: var(--paper); color: var(--paper); }
+.drawer__eyebrow {
+  font-family: var(--mono); font-size: 10px; letter-spacing: 0.22em;
+  text-transform: uppercase; color: var(--accent);
+}
+.drawer__title {
+  font-family: var(--serif); font-size: 32px; font-weight: 400;
+  letter-spacing: -0.012em; line-height: 1.05; margin-top: 8px;
+}
+.drawer__desc {
+  margin-top: 12px; font-size: 14px; color: var(--paper-2); line-height: 1.6;
+}
+.drawer__body { padding: 22px 32px 32px; overflow-y: auto; flex: 1; }
+.drawer__section { margin-bottom: 24px; }
+.drawer__section h4 {
+  font-family: var(--mono); font-size: 10.5px; font-weight: 500;
+  letter-spacing: 0.18em; text-transform: uppercase; color: var(--paper-3);
+  margin-bottom: 12px; display: flex; align-items: center; gap: 10px;
+}
+.drawer__section h4::after { content: ''; flex: 1; height: 1px; background: var(--line); }
+
+.prov-row {
+  padding: 16px 18px; background: var(--surface);
+  border: 1px solid var(--line); border-radius: 3px; margin-bottom: 8px;
+}
+.prov-row__head {
+  display: flex; align-items: baseline; justify-content: space-between; gap: 14px;
+}
+.prov-row__name {
+  font-family: var(--mono); font-size: 12.5px; font-weight: 500; color: var(--paper);
+  display: flex; align-items: center; gap: 9px;
+}
+.prov-row__name .swatch { width: 8px; height: 8px; border-radius: 2px; }
+.prov-row__rate {
+  font-family: var(--mono); font-size: 15px; color: var(--paper); white-space: nowrap;
+}
+.prov-row__rate--free { color: var(--mint); }
+.prov-row__rate--na   { color: var(--paper-3); }
+.tiertable {
+  width: 100%; border-collapse: collapse; margin-top: 12px;
+  border-top: 1px solid var(--line);
+}
+.tiertable td {
+  font-family: var(--mono); font-size: 11.5px; padding: 6px 2px;
+  border-bottom: 1px solid var(--line);
+}
+.tiertable td:first-child { color: var(--paper-2); }
+.tiertable td:last-child { text-align: right; color: var(--paper); white-space: nowrap; }
+.tiertable tr:last-child td { border-bottom: none; }
+.prov-row__note {
+  font-family: var(--sans); font-size: 12.5px; color: var(--paper-2); line-height: 1.58; margin-top: 12px;
+}
+.prov-row__src {
+  margin-top: 10px; font-family: var(--mono); font-size: 10.5px;
+}
+.prov-row__src a {
+  color: var(--paper-3); text-decoration: underline;
+  text-decoration-color: var(--line-2); text-underline-offset: 3px; word-break: break-all;
+}
+.prov-row__src a:hover { color: var(--accent); }
+
+/* ─────────── COLOPHON ─────────── */
+.colophon {
+  margin-top: 64px; padding-top: 32px; border-top: 1px solid var(--line);
+  display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 32px;
+  font-size: 13px; color: var(--paper-3);
+}
+.colophon h5 {
+  font-family: var(--mono); font-size: 10px; letter-spacing: 0.18em;
+  text-transform: uppercase; color: var(--paper-2); margin-bottom: 10px; font-weight: 500;
+}
+.colophon p { font-size: 13px; line-height: 1.6; }
+.colophon p a {
+  color: var(--paper-2); text-decoration: underline;
+  text-decoration-color: var(--line-2); text-underline-offset: 3px;
+}
+.colophon p a:hover { color: var(--accent); }
+.colophon code {
+  font-family: var(--mono); font-size: 11.5px; background: var(--surface);
+  padding: 1px 6px; border-radius: 2px; border: 1px solid var(--line); color: var(--accent-2);
+}
+
+@media (max-width: 900px) {
+  .page { padding: 32px 22px 72px; }
+  .masthead { grid-template-columns: 1fr; gap: 24px; }
+  .masthead__status { text-align: left; align-items: flex-start; }
+  .filters { position: static; padding: 14px; }
+  .colophon { grid-template-columns: 1fr; gap: 24px; }
+}
+</style>
+</head>
+<body>
+
+<div class="grain"></div>
+<div class="scanlines"></div>
+
+<div class="page">
+
+  <header class="masthead">
+    <div class="masthead__brand">
+      <a class="masthead__eyebrow" href="../">
+        <span class="masthead__eyebrow-arrow">←</span>
+        Infra Atlas · Cross-Cloud · Egress &amp; Transfer
+      </a>
+      <h1 class="masthead__title">Egress <em>Map.</em></h1>
+      <p class="masthead__subtitle">
+        What it costs to move a gigabyte across AWS, Azure and Google Cloud — <span>out to the internet, between zones and regions, through a NAT gateway or a private link.</span> The cost the calculators bury.
+      </p>
+    </div>
+    <aside class="masthead__status">
+      <div class="status-line">
+        <span class="status-dot"></span>
+        <span class="status-text">Curated · v1</span>
+      </div>
+      <div class="status-time">Verified · <time datetime="2026-05-19">2026-05-19</time></div>
+      <div class="status-counts">
+        <div>Providers<strong id="count-providers">3</strong></div>
+        <div>Transfer types<strong id="count-transfers">—</strong></div>
+        <div>Footnotes<strong id="count-notes">—</strong></div>
+      </div>
+    </aside>
+  </header>
+
+  <main id="ia-main">
+
+  <div class="readnote">
+    <span class="readnote__mark">*</span>
+    <p class="readnote__text">
+      <strong>Egress pricing is conditional.</strong> Free monthly tiers, same-region exemptions, CDN-routed discounts and committed-use deals all move the real number. Treat the headline rate as the map and the footnote as the <em>territory</em> — and read every figure as a US-dollar <em>list</em> price, never the invoiced price. Click any cell for the tier ladder and the vendor source.
+    </p>
+  </div>
+
+  <section class="filters">
+    <div class="filter-search">
+      <input id="search" type="search" autocomplete="off" spellcheck="false" placeholder="Filter — search by transfer type, rate, cloud…">
+    </div>
+    <div class="filter-chips" id="group-chips"></div>
+    <div class="filter-chips" id="provider-chips"></div>
+  </section>
+
+  <div class="legend">
+    <span class="legend__label">Legend</span>
+    <span class="legend__item"><span class="legend__dot" style="background:var(--paper-2)"></span> Metered — a published per-GB list rate</span>
+    <span class="legend__item"><span class="legend__dot" style="background:var(--mint)"></span> Free — no charge for this transfer</span>
+    <span class="legend__item"><span class="legend__star">*</span> Click any cell for the tier ladder &amp; source</span>
+  </div>
+
+  <div class="matrix-wrap">
+    <table class="matrix" id="matrix"></table>
+  </div>
+
+  </main>
+
+  <footer class="colophon">
+    <div>
+      <h5>About</h5>
+      <p>Instrument 18 of <a href="../">Infra Atlas</a>. The cross-cloud data-transfer cost map — what AWS, Azure and Google Cloud charge to move a gigabyte: out to the internet, between zones and regions, and through a NAT gateway or a private interconnect. Click any cell for the tier ladder and the source.</p>
+    </div>
+    <div>
+      <h5>Sources &amp; method</h5>
+      <p>Every rate is a published list price, curated from the providers&rsquo; official pricing pages — AWS EC2, VPC and Direct Connect; Azure bandwidth, NAT Gateway and ExpressRoute; Google Cloud network, NAT and Interconnect. Source URLs are cited in each cell&rsquo;s drawer. Pricing pages render dynamically and change without notice — this is a snapshot, verified 2026-05-19, not a live feed. List price, never the invoiced price. <em>Spot a stale rate? <a href="https://github.com/ineslino/infra-atlas/issues/new" target="_blank" rel="noopener">Open an issue</a>.</em></p>
+    </div>
+    <div>
+      <h5>Shortcuts</h5>
+      <p><code>/</code> search · <code>Esc</code> close drawer · click a cell for the tier ladder, click a row name for the full per-cloud breakdown. The same data is published as JSON at <code>/egress/data.json</code>.</p>
+    </div>
+  </footer>
+
+</div>
+
+<!-- DRAWER -->
+<div class="drawer-backdrop" id="drawer-backdrop"></div>
+<aside class="drawer" id="drawer" aria-hidden="true">
+  <div class="drawer__head" id="drawer-head"></div>
+  <div class="drawer__body" id="drawer-body"></div>
+</aside>
+
+<script>
+// ═══════════════════════════════════════════════════════════════════
+// INFRA ATLAS · EGRESS & DATA-TRANSFER COST MAP
+// Every rate is a published list price, verified against the provider's
+// official pricing documentation (2026-05-19). The source URL for each
+// figure is in its `src` field, surfaced in the drawer. Egress pricing
+// is conditional — free tiers, direction and region all move the real
+// number — so each rate carries a `note`. Curated, not a live feed.
+//
+// data.json is generated from the consts below by ./refresh.sh — edit
+// the data here, then re-run the script. index.html is source of truth.
+// ═══════════════════════════════════════════════════════════════════
+
+// ───────────────────────────────────────────────────────────────────
+// PROVIDERS
+// ───────────────────────────────────────────────────────────────────
+const PROVIDERS = [
+  { key: "aws",   name: "Amazon Web Services", short: "AWS",   swatch: "#FF9F66" },
+  { key: "azure", name: "Microsoft Azure",     short: "Azure", swatch: "#7CD7F1" },
+  { key: "gcp",   name: "Google Cloud",        short: "GCP",   swatch: "#F4C660" }
+];
+
+// ───────────────────────────────────────────────────────────────────
+// GROUPS — the transfer rows are bucketed into these
+// ───────────────────────────────────────────────────────────────────
+const GROUPS = [
+  { key: "internet", label: "Out to the internet" },
+  { key: "internal", label: "Inside one cloud" },
+  { key: "links",    label: "Gateways & private links" }
+];
+
+// ───────────────────────────────────────────────────────────────────
+// TRANSFERS — one row per transfer type
+//   rates[provider]:
+//     level    : rate | free | na   (drives the cell colour)
+//     headline : the rate shown in the matrix cell
+//     unit     : GB | GiB           (AWS/Azure bill per GB, GCP per GiB)
+//     tiers    : optional [{band,usd}] volume ladder, shown in the drawer
+//     note     : the footnote — the conditional truth behind the headline
+//     src      : official vendor pricing URL backing the figure
+// ───────────────────────────────────────────────────────────────────
+const TRANSFERS = [
+
+  { id: "internet-egress", group: "internet", label: "Internet egress (out)",
+    sub: "data sent to the public internet",
+    desc: "Data leaving the cloud for the public internet — the headline cost line, and the charge that dominates most cloud networking bills.",
+    rates: {
+      aws: { level: "rate", headline: "$0.09 /GB", unit: "GB",
+             tiers: [
+               { band: "First 100 GB / month", usd: 0 },
+               { band: "Up to 10 TB / month",  usd: 0.09 },
+               { band: "Next 40 TB",           usd: 0.085 },
+               { band: "Next 100 TB",          usd: 0.07 },
+               { band: "Beyond 150 TB",        usd: 0.05 }
+             ],
+             note: "First 100 GB each month is free, aggregated across AWS services and regions. Beyond that the rate steps down with volume as shown; transfers above 500 TB/month are contact-sales. Inbound data transfer from the internet is free.",
+             src: "https://aws.amazon.com/ec2/pricing/on-demand/" },
+      azure: { level: "rate", headline: "$0.087 /GB", unit: "GB",
+             tiers: [
+               { band: "First 100 GB / month", usd: 0 },
+               { band: "Up to 10 TB / month",  usd: 0.087 },
+               { band: "Next 40 TB",           usd: 0.083 },
+               { band: "Next 100 TB",          usd: 0.07 },
+               { band: "Beyond 150 TB",        usd: 0.05 }
+             ],
+             note: "Zone 1 rate — North America and Europe — over Microsoft's global network. The first 100 GB each month is free and inbound transfer is free. A Routing Preference of Internet routing prices a little lower.",
+             src: "https://azure.microsoft.com/en-us/pricing/details/bandwidth/" },
+      gcp: { level: "rate", headline: "$0.12 /GiB", unit: "GiB",
+             tiers: [
+               { band: "0 to 1 TB / month",   usd: 0.12 },
+               { band: "1 to 10 TB / month",  usd: 0.11 },
+               { band: "10 TB and above",     usd: 0.08 }
+             ],
+             note: "Premium network tier, to worldwide destinations other than China and Australia. The Standard tier is cheaper — roughly $0.085 then $0.065 per GiB from a US region — and carries a 200 GB monthly free allowance per region. Google bills per GiB, slightly larger than a GB.",
+             src: "https://cloud.google.com/network-tiers/pricing" }
+    } },
+
+  { id: "cross-az", group: "internal", label: "Cross-AZ, same region",
+    sub: "between Availability Zones",
+    desc: "Data moving between Availability Zones inside one region — the running cost of a multi-AZ, highly-available architecture.",
+    rates: {
+      aws: { level: "rate", headline: "$0.01 /GB", unit: "GB",
+             note: "Charged at one cent per GB on both the sending and the receiving side, so a round trip between Availability Zones effectively costs about two cents per GB. Applies to private-IP traffic across AZs.",
+             src: "https://aws.amazon.com/ec2/pricing/on-demand/" },
+      azure: { level: "free", headline: "Free", unit: "GB",
+             note: "Azure no longer charges for data transfer between Availability Zones in the same region — inter-AZ billing was formally eliminated, announced during 2024. The raw retail-price API still exposes legacy one-cent meters that are not billed.",
+             src: "https://azure.microsoft.com/en-us/pricing/details/bandwidth/" },
+      gcp: { level: "rate", headline: "$0.01 /GiB", unit: "GiB",
+             note: "One cent per GiB for VM-to-VM traffic between zones of the same region, billed on the sending side. Traffic inside a single zone over internal IPs is free.",
+             src: "https://cloud.google.com/vpc/network-pricing" }
+    } },
+
+  { id: "cross-region", group: "internal", label: "Cross-region, same cloud",
+    sub: "region to region, one provider",
+    desc: "Data transfer from one of the provider's regions to another — replication, multi-region failover and cross-region backups.",
+    rates: {
+      aws: { level: "rate", headline: "$0.02 /GB", unit: "GB",
+             note: "Representative rate between two US regions, billed on egress from the source region with inbound free. Between the two US-East regions — N. Virginia and Ohio — it is one cent per GB. The exact rate depends on the source region, so non-US origins differ.",
+             src: "https://aws.amazon.com/ec2/pricing/on-demand/" },
+      azure: { level: "rate", headline: "$0.02 /GB", unit: "GB",
+             note: "Standard inter-region transfer, North America to North America, billed on egress from the source region with inbound free. The rate varies by source continent.",
+             src: "https://azure.microsoft.com/en-us/pricing/details/bandwidth/" },
+      gcp: { level: "rate", headline: "$0.01 /GiB", unit: "GiB",
+             note: "US or Canada region to US or Canada region, under Google Cloud's current Data Transfer pricing model, billed on the sending side. Some third-party sources cite two cents — that figure usually refers to Cloud Storage cross-region replication, a separate charge. Cross-continent transfer costs more; confirm your exact region pair on the linked page.",
+             src: "https://cloud.google.com/vpc/network-pricing" }
+    } },
+
+  { id: "nat-processing", group: "links", label: "NAT gateway data processing",
+    sub: "per-GB surcharge through a NAT",
+    desc: "The per-gigabyte surcharge for traffic routed through a managed NAT gateway — separate from, and on top of, the gateway's hourly charge.",
+    rates: {
+      aws: { level: "rate", headline: "$0.045 /GB", unit: "GB",
+             note: "Per-GB data-processing charge for every gigabyte through a NAT gateway, to any destination. It is on top of the separate NAT gateway hourly charge of about 4.5 cents, and on top of internet-egress charges.",
+             src: "https://aws.amazon.com/vpc/pricing/" },
+      azure: { level: "rate", headline: "$0.045 /GB", unit: "GB",
+             note: "Data processed through an Azure NAT Gateway, inbound and outbound. Separate from the NAT gateway hourly resource charge of about 4.5 cents per hour.",
+             src: "https://azure.microsoft.com/en-us/pricing/details/azure-nat-gateway/" },
+      gcp: { level: "rate", headline: "$0.045 /GiB", unit: "GiB",
+             note: "Data processed through Cloud NAT, both ingress and egress. Separate from the small hourly Cloud NAT charge billed per VM.",
+             src: "https://cloud.google.com/nat/pricing" }
+    } },
+
+  { id: "interconnect", group: "links", label: "Private interconnect (egress)",
+    sub: "over a dedicated private link",
+    desc: "Outbound data over a dedicated private link — AWS Direct Connect, Azure ExpressRoute or Google Cloud Interconnect — the route to your own datacentre or another cloud that sidesteps full internet-egress rates.",
+    rates: {
+      aws: { level: "rate", headline: "$0.02 /GB", unit: "GB",
+             note: "AWS Direct Connect data-transfer-out, from a US region to a US Direct Connect location — a flat rate with no tiers. Port-hour fees are billed separately.",
+             src: "https://aws.amazon.com/directconnect/pricing/" },
+      azure: { level: "rate", headline: "$0.025 /GB", unit: "GB",
+             note: "Azure ExpressRoute outbound on the Metered plan, Zone 1. Inbound is free; the Unlimited plan replaces metering with a higher fixed port fee.",
+             src: "https://azure.microsoft.com/en-us/pricing/details/expressroute/" },
+      gcp: { level: "rate", headline: "$0.02 /GiB", unit: "GiB",
+             note: "Google Cloud Interconnect — Dedicated or Partner — outbound, US to US. Inbound is not charged; VLAN-attachment and port fees are separate.",
+             src: "https://cloud.google.com/network-connectivity/docs/interconnect/pricing" }
+    } }
+
+];
+
+// ───────────────────────────────────────────────────────────────────
+// STATE + RENDER
+// ───────────────────────────────────────────────────────────────────
+const state = {
+  providers: new Set(PROVIDERS.map(p => p.key)),
+  group: "all",
+  query: ""
+};
+
+const $ = (s) => document.querySelector(s);
+const $$ = (s) => Array.from(document.querySelectorAll(s));
+
+const escapeHtml = (s) => String(s).replace(/[&<>"']/g, (c) => ({
+  "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
+}[c]));
+
+const rateOf = (t, k) => t.rates[k] || { level: "na", headline: "—", note: "" };
+
+// ─── Permalinks — filter state ⇄ URL hash ───
+function writeHash() {
+  const keys = PROVIDERS.map(p => p.key);
+  const p = new URLSearchParams();
+  if (state.providers.size < keys.length) p.set("clouds", keys.filter(k => state.providers.has(k)).join(","));
+  if (state.group !== "all") p.set("group", state.group);
+  if (state.query.trim())    p.set("q", state.query.trim());
+  const h = p.toString();
+  history.replaceState(null, "", h ? "#" + h : location.pathname + location.search);
+}
+function applyHash() {
+  const keys = PROVIDERS.map(p => p.key);
+  const p = new URLSearchParams(location.hash.slice(1));
+  const cl = p.get("clouds");
+  if (cl) {
+    const valid = cl.split(",").filter(x => keys.includes(x));
+    if (valid.length) state.providers = new Set(valid);
+  }
+  const g = p.get("group"); if (g) state.group = g;
+  state.query = p.get("q") || "";
+  const allP = state.providers.size === keys.length;
+  $$('.chip[data-p]').forEach(b => {
+    if (b.dataset.p === "all") b.classList.toggle("is-active", allP);
+    else b.classList.toggle("is-active", !allP && state.providers.has(b.dataset.p));
+  });
+  $$('.chip[data-group]').forEach(b => b.classList.toggle("is-active", b.dataset.group === state.group));
+  const sb = $("#search"); if (sb) sb.value = state.query;
+}
+
+function init() {
+  $("#count-transfers").textContent = TRANSFERS.length;
+  const notes = TRANSFERS.reduce((acc, t) =>
+    acc + Object.values(t.rates).filter(r => r.note && r.note.length > 0).length, 0);
+  $("#count-notes").textContent = notes;
+
+  const groupChips = $("#group-chips");
+  groupChips.innerHTML = `<span class="filter-chips__label">Type</span>
+    <button class="chip is-active" data-group="all">All</button>` +
+    GROUPS.map(g => `<button class="chip" data-group="${g.key}">${escapeHtml(g.label)}</button>`).join("");
+
+  const provChips = $("#provider-chips");
+  provChips.innerHTML = `<span class="filter-chips__label">Clouds</span>
+    <button class="chip is-active" data-p="all">All</button>` +
+    PROVIDERS.map(p => `<button class="chip" data-p="${p.key}"><span class="swatch" style="background:${p.swatch}"></span>${escapeHtml(p.short)}</button>`).join("");
+
+  applyHash();
+  renderMatrix();
+  wireEvents();
+  window.addEventListener("hashchange", () => { applyHash(); applyFilter(); });
+}
+
+function renderMatrix() {
+  const table = $("#matrix");
+  let html = "<thead><tr>";
+  html += '<th class="transfer-col" scope="col">Transfer type</th>';
+  PROVIDERS.forEach(p => {
+    html += `<th class="col-${p.key}" scope="col"><span class="vendor-tag"><span class="swatch" style="background:${p.swatch}"></span>${escapeHtml(p.short)}</span></th>`;
+  });
+  html += "</tr></thead><tbody>";
+
+  GROUPS.forEach(group => {
+    const rows = TRANSFERS.filter(t => t.group === group.key);
+    if (rows.length === 0) return;
+    html += `<tr class="group-row" data-group="${group.key}"><td colspan="${PROVIDERS.length + 1}"><span class="group-label">▸ ${escapeHtml(group.label)}</span></td></tr>`;
+    rows.forEach(t => {
+      html += `<tr class="transfer-row" data-transfer="${t.id}" data-group="${group.key}">`;
+      html += `<td class="transfer-col" data-action="open-transfer" tabindex="0" role="button" aria-label="Open per-cloud breakdown for ${escapeHtml(t.label)}"><span class="transfer-name">${escapeHtml(t.label)}</span><span class="transfer-sub">${escapeHtml(t.sub)}</span></td>`;
+      PROVIDERS.forEach(p => {
+        const r = rateOf(t, p.key);
+        const hasNote = r.note && r.note.length > 0;
+        html += `<td class="cell col-${p.key}" data-transfer="${t.id}" data-provider="${p.key}" tabindex="0" role="button" aria-label="${escapeHtml(t.label)} — ${escapeHtml(p.name)}: ${escapeHtml(r.headline)}. Open footnote.">`;
+        html += `<span class="cell-value cell-value--${r.level}">${escapeHtml(r.headline)}${hasNote ? '<span class="cell-value__star">*</span>' : ''}</span>`;
+        html += `</td>`;
+      });
+      html += `</tr>`;
+    });
+  });
+
+  html += "</tbody>";
+  table.innerHTML = html;
+  applyFilter();
+}
+
+function applyFilter() {
+  const q = state.query.trim().toLowerCase();
+  const table = $("#matrix");
+
+  PROVIDERS.forEach(p => {
+    table.classList.toggle(`hide-${p.key}`, !state.providers.has(p.key));
+  });
+
+  $$(".matrix tbody tr.transfer-row").forEach(row => {
+    const t = TRANSFERS.find(x => x.id === row.dataset.transfer);
+    if (!t) return;
+    let matches = state.group === "all" || t.group === state.group;
+    if (matches && q) {
+      const groupLabel = (GROUPS.find(g => g.key === t.group) || {}).label || "";
+      const provHay = PROVIDERS
+        .filter(p => state.providers.has(p.key))
+        .map(p => {
+          const r = rateOf(t, p.key);
+          return `${p.name} ${p.short} ${r.headline} ${r.note || ""}`;
+        })
+        .join(" ");
+      const hay = `${t.label} ${t.sub} ${t.desc} ${groupLabel} ${provHay}`.toLowerCase();
+      matches = hay.includes(q);
+    }
+    row.classList.toggle("is-hidden", !matches);
+  });
+
+  GROUPS.forEach(group => {
+    const visible = $$(`.matrix tbody tr.transfer-row[data-group="${group.key}"]`).some(r => !r.classList.contains("is-hidden"));
+    const groupRow = $(`.matrix tbody tr.group-row[data-group="${group.key}"]`);
+    if (groupRow) groupRow.classList.toggle("is-hidden", !visible);
+  });
+  writeHash();
+}
+
+// ─── Drawer ───
+let lastFocused = null;
+function openDrawer() {
+  lastFocused = document.activeElement;
+  $("#drawer-backdrop").classList.add("is-open");
+  $("#drawer").classList.add("is-open");
+  $("#drawer").setAttribute("aria-hidden", "false");
+  const closeBtn = $("#drawer .drawer__close");
+  if (closeBtn) closeBtn.focus();
+}
+function closeDrawer() {
+  $("#drawer-backdrop").classList.remove("is-open");
+  $("#drawer").classList.remove("is-open");
+  $("#drawer").setAttribute("aria-hidden", "true");
+  if (lastFocused && typeof lastFocused.focus === "function") lastFocused.focus();
+}
+
+function tierTable(r) {
+  if (!r.tiers || !r.tiers.length) return "";
+  const rows = r.tiers.map(t => {
+    const price = t.usd === 0 ? "Free" : `$${t.usd} / ${escapeHtml(r.unit)}`;
+    return `<tr><td>${escapeHtml(t.band)}</td><td>${price}</td></tr>`;
+  }).join("");
+  return `<table class="tiertable"><tbody>${rows}</tbody></table>`;
+}
+
+function openTransferDrawer(transfer, focusProvider) {
+  const group = (GROUPS.find(g => g.key === transfer.group) || {}).label || "";
+  $("#drawer-head").innerHTML = `
+    <div class="drawer__eyebrow">${escapeHtml(group)}</div>
+    <h3 class="drawer__title">${escapeHtml(transfer.label)}</h3>
+    <p class="drawer__desc">${escapeHtml(transfer.desc)}</p>
+    <button class="drawer__close" type="button" onclick="closeDrawer()">Close ⤬</button>
+  `;
+  const body = PROVIDERS.map(p => {
+    const r = rateOf(transfer, p.key);
+    const isFocus = focusProvider === p.key;
+    const srcHtml = r.src
+      ? `<div class="prov-row__src">Source · <a href="${escapeHtml(r.src)}" target="_blank" rel="noopener">${escapeHtml(r.src)}</a></div>`
+      : "";
+    return `<div class="prov-row" ${isFocus ? 'style="border-color: var(--accent); background: rgba(255,120,73,0.05);"' : ''}>
+      <div class="prov-row__head">
+        <div class="prov-row__name"><span class="swatch" style="background:${p.swatch}"></span>${escapeHtml(p.name)}</div>
+        <div class="prov-row__rate prov-row__rate--${r.level}">${escapeHtml(r.headline)}</div>
+      </div>
+      ${tierTable(r)}
+      <div class="prov-row__note">${escapeHtml(r.note || "—")}</div>
+      ${srcHtml}
+    </div>`;
+  }).join("");
+  $("#drawer-body").innerHTML = `<div class="drawer__section"><h4>Per-cloud rates &amp; sources</h4>${body}</div>`;
+  openDrawer();
+}
+
+function wireEvents() {
+  document.addEventListener("click", (e) => {
+    const g = e.target.closest(".chip[data-group]");
+    if (g) {
+      state.group = g.dataset.group;
+      $$('.chip[data-group]').forEach(b => b.classList.toggle("is-active", b.dataset.group === state.group));
+      applyFilter();
+      return;
+    }
+    const p = e.target.closest(".chip[data-p]");
+    if (p) {
+      const key = p.dataset.p;
+      if (key === "all") {
+        state.providers = new Set(PROVIDERS.map(x => x.key));
+        $$('.chip[data-p]').forEach(b => b.classList.toggle("is-active", b.dataset.p === "all"));
+      } else {
+        if ($('.chip[data-p="all"]').classList.contains("is-active")) {
+          state.providers = new Set([key]);
+          $$('.chip[data-p]').forEach(b => b.classList.toggle("is-active", b.dataset.p === key));
+        } else {
+          if (state.providers.has(key) && state.providers.size === 1) {
+            state.providers = new Set(PROVIDERS.map(x => x.key));
+            $$('.chip[data-p]').forEach(b => b.classList.toggle("is-active", b.dataset.p === "all"));
+          } else {
+            state.providers.has(key) ? state.providers.delete(key) : state.providers.add(key);
+            p.classList.toggle("is-active");
+            $('.chip[data-p="all"]').classList.remove("is-active");
+          }
+        }
+      }
+      applyFilter();
+      return;
+    }
+    const cell = e.target.closest("td.cell");
+    if (cell) {
+      const t = TRANSFERS.find(x => x.id === cell.dataset.transfer);
+      if (t) openTransferDrawer(t, cell.dataset.provider);
+      return;
+    }
+    const transferCol = e.target.closest("td.transfer-col[data-action='open-transfer']");
+    if (transferCol) {
+      const row = transferCol.closest("tr.transfer-row");
+      const t = TRANSFERS.find(x => x.id === row.dataset.transfer);
+      if (t) openTransferDrawer(t, null);
+      return;
+    }
+  });
+
+  document.addEventListener("keydown", (e) => {
+    if (e.key !== "Enter" && e.key !== " ") return;
+    const cell = e.target.closest("td.cell");
+    if (cell) {
+      e.preventDefault();
+      const t = TRANSFERS.find(x => x.id === cell.dataset.transfer);
+      if (t) openTransferDrawer(t, cell.dataset.provider);
+      return;
+    }
+    const transferCol = e.target.closest("td.transfer-col[data-action='open-transfer']");
+    if (transferCol) {
+      e.preventDefault();
+      const row = transferCol.closest("tr.transfer-row");
+      const t = TRANSFERS.find(x => x.id === row.dataset.transfer);
+      if (t) openTransferDrawer(t, null);
+    }
+  });
+
+  $("#drawer-backdrop").addEventListener("click", closeDrawer);
+  $("#search").addEventListener("input", (e) => {
+    state.query = e.target.value;
+    applyFilter();
+  });
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") closeDrawer();
+    if (e.key === "/" && e.target.tagName !== "INPUT") { e.preventDefault(); $("#search").focus(); }
+  });
+}
+
+init();
+</script>
+<script src="/nav.js" defer></script>
+</body>
+</html>
