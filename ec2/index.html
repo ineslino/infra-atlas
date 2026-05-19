@@ -414,6 +414,24 @@ a.masthead__back::before { display: none; }
 .sort-select:hover { border-color: var(--paper-3); color: var(--paper); }
 .sort-select:focus { border-color: var(--accent); }
 
+/* ─────────── FOCUS ─────────── */
+.region-card:focus-visible,
+.instance-row:focus-visible,
+.chip:focus-visible,
+.filter-tab:focus-visible,
+.drawer__close:focus-visible,
+.cmp-modal__close:focus-visible,
+.cmp-fab:focus-visible,
+.cmp-tray__go:focus-visible,
+.cmp-tray__exit:focus-visible,
+.cmp-chip__x:focus-visible,
+a:focus-visible,
+button:focus-visible,
+[tabindex]:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
 .chip {
   background: transparent;
   border: 1px solid var(--line-2);
@@ -1073,10 +1091,12 @@ a.masthead__back::before { display: none; }
     </aside>
   </header>
 
+  <main id="ia-main">
+
   <section class="filters">
-    <div class="filter-tabs" role="tablist" aria-label="View mode">
-      <button class="filter-tab is-active" data-mode="region" role="tab" aria-selected="true">By Region</button>
-      <button class="filter-tab" data-mode="instance" role="tab" aria-selected="false">By Instance</button>
+    <div class="filter-tabs" aria-label="View mode">
+      <button class="filter-tab is-active" type="button" data-mode="region" aria-pressed="true">By Region</button>
+      <button class="filter-tab" type="button" data-mode="instance" aria-pressed="false">By Instance</button>
     </div>
     <div class="filter-search">
       <input id="search" type="search" autocomplete="off" spellcheck="false" placeholder="Filter regions, instance types, families…">
@@ -1117,12 +1137,14 @@ a.masthead__back::before { display: none; }
         <option value="vcpu-desc">Sort · vCPU ↓</option>
         <option value="mem-desc">Sort · Memory ↓</option>
       </select>
-      <div class="result-meta__count"><strong id="result-count">0</strong> shown</div>
+      <div class="result-meta__count" aria-live="polite"><strong id="result-count">0</strong> shown</div>
     </div>
   </div>
 
-  <main class="results" id="results">
+  <section class="results" id="results" aria-label="Results">
     <!-- rendered by JS -->
+  </section>
+
   </main>
 
   <footer class="colophon">
@@ -1904,6 +1926,9 @@ function renderRegionView() {
     const card = document.createElement("div");
     card.className = "region-card fade-in" + (total === 0 ? " is-empty" : "");
     card.style.animationDelay = (idx * 0.012) + "s";
+    card.tabIndex = 0;
+    card.setAttribute("role", "button");
+    card.setAttribute("aria-label", `${r.name} (${r.code}) — ${total} instance types. Open region detail.`);
     card.innerHTML = `
       <div class="region-card__head">
         <div>
@@ -1920,6 +1945,9 @@ function renderRegionView() {
       </div>
     `;
     card.addEventListener("click", () => openRegionDrawer(r));
+    card.addEventListener("keydown", (e) => {
+      if (e.key === "Enter" || e.key === " ") { e.preventDefault(); openRegionDrawer(r); }
+    });
     grid.appendChild(card);
   });
 
@@ -1971,6 +1999,9 @@ function renderInstanceView() {
     row.className = "instance-row fade-in";
     row.style.animationDelay = Math.min(idx * 0.004, 0.6) + "s";
     if (entry.fam.desc) row.title = entry.fam.desc;
+    row.tabIndex = 0;
+    row.setAttribute("role", "button");
+    row.setAttribute("aria-label", `Instance type ${entry.full} — ${CAT_LABEL[entry.fam.cat]}. Open instance detail.`);
     const priceStr = fmtPrice(entry.price, state.currency);
     const specBits = [];
     if (entry.vcpu != null) specBits.push(`${entry.vcpu} vCPU`);
@@ -1994,6 +2025,9 @@ function renderInstanceView() {
       </div>
     `;
     row.addEventListener("click", () => openInstanceDrawer(entry.fam, entry.size));
+    row.addEventListener("keydown", (e) => {
+      if (e.key === "Enter" || e.key === " ") { e.preventDefault(); openInstanceDrawer(entry.fam, entry.size); }
+    });
     list.appendChild(row);
   });
 
@@ -2016,16 +2050,61 @@ function renderInstanceView() {
 //  DRAWERS
 // ─────────────────────────────────────────────────────────────────
 
+// ─── Focus management — shared by the drawer and the compare modal ───
+const FOCUSABLE = 'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])';
+
+function getFocusable(container) {
+  return Array.prototype.filter.call(
+    container.querySelectorAll(FOCUSABLE),
+    el => el.offsetParent !== null || el === document.activeElement
+  );
+}
+
+// Trap Tab within `container`; cycle first↔last focusable.
+function trapFocus(e, container) {
+  if (e.key !== "Tab") return;
+  const items = getFocusable(container);
+  if (items.length === 0) return;
+  const first = items[0], last = items[items.length - 1];
+  if (e.shiftKey && document.activeElement === first) {
+    e.preventDefault(); last.focus();
+  } else if (!e.shiftKey && document.activeElement === last) {
+    e.preventDefault(); first.focus();
+  }
+}
+
+let drawerLastFocused = null;
+let drawerTrapHandler = null;
+
 function openDrawer() {
+  drawerLastFocused = document.activeElement;
   $("#drawer-backdrop").classList.add("is-open");
   $("#drawer").classList.add("is-open");
   $("#drawer").setAttribute("aria-hidden", "false");
+  // Hide the rest of the page from assistive tech while the drawer is open.
+  $("#ia-main").setAttribute("aria-hidden", "true");
+  const drawer = $("#drawer");
+  const closeBtn = drawer.querySelector(".drawer__close");
+  if (closeBtn) closeBtn.focus();
+  drawerTrapHandler = (e) => trapFocus(e, drawer);
+  drawer.addEventListener("keydown", drawerTrapHandler);
 }
 
 function closeDrawer() {
+  const drawer = $("#drawer");
+  if (!drawer.classList.contains("is-open")) return;
+  if (drawerTrapHandler) {
+    drawer.removeEventListener("keydown", drawerTrapHandler);
+    drawerTrapHandler = null;
+  }
   $("#drawer-backdrop").classList.remove("is-open");
-  $("#drawer").classList.remove("is-open");
-  $("#drawer").setAttribute("aria-hidden", "true");
+  drawer.classList.remove("is-open");
+  drawer.setAttribute("aria-hidden", "true");
+  $("#ia-main").removeAttribute("aria-hidden");
+  if (drawerLastFocused && typeof drawerLastFocused.focus === "function") {
+    drawerLastFocused.focus();
+  }
+  drawerLastFocused = null;
 }
 
 function openRegionDrawer(region) {
@@ -2202,7 +2281,7 @@ function render() {
 function setMode(m) {
   state.mode = m;
   $$(".filter-tab").forEach(b => b.classList.toggle("is-active", b.dataset.mode === m));
-  $$(".filter-tab").forEach(b => b.setAttribute("aria-selected", b.dataset.mode === m));
+  $$(".filter-tab").forEach(b => b.setAttribute("aria-pressed", b.dataset.mode === m));
   $("#search").placeholder = m === "region"
     ? "Filter regions, areas, or instance types…"
     : "Filter instance types or families…";
@@ -2321,6 +2400,8 @@ async function loadData() {
   overlay.id = "cmp-overlay";
   overlay.setAttribute("role", "dialog");
   overlay.setAttribute("aria-modal", "true");
+  overlay.setAttribute("aria-label", "Region comparison");
+  overlay.setAttribute("aria-hidden", "true");
   overlay.innerHTML = '<div class="cmp-modal">'
     + '<button class="cmp-modal__close" id="cmp-close" type="button">Close ✕</button>'
     + '<div class="cmp-modal__body" id="cmp-body"></div></div>';
@@ -2350,6 +2431,19 @@ async function loadData() {
     if (!state.compareMode || state.mode !== "region") return;
     var card = e.target.closest(".region-card");
     if (!card) return;
+    e.stopPropagation();
+    toggleCompare(cardCode(card));
+  }, true);
+
+  // Keyboard activation for compare-mode card selection. Capture phase runs
+  // before the card's own keydown handler, so stopPropagation prevents the
+  // drawer from also opening while compare mode is active.
+  results.addEventListener("keydown", function (e) {
+    if (!state.compareMode || state.mode !== "region") return;
+    if (e.key !== "Enter" && e.key !== " ") return;
+    var card = e.target.closest(".region-card");
+    if (!card) return;
+    e.preventDefault();
     e.stopPropagation();
     toggleCompare(cardCode(card));
   }, true);
@@ -2468,9 +2562,47 @@ async function loadData() {
     html += '</div>';
 
     document.getElementById("cmp-body").innerHTML = html;
-    overlay.classList.add("is-open");
+    openOverlay();
   }
-  function closeComparison() { overlay.classList.remove("is-open"); }
+
+  var cmpLastFocused = null;
+  var cmpTrapHandler = null;
+  var canTrap = (typeof trapFocus === "function");
+
+  function openOverlay() {
+    cmpLastFocused = document.activeElement;
+    overlay.classList.add("is-open");
+    overlay.setAttribute("aria-hidden", "false");
+    // Hide everything behind the modal from assistive tech.
+    var main = document.getElementById("ia-main");
+    if (main) main.setAttribute("aria-hidden", "true");
+    var dockEl = document.getElementById("cmp-dock");
+    if (dockEl) dockEl.setAttribute("aria-hidden", "true");
+    var closeBtn = document.getElementById("cmp-close");
+    if (closeBtn) closeBtn.focus();
+    if (canTrap) {
+      cmpTrapHandler = function (e) { trapFocus(e, overlay); };
+      overlay.addEventListener("keydown", cmpTrapHandler);
+    }
+  }
+
+  function closeComparison() {
+    if (!overlay.classList.contains("is-open")) return;
+    if (cmpTrapHandler) {
+      overlay.removeEventListener("keydown", cmpTrapHandler);
+      cmpTrapHandler = null;
+    }
+    overlay.classList.remove("is-open");
+    overlay.setAttribute("aria-hidden", "true");
+    var main = document.getElementById("ia-main");
+    if (main) main.removeAttribute("aria-hidden");
+    var dockEl = document.getElementById("cmp-dock");
+    if (dockEl) dockEl.removeAttribute("aria-hidden");
+    if (cmpLastFocused && typeof cmpLastFocused.focus === "function") {
+      cmpLastFocused.focus();
+    }
+    cmpLastFocused = null;
+  }
   document.getElementById("cmp-close").addEventListener("click", closeComparison);
   overlay.addEventListener("mousedown", function (e) { if (e.target === overlay) closeComparison(); });
   document.addEventListener("keydown", function (e) {
