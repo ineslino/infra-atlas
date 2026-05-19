@@ -27,7 +27,8 @@
     ["/kubernetes/",             "Kubernetes Atlas",      "Cross-cloud", "managed kubernetes k8s eks aks gke oke ovh container control plane version sla node pool"],
     ["/compliance/",             "Compliance Footprint",  "Cross-cloud", "compliance certification fedramp iso soc hipaa pci dss gdpr irap c5 ens audit attestation"],
     ["/confidential-computing/", "Confidential Computing","Cross-cloud", "confidential enclave sgx sev snp tdx nitro tee trusted execution memory encryption attestation"],
-    ["/iam-matrix/",             "IAM Matrix",            "Cross-cloud", "iam identity access management rbac abac policy entra id permissions roles authorization"]
+    ["/iam-matrix/",             "IAM Matrix",            "Cross-cloud", "iam identity access management rbac abac policy entra id permissions roles authorization"],
+    ["/ai-atlas/",               "Generative AI Atlas",   "Cross-cloud", "ai generative model llm foundation model bedrock vertex azure foundry oci ovh openai gpt claude anthropic gemini google llama meta mistral cohere deepseek grok fine-tuning rag agents guardrails inference"]
   ];
 
   // Normalise current path → "/ec2/" form

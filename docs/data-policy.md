@@ -5,7 +5,7 @@ from, and how often it refreshes. This document exists so those are *decisions*,
 not accidents — and so "how many regions, counting which partitions" has one
 settled answer instead of being re-litigated every time.
 
-_Last reviewed: 2026-05-16._
+_Last reviewed: 2026-05-19._
 
 ## 1. Region inclusion
 
@@ -91,7 +91,7 @@ SKUs, specific GPU shapes) are curated and dated, not live-verified.
 |---------------|-----------|---------|
 | `ec2`, `azure-vm`, `oci-compute`, `ovh-instances` | `refresh.sh` pulls a public API/dataset | Daily 06:00 UTC (`refresh.yml`) |
 | `regions`, `gcp-compute` | **Curated** — `refresh.sh` only re-serialises the hand-maintained const in `index.html` and re-stamps the timestamp | Data changes only when a human edits `index.html` |
-| APIM + cross-cloud instruments (`apim-matrix`, `apigee`, `mulesoft`, `aws-api-gateway`, `self-hosted-apim`, `equivalent-sku`, `kubernetes`, `compliance`, `confidential-computing`, `iam-matrix`) | Static, hand-curated, dated snapshots | Updated by hand; carry a visible snapshot date |
+| APIM + cross-cloud instruments (`apim-matrix`, `apigee`, `mulesoft`, `aws-api-gateway`, `self-hosted-apim`, `equivalent-sku`, `kubernetes`, `compliance`, `confidential-computing`, `iam-matrix`, `ai-atlas`) | Static, hand-curated, dated snapshots | Updated by hand; carry a visible snapshot date |
 
 **Do not describe `regions` or `gcp-compute` as "refreshed daily from public
 datasets"** — they are curated. Site copy must distinguish *live-API* instruments
@@ -103,7 +103,7 @@ from *curated* ones (the APIM/cross-cloud pages already do this correctly).
 |-------|----------------|------|
 | `verify-data.yml` → `verify` job | `data.json` matches `index.html` for `regions`, `gcp-compute` (faithful re-serialisation) | every push / PR |
 | `verify-data.yml` → `region-drift` job | `regions/data.json` region set matches the dated, vendor-verified `regions/region-reference.json` | every push / PR |
-| `verify-freshness.yml` | Curated cross-cloud matrices' snapshot dates are within 180 days | monthly + manual |
+| `verify-freshness.yml` | Curated cross-cloud matrices' snapshot dates are within their freshness window — 180 days, or 45 for the fast-moving Generative AI Atlas | monthly + manual |
 
 ### Re-verification duty
 
