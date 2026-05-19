@@ -262,7 +262,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, [tabindex]:focus-vis
   position: relative;
 }
 .cell-mark--yes  { background: rgba(111, 231, 181, 0.15); color: var(--yes); }
-.cell-mark--no   { background: rgba(244, 123, 123, 0.12); color: var(--no); opacity: 0.65; }
+.cell-mark--no   { background: rgba(244, 123, 123, 0.12); color: var(--no); }
 .cell-mark--part { background: rgba(244, 198, 96, 0.15); color: var(--part); }
 .cell-mark--info { background: rgba(124, 215, 241, 0.13); color: var(--sky); }
 .cell-mark__star {
@@ -437,7 +437,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, [tabindex]:focus-vis
         <span class="status-dot"></span>
         <span class="status-text">Curated · v1</span>
       </div>
-      <div class="status-time">Issue 01 · <time datetime="2026-05-16">2026-05-16</time></div>
+      <div class="status-time">Verified · <time datetime="2026-05-16">2026-05-16</time></div>
       <div class="status-counts">
         <div>Providers<strong id="count-vendors">4</strong></div>
         <div>Capabilities<strong id="count-features">—</strong></div>
@@ -466,12 +466,12 @@ a:focus-visible, button:focus-visible, input:focus-visible, [tabindex]:focus-vis
     <span class="legend__item"><span class="cell-mark cell-mark--part">◐</span> Partial / scoped / via add-on</span>
     <span class="legend__item"><span class="cell-mark cell-mark--no">✗</span> Not supported</span>
     <span class="legend__item"><span class="cell-mark cell-mark--info">≈</span> Exists, but model differs</span>
-    <span class="legend__item"><span class="cell-mark cell-mark--yes" style="position:relative">✓<span class="cell-mark__star">*</span></span> Click cell for footnote + source</span>
+    <span class="legend__item"><span class="cell-mark cell-mark--yes" style="position:relative">✓<span class="cell-mark__star">*</span></span> Click any cell for the note &amp; source</span>
   </div>
 
   <div class="matrix-wrap">
     <table class="matrix" id="matrix" aria-label="Cross-provider IAM capability matrix"></table>
-    <div class="matrix-empty" id="matrix-empty">No capabilities match the current filter.</div>
+    <div class="matrix-empty" id="matrix-empty" aria-live="polite">No capabilities match the current filter.</div>
   </div>
 
   </main>
@@ -1066,11 +1066,30 @@ function applyFilter() {
 // ─── Drawer ───
 let lastFocused = null;
 
+function getDrawerFocusable() {
+  return $$("#drawer a[href], #drawer button, #drawer input, #drawer select, #drawer textarea, #drawer [tabindex]:not([tabindex='-1'])")
+    .filter(el => !el.disabled && el.offsetParent !== null);
+}
+function trapFocus(e) {
+  if (e.key !== "Tab") return;
+  const focusable = getDrawerFocusable();
+  if (!focusable.length) { e.preventDefault(); return; }
+  const first = focusable[0];
+  const last = focusable[focusable.length - 1];
+  if (e.shiftKey && document.activeElement === first) {
+    e.preventDefault();
+    last.focus();
+  } else if (!e.shiftKey && document.activeElement === last) {
+    e.preventDefault();
+    first.focus();
+  }
+}
 function openDrawer() {
   lastFocused = document.activeElement;
   $("#drawer-backdrop").classList.add("is-open");
   $("#drawer").classList.add("is-open");
   $("#drawer").setAttribute("aria-hidden", "false");
+  $("#drawer").addEventListener("keydown", trapFocus);
   const closeBtn = $("#drawer .drawer__close");
   if (closeBtn) closeBtn.focus();
 }
@@ -1078,6 +1097,7 @@ function closeDrawer() {
   $("#drawer-backdrop").classList.remove("is-open");
   $("#drawer").classList.remove("is-open");
   $("#drawer").setAttribute("aria-hidden", "true");
+  $("#drawer").removeEventListener("keydown", trapFocus);
   if (lastFocused && typeof lastFocused.focus === "function") lastFocused.focus();
   lastFocused = null;
 }

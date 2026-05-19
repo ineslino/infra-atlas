@@ -239,7 +239,7 @@ body {
   position: relative;
 }
 .cell-mark--yes  { background: rgba(111, 231, 181, 0.15); color: var(--yes); }
-.cell-mark--no   { background: rgba(244, 123, 123, 0.12); color: var(--no); opacity: 0.65; }
+.cell-mark--no   { background: rgba(244, 123, 123, 0.12); color: var(--no); }
 .cell-mark--part { background: rgba(244, 198, 96, 0.15); color: var(--part); }
 .cell-mark__star {
   position: absolute; top: -3px; right: -6px;
@@ -257,7 +257,7 @@ body {
 }
 .cell-value--yes  { color: var(--paper); }
 .cell-value--part { color: var(--part); }
-.cell-value--no   { color: var(--no); opacity: 0.72; }
+.cell-value--no   { color: var(--no); }
 .cell-value__star {
   font-size: 10px; color: var(--accent); align-self: flex-start;
   margin-left: 1px;
@@ -420,7 +420,7 @@ body {
         <span class="status-dot"></span>
         <span class="status-text">Curated · v1</span>
       </div>
-      <div class="status-time">Issue 01 · 2026-05-18</div>
+      <div class="status-time">Verified · 2026-05-18</div>
       <div class="status-counts">
         <div>Vendors<strong id="count-vendors">7</strong></div>
         <div>Capabilities<strong id="count-features">—</strong></div>
@@ -444,7 +444,7 @@ body {
     <span class="legend__item"><span class="cell-mark cell-mark--yes">✓</span> Native support</span>
     <span class="legend__item"><span class="cell-mark cell-mark--part">◐</span> Partial / via workaround</span>
     <span class="legend__item"><span class="cell-mark cell-mark--no">✗</span> Not supported</span>
-    <span class="legend__item"><span class="cell-mark cell-mark--yes" style="position:relative">✓<span class="cell-mark__star">*</span></span> Click for footnote</span>
+    <span class="legend__item"><span class="cell-mark cell-mark--yes" style="position:relative">✓<span class="cell-mark__star">*</span></span> Click any cell for the note &amp; source</span>
   </div>
 
   <div class="matrix-wrap">
@@ -1057,15 +1057,40 @@ function applyFilter() {
 }
 
 // ─── Drawer ───
+let lastFocused = null;
+function getDrawerFocusable() {
+  return $$("#drawer a[href], #drawer button, #drawer input, #drawer select, #drawer textarea, #drawer [tabindex]:not([tabindex='-1'])")
+    .filter(el => !el.disabled && el.offsetParent !== null);
+}
+function trapFocus(e) {
+  if (e.key !== "Tab") return;
+  const focusable = getDrawerFocusable();
+  if (!focusable.length) { e.preventDefault(); return; }
+  const first = focusable[0];
+  const last = focusable[focusable.length - 1];
+  if (e.shiftKey && document.activeElement === first) {
+    e.preventDefault();
+    last.focus();
+  } else if (!e.shiftKey && document.activeElement === last) {
+    e.preventDefault();
+    first.focus();
+  }
+}
 function openDrawer() {
+  lastFocused = document.activeElement;
   $("#drawer-backdrop").classList.add("is-open");
   $("#drawer").classList.add("is-open");
   $("#drawer").setAttribute("aria-hidden", "false");
+  $("#drawer").addEventListener("keydown", trapFocus);
+  const closeBtn = $("#drawer .drawer__close");
+  if (closeBtn) closeBtn.focus();
 }
 function closeDrawer() {
   $("#drawer-backdrop").classList.remove("is-open");
   $("#drawer").classList.remove("is-open");
   $("#drawer").setAttribute("aria-hidden", "true");
+  $("#drawer").removeEventListener("keydown", trapFocus);
+  if (lastFocused && typeof lastFocused.focus === "function") lastFocused.focus();
 }
 
 function openFeatureDrawer(feature, focusVendor) {

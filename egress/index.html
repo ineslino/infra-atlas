@@ -468,7 +468,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, [tabindex]:focus-vis
     <span class="legend__label">Legend</span>
     <span class="legend__item"><span class="legend__dot" style="background:var(--paper-2)"></span> Metered — a published per-GB list rate</span>
     <span class="legend__item"><span class="legend__dot" style="background:var(--mint)"></span> Free — no charge for this transfer</span>
-    <span class="legend__item"><span class="legend__star">*</span> Click any cell for the tier ladder &amp; source</span>
+    <span class="legend__item"><span class="legend__star">*</span> Click any cell for the note &amp; source</span>
   </div>
 
   <div class="matrix-wrap">
@@ -778,11 +778,30 @@ function applyFilter() {
 
 // ─── Drawer ───
 let lastFocused = null;
+function getDrawerFocusable() {
+  return $$("#drawer a[href], #drawer button, #drawer input, #drawer select, #drawer textarea, #drawer [tabindex]:not([tabindex='-1'])")
+    .filter(el => !el.disabled && el.offsetParent !== null);
+}
+function trapFocus(e) {
+  if (e.key !== "Tab") return;
+  const focusable = getDrawerFocusable();
+  if (!focusable.length) { e.preventDefault(); return; }
+  const first = focusable[0];
+  const last = focusable[focusable.length - 1];
+  if (e.shiftKey && document.activeElement === first) {
+    e.preventDefault();
+    last.focus();
+  } else if (!e.shiftKey && document.activeElement === last) {
+    e.preventDefault();
+    first.focus();
+  }
+}
 function openDrawer() {
   lastFocused = document.activeElement;
   $("#drawer-backdrop").classList.add("is-open");
   $("#drawer").classList.add("is-open");
   $("#drawer").setAttribute("aria-hidden", "false");
+  $("#drawer").addEventListener("keydown", trapFocus);
   const closeBtn = $("#drawer .drawer__close");
   if (closeBtn) closeBtn.focus();
 }
@@ -790,6 +809,7 @@ function closeDrawer() {
   $("#drawer-backdrop").classList.remove("is-open");
   $("#drawer").classList.remove("is-open");
   $("#drawer").setAttribute("aria-hidden", "true");
+  $("#drawer").removeEventListener("keydown", trapFocus);
   if (lastFocused && typeof lastFocused.focus === "function") lastFocused.focus();
 }
 
