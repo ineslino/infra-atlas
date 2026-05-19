@@ -1,0 +1,1140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="color-scheme" content="dark">
+<title>Cross-Cloud · Networking Primitives Matrix · Infra Atlas</title>
+<link rel="icon" href="/favicon.svg?v=2" type="image/svg+xml">
+<meta name="description" content="A Rosetta stone for cloud networking — every core primitive mapped across AWS, Azure, Google Cloud and OCI: VPCs, subnets, peering, firewalls, load balancers, private links. With the semantic caveats spelled out per cell.">
+<link rel="canonical" href="https://infraatlas.dev/networking-matrix/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Infra Atlas">
+<meta property="og:title" content="Cross-Cloud · Networking Primitives Matrix · Infra Atlas">
+<meta property="og:description" content="A Rosetta stone for cloud networking — every core primitive mapped across AWS, Azure, Google Cloud and OCI. VPCs, subnets, peering, firewalls, load balancers, private links — with the asterisks intact.">
+<meta property="og:url" content="https://infraatlas.dev/networking-matrix/">
+<meta property="og:image" content="https://infraatlas.dev/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Infra Atlas — a reference for the infrastructure stack">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Cross-Cloud · Networking Primitives Matrix · Infra Atlas">
+<meta name="twitter:description" content="A Rosetta stone for cloud networking — every core primitive mapped across AWS, Azure, Google Cloud and OCI. With the asterisks intact.">
+<meta name="twitter:image" content="https://infraatlas.dev/og.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@300;400;500;600&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+:root {
+  --ink: #0A0907; --ink-2: #100E0C; --surface: #161310; --surface-2: #1E1A15; --surface-3: #2A241C;
+  --line: rgba(244, 239, 230, 0.06); --line-2: rgba(244, 239, 230, 0.14); --line-3: rgba(244, 239, 230, 0.28);
+  --paper: #F4EFE6; --paper-2: rgba(244, 239, 230, 0.66); --paper-3: rgba(244, 239, 230, 0.55); --paper-4: rgba(244, 239, 230, 0.20);
+  --accent: #FF7849; --accent-2: #FFA66E; --accent-glow: rgba(255, 120, 73, 0.22);
+  --mint: #6FE7B5; --gold: #F4C660; --plum: #C586E8; --sky: #7CD7F1; --rose: #F47B7B; --teal: #5BCCC9;
+  --yes:   #6FE7B5;
+  --no:    #F47B7B;
+  --part:  #F4C660;
+  --serif: 'Instrument Serif', 'Times New Roman', serif;
+  --mono: 'JetBrains Mono', ui-monospace, monospace;
+  --sans: 'Manrope', -apple-system, system-ui, sans-serif;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body {
+  background: var(--ink);
+  color: var(--paper);
+  font-family: var(--sans);
+  font-size: 15px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  min-height: 100vh;
+}
+
+body {
+  background:
+    radial-gradient(ellipse at 100% -10%, rgba(255, 120, 73, 0.07), transparent 55%),
+    radial-gradient(ellipse at -10% 110%, rgba(244, 198, 96, 0.05), transparent 65%),
+    var(--ink);
+  background-attachment: fixed;
+  overflow-x: hidden;
+}
+
+.grain {
+  pointer-events: none; position: fixed; inset: 0; z-index: 100; opacity: 0.08; mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml;utf8,<svg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.6 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+}
+.scanlines {
+  pointer-events: none; position: fixed; inset: 0; z-index: 99;
+  background: repeating-linear-gradient(180deg, transparent, transparent 2px, rgba(244,239,230,0.012) 2px, rgba(244,239,230,0.012) 3px);
+}
+::selection { background: var(--accent); color: var(--ink); }
+
+/* ─────────── FOCUS ─────────── */
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+a:focus-visible, button:focus-visible, input:focus-visible, [tabindex]:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+.matrix tbody tr.feature-row td.cell:focus-visible,
+.matrix tbody tr.feature-row td.feature-col:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: -2px;
+}
+
+.page { max-width: 1500px; margin: 0 auto; padding: 56px 48px 96px; position: relative; }
+
+/* ─────────── MASTHEAD ─────────── */
+.masthead {
+  display: grid; grid-template-columns: 1fr auto; gap: 48px; align-items: end;
+  padding-bottom: 36px; border-bottom: 1px solid var(--line); margin-bottom: 32px;
+}
+.masthead__eyebrow {
+  font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.22em; color: var(--paper-3);
+  text-transform: uppercase; display: inline-flex; align-items: center; gap: 12px;
+  text-decoration: none; transition: color 0.2s ease;
+}
+.masthead__eyebrow:hover { color: var(--paper); }
+.masthead__eyebrow-arrow { color: var(--accent); transition: transform 0.2s ease; }
+.masthead__eyebrow:hover .masthead__eyebrow-arrow { transform: translateX(-4px); }
+.masthead__title {
+  font-family: var(--serif); font-weight: 400;
+  font-size: clamp(48px, 7vw, 108px); line-height: 0.95; letter-spacing: -0.02em;
+  margin-top: 16px; color: var(--paper);
+}
+.masthead__title em { font-style: italic; color: var(--accent); }
+.masthead__subtitle {
+  margin-top: 18px; font-size: 16px; color: var(--paper-2); max-width: 640px; line-height: 1.55;
+}
+.masthead__subtitle span {
+  font-family: var(--serif); font-style: italic; color: var(--paper);
+}
+
+.masthead__status {
+  text-align: right; display: flex; flex-direction: column; align-items: flex-end; gap: 14px; padding-bottom: 6px;
+}
+.status-line {
+  display: inline-flex; align-items: center; gap: 10px;
+  font-family: var(--mono); font-size: 11px; letter-spacing: 0.18em;
+  text-transform: uppercase; color: var(--gold);
+}
+.status-dot {
+  width: 8px; height: 8px; border-radius: 50%; background: var(--gold);
+  animation: pulse 2.4s infinite;
+}
+@keyframes pulse {
+  0% { box-shadow: 0 0 0 0 rgba(244,198,96,0.5); }
+  70% { box-shadow: 0 0 0 14px rgba(244,198,96,0); }
+  100% { box-shadow: 0 0 0 0 rgba(244,198,96,0); }
+}
+.status-time { font-family: var(--mono); font-size: 12px; color: var(--paper-3); }
+.status-counts { display: flex; gap: 24px; margin-top: 4px; }
+.status-counts > div {
+  text-align: right; font-family: var(--mono); font-size: 11px; letter-spacing: 0.12em;
+  text-transform: uppercase; color: var(--paper-3); display: flex; flex-direction: column; gap: 2px;
+}
+.status-counts strong {
+  font-family: var(--serif); font-style: italic; font-weight: 400; font-size: 28px;
+  color: var(--paper); letter-spacing: -0.01em; text-transform: none;
+}
+
+/* ─────────── READING NOTE ─────────── */
+.readnote {
+  display: flex; gap: 18px; align-items: flex-start;
+  padding: 20px 24px; margin-bottom: 28px;
+  background: linear-gradient(180deg, rgba(255,120,73,0.075), rgba(255,120,73,0.02));
+  border: 1px solid rgba(255,120,73,0.22); border-radius: 5px;
+}
+.readnote__mark {
+  font-family: var(--serif); font-style: italic; font-size: 40px;
+  color: var(--accent); line-height: 0.7; flex-shrink: 0;
+}
+.readnote__text { font-size: 13.5px; color: var(--paper-2); line-height: 1.62; }
+.readnote__text strong { color: var(--paper); font-weight: 600; }
+.readnote__text em { font-family: var(--serif); font-style: italic; color: var(--paper); font-size: 15px; }
+
+/* ─────────── FILTERS ─────────── */
+.filters {
+  display: grid; grid-template-columns: auto 1fr; gap: 18px 32px; align-items: center;
+  padding: 18px 22px; background: linear-gradient(180deg, var(--surface) 0%, var(--ink-2) 100%);
+  border: 1px solid var(--line); border-radius: 4px;
+  position: sticky; top: 16px; z-index: 50; backdrop-filter: blur(12px); margin-bottom: 28px;
+}
+.filter-search {
+  flex: 1; position: relative; grid-column: 1 / -1;
+}
+.filter-search input {
+  width: 100%; background: var(--ink); border: 1px solid var(--line); color: var(--paper);
+  font-family: var(--mono); font-size: 13px; padding: 12px 16px 12px 42px;
+  border-radius: 3px; outline: none; transition: border-color 0.2s ease;
+}
+.filter-search input::placeholder { color: var(--paper-3); }
+.filter-search input:focus { border-color: var(--accent); }
+.filter-search::before {
+  content: '⌕'; position: absolute; left: 16px; top: 50%; transform: translateY(-50%);
+  color: var(--paper-3); font-size: 18px; pointer-events: none;
+}
+.filter-chips {
+  grid-column: 1 / -1; display: flex; flex-wrap: wrap; gap: 6px; align-items: center;
+}
+.filter-chips__label {
+  font-family: var(--mono); font-size: 10px; letter-spacing: 0.16em;
+  text-transform: uppercase; color: var(--paper-3); margin-right: 4px;
+}
+.chip {
+  background: transparent; border: 1px solid var(--line-2); color: var(--paper-2);
+  font-family: var(--mono); font-size: 11px; letter-spacing: 0.06em;
+  padding: 6px 12px; border-radius: 99px; cursor: pointer; transition: all 0.15s ease;
+  display: inline-flex; align-items: center; gap: 8px; white-space: nowrap;
+}
+.chip:hover { border-color: var(--paper-3); color: var(--paper); }
+.chip.is-active { background: var(--paper); border-color: var(--paper); color: var(--ink); }
+.chip .swatch {
+  width: 8px; height: 8px; border-radius: 2px;
+}
+
+/* ─────────── MATRIX ─────────── */
+.matrix-wrap {
+  overflow-x: auto; margin-bottom: 48px;
+  border: 1px solid var(--line); border-radius: 6px;
+  background: linear-gradient(180deg, var(--ink-2) 0%, var(--ink) 100%);
+}
+.matrix {
+  width: 100%; border-collapse: collapse; min-width: 1080px;
+  font-family: var(--sans); font-size: 13px;
+}
+.matrix thead th {
+  position: sticky; top: 0; z-index: 10; background: var(--ink-2);
+  font-family: var(--mono); font-weight: 500; font-size: 10.5px;
+  letter-spacing: 0.14em; text-transform: uppercase; color: var(--paper-2);
+  padding: 18px 12px 12px; vertical-align: bottom; text-align: center;
+  border-bottom: 1px solid var(--line-2);
+  white-space: nowrap;
+}
+.matrix thead th.feature-col {
+  text-align: left; padding-left: 22px; min-width: 280px;
+  font-family: var(--serif); font-style: italic; font-size: 16px;
+  letter-spacing: 0; text-transform: none; color: var(--paper);
+  font-weight: 400;
+}
+.matrix th .vendor-tag {
+  display: inline-flex; align-items: center; gap: 6px;
+}
+.matrix th .swatch {
+  width: 6px; height: 6px; border-radius: 1px;
+}
+
+.matrix tbody tr.category-row td {
+  padding: 22px 22px 10px;
+  border-top: 1px dashed var(--line);
+  background: linear-gradient(180deg, rgba(0,0,0,0.2), transparent);
+}
+.matrix tbody tr.category-row td .cat-label {
+  font-family: var(--mono); font-size: 10px; letter-spacing: 0.22em;
+  text-transform: uppercase; color: var(--paper-3);
+  display: flex; align-items: center; gap: 10px;
+}
+.matrix tbody tr.category-row td .cat-label::after {
+  content: ''; flex: 1; height: 1px; background: var(--line);
+}
+.matrix tbody tr.feature-row td {
+  padding: 12px 12px; border-bottom: 1px solid var(--line);
+  vertical-align: middle;
+}
+.matrix tbody tr.feature-row td.feature-col {
+  padding-left: 22px; color: var(--paper); font-size: 14px;
+  text-align: left; cursor: pointer;
+  border-right: 1px solid var(--line);
+}
+.matrix tbody tr.feature-row td.feature-col:hover { color: var(--accent-2); }
+.matrix tbody tr.feature-row td.cell {
+  text-align: center; min-width: 150px; cursor: pointer;
+  transition: background 0.15s ease;
+  position: relative;
+}
+.matrix tbody tr.feature-row td.cell:hover {
+  background: rgba(255, 120, 73, 0.04);
+}
+.matrix tbody tr.feature-row:hover {
+  background: linear-gradient(90deg, transparent, rgba(255, 120, 73, 0.02), transparent);
+}
+
+/* Mark cells */
+.cell-mark {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 24px; height: 24px; border-radius: 50%;
+  font-family: var(--mono); font-size: 14px; font-weight: 500;
+  position: relative;
+}
+.cell-mark--yes  { background: rgba(111, 231, 181, 0.15); color: var(--yes); }
+.cell-mark--no   { background: rgba(244, 123, 123, 0.12); color: var(--no); opacity: 0.65; }
+.cell-mark--part { background: rgba(244, 198, 96, 0.15); color: var(--part); }
+.cell-mark__star {
+  position: absolute; top: -3px; right: -6px;
+  font-size: 10px; color: var(--accent);
+  background: var(--ink-2); border-radius: 50%; width: 12px; height: 12px;
+  display: inline-flex; align-items: center; justify-content: center;
+}
+.cell-value {
+  display: inline-flex; align-items: baseline; justify-content: center; gap: 2px;
+  font-family: var(--mono); font-size: 12px; line-height: 1.35;
+  padding: 4px 8px; border-radius: 3px; position: relative;
+  max-width: 180px;
+}
+.cell-value--yes  { color: var(--paper); }
+.cell-value--part { color: var(--part); }
+.cell-value--no   { color: var(--no); opacity: 0.72; }
+.cell-value__star {
+  font-size: 10px; color: var(--accent); align-self: flex-start;
+  margin-left: 1px;
+}
+
+/* Hide columns when vendor filtered out */
+.matrix.hide-aws   .col-aws,
+.matrix.hide-azure .col-azure,
+.matrix.hide-gcp   .col-gcp,
+.matrix.hide-oci   .col-oci { display: none; }
+
+/* Hide rows when filtered/searched */
+.matrix tbody tr.feature-row.is-hidden,
+.matrix tbody tr.category-row.is-hidden { display: none; }
+
+/* ─────────── LEGEND ─────────── */
+.legend {
+  display: flex; flex-wrap: wrap; gap: 18px; align-items: center;
+  margin-bottom: 28px; padding: 16px 22px;
+  background: var(--surface); border: 1px solid var(--line); border-radius: 4px;
+  font-family: var(--mono); font-size: 11px; color: var(--paper-2);
+}
+.legend__label {
+  font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--paper-3);
+}
+.legend__item { display: inline-flex; align-items: center; gap: 8px; }
+
+/* ─────────── DRAWER ─────────── */
+.drawer-backdrop {
+  position: fixed; inset: 0; background: rgba(10, 9, 7, 0.7); backdrop-filter: blur(8px);
+  z-index: 200; opacity: 0; pointer-events: none; transition: opacity 0.25s ease;
+}
+.drawer-backdrop.is-open { opacity: 1; pointer-events: auto; }
+.drawer {
+  position: fixed; top: 0; right: 0; bottom: 0; width: min(640px, 100%);
+  background: var(--ink-2); border-left: 1px solid var(--line-2); z-index: 201;
+  transform: translateX(100%); transition: transform 0.32s cubic-bezier(0.2, 0.8, 0.2, 1);
+  display: flex; flex-direction: column;
+}
+.drawer.is-open { transform: translateX(0); }
+.drawer__head {
+  padding: 28px 32px 22px; border-bottom: 1px solid var(--line); position: relative; flex-shrink: 0;
+}
+.drawer__close {
+  position: absolute; top: 20px; right: 20px;
+  background: transparent; border: 1px solid var(--line-2); color: var(--paper-2);
+  font-family: var(--mono); font-size: 11px; padding: 6px 10px; cursor: pointer;
+  border-radius: 2px; letter-spacing: 0.1em; text-transform: uppercase;
+}
+.drawer__close:hover { border-color: var(--paper); color: var(--paper); }
+.drawer__eyebrow {
+  font-family: var(--mono); font-size: 10px; letter-spacing: 0.22em;
+  text-transform: uppercase; color: var(--accent);
+}
+.drawer__title {
+  font-family: var(--serif); font-size: 32px; font-weight: 400;
+  letter-spacing: -0.012em; line-height: 1.05; margin-top: 8px;
+}
+.drawer__desc {
+  margin-top: 12px; font-size: 14px; color: var(--paper-2); line-height: 1.6;
+}
+.drawer__body { padding: 22px 32px 32px; overflow-y: auto; flex: 1; }
+.drawer__section { margin-bottom: 24px; }
+.drawer__section h4 {
+  font-family: var(--mono); font-size: 10.5px; font-weight: 500;
+  letter-spacing: 0.18em; text-transform: uppercase; color: var(--paper-3);
+  margin-bottom: 12px; display: flex; align-items: center; gap: 10px;
+}
+.drawer__section h4::after { content: ''; flex: 1; height: 1px; background: var(--line); }
+
+.vendor-row {
+  display: grid; grid-template-columns: auto 1fr; gap: 14px;
+  padding: 14px 16px; background: var(--surface);
+  border: 1px solid var(--line); border-radius: 3px; margin-bottom: 6px;
+  align-items: start;
+}
+.vendor-row__name {
+  font-family: var(--mono); font-size: 12.5px; font-weight: 500; color: var(--paper);
+  display: flex; align-items: center; gap: 9px;
+}
+.vendor-row__name .swatch { width: 8px; height: 8px; border-radius: 2px; }
+.vendor-row__value {
+  font-family: var(--mono); font-size: 12px; color: var(--paper); margin-top: 6px;
+}
+.vendor-row__value--part { color: var(--part); }
+.vendor-row__value--no   { color: var(--no); }
+.vendor-row__note {
+  font-family: var(--sans); font-size: 12.5px; color: var(--paper-2); line-height: 1.55; margin-top: 6px;
+}
+.vendor-row__src {
+  margin-top: 8px; font-family: var(--mono); font-size: 10.5px;
+}
+.vendor-row__src a {
+  color: var(--paper-3); text-decoration: underline;
+  text-decoration-color: var(--line-2); text-underline-offset: 3px; word-break: break-all;
+}
+.vendor-row__src a:hover { color: var(--accent); }
+.vendor-row__mark {
+  font-family: var(--mono); font-size: 16px; font-weight: 500;
+  width: 30px; height: 30px; border-radius: 50%;
+  display: inline-flex; align-items: center; justify-content: center;
+}
+.vendor-row__mark--yes  { background: rgba(111, 231, 181, 0.15); color: var(--yes); }
+.vendor-row__mark--no   { background: rgba(244, 123, 123, 0.12); color: var(--no); opacity: 0.65; }
+.vendor-row__mark--part { background: rgba(244, 198, 96, 0.15); color: var(--part); }
+
+/* ─────────── COLOPHON ─────────── */
+.colophon {
+  margin-top: 64px; padding-top: 32px; border-top: 1px solid var(--line);
+  display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 32px;
+  font-size: 13px; color: var(--paper-3);
+}
+.colophon h5 {
+  font-family: var(--mono); font-size: 10px; letter-spacing: 0.18em;
+  text-transform: uppercase; color: var(--paper-2); margin-bottom: 10px; font-weight: 500;
+}
+.colophon p { font-size: 13px; line-height: 1.6; }
+.colophon p a {
+  color: var(--paper-2); text-decoration: underline;
+  text-decoration-color: var(--line-2); text-underline-offset: 3px;
+}
+.colophon p a:hover { color: var(--accent); }
+.colophon code {
+  font-family: var(--mono); font-size: 11.5px; background: var(--surface);
+  padding: 1px 6px; border-radius: 2px; border: 1px solid var(--line); color: var(--accent-2);
+}
+
+@media (max-width: 900px) {
+  .page { padding: 32px 22px 72px; }
+  .masthead { grid-template-columns: 1fr; gap: 24px; }
+  .masthead__status { text-align: left; align-items: flex-start; }
+  .filters { position: static; padding: 14px; }
+  .colophon { grid-template-columns: 1fr; gap: 24px; }
+}
+</style>
+</head>
+<body>
+
+<div class="grain"></div>
+<div class="scanlines"></div>
+
+<div class="page">
+
+  <header class="masthead">
+    <div class="masthead__brand">
+      <a class="masthead__eyebrow" href="../">
+        <span class="masthead__eyebrow-arrow">←</span>
+        Infra Atlas · Cross-Cloud · Networking Primitives
+      </a>
+      <h1 class="masthead__title">Networking <em>Matrix.</em></h1>
+      <p class="masthead__subtitle">
+        Every core networking primitive — the virtual network, peering, firewalls, load balancers, private links — mapped across <span>AWS, Azure, Google Cloud and OCI</span>. A Rosetta stone for porting a design between clouds, because <span>equivalent is rarely identical.</span>
+      </p>
+    </div>
+    <aside class="masthead__status">
+      <div class="status-line">
+        <span class="status-dot"></span>
+        <span class="status-text">Curated · v1</span>
+      </div>
+      <div class="status-time">Verified · <time datetime="2026-05-19">2026-05-19</time></div>
+      <div class="status-counts">
+        <div>Providers<strong id="count-vendors">4</strong></div>
+        <div>Primitives<strong id="count-features">—</strong></div>
+        <div>Footnotes<strong id="count-stars">—</strong></div>
+      </div>
+    </aside>
+  </header>
+
+  <main id="ia-main">
+
+  <div class="readnote">
+    <span class="readnote__mark">*</span>
+    <p class="readnote__text">
+      <strong>Equivalent is rarely 1:1.</strong> A security group is not quite a network security group; a global VPC is not a regional one; a stateless subnet ACL has no native match on half these clouds. This matrix maps the <em>closest</em> construct in each cloud — the ◐ marks and the per-cell notes are where the real differences live. Read them before you port a design.
+    </p>
+  </div>
+
+  <section class="filters">
+    <div class="filter-search">
+      <input id="search" type="search" autocomplete="off" spellcheck="false" placeholder="Filter — search by primitive, product name, cloud…">
+    </div>
+    <div class="filter-chips" id="cat-chips"></div>
+    <div class="filter-chips" id="vendor-chips"></div>
+  </section>
+
+  <div class="legend">
+    <span class="legend__label">Legend</span>
+    <span class="legend__item"><span class="cell-mark cell-mark--yes">✓</span> First-class equivalent</span>
+    <span class="legend__item"><span class="cell-mark cell-mark--part">◐</span> Partial — read the note</span>
+    <span class="legend__item"><span class="cell-mark cell-mark--no">✗</span> No native equivalent</span>
+    <span class="legend__item"><span class="cell-mark cell-mark--yes" style="position:relative">✓<span class="cell-mark__star">*</span></span> Click any cell for the note &amp; source</span>
+  </div>
+
+  <div class="matrix-wrap">
+    <table class="matrix" id="matrix"></table>
+  </div>
+
+  </main>
+
+  <footer class="colophon">
+    <div>
+      <h5>About</h5>
+      <p>Instrument 19 of <a href="../">Infra Atlas</a>. The cross-cloud networking Rosetta stone — every core primitive of the virtual network mapped across AWS, Azure, Google Cloud and OCI, with the semantic caveats spelled out per cell. Click any cell for the note and the source URL.</p>
+    </div>
+    <div>
+      <h5>Sources</h5>
+      <p>Every cell is verified against the provider&rsquo;s official networking documentation — the AWS VPC, Azure Virtual Network, Google Cloud VPC and OCI Networking docs. Source URLs are cited in each cell&rsquo;s drawer. Networking constructs are stable but do get renamed and extended, so this is a curated snapshot — verified 2026-05-19 and reviewed roughly twice a year. <em>If you spot a stale fact, <a href="https://github.com/ineslino/infra-atlas/issues/new" target="_blank" rel="noopener">open an issue</a>.</em></p>
+    </div>
+    <div>
+      <h5>Shortcuts</h5>
+      <p><code>/</code> search · <code>Esc</code> close drawer · click a cell for the note, click a row name for the full per-cloud breakdown.</p>
+    </div>
+  </footer>
+
+</div>
+
+<!-- DRAWER -->
+<div class="drawer-backdrop" id="drawer-backdrop"></div>
+<aside class="drawer" id="drawer" aria-hidden="true">
+  <div class="drawer__head" id="drawer-head"></div>
+  <div class="drawer__body" id="drawer-body"></div>
+</aside>
+
+<script>
+// ═══════════════════════════════════════════════════════════════════
+// INFRA ATLAS · CROSS-CLOUD NETWORKING PRIMITIVES MATRIX
+// Every cell is verified against the provider's official networking
+// documentation (2026-05-19). The source URL for each datum is in the
+// cell's `src` field, surfaced in the drawer. "Equivalent" is rarely
+// 1:1 — partial equivalences are marked level:"part" and genuine gaps
+// level:"no", never fabricated into a false match.
+// ═══════════════════════════════════════════════════════════════════
+
+// ───────────────────────────────────────────────────────────────────
+// VENDORS (cloud providers)
+// ───────────────────────────────────────────────────────────────────
+const VENDORS = [
+  { key: "aws",   name: "Amazon Web Services", short: "AWS",   cloud: "AWS",    swatch: "#FF9F66" },
+  { key: "azure", name: "Microsoft Azure",     short: "Azure", cloud: "Azure",  swatch: "#7CD7F1" },
+  { key: "gcp",   name: "Google Cloud",        short: "GCP",   cloud: "Google", swatch: "#F4C660" },
+  { key: "oci",   name: "Oracle Cloud",        short: "OCI",   cloud: "Oracle", swatch: "#F47B7B" }
+];
+
+// ───────────────────────────────────────────────────────────────────
+// CATEGORIES
+// ───────────────────────────────────────────────────────────────────
+const CATEGORIES = [
+  { key: "foundations",  label: "The Virtual Network" },
+  { key: "connectivity", label: "Peering & Hybrid Connectivity" },
+  { key: "security",     label: "Security & Filtering" },
+  { key: "edge",         label: "Edge, Egress & Access" }
+];
+
+// ───────────────────────────────────────────────────────────────────
+// FEATURES — one row per networking primitive
+//   level : yes | part | no   (yes = first-class equivalent,
+//           part = partial / meaningful divergence, no = genuine gap)
+//   value : the provider's term for the primitive (shown in the cell)
+//   note  : the semantic caveat — surfaced in the drawer
+//   src   : official vendor documentation URL backing the cell
+// ───────────────────────────────────────────────────────────────────
+const FEATURES = [
+
+  // ══ The Virtual Network ══
+  { id:"virtual-network", category:"foundations", name:"Virtual network",
+    desc:"The top-level isolated network container — the boundary every subnet, route table and gateway lives inside.",
+    support: {
+      aws:   { level:"yes", value:"Amazon VPC",
+               note:"A regional container spanning every Availability Zone in one region; it cannot cross regions.",
+               src:"https://docs.aws.amazon.com/vpc/latest/userguide/what-is-amazon-vpc.html" },
+      azure: { level:"yes", value:"Virtual Network",
+               note:"The VNet is regional — scoped to one Azure region, with cross-region reach via peering. The top-level isolation boundary.",
+               src:"https://learn.microsoft.com/en-us/azure/virtual-network/virtual-networks-overview" },
+      gcp:   { level:"yes", value:"VPC network",
+               note:"GCP's VPC network is global — it is not bound to a region and spans Google's backbone worldwide; only its subnets are regional. A fundamental shape difference from the regional AWS and Azure model.",
+               src:"https://cloud.google.com/vpc/docs/vpc" },
+      oci:   { level:"yes", value:"VCN",
+               note:"The Virtual Cloud Network is regional — it spans all availability domains in one region and carries one or more CIDR blocks.",
+               src:"https://docs.oracle.com/en-us/iaas/Content/Network/Concepts/overview.htm" }
+    }
+  },
+
+  { id:"subnet", category:"foundations", name:"Subnet",
+    desc:"The address-range subdivision of the network that workloads actually attach to.",
+    support: {
+      aws:   { level:"yes", value:"Subnet",
+               note:"AWS subnets are zonal — each lives in exactly one Availability Zone, so multi-AZ resilience means one subnet per zone.",
+               src:"https://docs.aws.amazon.com/vpc/latest/userguide/configure-subnets.html" },
+      azure: { level:"yes", value:"Subnet",
+               note:"Azure subnets are regional — a subnet spans every availability zone in the region; zone resilience is a property of the resources placed in it, not the subnet.",
+               src:"https://learn.microsoft.com/en-us/azure/virtual-network/concepts-and-best-practices" },
+      gcp:   { level:"yes", value:"Subnet",
+               note:"GCP subnets are regional — a subnet's range spans every zone in its region, and instances in any of those zones attach to it.",
+               src:"https://cloud.google.com/vpc/docs/subnets" },
+      oci:   { level:"yes", value:"Subnet",
+               note:"OCI subnets are regional (recommended) or AD-specific — regional subnets span all availability domains; each subnet is designated public or private.",
+               src:"https://docs.oracle.com/en-us/iaas/Content/Network/Tasks/Overview_of_VCNs_and_Subnets.htm" }
+    }
+  },
+
+  { id:"route-table", category:"foundations", name:"Route table",
+    desc:"Control over where traffic goes — the routing rules applied to a subnet's egress.",
+    support: {
+      aws:   { level:"yes", value:"Route table",
+               note:"A regional resource associated to subnets or gateways; the most-specific matching route wins, and every subnet uses a route table.",
+               src:"https://docs.aws.amazon.com/vpc/latest/userguide/VPC_Route_Tables.html" },
+      azure: { level:"yes", value:"Route table + UDR",
+               note:"User-Defined Routes override Azure's default system routes; a subnet can have one route table.",
+               src:"https://learn.microsoft.com/en-us/azure/virtual-network/virtual-networks-udr-overview" },
+      gcp:   { level:"part", value:"VPC routes",
+               note:"There is no discrete attachable route-table object — routes are global VPC-level entities applied network-wide and filtered by network tags or instances, not associated per subnet.",
+               src:"https://cloud.google.com/vpc/docs/routes" },
+      oci:   { level:"yes", value:"VCN route table",
+               note:"A per-subnet (or per-gateway) rule set; it governs only traffic leaving the subnet — intra-VCN traffic always flows.",
+               src:"https://docs.oracle.com/en-us/iaas/Content/Network/Tasks/managingroutetables.htm" }
+    }
+  },
+
+  { id:"ipv6", category:"foundations", name:"IPv6 support",
+    desc:"Whether the network can run IPv6, and on what terms.",
+    support: {
+      aws:   { level:"yes", value:"Dual-stack VPC",
+               note:"IPv4 by default; you opt in by associating a /56 IPv6 CIDR. AWS is dual-stack only — there are no IPv6-only VPCs.",
+               src:"https://docs.aws.amazon.com/vpc/latest/userguide/vpc-ip-addressing.html" },
+      azure: { level:"yes", value:"IPv6 dual-stack",
+               note:"Dual-stack only — no IPv6-only VNets — and IPv6 subnets must be exactly /64.",
+               src:"https://learn.microsoft.com/en-us/azure/virtual-network/ip-services/ipv6-overview" },
+      gcp:   { level:"yes", value:"Dual-stack / v6-only",
+               note:"Supported in custom-mode VPCs on the Premium tier; subnets can be external- or internal-IPv6, and IPv6-only subnets are supported.",
+               src:"https://cloud.google.com/vpc/docs/ipv6-support" },
+      oci:   { level:"yes", value:"IPv6 for VCN",
+               note:"Dual-stack only; an Oracle-assigned /56, a customer ULA, or BYOIPv6 — and every IPv6 subnet is /64.",
+               src:"https://docs.oracle.com/en-us/iaas/Content/Network/Concepts/ipv6.htm" }
+    }
+  },
+
+  // ══ Peering & Hybrid Connectivity ══
+  { id:"peering", category:"connectivity", name:"Network peering",
+    desc:"Connecting two virtual networks directly so they exchange private traffic.",
+    support: {
+      aws:   { level:"yes", value:"VPC peering",
+               note:"A 1:1, non-transitive connection between two VPCs — same or cross-region, same or cross-account; traffic stays on the AWS backbone.",
+               src:"https://docs.aws.amazon.com/vpc/latest/peering/what-is-vpc-peering.html" },
+      azure: { level:"yes", value:"VNet peering",
+               note:"Non-transitive private connectivity; works intra-region and cross-region (Global VNet Peering). Spoke-to-spoke transit needs a hub appliance.",
+               src:"https://learn.microsoft.com/en-us/azure/virtual-network/virtual-network-peering-overview" },
+      gcp:   { level:"yes", value:"VPC Network Peering",
+               note:"Full-bandwidth private connectivity between two VPCs; non-transitive — peered VPCs do not reach each other's peers.",
+               src:"https://cloud.google.com/vpc/docs/vpc-peering" },
+      oci:   { level:"part", value:"LPG / RPC",
+               note:"No single peering construct — a Local Peering Gateway peers VCNs within one region, a Remote Peering Connection peers them across regions. Both are non-transitive.",
+               src:"https://docs.oracle.com/en-us/iaas/Content/Network/Tasks/localVCNpeering.htm" }
+    }
+  },
+
+  { id:"transit-hub", category:"connectivity", name:"Transit / hub-and-spoke",
+    desc:"A managed hub that interconnects many networks with transitive routing — the scalable alternative to a mesh of peerings.",
+    support: {
+      aws:   { level:"yes", value:"Transit Gateway",
+               note:"A regional managed hub interconnecting thousands of VPCs and VPNs with transitive routing; cross-region needs Transit Gateway peering.",
+               src:"https://docs.aws.amazon.com/vpc/latest/tgw/what-is-transit-gateway.html" },
+      azure: { level:"yes", value:"Virtual WAN",
+               note:"A Microsoft-managed global transit hub providing any-to-any transitive routing; the Standard SKU is required for a full mesh.",
+               src:"https://learn.microsoft.com/en-us/azure/virtual-wan/virtual-wan-about" },
+      gcp:   { level:"yes", value:"Network Connectivity Center",
+               note:"A managed hub providing transitive any-to-any connectivity among VPC and hybrid spokes.",
+               src:"https://cloud.google.com/network-connectivity/docs/network-connectivity-center/concepts/overview" },
+      oci:   { level:"yes", value:"Dynamic Routing Gateway",
+               note:"A managed virtual router and true transit hub — one DRG attaches many VCNs, VPNs, FastConnects and remote peerings with transitive routing.",
+               src:"https://docs.oracle.com/en-us/iaas/Content/Network/Tasks/managingDRGs.htm" }
+    }
+  },
+
+  { id:"vpn", category:"connectivity", name:"Site-to-site VPN",
+    desc:"An encrypted IPsec tunnel from the cloud network to an on-premises site.",
+    support: {
+      aws:   { level:"yes", value:"Site-to-Site VPN",
+               note:"A managed IPsec connection with two tunnels for redundancy; it terminates on a Virtual Private Gateway or a Transit Gateway.",
+               src:"https://docs.aws.amazon.com/vpn/latest/s2svpn/VPC_VPN.html" },
+      azure: { level:"yes", value:"VPN Gateway",
+               note:"An IPsec/IKE tunnel to on-premises, deployed into a dedicated GatewaySubnet; route-based gateways can be zone-redundant.",
+               src:"https://learn.microsoft.com/en-us/azure/vpn-gateway/vpn-gateway-about-vpngateways" },
+      gcp:   { level:"yes", value:"Cloud VPN",
+               note:"IPsec tunnels to on-premises; HA VPN carries a 99.99% SLA. Per-tunnel throughput is modest, roughly 1.5 to 3 Gbps.",
+               src:"https://cloud.google.com/network-connectivity/docs/vpn/concepts/overview" },
+      oci:   { level:"yes", value:"Site-to-Site VPN",
+               note:"An IPsec tunnel terminating on a DRG; Oracle provisions two redundant tunnels per connection.",
+               src:"https://docs.oracle.com/en-us/iaas/Content/Network/Tasks/overviewIPsec.htm" }
+    }
+  },
+
+  { id:"interconnect", category:"connectivity", name:"Dedicated interconnect",
+    desc:"A physical private link into the cloud, bypassing the public internet.",
+    support: {
+      aws:   { level:"yes", value:"Direct Connect",
+               note:"A physical fibre link via a Direct Connect location, not encrypted by default; a Direct Connect Gateway fans out to VPCs and Transit Gateways.",
+               src:"https://docs.aws.amazon.com/directconnect/latest/UserGuide/Welcome.html" },
+      azure: { level:"yes", value:"ExpressRoute",
+               note:"A private physical circuit via a connectivity provider; it does not traverse the public internet.",
+               src:"https://learn.microsoft.com/en-us/azure/expressroute/" },
+      gcp:   { level:"yes", value:"Cloud Interconnect",
+               note:"Dedicated Interconnect provides 10 or 100 Gbps private links to VPC internal IPs; Partner Interconnect is the lower-capacity option.",
+               src:"https://cloud.google.com/network-connectivity/docs/interconnect/concepts/dedicated-overview" },
+      oci:   { level:"yes", value:"FastConnect",
+               note:"A dedicated physical private link; it supports private peering to VCNs via a DRG and public peering to Oracle services.",
+               src:"https://docs.oracle.com/en-us/iaas/Content/Network/Concepts/fastconnect.htm" }
+    }
+  },
+
+  // ══ Security & Filtering ══
+  { id:"instance-firewall", category:"security", name:"Instance firewall (stateful)",
+    desc:"The stateful, per-resource virtual firewall enforced close to the workload.",
+    support: {
+      aws:   { level:"yes", value:"Security group",
+               note:"A stateful firewall at the network-interface level; allow-rules only, with no deny, and return traffic auto-permitted.",
+               src:"https://docs.aws.amazon.com/vpc/latest/userguide/vpc-security-groups.html" },
+      azure: { level:"yes", value:"Network Security Group",
+               note:"Stateful 5-tuple allow/deny rules; an NSG attaches to a NIC or a whole subnet — broader than a strictly per-instance firewall. Application Security Groups let rules target app tiers.",
+               src:"https://learn.microsoft.com/en-us/azure/virtual-network/network-security-groups-overview" },
+      gcp:   { level:"yes", value:"VPC firewall rules",
+               note:"Stateful, distributed enforcement on every workload; rules are applied by network tags or service accounts rather than by subnet membership. Part of Cloud NGFW.",
+               src:"https://cloud.google.com/firewall/docs/firewalls" },
+      oci:   { level:"yes", value:"Network Security Group",
+               note:"A per-VNIC virtual firewall whose rules can reference other NSGs as source or destination; stateful by default, with a stateless option.",
+               src:"https://docs.oracle.com/en-us/iaas/Content/Network/Concepts/networksecuritygroups.htm" }
+    }
+  },
+
+  { id:"subnet-acl", category:"security", name:"Subnet ACL (stateless)",
+    desc:"A stateless allow/deny list enforced at the subnet boundary — the AWS Network ACL model.",
+    support: {
+      aws:   { level:"yes", value:"Network ACL",
+               note:"A stateless, ordered allow/deny list at the subnet boundary; return traffic must be explicitly permitted on the ephemeral port range.",
+               src:"https://docs.aws.amazon.com/vpc/latest/userguide/vpc-network-acls.html" },
+      azure: { level:"no", value:"—",
+               note:"Azure has no stateless subnet ACL. The NSG is the only subnet or NIC filter and it is stateful — there is no native equivalent of an AWS Network ACL.",
+               src:"https://learn.microsoft.com/en-us/azure/virtual-network/network-security-groups-overview" },
+      gcp:   { level:"no", value:"—",
+               note:"GCP has no stateless subnet ACL. All VPC firewall rules and policies are stateful, with connection tracking — there is no per-subnet stateless allow/deny boundary.",
+               src:"https://cloud.google.com/firewall/docs/firewall-policies-overview" },
+      oci:   { level:"part", value:"Security List",
+               note:"A subnet-wide rule set — the closest analogue — but not a purely stateless ACL: each rule is independently stateful or stateless. Security Lists and NSGs are evaluated together, as a union of allows.",
+               src:"https://docs.oracle.com/en-us/iaas/Content/Network/Concepts/securitylists.htm" }
+    }
+  },
+
+  { id:"managed-firewall", category:"security", name:"Managed network firewall",
+    desc:"A higher-layer managed firewall service — IDS/IPS, deep packet inspection, FQDN filtering.",
+    support: {
+      aws:   { level:"yes", value:"Network Firewall",
+               note:"A managed stateful IDS/IPS firewall on the Suricata engine, with FQDN filtering, deep packet inspection and TLS inspection; it deploys per Availability Zone.",
+               src:"https://docs.aws.amazon.com/network-firewall/latest/developerguide/what-is-aws-network-firewall.html" },
+      azure: { level:"yes", value:"Azure Firewall",
+               note:"A regional managed stateful firewall; the Premium SKU adds IDPS, TLS inspection and URL filtering, and all SKUs do FQDN filtering.",
+               src:"https://learn.microsoft.com/en-us/azure/firewall/features-by-sku" },
+      gcp:   { level:"yes", value:"Cloud NGFW",
+               note:"The Enterprise tier adds IDS/IPS, TLS inspection and FQDN or domain filtering via a managed firewall endpoint; the lower tiers lack L7 inspection.",
+               src:"https://cloud.google.com/firewall/docs/about-intrusion-prevention" },
+      oci:   { level:"yes", value:"OCI Network Firewall",
+               note:"A managed firewall built on Palo Alto Networks, with IDS/IPS, TLS inspection and FQDN or URL filtering; FQDN filtering covers public FQDNs only.",
+               src:"https://docs.oracle.com/en-us/iaas/Content/network-firewall/overview.htm" }
+    }
+  },
+
+  { id:"ddos", category:"security", name:"DDoS protection",
+    desc:"Defence against volumetric and protocol denial-of-service attacks.",
+    support: {
+      aws:   { level:"yes", value:"AWS Shield",
+               note:"Shield Standard is automatic and free for L3/L4; Shield Advanced is paid and adds L7 mitigation, cost protection and a response team — its L7 defence depends on AWS WAF.",
+               src:"https://docs.aws.amazon.com/waf/latest/developerguide/shield-chapter.html" },
+      azure: { level:"yes", value:"DDoS Protection",
+               note:"Always-on L3/L4 mitigation; basic platform protection is free, while the Network and IP Protection tiers add tuning, telemetry and mitigation flow logs.",
+               src:"https://learn.microsoft.com/en-us/azure/ddos-protection/ddos-protection-overview" },
+      gcp:   { level:"yes", value:"Cloud Armor",
+               note:"Always-on L3/L4 protection for load balancers is automatic; L7 and advanced volumetric defence need configured security policies or the Enterprise tier.",
+               src:"https://cloud.google.com/armor/docs/cloud-armor-overview" },
+      oci:   { level:"part", value:"DDoS + WAF",
+               note:"L3/L4 volumetric scrubbing is automatic, always-on and free — there is no separately provisionable L3/L4 service the way the other clouds offer one. L7 denial-of-service defence is handled by the WAF.",
+               src:"https://docs.oracle.com/en/solutions/learn-ddos-prevention-oci/index.html" }
+    }
+  },
+
+  { id:"flow-logs", category:"security", name:"Network flow logs",
+    desc:"Logging of network traffic metadata for visibility, audit and forensics.",
+    support: {
+      aws:   { level:"yes", value:"VPC Flow Logs",
+               note:"Captures IP traffic metadata — not packet payload — at VPC, subnet or interface level; delivered to CloudWatch Logs, S3 or Firehose.",
+               src:"https://docs.aws.amazon.com/vpc/latest/userguide/flow-logs.html" },
+      azure: { level:"yes", value:"VNet Flow Logs",
+               note:"L4 IP-flow logging at VNet scope written to a storage account; it supersedes the older NSG Flow Logs, which are being retired.",
+               src:"https://learn.microsoft.com/en-us/azure/network-watcher/vnet-flow-logs-overview" },
+      gcp:   { level:"yes", value:"VPC Flow Logs",
+               note:"Sampled records of VM-to-VM, internet and hybrid traffic; enabled per subnet, VLAN attachment or VPN tunnel.",
+               src:"https://cloud.google.com/vpc/docs/flow-logs" },
+      oci:   { level:"yes", value:"VCN Flow Logs",
+               note:"Captures accepted and rejected traffic metadata via the Logging service; enabled per VCN, subnet or VNIC, with optional capture filters.",
+               src:"https://docs.oracle.com/en-us/iaas/Content/Network/Concepts/vcn-flow-logs.htm" }
+    }
+  },
+
+  // ══ Edge, Egress & Access ══
+  { id:"load-balancing", category:"edge", name:"Load balancing",
+    desc:"Distributing traffic across backends — at L4 (transport) and L7 (application).",
+    support: {
+      aws:   { level:"yes", value:"ALB · NLB · GLB",
+               note:"Elastic Load Balancing splits into three current types — Application LB (L7), Network LB (L4) and Gateway LB (L3, for inserting virtual appliances). All are regional.",
+               src:"https://docs.aws.amazon.com/elasticloadbalancing/latest/userguide/what-is-load-balancing.html" },
+      azure: { level:"yes", value:"Load Balancer · App GW",
+               note:"Azure Load Balancer is L4; Application Gateway is L7 with WAF — two separate products. Front Door and Traffic Manager add global tiers.",
+               src:"https://learn.microsoft.com/en-us/azure/architecture/guide/technology-choices/load-balancing-overview" },
+      gcp:   { level:"yes", value:"Cloud Load Balancing",
+               note:"Application LB (L7, Envoy-based) and Network LB (L4); the external Application LB is uniquely global and anycast, unlike a regional AWS ALB.",
+               src:"https://cloud.google.com/load-balancing/docs/choosing-load-balancer" },
+      oci:   { level:"yes", value:"Load Balancer · NLB",
+               note:"The Flexible Load Balancer is an L4/L7 proxy; the Network Load Balancer is low-latency L4 pass-through that preserves the client source IP.",
+               src:"https://docs.oracle.com/en-us/iaas/Content/Balance/home.htm" }
+    }
+  },
+
+  { id:"nat", category:"edge", name:"NAT for egress",
+    desc:"Letting resources in a private subnet reach the internet outbound, without accepting inbound connections.",
+    support: {
+      aws:   { level:"yes", value:"NAT Gateway",
+               note:"Managed and zonal — deploy one per Availability Zone for resilience. IPv4 only; IPv6 egress uses the separate egress-only internet gateway.",
+               src:"https://docs.aws.amazon.com/vpc/latest/userguide/vpc-nat-gateway.html" },
+      azure: { level:"yes", value:"NAT Gateway",
+               note:"Fully managed outbound-only SNAT for a subnet, allowing no unsolicited inbound; the StandardV2 SKU is zone-redundant.",
+               src:"https://learn.microsoft.com/en-us/azure/nat-gateway/nat-overview" },
+      gcp:   { level:"yes", value:"Cloud NAT",
+               note:"A managed, distributed regional service — there is no NAT gateway instance and no bandwidth bottleneck.",
+               src:"https://cloud.google.com/nat/docs/overview" },
+      oci:   { level:"yes", value:"NAT Gateway",
+               note:"A regional virtual router giving private-subnet resources outbound internet access while blocking unsolicited inbound connections.",
+               src:"https://docs.oracle.com/en-us/iaas/Content/Network/Tasks/NATgateway.htm" }
+    }
+  },
+
+  { id:"private-service", category:"edge", name:"Private service access",
+    desc:"Reaching a managed or third-party service over a private address, without traversing the internet — the PrivateLink pattern.",
+    support: {
+      aws:   { level:"yes", value:"PrivateLink",
+               note:"Interface endpoints expose a service as a private network interface inside the consumer VPC — no internet gateway, NAT or peering. Gateway endpoints for S3 and DynamoDB are a separate route-based variant.",
+               src:"https://docs.aws.amazon.com/vpc/latest/privatelink/what-is-privatelink.html" },
+      azure: { level:"yes", value:"Private Link",
+               note:"A private endpoint is a NIC with a private VNet IP mapping to a PaaS or partner service; traffic stays on the Microsoft backbone.",
+               src:"https://learn.microsoft.com/en-us/azure/private-link/private-endpoint-overview" },
+      gcp:   { level:"yes", value:"Private Service Connect",
+               note:"PSC exposes producer services — including Google APIs — via a private endpoint IP in the consumer VPC. The older peering-based Private Services Access still exists for some managed services.",
+               src:"https://cloud.google.com/vpc/docs/private-service-connect" },
+      oci:   { level:"part", value:"Service GW / PE",
+               note:"Two distinct constructs, not one: a Service Gateway routes a VCN privately to whole Oracle service CIDRs via their public endpoints, while a Private Endpoint places a private IP in your subnet for one specific service. There is no single PrivateLink-equivalent.",
+               src:"https://docs.oracle.com/en-us/iaas/Content/Network/Concepts/privateaccess.htm" }
+    }
+  },
+
+  { id:"private-dns", category:"edge", name:"Private DNS",
+    desc:"Internal DNS zones resolvable only inside the network.",
+    support: {
+      aws:   { level:"yes", value:"Route 53 private zone",
+               note:"A DNS zone resolvable only within associated VPCs; hybrid or cross-VPC resolution adds Route 53 Resolver endpoints and rules.",
+               src:"https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/hosted-zones-private.html" },
+      azure: { level:"yes", value:"Private DNS zones",
+               note:"Internal-only zones resolvable from linked VNets; they support VM autoregistration and underpin private endpoints.",
+               src:"https://learn.microsoft.com/en-us/azure/dns/private-dns-overview" },
+      gcp:   { level:"yes", value:"Cloud DNS private",
+               note:"Private zones resolve only within authorised VPC networks; cross-network resolution needs DNS peering or forwarding.",
+               src:"https://cloud.google.com/dns/docs/zones" },
+      oci:   { level:"yes", value:"Private DNS",
+               note:"VCN-scoped — each VCN gets a dedicated resolver, and private zones group into views shareable across VCNs in a region.",
+               src:"https://docs.oracle.com/en-us/iaas/Content/DNS/Tasks/privatedns.htm" }
+    }
+  }
+
+];
+
+// ───────────────────────────────────────────────────────────────────
+// STATE + RENDER
+// ───────────────────────────────────────────────────────────────────
+const state = {
+  vendors: new Set(VENDORS.map(v => v.key)),
+  category: "all",
+  query: ""
+};
+
+const $ = (s) => document.querySelector(s);
+const $$ = (s) => Array.from(document.querySelectorAll(s));
+
+const escapeHtml = (s) => String(s).replace(/[&<>"']/g, (c) => ({
+  "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
+}[c]));
+
+// ─── Permalinks — filter state ⇄ URL hash ───
+function writeHash() {
+  const keys = VENDORS.map(v => v.key);
+  const p = new URLSearchParams();
+  if (state.vendors.size < keys.length) p.set("vendors", keys.filter(k => state.vendors.has(k)).join(","));
+  if (state.category !== "all") p.set("cat", state.category);
+  if (state.query.trim())       p.set("q", state.query.trim());
+  const h = p.toString();
+  history.replaceState(null, "", h ? "#" + h : location.pathname + location.search);
+}
+function applyHash() {
+  const keys = VENDORS.map(v => v.key);
+  const p = new URLSearchParams(location.hash.slice(1));
+  const vd = p.get("vendors");
+  if (vd) {
+    const valid = vd.split(",").filter(x => keys.includes(x));
+    if (valid.length) state.vendors = new Set(valid);
+  }
+  const cat = p.get("cat"); if (cat) state.category = cat;
+  state.query = p.get("q") || "";
+  const allV = state.vendors.size === keys.length;
+  $$('.chip[data-v]').forEach(b => {
+    if (b.dataset.v === "all") b.classList.toggle("is-active", allV);
+    else b.classList.toggle("is-active", !allV && state.vendors.has(b.dataset.v));
+  });
+  $$('.chip[data-cat]').forEach(b => b.classList.toggle("is-active", b.dataset.cat === state.category));
+  const sb = $("#search"); if (sb) sb.value = state.query;
+}
+
+function init() {
+  // Counts
+  $("#count-features").textContent = FEATURES.length;
+  const stars = FEATURES.reduce((acc, f) => acc + Object.values(f.support).filter(s => s.note && s.note.length > 0).length, 0);
+  $("#count-stars").textContent = stars;
+
+  // Category chips
+  const catChips = $("#cat-chips");
+  catChips.innerHTML = `<span class="filter-chips__label">Category</span>
+    <button class="chip is-active" data-cat="all">All</button>` +
+    CATEGORIES.map(c => `<button class="chip" data-cat="${c.key}">${escapeHtml(c.label)}</button>`).join("");
+
+  // Vendor chips
+  const vChips = $("#vendor-chips");
+  vChips.innerHTML = `<span class="filter-chips__label">Clouds</span>
+    <button class="chip is-active" data-v="all">All</button>` +
+    VENDORS.map(v => `<button class="chip" data-v="${v.key}"><span class="swatch" style="background:${v.swatch}"></span>${escapeHtml(v.short)}</button>`).join("");
+
+  applyHash();
+  renderMatrix();
+  wireEvents();
+  window.addEventListener("hashchange", () => { applyHash(); applyFilter(); });
+}
+
+function renderMatrix() {
+  const table = $("#matrix");
+  let html = "<thead><tr>";
+  html += '<th class="feature-col" scope="col">Primitive</th>';
+  VENDORS.forEach(v => {
+    html += `<th class="col-${v.key}" scope="col"><span class="vendor-tag"><span class="swatch" style="background:${v.swatch}"></span>${escapeHtml(v.short)}</span></th>`;
+  });
+  html += "</tr></thead><tbody>";
+
+  CATEGORIES.forEach(cat => {
+    const features = FEATURES.filter(f => f.category === cat.key);
+    if (features.length === 0) return;
+    html += `<tr class="category-row" data-cat="${cat.key}"><td colspan="${VENDORS.length + 1}"><span class="cat-label">▸ ${escapeHtml(cat.label)}</span></td></tr>`;
+    features.forEach(f => {
+      html += `<tr class="feature-row" data-feature="${f.id}" data-cat="${cat.key}">`;
+      html += `<td class="feature-col" data-action="open-feature" tabindex="0" role="button" aria-label="Open per-cloud breakdown for ${escapeHtml(f.name)}">${escapeHtml(f.name)}</td>`;
+      VENDORS.forEach(v => {
+        const s = f.support[v.key] || { level: "no", value: "—", note: "" };
+        const hasNote = s.note && s.note.length > 0;
+        const valText = s.value || (s.level === "yes" ? "✓" : s.level === "part" ? "◐" : "✗");
+        html += `<td class="cell col-${v.key}" data-feature="${f.id}" data-vendor="${v.key}" tabindex="0" role="button" aria-label="${escapeHtml(f.name)} — ${escapeHtml(v.name)}: ${escapeHtml(valText)}. Open footnote.">`;
+        html += `<span class="cell-value cell-value--${s.level}">${escapeHtml(valText)}${hasNote ? '<span class="cell-value__star">*</span>' : ''}</span>`;
+        html += `</td>`;
+      });
+      html += `</tr>`;
+    });
+  });
+
+  html += "</tbody>";
+  table.innerHTML = html;
+  applyFilter();
+}
+
+function applyFilter() {
+  const q = state.query.trim().toLowerCase();
+  const table = $("#matrix");
+
+  // Vendor visibility (via class on table)
+  VENDORS.forEach(v => {
+    table.classList.toggle(`hide-${v.key}`, !state.vendors.has(v.key));
+  });
+
+  // Row visibility
+  $$(".matrix tbody tr.feature-row").forEach(row => {
+    const f = FEATURES.find(x => x.id === row.dataset.feature);
+    if (!f) return;
+    let matches = state.category === "all" || f.category === state.category;
+    if (matches && q) {
+      const cat = (CATEGORIES.find(c => c.key === f.category) || {}).label || "";
+      const vendorHay = VENDORS
+        .filter(v => state.vendors.has(v.key))
+        .map(v => {
+          const s = f.support[v.key] || {};
+          return `${v.name} ${v.short} ${v.cloud} ${s.value || ""} ${s.note || ""}`;
+        })
+        .join(" ");
+      const hay = `${f.name} ${f.desc} ${cat} ${vendorHay}`.toLowerCase();
+      matches = hay.includes(q);
+    }
+    row.classList.toggle("is-hidden", !matches);
+  });
+
+  // Hide category rows that have no visible features
+  CATEGORIES.forEach(cat => {
+    const visible = $$(`.matrix tbody tr.feature-row[data-cat="${cat.key}"]`).some(r => !r.classList.contains("is-hidden"));
+    const catRow = $(`.matrix tbody tr.category-row[data-cat="${cat.key}"]`);
+    if (catRow) catRow.classList.toggle("is-hidden", !visible);
+  });
+  writeHash();
+}
+
+// ─── Drawer ───
+let lastFocused = null;
+function openDrawer() {
+  lastFocused = document.activeElement;
+  $("#drawer-backdrop").classList.add("is-open");
+  $("#drawer").classList.add("is-open");
+  $("#drawer").setAttribute("aria-hidden", "false");
+  const closeBtn = $("#drawer .drawer__close");
+  if (closeBtn) closeBtn.focus();
+}
+function closeDrawer() {
+  $("#drawer-backdrop").classList.remove("is-open");
+  $("#drawer").classList.remove("is-open");
+  $("#drawer").setAttribute("aria-hidden", "true");
+  if (lastFocused && typeof lastFocused.focus === "function") lastFocused.focus();
+}
+
+function openFeatureDrawer(feature, focusVendor) {
+  const cat = (CATEGORIES.find(c => c.key === feature.category) || {}).label || "";
+  $("#drawer-head").innerHTML = `
+    <div class="drawer__eyebrow">${escapeHtml(cat)}</div>
+    <h3 class="drawer__title">${escapeHtml(feature.name)}</h3>
+    <p class="drawer__desc">${escapeHtml(feature.desc)}</p>
+    <button class="drawer__close" type="button" onclick="closeDrawer()">Close ⤬</button>
+  `;
+  const body = VENDORS.map(v => {
+    const s = feature.support[v.key] || { level: "no", value: "—", note: "" };
+    const sym = s.level === "yes" ? "✓" : s.level === "part" ? "◐" : "✗";
+    const isFocus = focusVendor === v.key;
+    const valText = s.value || sym;
+    const srcHtml = s.src
+      ? `<div class="vendor-row__src">Source · <a href="${escapeHtml(s.src)}" target="_blank" rel="noopener">${escapeHtml(s.src)}</a></div>`
+      : "";
+    return `<div class="vendor-row" ${isFocus ? 'style="border-color: var(--accent); background: rgba(255,120,73,0.05);"' : ''}>
+      <span class="vendor-row__mark vendor-row__mark--${s.level}">${sym}</span>
+      <div>
+        <div class="vendor-row__name"><span class="swatch" style="background:${v.swatch}"></span>${escapeHtml(v.name)}</div>
+        <div class="vendor-row__value vendor-row__value--${s.level}">${escapeHtml(valText)}</div>
+        <div class="vendor-row__note">${escapeHtml(s.note || (s.level === "no" ? "No native equivalent." : "—"))}</div>
+        ${srcHtml}
+      </div>
+    </div>`;
+  }).join("");
+  $("#drawer-body").innerHTML = `<div class="drawer__section"><h4>Per-cloud detail &amp; sources</h4>${body}</div>`;
+  openDrawer();
+}
+
+function wireEvents() {
+  document.addEventListener("click", (e) => {
+    // Category chips
+    const c = e.target.closest(".chip[data-cat]");
+    if (c) {
+      state.category = c.dataset.cat;
+      $$('.chip[data-cat]').forEach(b => b.classList.toggle("is-active", b.dataset.cat === state.category));
+      applyFilter();
+      return;
+    }
+    // Vendor chips
+    const v = e.target.closest(".chip[data-v]");
+    if (v) {
+      const key = v.dataset.v;
+      if (key === "all") {
+        state.vendors = new Set(VENDORS.map(x => x.key));
+        $$('.chip[data-v]').forEach(b => b.classList.toggle("is-active", b.dataset.v === "all"));
+      } else {
+        if ($('.chip[data-v="all"]').classList.contains("is-active")) {
+          state.vendors = new Set([key]);
+          $$('.chip[data-v]').forEach(b => b.classList.toggle("is-active", b.dataset.v === key));
+        } else {
+          if (state.vendors.has(key) && state.vendors.size === 1) {
+            state.vendors = new Set(VENDORS.map(x => x.key));
+            $$('.chip[data-v]').forEach(b => b.classList.toggle("is-active", b.dataset.v === "all"));
+          } else {
+            state.vendors.has(key) ? state.vendors.delete(key) : state.vendors.add(key);
+            v.classList.toggle("is-active");
+            $('.chip[data-v="all"]').classList.remove("is-active");
+          }
+        }
+      }
+      applyFilter();
+      return;
+    }
+    // Cell → footnote
+    const cell = e.target.closest("td.cell");
+    if (cell) {
+      const f = FEATURES.find(x => x.id === cell.dataset.feature);
+      if (f) openFeatureDrawer(f, cell.dataset.vendor);
+      return;
+    }
+    // Primitive name → full breakdown
+    const featureCol = e.target.closest("td.feature-col[data-action='open-feature']");
+    if (featureCol) {
+      const row = featureCol.closest("tr.feature-row");
+      const f = FEATURES.find(x => x.id === row.dataset.feature);
+      if (f) openFeatureDrawer(f, null);
+      return;
+    }
+  });
+
+  // Keyboard activation for cells & primitive names
+  document.addEventListener("keydown", (e) => {
+    if (e.key !== "Enter" && e.key !== " ") return;
+    const cell = e.target.closest("td.cell");
+    if (cell) {
+      e.preventDefault();
+      const f = FEATURES.find(x => x.id === cell.dataset.feature);
+      if (f) openFeatureDrawer(f, cell.dataset.vendor);
+      return;
+    }
+    const featureCol = e.target.closest("td.feature-col[data-action='open-feature']");
+    if (featureCol) {
+      e.preventDefault();
+      const row = featureCol.closest("tr.feature-row");
+      const f = FEATURES.find(x => x.id === row.dataset.feature);
+      if (f) openFeatureDrawer(f, null);
+    }
+  });
+
+  $("#drawer-backdrop").addEventListener("click", closeDrawer);
+  $("#search").addEventListener("input", (e) => {
+    state.query = e.target.value;
+    applyFilter();
+  });
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") closeDrawer();
+    if (e.key === "/" && e.target.tagName !== "INPUT") { e.preventDefault(); $("#search").focus(); }
+  });
+}
+
+init();
+</script>
+<script src="/nav.js" defer></script>
+</body>
+</html>

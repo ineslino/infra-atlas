@@ -29,7 +29,8 @@
     ["/confidential-computing/", "Confidential Computing","Cross-cloud", "confidential enclave sgx sev snp tdx nitro tee trusted execution memory encryption attestation"],
     ["/iam-matrix/",             "IAM Matrix",            "Cross-cloud", "iam identity access management rbac abac policy entra id permissions roles authorization"],
     ["/ai-atlas/",               "Generative AI Atlas",   "Cross-cloud", "ai generative model llm foundation model bedrock vertex azure foundry oci ovh openai gpt claude anthropic gemini google llama meta mistral cohere deepseek grok fine-tuning rag agents guardrails inference"],
-    ["/egress/",                 "Egress & Transfer Cost Map","Cross-cloud", "egress data transfer cost networking bandwidth nat gateway interconnect direct connect expressroute cross-region cross-az internet bill price gigabyte"]
+    ["/egress/",                 "Egress & Transfer Cost Map","Cross-cloud", "egress data transfer cost networking bandwidth nat gateway interconnect direct connect expressroute cross-region cross-az internet bill price gigabyte"],
+    ["/networking-matrix/",      "Networking Matrix",      "Cross-cloud", "networking primitives vpc vnet vcn subnet route table peering transit gateway virtual wan ncc drg firewall security group nsg network acl nat load balancer privatelink private link rosetta aws azure gcp oci"]
   ];
   var DECISIONS = [
     ["/decisions/",                                          "Decisions — the hub",                   "Decisions", "decision guide which one should i use compare versus vs choose"],
@@ -249,7 +250,7 @@
   }
 
   // ── Donation surface — gratitude module + footer support strip ───
-  // Injected here once so all 18 instruments stay consistent without a
+  // Injected here once so all 19 instruments stay consistent without a
   // copy-paste into every file. See tasks/marketing-2026-05/donations.md.
   (function () {
     var SUPPORT = "/support/";
@@ -262,7 +263,7 @@
           '<div class="ia-grat__in">'
         +   '<div class="ia-grat__txt">'
         +     '<div class="ia-grat__kick">Free to read · no ads · no vendor money</div>'
-        +     '<p>One of eighteen instruments, kept current and kept honest by one '
+        +     '<p>One of nineteen instruments, kept current and kept honest by one '
         +     'person. If it saved you a detour through the vendor docs, you can '
         +     'help keep the atlas running.</p>'
         +   '</div>'
