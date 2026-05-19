@@ -39,9 +39,10 @@ def extract_array(name):
     src = re.sub(r'([{,]\s*)([a-zA-Z_]\w*)\s*:', r'\1"\2":', src)
     # Drop trailing commas before } or ]
     src = re.sub(r',(\s*[}\]])', r'\1', src)
-    # Strip // line comments — but NOT the // inside https:// URLs
-    src = re.sub(r'(?<!:)//[^\n]*', '', src)
-    # Strip /* block */ comments
+    # Strip /* block */ comments. Line (//) comments are deliberately NOT
+    # stripped: the const has none, and a blind // strip would corrupt any
+    # string value containing // (a URL, or prose). json.loads handles // inside
+    # a quoted string fine; a stray // comment would fail loudly, which is wanted.
     src = re.sub(r'/\*.*?\*/', '', src, flags=re.DOTALL)
     try:
         return json.loads(src)

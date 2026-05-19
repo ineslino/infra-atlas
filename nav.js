@@ -71,7 +71,7 @@
 
   var current = null;
   ITEMS.forEach(function (it) {
-    it.cur = (it.href === "/") ? (here === "/") : (here.indexOf(it.href) !== -1);
+    it.cur = (it.href === "/") ? (here === "/") : (here === it.href);
     if (it.cur && it.href !== "/") current = it;
   });
 
