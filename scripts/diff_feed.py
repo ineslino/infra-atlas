@@ -31,8 +31,13 @@ def diff(inst, old, new):
     entries = []
 
     # ── Regions ──
+    # Compute instruments carry a top-level regions[]; the Region Map is
+    # city-modelled, with region objects nested under cities[].regions[].
     def codes(d):
-        return {r.get("code") for r in d.get("regions", []) if r.get("code")}
+        regs = list(d.get("regions", []))
+        for c in d.get("cities", []):
+            regs.extend(c.get("regions", []))
+        return {r.get("code") for r in regs if isinstance(r, dict) and r.get("code")}
     o_reg, n_reg = codes(old), codes(new)
     for c in sorted(n_reg - o_reg):
         entries.append((ts, inst, "region-added", f"new region {c}"))
