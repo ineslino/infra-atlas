@@ -449,6 +449,24 @@ body {
 }
 .section-head__meta strong { color: var(--paper); font-weight: 500; }
 
+.instruments__intro {
+  max-width: 1280px;
+  margin: 0 auto 28px;
+  padding: 0 clamp(20px, 4vw, 48px);
+  font-family: var(--sans);
+  font-size: 14.5px;
+  line-height: 1.6;
+  color: var(--paper-2);
+}
+.instruments__intro strong { color: var(--paper); font-weight: 600; }
+.instruments__intro a {
+  color: var(--paper);
+  text-decoration: underline;
+  text-decoration-color: var(--accent);
+  text-underline-offset: 3px;
+}
+.instruments__intro a:hover { color: var(--accent); }
+
 /* ───────── WHAT CHANGED · feed ───────── */
 .dispatches { margin-top: 100px; }
 .dispatch-list { list-style: none; margin: 0; padding: 0; }
@@ -492,13 +510,6 @@ body {
 .dispatch-kind[data-tone="drop"]  { color: var(--rose);   border-color: rgba(244, 123, 123, 0.32); }
 .dispatch-kind[data-tone="price"] { color: var(--accent); border-color: rgba(255, 120, 73, 0.32); }
 .dispatch-text { font-family: var(--mono); font-size: 12.5px; color: var(--paper); flex: 1 1 280px; }
-.dispatch-empty {
-  font-family: var(--mono);
-  font-size: 12px;
-  color: var(--paper-3);
-  padding: 18px 2px;
-  border-top: 1px solid var(--line);
-}
 
 .department {
   margin-top: 56px;
@@ -852,7 +863,7 @@ body {
 <div class="page">
 
   <div class="top-rule">
-    <div class="top-rule__center">Issue No. 01 · A reference for the infrastructure stack</div>
+    <div class="top-rule__center">Issue No. 01 · Compare cloud infrastructure across every major vendor</div>
     <div class="top-rule__sync">
       <span class="pulse"></span>
       Synced daily · 06:00 UTC
@@ -894,6 +905,10 @@ body {
         <strong>19</strong> Live · <strong>0</strong> In Dev · <strong>0</strong> Planned
       </div>
     </header>
+
+    <p class="instruments__intro">
+      <strong>New here?</strong> The cross-cloud instruments — <a href="./equivalent-sku/">Equivalent-SKU</a>, <a href="./networking-matrix/">Networking</a>, <a href="./ai-atlas/">Generative AI</a> and <a href="./iam-matrix/">IAM</a> — are what nobody else does neutrally. Start there.
+    </p>
 
     <!-- ───── DEPARTMENT I: CLOUD COMPUTE ───── -->
     <div class="department" data-dept="cloud">
@@ -1459,14 +1474,10 @@ body {
     .then(function (feed) {
       if (!feed) return;                         // no feed.json — leave section hidden
       var entries = Array.isArray(feed.entries) ? feed.entries : [];
+      if (!entries.length) return;               // empty feed — leave the section hidden instead of showing a placeholder
       sec.hidden = false;
       var count = document.getElementById("dispatch-count");
       if (count) count.textContent = entries.length;
-      if (!entries.length) {
-        list.innerHTML = '<li class="dispatch-empty">No dispatches yet — the daily '
-          + 'refresh appends changes here as prices and catalogues shift.</li>';
-        return;
-      }
       list.innerHTML = entries.slice(0, 18).map(function (e) {
         return '<li class="dispatch-item">'
           + '<span class="dispatch-date">' + fmtDate(e.ts) + '</span>'
