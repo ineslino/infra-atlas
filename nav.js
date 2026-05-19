@@ -106,6 +106,10 @@
     + 'letter-spacing:0.14em;text-transform:uppercase;color:var(--accent,#FF7849);'
     + 'transition:color .15s;}'
     + '.ia-nav__support:hover{color:var(--accent-2,#FFA66E);}'
+    + '.ia-nav__action{font-family:var(--mono,monospace);font-size:10.5px;'
+    + 'letter-spacing:0.14em;text-transform:uppercase;'
+    + 'color:var(--paper-3,rgba(244,239,230,0.55));transition:color .15s;}'
+    + '.ia-nav__action:hover{color:var(--paper,#F4EFE6);}'
     /* command palette */
     + '.ia-cmdk{position:fixed;inset:0;z-index:200;display:none;align-items:flex-start;'
     + 'justify-content:center;padding:13vh 16px 16px;background:rgba(10,9,7,0.74);'
@@ -208,6 +212,7 @@
     +   hereHtml
     + '</a>'
     + '<div class="ia-nav__right">'
+    +   '<a class="ia-nav__action" href="https://github.com/ineslino/infra-atlas/issues/new/choose" target="_blank" rel="noopener">Report a fix</a>'
     +   '<a class="ia-nav__support" href="/support/" data-ia-cta="nav">Support us</a>'
     +   '<button class="ia-nav__btn" id="ia-nav-btn" aria-haspopup="dialog" aria-expanded="false">'
     +     '<svg viewBox="0 0 16 16" width="12" height="12" aria-hidden="true" fill="none" '
@@ -285,7 +290,8 @@
       strip.className = "ia-support";
       strip.innerHTML =
           'Infra Atlas is free to read and reader-supported · '
-        + '<a href="' + SUPPORT + '" data-ia-cta="footer">Support the atlas →</a>';
+        + '<a href="' + SUPPORT + '" data-ia-cta="footer">Support the atlas →</a>'
+        + ' · <a href="/privacy/">Privacy</a>';
       document.body.appendChild(strip);
     }
 

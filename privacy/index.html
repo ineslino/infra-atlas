@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="color-scheme" content="dark">
+<title>Privacy · Infra Atlas</title>
+<link rel="icon" href="/favicon.svg?v=2" type="image/svg+xml">
+<meta name="description" content="What Infra Atlas collects and does not collect. No cookies, no persistent identifiers, no cross-site tracking — only aggregate visit counts via Cloudflare Web Analytics.">
+<link rel="canonical" href="https://infraatlas.dev/privacy/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Infra Atlas">
+<meta property="og:title" content="Privacy · Infra Atlas">
+<meta property="og:description" content="No cookies, no persistent identifiers, no cross-site tracking — only aggregate visit counts via Cloudflare Web Analytics.">
+<meta property="og:url" content="https://infraatlas.dev/privacy/">
+<meta property="og:image" content="https://infraatlas.dev/og.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Privacy · Infra Atlas">
+<meta name="twitter:description" content="No cookies, no persistent identifiers, no cross-site tracking — only aggregate visit counts.">
+<meta name="twitter:image" content="https://infraatlas.dev/og.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@300;400;500;600&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+:root {
+  --ink: #0A0907; --ink-2: #100E0C; --surface: #161310;
+  --line: rgba(244, 239, 230, 0.06); --line-2: rgba(244, 239, 230, 0.14);
+  --paper: #F4EFE6; --paper-2: rgba(244, 239, 230, 0.66); --paper-3: rgba(244, 239, 230, 0.55);
+  --accent: #FF7849; --accent-2: #FFA66E;
+  --serif: 'Instrument Serif', 'Times New Roman', serif;
+  --mono: 'JetBrains Mono', ui-monospace, monospace;
+  --sans: 'Manrope', -apple-system, system-ui, sans-serif;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body {
+  background: var(--ink); color: var(--paper);
+  font-family: var(--sans); font-size: 15px; line-height: 1.55;
+  -webkit-font-smoothing: antialiased; min-height: 100vh;
+}
+body {
+  background:
+    radial-gradient(ellipse at 100% -10%, rgba(255, 120, 73, 0.07), transparent 55%),
+    radial-gradient(ellipse at -10% 110%, rgba(244, 198, 96, 0.05), transparent 65%),
+    var(--ink);
+  background-attachment: fixed; overflow-x: hidden;
+}
+.grain {
+  pointer-events: none; position: fixed; inset: 0; z-index: 100; opacity: 0.08; mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml;utf8,<svg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.6 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+}
+.scanlines {
+  pointer-events: none; position: fixed; inset: 0; z-index: 99;
+  background: repeating-linear-gradient(180deg, transparent, transparent 2px, rgba(244,239,230,0.012) 2px, rgba(244,239,230,0.012) 3px);
+}
+::selection { background: var(--accent); color: var(--ink); }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 2px; }
+
+.page { max-width: 720px; margin: 0 auto; padding: 56px 32px 96px; position: relative; }
+
+.masthead { padding-bottom: 28px; border-bottom: 1px solid var(--line); margin-bottom: 36px; }
+.eyebrow {
+  font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.22em; color: var(--paper-3);
+  text-transform: uppercase; display: inline-flex; align-items: center; gap: 12px;
+  text-decoration: none; transition: color 0.2s ease;
+}
+.eyebrow:hover { color: var(--paper); }
+.eyebrow .arrow { color: var(--accent); transition: transform 0.2s ease; }
+.eyebrow:hover .arrow { transform: translateX(-4px); }
+h1.title {
+  font-family: var(--serif); font-weight: 400; font-style: italic;
+  font-size: clamp(48px, 8vw, 88px); line-height: 0.95; letter-spacing: -0.02em;
+  margin-top: 16px; color: var(--paper);
+}
+h1.title em { font-style: italic; color: var(--accent); }
+.subtitle {
+  margin-top: 18px; font-size: 15.5px; color: var(--paper-2); line-height: 1.6;
+}
+
+section { margin-top: 32px; }
+section h2 {
+  font-family: var(--mono); font-size: 11px; letter-spacing: 0.18em;
+  text-transform: uppercase; color: var(--paper-3); font-weight: 500;
+  margin-bottom: 10px; display: flex; align-items: center; gap: 10px;
+}
+section h2::after { content: ''; flex: 1; height: 1px; background: var(--line); }
+section p { font-size: 14.5px; color: var(--paper-2); line-height: 1.65; }
+section p + p { margin-top: 10px; }
+section p strong { color: var(--paper); font-weight: 600; }
+section p a {
+  color: var(--paper); text-decoration: underline;
+  text-decoration-color: var(--line-2); text-underline-offset: 3px;
+}
+section p a:hover { color: var(--accent); }
+ul.bare {
+  list-style: none; margin: 8px 0 0 0; padding: 0;
+  font-size: 14.5px; color: var(--paper-2); line-height: 1.65;
+}
+ul.bare li { padding: 4px 0 4px 18px; position: relative; }
+ul.bare li::before {
+  content: '·'; position: absolute; left: 4px; color: var(--accent);
+  font-family: var(--mono); font-weight: 700;
+}
+
+.colophon {
+  margin-top: 64px; padding-top: 28px; border-top: 1px solid var(--line);
+  font-family: var(--mono); font-size: 11px; letter-spacing: 0.06em;
+  color: var(--paper-3);
+}
+.colophon a {
+  color: var(--paper-2); text-decoration: underline;
+  text-decoration-color: var(--line-2); text-underline-offset: 3px;
+}
+.colophon a:hover { color: var(--accent); }
+</style>
+</head>
+<body>
+
+<div class="grain"></div>
+<div class="scanlines"></div>
+
+<div class="page">
+
+  <header class="masthead">
+    <a class="eyebrow" href="../"><span class="arrow">←</span> Infra Atlas · Privacy</a>
+    <h1 class="title">Privacy.</h1>
+    <p class="subtitle">Infra Atlas is a static reference site. Reading it should not require trusting us with your data — and largely, it does not. Here is the full and honest list.</p>
+  </header>
+
+  <main id="ia-main">
+
+    <section>
+      <h2>What is collected</h2>
+      <p>Aggregate, anonymous visit data via <strong>Cloudflare Web Analytics</strong> — a cookieless, privacy-first product. The dataset is:</p>
+      <ul class="bare">
+        <li>Pageviews (a count, no identifier)</li>
+        <li>Referrer (the link or search engine that sent the visit)</li>
+        <li>Country (from the connecting IP, not stored against a user)</li>
+        <li>Browser and OS family</li>
+        <li>Core web vitals (load timing, layout shift)</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>What is NOT collected</h2>
+      <ul class="bare">
+        <li><strong>No cookies.</strong> The site sets none, and the analytics provider sets none.</li>
+        <li><strong>No persistent identifiers.</strong> No device fingerprint, no visitor ID, no cross-site tracking.</li>
+        <li><strong>No personal data.</strong> No accounts, no email list, no forms, no logins.</li>
+        <li><strong>No advertising.</strong> No ad networks, no tracking pixels, no retargeting.</li>
+        <li><strong>No data sold.</strong> The site has no commercial customers; there is nothing to sell.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>Third parties this site loads</h2>
+      <p>Two, in total:</p>
+      <ul class="bare">
+        <li><strong>Cloudflare</strong> — hosts the site, serves the analytics. <a href="https://www.cloudflare.com/privacypolicy/" target="_blank" rel="noopener">Cloudflare's privacy policy</a>.</li>
+        <li><strong>Google Fonts</strong> — the typography (Instrument Serif, JetBrains Mono, Manrope) loads from <code style="font-family:var(--mono)">fonts.gstatic.com</code>; Google sees the request IP on font load. <a href="https://policies.google.com/privacy" target="_blank" rel="noopener">Google's privacy policy</a>. Self-hosting these fonts is on the roadmap.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>Donations</h2>
+      <p>If you support the project via <a href="/support/">the support page</a>, the donation provider's own privacy terms apply. Infra Atlas does not see your payment details, only the aggregate fact that a donation occurred.</p>
+    </section>
+
+    <section>
+      <h2>This page is open-source</h2>
+      <p>This privacy notice lives in the same repository as the site. If a claim here is inaccurate, that is a bug — <a href="https://github.com/ineslino/infra-atlas/issues/new/choose" target="_blank" rel="noopener">open an issue</a> and it will be corrected.</p>
+    </section>
+
+  </main>
+
+  <footer class="colophon">
+    <p>Infra Atlas · <a href="../">Home</a> · <a href="https://github.com/ineslino/infra-atlas" target="_blank" rel="noopener">GitHub</a> · MIT-licensed · Verified <time datetime="2026-05-19">2026-05-19</time></p>
+  </footer>
+
+</div>
+
+<script src="/nav.js" defer></script>
+</body>
+</html>
