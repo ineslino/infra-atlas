@@ -548,6 +548,10 @@ a.masthead__eyebrow:hover .masthead__eyebrow-arrow { transform: translateX(-4px)
   border-color: var(--line-3);
   background: var(--surface-2);
 }
+.region-card:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
 
 .region-card__provider {
   font-family: var(--mono);
@@ -1053,6 +1057,8 @@ a.masthead__eyebrow:hover .masthead__eyebrow-arrow { transform: translateX(-4px)
     </aside>
   </header>
 
+  <main id="ia-main">
+
   <section class="chart-section">
     <div class="chart-frame">
       <div class="chart-frame__corner tl">
@@ -1153,10 +1159,12 @@ a.masthead__eyebrow:hover .masthead__eyebrow-arrow { transform: translateX(-4px)
 
   <div class="result-meta">
     <div class="result-meta__title" id="result-title">All regions</div>
-    <div class="result-meta__count"><strong id="result-count">0</strong> shown</div>
+    <div class="result-meta__count" aria-live="polite"><strong id="result-count">0</strong> shown</div>
   </div>
 
-  <main id="results"></main>
+  <div id="results"></div>
+
+  </main>
 
   <footer class="colophon">
     <div>
@@ -1189,7 +1197,7 @@ a.masthead__eyebrow:hover .masthead__eyebrow-arrow { transform: translateX(-4px)
 
 <!-- DRAWER -->
 <div class="drawer-backdrop" id="drawer-backdrop"></div>
-<aside class="drawer" id="drawer" aria-hidden="true">
+<aside class="drawer" id="drawer" role="dialog" aria-modal="true" aria-label="Region details" aria-hidden="true" tabindex="-1">
   <div class="drawer__head" id="drawer-head"></div>
   <div class="drawer__body" id="drawer-body"></div>
 </aside>
@@ -1915,6 +1923,9 @@ function renderList() {
     rows.forEach(r => {
       const card = document.createElement("div");
       card.className = "region-card";
+      card.tabIndex = 0;
+      card.setAttribute("role", "button");
+      card.setAttribute("aria-label", `${PROVIDERS[r.p].name} region ${r.code} — ${r.name}, ${r.city.split(",")[0]}. View city details.`);
       card.innerHTML = `
         <span class="region-card__provider" data-p="${r.p}">${PROVIDERS[r.p].name}</span>
         <div class="region-card__main">
@@ -1926,9 +1937,13 @@ function renderList() {
           <div>${r.az} AZ · ${r.since}</div>
         </div>
       `;
-      card.addEventListener("click", () => {
+      const openCard = () => {
         const city = CITIES.find(c => c.city === r.city);
         if (city) openCityDrawer(city);
+      };
+      card.addEventListener("click", openCard);
+      card.addEventListener("keydown", (e) => {
+        if (e.key === "Enter" || e.key === " ") { e.preventDefault(); openCard(); }
       });
       grid.appendChild(card);
     });
@@ -2105,15 +2120,38 @@ function hideTooltip() {
 }
 
 // ─── Drawer ───
+let drawerLastFocus = null;
+function drawerFocusables() {
+  return $$('#drawer button, #drawer a[href], #drawer input, #drawer [tabindex]:not([tabindex="-1"])')
+    .filter(el => el.offsetParent !== null);
+}
+function trapDrawerTab(e) {
+  if (e.key !== "Tab") return;
+  const f = drawerFocusables();
+  if (!f.length) return;
+  const first = f[0], last = f[f.length - 1];
+  if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+  else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+}
 function openDrawer() {
+  drawerLastFocus = document.activeElement;
   $("#drawer-backdrop").classList.add("is-open");
-  $("#drawer").classList.add("is-open");
-  $("#drawer").setAttribute("aria-hidden","false");
+  const drawer = $("#drawer");
+  drawer.classList.add("is-open");
+  drawer.setAttribute("aria-hidden","false");
+  drawer.addEventListener("keydown", trapDrawerTab);
+  const f = drawerFocusables();
+  (f[0] || drawer).focus();
 }
 function closeDrawer() {
+  const drawer = $("#drawer");
+  if (!drawer.classList.contains("is-open")) return;
   $("#drawer-backdrop").classList.remove("is-open");
-  $("#drawer").classList.remove("is-open");
-  $("#drawer").setAttribute("aria-hidden","true");
+  drawer.classList.remove("is-open");
+  drawer.setAttribute("aria-hidden","true");
+  drawer.removeEventListener("keydown", trapDrawerTab);
+  if (drawerLastFocus && typeof drawerLastFocus.focus === "function") drawerLastFocus.focus();
+  drawerLastFocus = null;
 }
 
 function openCityDrawer(city) {

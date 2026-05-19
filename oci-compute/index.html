@@ -124,41 +124,15 @@ body {
   letter-spacing: 0.22em;
   color: var(--paper-3);
   text-transform: uppercase;
-  display: flex;
+  display: inline-flex;
   align-items: center;
   gap: 12px;
-}
-
-.masthead__eyebrow::before {
-  content: '';
-  display: inline-block;
-  width: 22px;
-  height: 1px;
-  background: var(--accent);
-}
-
-a.masthead__back {
   text-decoration: none;
-  transition: color 0.2s ease, gap 0.2s ease;
-  gap: 10px;
+  transition: color 0.2s ease;
 }
-
-a.masthead__back:hover {
-  color: var(--paper);
-}
-
-.masthead__back-arrow {
-  display: inline-block;
-  color: var(--accent);
-  font-family: var(--mono);
-  transition: transform 0.2s ease;
-}
-
-a.masthead__back:hover .masthead__back-arrow {
-  transform: translateX(-4px);
-}
-
-a.masthead__back::before { display: none; }
+.masthead__eyebrow:hover { color: var(--paper); }
+.masthead__eyebrow-arrow { color: var(--accent); transition: transform 0.2s ease; }
+.masthead__eyebrow:hover .masthead__eyebrow-arrow { transform: translateX(-4px); }
 
 .masthead__title {
   font-family: var(--serif);
@@ -524,6 +498,11 @@ a.masthead__back::before { display: none; }
   transform: translateY(-1px);
 }
 
+.region-card:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
 .region-card:hover::before {
   opacity: 1;
 }
@@ -636,6 +615,11 @@ a.masthead__back::before { display: none; }
 .instance-row:hover {
   border-color: var(--line-3);
   background: var(--surface-2);
+}
+
+.instance-row:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
 }
 
 .instance-row__name {
@@ -1050,8 +1034,8 @@ a.masthead__back::before { display: none; }
 
   <header class="masthead">
     <div class="masthead__brand">
-      <a href="../" class="masthead__eyebrow masthead__back">
-        <span class="masthead__back-arrow">←</span>
+      <a class="masthead__eyebrow" href="../">
+        <span class="masthead__eyebrow-arrow">←</span>
         Infra Atlas · Cloud · OCI · Compute Observatory
       </a>
       <h1 class="masthead__title">Compute <em>Observatory.</em></h1>
@@ -1071,6 +1055,8 @@ a.masthead__back::before { display: none; }
       </div>
     </aside>
   </header>
+
+  <main id="ia-main">
 
   <section class="filters">
     <div class="filter-tabs" role="tablist" aria-label="View mode">
@@ -1116,12 +1102,14 @@ a.masthead__back::before { display: none; }
         <option value="vcpu-desc">Sort · vCPU ↓</option>
         <option value="mem-desc">Sort · Memory ↓</option>
       </select>
-      <div class="result-meta__count"><strong id="result-count">0</strong> shown</div>
+      <div class="result-meta__count" aria-live="polite"><strong id="result-count">0</strong> shown</div>
     </div>
   </div>
 
-  <main class="results" id="results">
+  <div class="results" id="results">
     <!-- rendered by JS -->
+  </div>
+
   </main>
 
   <footer class="colophon">
@@ -1145,7 +1133,7 @@ a.masthead__back::before { display: none; }
 
 <!-- DRAWER -->
 <div class="drawer-backdrop" id="drawer-backdrop"></div>
-<aside class="drawer" id="drawer" aria-hidden="true">
+<aside class="drawer" id="drawer" role="dialog" aria-modal="true" aria-label="Details" aria-hidden="true" tabindex="-1">
   <div class="drawer__head" id="drawer-head"></div>
   <div class="drawer__body" id="drawer-body"></div>
 </aside>
@@ -1531,6 +1519,9 @@ function renderRegionView() {
     const card = document.createElement("div");
     card.className = "region-card fade-in" + (total === 0 ? " is-empty" : "");
     card.style.animationDelay = (idx * 0.012) + "s";
+    card.tabIndex = 0;
+    card.setAttribute("role", "button");
+    card.setAttribute("aria-label", `${r.name} (${r.code}) — ${total} shapes. View region details.`);
     card.innerHTML = `
       <div class="region-card__head">
         <div>
@@ -1547,6 +1538,9 @@ function renderRegionView() {
       </div>
     `;
     card.addEventListener("click", () => openRegionDrawer(r));
+    card.addEventListener("keydown", (e) => {
+      if (e.key === "Enter" || e.key === " ") { e.preventDefault(); card.click(); }
+    });
     grid.appendChild(card);
   });
 
@@ -1598,6 +1592,9 @@ function renderInstanceView() {
     row.className = "instance-row fade-in";
     row.style.animationDelay = Math.min(idx * 0.004, 0.6) + "s";
     if (entry.fam.desc) row.title = entry.fam.desc;
+    row.tabIndex = 0;
+    row.setAttribute("role", "button");
+    row.setAttribute("aria-label", `${entry.full} — view instance type details.`);
     const priceStr = fmtPrice(entry.price, state.currency);
     const specBits = [];
     if (entry.vcpu != null) specBits.push(`${entry.vcpu} vCPU`);
@@ -1621,6 +1618,9 @@ function renderInstanceView() {
       </div>
     `;
     row.addEventListener("click", () => openInstanceDrawer(entry.fam, entry.size));
+    row.addEventListener("keydown", (e) => {
+      if (e.key === "Enter" || e.key === " ") { e.preventDefault(); row.click(); }
+    });
     list.appendChild(row);
   });
 
@@ -1643,16 +1643,39 @@ function renderInstanceView() {
 //  DRAWERS
 // ─────────────────────────────────────────────────────────────────
 
+let drawerLastFocus = null;
+function drawerFocusables() {
+  return $$('#drawer button, #drawer a[href], #drawer input, #drawer [tabindex]:not([tabindex="-1"])')
+    .filter(el => el.offsetParent !== null);
+}
+function trapDrawerTab(e) {
+  if (e.key !== "Tab") return;
+  const f = drawerFocusables();
+  if (!f.length) return;
+  const first = f[0], last = f[f.length - 1];
+  if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+  else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+}
 function openDrawer() {
+  drawerLastFocus = document.activeElement;
   $("#drawer-backdrop").classList.add("is-open");
-  $("#drawer").classList.add("is-open");
-  $("#drawer").setAttribute("aria-hidden", "false");
+  const drawer = $("#drawer");
+  drawer.classList.add("is-open");
+  drawer.setAttribute("aria-hidden", "false");
+  drawer.addEventListener("keydown", trapDrawerTab);
+  const f = drawerFocusables();
+  (f[0] || drawer).focus();
 }
 
 function closeDrawer() {
+  const drawer = $("#drawer");
+  if (!drawer.classList.contains("is-open")) return;
   $("#drawer-backdrop").classList.remove("is-open");
-  $("#drawer").classList.remove("is-open");
-  $("#drawer").setAttribute("aria-hidden", "true");
+  drawer.classList.remove("is-open");
+  drawer.setAttribute("aria-hidden", "true");
+  drawer.removeEventListener("keydown", trapDrawerTab);
+  if (drawerLastFocus && typeof drawerLastFocus.focus === "function") drawerLastFocus.focus();
+  drawerLastFocus = null;
 }
 
 function openRegionDrawer(region) {
