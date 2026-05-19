@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="color-scheme" content="dark">
+<title>The Data · API · Infra Atlas</title>
+<link rel="icon" href="/favicon.svg?v=2" type="image/svg+xml">
+<meta name="description" content="Every Infra Atlas data instrument publishes its dataset as a public, CORS-enabled data.json — EC2, regions, Azure VM, GCP, OCI and OVH compute. Free, no key. Build on it.">
+<link rel="canonical" href="https://infraatlas.dev/api/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Infra Atlas">
+<meta property="og:title" content="The Data · API · Infra Atlas">
+<meta property="og:description" content="Every Infra Atlas data instrument publishes its dataset as a public, CORS-enabled data.json. Free, no key. Build on it.">
+<meta property="og:url" content="https://infraatlas.dev/api/">
+<meta property="og:image" content="https://infraatlas.dev/og.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="The Data · API · Infra Atlas">
+<meta name="twitter:description" content="Every Infra Atlas data instrument publishes its dataset as a public, CORS-enabled data.json. Free, no key.">
+<meta name="twitter:image" content="https://infraatlas.dev/og.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@300;400;500;600&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ink: #0A0907; --ink-2: #100E0C; --surface: #161310; --surface-2: #1E1A15;
+  --line: rgba(244,239,230,0.06); --line-2: rgba(244,239,230,0.14);
+  --paper: #F4EFE6; --paper-2: rgba(244,239,230,0.66); --paper-3: rgba(244,239,230,0.55); --paper-4: rgba(244,239,230,0.20);
+  --accent: #FF7849; --accent-2: #FFA66E; --mint: #6FE7B5; --gold: #F4C660;
+  --serif: 'Instrument Serif', 'Times New Roman', serif;
+  --mono: 'JetBrains Mono', ui-monospace, monospace;
+  --sans: 'Manrope', -apple-system, system-ui, sans-serif;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body {
+  background: var(--ink); color: var(--paper); font-family: var(--sans);
+  font-size: 15px; line-height: 1.5; -webkit-font-smoothing: antialiased; min-height: 100vh;
+}
+body {
+  background:
+    radial-gradient(ellipse at 100% -10%, rgba(255,120,73,0.07), transparent 55%),
+    radial-gradient(ellipse at -10% 110%, rgba(244,198,96,0.05), transparent 65%), var(--ink);
+  background-attachment: fixed; overflow-x: hidden;
+}
+.grain { pointer-events: none; position: fixed; inset: 0; z-index: 100; opacity: 0.08; mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml;utf8,<svg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.6 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>"); }
+.scanlines { pointer-events: none; position: fixed; inset: 0; z-index: 99;
+  background: repeating-linear-gradient(180deg, transparent, transparent 2px, rgba(244,239,230,0.012) 2px, rgba(244,239,230,0.012) 3px); }
+::selection { background: var(--accent); color: var(--ink); }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 2px; }
+a { color: inherit; }
+.page { max-width: 1000px; margin: 0 auto; padding: 56px 40px 96px; position: relative; }
+.masthead { padding-bottom: 30px; border-bottom: 1px solid var(--line); margin-bottom: 36px; }
+.eyebrow { font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.22em; color: var(--paper-3);
+  text-transform: uppercase; text-decoration: none; display: inline-flex; align-items: center; gap: 10px; transition: color .2s; }
+.eyebrow:hover { color: var(--paper); }
+.eyebrow .arrow { color: var(--accent); transition: transform .2s; }
+.eyebrow:hover .arrow { transform: translateX(-4px); }
+.title { font-family: var(--serif); font-weight: 400; font-size: clamp(44px,7vw,84px);
+  line-height: 1.0; letter-spacing: -0.02em; margin-top: 18px; }
+.title em { font-style: italic; color: var(--accent); }
+.subtitle { margin-top: 16px; font-size: 16px; color: var(--paper-2); max-width: 640px; line-height: 1.6; }
+.subtitle span { font-family: var(--serif); font-style: italic; color: var(--paper); }
+section { margin-bottom: 38px; }
+.sec-label { font-family: var(--mono); font-size: 10.5px; font-weight: 500; letter-spacing: 0.2em;
+  text-transform: uppercase; color: var(--paper-3); margin-bottom: 14px; display: flex; align-items: center; gap: 12px; }
+.sec-label::after { content: ''; flex: 1; height: 1px; background: var(--line); }
+.endpoints-wrap { overflow-x: auto; border: 1px solid var(--line); border-radius: 6px; background: var(--ink-2); }
+table.endpoints { width: 100%; border-collapse: collapse; min-width: 660px; font-size: 13px; }
+table.endpoints th { background: var(--ink-2); font-family: var(--mono); font-weight: 500; font-size: 10.5px;
+  letter-spacing: 0.13em; text-transform: uppercase; color: var(--paper-2); text-align: left;
+  padding: 14px 16px 11px; border-bottom: 1px solid var(--line-2); }
+table.endpoints td { padding: 12px 16px; border-bottom: 1px solid var(--line); vertical-align: top; line-height: 1.5; }
+table.endpoints tr:last-child td { border-bottom: none; }
+table.endpoints tr:hover { background: rgba(255,120,73,0.03); }
+table.endpoints .nm { color: var(--paper); font-weight: 600; white-space: nowrap; }
+table.endpoints a.ep { font-family: var(--mono); font-size: 12px; color: var(--accent-2); text-decoration: none;
+  border-bottom: 1px solid var(--line-2); }
+table.endpoints a.ep:hover { color: var(--accent); }
+table.endpoints .desc { color: var(--paper-2); }
+.cadence { font-family: var(--mono); font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase;
+  padding: 2px 8px; border-radius: 99px; white-space: nowrap; }
+.cadence--daily { color: var(--mint); background: rgba(111,231,181,0.12); }
+.cadence--curated { color: var(--gold); background: rgba(244,198,96,0.12); }
+.contract { border: 1px solid var(--line-2); border-left: 3px solid var(--accent); border-radius: 5px;
+  background: linear-gradient(180deg, var(--surface) 0%, var(--ink-2) 100%); padding: 22px 26px; }
+.contract p { font-size: 14.5px; line-height: 1.65; color: var(--paper-2); }
+.contract p + p { margin-top: 10px; }
+.contract strong { color: var(--accent-2); font-weight: 600; }
+pre { background: var(--ink-2); border: 1px solid var(--line); border-radius: 6px;
+  padding: 16px 18px; overflow-x: auto; margin-bottom: 10px; }
+pre code { font-family: var(--mono); font-size: 12.5px; line-height: 1.6; color: var(--paper-2); }
+pre code .k { color: var(--accent-2); }
+pre code .s { color: var(--mint); }
+pre code .c { color: var(--paper-4); }
+.schema { font-family: var(--mono); font-size: 12.5px; line-height: 1.7; color: var(--paper-2);
+  border: 1px solid var(--line); border-radius: 6px; background: var(--ink-2); padding: 18px 20px; }
+.schema .f { color: var(--accent-2); }
+.schema .t { color: var(--paper-4); }
+.schema .n { color: var(--paper-3); }
+.colophon { margin-top: 56px; padding-top: 26px; border-top: 1px solid var(--line);
+  font-size: 12.5px; color: var(--paper-3); line-height: 1.6; }
+.colophon a { color: var(--paper-2); text-decoration: underline; text-decoration-color: var(--line-2); text-underline-offset: 3px; }
+.colophon a:hover { color: var(--accent); }
+@media (max-width: 720px) { .page { padding: 32px 20px 72px; } }
+</style>
+</head>
+<body>
+<div class="grain"></div>
+<div class="scanlines"></div>
+<div class="page">
+
+  <header class="masthead">
+    <a class="eyebrow" href="/"><span class="arrow">←</span> Infra Atlas</a>
+    <h1 class="title">The <em>Data.</em></h1>
+    <p class="subtitle">Every data instrument already publishes its full dataset as JSON — <span>CORS-enabled, free, no key.</span> Build on it instead of re-scraping the vendor docs.</p>
+  </header>
+
+  <section>
+    <div class="sec-label">Endpoints</div>
+    <div class="endpoints-wrap"><table class="endpoints">
+      <thead><tr><th>Instrument</th><th>Endpoint</th><th>Contents</th><th>Refresh</th></tr></thead>
+      <tbody>
+        <tr><td class="nm">EC2 Observatory</td><td><a class="ep" href="/ec2/data.json">/ec2/data.json</a></td><td class="desc">AWS regions and EC2 instance families — vCPU, memory, on-demand price, storage, network, GPU.</td><td><span class="cadence cadence--daily">Daily</span></td></tr>
+        <tr><td class="nm">Region Map</td><td><a class="ep" href="/regions/data.json">/regions/data.json</a></td><td class="desc">Cities and cloud regions across AWS, Azure, GCP, OCI and OVHcloud — all partitions.</td><td><span class="cadence cadence--curated">Curated</span></td></tr>
+        <tr><td class="nm">Azure VM Atlas</td><td><a class="ep" href="/azure-vm/data.json">/azure-vm/data.json</a></td><td class="desc">Azure VM series and sizes — vCPU, memory and live Retail-API price.</td><td><span class="cadence cadence--daily">Daily</span></td></tr>
+        <tr><td class="nm">GCP Compute Index</td><td><a class="ep" href="/gcp-compute/data.json">/gcp-compute/data.json</a></td><td class="desc">Google Cloud machine families and types — vCPU, memory, price.</td><td><span class="cadence cadence--curated">Curated</span></td></tr>
+        <tr><td class="nm">OCI Compute Observatory</td><td><a class="ep" href="/oci-compute/data.json">/oci-compute/data.json</a></td><td class="desc">Oracle Cloud compute shapes — OCPU, memory and computed price.</td><td><span class="cadence cadence--daily">Daily</span></td></tr>
+        <tr><td class="nm">OVH Instance Catalogue</td><td><a class="ep" href="/ovh-instances/data.json">/ovh-instances/data.json</a></td><td class="desc">OVHcloud Public Cloud instance ranges — vCPU, memory, price.</td><td><span class="cadence cadence--daily">Daily</span></td></tr>
+        <tr><td class="nm">What Changed feed</td><td><a class="ep" href="/feed.json">/feed.json</a></td><td class="desc">Recent dataset changes — regions, families and prices added or moved across the data instruments.</td><td><span class="cadence cadence--daily">Daily</span></td></tr>
+      </tbody>
+    </table></div>
+  </section>
+
+  <section>
+    <div class="sec-label">The stability contract</div>
+    <div class="contract">
+      <p><strong>Best-effort, not a product.</strong> These are flat JSON files served straight off the static host. The JSON shape can change without notice as instruments evolve — do not hard-code deep field paths you cannot re-check, and read defensively.</p>
+      <p>There is <strong>no uptime guarantee, no SLA, no API key and no rate limit</strong> — please be kind, and cache rather than poll. Responses are cached roughly an hour at the edge; the <code style="font-family:var(--mono);color:var(--accent-2)">generated</code> field carries the dataset's own timestamp, so a consumer can tell how fresh a copy is.</p>
+      <p>The cloud-compute endpoints refresh daily from public datasets and price APIs; <em style="font-family:var(--serif);font-style:italic;color:var(--paper)">regions</em> and <em style="font-family:var(--serif);font-style:italic;color:var(--paper)">gcp-compute</em> are curated snapshots, re-serialised on the same schedule.</p>
+    </div>
+  </section>
+
+  <section>
+    <div class="sec-label">Using it</div>
+    <pre><code><span class="c">// Browser or Node — CORS is open, no key needed</span>
+<span class="k">const</span> data = <span class="k">await</span> fetch(<span class="s">"https://infraatlas.dev/ec2/data.json"</span>)
+  .then(r =&gt; r.json());
+console.log(data.families.length, <span class="s">"EC2 families ·"</span>, data.generated);</code></pre>
+    <pre><code><span class="c"># Shell — count priced EC2 instance types</span>
+curl -s https://infraatlas.dev/ec2/data.json \
+  | jq <span class="s">'[.families[].specs[] | select(.price)] | length'</span></code></pre>
+  </section>
+
+  <section>
+    <div class="sec-label">Shape — <span style="font-family:var(--mono);font-size:11px;text-transform:none;letter-spacing:0;color:var(--paper-3)">ec2/data.json</span></div>
+    <div class="schema">{<br>
+      &nbsp;&nbsp;<span class="f">"generated"</span>: <span class="t">string</span>  <span class="n">— ISO-8601 UTC timestamp of this snapshot</span><br>
+      &nbsp;&nbsp;<span class="f">"source"</span>: <span class="t">string</span>  <span class="n">— the upstream dataset, named</span><br>
+      &nbsp;&nbsp;<span class="f">"currency"</span>, <span class="f">"priceRef"</span>: <span class="t">string</span>  <span class="n">— pricing currency and reference region</span><br>
+      &nbsp;&nbsp;<span class="f">"regions"</span>: <span class="t">array</span>  <span class="n">— { code, name, area, flag, since }</span><br>
+      &nbsp;&nbsp;<span class="f">"families"</span>: <span class="t">array</span>  <span class="n">— per family:</span><br>
+      &nbsp;&nbsp;&nbsp;&nbsp;<span class="f">key</span>, <span class="f">cat</span>, <span class="f">arch</span>, <span class="f">vendor</span>, <span class="f">desc</span>, <span class="f">clock</span>: <span class="t">string</span><br>
+      &nbsp;&nbsp;&nbsp;&nbsp;<span class="f">sizes</span>: <span class="t">array</span>  ·  <span class="f">in</span>: <span class="t">array</span> <span class="n">of region codes</span><br>
+      &nbsp;&nbsp;&nbsp;&nbsp;<span class="f">specs</span>: <span class="t">object</span>  <span class="n">— size → { vcpu, mem, price, storage?, net?, gpu? }</span><br>
+      }
+    </div>
+    <p style="font-size:12.5px;color:var(--paper-3);margin-top:10px;line-height:1.6;">The other compute endpoints follow the same <code style="font-family:var(--mono);color:var(--accent-2)">regions[]</code> + <code style="font-family:var(--mono);color:var(--accent-2)">families[]</code> shape; <code style="font-family:var(--mono);color:var(--accent-2)">regions/data.json</code> is city-modelled (<code style="font-family:var(--mono);color:var(--accent-2)">cities[]</code>, each with nested <code style="font-family:var(--mono);color:var(--accent-2)">regions[]</code>). Click any endpoint above to read the live file.</p>
+  </section>
+
+  <footer class="colophon">
+    Part of <a href="/">Infra Atlas</a>. The data is published as-is under the project's open terms — attribution to <a href="https://infraatlas.dev/">infraatlas.dev</a> is appreciated. Found the schema changed under you? <a href="https://github.com/ineslino/infra-atlas/issues/new" target="_blank" rel="noopener">Open an issue</a>.
+  </footer>
+
+</div>
+<script src="/nav.js" defer></script>
+</body>
+</html>

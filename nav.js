@@ -53,6 +53,9 @@
   var ITEMS = [{
     href: "/", name: "The Atlas — all instruments", vendor: "Home",
     group: "", keywords: "home overview index landing start"
+  }, {
+    href: "/api/", name: "The Data — public data.json API", vendor: "Data",
+    group: "", keywords: "api data json endpoint feed download cors developer build"
   }];
   function pushGroup(arr, label) {
     arr.forEach(function (it) {
