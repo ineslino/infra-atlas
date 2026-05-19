@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="color-scheme" content="dark">
+<title>App Service, Container Apps or a VM? · Decisions · Infra Atlas</title>
+<link rel="icon" href="/favicon.svg?v=2" type="image/svg+xml">
+<meta name="description" content="Azure&#x27;s modern compute choice — the successor to &#x27;web role vs worker role vs VM&#x27;.">
+<link rel="canonical" href="https://infraatlas.dev/decisions/azure-app-service-vs-container-apps-vs-vm/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Infra Atlas">
+<meta property="og:title" content="App Service, Container Apps or a VM? · Infra Atlas Decisions">
+<meta property="og:description" content="Azure&#x27;s modern compute choice — the successor to &#x27;web role vs worker role vs VM&#x27;.">
+<meta property="og:url" content="https://infraatlas.dev/decisions/azure-app-service-vs-container-apps-vs-vm/">
+<meta property="og:image" content="https://infraatlas.dev/og.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="App Service, Container Apps or a VM? · Infra Atlas Decisions">
+<meta name="twitter:description" content="Azure&#x27;s modern compute choice — the successor to &#x27;web role vs worker role vs VM&#x27;.">
+<meta name="twitter:image" content="https://infraatlas.dev/og.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@300;400;500;600&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/decisions/decision.css">
+</head>
+<body>
+<div class="grain"></div>
+<div class="scanlines"></div>
+<div class="page">
+  <header class="masthead">
+    <a class="eyebrow" href="/decisions/"><span class="arrow">←</span> Infra Atlas · Decisions</a>
+    <h1 class="title">App Service, Container Apps <em>or</em> a VM?</h1>
+    <p class="subtitle">Azure&#x27;s modern compute choice — the successor to &#x27;web role vs worker role vs VM&#x27;.</p>
+    <div class="reviewed"><span class="dot"></span>Reviewed <time datetime="2026-05-19">2026-05-19</time></div>
+  </header>
+  <section class="verdict">
+    <div class="sec-label">The verdict</div>
+    <p><strong>App Service</strong> is managed PaaS for web apps and APIs — deploy code, Microsoft runs the OS. <strong>Container Apps</strong> is serverless, Kubernetes-based PaaS for containerised microservices and event-driven jobs, with scale-to-zero. <strong>Virtual Machines</strong> is IaaS — full OS control, and the work that comes with it. The deciding factor is control against management: App Service for a code-first web app, Container Apps for containerised or event-driven microservices needing scale-to-zero, and VMs only when you genuinely need OS-level control or software no PaaS supports.</p>
+  </section>
+  <section>
+    <div class="sec-label">Head to head</div>
+    <div class="compare-wrap"><table class="compare">
+      <thead><tr><th>Criterion</th><th>App Service</th><th>Container Apps</th><th>Virtual Machines</th></tr></thead>
+      <tbody>
+        <tr><!-- src: https://learn.microsoft.com/en-us/azure/architecture/guide/technology-choices/compute-decision-tree --><td class="criterion">Hosting model</td><td class="val">Managed PaaS</td><td class="val">Serverless PaaS, built on Kubernetes</td><td class="val">IaaS — you provision and manage VMs</td></tr>
+        <tr><!-- src: https://learn.microsoft.com/en-us/azure/app-service/overview --><td class="criterion">Deploy unit</td><td class="val">Code (.NET, Java, Node, Python, PHP) or a container</td><td class="val">A container image</td><td class="val">A VM / OS image</td></tr>
+        <tr><!-- src: https://learn.microsoft.com/en-us/azure/container-apps/overview --><td class="criterion">Scale to zero</td><td class="val">No — plan instances always run</td><td class="val">Yes — most apps scale to zero</td><td class="val">No</td></tr>
+        <tr><!-- src: https://learn.microsoft.com/en-us/azure/architecture/guide/technology-choices/compute-decision-tree --><td class="criterion">Autoscaling</td><td class="val">Built-in autoscale rules</td><td class="val">KEDA — HTTP traffic, events, CPU/memory</td><td class="val">Virtual Machine Scale Sets</td></tr>
+        <tr><!-- src: https://learn.microsoft.com/en-us/azure/app-service/overview-hosting-plans --><td class="criterion">Pricing model</td><td class="val">Per App Service plan instance</td><td class="val">Serverless consumption — vCPU / GiB-seconds</td><td class="val">Hourly per VM size + OS</td></tr>
+        <tr><!-- src: https://learn.microsoft.com/en-us/azure/virtual-machines/overview --><td class="criterion">Control &amp; OS access</td><td class="val">Platform manages the OS — no general access</td><td class="val">Abstracted Kubernetes — no OS or K8s API</td><td class="val">Full — patch and install anything</td></tr>
+        <tr><!-- src: https://learn.microsoft.com/en-us/azure/container-apps/overview --><td class="criterion">Best workloads</td><td class="val">Web apps, REST APIs, mobile back ends</td><td class="val">Microservices, event-driven and background jobs</td><td class="val">Anything — lift-and-shift, HPC, SAP / Oracle</td></tr>
+        <tr><!-- src: https://learn.microsoft.com/en-us/azure/architecture/guide/technology-choices/compute-decision-tree --><td class="criterion">Ops burden</td><td class="val">Low</td><td class="val">Low</td><td class="val">High</td></tr>
+      </tbody>
+    </table></div>
+  </section>
+  <section>
+    <div class="sec-label">When to pick which</div>
+    <div class="pickwhen">
+      <div class="pick"><h4>Pick App Service when</h4><ul><li>You have a web app, REST API or mobile back end in a supported language.</li><li>You want deployment slots, CI/CD and managed certificates without orchestration.</li><li>Traffic is steady and predictable — scale-to-zero is not required.</li></ul></div>
+      <div class="pick"><h4>Pick Container Apps when</h4><ul><li>You run containerised microservices or event-driven jobs and want scale-to-zero.</li><li>You want KEDA autoscaling, Dapr, and revision-based blue/green.</li><li>You want Kubernetes patterns without managing a cluster or its API.</li></ul></div>
+      <div class="pick"><h4>Pick Virtual Machines when</h4><ul><li>You need full OS control, or must run software no PaaS supports.</li><li>You are doing a like-for-like lift-and-shift of an existing workload.</li><li>You run specialty workloads — SAP, Oracle, HPC, or your own Kubernetes.</li></ul></div>
+    </div>
+  </section>
+  <section class="sources">
+    <div class="sec-label">Sources</div>
+    <ol>
+      <li>Choose an Azure compute service — <a href="https://learn.microsoft.com/en-us/azure/architecture/guide/technology-choices/compute-decision-tree" target="_blank" rel="noopener">https://learn.microsoft.com/en-us/azure/architecture/guide/technology-choices/compute-decision-tree</a></li>
+      <li>Azure App Service overview — <a href="https://learn.microsoft.com/en-us/azure/app-service/overview" target="_blank" rel="noopener">https://learn.microsoft.com/en-us/azure/app-service/overview</a></li>
+      <li>App Service plans and tiers — <a href="https://learn.microsoft.com/en-us/azure/app-service/overview-hosting-plans" target="_blank" rel="noopener">https://learn.microsoft.com/en-us/azure/app-service/overview-hosting-plans</a></li>
+      <li>Azure Container Apps overview — <a href="https://learn.microsoft.com/en-us/azure/container-apps/overview" target="_blank" rel="noopener">https://learn.microsoft.com/en-us/azure/container-apps/overview</a></li>
+      <li>Azure Virtual Machines overview — <a href="https://learn.microsoft.com/en-us/azure/virtual-machines/overview" target="_blank" rel="noopener">https://learn.microsoft.com/en-us/azure/virtual-machines/overview</a></li>
+    </ol>
+  </section>
+  <section>
+    <div class="sec-label">Related instruments</div>
+    <div class="crosslinks"><span class="lbl">See also</span><a href="/azure-vm/">Azure VM Atlas</a></div>
+  </section>
+  <footer class="colophon">
+    Reviewed <time datetime="2026-05-19">2026-05-19</time> against vendor documentation — every
+    comparison-table row and the verdict carry a source. Part of <a href="/">Infra Atlas</a>
+    · <a href="/decisions/">Decisions</a>. Spot a stale fact?
+    <a href="https://github.com/ineslino/infra-atlas/issues/new" target="_blank" rel="noopener">Open an issue</a>.
+  </footer>
+</div>
+<script src="/nav.js" defer></script>
+</body>
+</html>

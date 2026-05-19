@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="color-scheme" content="dark">
+<title>App Engine or Compute Engine? · Decisions · Infra Atlas</title>
+<link rel="icon" href="/favicon.svg?v=2" type="image/svg+xml">
+<meta name="description" content="Google Cloud&#x27;s PaaS-vs-IaaS choice — ship code, or run the machine.">
+<link rel="canonical" href="https://infraatlas.dev/decisions/app-engine-vs-compute-engine/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Infra Atlas">
+<meta property="og:title" content="App Engine or Compute Engine? · Infra Atlas Decisions">
+<meta property="og:description" content="Google Cloud&#x27;s PaaS-vs-IaaS choice — ship code, or run the machine.">
+<meta property="og:url" content="https://infraatlas.dev/decisions/app-engine-vs-compute-engine/">
+<meta property="og:image" content="https://infraatlas.dev/og.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="App Engine or Compute Engine? · Infra Atlas Decisions">
+<meta name="twitter:description" content="Google Cloud&#x27;s PaaS-vs-IaaS choice — ship code, or run the machine.">
+<meta name="twitter:image" content="https://infraatlas.dev/og.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@300;400;500;600&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/decisions/decision.css">
+</head>
+<body>
+<div class="grain"></div>
+<div class="scanlines"></div>
+<div class="page">
+  <header class="masthead">
+    <a class="eyebrow" href="/decisions/"><span class="arrow">←</span> Infra Atlas · Decisions</a>
+    <h1 class="title">App Engine <em>or</em> Compute Engine?</h1>
+    <p class="subtitle">Google Cloud&#x27;s PaaS-vs-IaaS choice — ship code, or run the machine.</p>
+    <div class="reviewed"><span class="dot"></span>Reviewed <time datetime="2026-05-19">2026-05-19</time></div>
+  </header>
+  <section class="verdict">
+    <div class="sec-label">The verdict</div>
+    <p>Pick <strong>App Engine</strong> to ship application code and let Google run it — no servers, no OS patching, autoscaling built in. Pick <strong>Compute Engine</strong> when you need the OS, root/SSH access, custom networking, GPUs, or anything that is not a stateless web app. The deciding line is the operations boundary: App Engine trades infrastructure control for near-zero ops burden; Compute Engine gives you full control and the responsibility that comes with it.</p>
+  </section>
+  <section>
+    <div class="sec-label">Head to head</div>
+    <div class="compare-wrap"><table class="compare">
+      <thead><tr><th>Criterion</th><th>App Engine</th><th>Compute Engine</th></tr></thead>
+      <tbody>
+        <tr><!-- src: https://docs.cloud.google.com/compute/docs/overview --><td class="criterion">Abstraction</td><td class="val">PaaS — deploy app code, Google runs the servers</td><td class="val">IaaS — you provision and manage the VMs</td></tr>
+        <tr><!-- src: https://docs.cloud.google.com/appengine/docs/the-appengine-environments --><td class="criterion">Scale to zero</td><td class="val">Standard: yes. Flexible: no (min 1 instance)</td><td class="val">Only via schedule-based autoscaling</td></tr>
+        <tr><!-- src: https://docs.cloud.google.com/appengine/docs/standard/how-instances-are-managed --><td class="criterion">Cold starts</td><td class="val">Yes — loading requests; warmup mitigates</td><td class="val">None inherent — you own the VM lifecycle</td></tr>
+        <tr><!-- src: https://docs.cloud.google.com/appengine/docs/standard/runtimes --><td class="criterion">Runtimes</td><td class="val">Standard: Go, Java, Node, Python, PHP, Ruby. Flexible: any (Docker)</td><td class="val">Any — pick the OS, install anything</td></tr>
+        <tr><!-- src: https://docs.cloud.google.com/appengine/docs/the-appengine-environments --><td class="criterion">OS / root access</td><td class="val">Standard: no SSH. Flexible: SSH, OS still managed</td><td class="val">Full root / SSH; Linux or Windows</td></tr>
+        <tr><!-- src: https://cloud.google.com/compute/vm-instance-pricing --><td class="criterion">Pricing model</td><td class="val">Standard: instance-hours. Flexible: vCPU + memory + disk</td><td class="val">Per-second; sustained- &amp; committed-use discounts</td></tr>
+        <tr><!-- src: https://docs.cloud.google.com/appengine/docs/standard/how-instances-are-managed --><td class="criterion">Max request time</td><td class="val">Standard: 10 min auto / 24 h basic. Flexible: 60 min</td><td class="val">N/A — not a request-scoped platform</td></tr>
+        <tr><!-- src: https://docs.cloud.google.com/compute/docs/overview --><td class="criterion">Ideal workload</td><td class="val">Stateless web apps &amp; HTTP APIs, minimal ops</td><td class="val">Databases, GPU/TPU jobs, daemons, lift-and-shift</td></tr>
+      </tbody>
+    </table></div>
+  </section>
+  <section>
+    <div class="sec-label">When to pick which</div>
+    <div class="pickwhen">
+      <div class="pick"><h4>Pick App Engine when</h4><ul><li>You have a stateless web app or HTTP API in a supported language and want to deploy code, not servers.</li><li>Traffic is spiky — autoscaling absorbs it, and Standard can scale to zero between bursts.</li><li>You want minimal ops: no VM lifecycle, no instance groups, no networking setup.</li></ul></div>
+      <div class="pick"><h4>Pick Compute Engine when</h4><ul><li>You need root/SSH, a specific OS, kernel modules, or software App Engine will not host.</li><li>The workload is not a web app — databases, batch/HPC, GPU/TPU, long-running daemons.</li><li>You need full VPC control or fine-grained machine sizing and cost levers.</li></ul></div>
+    </div>
+  </section>
+  <section class="sources">
+    <div class="sec-label">Sources</div>
+    <ol>
+      <li>Choose an App Engine environment — <a href="https://docs.cloud.google.com/appengine/docs/the-appengine-environments" target="_blank" rel="noopener">https://docs.cloud.google.com/appengine/docs/the-appengine-environments</a></li>
+      <li>Compute Engine overview — <a href="https://docs.cloud.google.com/compute/docs/overview" target="_blank" rel="noopener">https://docs.cloud.google.com/compute/docs/overview</a></li>
+      <li>App Engine Standard — instance management — <a href="https://docs.cloud.google.com/appengine/docs/standard/how-instances-are-managed" target="_blank" rel="noopener">https://docs.cloud.google.com/appengine/docs/standard/how-instances-are-managed</a></li>
+      <li>App Engine Standard runtimes — <a href="https://docs.cloud.google.com/appengine/docs/standard/runtimes" target="_blank" rel="noopener">https://docs.cloud.google.com/appengine/docs/standard/runtimes</a></li>
+      <li>Compute Engine autoscaler — <a href="https://docs.cloud.google.com/compute/docs/autoscaler" target="_blank" rel="noopener">https://docs.cloud.google.com/compute/docs/autoscaler</a></li>
+      <li>Compute Engine VM pricing — <a href="https://cloud.google.com/compute/vm-instance-pricing" target="_blank" rel="noopener">https://cloud.google.com/compute/vm-instance-pricing</a></li>
+    </ol>
+  </section>
+  <section>
+    <div class="sec-label">Related instruments</div>
+    <div class="crosslinks"><span class="lbl">See also</span><a href="/gcp-compute/">GCP Compute Index</a></div>
+  </section>
+  <footer class="colophon">
+    Reviewed <time datetime="2026-05-19">2026-05-19</time> against vendor documentation — every
+    comparison-table row and the verdict carry a source. Part of <a href="/">Infra Atlas</a>
+    · <a href="/decisions/">Decisions</a>. Spot a stale fact?
+    <a href="https://github.com/ineslino/infra-atlas/issues/new" target="_blank" rel="noopener">Open an issue</a>.
+  </footer>
+</div>
+<script src="/nav.js" defer></script>
+</body>
+</html>

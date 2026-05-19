@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="color-scheme" content="dark">
+<title>REST API or HTTP API? · Decisions · Infra Atlas</title>
+<link rel="icon" href="/favicon.svg?v=2" type="image/svg+xml">
+<meta name="description" content="Amazon API Gateway&#x27;s two API types — the cheaper default, and what still needs the original.">
+<link rel="canonical" href="https://infraatlas.dev/decisions/rest-api-vs-http-api/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Infra Atlas">
+<meta property="og:title" content="REST API or HTTP API? · Infra Atlas Decisions">
+<meta property="og:description" content="Amazon API Gateway&#x27;s two API types — the cheaper default, and what still needs the original.">
+<meta property="og:url" content="https://infraatlas.dev/decisions/rest-api-vs-http-api/">
+<meta property="og:image" content="https://infraatlas.dev/og.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="REST API or HTTP API? · Infra Atlas Decisions">
+<meta name="twitter:description" content="Amazon API Gateway&#x27;s two API types — the cheaper default, and what still needs the original.">
+<meta name="twitter:image" content="https://infraatlas.dev/og.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@300;400;500;600&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/decisions/decision.css">
+</head>
+<body>
+<div class="grain"></div>
+<div class="scanlines"></div>
+<div class="page">
+  <header class="masthead">
+    <a class="eyebrow" href="/decisions/"><span class="arrow">←</span> Infra Atlas · Decisions</a>
+    <h1 class="title">REST API <em>or</em> HTTP API?</h1>
+    <p class="subtitle">Amazon API Gateway&#x27;s two API types — the cheaper default, and what still needs the original.</p>
+    <div class="reviewed"><span class="dot"></span>Reviewed <time datetime="2026-05-19">2026-05-19</time></div>
+  </header>
+  <section class="verdict">
+    <div class="sec-label">The verdict</div>
+    <p><strong>HTTP API</strong> is the right default for new APIs — roughly a third of the price per million requests, and it covers the common cases: Lambda and HTTP proxy integrations, JWT / Lambda / IAM authorization, CORS, custom domains. Choose <strong>REST API</strong> when you specifically need API keys with usage plans, AWS WAF, a private (VPC-only) endpoint, request validation, response caching, an edge-optimized endpoint, or body transformation. The deciding factor: if you need API keys plus usage plans, WAF, or a private endpoint, you must use REST API — HTTP API does not offer them.</p>
+  </section>
+  <section>
+    <div class="sec-label">Head to head</div>
+    <div class="compare-wrap"><table class="compare">
+      <thead><tr><th>Criterion</th><th>REST API</th><th>HTTP API</th></tr></thead>
+      <tbody>
+        <tr><!-- src: https://aws.amazon.com/api-gateway/pricing/ --><td class="criterion">Price per million requests</td><td class="val">$3.50 (first tier)</td><td class="val">$1.00 (first tier)</td></tr>
+        <tr><!-- src: https://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-api-usage-plans.html --><td class="criterion">API keys &amp; usage plans</td><td class="val">Yes — per-client throttling and quotas</td><td class="val">No</td></tr>
+        <tr><!-- src: https://docs.aws.amazon.com/apigateway/latest/developerguide/apigateway-control-access-aws-waf.html --><td class="criterion">AWS WAF integration</td><td class="val">Yes</td><td class="val">No</td></tr>
+        <tr><!-- src: https://docs.aws.amazon.com/apigateway/latest/developerguide/apigateway-private-apis.html --><td class="criterion">Private (VPC-only) endpoint</td><td class="val">Yes</td><td class="val">No</td></tr>
+        <tr><!-- src: https://docs.aws.amazon.com/apigateway/latest/developerguide/http-api-jwt-authorizer.html --><td class="criterion">JWT authorizer</td><td class="val">No — use a Lambda authorizer for JWTs</td><td class="val">Yes — native</td></tr>
+        <tr><!-- src: https://docs.aws.amazon.com/apigateway/latest/developerguide/http-api-vs-rest.html --><td class="criterion">Request validation</td><td class="val">Yes</td><td class="val">No</td></tr>
+        <tr><!-- src: https://docs.aws.amazon.com/apigateway/latest/developerguide/http-api-vs-rest.html --><td class="criterion">Body transformation</td><td class="val">Yes — VTL mapping templates</td><td class="val">No — parameter mapping only</td></tr>
+        <tr><!-- src: https://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-caching.html --><td class="criterion">Response caching</td><td class="val">Yes — per-stage</td><td class="val">No</td></tr>
+        <tr><!-- src: https://docs.aws.amazon.com/apigateway/latest/developerguide/http-api-vs-rest.html --><td class="criterion">Edge-optimized endpoint</td><td class="val">Yes</td><td class="val">No</td></tr>
+      </tbody>
+    </table></div>
+  </section>
+  <section>
+    <div class="sec-label">When to pick which</div>
+    <div class="pickwhen">
+      <div class="pick"><h4>Pick HTTP API when</h4><ul><li>You want the lowest cost — about $1.00 vs $3.50 per million requests.</li><li>Your needs are Lambda or HTTP proxy integrations with JWT, Lambda or IAM authorization.</li><li>You do not need API keys, request validation, WAF, caching or private endpoints.</li></ul></div>
+      <div class="pick"><h4>Pick REST API when</h4><ul><li>You need API keys with usage plans for per-client throttling and quotas.</li><li>You need AWS WAF, a private (VPC-only) endpoint, or request validation.</li><li>You need body transformation, response caching, or an edge-optimized endpoint.</li></ul></div>
+    </div>
+  </section>
+  <section class="sources">
+    <div class="sec-label">Sources</div>
+    <ol>
+      <li>Choosing between REST APIs and HTTP APIs — <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/http-api-vs-rest.html" target="_blank" rel="noopener">https://docs.aws.amazon.com/apigateway/latest/developerguide/http-api-vs-rest.html</a></li>
+      <li>Amazon API Gateway pricing — <a href="https://aws.amazon.com/api-gateway/pricing/" target="_blank" rel="noopener">https://aws.amazon.com/api-gateway/pricing/</a></li>
+      <li>Private REST APIs in API Gateway — <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/apigateway-private-apis.html" target="_blank" rel="noopener">https://docs.aws.amazon.com/apigateway/latest/developerguide/apigateway-private-apis.html</a></li>
+      <li>Use AWS WAF to protect REST APIs — <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/apigateway-control-access-aws-waf.html" target="_blank" rel="noopener">https://docs.aws.amazon.com/apigateway/latest/developerguide/apigateway-control-access-aws-waf.html</a></li>
+      <li>JWT authorizers for HTTP APIs — <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/http-api-jwt-authorizer.html" target="_blank" rel="noopener">https://docs.aws.amazon.com/apigateway/latest/developerguide/http-api-jwt-authorizer.html</a></li>
+      <li>Usage plans and API keys for REST APIs — <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-api-usage-plans.html" target="_blank" rel="noopener">https://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-api-usage-plans.html</a></li>
+      <li>Cache settings for REST APIs — <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-caching.html" target="_blank" rel="noopener">https://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-caching.html</a></li>
+    </ol>
+  </section>
+  <section>
+    <div class="sec-label">Related instruments</div>
+    <div class="crosslinks"><span class="lbl">See also</span><a href="/aws-api-gateway/">AWS API Gateway Atlas</a><a href="/apim-matrix/">APIM Feature Matrix</a></div>
+  </section>
+  <footer class="colophon">
+    Reviewed <time datetime="2026-05-19">2026-05-19</time> against vendor documentation — every
+    comparison-table row and the verdict carry a source. Part of <a href="/">Infra Atlas</a>
+    · <a href="/decisions/">Decisions</a>. Spot a stale fact?
+    <a href="https://github.com/ineslino/infra-atlas/issues/new" target="_blank" rel="noopener">Open an issue</a>.
+  </footer>
+</div>
+<script src="/nav.js" defer></script>
+</body>
+</html>

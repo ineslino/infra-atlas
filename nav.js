@@ -30,6 +30,17 @@
     ["/iam-matrix/",             "IAM Matrix",            "Cross-cloud", "iam identity access management rbac abac policy entra id permissions roles authorization"],
     ["/ai-atlas/",               "Generative AI Atlas",   "Cross-cloud", "ai generative model llm foundation model bedrock vertex azure foundry oci ovh openai gpt claude anthropic gemini google llama meta mistral cohere deepseek grok fine-tuning rag agents guardrails inference"]
   ];
+  var DECISIONS = [
+    ["/decisions/",                                          "Decisions — the hub",                   "Decisions", "decision guide which one should i use compare versus vs choose"],
+    ["/decisions/app-engine-vs-compute-engine/",             "App Engine vs Compute Engine",          "GCP",       "google paas iaas serverless vm app engine compute engine"],
+    ["/decisions/fargate-vs-ec2/",                           "Fargate vs EC2 for ECS",                "AWS",       "aws ecs containers serverless launch type fargate ec2"],
+    ["/decisions/api-gateway-vs-proxy-vs-load-balancer/",    "API gateway vs proxy vs load balancer", "Patterns",  "reverse proxy nginx alb nlb load balancer api gateway"],
+    ["/decisions/rest-api-vs-http-api/",                     "REST API vs HTTP API",                  "AWS",       "amazon api gateway rest http api type"],
+    ["/decisions/cloud-run-vs-app-engine-flex/",             "Cloud Run vs App Engine Flexible",      "GCP",       "google cloud run app engine flexible containers serverless"],
+    ["/decisions/aurora-vs-rds/",                            "Aurora vs RDS",                         "AWS",       "amazon database relational managed aurora rds mysql postgres"],
+    ["/decisions/azure-app-service-vs-container-apps-vs-vm/","App Service vs Container Apps vs VM",    "Azure",     "azure app service container apps virtual machine paas web worker role"],
+    ["/decisions/nat-gateway-vs-instance-vs-no-nat/",        "NAT gateway vs instance vs no NAT",      "AWS",       "aws vpc nat gateway instance egress private subnet networking"]
+  ];
 
   // Normalise current path → "/ec2/" form
   var here = location.pathname.replace(/index\.html$/, "");
@@ -51,6 +62,7 @@
   pushGroup(CLOUD, "Cloud Compute");
   pushGroup(APIM, "API Management");
   pushGroup(XCLOUD, "Cross-Cloud");
+  pushGroup(DECISIONS, "Decisions");
 
   var current = null;
   ITEMS.forEach(function (it) {

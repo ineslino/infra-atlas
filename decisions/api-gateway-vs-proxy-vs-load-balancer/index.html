@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="color-scheme" content="dark">
+<title>API gateway, proxy or load balancer? · Decisions · Infra Atlas</title>
+<link rel="icon" href="/favicon.svg?v=2" type="image/svg+xml">
+<meta name="description" content="Three things you put in front of services — and they are often layered, not either/or.">
+<link rel="canonical" href="https://infraatlas.dev/decisions/api-gateway-vs-proxy-vs-load-balancer/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Infra Atlas">
+<meta property="og:title" content="API gateway, proxy or load balancer? · Infra Atlas Decisions">
+<meta property="og:description" content="Three things you put in front of services — and they are often layered, not either/or.">
+<meta property="og:url" content="https://infraatlas.dev/decisions/api-gateway-vs-proxy-vs-load-balancer/">
+<meta property="og:image" content="https://infraatlas.dev/og.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="API gateway, proxy or load balancer? · Infra Atlas Decisions">
+<meta name="twitter:description" content="Three things you put in front of services — and they are often layered, not either/or.">
+<meta name="twitter:image" content="https://infraatlas.dev/og.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@300;400;500;600&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/decisions/decision.css">
+</head>
+<body>
+<div class="grain"></div>
+<div class="scanlines"></div>
+<div class="page">
+  <header class="masthead">
+    <a class="eyebrow" href="/decisions/"><span class="arrow">←</span> Infra Atlas · Decisions</a>
+    <h1 class="title">API gateway, proxy <em>or</em> load balancer?</h1>
+    <p class="subtitle">Three things you put in front of services — and they are often layered, not either/or.</p>
+    <div class="reviewed"><span class="dot"></span>Reviewed <time datetime="2026-05-19">2026-05-19</time></div>
+  </header>
+  <section class="verdict">
+    <div class="sec-label">The verdict</div>
+    <p>A <strong>load balancer</strong> spreads traffic across healthy targets for availability and scale. A <strong>reverse proxy</strong> is a general-purpose intermediary you fully control — routing, TLS, caching, rewriting. An <strong>API gateway</strong> is a managed product for publishing and governing APIs — auth, API keys, throttling, transformation, OpenAPI. They are commonly layered (gateway in front of a load balancer in front of services), not a single choice. The deciding factor is how much API-product governance you need.</p>
+  </section>
+  <section>
+    <div class="sec-label">Head to head</div>
+    <div class="compare-wrap"><table class="compare">
+      <thead><tr><th>Criterion</th><th>API gateway</th><th>Reverse proxy</th><th>Load balancer</th></tr></thead>
+      <tbody>
+        <tr><!-- src: https://docs.aws.amazon.com/apigateway/latest/developerguide/welcome.html --><td class="criterion">Primary purpose</td><td class="val">Publish and govern APIs</td><td class="val">A general-purpose request intermediary</td><td class="val">Spread traffic across healthy targets</td></tr>
+        <tr><!-- src: https://docs.aws.amazon.com/elasticloadbalancing/latest/application/introduction.html --><td class="criterion">OSI layer</td><td class="val">L7 — HTTP / REST / WebSocket</td><td class="val">L7</td><td class="val">L7 (ALB) or L4 (NLB)</td></tr>
+        <tr><!-- src: https://docs.aws.amazon.com/apigateway/latest/developerguide/welcome.html --><td class="criterion">Auth &amp; API keys</td><td class="val">Built in — IAM, Cognito, Lambda authorizers, API keys</td><td class="val">Manual configuration</td><td class="val">ALB: OIDC/Cognito. NLB: none</td></tr>
+        <tr><!-- src: https://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-request-throttling.html --><td class="criterion">Rate limiting</td><td class="val">Built in — throttling, usage plans, quotas</td><td class="val">Manual (e.g. limit_req)</td><td class="val">Not provided</td></tr>
+        <tr><!-- src: https://docs.aws.amazon.com/apigateway/latest/developerguide/rest-api-data-transformations.html --><td class="criterion">Transformation</td><td class="val">Yes — mapping templates and parameter mapping</td><td class="val">Manual header / URI rewriting</td><td class="val">None</td></tr>
+        <tr><!-- src: https://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-import-api.html --><td class="criterion">API-product management</td><td class="val">OpenAPI import/export, SDK generation, stages</td><td class="val">None</td><td class="val">None</td></tr>
+        <tr><!-- src: https://docs.aws.amazon.com/apigateway/latest/developerguide/welcome.html --><td class="criterion">Who operates it</td><td class="val">Fully managed by AWS</td><td class="val">You operate the server / process</td><td class="val">Fully managed by AWS</td></tr>
+        <tr><!-- src: https://docs.aws.amazon.com/elasticloadbalancing/latest/application/introduction.html --><td class="criterion">Typical placement</td><td class="val">Edge entry point for APIs</td><td class="val">Any hop you control</td><td class="val">In front of a fleet, often behind a gateway</td></tr>
+      </tbody>
+    </table></div>
+  </section>
+  <section>
+    <div class="sec-label">When to pick which</div>
+    <div class="pickwhen">
+      <div class="pick"><h4>Reach for an API gateway when</h4><ul><li>You publish APIs and need API keys, usage plans and quotas.</li><li>You need managed auth and request transformation without running code.</li><li>You manage APIs as products via OpenAPI, stages and SDKs.</li></ul></div>
+      <div class="pick"><h4>Reach for a reverse proxy when</h4><ul><li>You need full control of routing, rewriting, caching or static content.</li><li>You want a portable, vendor-neutral intermediary — on-prem, multi-cloud, or a sidecar.</li><li>Your needs sit between a plain load balancer and a gateway, and you will operate it.</li></ul></div>
+      <div class="pick"><h4>Reach for a load balancer when</h4><ul><li>The goal is spreading traffic across healthy targets for availability.</li><li>You need L4 throughput and static IPs (NLB) or L7 path routing (ALB).</li><li>You want a managed, health-checked entry point without API-product features.</li></ul></div>
+    </div>
+  </section>
+  <section class="sources">
+    <div class="sec-label">Sources</div>
+    <ol>
+      <li>Amazon API Gateway — welcome / overview — <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/welcome.html" target="_blank" rel="noopener">https://docs.aws.amazon.com/apigateway/latest/developerguide/welcome.html</a></li>
+      <li>API Gateway request throttling — <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-request-throttling.html" target="_blank" rel="noopener">https://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-request-throttling.html</a></li>
+      <li>API Gateway data transformations — <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/rest-api-data-transformations.html" target="_blank" rel="noopener">https://docs.aws.amazon.com/apigateway/latest/developerguide/rest-api-data-transformations.html</a></li>
+      <li>Application Load Balancer — introduction — <a href="https://docs.aws.amazon.com/elasticloadbalancing/latest/application/introduction.html" target="_blank" rel="noopener">https://docs.aws.amazon.com/elasticloadbalancing/latest/application/introduction.html</a></li>
+      <li>Network Load Balancer — introduction — <a href="https://docs.aws.amazon.com/elasticloadbalancing/latest/network/introduction.html" target="_blank" rel="noopener">https://docs.aws.amazon.com/elasticloadbalancing/latest/network/introduction.html</a></li>
+      <li>ALB — authenticate users — <a href="https://docs.aws.amazon.com/elasticloadbalancing/latest/application/listener-authenticate-users.html" target="_blank" rel="noopener">https://docs.aws.amazon.com/elasticloadbalancing/latest/application/listener-authenticate-users.html</a></li>
+      <li>nginx — beginner&#x27;s guide (reverse proxy) — <a href="https://nginx.org/en/docs/beginners_guide.html" target="_blank" rel="noopener">https://nginx.org/en/docs/beginners_guide.html</a></li>
+    </ol>
+  </section>
+  <section>
+    <div class="sec-label">Related instruments</div>
+    <div class="crosslinks"><span class="lbl">See also</span><a href="/apim-matrix/">APIM Feature Matrix</a><a href="/aws-api-gateway/">AWS API Gateway Atlas</a></div>
+  </section>
+  <footer class="colophon">
+    Reviewed <time datetime="2026-05-19">2026-05-19</time> against vendor documentation — every
+    comparison-table row and the verdict carry a source. Part of <a href="/">Infra Atlas</a>
+    · <a href="/decisions/">Decisions</a>. Spot a stale fact?
+    <a href="https://github.com/ineslino/infra-atlas/issues/new" target="_blank" rel="noopener">Open an issue</a>.
+  </footer>
+</div>
+<script src="/nav.js" defer></script>
+</body>
+</html>

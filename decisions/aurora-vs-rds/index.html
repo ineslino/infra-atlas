@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="color-scheme" content="dark">
+<title>Aurora or RDS? · Decisions · Infra Atlas</title>
+<link rel="icon" href="/favicon.svg?v=2" type="image/svg+xml">
+<meta name="description" content="Amazon&#x27;s two managed relational databases — distributed architecture, or the lower floor cost.">
+<link rel="canonical" href="https://infraatlas.dev/decisions/aurora-vs-rds/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Infra Atlas">
+<meta property="og:title" content="Aurora or RDS? · Infra Atlas Decisions">
+<meta property="og:description" content="Amazon&#x27;s two managed relational databases — distributed architecture, or the lower floor cost.">
+<meta property="og:url" content="https://infraatlas.dev/decisions/aurora-vs-rds/">
+<meta property="og:image" content="https://infraatlas.dev/og.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Aurora or RDS? · Infra Atlas Decisions">
+<meta name="twitter:description" content="Amazon&#x27;s two managed relational databases — distributed architecture, or the lower floor cost.">
+<meta name="twitter:image" content="https://infraatlas.dev/og.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@300;400;500;600&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/decisions/decision.css">
+</head>
+<body>
+<div class="grain"></div>
+<div class="scanlines"></div>
+<div class="page">
+  <header class="masthead">
+    <a class="eyebrow" href="/decisions/"><span class="arrow">←</span> Infra Atlas · Decisions</a>
+    <h1 class="title">Aurora <em>or</em> RDS?</h1>
+    <p class="subtitle">Amazon&#x27;s two managed relational databases — distributed architecture, or the lower floor cost.</p>
+    <div class="reviewed"><span class="dot"></span>Reviewed <time datetime="2026-05-19">2026-05-19</time></div>
+  </header>
+  <section class="verdict">
+    <div class="sec-label">The verdict</div>
+    <p>Pick <strong>Aurora</strong> for a MySQL- or PostgreSQL-compatible database that values its distributed storage: failover in roughly 30 seconds, up to 15 low-lag readers on one volume, a multi-region Global Database, and Serverless v2 scale-to-low. Pick standard <strong>RDS</strong> when you need an engine Aurora does not offer — MariaDB, Oracle, SQL Server, Db2 — or when a small, steady workload costs less on RDS&#x27;s simple instance-plus-volume pricing. The single biggest factor is the engine: need MariaDB / Oracle / SQL Server and it must be RDS; otherwise it is Aurora&#x27;s architecture against RDS&#x27;s lower floor.</p>
+  </section>
+  <section>
+    <div class="sec-label">Head to head</div>
+    <div class="compare-wrap"><table class="compare">
+      <thead><tr><th>Criterion</th><th>Aurora</th><th>RDS (standard engines)</th></tr></thead>
+      <tbody>
+        <tr><!-- src: https://aws.amazon.com/rds/faqs/ --><td class="criterion">Supported engines</td><td class="val">MySQL- and PostgreSQL-compatible only</td><td class="val">MySQL, PostgreSQL, MariaDB, Oracle, SQL Server, Db2</td></tr>
+        <tr><!-- src: https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/Aurora.Overview.StorageReliability.html --><td class="criterion">Storage architecture</td><td class="val">One distributed volume — 6 copies across 3 AZs</td><td class="val">An EBS volume per instance; Multi-AZ adds a standby</td></tr>
+        <tr><!-- src: https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/Aurora.Overview.html --><td class="criterion">Read replicas</td><td class="val">Up to 15, sharing the volume, tens-of-ms lag</td><td class="val">Up to 15 (MySQL/PostgreSQL), async, variable lag</td></tr>
+        <tr><!-- src: https://aws.amazon.com/rds/aurora/faqs/ --><td class="criterion">Failover speed</td><td class="val">Typically ~30 s when replicas exist</td><td class="val">Multi-AZ instance: typically 1-2 minutes</td></tr>
+        <tr><!-- src: https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/aurora-serverless-v2-auto-pause.html --><td class="criterion">Serverless / scale-to-low</td><td class="val">Serverless v2 — 0.5-ACU steps, can pause to zero</td><td class="val">No serverless option for standard engines</td></tr>
+        <tr><!-- src: https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/aurora-global-database.html --><td class="criterion">Multi-region</td><td class="val">Global Database — up to 10 Regions, sub-second lag</td><td class="val">Cross-Region read replicas, asynchronous</td></tr>
+        <tr><!-- src: https://aws.amazon.com/rds/aurora/pricing/ --><td class="criterion">Pricing model</td><td class="val">Compute + storage + I/O, or I/O-Optimized</td><td class="val">Instance-hours + storage + provisioned IOPS</td></tr>
+        <tr><!-- src: https://aws.amazon.com/rds/faqs/ --><td class="criterion">Cost for small steady workloads</td><td class="val">Higher floor</td><td class="val">Lower — simple instance plus a single volume</td></tr>
+      </tbody>
+    </table></div>
+  </section>
+  <section>
+    <div class="sec-label">When to pick which</div>
+    <div class="pickwhen">
+      <div class="pick"><h4>Pick Aurora when</h4><ul><li>You need MySQL or PostgreSQL with fast (~30 s) failover and high availability.</li><li>You need many low-lag read replicas, or a multi-region Global Database.</li><li>Your workload is spiky — Serverless v2 pauses to near-zero compute cost.</li></ul></div>
+      <div class="pick"><h4>Pick standard RDS when</h4><ul><li>You need MariaDB, Oracle, SQL Server or Db2 — Aurora supports none of them.</li><li>You run a small, steady workload where simple instance + volume pricing is cheaper.</li><li>You want a straightforward EBS-backed model with predictable provisioned IOPS.</li></ul></div>
+    </div>
+  </section>
+  <section class="sources">
+    <div class="sec-label">Sources</div>
+    <ol>
+      <li>Amazon Aurora FAQs — <a href="https://aws.amazon.com/rds/aurora/faqs/" target="_blank" rel="noopener">https://aws.amazon.com/rds/aurora/faqs/</a></li>
+      <li>Amazon RDS FAQs — <a href="https://aws.amazon.com/rds/faqs/" target="_blank" rel="noopener">https://aws.amazon.com/rds/faqs/</a></li>
+      <li>Aurora storage and reliability — <a href="https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/Aurora.Overview.StorageReliability.html" target="_blank" rel="noopener">https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/Aurora.Overview.StorageReliability.html</a></li>
+      <li>Aurora Serverless v2 auto-pause — <a href="https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/aurora-serverless-v2-auto-pause.html" target="_blank" rel="noopener">https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/aurora-serverless-v2-auto-pause.html</a></li>
+      <li>Aurora global databases — <a href="https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/aurora-global-database.html" target="_blank" rel="noopener">https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/aurora-global-database.html</a></li>
+      <li>Amazon Aurora pricing — <a href="https://aws.amazon.com/rds/aurora/pricing/" target="_blank" rel="noopener">https://aws.amazon.com/rds/aurora/pricing/</a></li>
+    </ol>
+  </section>
+  <footer class="colophon">
+    Reviewed <time datetime="2026-05-19">2026-05-19</time> against vendor documentation — every
+    comparison-table row and the verdict carry a source. Part of <a href="/">Infra Atlas</a>
+    · <a href="/decisions/">Decisions</a>. Spot a stale fact?
+    <a href="https://github.com/ineslino/infra-atlas/issues/new" target="_blank" rel="noopener">Open an issue</a>.
+  </footer>
+</div>
+<script src="/nav.js" defer></script>
+</body>
+</html>

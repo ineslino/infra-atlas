@@ -1,7 +1,7 @@
 name: Verify freshness
 
 # The curated Cross-Cloud matrices (kubernetes, compliance, confidential-
-# computing, iam-matrix, ai-atlas) carry no refresh.sh — their data is hand-maintained
+# computing, iam-matrix, ai-atlas) and the decisions/ pages carry no refresh.sh — hand-maintained
 # from vendor docs and snapshot-dated in the masthead, inside a
 # <time datetime="…"> element within .status-time. Nothing else would catch
 # them silently going stale as time passes.
@@ -38,6 +38,7 @@ jobs:
             "confidential-computing:180"
             "iam-matrix:180"
             "ai-atlas:45"
+            "decisions:365"
           )
           now=$(date -u +%s)
           stale=0

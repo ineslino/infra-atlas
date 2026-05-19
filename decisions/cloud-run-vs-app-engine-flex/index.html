@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="color-scheme" content="dark">
+<title>Cloud Run or App Engine Flexible? · Decisions · Infra Atlas</title>
+<link rel="icon" href="/favicon.svg?v=2" type="image/svg+xml">
+<meta name="description" content="Two ways to run containers on Google Cloud — and Google&#x27;s own recommended default.">
+<link rel="canonical" href="https://infraatlas.dev/decisions/cloud-run-vs-app-engine-flex/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Infra Atlas">
+<meta property="og:title" content="Cloud Run or App Engine Flexible? · Infra Atlas Decisions">
+<meta property="og:description" content="Two ways to run containers on Google Cloud — and Google&#x27;s own recommended default.">
+<meta property="og:url" content="https://infraatlas.dev/decisions/cloud-run-vs-app-engine-flex/">
+<meta property="og:image" content="https://infraatlas.dev/og.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Cloud Run or App Engine Flexible? · Infra Atlas Decisions">
+<meta name="twitter:description" content="Two ways to run containers on Google Cloud — and Google&#x27;s own recommended default.">
+<meta name="twitter:image" content="https://infraatlas.dev/og.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@300;400;500;600&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/decisions/decision.css">
+</head>
+<body>
+<div class="grain"></div>
+<div class="scanlines"></div>
+<div class="page">
+  <header class="masthead">
+    <a class="eyebrow" href="/decisions/"><span class="arrow">←</span> Infra Atlas · Decisions</a>
+    <h1 class="title">Cloud Run <em>or</em> App Engine Flexible?</h1>
+    <p class="subtitle">Two ways to run containers on Google Cloud — and Google&#x27;s own recommended default.</p>
+    <div class="reviewed"><span class="dot"></span>Reviewed <time datetime="2026-05-19">2026-05-19</time></div>
+  </header>
+  <section class="verdict">
+    <div class="sec-label">The verdict</div>
+    <p><strong>Cloud Run</strong> is Google&#x27;s modern default — its own documentation recommends it over App Engine for new users, citing advanced capabilities such as GPUs at lower prices. It scales to zero and bills per request. <strong>App Engine Flexible</strong> is not deprecated and remains supported, but it is a legacy option: it still fits when you need VM-level control (Compute Engine VMs with SSH), workloads that must sit in the Compute Engine network, or steady traffic where an always-on instance is acceptable. The deciding factor is scale-to-zero and billing — Cloud Run charges nothing when idle; Flexible always keeps a billable VM running.</p>
+  </section>
+  <section>
+    <div class="sec-label">Head to head</div>
+    <div class="compare-wrap"><table class="compare">
+      <thead><tr><th>Criterion</th><th>Cloud Run</th><th>App Engine Flexible</th></tr></thead>
+      <tbody>
+        <tr><!-- src: https://docs.cloud.google.com/run/docs/about-instance-autoscaling --><td class="criterion">Scale to zero</td><td class="val">Yes — idle revisions scale to 0 instances</td><td class="val">No — at least one instance always runs</td></tr>
+        <tr><!-- src: https://docs.cloud.google.com/run/docs/configuring/billing-settings --><td class="criterion">Billing when idle</td><td class="val">Request-based billing — no charge when idle</td><td class="val">Instances billed continuously</td></tr>
+        <tr><!-- src: https://docs.cloud.google.com/run/docs/resource-model --><td class="criterion">Deploy unit</td><td class="val">Any OCI / Docker container, as an immutable revision</td><td class="val">A Docker container on Compute Engine VMs</td></tr>
+        <tr><!-- src: https://docs.cloud.google.com/run/docs/about-instance-autoscaling --><td class="criterion">Cold starts</td><td class="val">Yes — scale-from-zero</td><td class="val">None — no scale-from-zero</td></tr>
+        <tr><!-- src: https://docs.cloud.google.com/appengine/docs/the-appengine-environments --><td class="criterion">Startup speed</td><td class="val">Seconds</td><td class="val">Minutes — VM boot</td></tr>
+        <tr><!-- src: https://docs.cloud.google.com/run/docs/configuring/request-timeout --><td class="criterion">Request timeout</td><td class="val">Default 5 min, configurable to 60 min</td><td class="val">60 min</td></tr>
+        <tr><!-- src: https://docs.cloud.google.com/run/docs/configuring/services/gpu --><td class="criterion">GPU support</td><td class="val">Yes — NVIDIA L4 and RTX PRO 6000</td><td class="val">No</td></tr>
+        <tr><!-- src: https://docs.cloud.google.com/appengine/docs/flexible/overview --><td class="criterion">VM-level access</td><td class="val">No host access</td><td class="val">Yes — SSH into the underlying Compute Engine VM</td></tr>
+        <tr><!-- src: https://docs.cloud.google.com/appengine/migration-center/run/compare-gae-with-run --><td class="criterion">Positioning</td><td class="val">Modern, recommended default for new projects</td><td class="val">Supported; Cloud Run recommended instead</td></tr>
+      </tbody>
+    </table></div>
+  </section>
+  <section>
+    <div class="sec-label">When to pick which</div>
+    <div class="pickwhen">
+      <div class="pick"><h4>Pick Cloud Run when</h4><ul><li>Traffic is spiky — scale to zero and pay only per request.</li><li>You are starting a new project — Google recommends it as the default.</li><li>You need GPUs, fast deploys, or percentage-based traffic splitting.</li></ul></div>
+      <div class="pick"><h4>Pick App Engine Flexible when</h4><ul><li>You need VM-level control — SSH into the Compute Engine VM for debugging.</li><li>Your app must run inside the Compute Engine network.</li><li>You have an existing Flexible app and migration cost outweighs modernising now.</li></ul></div>
+    </div>
+  </section>
+  <section class="sources">
+    <div class="sec-label">Sources</div>
+    <ol>
+      <li>Compare App Engine and Cloud Run — <a href="https://docs.cloud.google.com/appengine/migration-center/run/compare-gae-with-run" target="_blank" rel="noopener">https://docs.cloud.google.com/appengine/migration-center/run/compare-gae-with-run</a></li>
+      <li>Cloud Run instance autoscaling — <a href="https://docs.cloud.google.com/run/docs/about-instance-autoscaling" target="_blank" rel="noopener">https://docs.cloud.google.com/run/docs/about-instance-autoscaling</a></li>
+      <li>Cloud Run billing settings — <a href="https://docs.cloud.google.com/run/docs/configuring/billing-settings" target="_blank" rel="noopener">https://docs.cloud.google.com/run/docs/configuring/billing-settings</a></li>
+      <li>Cloud Run request timeout — <a href="https://docs.cloud.google.com/run/docs/configuring/request-timeout" target="_blank" rel="noopener">https://docs.cloud.google.com/run/docs/configuring/request-timeout</a></li>
+      <li>Cloud Run GPU configuration — <a href="https://docs.cloud.google.com/run/docs/configuring/services/gpu" target="_blank" rel="noopener">https://docs.cloud.google.com/run/docs/configuring/services/gpu</a></li>
+      <li>App Engine flexible environment overview — <a href="https://docs.cloud.google.com/appengine/docs/flexible/overview" target="_blank" rel="noopener">https://docs.cloud.google.com/appengine/docs/flexible/overview</a></li>
+    </ol>
+  </section>
+  <section>
+    <div class="sec-label">Related instruments</div>
+    <div class="crosslinks"><span class="lbl">See also</span><a href="/gcp-compute/">GCP Compute Index</a></div>
+  </section>
+  <footer class="colophon">
+    Reviewed <time datetime="2026-05-19">2026-05-19</time> against vendor documentation — every
+    comparison-table row and the verdict carry a source. Part of <a href="/">Infra Atlas</a>
+    · <a href="/decisions/">Decisions</a>. Spot a stale fact?
+    <a href="https://github.com/ineslino/infra-atlas/issues/new" target="_blank" rel="noopener">Open an issue</a>.
+  </footer>
+</div>
+<script src="/nav.js" defer></script>
+</body>
+</html>

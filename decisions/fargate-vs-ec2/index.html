@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="color-scheme" content="dark">
+<title>Fargate or EC2 for ECS? · Decisions · Infra Atlas</title>
+<link rel="icon" href="/favicon.svg?v=2" type="image/svg+xml">
+<meta name="description" content="Serverless containers, or containers on instances you run yourself.">
+<link rel="canonical" href="https://infraatlas.dev/decisions/fargate-vs-ec2/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Infra Atlas">
+<meta property="og:title" content="Fargate or EC2 for ECS? · Infra Atlas Decisions">
+<meta property="og:description" content="Serverless containers, or containers on instances you run yourself.">
+<meta property="og:url" content="https://infraatlas.dev/decisions/fargate-vs-ec2/">
+<meta property="og:image" content="https://infraatlas.dev/og.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Fargate or EC2 for ECS? · Infra Atlas Decisions">
+<meta name="twitter:description" content="Serverless containers, or containers on instances you run yourself.">
+<meta name="twitter:image" content="https://infraatlas.dev/og.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@300;400;500;600&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/decisions/decision.css">
+</head>
+<body>
+<div class="grain"></div>
+<div class="scanlines"></div>
+<div class="page">
+  <header class="masthead">
+    <a class="eyebrow" href="/decisions/"><span class="arrow">←</span> Infra Atlas · Decisions</a>
+    <h1 class="title">Fargate <em>or</em> EC2 for ECS?</h1>
+    <p class="subtitle">Serverless containers, or containers on instances you run yourself.</p>
+    <div class="reviewed"><span class="dot"></span>Reviewed <time datetime="2026-05-19">2026-05-19</time></div>
+  </header>
+  <section class="verdict">
+    <div class="sec-label">The verdict</div>
+    <p>Pick <strong>Fargate</strong> for zero infrastructure management, spiky workloads, or simply getting started — you pay per vCPU-second the task requests and AWS owns the host. Pick the <strong>EC2 launch type</strong> for large, steady, high-utilisation workloads that must be price-optimised, or anything needing GPUs, privileged containers, daemon workloads, or custom AMIs. The deciding factor is steady-state utilisation and host control: high predictable load plus any host-level need points to EC2; everything else favours Fargate.</p>
+  </section>
+  <section>
+    <div class="sec-label">Head to head</div>
+    <div class="compare-wrap"><table class="compare">
+      <thead><tr><th>Criterion</th><th>Fargate</th><th>EC2 launch type</th></tr></thead>
+      <tbody>
+        <tr><!-- src: https://docs.aws.amazon.com/AmazonECS/latest/developerguide/AWS_Fargate.html --><td class="criterion">Host management</td><td class="val">AWS — no provisioning, patching or scaling</td><td class="val">You — instance choice, config, maintenance</td></tr>
+        <tr><!-- src: https://aws.amazon.com/fargate/pricing/ --><td class="criterion">Pricing model</td><td class="val">Per-second, on the vCPU + memory the task requests</td><td class="val">The EC2 instances you run — used or idle</td></tr>
+        <tr><!-- src: https://docs.aws.amazon.com/AmazonECS/latest/developerguide/launch_types.html --><td class="criterion">Cost at steady high load</td><td class="val">Less efficient — billed per task, not per packed host</td><td class="val">Cheaper — pack instances to high utilisation</td></tr>
+        <tr><!-- src: https://docs.aws.amazon.com/AmazonECS/latest/developerguide/ecs-gpu.html --><td class="criterion">GPU support</td><td class="val">Not supported</td><td class="val">Yes — EC2 GPU instances + the GPU-optimized AMI</td></tr>
+        <tr><!-- src: https://docs.aws.amazon.com/AmazonECS/latest/developerguide/fargate-tasks-services.html --><td class="criterion">Privileged / daemon tasks</td><td class="val">No — privileged and the DAEMON strategy unsupported</td><td class="val">Yes — privileged containers and DAEMON tasks</td></tr>
+        <tr><!-- src: https://docs.aws.amazon.com/AmazonECS/latest/developerguide/launch_types.html --><td class="criterion">Host access</td><td class="val">None — no SSH, no custom AMI</td><td class="val">Full — SSH, custom AMIs, instance-type choice</td></tr>
+        <tr><!-- src: https://docs.aws.amazon.com/AmazonECS/latest/developerguide/fargate-tasks-services.html --><td class="criterion">Networking modes</td><td class="val">awsvpc only — one ENI per task</td><td class="val">awsvpc, bridge or host</td></tr>
+        <tr><!-- src: https://docs.aws.amazon.com/AmazonECS/latest/developerguide/AWS_Fargate.html --><td class="criterion">Isolation</td><td class="val">Each task in its own kernel / CPU / memory boundary</td><td class="val">Tasks on an instance share that instance&#x27;s kernel</td></tr>
+      </tbody>
+    </table></div>
+  </section>
+  <section>
+    <div class="sec-label">When to pick which</div>
+    <div class="pickwhen">
+      <div class="pick"><h4>Pick Fargate when</h4><ul><li>You want to focus on the application and not provision, patch or scale servers.</li><li>Workloads are variable — you would rather pay per task-second than for idle instances.</li><li>You are starting with containers, or you need strong per-task isolation.</li></ul></div>
+      <div class="pick"><h4>Pick the EC2 launch type when</h4><ul><li>You run large, steady, high-utilisation workloads that must be price-optimised.</li><li>You need GPUs, privileged containers, the DAEMON strategy, or bridge/host networking.</li><li>You need custom AMIs, specific instance types, or host-level access.</li></ul></div>
+    </div>
+  </section>
+  <section class="sources">
+    <div class="sec-label">Sources</div>
+    <ol>
+      <li>Architect for AWS Fargate for Amazon ECS — <a href="https://docs.aws.amazon.com/AmazonECS/latest/developerguide/AWS_Fargate.html" target="_blank" rel="noopener">https://docs.aws.amazon.com/AmazonECS/latest/developerguide/AWS_Fargate.html</a></li>
+      <li>Amazon ECS launch types — <a href="https://docs.aws.amazon.com/AmazonECS/latest/developerguide/launch_types.html" target="_blank" rel="noopener">https://docs.aws.amazon.com/AmazonECS/latest/developerguide/launch_types.html</a></li>
+      <li>ECS task definitions for Fargate — <a href="https://docs.aws.amazon.com/AmazonECS/latest/developerguide/fargate-tasks-services.html" target="_blank" rel="noopener">https://docs.aws.amazon.com/AmazonECS/latest/developerguide/fargate-tasks-services.html</a></li>
+      <li>ECS task definitions for GPU workloads — <a href="https://docs.aws.amazon.com/AmazonECS/latest/developerguide/ecs-gpu.html" target="_blank" rel="noopener">https://docs.aws.amazon.com/AmazonECS/latest/developerguide/ecs-gpu.html</a></li>
+      <li>AWS Fargate pricing — <a href="https://aws.amazon.com/fargate/pricing/" target="_blank" rel="noopener">https://aws.amazon.com/fargate/pricing/</a></li>
+      <li>Amazon ECS pricing — <a href="https://aws.amazon.com/ecs/pricing/" target="_blank" rel="noopener">https://aws.amazon.com/ecs/pricing/</a></li>
+    </ol>
+  </section>
+  <section>
+    <div class="sec-label">Related instruments</div>
+    <div class="crosslinks"><span class="lbl">See also</span><a href="/ec2/">EC2 Observatory</a><a href="/equivalent-sku/">Equivalent-SKU Finder</a></div>
+  </section>
+  <footer class="colophon">
+    Reviewed <time datetime="2026-05-19">2026-05-19</time> against vendor documentation — every
+    comparison-table row and the verdict carry a source. Part of <a href="/">Infra Atlas</a>
+    · <a href="/decisions/">Decisions</a>. Spot a stale fact?
+    <a href="https://github.com/ineslino/infra-atlas/issues/new" target="_blank" rel="noopener">Open an issue</a>.
+  </footer>
+</div>
+<script src="/nav.js" defer></script>
+</body>
+</html>

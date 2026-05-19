@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="color-scheme" content="dark">
+<title>NAT gateway, NAT instance or no NAT? · Decisions · Infra Atlas</title>
+<link rel="icon" href="/favicon.svg?v=2" type="image/svg+xml">
+<meta name="description" content="How private-subnet workloads reach the internet — or avoid needing to.">
+<link rel="canonical" href="https://infraatlas.dev/decisions/nat-gateway-vs-instance-vs-no-nat/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Infra Atlas">
+<meta property="og:title" content="NAT gateway, NAT instance or no NAT? · Infra Atlas Decisions">
+<meta property="og:description" content="How private-subnet workloads reach the internet — or avoid needing to.">
+<meta property="og:url" content="https://infraatlas.dev/decisions/nat-gateway-vs-instance-vs-no-nat/">
+<meta property="og:image" content="https://infraatlas.dev/og.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="NAT gateway, NAT instance or no NAT? · Infra Atlas Decisions">
+<meta name="twitter:description" content="How private-subnet workloads reach the internet — or avoid needing to.">
+<meta name="twitter:image" content="https://infraatlas.dev/og.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@300;400;500;600&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/decisions/decision.css">
+</head>
+<body>
+<div class="grain"></div>
+<div class="scanlines"></div>
+<div class="page">
+  <header class="masthead">
+    <a class="eyebrow" href="/decisions/"><span class="arrow">←</span> Infra Atlas · Decisions</a>
+    <h1 class="title">NAT gateway, NAT instance <em>or</em> no NAT?</h1>
+    <p class="subtitle">How private-subnet workloads reach the internet — or avoid needing to.</p>
+    <div class="reviewed"><span class="dot"></span>Reviewed <time datetime="2026-05-19">2026-05-19</time></div>
+  </header>
+  <section class="verdict">
+    <div class="sec-label">The verdict</div>
+    <p><strong>NAT Gateway</strong> is the default for private-subnet egress — AWS recommends it for availability, bandwidth and zero administration. A <strong>NAT instance</strong> is now a niche, legacy choice: pick it only for a feature the gateway lacks — port forwarding, doubling as a bastion, or very low traffic where its hourly cost wins. You can <strong>skip NAT entirely</strong> when private workloads only talk to AWS services (a free Gateway endpoint, or Interface endpoints), or when a workload is genuinely public. The deciding factor is cost: the NAT Gateway data-processing charge applies to every GB — including AWS-service traffic a cheaper endpoint could carry.</p>
+  </section>
+  <section>
+    <div class="sec-label">Head to head</div>
+    <div class="compare-wrap"><table class="compare">
+      <thead><tr><th>Criterion</th><th>NAT Gateway</th><th>NAT instance</th><th>No NAT</th></tr></thead>
+      <tbody>
+        <tr><!-- src: https://docs.aws.amazon.com/vpc/latest/userguide/vpc-nat-comparison.html --><td class="criterion">Managed?</td><td class="val">Fully managed by AWS</td><td class="val">You manage it — OS and patches</td><td class="val">Endpoints and gateways fully managed</td></tr>
+        <tr><!-- src: https://docs.aws.amazon.com/vpc/latest/userguide/vpc-nat-comparison.html --><td class="criterion">Availability</td><td class="val">Redundant within its AZ</td><td class="val">Single instance — you script failover</td><td class="val">HA, horizontally scaled</td></tr>
+        <tr><!-- src: https://docs.aws.amazon.com/vpc/latest/userguide/nat-gateway-basics.html --><td class="criterion">Bandwidth</td><td class="val">5 Gbps, auto-scales to 100 Gbps</td><td class="val">Limited by the instance type</td><td class="val">No NAT bandwidth limit</td></tr>
+        <tr><!-- src: https://aws.amazon.com/vpc/pricing/ --><td class="criterion">Hourly cost</td><td class="val">Per-gateway hourly charge</td><td class="val">EC2 instance hourly rate</td><td class="val">Gateway endpoint: none. Interface: ~$0.01/AZ-hr</td></tr>
+        <tr><!-- src: https://docs.aws.amazon.com/vpc/latest/userguide/nat-gateway-pricing.html --><td class="criterion">Data-processing cost</td><td class="val">A per-GB charge on all traffic</td><td class="val">None — pay EC2 data transfer only</td><td class="val">Gateway endpoint: none. Interface: ~$0.01/GB</td></tr>
+        <tr><!-- src: https://docs.aws.amazon.com/vpc/latest/userguide/vpc-nat-comparison.html --><td class="criterion">Port forwarding / bastion</td><td class="val">Not supported</td><td class="val">Supported — can also serve as a bastion</td><td class="val">Not applicable</td></tr>
+        <tr><!-- src: https://docs.aws.amazon.com/vpc/latest/userguide/work-with-nat-instances.html --><td class="criterion">Maintenance</td><td class="val">None</td><td class="val">OS patches; build your own NAT AMI</td><td class="val">None</td></tr>
+        <tr><!-- src: https://docs.aws.amazon.com/vpc/latest/privatelink/gateway-endpoints.html --><td class="criterion">AWS-service-only egress</td><td class="val">Works, but billed per GB</td><td class="val">Works, with management overhead</td><td class="val">Best fit — a free Gateway endpoint</td></tr>
+      </tbody>
+    </table></div>
+  </section>
+  <section>
+    <div class="sec-label">When to pick which</div>
+    <div class="pickwhen">
+      <div class="pick"><h4>Pick NAT Gateway when</h4><ul><li>Private workloads need general outbound internet — it is the AWS-recommended default.</li><li>You want zero maintenance and built-in per-AZ redundancy.</li><li>Traffic is moderate-to-high and the per-GB charge is acceptable.</li></ul></div>
+      <div class="pick"><h4>Pick a NAT instance when</h4><ul><li>You need port forwarding, which a NAT Gateway does not support.</li><li>You want one instance to also serve as a bastion / jump host.</li><li>Egress is tiny and infrequent, where a small instance undercuts the gateway.</li></ul></div>
+      <div class="pick"><h4>Skip NAT entirely when</h4><ul><li>Private workloads only reach S3 or DynamoDB — use a free Gateway endpoint.</li><li>Egress is only to other AWS services — Interface endpoints usually undercut NAT.</li><li>The workload is genuinely public — put it in a public subnet behind an internet gateway.</li></ul></div>
+    </div>
+  </section>
+  <section class="sources">
+    <div class="sec-label">Sources</div>
+    <ol>
+      <li>NAT gateway vs NAT instance comparison — <a href="https://docs.aws.amazon.com/vpc/latest/userguide/vpc-nat-comparison.html" target="_blank" rel="noopener">https://docs.aws.amazon.com/vpc/latest/userguide/vpc-nat-comparison.html</a></li>
+      <li>NAT gateway basics — bandwidth and limits — <a href="https://docs.aws.amazon.com/vpc/latest/userguide/nat-gateway-basics.html" target="_blank" rel="noopener">https://docs.aws.amazon.com/vpc/latest/userguide/nat-gateway-basics.html</a></li>
+      <li>NAT gateway pricing — <a href="https://docs.aws.amazon.com/vpc/latest/userguide/nat-gateway-pricing.html" target="_blank" rel="noopener">https://docs.aws.amazon.com/vpc/latest/userguide/nat-gateway-pricing.html</a></li>
+      <li>Amazon VPC pricing — <a href="https://aws.amazon.com/vpc/pricing/" target="_blank" rel="noopener">https://aws.amazon.com/vpc/pricing/</a></li>
+      <li>Work with NAT instances — <a href="https://docs.aws.amazon.com/vpc/latest/userguide/work-with-nat-instances.html" target="_blank" rel="noopener">https://docs.aws.amazon.com/vpc/latest/userguide/work-with-nat-instances.html</a></li>
+      <li>Gateway endpoints for S3 and DynamoDB — <a href="https://docs.aws.amazon.com/vpc/latest/privatelink/gateway-endpoints.html" target="_blank" rel="noopener">https://docs.aws.amazon.com/vpc/latest/privatelink/gateway-endpoints.html</a></li>
+      <li>Egress-only internet gateways — <a href="https://docs.aws.amazon.com/vpc/latest/userguide/egress-only-internet-gateway.html" target="_blank" rel="noopener">https://docs.aws.amazon.com/vpc/latest/userguide/egress-only-internet-gateway.html</a></li>
+    </ol>
+  </section>
+  <footer class="colophon">
+    Reviewed <time datetime="2026-05-19">2026-05-19</time> against vendor documentation — every
+    comparison-table row and the verdict carry a source. Part of <a href="/">Infra Atlas</a>
+    · <a href="/decisions/">Decisions</a>. Spot a stale fact?
+    <a href="https://github.com/ineslino/infra-atlas/issues/new" target="_blank" rel="noopener">Open an issue</a>.
+  </footer>
+</div>
+<script src="/nav.js" defer></script>
+</body>
+</html>

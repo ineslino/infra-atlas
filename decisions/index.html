@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="color-scheme" content="dark">
+<title>Decisions · Infra Atlas</title>
+<link rel="icon" href="/favicon.svg?v=2" type="image/svg+xml">
+<meta name="description" content="Short, neutral, footnoted answers to the 'which one should I use' questions cloud engineers ask most — Fargate vs EC2, REST vs HTTP API, Aurora vs RDS, and more. With the asterisks intact.">
+<link rel="canonical" href="https://infraatlas.dev/decisions/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Infra Atlas">
+<meta property="og:title" content="Decisions · Infra Atlas">
+<meta property="og:description" content="Short, neutral, footnoted 'which one should I use' references for the cloud comparisons engineers ask most.">
+<meta property="og:url" content="https://infraatlas.dev/decisions/">
+<meta property="og:image" content="https://infraatlas.dev/og.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Decisions · Infra Atlas">
+<meta name="twitter:description" content="Short, neutral, footnoted 'which one should I use' references for the cloud comparisons engineers ask most.">
+<meta name="twitter:image" content="https://infraatlas.dev/og.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@300;400;500;600&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/decisions/decision.css">
+</head>
+<body>
+<div class="grain"></div>
+<div class="scanlines"></div>
+<div class="page">
+  <header class="masthead">
+    <a class="eyebrow" href="/"><span class="arrow">←</span> Infra Atlas</a>
+    <h1 class="title">The <em>Decisions.</em></h1>
+    <p class="subtitle">Short, neutral, footnoted answers to the "which one should I use" questions cloud engineers ask most. One screen each — a plain verdict, a sourced comparison, and when to pick which.</p>
+    <div class="reviewed"><span class="dot"></span>8 decisions · reviewed <time datetime="2026-05-19">2026-05-19</time></div>
+  </header>
+  <section>
+    <div class="decision-grid">
+        <a class="dcard" href="/decisions/app-engine-vs-compute-engine/">
+          <div class="dcard__cloud">Google Cloud</div>
+          <div class="dcard__q">App Engine <em>or</em> Compute Engine?</div>
+          <div class="dcard__teaser">PaaS or IaaS on Google Cloud — when to hand Google the servers, and when to keep them.</div>
+          <div class="dcard__foot">Reviewed 2026-05-19</div>
+        </a>
+        <a class="dcard" href="/decisions/fargate-vs-ec2/">
+          <div class="dcard__cloud">AWS · containers</div>
+          <div class="dcard__q">Fargate <em>or</em> EC2 for ECS?</div>
+          <div class="dcard__teaser">Hand AWS the host, or run your own instances — the ECS container-platform call.</div>
+          <div class="dcard__foot">Reviewed 2026-05-19</div>
+        </a>
+        <a class="dcard" href="/decisions/api-gateway-vs-proxy-vs-load-balancer/">
+          <div class="dcard__cloud">Patterns · AWS reference</div>
+          <div class="dcard__q">API gateway, proxy <em>or</em> load balancer?</div>
+          <div class="dcard__teaser">Gateway, proxy, load balancer — what each is actually for, and why you often need all three.</div>
+          <div class="dcard__foot">Reviewed 2026-05-19</div>
+        </a>
+        <a class="dcard" href="/decisions/rest-api-vs-http-api/">
+          <div class="dcard__cloud">AWS · API Gateway</div>
+          <div class="dcard__q">REST API <em>or</em> HTTP API?</div>
+          <div class="dcard__teaser">API Gateway&#x27;s cheaper default vs the feature-complete original — and the features that force the choice.</div>
+          <div class="dcard__foot">Reviewed 2026-05-19</div>
+        </a>
+        <a class="dcard" href="/decisions/cloud-run-vs-app-engine-flex/">
+          <div class="dcard__cloud">Google Cloud</div>
+          <div class="dcard__q">Cloud Run <em>or</em> App Engine Flexible?</div>
+          <div class="dcard__teaser">Google&#x27;s modern serverless-container default vs the legacy VM-backed option.</div>
+          <div class="dcard__foot">Reviewed 2026-05-19</div>
+        </a>
+        <a class="dcard" href="/decisions/aurora-vs-rds/">
+          <div class="dcard__cloud">AWS · databases</div>
+          <div class="dcard__q">Aurora <em>or</em> RDS?</div>
+          <div class="dcard__teaser">AWS&#x27;s cloud-native database engine vs classic managed RDS — architecture, or the cheaper floor.</div>
+          <div class="dcard__foot">Reviewed 2026-05-19</div>
+        </a>
+        <a class="dcard" href="/decisions/azure-app-service-vs-container-apps-vs-vm/">
+          <div class="dcard__cloud">Azure</div>
+          <div class="dcard__q">App Service, Container Apps <em>or</em> a VM?</div>
+          <div class="dcard__teaser">Azure&#x27;s PaaS, its serverless containers, or raw VMs — the modern three-way compute call.</div>
+          <div class="dcard__foot">Reviewed 2026-05-19</div>
+        </a>
+        <a class="dcard" href="/decisions/nat-gateway-vs-instance-vs-no-nat/">
+          <div class="dcard__cloud">AWS · networking</div>
+          <div class="dcard__q">NAT gateway, NAT instance <em>or</em> no NAT?</div>
+          <div class="dcard__teaser">Private-subnet egress on AWS — the managed default, the legacy workaround, and skipping NAT outright.</div>
+          <div class="dcard__foot">Reviewed 2026-05-19</div>
+        </a>
+    </div>
+  </section>
+  <footer class="colophon">
+    Every decision is a curated, dated snapshot — each verdict and comparison cell sourced to
+    vendor documentation. Part of <a href="/">Infra Atlas</a>. Spot a stale fact?
+    <a href="https://github.com/ineslino/infra-atlas/issues/new" target="_blank" rel="noopener">Open an issue</a>.
+  </footer>
+</div>
+<script src="/nav.js" defer></script>
+</body>
+</html>
