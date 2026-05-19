@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url><loc>https://infraatlas.dev/</loc><lastmod>2026-05-19</lastmod></url>
+  <url><loc>https://infraatlas.dev/ai-atlas/</loc><lastmod>2026-05-19</lastmod></url>
+  <url><loc>https://infraatlas.dev/api/</loc><lastmod>2026-05-19</lastmod></url>
+  <url><loc>https://infraatlas.dev/apigee/</loc><lastmod>2026-05-18</lastmod></url>
+  <url><loc>https://infraatlas.dev/apim-matrix/</loc><lastmod>2026-05-19</lastmod></url>
+  <url><loc>https://infraatlas.dev/aws-api-gateway/</loc><lastmod>2026-05-18</lastmod></url>
+  <url><loc>https://infraatlas.dev/azure-vm/</loc><lastmod>2026-05-19</lastmod></url>
+  <url><loc>https://infraatlas.dev/compliance/</loc><lastmod>2026-05-19</lastmod></url>
+  <url><loc>https://infraatlas.dev/confidential-computing/</loc><lastmod>2026-05-19</lastmod></url>
+  <url><loc>https://infraatlas.dev/decisions/</loc><lastmod>2026-05-19</lastmod></url>
+  <url><loc>https://infraatlas.dev/ec2/</loc><lastmod>2026-05-19</lastmod></url>
+  <url><loc>https://infraatlas.dev/egress/</loc><lastmod>2026-05-19</lastmod></url>
+  <url><loc>https://infraatlas.dev/equivalent-sku/</loc><lastmod>2026-05-18</lastmod></url>
+  <url><loc>https://infraatlas.dev/gcp-compute/</loc><lastmod>2026-05-19</lastmod></url>
+  <url><loc>https://infraatlas.dev/iam-matrix/</loc><lastmod>2026-05-19</lastmod></url>
+  <url><loc>https://infraatlas.dev/kubernetes/</loc><lastmod>2026-05-19</lastmod></url>
+  <url><loc>https://infraatlas.dev/mulesoft/</loc><lastmod>2026-05-18</lastmod></url>
+  <url><loc>https://infraatlas.dev/networking-matrix/</loc><lastmod>2026-05-19</lastmod></url>
+  <url><loc>https://infraatlas.dev/oci-compute/</loc><lastmod>2026-05-19</lastmod></url>
+  <url><loc>https://infraatlas.dev/ovh-instances/</loc><lastmod>2026-05-19</lastmod></url>
+  <url><loc>https://infraatlas.dev/regions/</loc><lastmod>2026-05-19</lastmod></url>
+  <url><loc>https://infraatlas.dev/self-hosted-apim/</loc><lastmod>2026-05-18</lastmod></url>
+  <url><loc>https://infraatlas.dev/support/</loc><lastmod>2026-05-18</lastmod></url>
+  <url><loc>https://infraatlas.dev/decisions/api-gateway-vs-proxy-vs-load-balancer/</loc><lastmod>2026-05-19</lastmod></url>
+  <url><loc>https://infraatlas.dev/decisions/app-engine-vs-compute-engine/</loc><lastmod>2026-05-19</lastmod></url>
+  <url><loc>https://infraatlas.dev/decisions/aurora-vs-rds/</loc><lastmod>2026-05-19</lastmod></url>
+  <url><loc>https://infraatlas.dev/decisions/azure-app-service-vs-container-apps-vs-vm/</loc><lastmod>2026-05-19</lastmod></url>
+  <url><loc>https://infraatlas.dev/decisions/cloud-run-vs-app-engine-flex/</loc><lastmod>2026-05-19</lastmod></url>
+  <url><loc>https://infraatlas.dev/decisions/fargate-vs-ec2/</loc><lastmod>2026-05-19</lastmod></url>
+  <url><loc>https://infraatlas.dev/decisions/nat-gateway-vs-instance-vs-no-nat/</loc><lastmod>2026-05-19</lastmod></url>
+  <url><loc>https://infraatlas.dev/decisions/rest-api-vs-http-api/</loc><lastmod>2026-05-19</lastmod></url>
+</urlset>

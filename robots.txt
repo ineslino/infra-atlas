@@ -1,0 +1,6 @@
+# Infra Atlas — https://infraatlas.dev
+# A neutral, free reference for cloud and API-management infrastructure.
+User-agent: *
+Allow: /
+
+Sitemap: https://infraatlas.dev/sitemap.xml

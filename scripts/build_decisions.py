@@ -16,6 +16,7 @@ vendor doc backing it, and every page lists numbered sources. Bump REVIEWED
 when the content is re-verified against the vendor docs.
 """
 import html
+import json
 import os
 
 REVIEWED = "2026-05-19"
@@ -316,6 +317,18 @@ def plain_title(d):
 
 def render_page(d):
     q = plain_title(d)
+    ld = json.dumps({
+        "@context": "https://schema.org",
+        "@type": "TechArticle",
+        "headline": q,
+        "description": d["sub"],
+        "url": f"https://infraatlas.dev/decisions/{d['slug']}/",
+        "datePublished": REVIEWED,
+        "dateModified": REVIEWED,
+        "inLanguage": "en",
+        "isPartOf": {"@type": "WebSite", "name": "Infra Atlas",
+                     "url": "https://infraatlas.dev/"},
+    }, indent=2).replace("<", "\\u003c")
     head = f"""<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -336,6 +349,9 @@ def render_page(d):
 <meta name="twitter:title" content="{esc(q)} · Infra Atlas Decisions">
 <meta name="twitter:description" content="{esc(d['sub'])}">
 <meta name="twitter:image" content="https://infraatlas.dev/og.png">
+<script type="application/ld+json">
+{ld}
+</script>
 {FONTS}
 <link rel="stylesheet" href="/decisions/decision.css">
 </head>
