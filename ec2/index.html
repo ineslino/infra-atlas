@@ -1071,7 +1071,7 @@ button:focus-visible,
         <span class="masthead__back-arrow">←</span>
         Infra Atlas · Cloud · AWS · EC2 Observatory
       </a>
-      <h1 class="masthead__title">EC2 <em>Observatory</em></h1>
+      <h1 class="masthead__title">EC2 <em>Observatory.</em></h1>
       <p class="masthead__subtitle">
         A live atlas of Amazon Elastic Compute Cloud instance availability across regions.
         Cross-reference <span>compute types</span> against <span>geographies</span> — the way picking the right instance for the right region should be.
@@ -2119,7 +2119,7 @@ function openRegionDrawer(region) {
       <span><strong>${visible.length}</strong> Families</span>
       <span>Since <strong>${region.since}</strong></span>
     </div>
-    <button class="drawer__close" onclick="closeDrawer()">Close ⤬</button>
+    <button class="drawer__close" onclick="closeDrawer()">Close <span aria-hidden="true">⤬</span></button>
   `;
 
   // group by category
@@ -2190,7 +2190,7 @@ function openInstanceDrawer(family, size) {
       <span title="On-demand Linux · ${state.priceRef}">Price <strong>${priceStr ? priceStr + "/hr" : "—"}</strong></span>
       <span><strong>${regions.length}</strong>/${state.data.regions.length} regions</span>
     </div>
-    <button class="drawer__close" onclick="closeDrawer()">Close ⤬</button>
+    <button class="drawer__close" onclick="closeDrawer()">Close <span aria-hidden="true">⤬</span></button>
   `;
 
   let body = `<div class="drawer__section">
@@ -2329,6 +2329,7 @@ function init() {
     if (e.key === "Escape") { closeDrawer(); return; }
     if (e.target.tagName === "INPUT") return;
     if (e.key === "/") { e.preventDefault(); $("#search").focus(); }
+    if (document.querySelector(".cmp-overlay.is-open")) return;
     if (e.key === "r" || e.key === "R") setMode("region");
     if (e.key === "i" || e.key === "I") setMode("instance");
   });
@@ -2403,7 +2404,7 @@ async function loadData() {
   overlay.setAttribute("aria-label", "Region comparison");
   overlay.setAttribute("aria-hidden", "true");
   overlay.innerHTML = '<div class="cmp-modal">'
-    + '<button class="cmp-modal__close" id="cmp-close" type="button">Close ✕</button>'
+    + '<button class="cmp-modal__close" id="cmp-close" type="button">Close <span aria-hidden="true">✕</span></button>'
     + '<div class="cmp-modal__body" id="cmp-body"></div></div>';
   document.body.appendChild(overlay);
 

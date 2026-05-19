@@ -2163,7 +2163,7 @@ function openCityDrawer(city) {
       <span><strong>${new Set(city.regions.map(r => r.p)).size}</strong> providers</span>
       <span>${city.lat.toFixed(2)}°, ${city.lng.toFixed(2)}°</span>
     </div>
-    <button class="drawer__close" onclick="closeDrawer()">Close ⤬</button>
+    <button class="drawer__close" onclick="closeDrawer()">Close <span aria-hidden="true">⤬</span></button>
   `;
   const earliest = Math.min(...city.regions.map(r => r.since));
   const azTotal  = city.regions.reduce((acc, r) => acc + r.az, 0);

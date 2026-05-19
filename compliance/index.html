@@ -1020,7 +1020,7 @@ function openFeatureDrawer(feature, focusVendor) {
     <div class="drawer__eyebrow">${(CATEGORIES.find(c => c.key === feature.category) || {}).label || ""}</div>
     <h3 class="drawer__title">${feature.name}</h3>
     <p class="drawer__desc">${feature.desc}</p>
-    <button class="drawer__close" type="button" onclick="closeDrawer()">Close ⤬</button>
+    <button class="drawer__close" type="button" onclick="closeDrawer()">Close <span aria-hidden="true">⤬</span></button>
   `;
   const body = VENDORS.map(v => {
     const s = feature.support[v.key] || { level: "no", note: "" };

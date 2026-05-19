@@ -954,7 +954,7 @@ function openTechDrawer(tech, focusCloud) {
     <div class="drawer__tags">${
       (tech.tags || []).map(t => `<span class="drawer__tag">${esc(t)}</span>`).join("")
     }</div>
-    <button class="drawer__close" id="drawer-close-btn" type="button">Close ⤬</button>
+    <button class="drawer__close" id="drawer-close-btn" type="button">Close <span aria-hidden="true">⤬</span></button>
   `;
   const rows = CLOUDS.map(c => {
     const s = tech.support[c.key] || { level: "no", note: "", fams: [], regions: "" };

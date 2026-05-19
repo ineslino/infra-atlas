@@ -828,7 +828,7 @@ function openTransferDrawer(transfer, focusProvider) {
     <div class="drawer__eyebrow">${escapeHtml(group)}</div>
     <h3 class="drawer__title">${escapeHtml(transfer.label)}</h3>
     <p class="drawer__desc">${escapeHtml(transfer.desc)}</p>
-    <button class="drawer__close" type="button" onclick="closeDrawer()">Close ⤬</button>
+    <button class="drawer__close" type="button" onclick="closeDrawer()">Close <span aria-hidden="true">⤬</span></button>
   `;
   const body = PROVIDERS.map(p => {
     const r = rateOf(transfer, p.key);

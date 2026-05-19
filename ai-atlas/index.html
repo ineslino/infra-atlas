@@ -437,7 +437,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, [tabindex]:focus-vis
       <div class="status-counts">
         <div>Platforms<strong id="count-vendors">5</strong></div>
         <div>Capabilities<strong id="count-features">—</strong></div>
-        <div>Asterisks<strong id="count-stars">—</strong></div>
+        <div>Footnotes<strong id="count-stars">—</strong></div>
       </div>
     </aside>
   </header>
@@ -992,7 +992,7 @@ function openFeatureDrawer(feature, focusVendor) {
     <div class="drawer__eyebrow">${escapeHtml(cat)}</div>
     <h3 class="drawer__title">${escapeHtml(feature.name)}</h3>
     <p class="drawer__desc">${escapeHtml(feature.desc)}</p>
-    <button class="drawer__close" type="button" onclick="closeDrawer()">Close ⤬</button>
+    <button class="drawer__close" type="button" onclick="closeDrawer()">Close <span aria-hidden="true">⤬</span></button>
   `;
   const body = VENDORS.map(v => {
     const s = feature.support[v.key] || { level: "no", value: "—", note: "" };

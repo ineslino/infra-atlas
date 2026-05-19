@@ -1532,7 +1532,7 @@ function openRegionDrawer(region) {
       <span><strong>${visible.length}</strong> Families</span>
       <span>Since <strong>${region.since}</strong></span>
     </div>
-    <button class="drawer__close" onclick="closeDrawer()">Close ⤬</button>
+    <button class="drawer__close" onclick="closeDrawer()">Close <span aria-hidden="true">⤬</span></button>
   `;
 
   // group by category
@@ -1594,7 +1594,7 @@ function openInstanceDrawer(family, size) {
       <span>Arch <strong>${family.arch === "x86" ? "x86_64" : "arm64"}</strong></span>
       <span><strong>${regions.length}</strong>/${state.data.regions.length} regions</span>
     </div>
-    <button class="drawer__close" onclick="closeDrawer()">Close ⤬</button>
+    <button class="drawer__close" onclick="closeDrawer()">Close <span aria-hidden="true">⤬</span></button>
   `;
 
   let body = `<div class="drawer__section">
@@ -1775,10 +1775,8 @@ async function loadData() {
   var overlay = document.createElement("div");
   overlay.className = "cmp-overlay";
   overlay.id = "cmp-overlay";
-  overlay.setAttribute("role", "dialog");
-  overlay.setAttribute("aria-modal", "true");
-  overlay.innerHTML = '<div class="cmp-modal">'
-    + '<button class="cmp-modal__close" id="cmp-close" type="button">Close ✕</button>'
+  overlay.innerHTML = '<div class="cmp-modal" role="dialog" aria-modal="true" aria-label="Region comparison">'
+    + '<button class="cmp-modal__close" id="cmp-close" type="button">Close <span aria-hidden="true">✕</span></button>'
     + '<div class="cmp-modal__body" id="cmp-body"></div></div>';
   document.body.appendChild(overlay);
 
@@ -1853,11 +1851,11 @@ async function loadData() {
       })(xs[i]);
     }
     var go = document.getElementById("cmp-go");
-    if (go) go.addEventListener("click", openComparison);
+    if (go) go.addEventListener("click", renderComparison);
     document.getElementById("cmp-exit").addEventListener("click", function () { setCompareMode(false); });
   }
 
-  function openComparison() {
+  function renderComparison() {
     if (state.compare.size < 2 || !state.data) return;
     var regions = Array.from(state.compare).map(regionByCode).filter(Boolean);
     if (regions.length < 2) return;
