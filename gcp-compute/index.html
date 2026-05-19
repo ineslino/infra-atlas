@@ -1924,9 +1924,47 @@ async function loadData() {
     html += '</div>';
 
     document.getElementById("cmp-body").innerHTML = html;
-    overlay.classList.add("is-open");
+    openComparison();
   }
-  function closeComparison() { overlay.classList.remove("is-open"); }
+
+  // ─── Focus management for the compare modal (self-contained) ───
+  var CMP_FOCUSABLE = 'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])';
+  var cmpLastFocus = null;
+  function cmpFocusables() {
+    return Array.prototype.filter.call(
+      overlay.querySelectorAll(CMP_FOCUSABLE),
+      function (el) { return el.offsetParent !== null || el === document.activeElement; }
+    );
+  }
+  function cmpTrapTab(e) {
+    if (e.key !== "Tab") return;
+    var f = cmpFocusables();
+    if (!f.length) return;
+    var first = f[0], last = f[f.length - 1];
+    if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+    else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+  }
+  function openComparison() {
+    cmpLastFocus = document.activeElement;
+    overlay.classList.add("is-open");
+    var main = document.getElementById("ia-main");
+    if (main) main.setAttribute("aria-hidden", "true");
+    if (dock) dock.setAttribute("aria-hidden", "true");
+    overlay.addEventListener("keydown", cmpTrapTab);
+    var closeBtn = document.getElementById("cmp-close");
+    var f = cmpFocusables();
+    (closeBtn || f[0] || overlay).focus();
+  }
+  function closeComparison() {
+    if (!overlay.classList.contains("is-open")) return;
+    overlay.classList.remove("is-open");
+    overlay.removeEventListener("keydown", cmpTrapTab);
+    var main = document.getElementById("ia-main");
+    if (main) main.removeAttribute("aria-hidden");
+    if (dock) dock.removeAttribute("aria-hidden");
+    if (cmpLastFocus && typeof cmpLastFocus.focus === "function") cmpLastFocus.focus();
+    cmpLastFocus = null;
+  }
   document.getElementById("cmp-close").addEventListener("click", closeComparison);
   overlay.addEventListener("mousedown", function (e) { if (e.target === overlay) closeComparison(); });
   document.addEventListener("keydown", function (e) {
