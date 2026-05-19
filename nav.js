@@ -44,6 +44,30 @@
     ["/decisions/nat-gateway-vs-instance-vs-no-nat/",        "NAT gateway vs instance vs no NAT",      "AWS",       "aws vpc nat gateway instance egress private subnet networking"]
   ];
 
+  // Per-page related instruments — hrefs must match ITEMS entries. Curated, not
+  // a full graph: 2–4 genuinely relevant siblings per page is the right size.
+  var RELATED = {
+    "/ec2/":                    ["/azure-vm/", "/equivalent-sku/", "/regions/"],
+    "/azure-vm/":               ["/ec2/", "/equivalent-sku/", "/regions/"],
+    "/gcp-compute/":            ["/equivalent-sku/", "/regions/", "/ai-atlas/"],
+    "/oci-compute/":            ["/equivalent-sku/", "/regions/", "/iam-matrix/"],
+    "/ovh-instances/":          ["/equivalent-sku/", "/regions/"],
+    "/regions/":                ["/ec2/", "/azure-vm/", "/gcp-compute/"],
+    "/equivalent-sku/":         ["/ec2/", "/azure-vm/", "/gcp-compute/", "/oci-compute/"],
+    "/kubernetes/":             ["/networking-matrix/", "/iam-matrix/", "/equivalent-sku/"],
+    "/iam-matrix/":             ["/networking-matrix/", "/kubernetes/", "/confidential-computing/"],
+    "/apim-matrix/":            ["/aws-api-gateway/", "/apigee/", "/mulesoft/"],
+    "/aws-api-gateway/":        ["/apim-matrix/", "/apigee/", "/mulesoft/"],
+    "/apigee/":                 ["/apim-matrix/", "/aws-api-gateway/", "/mulesoft/"],
+    "/mulesoft/":               ["/apim-matrix/", "/aws-api-gateway/", "/apigee/"],
+    "/self-hosted-apim/":       ["/apim-matrix/", "/aws-api-gateway/"],
+    "/compliance/":             ["/regions/", "/confidential-computing/"],
+    "/confidential-computing/": ["/compliance/", "/iam-matrix/"],
+    "/ai-atlas/":               ["/gcp-compute/", "/networking-matrix/"],
+    "/networking-matrix/":      ["/egress/", "/iam-matrix/", "/kubernetes/"],
+    "/egress/":                 ["/networking-matrix/", "/regions/"]
+  };
+
   // Normalise current path → "/ec2/" form
   var here = location.pathname.replace(/index\.html$/, "");
   if (here.charAt(here.length - 1) !== "/") here += "/";
@@ -157,6 +181,19 @@
     + 'letter-spacing:0.04em;padding:9px 16px;border-radius:5px;text-decoration:none;'
     + 'transform:translateY(-160%);transition:transform .15s;}'
     + '.ia-skip:focus{transform:translateY(0);}'
+    /* related-instruments — small pill strip injected after the masthead */
+    + '.ia-related{display:flex;align-items:center;gap:10px;flex-wrap:wrap;'
+    + 'margin:-12px 0 28px 0;}'
+    + '.ia-related__label{font-family:var(--mono,monospace);font-size:9.5px;'
+    + 'letter-spacing:0.2em;text-transform:uppercase;'
+    + 'color:var(--paper-3,rgba(244,239,230,0.55));}'
+    + '.ia-related__item{font-family:var(--mono,monospace);font-size:11px;'
+    + 'letter-spacing:0.04em;color:var(--paper-2,rgba(244,239,230,0.66));'
+    + 'text-decoration:none;padding:5px 11px;'
+    + 'border:1px solid var(--line-2,rgba(244,239,230,0.14));'
+    + 'border-radius:99px;transition:color .15s,border-color .15s;}'
+    + '.ia-related__item:hover{color:var(--paper,#F4EFE6);'
+    + 'border-color:var(--paper-3,rgba(244,239,230,0.42));}'
     /* donation surface — gratitude module + footer support strip */
     + '.ia-grat{margin:56px 0 4px;}'
     + '.ia-grat__in{display:flex;align-items:center;justify-content:space-between;'
@@ -305,6 +342,34 @@
         });
       }
     });
+  })();
+
+  // ── Related instruments — small pill strip after the masthead ─────
+  (function () {
+    if (!current || !RELATED[current.href]) return;
+    var masthead = document.querySelector(".masthead");
+    if (!masthead) return;
+    var hrefs = RELATED[current.href];
+    var items = [];
+    for (var i = 0; i < hrefs.length; i++) {
+      for (var j = 0; j < ITEMS.length; j++) {
+        if (ITEMS[j].href === hrefs[i]) { items.push(ITEMS[j]); break; }
+      }
+    }
+    if (!items.length) return;
+    function relEsc(s) {
+      return String(s).replace(/[&<>"]/g, function (c) {
+        return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c];
+      });
+    }
+    var rel = document.createElement("aside");
+    rel.className = "ia-related";
+    rel.setAttribute("aria-label", "Related instruments");
+    rel.innerHTML = '<span class="ia-related__label">Related</span>' +
+      items.map(function (it) {
+        return '<a class="ia-related__item" href="' + it.href + '">' + relEsc(it.name) + '</a>';
+      }).join("");
+    masthead.parentNode.insertBefore(rel, masthead.nextSibling);
   })();
 
   // ── Behaviour ────────────────────────────────────────────────────
