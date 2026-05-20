@@ -96,17 +96,41 @@ input[type="range"]::-moz-range-thumb {
 .vcard__verdict.is-pass { color: var(--mint); border: 1px solid rgba(111,231,181,0.4); }
 .vcard__verdict.is-warn { color: var(--gold); border: 1px solid rgba(244,198,96,0.4); }
 .vcard__verdict.is-fail { color: var(--rose); border: 1px solid rgba(244,123,123,0.4); }
-.vcard__limits { display: flex; flex-direction: column; gap: 8px; }
+/* The limits stack is itself the grid — each .lim row spans all three
+   parent columns via `subgrid`. This is what makes the value and verdict
+   columns line up vertically across rows of the same card; with each .lim
+   as an independent grid (the previous structure) the auto-sized columns
+   varied per row and the verdict ✓/⚠/✕ wandered horizontally. */
+.vcard__limits {
+  display: grid;
+  /* Col 1 (max-content): the name column always fits the widest constraint
+     name in this card without wrapping ("Backend timeout" is 15 chars and
+     the longest). With plain `auto` here, the greedy 1fr column squeezes
+     col 1 small enough to force a line-wrap.
+     Col 2 (minmax(0, 1fr)): without `minmax(0,…)` the column also grows to
+     max-content because `.lim__val` is content-shaped — overflowing the
+     card. The `0` lower bound lets the value column shrink below content
+     width and the value text wrap onto a second line for the long entries
+     (e.g. "30 MB buffered (streaming bypasses)"). */
+  grid-template-columns: max-content minmax(0, 1fr) auto;
+  row-gap: 8px;
+  column-gap: 10px;
+}
 .lim {
-  display: grid; grid-template-columns: 1fr auto auto; gap: 10px; align-items: baseline;
-  padding: 9px 12px; border: 1px solid var(--line); border-radius: 4px;
+  display: grid;
+  grid-template-columns: subgrid;
+  grid-column: 1 / -1;
+  align-items: baseline;
+  padding: 9px 12px;
+  border: 1px solid var(--line);
+  border-radius: 4px;
 }
 .lim.is-active { border-color: var(--line-2); background: rgba(244,239,230,0.02); }
 .lim.is-active.is-pass { border-color: rgba(111,231,181,0.32); }
 .lim.is-active.is-warn { border-color: rgba(244,198,96,0.32); }
 .lim.is-active.is-fail { border-color: rgba(244,123,123,0.32); }
 .lim__name { font-family: var(--mono); font-size: 11px; letter-spacing: 0.04em; color: var(--paper-2); }
-.lim__val { font-family: var(--mono); font-size: 11.5px; color: var(--paper); font-weight: 500; text-align: right; white-space: nowrap; }
+.lim__val { font-family: var(--mono); font-size: 11.5px; color: var(--paper); font-weight: 500; text-align: right; min-width: 0; word-break: break-word; }
 .lim__verdict { font-family: var(--mono); font-size: 12px; min-width: 18px; text-align: center; }
 .lim__verdict.is-pass { color: var(--mint); }
 .lim__verdict.is-warn { color: var(--gold); }
