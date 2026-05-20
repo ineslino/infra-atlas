@@ -32,6 +32,11 @@
     ["/egress/",                 "Egress & Transfer Cost Map","Cross-cloud", "egress data transfer cost networking bandwidth nat gateway interconnect direct connect expressroute cross-region cross-az internet bill price gigabyte"],
     ["/networking-matrix/",      "Networking Matrix",      "Cross-cloud", "networking primitives vpc vnet vcn subnet route table peering transit gateway virtual wan ncc drg firewall security group nsg network acl nat load balancer privatelink private link rosetta aws azure gcp oci"]
   ];
+  var TOOLS = [
+    ["/tools/egress-cost/",  "Egress Cost Calculator",     "Tool", "egress cost calculator bandwidth bill data transfer aws azure gcp price tier compare"],
+    ["/tools/subnet/",       "Subnet Calculator",          "Tool", "subnet cidr calculator vpc vnet vcn reserved ips usable hosts aws azure gcp oci ipv4 ipv6"],
+    ["/tools/apim-limits/",  "APIM Limits Picker",         "Tool", "apim api gateway limits timeout payload rate limit websocket pick choose vendor mulesoft apigee"]
+  ];
   var DECISIONS = [
     ["/decisions/",                                          "Decisions — the hub",                   "Decisions", "decision guide which one should i use compare versus vs choose"],
     ["/decisions/app-engine-vs-compute-engine/",             "App Engine vs Compute Engine",          "GCP",       "google paas iaas serverless vm app engine compute engine"],
@@ -56,7 +61,6 @@
     "/equivalent-sku/":         ["/ec2/", "/azure-vm/", "/gcp-compute/", "/oci-compute/"],
     "/kubernetes/":             ["/networking-matrix/", "/iam-matrix/", "/equivalent-sku/"],
     "/iam-matrix/":             ["/networking-matrix/", "/kubernetes/", "/confidential-computing/"],
-    "/apim-matrix/":            ["/aws-api-gateway/", "/apigee/", "/mulesoft/"],
     "/aws-api-gateway/":        ["/apim-matrix/", "/apigee/", "/mulesoft/"],
     "/apigee/":                 ["/apim-matrix/", "/aws-api-gateway/", "/mulesoft/"],
     "/mulesoft/":               ["/apim-matrix/", "/aws-api-gateway/", "/apigee/"],
@@ -64,8 +68,12 @@
     "/compliance/":             ["/regions/", "/confidential-computing/"],
     "/confidential-computing/": ["/compliance/", "/iam-matrix/"],
     "/ai-atlas/":               ["/gcp-compute/", "/networking-matrix/"],
-    "/networking-matrix/":      ["/egress/", "/iam-matrix/", "/kubernetes/"],
-    "/egress/":                 ["/networking-matrix/", "/regions/"]
+    "/networking-matrix/":      ["/egress/", "/tools/subnet/", "/iam-matrix/", "/kubernetes/"],
+    "/egress/":                 ["/tools/egress-cost/", "/networking-matrix/", "/regions/"],
+    "/apim-matrix/":            ["/tools/apim-limits/", "/aws-api-gateway/", "/apigee/", "/mulesoft/"],
+    "/tools/egress-cost/":      ["/egress/", "/networking-matrix/"],
+    "/tools/subnet/":           ["/networking-matrix/", "/regions/"],
+    "/tools/apim-limits/":      ["/apim-matrix/", "/aws-api-gateway/"]
   };
 
   // Normalise current path → "/ec2/" form
@@ -91,6 +99,7 @@
   pushGroup(CLOUD, "Cloud Compute");
   pushGroup(APIM, "API Management");
   pushGroup(XCLOUD, "Cross-Cloud");
+  pushGroup(TOOLS, "Tools");
   pushGroup(DECISIONS, "Decisions");
 
   var current = null;

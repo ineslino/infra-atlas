@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="color-scheme" content="dark">
+<title>APIM Limits Picker · Infra Atlas</title>
+<link rel="icon" href="/favicon.svg?v=2" type="image/svg+xml">
+<meta name="description" content="Pick the constraints — backend timeout, request payload, gRPC, mTLS, GraphQL — and see which API management vendors clear the bar. Apigee, AWS, Azure, Mulesoft, Kong, Gravitee and IBM API Connect, side by side, sourced.">
+<link rel="canonical" href="https://infraatlas.dev/tools/apim-limits/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Infra Atlas">
+<meta property="og:title" content="APIM Limits Picker · Infra Atlas">
+<meta property="og:description" content="Tick the constraints you actually need — backend timeout, payload size, gRPC, mTLS — and see which API management vendor clears the bar.">
+<meta property="og:url" content="https://infraatlas.dev/tools/apim-limits/">
+<meta property="og:image" content="https://infraatlas.dev/og.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="APIM Limits Picker · Infra Atlas">
+<meta name="twitter:description" content="Tick the constraints you actually need — see which API management vendor clears the bar.">
+<meta name="twitter:image" content="https://infraatlas.dev/og.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@300;400;500;600&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+:root {
+  --ink: #0A0907; --ink-2: #100E0C; --surface: #161310; --surface-2: #1E1A15;
+  --line: rgba(244, 239, 230, 0.06); --line-2: rgba(244, 239, 230, 0.14); --line-3: rgba(244, 239, 230, 0.28);
+  --paper: #F4EFE6; --paper-2: rgba(244, 239, 230, 0.66); --paper-3: rgba(244, 239, 230, 0.55);
+  --accent: #FF7849; --accent-2: #FFA66E;
+  --mint: #6FE7B5; --gold: #F4C660; --rose: #F47B7B;
+  --serif: 'Instrument Serif', 'Times New Roman', serif;
+  --mono: 'JetBrains Mono', ui-monospace, monospace;
+  --sans: 'Manrope', -apple-system, system-ui, sans-serif;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { background: var(--ink); color: var(--paper); font-family: var(--sans); font-size: 15px; line-height: 1.55; -webkit-font-smoothing: antialiased; min-height: 100vh; }
+body {
+  background:
+    radial-gradient(ellipse at 100% -10%, rgba(255, 120, 73, 0.07), transparent 55%),
+    radial-gradient(ellipse at -10% 110%, rgba(244, 198, 96, 0.05), transparent 65%),
+    var(--ink);
+  background-attachment: fixed; overflow-x: hidden;
+}
+.grain { pointer-events: none; position: fixed; inset: 0; z-index: 100; opacity: 0.08; mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml;utf8,<svg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.6 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+}
+.scanlines { pointer-events: none; position: fixed; inset: 0; z-index: 99;
+  background: repeating-linear-gradient(180deg, transparent, transparent 2px, rgba(244,239,230,0.012) 2px, rgba(244,239,230,0.012) 3px);
+}
+::selection { background: var(--accent); color: var(--ink); }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 2px; }
+
+.page { max-width: 1180px; margin: 0 auto; padding: 56px 32px 96px; position: relative; }
+
+.masthead { padding-bottom: 28px; border-bottom: 1px solid var(--line); margin-bottom: 36px; }
+.eyebrow { font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.22em; color: var(--paper-3);
+  text-transform: uppercase; display: inline-flex; align-items: center; gap: 12px; text-decoration: none; transition: color 0.2s ease; }
+.eyebrow:hover { color: var(--paper); }
+.eyebrow .arrow { color: var(--accent); transition: transform 0.2s ease; }
+.eyebrow:hover .arrow { transform: translateX(-4px); }
+h1.title { font-family: var(--serif); font-weight: 400; font-size: clamp(40px, 6.4vw, 76px); line-height: 0.98; letter-spacing: -0.02em; margin-top: 12px; color: var(--paper); }
+h1.title em { font-style: italic; color: var(--accent); }
+.subtitle { margin-top: 16px; font-size: 15.5px; color: var(--paper-2); line-height: 1.6; max-width: 740px; }
+.subtitle a { color: var(--paper); text-decoration: underline; text-decoration-color: var(--accent); text-underline-offset: 3px; }
+
+/* ─────────── CONSTRAINT PANEL ─────────── */
+.panel {
+  display: grid; grid-template-columns: repeat(2, 1fr); gap: 22px;
+  padding: 24px; background: linear-gradient(180deg, var(--surface) 0%, var(--ink-2) 100%);
+  border: 1px solid var(--line-2); border-radius: 6px; margin-bottom: 28px;
+}
+.group { display: flex; flex-direction: column; gap: 12px; }
+.group__title { font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--paper-3); border-bottom: 1px solid var(--line); padding-bottom: 6px; }
+.slider { display: flex; flex-direction: column; gap: 6px; }
+.slider__head { display: flex; justify-content: space-between; align-items: baseline; font-family: var(--mono); font-size: 12.5px; }
+.slider__label { color: var(--paper-2); }
+.slider__val { color: var(--paper); font-weight: 500; }
+input[type="range"] {
+  -webkit-appearance: none; appearance: none;
+  width: 100%; height: 4px; border-radius: 2px;
+  background: var(--surface-2); outline: none; cursor: pointer;
+}
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none; appearance: none;
+  width: 16px; height: 16px; border-radius: 50%;
+  background: var(--accent); cursor: pointer;
+}
+input[type="range"]::-moz-range-thumb {
+  width: 16px; height: 16px; border-radius: 50%;
+  background: var(--accent); border: 0; cursor: pointer;
+}
+.checks { display: flex; flex-direction: column; gap: 9px; }
+.check { display: flex; align-items: center; gap: 12px; cursor: pointer;
+  font-family: var(--sans); font-size: 13.5px; color: var(--paper-2); user-select: none; }
+.check input { position: absolute; opacity: 0; pointer-events: none; }
+.check__box {
+  width: 18px; height: 18px; border: 1px solid var(--line-3); border-radius: 3px;
+  display: inline-flex; align-items: center; justify-content: center;
+  background: var(--ink); transition: all 0.15s;
+  font-family: var(--mono); font-size: 12px; color: var(--ink);
+}
+.check input:checked + .check__box { background: var(--accent); border-color: var(--accent); }
+.check input:checked + .check__box::after { content: "✓"; color: var(--ink); font-weight: 700; }
+.check:hover { color: var(--paper); }
+.check__hint { color: var(--paper-3); font-size: 11.5px; font-family: var(--mono); margin-left: 6px; }
+.reset { margin-top: 4px; align-self: flex-start; background: transparent; color: var(--paper-3);
+  border: 1px solid var(--line-2); border-radius: 99px; padding: 6px 14px;
+  font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.12em; text-transform: uppercase;
+  cursor: pointer; transition: all 0.15s; }
+.reset:hover { color: var(--paper); border-color: var(--paper-3); }
+
+/* ─────────── RESULTS HEADER ─────────── */
+.tally { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 18px; }
+.tally__count { font-family: var(--serif); font-style: italic; font-size: 28px; color: var(--paper); }
+.tally__count em { color: var(--accent); font-style: italic; }
+.tally__hint { font-family: var(--mono); font-size: 11px; color: var(--paper-3); letter-spacing: 0.04em; }
+
+/* ─────────── VENDOR CARDS ─────────── */
+.vendors { display: grid; grid-template-columns: repeat(auto-fit, minmax(310px, 1fr)); gap: 14px; }
+.vcard {
+  background: var(--surface); border: 1px solid var(--line); border-radius: 5px; padding: 22px;
+  display: flex; flex-direction: column; gap: 14px; transition: opacity 0.15s, border-color 0.15s;
+}
+.vcard.is-pass { border-color: rgba(111, 231, 181, 0.4); background: linear-gradient(180deg, rgba(111,231,181,0.04), transparent 60%), var(--surface); }
+.vcard.is-fail { opacity: 0.5; }
+.vcard__head { display: flex; align-items: center; justify-content: space-between; }
+.vcard__name { font-family: var(--mono); font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--paper-2); display: inline-flex; align-items: center; gap: 8px; }
+.vcard__name .dot { width: 9px; height: 9px; border-radius: 2px; }
+.vcard__verdict { font-family: var(--mono); font-size: 9.5px; letter-spacing: 0.16em; text-transform: uppercase; padding: 3px 9px; border-radius: 99px; }
+.vcard__verdict.is-pass { color: var(--mint); border: 1px solid rgba(111,231,181,0.4); }
+.vcard__verdict.is-fail { color: var(--rose); border: 1px solid rgba(244,123,123,0.4); }
+.vcard__limits { display: flex; flex-direction: column; gap: 8px; }
+.lim {
+  display: grid; grid-template-columns: 1fr auto auto; gap: 10px; align-items: baseline;
+  padding: 9px 12px; border: 1px solid var(--line); border-radius: 4px;
+}
+.lim.is-active { border-color: var(--line-2); background: rgba(244,239,230,0.02); }
+.lim.is-active.is-pass { border-color: rgba(111,231,181,0.32); }
+.lim.is-active.is-fail { border-color: rgba(244,123,123,0.32); }
+.lim__name { font-family: var(--mono); font-size: 11px; letter-spacing: 0.04em; color: var(--paper-2); }
+.lim__val { font-family: var(--mono); font-size: 11.5px; color: var(--paper); font-weight: 500; text-align: right; white-space: nowrap; }
+.lim__verdict { font-family: var(--mono); font-size: 12px; min-width: 18px; text-align: center; }
+.lim__verdict.is-pass { color: var(--mint); }
+.lim__verdict.is-fail { color: var(--rose); }
+.lim__verdict.is-mute { color: var(--paper-3); }
+.vcard__notes { font-family: var(--sans); font-size: 12px; color: var(--paper-2); line-height: 1.5; border-top: 1px solid var(--line); padding-top: 12px; }
+.vcard__notes p { margin-top: 6px; }
+.vcard__notes p:first-child { margin-top: 0; }
+.vcard__notes strong { color: var(--paper); }
+.vcard__src { font-family: var(--mono); font-size: 10px; }
+.vcard__src a { color: var(--paper-3); text-decoration: underline; text-decoration-color: var(--line-2); text-underline-offset: 3px; word-break: break-all; }
+.vcard__src a:hover { color: var(--accent); }
+
+/* ─────────── ABOUT / COLOPHON ─────────── */
+.about { padding: 20px 24px; border: 1px solid var(--line); border-radius: 5px;
+  background: linear-gradient(180deg, rgba(255,120,73,0.05), rgba(255,120,73,0.01));
+  border-color: rgba(255,120,73,0.22); margin: 28px 0; }
+.about__mark { font-family: var(--serif); font-style: italic; font-size: 28px; color: var(--accent); float: left; margin: 0 14px 0 0; line-height: 0.9; }
+.about p { font-size: 13.5px; color: var(--paper-2); line-height: 1.6; }
+.about strong { color: var(--paper); font-weight: 600; }
+.about a { color: var(--paper); text-decoration: underline; text-decoration-color: var(--accent); text-underline-offset: 3px; }
+.about a:hover { color: var(--accent); }
+
+.colophon { margin-top: 64px; padding-top: 28px; border-top: 1px solid var(--line);
+  font-family: var(--mono); font-size: 11px; letter-spacing: 0.06em; color: var(--paper-3); }
+.colophon a { color: var(--paper-2); text-decoration: underline; text-decoration-color: var(--line-2); text-underline-offset: 3px; }
+.colophon a:hover { color: var(--accent); }
+
+@media (max-width: 760px) {
+  .panel { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<div class="grain"></div>
+<div class="scanlines"></div>
+
+<div class="page">
+
+  <header class="masthead">
+    <a class="eyebrow" href="../"><span class="arrow">←</span> Infra Atlas · Tools</a>
+    <h1 class="title">APIM Limits <em>Picker.</em></h1>
+    <p class="subtitle">Tick the constraints your service actually needs — backend timeout, max payload, gRPC, mTLS, GraphQL — and see which API management vendor clears the bar. Built on the cross-vendor <a href="/apim-matrix/">APIM Matrix</a>.</p>
+  </header>
+
+  <main id="ia-main">
+
+    <!-- Inputs -->
+    <section class="panel" aria-label="Constraint picker">
+
+      <div class="group">
+        <div class="group__title">Numeric thresholds</div>
+
+        <div class="slider">
+          <div class="slider__head">
+            <span class="slider__label">Minimum backend timeout</span>
+            <span class="slider__val" id="t-timeout-val">≥ 30 s</span>
+          </div>
+          <input type="range" id="t-timeout" min="0" max="300" step="5" value="30" aria-label="Minimum backend timeout in seconds">
+        </div>
+
+        <div class="slider">
+          <div class="slider__head">
+            <span class="slider__label">Minimum request payload</span>
+            <span class="slider__val" id="t-payload-val">≥ 10 MB</span>
+          </div>
+          <input type="range" id="t-payload" min="0" max="1024" step="1" value="10" aria-label="Minimum request payload in MB">
+        </div>
+
+      </div>
+
+      <div class="group">
+        <div class="group__title">Capabilities</div>
+        <div class="checks">
+          <label class="check"><input type="checkbox" id="c-mtls"><span class="check__box"></span>mTLS (client cert auth)<span class="check__hint">— B2B / zero-trust</span></label>
+          <label class="check"><input type="checkbox" id="c-grpc"><span class="check__box"></span>gRPC support<span class="check__hint">— passthrough or transcoding</span></label>
+          <label class="check"><input type="checkbox" id="c-graphql"><span class="check__box"></span>GraphQL passthrough<span class="check__hint">— proxy GraphQL endpoints</span></label>
+          <label class="check"><input type="checkbox" id="c-oauth-cc"><span class="check__box"></span>OAuth 2.0 Client Credentials<span class="check__hint">— native token issuance</span></label>
+          <label class="check"><input type="checkbox" id="c-self-host"><span class="check__box"></span>Self-hostable<span class="check__hint">— run in your own VPC / cluster</span></label>
+        </div>
+        <button type="button" class="reset" id="reset">Clear constraints</button>
+      </div>
+
+    </section>
+
+    <!-- Tally -->
+    <div class="tally">
+      <div class="tally__count" id="tally"></div>
+      <div class="tally__hint">✓ = constraint met · ✕ = does not clear the bar</div>
+    </div>
+
+    <!-- Vendor cards -->
+    <section class="vendors" id="vendors" aria-live="polite" aria-label="Vendor results"></section>
+
+    <!-- About -->
+    <div class="about">
+      <span class="about__mark">*</span>
+      <p><strong>Most of these are <em>operator-set</em>, not vendor-imposed.</strong> The numeric thresholds here are the headline maximum each vendor will let you raise to — not their default. Anything beyond the platform ceiling is a hard wall (e.g. AWS's 10 MB payload, 30 s HTTP API timeout) and cannot be raised. "Configurable" vendors will let you go as high as your backend tolerates. Always read the full footnote in the <a href="/apim-matrix/">APIM Matrix</a> before committing.</p>
+    </div>
+
+  </main>
+
+  <footer class="colophon">
+    <p>Infra Atlas · <a href="../">Tools</a> · <a href="/apim-matrix/">APIM Matrix</a> · <a href="https://github.com/ineslino/infra-atlas" target="_blank" rel="noopener">GitHub</a> · MIT-licensed · Verified <time datetime="2026-05-19">2026-05-19</time></p>
+  </footer>
+
+</div>
+
+<script>
+// ═══════════════════════════════════════════════════════════════════
+// APIM Limits Picker · Infra Atlas
+//
+// Data mirrors the lim-timeout, lim-payload, mtls, grpc, graphql-passthru,
+// oauth-cc rows of /apim-matrix/ (verified 2026-05-19). "max" = the highest
+// value the vendor will let the operator raise to — null means "configurable
+// without a vendor-imposed ceiling". "hard" = the ceiling is not raisable.
+// ═══════════════════════════════════════════════════════════════════
+
+const VENDORS = [
+  { key: "apigee",   name: "Apigee",            swatch: "#F4C660" },
+  { key: "aws",      name: "AWS API Gateway",   swatch: "#FF9F66" },
+  { key: "azure",    name: "Azure APIM",        swatch: "#7CD7F1" },
+  { key: "mulesoft", name: "Mulesoft Anypoint", swatch: "#C586E8" },
+  { key: "kong",     name: "Kong / Konnect",    swatch: "#6FE7B5" },
+  { key: "gravitee", name: "Gravitee",          swatch: "#FFA66E" },
+  { key: "ibm",      name: "IBM API Connect",   swatch: "#A8A39A" }
+];
+
+const LIMITS = {
+  timeout: {
+    apigee:   { max: 300,  hard: true,  display: "300 s max (default 55 s)" },
+    aws:      { max: 30,   hard: true,  display: "30 s HTTP · 29 s REST (raisable)" },
+    azure:    { max: 300,  hard: false, display: "300 s default, configurable" },
+    mulesoft: { max: null, hard: false, display: "10 s default, no ceiling" },
+    kong:     { max: null, hard: false, display: "60 s default, no ceiling" },
+    gravitee: { max: null, hard: false, display: "Per-endpoint, no ceiling" },
+    ibm:      { max: null, hard: false, display: "60 s default, no ceiling" }
+  },
+  // payload — values in MB.
+  payload: {
+    apigee:   { max: 30,    hard: true,  display: "30 MB buffered (streaming bypasses)" },
+    aws:      { max: 10,    hard: true,  display: "10 MB (non-raisable)" },
+    azure:    { max: 1024,  hard: true,  display: "1 GiB (v2 / Consumption); 500 MiB classic" },
+    mulesoft: { max: 1024,  hard: true,  display: "1 GB (CloudHub 2.0); no limit on self-hosted" },
+    kong:     { max: null,  hard: false, display: "128 MB default, operator-set" },
+    gravitee: { max: null,  hard: false, display: "No vendor limit" },
+    ibm:      { max: 5120,  hard: true,  display: "4 MB default, up to ~5 GB" }
+  },
+  mtls: {
+    apigee: "yes", aws: "part", azure: "yes", mulesoft: "yes", kong: "yes", gravitee: "yes", ibm: "yes"
+  },
+  grpc: {
+    apigee: "part", aws: "part", azure: "part", mulesoft: "yes", kong: "yes", gravitee: "yes", ibm: "no"
+  },
+  graphql: {
+    apigee: "yes", aws: "yes", azure: "yes", mulesoft: "yes", kong: "yes", gravitee: "yes", ibm: "yes"
+  },
+  "oauth-cc": {
+    apigee: "yes", aws: "part", azure: "yes", mulesoft: "yes", kong: "yes", gravitee: "yes", ibm: "yes"
+  },
+  // Self-hostable = can run in customer infrastructure (not SaaS-only)
+  "self-host": {
+    apigee: "part",   // Hybrid only
+    aws: "no",
+    azure: "part",    // self-hosted gateway exists but plane is in Azure
+    mulesoft: "yes",  // Flex Gateway / customer-hosted runtime
+    kong: "yes",
+    gravitee: "yes",
+    ibm: "yes"
+  }
+};
+
+const NOTES = {
+  apigee:   { mtls: "Native two-way SSL.", grpc: "gRPC proxy on Apigee X — recent; no full HTTP transcoding.", graphql: "GraphQL policy validates and routes.", "oauth-cc": "Native via OAuthV2 policy.", "self-host": "Hybrid only — control plane stays in Google Cloud." },
+  aws:      { mtls: "Custom domain mTLS only, not on private APIs.", grpc: "VPC Link can route gRPC; transcoding not native.", graphql: "Opaque POST; AppSync is the real GraphQL story.", "oauth-cc": "Not native — implement via Cognito or Lambda authorizer.", "self-host": "SaaS only — cannot run API Gateway outside AWS." },
+  azure:    { mtls: "Custom domain + inbound mTLS policy.", grpc: "Pass-through in self-hosted gateway; transcoding limited.", graphql: "Native since 2023, including synthetic schemas.", "oauth-cc": "Native OAuth2 via Entra ID, Auth0, Okta etc.", "self-host": "Self-hosted gateway runs anywhere, but the control plane is Azure SaaS." },
+  mulesoft: { mtls: "Configurable at HTTP listener; Flex Gateway also supports.", grpc: "gRPC connector + transcoding native.", graphql: "HTTP listener handles GraphQL transparently.", "oauth-cc": "Anypoint Identity Manager OAuth provider.", "self-host": "Flex Gateway and customer-hosted runtime both ship for self-host." },
+  kong:     { mtls: "mtls-auth (Enterprise) — OSS does TLS termination only.", grpc: "grpc-gateway + grpc-web plugins.", graphql: "Native; graphql-rate-limiting-advanced plugin.", "oauth-cc": "oauth2 plugin (OSS + Enterprise).", "self-host": "Fully self-hostable; OSS runs anywhere." },
+  gravitee: { mtls: "Built-in mTLS authentication.", grpc: "gRPC native in v4 with REST → gRPC transcoding.", graphql: "GraphQL APIs supported natively in v4.", "oauth-cc": "Gravitee AM included as identity manager.", "self-host": "Open source; runs in any cluster." },
+  ibm:      { mtls: "Native two-way TLS at the gateway.", grpc: "No native gRPC support.", graphql: "Passthrough supported; no native schema management.", "oauth-cc": "Built-in OAuth provider, plus IBM Security Verify.", "self-host": "Runs on-prem, Kubernetes or IBM Cloud." }
+};
+
+const SRC = {
+  timeout: {
+    apigee: "https://cloud.google.com/apigee/docs/api-platform/troubleshoot/playbooks/runtime/504-target-read-timeout",
+    aws: "https://docs.aws.amazon.com/apigateway/latest/developerguide/limits.html",
+    azure: "https://learn.microsoft.com/en-us/azure/api-management/forward-request-policy",
+    mulesoft: "https://docs.mulesoft.com/http-connector/latest/http-documentation",
+    kong: "https://developer.konghq.com/gateway/entities/service/",
+    gravitee: "https://documentation.gravitee.io/apim/4.1/overview/gravitee-api-definitions-and-execution-engines/timeout-management",
+    ibm: "https://www.ibm.com/docs/en/api-connect/10.0.x_cd?topic=invoke-configuring-policy-datapower-api-gateway"
+  },
+  payload: {
+    apigee: "https://cloud.google.com/apigee/docs/api-platform/reference/limits",
+    aws: "https://docs.aws.amazon.com/apigateway/latest/developerguide/limits.html",
+    azure: "https://learn.microsoft.com/en-us/azure/azure-resource-manager/management/azure-subscription-service-limits",
+    mulesoft: "https://docs.mulesoft.com/cloudhub-2/ch2-limits",
+    kong: "https://developer.konghq.com/plugins/request-size-limiting/reference/",
+    gravitee: "https://documentation.gravitee.io/apim/create-and-configure-apis/apply-policies/policy-reference/request-content-limit",
+    ibm: "https://www.ibm.com/docs/en/api-connect/10.0.x_cd?topic=policies-parse"
+  }
+};
+
+const state = { timeout: 30, payload: 10, mtls: false, grpc: false, graphql: false, "oauth-cc": false, "self-host": false };
+
+const $ = (s) => document.querySelector(s);
+const $$ = (s) => Array.from(document.querySelectorAll(s));
+const esc = (s) => String(s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+
+// ─── Verdict helpers ───
+// For numeric limits, pass if vendor.max === null (no ceiling) OR vendor.max >= required.
+function numericPass(limit, vendorKey, required) {
+  if (required <= 0) return { active: false, pass: true };
+  const v = LIMITS[limit][vendorKey];
+  if (!v) return { active: true, pass: false };
+  if (v.max === null) return { active: true, pass: true };
+  return { active: true, pass: v.max >= required };
+}
+// For boolean capabilities: required = checked.
+// Passes if level === "yes". "part" is a partial pass, treat as fail
+// for strict constraints but show ⚠.
+function capPass(cap, vendorKey, required) {
+  if (!required) return { active: false, pass: true, level: LIMITS[cap][vendorKey] };
+  const level = LIMITS[cap][vendorKey];
+  return { active: true, pass: level === "yes", level };
+}
+
+function fmtMB(mb) {
+  if (mb >= 1024) return (mb / 1024) + " GB";
+  return mb + " MB";
+}
+
+// ─── Render ───
+function render() {
+  // Update slider readouts
+  $("#t-timeout-val").textContent = state.timeout === 0 ? "any" : "≥ " + state.timeout + " s";
+  $("#t-payload-val").textContent = state.payload === 0 ? "any" : "≥ " + fmtMB(state.payload);
+
+  let passing = 0;
+  const html = VENDORS.map((v) => {
+    const checks = [
+      { id: "timeout", label: "Backend timeout", val: LIMITS.timeout[v.key].display, ...numericPass("timeout", v.key, state.timeout) },
+      { id: "payload", label: "Request payload",  val: LIMITS.payload[v.key].display, ...numericPass("payload", v.key, state.payload) },
+      { id: "mtls",    label: "mTLS",             val: LIMITS.mtls[v.key],     ...capPass("mtls", v.key, state.mtls) },
+      { id: "grpc",    label: "gRPC",             val: LIMITS.grpc[v.key],     ...capPass("grpc", v.key, state.grpc) },
+      { id: "graphql", label: "GraphQL",          val: LIMITS.graphql[v.key],  ...capPass("graphql", v.key, state.graphql) },
+      { id: "oauth-cc", label: "OAuth CC",        val: LIMITS["oauth-cc"][v.key], ...capPass("oauth-cc", v.key, state["oauth-cc"]) },
+      { id: "self-host", label: "Self-hostable",  val: LIMITS["self-host"][v.key], ...capPass("self-host", v.key, state["self-host"]) }
+    ];
+
+    const activeChecks = checks.filter((c) => c.active);
+    const overallPass = activeChecks.length === 0 ? null : activeChecks.every((c) => c.pass);
+    if (overallPass === true || overallPass === null) passing++;
+
+    const limsHtml = checks.map((c) => {
+      let mark = "·"; let cls = "is-mute";
+      if (c.active) {
+        if (c.pass) { mark = "✓"; cls = "is-pass"; }
+        else        { mark = "✕"; cls = "is-fail"; }
+      }
+      const valDisplay = (c.id === "mtls" || c.id === "grpc" || c.id === "graphql" || c.id === "oauth-cc" || c.id === "self-host")
+        ? ({ yes: "Native", part: "Partial", no: "No" }[c.val] || c.val)
+        : c.val;
+      const limCls = "lim" + (c.active ? " is-active " + (c.pass ? "is-pass" : "is-fail") : "");
+      return '<div class="' + limCls + '">' +
+        '<span class="lim__name">' + esc(c.label) + '</span>' +
+        '<span class="lim__val">' + esc(valDisplay) + '</span>' +
+        '<span class="lim__verdict ' + cls + '">' + mark + '</span>' +
+      '</div>';
+    }).join("");
+
+    let verdictTag = "";
+    let cardCls = "vcard";
+    if (overallPass === true) {
+      verdictTag = '<span class="vcard__verdict is-pass">Clears the bar</span>';
+      cardCls += " is-pass";
+    } else if (overallPass === false) {
+      verdictTag = '<span class="vcard__verdict is-fail">Falls short</span>';
+      cardCls += " is-fail";
+    }
+
+    // Build narrative notes for the active capability constraints
+    const noteBlocks = activeChecks
+      .filter((c) => NOTES[v.key] && NOTES[v.key][c.id])
+      .map((c) => '<p><strong>' + esc(c.label) + ':</strong> ' + esc(NOTES[v.key][c.id]) + '</p>')
+      .join("");
+
+    // Sources: only show for active numeric limits
+    const srcs = [];
+    if (state.timeout > 0 && SRC.timeout[v.key]) srcs.push({ id: "timeout", url: SRC.timeout[v.key] });
+    if (state.payload > 0 && SRC.payload[v.key]) srcs.push({ id: "payload", url: SRC.payload[v.key] });
+    const srcsHtml = srcs.length
+      ? '<div class="vcard__src">Sourced · ' + srcs.map((s) => '<a href="' + esc(s.url) + '" target="_blank" rel="noopener">' + esc(s.id) + '</a>').join(' · ') + '</div>'
+      : '';
+
+    return '<article class="' + cardCls + '">' +
+      '<header class="vcard__head">' +
+        '<span class="vcard__name"><span class="dot" style="background:' + v.swatch + '"></span>' + esc(v.name) + '</span>' +
+        verdictTag +
+      '</header>' +
+      '<div class="vcard__limits">' + limsHtml + '</div>' +
+      (noteBlocks ? '<div class="vcard__notes">' + noteBlocks + '</div>' : '') +
+      srcsHtml +
+    '</article>';
+  }).join("");
+  $("#vendors").innerHTML = html;
+
+  // Tally
+  const activeCount = [
+    state.timeout > 0, state.payload > 0,
+    state.mtls, state.grpc, state.graphql, state["oauth-cc"], state["self-host"]
+  ].filter(Boolean).length;
+  if (activeCount === 0) {
+    $("#tally").innerHTML = '<em>' + VENDORS.length + '</em> vendors · no constraints applied yet';
+  } else {
+    $("#tally").innerHTML = '<em>' + passing + '</em> of ' + VENDORS.length + ' clear ' + activeCount + ' constraint' + (activeCount > 1 ? 's' : '');
+  }
+}
+
+// ─── Wiring ───
+$("#t-timeout").addEventListener("input", (e) => { state.timeout = +e.target.value; render(); });
+$("#t-payload").addEventListener("input", (e) => { state.payload = +e.target.value; render(); });
+[["c-mtls", "mtls"], ["c-grpc", "grpc"], ["c-graphql", "graphql"], ["c-oauth-cc", "oauth-cc"], ["c-self-host", "self-host"]].forEach(([id, key]) => {
+  $("#" + id).addEventListener("change", (e) => { state[key] = e.target.checked; render(); });
+});
+$("#reset").addEventListener("click", () => {
+  state.timeout = 0; state.payload = 0;
+  state.mtls = state.grpc = state.graphql = state["oauth-cc"] = state["self-host"] = false;
+  $("#t-timeout").value = 0; $("#t-payload").value = 0;
+  $$('input[type="checkbox"]').forEach((cb) => cb.checked = false);
+  render();
+});
+
+render();
+</script>
+<script src="/nav.js" defer></script>
+</body>
+</html>

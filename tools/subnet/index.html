@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="color-scheme" content="dark">
+<title>Cross-Cloud Subnet Calculator · Infra Atlas</title>
+<link rel="icon" href="/favicon.svg?v=2" type="image/svg+xml">
+<meta name="description" content="A /24 holds 254 usable hosts on a generic IP plan, 251 on AWS or Azure, 252 on GCP, 253 on OCI. Subnet calculator that shows you the usable count after each cloud's reserved IPs — with the rules sourced to vendor docs.">
+<link rel="canonical" href="https://infraatlas.dev/tools/subnet/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Infra Atlas">
+<meta property="og:title" content="Cross-Cloud Subnet Calculator · Infra Atlas">
+<meta property="og:description" content="Pick a CIDR — see the usable host count after each cloud's reserved IPs, side by side. AWS reserves 5, Azure 5, GCP 4, OCI 3.">
+<meta property="og:url" content="https://infraatlas.dev/tools/subnet/">
+<meta property="og:image" content="https://infraatlas.dev/og.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Cross-Cloud Subnet Calculator · Infra Atlas">
+<meta name="twitter:description" content="Pick a CIDR — see the usable host count after each cloud's reserved IPs, side by side.">
+<meta name="twitter:image" content="https://infraatlas.dev/og.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@300;400;500;600&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+:root {
+  --ink: #0A0907; --ink-2: #100E0C; --surface: #161310; --surface-2: #1E1A15;
+  --line: rgba(244, 239, 230, 0.06); --line-2: rgba(244, 239, 230, 0.14); --line-3: rgba(244, 239, 230, 0.28);
+  --paper: #F4EFE6; --paper-2: rgba(244, 239, 230, 0.66); --paper-3: rgba(244, 239, 230, 0.55);
+  --accent: #FF7849; --accent-2: #FFA66E;
+  --mint: #6FE7B5; --gold: #F4C660; --rose: #F47B7B;
+  --serif: 'Instrument Serif', 'Times New Roman', serif;
+  --mono: 'JetBrains Mono', ui-monospace, monospace;
+  --sans: 'Manrope', -apple-system, system-ui, sans-serif;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { background: var(--ink); color: var(--paper); font-family: var(--sans); font-size: 15px; line-height: 1.55; -webkit-font-smoothing: antialiased; min-height: 100vh; }
+body {
+  background:
+    radial-gradient(ellipse at 100% -10%, rgba(255, 120, 73, 0.07), transparent 55%),
+    radial-gradient(ellipse at -10% 110%, rgba(244, 198, 96, 0.05), transparent 65%),
+    var(--ink);
+  background-attachment: fixed; overflow-x: hidden;
+}
+.grain { pointer-events: none; position: fixed; inset: 0; z-index: 100; opacity: 0.08; mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml;utf8,<svg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.6 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+}
+.scanlines { pointer-events: none; position: fixed; inset: 0; z-index: 99;
+  background: repeating-linear-gradient(180deg, transparent, transparent 2px, rgba(244,239,230,0.012) 2px, rgba(244,239,230,0.012) 3px);
+}
+::selection { background: var(--accent); color: var(--ink); }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 2px; }
+
+.page { max-width: 1100px; margin: 0 auto; padding: 56px 32px 96px; position: relative; }
+
+.masthead { padding-bottom: 28px; border-bottom: 1px solid var(--line); margin-bottom: 36px; }
+.eyebrow { font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.22em; color: var(--paper-3);
+  text-transform: uppercase; display: inline-flex; align-items: center; gap: 12px; text-decoration: none; transition: color 0.2s ease; }
+.eyebrow:hover { color: var(--paper); }
+.eyebrow .arrow { color: var(--accent); transition: transform 0.2s ease; }
+.eyebrow:hover .arrow { transform: translateX(-4px); }
+h1.title { font-family: var(--serif); font-weight: 400; font-size: clamp(40px, 6.4vw, 76px); line-height: 0.98; letter-spacing: -0.02em; margin-top: 12px; color: var(--paper); }
+h1.title em { font-style: italic; color: var(--accent); }
+.subtitle { margin-top: 16px; font-size: 15.5px; color: var(--paper-2); line-height: 1.6; max-width: 740px; }
+.subtitle a { color: var(--paper); text-decoration: underline; text-decoration-color: var(--accent); text-underline-offset: 3px; }
+
+/* ─────────── INPUT PANEL ─────────── */
+.panel {
+  display: grid; grid-template-columns: 1.8fr 0.7fr 0.9fr; gap: 14px;
+  padding: 22px; background: linear-gradient(180deg, var(--surface) 0%, var(--ink-2) 100%);
+  border: 1px solid var(--line-2); border-radius: 6px; margin-bottom: 28px;
+}
+.field { display: flex; flex-direction: column; gap: 8px; }
+.field__label { font-family: var(--mono); font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--paper-3); }
+.field input, .field select {
+  background: var(--ink); border: 1px solid var(--line-2); color: var(--paper);
+  font-family: var(--mono); font-size: 14px; padding: 12px 14px; border-radius: 3px;
+  outline: none; transition: border-color 0.15s; appearance: none;
+}
+.field input:focus, .field select:focus { border-color: var(--accent); }
+.field input[type="number"] { -moz-appearance: textfield; }
+.field input::-webkit-outer-spin-button, .field input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+.unit-toggle { display: inline-flex; border: 1px solid var(--line-2); border-radius: 3px; overflow: hidden; }
+.unit-toggle button {
+  flex: 1; background: transparent; border: 0; color: var(--paper-2);
+  font-family: var(--mono); font-size: 12px; letter-spacing: 0.04em; padding: 12px 0; cursor: pointer; transition: all 0.15s;
+}
+.unit-toggle button.is-active { background: var(--paper); color: var(--ink); }
+.unit-toggle button:not(.is-active):hover { color: var(--paper); }
+
+.warning {
+  font-family: var(--mono); font-size: 11.5px; color: var(--rose);
+  padding: 10px 14px; border: 1px solid rgba(244, 123, 123, 0.32);
+  background: rgba(244, 123, 123, 0.06); border-radius: 4px; margin-bottom: 28px;
+}
+.warning.is-hidden { display: none; }
+
+/* ─────────── SUMMARY ROW ─────────── */
+.summary { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 32px; }
+.summary__cell {
+  padding: 18px 20px; border: 1px solid var(--line); border-radius: 5px;
+  background: var(--surface);
+}
+.summary__label { font-family: var(--mono); font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--paper-3); }
+.summary__value { font-family: var(--serif); font-style: italic; font-size: 30px; color: var(--paper); margin-top: 6px; letter-spacing: -0.01em; }
+.summary__value.is-mono { font-family: var(--mono); font-style: normal; font-size: 18px; word-break: break-all; }
+.summary__hint { font-family: var(--mono); font-size: 10.5px; color: var(--paper-3); margin-top: 4px; }
+
+/* ─────────── CLOUD CARDS ─────────── */
+.clouds { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-bottom: 32px; }
+.ccard {
+  background: var(--surface); border: 1px solid var(--line); border-radius: 5px; padding: 20px;
+  display: flex; flex-direction: column; gap: 12px;
+}
+.ccard.is-invalid { border-color: rgba(244, 123, 123, 0.32); opacity: 0.7; }
+.ccard.is-most { border-color: rgba(111, 231, 181, 0.4); background: linear-gradient(180deg, rgba(111,231,181,0.04), transparent 60%), var(--surface); }
+.ccard__head { display: flex; align-items: center; justify-content: space-between; }
+.ccard__name { font-family: var(--mono); font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--paper-2); display: inline-flex; align-items: center; gap: 8px; }
+.ccard__name .dot { width: 8px; height: 8px; border-radius: 2px; }
+.ccard__tag { font-family: var(--mono); font-size: 9.5px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--mint); padding: 3px 8px; border: 1px solid rgba(111,231,181,0.4); border-radius: 99px; }
+.ccard__tag.is-err { color: var(--rose); border-color: rgba(244, 123, 123, 0.4); }
+.ccard__usable { font-family: var(--serif); font-style: italic; font-size: 38px; line-height: 1; color: var(--paper); letter-spacing: -0.012em; }
+.ccard__usable.is-err { color: var(--rose); font-size: 15px; font-style: normal; font-family: var(--mono); }
+.ccard__sub { font-family: var(--mono); font-size: 11px; color: var(--paper-3); }
+.ccard__list { font-family: var(--mono); font-size: 11px; color: var(--paper-2); list-style: none; display: flex; flex-direction: column; gap: 3px; border-top: 1px solid var(--line); padding-top: 11px; }
+.ccard__list li { display: flex; justify-content: space-between; gap: 10px; }
+.ccard__list code { color: var(--paper-3); font-size: 10.5px; }
+.ccard__note { font-family: var(--sans); font-size: 12px; color: var(--paper-2); line-height: 1.5; border-top: 1px solid var(--line); padding-top: 10px; }
+.ccard__src { font-family: var(--mono); font-size: 10px; }
+.ccard__src a { color: var(--paper-3); text-decoration: underline; text-decoration-color: var(--line-2); text-underline-offset: 3px; word-break: break-all; }
+.ccard__src a:hover { color: var(--accent); }
+
+/* ─────────── ABOUT / COLOPHON ─────────── */
+.about { padding: 20px 24px; border: 1px solid var(--line); border-radius: 5px;
+  background: linear-gradient(180deg, rgba(255,120,73,0.05), rgba(255,120,73,0.01));
+  border-color: rgba(255,120,73,0.22); margin-bottom: 28px; }
+.about__mark { font-family: var(--serif); font-style: italic; font-size: 28px; color: var(--accent); float: left; margin: 0 14px 0 0; line-height: 0.9; }
+.about p { font-size: 13.5px; color: var(--paper-2); line-height: 1.6; }
+.about strong { color: var(--paper); font-weight: 600; }
+.about a { color: var(--paper); text-decoration: underline; text-decoration-color: var(--accent); text-underline-offset: 3px; }
+.about a:hover { color: var(--accent); }
+.about code { font-family: var(--mono); font-size: 12.5px; color: var(--paper); background: rgba(244,239,230,0.06); padding: 1px 5px; border-radius: 3px; }
+
+.colophon { margin-top: 64px; padding-top: 28px; border-top: 1px solid var(--line);
+  font-family: var(--mono); font-size: 11px; letter-spacing: 0.06em; color: var(--paper-3); }
+.colophon a { color: var(--paper-2); text-decoration: underline; text-decoration-color: var(--line-2); text-underline-offset: 3px; }
+.colophon a:hover { color: var(--accent); }
+
+@media (max-width: 1000px) {
+  .clouds { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 760px) {
+  .panel { grid-template-columns: 1fr; }
+  .summary { grid-template-columns: 1fr; }
+  .clouds { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<div class="grain"></div>
+<div class="scanlines"></div>
+
+<div class="page">
+
+  <header class="masthead">
+    <a class="eyebrow" href="../"><span class="arrow">←</span> Infra Atlas · Tools</a>
+    <h1 class="title">Cross-Cloud Subnet <em>Calculator.</em></h1>
+    <p class="subtitle">A <code style="font-family:var(--mono);font-size:14px;color:var(--accent);">/24</code> is not a <em>/24</em> everywhere. AWS, Azure, GCP and OCI each carve reserved IPs out of every subnet — different counts, different positions. Pick a CIDR and see the <em>actual</em> usable host count, side by side, with the rules sourced.</p>
+  </header>
+
+  <main id="ia-main">
+
+    <!-- Inputs -->
+    <section class="panel" aria-label="Subnet inputs">
+      <div class="field">
+        <label class="field__label" for="cidr">Network (CIDR)</label>
+        <input id="cidr" type="text" value="10.0.0.0/24" autocomplete="off" spellcheck="false" placeholder="10.0.0.0/24">
+      </div>
+      <div class="field">
+        <label class="field__label" for="family">Family</label>
+        <select id="family">
+          <option value="ipv4" selected>IPv4</option>
+          <option value="ipv6">IPv6</option>
+        </select>
+      </div>
+      <div class="field">
+        <label class="field__label">Quick set prefix</label>
+        <div class="unit-toggle" id="quick" role="radiogroup" aria-label="Quick CIDR prefix"></div>
+      </div>
+    </section>
+
+    <div class="warning is-hidden" id="warn" role="alert"></div>
+
+    <!-- Summary row (generic) -->
+    <section class="summary" id="summary" aria-label="Network summary"></section>
+
+    <!-- Cloud cards -->
+    <section class="clouds" id="clouds" aria-label="Per-cloud usable hosts"></section>
+
+    <!-- About / caveat -->
+    <div class="about">
+      <span class="about__mark">*</span>
+      <p><strong>Usable</strong> here means routable for workloads. AWS and Azure each reserve <code>first 4 + last 1</code>; GCP reserves <code>first 2 + last 2</code>; OCI reserves <code>first 2 + last 1</code>. IPv6 subnets are <code>/64</code> almost everywhere — the host count is meaningless at that size (~18 quintillion), so the panel shows the prefix you get and the reservations that still apply. Built on the cross-cloud <a href="/networking-matrix/">Networking Matrix</a>.</p>
+    </div>
+
+  </main>
+
+  <footer class="colophon">
+    <p>Infra Atlas · <a href="../">Tools</a> · <a href="/networking-matrix/">Networking Matrix</a> · <a href="https://github.com/ineslino/infra-atlas" target="_blank" rel="noopener">GitHub</a> · MIT-licensed · Verified <time datetime="2026-05-19">2026-05-19</time></p>
+  </footer>
+
+</div>
+
+<script>
+// ═══════════════════════════════════════════════════════════════════
+// Cross-Cloud Subnet Calculator · Infra Atlas
+//
+// Reservation rules (verified 2026-05-19):
+//   AWS    · 5 reserved · first 4 (.0, .1, .2, .3) + last (broadcast).
+//            IPv4 prefix /28 – /16. IPv6 /44 – /64.
+//            https://docs.aws.amazon.com/vpc/latest/userguide/subnet-sizing.html
+//   Azure  · 5 reserved · first 4 + last. IPv4 /29 – /2. IPv6 fixed /64.
+//            https://learn.microsoft.com/en-us/azure/virtual-network/virtual-networks-faq
+//   GCP    · 4 reserved · first 2 (network, default-gw) + last 2 (second-
+//            to-last reserved, broadcast). IPv4 /29 – /4 (/8 recommended). IPv6 /64.
+//            https://cloud.google.com/vpc/docs/subnets
+//   OCI    · 3 reserved · first 2 (network, gateway) + last (broadcast).
+//            IPv4 /16 – /30. IPv6 /64.
+//            https://docs.oracle.com/en-us/iaas/Content/Network/Concepts/overview.htm
+// ═══════════════════════════════════════════════════════════════════
+
+const CLOUDS = [
+  {
+    key: "aws", name: "AWS", swatch: "#FF9F66",
+    reserved: 5, reservedNote: "First 4 (network, VPC router, DNS, future) + last (broadcast).",
+    ipv4: { min: 16, max: 28 },
+    ipv6: { min: 44, max: 64 },
+    src: "https://docs.aws.amazon.com/vpc/latest/userguide/subnet-sizing.html"
+  },
+  {
+    key: "azure", name: "Azure", swatch: "#7CD7F1",
+    reserved: 5, reservedNote: "First 4 (network, default-gateway, DNS×2) + last (broadcast).",
+    ipv4: { min: 2, max: 29 },
+    ipv6: { min: 64, max: 64, note: "IPv6 subnets are fixed at /64 on Azure." },
+    src: "https://learn.microsoft.com/en-us/azure/virtual-network/virtual-networks-faq"
+  },
+  {
+    key: "gcp", name: "GCP", swatch: "#F4C660",
+    reserved: 4, reservedNote: "First 2 (network, default-gw) + last 2 (penultimate, broadcast).",
+    ipv4: { min: 4, max: 29, recommended: "/8 minimum recommended" },
+    ipv6: { min: 64, max: 64, note: "IPv6 subnets are fixed at /64." },
+    src: "https://cloud.google.com/vpc/docs/subnets"
+  },
+  {
+    key: "oci", name: "OCI", swatch: "#E26B6B",
+    reserved: 3, reservedNote: "First 2 (network, gateway) + last (broadcast).",
+    ipv4: { min: 16, max: 30 },
+    ipv6: { min: 64, max: 64, note: "IPv6 subnets are fixed at /64." },
+    src: "https://docs.oracle.com/en-us/iaas/Content/Network/Concepts/overview.htm"
+  }
+];
+
+// ─── State ───
+const state = { input: "10.0.0.0/24", family: "ipv4" };
+
+const $ = (s) => document.querySelector(s);
+const $$ = (s) => Array.from(document.querySelectorAll(s));
+const esc = (s) => String(s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+const fmt = (n) => n.toLocaleString("en-US");
+
+// ─── IPv4 math ───
+function parseV4(s) {
+  // returns { ip: BigInt, prefix: number } or { error }
+  const m = s.trim().match(/^(\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})\/(\d{1,2})$/);
+  if (!m) return { error: "Format: a.b.c.d/p (e.g. 10.0.0.0/24)" };
+  const o = [+m[1], +m[2], +m[3], +m[4]];
+  if (o.some((x) => x > 255)) return { error: "Each octet must be 0-255." };
+  const prefix = +m[5];
+  if (prefix < 0 || prefix > 32) return { error: "IPv4 prefix must be 0-32." };
+  const ip = (BigInt(o[0]) << 24n) | (BigInt(o[1]) << 16n) | (BigInt(o[2]) << 8n) | BigInt(o[3]);
+  return { ip, prefix };
+}
+function v4ToStr(n) {
+  return [(n >> 24n) & 0xFFn, (n >> 16n) & 0xFFn, (n >> 8n) & 0xFFn, n & 0xFFn].join(".");
+}
+function v4Net(ip, prefix) {
+  // network = ip & mask; broadcast = network | hostmask
+  if (prefix === 32) return { network: ip, broadcast: ip, hostMask: 0n };
+  if (prefix === 0)  return { network: 0n, broadcast: (1n << 32n) - 1n, hostMask: (1n << 32n) - 1n };
+  const hostBits = BigInt(32 - prefix);
+  const hostMask = (1n << hostBits) - 1n;
+  const netMask = ((1n << 32n) - 1n) ^ hostMask;
+  const network = ip & netMask;
+  const broadcast = network | hostMask;
+  return { network, broadcast, hostMask, total: hostMask + 1n };
+}
+
+// ─── IPv6 math ───
+function parseV6(s) {
+  const trimmed = s.trim();
+  const slash = trimmed.lastIndexOf("/");
+  if (slash < 0) return { error: "Format: prefix/length (e.g. 2001:db8::/56)" };
+  const addr = trimmed.slice(0, slash);
+  const prefix = +trimmed.slice(slash + 1);
+  if (!isFinite(prefix) || prefix < 0 || prefix > 128) return { error: "IPv6 prefix must be 0-128." };
+  // Expand :: to fill zeros
+  let parts;
+  if (addr.indexOf("::") >= 0) {
+    const halves = addr.split("::");
+    if (halves.length !== 2) return { error: "Only one '::' allowed." };
+    const left = halves[0] ? halves[0].split(":") : [];
+    const right = halves[1] ? halves[1].split(":") : [];
+    const missing = 8 - left.length - right.length;
+    if (missing < 0) return { error: "Too many groups in IPv6 address." };
+    parts = left.concat(Array(missing).fill("0")).concat(right);
+  } else {
+    parts = addr.split(":");
+  }
+  if (parts.length !== 8) return { error: "IPv6 address must have 8 groups." };
+  let ip = 0n;
+  for (const p of parts) {
+    if (!/^[0-9a-fA-F]{1,4}$/.test(p)) return { error: "Each IPv6 group must be 1-4 hex digits." };
+    ip = (ip << 16n) | BigInt(parseInt(p, 16));
+  }
+  return { ip, prefix };
+}
+function v6ToStr(n) {
+  const parts = [];
+  for (let i = 7; i >= 0; i--) parts.push(((n >> BigInt(i * 16)) & 0xFFFFn).toString(16));
+  // Collapse the longest run of zeros to ::
+  let bestStart = -1, bestLen = 0, curStart = -1, curLen = 0;
+  for (let i = 0; i < parts.length; i++) {
+    if (parts[i] === "0") {
+      if (curStart < 0) curStart = i;
+      curLen++;
+      if (curLen > bestLen) { bestLen = curLen; bestStart = curStart; }
+    } else { curStart = -1; curLen = 0; }
+  }
+  if (bestLen < 2) return parts.join(":");
+  const head = parts.slice(0, bestStart).join(":");
+  const tail = parts.slice(bestStart + bestLen).join(":");
+  return head + "::" + tail;
+}
+function v6Net(ip, prefix) {
+  if (prefix === 128) return { network: ip, broadcast: ip };
+  if (prefix === 0)   return { network: 0n, broadcast: (1n << 128n) - 1n };
+  const hostBits = BigInt(128 - prefix);
+  const hostMask = (1n << hostBits) - 1n;
+  const netMask = ((1n << 128n) - 1n) ^ hostMask;
+  const network = ip & netMask;
+  const broadcast = network | hostMask;
+  return { network, broadcast };
+}
+
+// ─── Render ───
+function showWarning(msg) {
+  const w = $("#warn");
+  if (!msg) { w.classList.add("is-hidden"); w.textContent = ""; return; }
+  w.classList.remove("is-hidden");
+  w.textContent = msg;
+}
+
+function renderSummary(rows) {
+  $("#summary").innerHTML = rows.map((r) =>
+    '<div class="summary__cell">' +
+      '<div class="summary__label">' + esc(r.label) + '</div>' +
+      '<div class="summary__value' + (r.mono ? ' is-mono' : '') + '">' + esc(r.value) + '</div>' +
+      (r.hint ? '<div class="summary__hint">' + esc(r.hint) + '</div>' : '') +
+    '</div>'
+  ).join("");
+}
+
+function renderClouds(family, prefix, total) {
+  // For each cloud, decide: valid prefix? compute usable hosts.
+  const html = CLOUDS.map((c) => {
+    const range = family === "ipv4" ? c.ipv4 : c.ipv6;
+    let invalid = null;
+    let mostFlag = false;
+    if (prefix < range.min) invalid = "Prefix too short — " + c.name + " allows /" + range.min + " – /" + range.max + " for " + family.toUpperCase() + ".";
+    else if (prefix > range.max) invalid = "Prefix too long — " + c.name + " allows /" + range.min + " – /" + range.max + " for " + family.toUpperCase() + ".";
+
+    let usable;
+    let usableLine;
+    if (invalid) {
+      usable = "—";
+      usableLine = invalid;
+    } else if (family === "ipv4") {
+      // /31 and /32 are too small for any reservation scheme. AWS allows /28
+      // min, Azure /29 min, GCP /29 min, OCI /30 min — at /30 you have only
+      // 4 total addresses, OCI's 3 reserved leaves 1 usable host (point-to-
+      // point only).
+      const u = total - BigInt(c.reserved);
+      const uNum = Number(u);
+      if (uNum < 1) { usable = "0"; usableLine = c.reserved + " reserved, /" + prefix + " too small."; }
+      else { usable = fmt(uNum); usableLine = c.reserved + " reserved · " + (uNum === 1 ? "1 host (point-to-point only)" : ""); }
+    } else {
+      // IPv6: total is enormous, just describe.
+      usable = "huge";
+      usableLine = c.reserved + " reserved out of 2^" + (128 - prefix);
+    }
+
+    const v6note = family === "ipv6" && range.note ? '<li><code>' + esc(range.note) + '</code></li>' : '';
+    const cls = "ccard" + (invalid ? " is-invalid" : "");
+
+    return '<article class="' + cls + '">' +
+      '<header class="ccard__head">' +
+        '<span class="ccard__name"><span class="dot" style="background:' + c.swatch + '"></span>' + esc(c.name) + '</span>' +
+        (invalid ? '<span class="ccard__tag is-err">unsupported</span>' : '') +
+      '</header>' +
+      '<div>' +
+        '<div class="ccard__usable' + (invalid ? ' is-err' : '') + '">' + esc(usable) + '</div>' +
+        '<div class="ccard__sub">usable host' + (usable === "1" ? '' : 's') + (family === "ipv6" ? ' (≈ 2^' + (128 - prefix) + ')' : '') + '</div>' +
+      '</div>' +
+      '<ul class="ccard__list">' +
+        '<li><span>Reserved</span><span><code>' + c.reserved + '</code></span></li>' +
+        '<li><span>' + family.toUpperCase() + ' prefix range</span><span><code>/' + range.min + ' – /' + range.max + '</code></span></li>' +
+        v6note +
+      '</ul>' +
+      '<p class="ccard__note">' + esc(c.reservedNote) + (range.recommended ? ' ' + esc(range.recommended) + '.' : '') + '</p>' +
+      '<div class="ccard__src">Source · <a href="' + esc(c.src) + '" target="_blank" rel="noopener">' + esc(c.src) + '</a></div>' +
+    '</article>';
+  }).join("");
+  $("#clouds").innerHTML = html;
+}
+
+function render() {
+  if (state.family === "ipv4") {
+    const r = parseV4(state.input);
+    if (r.error) { showWarning(r.error); renderSummary([]); renderClouds("ipv4", -1, 0n); return; }
+    const n = v4Net(r.ip, r.prefix);
+    const total = (r.prefix === 32) ? 1n : (n.hostMask + 1n);
+    // Detect: input was not the canonical network address (e.g. 10.0.0.5/24)
+    let canonNote = "";
+    if (n.network !== r.ip) {
+      canonNote = "Input " + v4ToStr(r.ip) + " is inside the subnet but is not the network address — canonical form: " + v4ToStr(n.network) + "/" + r.prefix + ".";
+    }
+    showWarning(canonNote);
+    renderSummary([
+      { label: "Network", value: v4ToStr(n.network) + "/" + r.prefix, mono: true },
+      { label: "Broadcast", value: v4ToStr(n.broadcast), mono: true, hint: "Total addresses: " + fmt(Number(total)) },
+      { label: "Generic usable", value: r.prefix >= 31 ? String(Number(total)) : String(Number(total) - 2), hint: "Classic 'first + last reserved' baseline (RFC 791)." }
+    ]);
+    renderClouds("ipv4", r.prefix, total);
+  } else {
+    const r = parseV6(state.input);
+    if (r.error) { showWarning(r.error); renderSummary([]); renderClouds("ipv6", -1, 0n); return; }
+    const n = v6Net(r.ip, r.prefix);
+    let canonNote = "";
+    if (n.network !== r.ip) canonNote = "Input is inside the subnet but not the network address — canonical: " + v6ToStr(n.network) + "/" + r.prefix + ".";
+    showWarning(canonNote);
+    renderSummary([
+      { label: "Network", value: v6ToStr(n.network) + "/" + r.prefix, mono: true },
+      { label: "Last address", value: v6ToStr(n.broadcast), mono: true, hint: "Total addresses: 2^" + (128 - r.prefix) },
+      { label: "Notes", value: "/64 standard", hint: "AWS, Azure, GCP, OCI all use /64 as the default subnet size." }
+    ]);
+    renderClouds("ipv6", r.prefix, 0n);
+  }
+}
+
+// ─── Wiring ───
+function setFamily(fam) {
+  state.family = fam;
+  // Switch default if input is incompatible
+  if (fam === "ipv4" && state.input.indexOf(":") >= 0) state.input = "10.0.0.0/24";
+  if (fam === "ipv6" && state.input.indexOf(":") < 0) state.input = "2001:db8::/64";
+  $("#cidr").value = state.input;
+  buildQuickToggle();
+  render();
+}
+function buildQuickToggle() {
+  const presets = state.family === "ipv4"
+    ? [["/16", "16"], ["/20", "20"], ["/24", "24"], ["/27", "27"], ["/28", "28"]]
+    : [["/48", "48"], ["/56", "56"], ["/60", "60"], ["/64", "64"]];
+  $("#quick").innerHTML = presets.map(([label, p]) =>
+    '<button type="button" data-prefix="' + p + '">' + label + '</button>'
+  ).join("");
+  $$('#quick button').forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const p = btn.dataset.prefix;
+      if (state.family === "ipv4") {
+        // Keep the network address from the current input; otherwise default 10.0.0.0
+        const cur = parseV4(state.input);
+        const ip = cur.error ? "10.0.0.0" : v4ToStr(v4Net(cur.ip, +p).network);
+        state.input = ip + "/" + p;
+      } else {
+        const cur = parseV6(state.input);
+        const ip = cur.error ? "2001:db8::" : v6ToStr(v6Net(cur.ip, +p).network);
+        state.input = ip + "/" + p;
+      }
+      $("#cidr").value = state.input;
+      render();
+    });
+  });
+}
+
+$("#cidr").addEventListener("input", (e) => { state.input = e.target.value; render(); });
+$("#family").addEventListener("change", (e) => setFamily(e.target.value));
+
+// Initial paint
+buildQuickToggle();
+render();
+</script>
+<script src="/nav.js" defer></script>
+</body>
+</html>
