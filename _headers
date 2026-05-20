@@ -20,6 +20,12 @@
 /search-index.json
   Cache-Control: public, max-age=3600, s-maxage=3600, stale-while-revalidate=86400
 
+# Shared CSS for /tools/ — cached an hour, served stale up to a day. The
+# selector matches the single file directly; if more shared assets land
+# under /tools/_*.css this can be generalised.
+/tools/shared.css
+  Cache-Control: public, max-age=3600, s-maxage=3600, stale-while-revalidate=86400
+
 # Future static assets bucket — immutable, year-long
 /assets/*
   Cache-Control: public, max-age=31536000, immutable

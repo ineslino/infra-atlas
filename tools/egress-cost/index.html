@@ -21,71 +21,15 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@300;400;500;600&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/tools/shared.css">
 
 <style>
-:root {
-  --ink: #0A0907; --ink-2: #100E0C; --surface: #161310; --surface-2: #1E1A15;
-  --line: rgba(244, 239, 230, 0.06); --line-2: rgba(244, 239, 230, 0.14); --line-3: rgba(244, 239, 230, 0.28);
-  --paper: #F4EFE6; --paper-2: rgba(244, 239, 230, 0.66); --paper-3: rgba(244, 239, 230, 0.55);
-  --accent: #FF7849; --accent-2: #FFA66E;
-  --mint: #6FE7B5; --gold: #F4C660; --rose: #F47B7B;
-  --serif: 'Instrument Serif', 'Times New Roman', serif;
-  --mono: 'JetBrains Mono', ui-monospace, monospace;
-  --sans: 'Manrope', -apple-system, system-ui, sans-serif;
-}
-* { box-sizing: border-box; margin: 0; padding: 0; }
-html, body { background: var(--ink); color: var(--paper); font-family: var(--sans); font-size: 15px; line-height: 1.55; -webkit-font-smoothing: antialiased; min-height: 100vh; }
-body {
-  background:
-    radial-gradient(ellipse at 100% -10%, rgba(255, 120, 73, 0.07), transparent 55%),
-    radial-gradient(ellipse at -10% 110%, rgba(244, 198, 96, 0.05), transparent 65%),
-    var(--ink);
-  background-attachment: fixed; overflow-x: hidden;
-}
-.grain { pointer-events: none; position: fixed; inset: 0; z-index: 100; opacity: 0.08; mix-blend-mode: overlay;
-  background-image: url("data:image/svg+xml;utf8,<svg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.6 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
-}
-.scanlines { pointer-events: none; position: fixed; inset: 0; z-index: 99;
-  background: repeating-linear-gradient(180deg, transparent, transparent 2px, rgba(244,239,230,0.012) 2px, rgba(244,239,230,0.012) 3px);
-}
-::selection { background: var(--accent); color: var(--ink); }
-:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 2px; }
-
-.page { max-width: 1100px; margin: 0 auto; padding: 56px 32px 96px; position: relative; }
-
-.masthead { padding-bottom: 28px; border-bottom: 1px solid var(--line); margin-bottom: 36px; }
-.eyebrow { font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.22em; color: var(--paper-3);
-  text-transform: uppercase; display: inline-flex; align-items: center; gap: 12px; text-decoration: none; transition: color 0.2s ease; }
-.eyebrow:hover { color: var(--paper); }
-.eyebrow .arrow { color: var(--accent); transition: transform 0.2s ease; }
-.eyebrow:hover .arrow { transform: translateX(-4px); }
-h1.title { font-family: var(--serif); font-weight: 400; font-size: clamp(40px, 6.4vw, 76px); line-height: 0.98; letter-spacing: -0.02em; margin-top: 12px; color: var(--paper); }
-h1.title em { font-style: italic; color: var(--accent); }
-.subtitle { margin-top: 16px; font-size: 15.5px; color: var(--paper-2); line-height: 1.6; max-width: 720px; }
-
 /* ─────────── INPUT PANEL ─────────── */
 .panel {
   display: grid; grid-template-columns: 1.4fr 1fr 0.8fr; gap: 14px;
   padding: 22px; background: linear-gradient(180deg, var(--surface) 0%, var(--ink-2) 100%);
   border: 1px solid var(--line-2); border-radius: 6px; margin-bottom: 36px;
 }
-.field { display: flex; flex-direction: column; gap: 8px; }
-.field__label { font-family: var(--mono); font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--paper-3); }
-.field select, .field input {
-  background: var(--ink); border: 1px solid var(--line-2); color: var(--paper);
-  font-family: var(--mono); font-size: 14px; padding: 12px 14px; border-radius: 3px;
-  outline: none; transition: border-color 0.15s; appearance: none;
-}
-.field select:focus, .field input:focus { border-color: var(--accent); }
-.field input[type="number"] { -moz-appearance: textfield; }
-.field input::-webkit-outer-spin-button, .field input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
-.unit-toggle { display: inline-flex; border: 1px solid var(--line-2); border-radius: 3px; overflow: hidden; }
-.unit-toggle button {
-  flex: 1; background: transparent; border: 0; color: var(--paper-2);
-  font-family: var(--mono); font-size: 13px; letter-spacing: 0.04em; padding: 12px 0; cursor: pointer; transition: all 0.15s;
-}
-.unit-toggle button.is-active { background: var(--paper); color: var(--ink); }
-.unit-toggle button:not(.is-active):hover { color: var(--paper); }
 
 /* ─────────── RESULTS ─────────── */
 .results { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 32px; }
@@ -107,21 +51,6 @@ h1.title em { font-style: italic; color: var(--accent); }
 .cloud-card__src { font-family: var(--mono); font-size: 10.5px; }
 .cloud-card__src a { color: var(--paper-3); text-decoration: underline; text-decoration-color: var(--line-2); text-underline-offset: 3px; word-break: break-all; }
 .cloud-card__src a:hover { color: var(--accent); }
-
-/* ─────────── ABOUT / COLOPHON ─────────── */
-.about { padding: 20px 24px; border: 1px solid var(--line); border-radius: 5px;
-  background: linear-gradient(180deg, rgba(255,120,73,0.05), rgba(255,120,73,0.01));
-  border-color: rgba(255,120,73,0.22); margin-bottom: 28px; }
-.about__mark { font-family: var(--serif); font-style: italic; font-size: 28px; color: var(--accent); float: left; margin: 0 14px 0 0; line-height: 0.9; }
-.about p { font-size: 13.5px; color: var(--paper-2); line-height: 1.6; }
-.about strong { color: var(--paper); font-weight: 600; }
-.about a { color: var(--paper); text-decoration: underline; text-decoration-color: var(--accent); text-underline-offset: 3px; }
-.about a:hover { color: var(--accent); }
-
-.colophon { margin-top: 64px; padding-top: 28px; border-top: 1px solid var(--line);
-  font-family: var(--mono); font-size: 11px; letter-spacing: 0.06em; color: var(--paper-3); }
-.colophon a { color: var(--paper-2); text-decoration: underline; text-decoration-color: var(--line-2); text-underline-offset: 3px; }
-.colophon a:hover { color: var(--accent); }
 
 @media (max-width: 900px) {
   .panel { grid-template-columns: 1fr; }
@@ -300,11 +229,20 @@ function render() {
     cloud: c,
     ...computeCost(state.transfer, c.key, state.volumeGB)
   }));
-  const cheapest = Math.min(...results.map((r) => r.total));
-  const allEqual = results.every((r) => Math.abs(r.total - cheapest) < 0.005);
+  // Crown a cheapest only when the gap to the next-cheapest cloud is
+  // meaningful — > 1% of the cheapest total OR > $0.50, whichever is bigger.
+  // Saves us from coronating Azure by 30 cents at 100 GB internet egress.
+  const sortedTotals = results.map((r) => r.total).slice().sort((a, b) => a - b);
+  const cheapest = sortedTotals[0];
+  const runnerUp = sortedTotals.find((t) => t > cheapest + 0.005);
+  let hasWinner = false;
+  if (runnerUp !== undefined) {
+    const tolerance = Math.max(cheapest * 0.01, 0.5);
+    hasWinner = (runnerUp - cheapest) > tolerance;
+  }
 
   const html = results.map((r) => {
-    const isWinner = !allEqual && Math.abs(r.total - cheapest) < 0.005;
+    const isWinner = hasWinner && Math.abs(r.total - cheapest) < 0.005;
     const cls = "cloud-card" + (isWinner ? " is-cheapest" : "");
     const tag = isWinner ? '<span class="cloud-card__tag">cheapest</span>' : "";
     const perGB = state.volumeGB > 0 ? r.total / state.volumeGB : 0;
@@ -338,6 +276,29 @@ function render() {
   $("#results").innerHTML = html;
 }
 
+// ─── URL state ───
+// Shape: ?t=<transfer>&v=<volume in displayed unit>&u=<GB|TB>
+// Reading: only honour values we recognise; silently fall back to defaults
+// for anything bogus. Writing: replaceState so the browser back-button is
+// not polluted with every keystroke.
+function readUrlState() {
+  const params = new URLSearchParams(location.search);
+  const t = params.get("t");
+  const u = params.get("u");
+  const v = parseFloat(params.get("v"));
+  if (t && RATES[t]) state.transfer = t;
+  if (u === "GB" || u === "TB") state.unit = u;
+  if (isFinite(v) && v >= 0) state.volumeGB = state.unit === "TB" ? v * 1024 : v;
+}
+function writeUrlState() {
+  const v = state.unit === "TB" ? state.volumeGB / 1024 : state.volumeGB;
+  const params = new URLSearchParams();
+  params.set("t", state.transfer);
+  params.set("v", Number(v.toFixed(2)).toString());
+  params.set("u", state.unit);
+  history.replaceState(null, "", "?" + params.toString());
+}
+
 // ─── Wiring ───
 function readVolume() {
   const v = parseFloat($("#volume").value);
@@ -349,13 +310,24 @@ function applyUnitToInput() {
   const v = state.unit === "TB" ? state.volumeGB / 1024 : state.volumeGB;
   $("#volume").value = Number(v.toFixed(2)).toString();
 }
+function syncDOMFromState() {
+  $("#transfer").value = state.transfer;
+  $$('.unit-toggle button').forEach((b) => {
+    const active = b.dataset.unit === state.unit;
+    b.classList.toggle("is-active", active);
+    b.setAttribute("aria-checked", active ? "true" : "false");
+  });
+  applyUnitToInput();
+}
 
 $("#transfer").addEventListener("change", (e) => {
   state.transfer = e.target.value;
+  writeUrlState();
   render();
 });
 $("#volume").addEventListener("input", () => {
   state.volumeGB = readVolume();
+  writeUrlState();
   render();
 });
 $$('.unit-toggle button').forEach((btn) => {
@@ -367,12 +339,15 @@ $$('.unit-toggle button').forEach((btn) => {
     state.unit = btn.dataset.unit;
     applyUnitToInput();
     state.volumeGB = readVolume();
+    writeUrlState();
     render();
   });
 });
 
-// Initial state
-applyUnitToInput();
+// Initial state: parse URL, sync inputs, render. No write — URL is already
+// what it is, no need to replaceState on first paint.
+readUrlState();
+syncDOMFromState();
 render();
 </script>
 <script src="/nav.js" defer></script>

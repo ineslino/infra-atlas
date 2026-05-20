@@ -21,48 +21,12 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@300;400;500;600&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/tools/shared.css">
 
 <style>
-:root {
-  --ink: #0A0907; --ink-2: #100E0C; --surface: #161310; --surface-2: #1E1A15;
-  --line: rgba(244, 239, 230, 0.06); --line-2: rgba(244, 239, 230, 0.14); --line-3: rgba(244, 239, 230, 0.28);
-  --paper: #F4EFE6; --paper-2: rgba(244, 239, 230, 0.66); --paper-3: rgba(244, 239, 230, 0.55);
-  --accent: #FF7849; --accent-2: #FFA66E;
-  --mint: #6FE7B5; --gold: #F4C660; --rose: #F47B7B;
-  --serif: 'Instrument Serif', 'Times New Roman', serif;
-  --mono: 'JetBrains Mono', ui-monospace, monospace;
-  --sans: 'Manrope', -apple-system, system-ui, sans-serif;
-}
-* { box-sizing: border-box; margin: 0; padding: 0; }
-html, body { background: var(--ink); color: var(--paper); font-family: var(--sans); font-size: 15px; line-height: 1.55; -webkit-font-smoothing: antialiased; min-height: 100vh; }
-body {
-  background:
-    radial-gradient(ellipse at 100% -10%, rgba(255, 120, 73, 0.07), transparent 55%),
-    radial-gradient(ellipse at -10% 110%, rgba(244, 198, 96, 0.05), transparent 65%),
-    var(--ink);
-  background-attachment: fixed; overflow-x: hidden;
-}
-.grain { pointer-events: none; position: fixed; inset: 0; z-index: 100; opacity: 0.08; mix-blend-mode: overlay;
-  background-image: url("data:image/svg+xml;utf8,<svg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.6 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
-}
-.scanlines { pointer-events: none; position: fixed; inset: 0; z-index: 99;
-  background: repeating-linear-gradient(180deg, transparent, transparent 2px, rgba(244,239,230,0.012) 2px, rgba(244,239,230,0.012) 3px);
-}
-::selection { background: var(--accent); color: var(--ink); }
-:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 2px; }
-
-.page { max-width: 1180px; margin: 0 auto; padding: 56px 32px 96px; position: relative; }
-
-.masthead { padding-bottom: 28px; border-bottom: 1px solid var(--line); margin-bottom: 36px; }
-.eyebrow { font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.22em; color: var(--paper-3);
-  text-transform: uppercase; display: inline-flex; align-items: center; gap: 12px; text-decoration: none; transition: color 0.2s ease; }
-.eyebrow:hover { color: var(--paper); }
-.eyebrow .arrow { color: var(--accent); transition: transform 0.2s ease; }
-.eyebrow:hover .arrow { transform: translateX(-4px); }
-h1.title { font-family: var(--serif); font-weight: 400; font-size: clamp(40px, 6.4vw, 76px); line-height: 0.98; letter-spacing: -0.02em; margin-top: 12px; color: var(--paper); }
-h1.title em { font-style: italic; color: var(--accent); }
-.subtitle { margin-top: 16px; font-size: 15.5px; color: var(--paper-2); line-height: 1.6; max-width: 740px; }
-.subtitle a { color: var(--paper); text-decoration: underline; text-decoration-color: var(--accent); text-underline-offset: 3px; }
+/* This picker shows up to 7 vendor cards in a row — wider than the default
+   1100px container. */
+.page { max-width: 1180px; }
 
 /* ─────────── CONSTRAINT PANEL ─────────── */
 .panel {
@@ -123,12 +87,14 @@ input[type="range"]::-moz-range-thumb {
   display: flex; flex-direction: column; gap: 14px; transition: opacity 0.15s, border-color 0.15s;
 }
 .vcard.is-pass { border-color: rgba(111, 231, 181, 0.4); background: linear-gradient(180deg, rgba(111,231,181,0.04), transparent 60%), var(--surface); }
+.vcard.is-warn { border-color: rgba(244, 198, 96, 0.4); background: linear-gradient(180deg, rgba(244,198,96,0.04), transparent 60%), var(--surface); }
 .vcard.is-fail { opacity: 0.5; }
 .vcard__head { display: flex; align-items: center; justify-content: space-between; }
 .vcard__name { font-family: var(--mono); font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--paper-2); display: inline-flex; align-items: center; gap: 8px; }
 .vcard__name .dot { width: 9px; height: 9px; border-radius: 2px; }
 .vcard__verdict { font-family: var(--mono); font-size: 9.5px; letter-spacing: 0.16em; text-transform: uppercase; padding: 3px 9px; border-radius: 99px; }
 .vcard__verdict.is-pass { color: var(--mint); border: 1px solid rgba(111,231,181,0.4); }
+.vcard__verdict.is-warn { color: var(--gold); border: 1px solid rgba(244,198,96,0.4); }
 .vcard__verdict.is-fail { color: var(--rose); border: 1px solid rgba(244,123,123,0.4); }
 .vcard__limits { display: flex; flex-direction: column; gap: 8px; }
 .lim {
@@ -137,11 +103,13 @@ input[type="range"]::-moz-range-thumb {
 }
 .lim.is-active { border-color: var(--line-2); background: rgba(244,239,230,0.02); }
 .lim.is-active.is-pass { border-color: rgba(111,231,181,0.32); }
+.lim.is-active.is-warn { border-color: rgba(244,198,96,0.32); }
 .lim.is-active.is-fail { border-color: rgba(244,123,123,0.32); }
 .lim__name { font-family: var(--mono); font-size: 11px; letter-spacing: 0.04em; color: var(--paper-2); }
 .lim__val { font-family: var(--mono); font-size: 11.5px; color: var(--paper); font-weight: 500; text-align: right; white-space: nowrap; }
 .lim__verdict { font-family: var(--mono); font-size: 12px; min-width: 18px; text-align: center; }
 .lim__verdict.is-pass { color: var(--mint); }
+.lim__verdict.is-warn { color: var(--gold); }
 .lim__verdict.is-fail { color: var(--rose); }
 .lim__verdict.is-mute { color: var(--paper-3); }
 .vcard__notes { font-family: var(--sans); font-size: 12px; color: var(--paper-2); line-height: 1.5; border-top: 1px solid var(--line); padding-top: 12px; }
@@ -152,20 +120,9 @@ input[type="range"]::-moz-range-thumb {
 .vcard__src a { color: var(--paper-3); text-decoration: underline; text-decoration-color: var(--line-2); text-underline-offset: 3px; word-break: break-all; }
 .vcard__src a:hover { color: var(--accent); }
 
-/* ─────────── ABOUT / COLOPHON ─────────── */
-.about { padding: 20px 24px; border: 1px solid var(--line); border-radius: 5px;
-  background: linear-gradient(180deg, rgba(255,120,73,0.05), rgba(255,120,73,0.01));
-  border-color: rgba(255,120,73,0.22); margin: 28px 0; }
-.about__mark { font-family: var(--serif); font-style: italic; font-size: 28px; color: var(--accent); float: left; margin: 0 14px 0 0; line-height: 0.9; }
-.about p { font-size: 13.5px; color: var(--paper-2); line-height: 1.6; }
-.about strong { color: var(--paper); font-weight: 600; }
-.about a { color: var(--paper); text-decoration: underline; text-decoration-color: var(--accent); text-underline-offset: 3px; }
-.about a:hover { color: var(--accent); }
-
-.colophon { margin-top: 64px; padding-top: 28px; border-top: 1px solid var(--line);
-  font-family: var(--mono); font-size: 11px; letter-spacing: 0.06em; color: var(--paper-3); }
-.colophon a { color: var(--paper-2); text-decoration: underline; text-decoration-color: var(--line-2); text-underline-offset: 3px; }
-.colophon a:hover { color: var(--accent); }
+/* APIM picker's about block needs slightly more top margin (the tally + cards
+   above run tighter than the egress/subnet result panel). */
+.about { margin-top: 28px; }
 
 @media (max-width: 760px) {
   .panel { grid-template-columns: 1fr; }
@@ -228,7 +185,7 @@ input[type="range"]::-moz-range-thumb {
     <!-- Tally -->
     <div class="tally">
       <div class="tally__count" id="tally"></div>
-      <div class="tally__hint">✓ = constraint met · ✕ = does not clear the bar</div>
+      <div class="tally__hint">✓ native · ⚠ partial / with caveats · ✕ does not clear the bar</div>
     </div>
 
     <!-- Vendor cards -->
@@ -350,21 +307,25 @@ const $$ = (s) => Array.from(document.querySelectorAll(s));
 const esc = (s) => String(s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
 
 // ─── Verdict helpers ───
-// For numeric limits, pass if vendor.max === null (no ceiling) OR vendor.max >= required.
-function numericPass(limit, vendorKey, required) {
-  if (required <= 0) return { active: false, pass: true };
+// Status enum: "pass" | "warn" | "fail" | "off" (off = constraint not active)
+// Numeric thresholds are binary — you either clear the bar or you don't.
+function numericStatus(limit, vendorKey, required) {
+  if (required <= 0) return { active: false, status: "off" };
   const v = LIMITS[limit][vendorKey];
-  if (!v) return { active: true, pass: false };
-  if (v.max === null) return { active: true, pass: true };
-  return { active: true, pass: v.max >= required };
+  if (!v) return { active: true, status: "fail" };
+  if (v.max === null) return { active: true, status: "pass" };
+  return { active: true, status: v.max >= required ? "pass" : "fail" };
 }
-// For boolean capabilities: required = checked.
-// Passes if level === "yes". "part" is a partial pass, treat as fail
-// for strict constraints but show ⚠.
-function capPass(cap, vendorKey, required) {
-  if (!required) return { active: false, pass: true, level: LIMITS[cap][vendorKey] };
+// Capability constraints are tri-state — `yes` is a clear pass, `part` is
+// a warn (works for most cases with a caveat), `no` is a hard fail. This
+// matters: AWS mTLS is `part` because it only works on custom domains, not
+// private APIs. Eliminating AWS entirely on a "mTLS required" tick would
+// be wrong for ~80% of users — flag it instead.
+function capStatus(cap, vendorKey, required) {
+  if (!required) return { active: false, status: "off", level: LIMITS[cap][vendorKey] };
   const level = LIMITS[cap][vendorKey];
-  return { active: true, pass: level === "yes", level };
+  const status = level === "yes" ? "pass" : level === "part" ? "warn" : "fail";
+  return { active: true, status, level };
 }
 
 function fmtMB(mb) {
@@ -378,32 +339,43 @@ function render() {
   $("#t-timeout-val").textContent = state.timeout === 0 ? "any" : "≥ " + state.timeout + " s";
   $("#t-payload-val").textContent = state.payload === 0 ? "any" : "≥ " + fmtMB(state.payload);
 
-  let passing = 0;
+  const tally = { pass: 0, warn: 0, fail: 0 };
   const html = VENDORS.map((v) => {
     const checks = [
-      { id: "timeout", label: "Backend timeout", val: LIMITS.timeout[v.key].display, ...numericPass("timeout", v.key, state.timeout) },
-      { id: "payload", label: "Request payload",  val: LIMITS.payload[v.key].display, ...numericPass("payload", v.key, state.payload) },
-      { id: "mtls",    label: "mTLS",             val: LIMITS.mtls[v.key],     ...capPass("mtls", v.key, state.mtls) },
-      { id: "grpc",    label: "gRPC",             val: LIMITS.grpc[v.key],     ...capPass("grpc", v.key, state.grpc) },
-      { id: "graphql", label: "GraphQL",          val: LIMITS.graphql[v.key],  ...capPass("graphql", v.key, state.graphql) },
-      { id: "oauth-cc", label: "OAuth CC",        val: LIMITS["oauth-cc"][v.key], ...capPass("oauth-cc", v.key, state["oauth-cc"]) },
-      { id: "self-host", label: "Self-hostable",  val: LIMITS["self-host"][v.key], ...capPass("self-host", v.key, state["self-host"]) }
+      { id: "timeout", label: "Backend timeout", val: LIMITS.timeout[v.key].display, ...numericStatus("timeout", v.key, state.timeout) },
+      { id: "payload", label: "Request payload",  val: LIMITS.payload[v.key].display, ...numericStatus("payload", v.key, state.payload) },
+      { id: "mtls",    label: "mTLS",             val: LIMITS.mtls[v.key],     ...capStatus("mtls", v.key, state.mtls) },
+      { id: "grpc",    label: "gRPC",             val: LIMITS.grpc[v.key],     ...capStatus("grpc", v.key, state.grpc) },
+      { id: "graphql", label: "GraphQL",          val: LIMITS.graphql[v.key],  ...capStatus("graphql", v.key, state.graphql) },
+      { id: "oauth-cc", label: "OAuth CC",        val: LIMITS["oauth-cc"][v.key], ...capStatus("oauth-cc", v.key, state["oauth-cc"]) },
+      { id: "self-host", label: "Self-hostable",  val: LIMITS["self-host"][v.key], ...capStatus("self-host", v.key, state["self-host"]) }
     ];
 
     const activeChecks = checks.filter((c) => c.active);
-    const overallPass = activeChecks.length === 0 ? null : activeChecks.every((c) => c.pass);
-    if (overallPass === true || overallPass === null) passing++;
+    // Overall verdict: any fail → fail. Else any warn → warn. Else pass.
+    // No active constraints → neutral (counts toward pass tally — nothing
+    // to fail against).
+    let verdict;
+    if (activeChecks.length === 0) verdict = "neutral";
+    else if (activeChecks.some((c) => c.status === "fail")) verdict = "fail";
+    else if (activeChecks.some((c) => c.status === "warn")) verdict = "warn";
+    else verdict = "pass";
+
+    if (verdict === "fail") tally.fail++;
+    else if (verdict === "warn") tally.warn++;
+    else tally.pass++;  // pass + neutral both count here
 
     const limsHtml = checks.map((c) => {
       let mark = "·"; let cls = "is-mute";
       if (c.active) {
-        if (c.pass) { mark = "✓"; cls = "is-pass"; }
-        else        { mark = "✕"; cls = "is-fail"; }
+        if (c.status === "pass")      { mark = "✓"; cls = "is-pass"; }
+        else if (c.status === "warn") { mark = "⚠"; cls = "is-warn"; }
+        else                          { mark = "✕"; cls = "is-fail"; }
       }
       const valDisplay = (c.id === "mtls" || c.id === "grpc" || c.id === "graphql" || c.id === "oauth-cc" || c.id === "self-host")
         ? ({ yes: "Native", part: "Partial", no: "No" }[c.val] || c.val)
         : c.val;
-      const limCls = "lim" + (c.active ? " is-active " + (c.pass ? "is-pass" : "is-fail") : "");
+      const limCls = "lim" + (c.active ? " is-active is-" + c.status : "");
       return '<div class="' + limCls + '">' +
         '<span class="lim__name">' + esc(c.label) + '</span>' +
         '<span class="lim__val">' + esc(valDisplay) + '</span>' +
@@ -413,10 +385,13 @@ function render() {
 
     let verdictTag = "";
     let cardCls = "vcard";
-    if (overallPass === true) {
+    if (verdict === "pass") {
       verdictTag = '<span class="vcard__verdict is-pass">Clears the bar</span>';
       cardCls += " is-pass";
-    } else if (overallPass === false) {
+    } else if (verdict === "warn") {
+      verdictTag = '<span class="vcard__verdict is-warn">Clears with caveats</span>';
+      cardCls += " is-warn";
+    } else if (verdict === "fail") {
       verdictTag = '<span class="vcard__verdict is-fail">Falls short</span>';
       cardCls += " is-fail";
     }
@@ -455,7 +430,13 @@ function render() {
   if (activeCount === 0) {
     $("#tally").innerHTML = '<em>' + VENDORS.length + '</em> vendors · no constraints applied yet';
   } else {
-    $("#tally").innerHTML = '<em>' + passing + '</em> of ' + VENDORS.length + ' clear ' + activeCount + ' constraint' + (activeCount > 1 ? 's' : '');
+    // Tri-state tally: "X clear · Y with caveats · Z fall short" — omit the
+    // zero buckets to keep it readable when one or two are empty.
+    const parts = [];
+    if (tally.pass) parts.push('<em>' + tally.pass + '</em> clear');
+    if (tally.warn) parts.push('<em>' + tally.warn + '</em> with caveats');
+    if (tally.fail) parts.push('<em>' + tally.fail + '</em> fall short');
+    $("#tally").innerHTML = parts.join(' · ');
   }
 }
 

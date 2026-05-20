@@ -1,0 +1,88 @@
+/* ════════════════════════════════════════════════════════════════════
+   Infra Atlas · Tools — shared chrome
+   Used by /tools/, /tools/egress-cost/, /tools/subnet/, /tools/apim-limits/.
+   Each tool keeps its own panel/results styling in an inline <style>
+   block; the masthead, form controls, about block and colophon live here.
+   ════════════════════════════════════════════════════════════════════ */
+
+:root {
+  --ink: #0A0907; --ink-2: #100E0C; --surface: #161310; --surface-2: #1E1A15;
+  --line: rgba(244, 239, 230, 0.06); --line-2: rgba(244, 239, 230, 0.14); --line-3: rgba(244, 239, 230, 0.28);
+  --paper: #F4EFE6; --paper-2: rgba(244, 239, 230, 0.66); --paper-3: rgba(244, 239, 230, 0.55);
+  --accent: #FF7849; --accent-2: #FFA66E;
+  --mint: #6FE7B5; --gold: #F4C660; --rose: #F47B7B;
+  --serif: 'Instrument Serif', 'Times New Roman', serif;
+  --mono: 'JetBrains Mono', ui-monospace, monospace;
+  --sans: 'Manrope', -apple-system, system-ui, sans-serif;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { background: var(--ink); color: var(--paper); font-family: var(--sans); font-size: 15px; line-height: 1.55; -webkit-font-smoothing: antialiased; min-height: 100vh; }
+body {
+  background:
+    radial-gradient(ellipse at 100% -10%, rgba(255, 120, 73, 0.07), transparent 55%),
+    radial-gradient(ellipse at -10% 110%, rgba(244, 198, 96, 0.05), transparent 65%),
+    var(--ink);
+  background-attachment: fixed; overflow-x: hidden;
+}
+.grain { pointer-events: none; position: fixed; inset: 0; z-index: 100; opacity: 0.08; mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml;utf8,<svg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.6 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+}
+.scanlines { pointer-events: none; position: fixed; inset: 0; z-index: 99;
+  background: repeating-linear-gradient(180deg, transparent, transparent 2px, rgba(244,239,230,0.012) 2px, rgba(244,239,230,0.012) 3px);
+}
+::selection { background: var(--accent); color: var(--ink); }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 2px; }
+
+/* Page container — tools can override max-width by re-declaring .page in
+   their inline style block. Default is 1100px. */
+.page { max-width: 1100px; margin: 0 auto; padding: 56px 32px 96px; position: relative; }
+
+/* Masthead — eyebrow + title + subtitle */
+.masthead { padding-bottom: 28px; border-bottom: 1px solid var(--line); margin-bottom: 36px; }
+.eyebrow { font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.22em; color: var(--paper-3);
+  text-transform: uppercase; display: inline-flex; align-items: center; gap: 12px; text-decoration: none; transition: color 0.2s ease; }
+.eyebrow:hover { color: var(--paper); }
+.eyebrow .arrow { color: var(--accent); transition: transform 0.2s ease; }
+.eyebrow:hover .arrow { transform: translateX(-4px); }
+h1.title { font-family: var(--serif); font-weight: 400; font-size: clamp(40px, 6.4vw, 76px); line-height: 0.98; letter-spacing: -0.02em; margin-top: 12px; color: var(--paper); }
+h1.title em { font-style: italic; color: var(--accent); }
+.subtitle { margin-top: 16px; font-size: 15.5px; color: var(--paper-2); line-height: 1.6; max-width: 720px; }
+.subtitle a { color: var(--paper); text-decoration: underline; text-decoration-color: var(--accent); text-underline-offset: 3px; }
+.subtitle code { font-family: var(--mono); font-size: 14px; color: var(--accent); }
+
+/* Form controls — used by tools that take inputs */
+.field { display: flex; flex-direction: column; gap: 8px; }
+.field__label { font-family: var(--mono); font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--paper-3); }
+.field select, .field input {
+  background: var(--ink); border: 1px solid var(--line-2); color: var(--paper);
+  font-family: var(--mono); font-size: 14px; padding: 12px 14px; border-radius: 3px;
+  outline: none; transition: border-color 0.15s; appearance: none;
+}
+.field select:focus, .field input:focus { border-color: var(--accent); }
+.field input[type="number"] { -moz-appearance: textfield; }
+.field input::-webkit-outer-spin-button, .field input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+.unit-toggle { display: inline-flex; border: 1px solid var(--line-2); border-radius: 3px; overflow: hidden; }
+.unit-toggle button {
+  flex: 1; background: transparent; border: 0; color: var(--paper-2);
+  font-family: var(--mono); font-size: 13px; letter-spacing: 0.04em; padding: 12px 0; cursor: pointer; transition: all 0.15s;
+}
+.unit-toggle button.is-active { background: var(--paper); color: var(--ink); }
+.unit-toggle button:not(.is-active):hover { color: var(--paper); }
+
+/* About / caveat block — orange-tinted note at the bottom of each tool */
+.about { padding: 20px 24px; border: 1px solid var(--line); border-radius: 5px;
+  background: linear-gradient(180deg, rgba(255,120,73,0.05), rgba(255,120,73,0.01));
+  border-color: rgba(255,120,73,0.22); margin-bottom: 28px; }
+.about__mark { font-family: var(--serif); font-style: italic; font-size: 28px; color: var(--accent); float: left; margin: 0 14px 0 0; line-height: 0.9; }
+.about p { font-size: 13.5px; color: var(--paper-2); line-height: 1.6; }
+.about strong { color: var(--paper); font-weight: 600; }
+.about a { color: var(--paper); text-decoration: underline; text-decoration-color: var(--accent); text-underline-offset: 3px; }
+.about a:hover { color: var(--accent); }
+.about code { font-family: var(--mono); font-size: 12.5px; color: var(--paper); background: rgba(244,239,230,0.06); padding: 1px 5px; border-radius: 3px; }
+.about em { font-style: italic; }
+
+/* Colophon */
+.colophon { margin-top: 64px; padding-top: 28px; border-top: 1px solid var(--line);
+  font-family: var(--mono); font-size: 11px; letter-spacing: 0.06em; color: var(--paper-3); }
+.colophon a { color: var(--paper-2); text-decoration: underline; text-decoration-color: var(--line-2); text-underline-offset: 3px; }
+.colophon a:hover { color: var(--accent); }
