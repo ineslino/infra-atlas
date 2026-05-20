@@ -82,6 +82,14 @@ input[type="range"]::-moz-range-thumb {
 
 /* ─────────── VENDOR CARDS ─────────── */
 .vendors { display: grid; grid-template-columns: repeat(auto-fit, minmax(310px, 1fr)); gap: 14px; }
+/* The 7th vendor (IBM) lands alone on row 3 of the 3-column layout. Push
+   it into column 2 so it sits centred under the row above instead of
+   clinging to the left edge. Scoped to viewports where the 3-column grid
+   actually activates — below ~1000px the grid drops to 2 columns and the
+   default flow looks right again. */
+@media (min-width: 1000px) {
+  .vcard:nth-child(7):last-child { grid-column: 2; }
+}
 .vcard {
   background: var(--surface); border: 1px solid var(--line); border-radius: 5px; padding: 22px;
   display: flex; flex-direction: column; gap: 14px; transition: opacity 0.15s, border-color 0.15s;
@@ -110,9 +118,12 @@ input[type="range"]::-moz-range-thumb {
      Col 2 (minmax(0, 1fr)): without `minmax(0,…)` the column also grows to
      max-content because `.lim__val` is content-shaped — overflowing the
      card. The `0` lower bound lets the value column shrink below content
-     width and the value text wrap onto a second line for the long entries
-     (e.g. "30 MB buffered (streaming bypasses)"). */
-  grid-template-columns: max-content minmax(0, 1fr) auto;
+     width if the value is too long.
+     Col 3 (18px fixed): the verdict column has to stay 18px even when
+     the row's verdict is empty (inactive constraint), so the value
+     column's right edge does not jump from row to row. A plain `auto`
+     here collapses to 0 when the content is empty. */
+  grid-template-columns: max-content minmax(0, 1fr) 18px;
   row-gap: 8px;
   column-gap: 10px;
 }
@@ -249,25 +260,29 @@ const VENDORS = [
   { key: "ibm",      name: "IBM API Connect",   swatch: "#A8A39A" }
 ];
 
+// `display` strings are tuned to fit one line in the value column (~21
+// chars at 11.5px mono in a 3-column vendor grid). The longer detail —
+// "non-raisable", "streaming bypasses", classic-vs-v2 tier names — lives
+// in the per-vendor NOTES block below the row, not in the headline.
 const LIMITS = {
   timeout: {
-    apigee:   { max: 300,  hard: true,  display: "300 s max (default 55 s)" },
-    aws:      { max: 30,   hard: true,  display: "30 s HTTP · 29 s REST (raisable)" },
-    azure:    { max: 300,  hard: false, display: "300 s default, configurable" },
-    mulesoft: { max: null, hard: false, display: "10 s default, no ceiling" },
-    kong:     { max: null, hard: false, display: "60 s default, no ceiling" },
-    gravitee: { max: null, hard: false, display: "Per-endpoint, no ceiling" },
-    ibm:      { max: null, hard: false, display: "60 s default, no ceiling" }
+    apigee:   { max: 300,  hard: true,  display: "55 s → 300 s max" },
+    aws:      { max: 30,   hard: true,  display: "30 s HTTP · 29 s REST" },
+    azure:    { max: 300,  hard: false, display: "300 s default" },
+    mulesoft: { max: null, hard: false, display: "10 s · no ceiling" },
+    kong:     { max: null, hard: false, display: "60 s · no ceiling" },
+    gravitee: { max: null, hard: false, display: "Per-endpoint" },
+    ibm:      { max: null, hard: false, display: "60 s · no ceiling" }
   },
   // payload — values in MB.
   payload: {
-    apigee:   { max: 30,    hard: true,  display: "30 MB buffered (streaming bypasses)" },
-    aws:      { max: 10,    hard: true,  display: "10 MB (non-raisable)" },
-    azure:    { max: 1024,  hard: true,  display: "1 GiB (v2 / Consumption); 500 MiB classic" },
-    mulesoft: { max: 1024,  hard: true,  display: "1 GB (CloudHub 2.0); no limit on self-hosted" },
-    kong:     { max: null,  hard: false, display: "128 MB default, operator-set" },
+    apigee:   { max: 30,    hard: true,  display: "30 MB buffered" },
+    aws:      { max: 10,    hard: true,  display: "10 MB · hard cap" },
+    azure:    { max: 1024,  hard: true,  display: "1 GiB v2 · 500 MiB v1" },
+    mulesoft: { max: 1024,  hard: true,  display: "1 GB CH2 · ∞ self-host" },
+    kong:     { max: null,  hard: false, display: "128 MB default" },
     gravitee: { max: null,  hard: false, display: "No vendor limit" },
-    ibm:      { max: 5120,  hard: true,  display: "4 MB default, up to ~5 GB" }
+    ibm:      { max: 5120,  hard: true,  display: "4 MB · 5 GB max" }
   },
   mtls: {
     apigee: "yes", aws: "part", azure: "yes", mulesoft: "yes", kong: "yes", gravitee: "yes", ibm: "yes"
@@ -390,7 +405,10 @@ function render() {
     else tally.pass++;  // pass + neutral both count here
 
     const limsHtml = checks.map((c) => {
-      let mark = "·"; let cls = "is-mute";
+      // Empty mark for inactive constraints — the verdict column keeps
+      // its 18px width via the grid template, so the value column's
+      // right edge does not drift between active and inactive rows.
+      let mark = ""; let cls = "is-mute";
       if (c.active) {
         if (c.status === "pass")      { mark = "✓"; cls = "is-pass"; }
         else if (c.status === "warn") { mark = "⚠"; cls = "is-warn"; }
