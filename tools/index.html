@@ -39,9 +39,8 @@
 .tcard__title { font-family: var(--serif); font-size: 28px; line-height: 1.1; color: var(--paper); }
 .tcard__title em { font-style: italic; color: var(--accent); }
 .tcard__desc { font-size: 13.5px; color: var(--paper-2); line-height: 1.55; }
-.tcard__feeds { font-family: var(--mono); font-size: 10.5px; color: var(--paper-3); display: inline-flex; align-items: center; gap: 6px; }
-.tcard__feeds a { color: var(--paper-2); text-decoration: underline; text-decoration-color: var(--line-2); text-underline-offset: 3px; }
-.tcard__feeds a:hover { color: var(--accent); }
+.tcard__feeds { font-family: var(--mono); font-size: 10.5px; color: var(--paper-3); }
+.tcard__feeds code { color: var(--paper-2); font-family: var(--mono); padding: 0 4px; background: rgba(244,239,230,0.04); border-radius: 2px; }
 .tcard__cta { margin-top: auto; font-family: var(--mono); font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--accent); }
 </style>
 </head>
@@ -60,25 +59,29 @@
 
   <main id="ia-main">
     <section class="grid">
+      <!-- Each card is a single <a>. The "Built on" path is shown as a
+           styled <code> rather than a nested anchor — HTML5 parsers close
+           the outer <a> implicitly when they hit an inner <a>, which would
+           shatter the card into three siblings inside .grid. -->
       <a class="tcard" href="/tools/egress-cost/">
         <div class="tcard__tag">Networking · Cost</div>
         <div class="tcard__title">Egress Cost <em>Calculator.</em></div>
         <div class="tcard__desc">What will moving <em>N</em> TB a month cost on AWS, Azure and GCP? Side by side, with the tier ladder shown.</div>
-        <div class="tcard__feeds">Built on <a href="/egress/">/egress/</a></div>
+        <div class="tcard__feeds">Built on <code>/egress/</code></div>
         <div class="tcard__cta">Open the calculator →</div>
       </a>
       <a class="tcard" href="/tools/subnet/">
         <div class="tcard__tag">Networking · CIDR</div>
         <div class="tcard__title">Subnet <em>Calculator.</em></div>
         <div class="tcard__desc">Pick a CIDR, see the usable host count after each cloud's reserved IPs — AWS reserves 5, Azure 5, GCP 4, OCI 3. Side-by-side, with the broadcast / gateway rules made explicit.</div>
-        <div class="tcard__feeds">Built on <a href="/networking-matrix/">/networking-matrix/</a></div>
+        <div class="tcard__feeds">Built on <code>/networking-matrix/</code></div>
         <div class="tcard__cta">Open the calculator →</div>
       </a>
       <a class="tcard" href="/tools/apim-limits/">
         <div class="tcard__tag">APIM · Limits</div>
         <div class="tcard__title">APIM Limits <em>Picker.</em></div>
         <div class="tcard__desc">Tick the constraints — request timeout, payload, rate-limit ceiling, WebSocket support — and see which API-management vendors clear the bar.</div>
-        <div class="tcard__feeds">Built on <a href="/apim-matrix/">/apim-matrix/</a></div>
+        <div class="tcard__feeds">Built on <code>/apim-matrix/</code></div>
         <div class="tcard__cta">Open the picker →</div>
       </a>
     </section>
