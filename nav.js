@@ -162,6 +162,8 @@
     + '.ia-cmdk__go{font-family:var(--mono,monospace);font-size:10px;'
     + 'color:var(--paper-3,rgba(244,239,230,0.42));opacity:0;}'
     + '.ia-cmdk__row.is-sel .ia-cmdk__go{opacity:1;}'
+    + '.ia-cmdk__match{font-style:italic;color:var(--paper-3,rgba(244,239,230,0.55));'
+    + 'font-size:11.5px;margin-left:8px;}'
     + '.ia-cmdk__empty{padding:26px 14px;text-align:center;'
     + 'color:var(--paper-3,rgba(244,239,230,0.42));font-family:var(--mono,monospace);font-size:12px;}'
     + '.ia-cmdk__foot{display:flex;gap:15px;padding:9px 15px;'
@@ -379,6 +381,25 @@
   var visible = [];
   var sel = 0;
 
+  // Lazy-loaded content index for ⌘K — `{href, term}` entries built by
+  // scripts/build_search_index.py. Fetched on first palette open so visitors
+  // who never use ⌘K do not pay its cost.
+  var SEARCH_INDEX = null;
+  var SEARCH_LOADING = false;
+  function loadSearchIndex() {
+    if (SEARCH_INDEX || SEARCH_LOADING) return;
+    SEARCH_LOADING = true;
+    fetch("/search-index.json", { cache: "force-cache" })
+      .then(function (r) { return r.ok ? r.json() : null; })
+      .then(function (idx) {
+        SEARCH_LOADING = false;
+        if (idx && Array.isArray(idx.entries)) SEARCH_INDEX = idx.entries;
+        // Re-render so an already-typed query picks up the new content matches.
+        if (overlay.classList.contains("is-open") && input.value) render();
+      })
+      .catch(function () { SEARCH_LOADING = false; });
+  }
+
   function esc(s) {
     return s.replace(/[&<>"]/g, function (c) {
       return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c];
@@ -388,10 +409,38 @@
     q = (q || "").trim().toLowerCase();
     if (!q) return ITEMS.slice();
     var toks = q.split(/\s+/);
-    return ITEMS.filter(function (it) {
+    // 1) Name / keyword matches against ITEMS — the existing path.
+    var byName = ITEMS.filter(function (it) {
       var hay = (it.name + " " + it.vendor + " " + it.group + " " + it.keywords).toLowerCase();
       return toks.every(function (t) { return hay.indexOf(t) !== -1; });
     });
+    // 2) Content matches via the lazy-loaded search index, one entry per href.
+    if (!SEARCH_INDEX) return byName;
+    var byHref = {};
+    for (var n = 0; n < byName.length; n++) byHref[byName[n].href] = true;
+    var contentMatches = [];
+    for (var i = 0; i < SEARCH_INDEX.length; i++) {
+      var e = SEARCH_INDEX[i];
+      if (byHref[e.href]) continue;
+      var t = (e.term || "").toLowerCase();
+      var ok = true;
+      for (var k = 0; k < toks.length; k++) {
+        if (t.indexOf(toks[k]) === -1) { ok = false; break; }
+      }
+      if (!ok) continue;
+      for (var j = 0; j < ITEMS.length; j++) {
+        if (ITEMS[j].href === e.href) {
+          contentMatches.push({
+            href: ITEMS[j].href, name: ITEMS[j].name, vendor: ITEMS[j].vendor,
+            group: ITEMS[j].group, keywords: ITEMS[j].keywords, cur: ITEMS[j].cur,
+            match: e.term
+          });
+          byHref[e.href] = true;
+          break;
+        }
+      }
+    }
+    return byName.concat(contentMatches);
   }
   function render() {
     visible = filter(input.value);
@@ -414,7 +463,9 @@
            +    'aria-selected="' + (i === sel ? 'true' : 'false') + '" '
            +    'data-idx="' + i + '" data-href="' + it.href + '">'
            +    '<span class="ia-cmdk__vd">' + it.vendor + '</span>'
-           +    '<span class="ia-cmdk__name">' + it.name + '</span>'
+           +    '<span class="ia-cmdk__name">' + it.name
+           +      (it.match ? '<span class="ia-cmdk__match">matched: “' + esc(it.match) + '”</span>' : '')
+           +    '</span>'
            +    (it.cur ? '<span class="ia-cmdk__dot" title="Current page"></span>' : '')
            +    '<span class="ia-cmdk__go">↵</span>'
            +  '</div>';
@@ -436,6 +487,7 @@
     if (visible[sel]) location.href = visible[sel].href;
   }
   function openCmdk() {
+    loadSearchIndex();                          // lazy-fetch the content index on first open
     overlay.classList.add("is-open");
     btn.classList.add("is-open");
     btn.setAttribute("aria-expanded", "true");
