@@ -6,7 +6,7 @@
 <meta name="color-scheme" content="dark">
 <title>Toolbox · Infra Atlas</title>
 <link rel="icon" href="/favicon.svg?v=2" type="image/svg+xml">
-<meta name="description" content="A curated, opinionated list of open-source tools cloud engineers actually keep on their $PATH — Kubernetes TUIs, networking diagnostics, shell productivity, IaC, secrets, FinOps. Sorted by domain, tagged by form and language. No SaaS pitches.">
+<meta name="description" content="A curated, opinionated list of open-source tools cloud engineers actually keep on their $PATH — Kubernetes TUIs, networking diagnostics, shell productivity, auth, IaC, secrets, FinOps, API testing, container images. Grouped by domain, tagged by form (CLI · TUI · GUI · Web UI) and language.">
 <link rel="canonical" href="https://infraatlas.dev/toolbox/">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Infra Atlas">
@@ -38,7 +38,7 @@
   <header class="masthead">
     <a class="eyebrow" href="/"><span class="arrow">←</span> Infra Atlas</a>
     <h1 class="title">The <em>Toolbox.</em></h1>
-    <p class="subtitle">Open-source tools we'd actually put on every cloud engineer's <code>$PATH</code> — Kubernetes TUIs, networking diagnostics, shell productivity, IaC, secrets, FinOps. Grouped by domain, tagged by form and language. No SaaS pitches, no rankings. Just what's worth knowing.</p>
+    <p class="subtitle">Open-source tools we'd actually put on every cloud engineer's <code>$PATH</code> — Kubernetes TUIs, networking diagnostics, shell productivity, auth &amp; secrets, IaC, API testing, container images, local runtimes. Grouped by domain, tagged by form (<code>CLI</code> · <code>TUI</code> · <code>GUI</code> · <code>Web UI</code>) and language. No SaaS, no rankings.</p>
   </header>
 
   <main id="ia-main">
@@ -63,13 +63,14 @@
         <div class="tbx-hub__count"><em>16</em> tools · fzf, ripgrep, zoxide, lazygit</div>
       </a>
 
-      <!-- Departments not yet populated. Stubs make the structure visible
-           without pretending to ship something we have not curated yet. -->
-      <div class="tbx-hub__card is-stub">
+      <a class="tbx-hub__card" href="/toolbox/auth/">
         <div class="tbx-hub__num">01 · Department</div>
         <h2 class="tbx-hub__title">Auth &amp; <em>Identity</em></h2>
-        <div class="tbx-hub__count">soon · aws-vault, granted, sops, age</div>
-      </div>
+        <div class="tbx-hub__count"><em>6</em> tools · aws-vault, sops, age, granted</div>
+      </a>
+
+      <!-- Departments not yet populated. Stubs make the structure visible
+           without pretending to ship something we have not curated yet. -->
 
       <div class="tbx-hub__card is-stub">
         <div class="tbx-hub__num">02 · Department</div>
@@ -107,11 +108,35 @@
         <div class="tbx-hub__count">soon · pgcli, atlas, usql, dbeaver</div>
       </div>
 
+      <div class="tbx-hub__card is-stub">
+        <div class="tbx-hub__num">11 · Department</div>
+        <h2 class="tbx-hub__title">API &amp; <em>Testing</em></h2>
+        <div class="tbx-hub__count">soon · Bruno, Hurl, k6, hey, vegeta</div>
+      </div>
+
+      <div class="tbx-hub__card is-stub">
+        <div class="tbx-hub__num">12 · Department</div>
+        <h2 class="tbx-hub__title">Container &amp; <em>Images</em></h2>
+        <div class="tbx-hub__count">soon · skopeo, crane, grype, syft, cosign</div>
+      </div>
+
+      <div class="tbx-hub__card is-stub">
+        <div class="tbx-hub__num">13 · Department</div>
+        <h2 class="tbx-hub__title">Local Dev &amp; <em>Runtimes</em></h2>
+        <div class="tbx-hub__count">soon · OrbStack, Colima, Rancher Desktop, DevPod</div>
+      </div>
+
+      <div class="tbx-hub__card is-stub">
+        <div class="tbx-hub__num">14 · Department</div>
+        <h2 class="tbx-hub__title">Git &amp; <em>Source Control</em></h2>
+        <div class="tbx-hub__count">soon · tig, gitui, gh, git-cliff, git-filter-repo</div>
+      </div>
+
     </section>
 
     <div class="about" style="margin-top: 36px;">
       <span class="about__mark">*</span>
-      <p>Each entry has a one-line description, the tool it <strong>replaces</strong> (the mental hook most engineers use), a link to the repo, and tags for form (<code>TUI</code> · <code>CLI</code> · <code>GUI</code>) and language (<code>Rust</code> · <code>Go</code> · <code>Python</code> · …). The ★ marks the picks worth installing on every machine — opinionated, not exhaustive. Open a PR on <a href="https://github.com/ineslino/infra-atlas" target="_blank" rel="noopener">GitHub</a> if you think we missed something obvious.</p>
+      <p>Each entry has a one-line description, the tool it <strong>replaces</strong> (the mental hook most engineers use), a link to the repo, and tags for form (<code>TUI</code> · <code>CLI</code> · <code>GUI</code> · <code>Web UI</code>) and language (<code>Rust</code> · <code>Go</code> · <code>Python</code> · …). <code>GUI</code> covers native desktop apps; <code>Web UI</code> covers self-hosted web interfaces you deploy. The ★ marks the picks worth installing on every machine — opinionated, not exhaustive. Open a PR on <a href="https://github.com/ineslino/infra-atlas" target="_blank" rel="noopener">GitHub</a> if you think we missed something obvious.</p>
     </div>
 
   </main>

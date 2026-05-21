@@ -39,6 +39,7 @@ TOOLBOX = [
     ("toolbox/kubernetes", "/toolbox/kubernetes/"),
     ("toolbox/networking", "/toolbox/networking/"),
     ("toolbox/shell",      "/toolbox/shell/"),
+    ("toolbox/auth",       "/toolbox/auth/"),
 ]
 
 # Keys whose string values get indexed. `value` catches the per-cell vendor

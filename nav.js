@@ -38,10 +38,11 @@
     ["/tools/apim-limits/",  "APIM Limits Picker",         "Tool", "apim api gateway limits timeout payload rate limit websocket pick choose vendor mulesoft apigee"]
   ];
   var TOOLBOX = [
-    ["/toolbox/",            "The Toolbox — hub",          "Toolbox", "tools curated open source TUI CLI list recommended path engineer kubernetes networking shell"],
+    ["/toolbox/",            "The Toolbox — hub",          "Toolbox", "tools curated open source TUI CLI GUI list recommended path engineer kubernetes networking shell auth secrets"],
     ["/toolbox/kubernetes/", "Kubernetes Toolbox",         "Toolbox", "k9s kubectx stern kubefwd popeye helm krew kind k3d skaffold tilt argocd dive lazydocker"],
     ["/toolbox/networking/", "Networking Toolbox",         "Toolbox", "mtr doggo dog bandwhich gping termshark bmon nload httpie xh mkcert nmap cloudflared dns traceroute"],
-    ["/toolbox/shell/",      "Shell & Productivity Toolbox","Toolbox","fzf ripgrep rg fd zoxide atuin starship mise direnv chezmoi zellij lazygit helix yazi gum bat delta"]
+    ["/toolbox/shell/",      "Shell & Productivity Toolbox","Toolbox","fzf ripgrep rg fd zoxide atuin starship mise direnv chezmoi zellij lazygit helix yazi gum bat delta"],
+    ["/toolbox/auth/",       "Auth & Identity Toolbox",    "Toolbox", "aws-vault granted sops age saml2aws chamber credentials secrets encryption kms ssm iam identity"]
   ];
   var DECISIONS = [
     ["/decisions/",                                          "Decisions — the hub",                   "Decisions", "decision guide which one should i use compare versus vs choose"],
@@ -67,7 +68,7 @@
     "/regions/":                ["/ec2/", "/azure-vm/", "/gcp-compute/"],
     "/equivalent-sku/":         ["/ec2/", "/azure-vm/", "/gcp-compute/", "/oci-compute/"],
     "/kubernetes/":             ["/networking-matrix/", "/iam-matrix/", "/equivalent-sku/"],
-    "/iam-matrix/":             ["/networking-matrix/", "/kubernetes/", "/confidential-computing/"],
+    "/iam-matrix/":             ["/networking-matrix/", "/kubernetes/", "/confidential-computing/", "/toolbox/auth/"],
     "/aws-api-gateway/":        ["/apim-matrix/", "/apigee/", "/mulesoft/", "/decisions/rest-api-vs-http-api/"],
     "/apigee/":                 ["/apim-matrix/", "/aws-api-gateway/", "/mulesoft/", "/decisions/api-gateway-vs-proxy-vs-load-balancer/"],
     "/mulesoft/":               ["/apim-matrix/", "/aws-api-gateway/", "/apigee/", "/decisions/api-gateway-vs-proxy-vs-load-balancer/"],
@@ -81,6 +82,7 @@
     "/tools/egress-cost/":      ["/egress/", "/networking-matrix/", "/decisions/nat-gateway-vs-instance-vs-no-nat/"],
     "/tools/subnet/":           ["/networking-matrix/", "/regions/"],
     "/tools/apim-limits/":      ["/apim-matrix/", "/aws-api-gateway/", "/decisions/rest-api-vs-http-api/"],
+    "/toolbox/auth/":           ["/iam-matrix/", "/compliance/", "/confidential-computing/"],
     // Decisions → related instruments (bidirectional)
     "/decisions/fargate-vs-ec2/":                            ["/ec2/", "/kubernetes/", "/equivalent-sku/"],
     "/decisions/azure-app-service-vs-container-apps-vs-vm/": ["/azure-vm/", "/kubernetes/", "/equivalent-sku/"],

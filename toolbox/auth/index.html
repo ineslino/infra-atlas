@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="color-scheme" content="dark">
+<title>Auth &amp; Identity Toolbox · Infra Atlas</title>
+<link rel="icon" href="/favicon.svg?v=2" type="image/svg+xml">
+<meta name="description" content="Open-source tools for AWS credential management, secrets encryption and SSO — aws-vault, granted, sops, age, saml2aws, chamber. Every platform engineer's auth stack.">
+<link rel="canonical" href="https://infraatlas.dev/toolbox/auth/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Infra Atlas">
+<meta property="og:title" content="Auth &amp; Identity Toolbox · Infra Atlas">
+<meta property="og:description" content="Open-source tools for credential management and secrets — aws-vault, granted, sops, age, saml2aws, chamber.">
+<meta property="og:url" content="https://infraatlas.dev/toolbox/auth/">
+<meta property="og:image" content="https://infraatlas.dev/og.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Auth &amp; Identity Toolbox · Infra Atlas">
+<meta name="twitter:description" content="Open-source credential and secrets tools for cloud engineers.">
+<meta name="twitter:image" content="https://infraatlas.dev/og.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@300;400;500;600&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/tools/shared.css">
+
+<style>
+.subtitle { max-width: 760px; }
+</style>
+</head>
+<body>
+
+<div class="grain"></div>
+<div class="scanlines"></div>
+
+<div class="page">
+
+  <header class="masthead">
+    <a class="eyebrow" href="/toolbox/"><span class="arrow">←</span> Infra Atlas · Toolbox</a>
+    <h1 class="title">Auth &amp; <em>Identity.</em></h1>
+    <p class="subtitle">Credentials left in <code>~/.aws/credentials</code> in plaintext, SAML logins done by copy-pasting tokens from a browser, secrets committed to git — these are not hypothetical mistakes. This department is the short list of tools that eliminate each one. ★ marks what we install on every machine before touching a customer account.</p>
+  </header>
+
+  <main id="ia-main">
+
+    <section class="tbx-filters" aria-label="Filter tools by tag">
+      <div class="tbx-filters__group">
+        <span class="tbx-filters__label">Form</span>
+        <button class="tbx-chip" data-tag="CLI">CLI</button>
+      </div>
+      <div class="tbx-filters__group">
+        <span class="tbx-filters__label">Category</span>
+        <button class="tbx-chip" data-tag="creds">Credentials</button>
+        <button class="tbx-chip" data-tag="secrets">Secrets</button>
+      </div>
+      <div class="tbx-filters__group">
+        <span class="tbx-filters__label">Use case</span>
+        <button class="tbx-chip" data-tag="SRE">SRE</button>
+        <button class="tbx-chip" data-tag="dev">Dev</button>
+        <button class="tbx-chip" data-tag="platform">Platform</button>
+      </div>
+      <div class="tbx-filters__group">
+        <span class="tbx-filters__label">Picks</span>
+        <button class="tbx-chip" data-tag="pick">★ Must-install</button>
+      </div>
+      <button class="tbx-clear" id="tbx-clear" type="button">Clear</button>
+    </section>
+
+    <section class="tbx-list" id="tbx-list" aria-label="Tools">
+
+      <article class="tbx-row" data-tags="CLI Go mature creds SRE pick">
+        <div class="tbx-row__head">
+          <span class="tbx-row__name">aws-vault</span>
+          <span class="tbx-row__star" title="Must-install pick">★</span>
+          <span class="tbx-row__replaces">replaces <strong>~/.aws/credentials plaintext files</strong></span>
+        </div>
+        <p class="tbx-row__tldr">Stores AWS IAM access keys in the OS keychain (macOS Keychain, Windows Credential Manager, Secret Service on Linux) — keys never touch disk in plaintext. Supports MFA prompts, role chaining, and multiple profiles. <code>aws-vault exec profile -- aws s3 ls</code> is the replacement for sourcing credentials into the environment.</p>
+        <div class="tbx-row__tags">
+          <span class="tbx-row__tag tbx-row__tag--form">CLI</span>
+          <span class="tbx-row__tag tbx-row__tag--lang">Go</span>
+          <span class="tbx-row__tag">mature</span>
+          <span class="tbx-row__tag">SRE</span>
+        </div>
+        <a class="tbx-row__repo" href="https://github.com/99designs/aws-vault" target="_blank" rel="noopener">99designs/aws-vault<span class="arr">→</span></a>
+      </article>
+
+      <article class="tbx-row" data-tags="CLI Go emerging creds SRE pick">
+        <div class="tbx-row__head">
+          <span class="tbx-row__name">granted</span>
+          <span class="tbx-row__star" title="Must-install pick">★</span>
+          <span class="tbx-row__replaces">replaces <strong>aws sso login + profile juggling</strong></span>
+        </div>
+        <p class="tbx-row__tldr">Multi-account AWS role switcher designed for IAM Identity Center (SSO) orgs. <code>assume role-name</code> picks up the profile and optionally opens a browser tab with a distinct background colour per account — so staging and production are visually distinct. More SSO-native than aws-vault; the two tools solve the same UX problem from different eras of AWS auth.</p>
+        <div class="tbx-row__tags">
+          <span class="tbx-row__tag tbx-row__tag--form">CLI</span>
+          <span class="tbx-row__tag tbx-row__tag--lang">Go</span>
+          <span class="tbx-row__tag">emerging</span>
+          <span class="tbx-row__tag">SRE</span>
+        </div>
+        <a class="tbx-row__repo" href="https://github.com/common-fate/granted" target="_blank" rel="noopener">common-fate/granted<span class="arr">→</span></a>
+      </article>
+
+      <article class="tbx-row" data-tags="CLI Go mature creds SRE">
+        <div class="tbx-row__head">
+          <span class="tbx-row__name">saml2aws</span>
+          <span class="tbx-row__replaces">replaces <strong>browser → copy-paste temporary creds</strong></span>
+        </div>
+        <p class="tbx-row__tldr">Log into AWS from any SAML 2.0 identity provider (Okta, Azure AD, Google Workspace, Ping, ADFS) and get STS credentials written to <code>~/.aws/credentials</code> or exported to the environment. The missing CLI bridge for orgs that run SAML-based SSO but need <code>aws</code> CLI access without manual copy-paste from the console.</p>
+        <div class="tbx-row__tags">
+          <span class="tbx-row__tag tbx-row__tag--form">CLI</span>
+          <span class="tbx-row__tag tbx-row__tag--lang">Go</span>
+          <span class="tbx-row__tag">mature</span>
+          <span class="tbx-row__tag">SRE</span>
+        </div>
+        <a class="tbx-row__repo" href="https://github.com/Versent/saml2aws" target="_blank" rel="noopener">Versent/saml2aws<span class="arr">→</span></a>
+      </article>
+
+      <article class="tbx-row" data-tags="CLI Go mature secrets platform pick">
+        <div class="tbx-row__head">
+          <span class="tbx-row__name">sops</span>
+          <span class="tbx-row__star" title="Must-install pick">★</span>
+          <span class="tbx-row__replaces">replaces <strong>plaintext secrets in git / git-crypt</strong></span>
+        </div>
+        <p class="tbx-row__tldr">Encrypts secrets files in-place — YAML, JSON, <code>.env</code>, binary — while keeping structure readable in diffs. Backends: AWS KMS, GCP KMS, Azure Key Vault, age, PGP. The canonical answer to "how do we store secrets in the same repo as config without exposing them." Works with Helm secrets, Flux, ArgoCD, and most GitOps stacks.</p>
+        <div class="tbx-row__tags">
+          <span class="tbx-row__tag tbx-row__tag--form">CLI</span>
+          <span class="tbx-row__tag tbx-row__tag--lang">Go</span>
+          <span class="tbx-row__tag">mature</span>
+          <span class="tbx-row__tag">platform</span>
+        </div>
+        <a class="tbx-row__repo" href="https://github.com/getsops/sops" target="_blank" rel="noopener">getsops/sops<span class="arr">→</span></a>
+      </article>
+
+      <article class="tbx-row" data-tags="CLI Go mature secrets dev pick">
+        <div class="tbx-row__head">
+          <span class="tbx-row__name">age</span>
+          <span class="tbx-row__star" title="Must-install pick">★</span>
+          <span class="tbx-row__replaces">replaces <strong>GPG for file encryption</strong></span>
+        </div>
+        <p class="tbx-row__tldr">Simple, modern file encryption: <code>age -r &lt;recipient&gt; secret.txt &gt; secret.age</code>. No config files, no key servers, no web of trust. Uses X25519 keys, SSH keys, or passphrase. Used as sops' most ergonomic key backend — if you're setting up sops for the first time, age is the right choice unless you specifically need KMS.</p>
+        <div class="tbx-row__tags">
+          <span class="tbx-row__tag tbx-row__tag--form">CLI</span>
+          <span class="tbx-row__tag tbx-row__tag--lang">Go</span>
+          <span class="tbx-row__tag">mature</span>
+          <span class="tbx-row__tag">dev</span>
+        </div>
+        <a class="tbx-row__repo" href="https://github.com/FiloSottile/age" target="_blank" rel="noopener">FiloSottile/age<span class="arr">→</span></a>
+      </article>
+
+      <article class="tbx-row" data-tags="CLI Go mature secrets platform">
+        <div class="tbx-row__head">
+          <span class="tbx-row__name">chamber</span>
+          <span class="tbx-row__replaces">replaces <strong>aws ssm get-parameter scripts</strong></span>
+        </div>
+        <p class="tbx-row__tldr">Read/write/exec against AWS SSM Parameter Store. <code>chamber exec service -- ./myapp</code> injects all parameters under <code>/service/</code> as environment variables. The lightweight alternative to HashiCorp Vault for teams already on AWS that want secrets injection without running extra infrastructure.</p>
+        <div class="tbx-row__tags">
+          <span class="tbx-row__tag tbx-row__tag--form">CLI</span>
+          <span class="tbx-row__tag tbx-row__tag--lang">Go</span>
+          <span class="tbx-row__tag">mature</span>
+          <span class="tbx-row__tag">platform</span>
+        </div>
+        <a class="tbx-row__repo" href="https://github.com/segmentio/chamber" target="_blank" rel="noopener">segmentio/chamber<span class="arr">→</span></a>
+      </article>
+
+    </section>
+
+    <div class="tbx-empty" id="tbx-empty" hidden>No tools match every active tag. Drop one and try again.</div>
+
+    <div class="about" style="margin-top: 36px;">
+      <span class="about__mark">*</span>
+      <p>All six tools are OSS and credential-free from the Toolbox's perspective — you bring your own KMS keys or keychain. The <em>credentials</em> category covers tools that handle AWS access keys or SAML tokens; the <em>secrets</em> category covers tools that encrypt or inject arbitrary secret values. The two overlap (sops uses KMS, chamber reads SSM) but the mental model is different. Open a PR if there is something obvious we missed.</p>
+    </div>
+
+  </main>
+
+  <footer class="colophon">
+    <p>Infra Atlas · <a href="/toolbox/">Toolbox</a> · <a href="/">Home</a> · <a href="https://github.com/ineslino/infra-atlas" target="_blank" rel="noopener">GitHub</a> · MIT-licensed · Reviewed <time datetime="2026-05-21">2026-05-21</time></p>
+  </footer>
+
+</div>
+
+<script src="/toolbox/filter.js" defer></script>
+<script src="/nav.js" defer></script>
+</body>
+</html>
