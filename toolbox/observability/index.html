@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="color-scheme" content="dark">
+<title>Observability &amp; Logs Toolbox · Infra Atlas</title>
+<link rel="icon" href="/favicon.svg?v=2" type="image/svg+xml">
+<meta name="description" content="Open-source observability tools for SREs — lnav, btop, jq, Vector, GoAccess, logcli, hyperfine. Tail logs, query JSON, stream metrics, benchmark commands.">
+<link rel="canonical" href="https://infraatlas.dev/toolbox/observability/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Infra Atlas">
+<meta property="og:title" content="Observability &amp; Logs Toolbox · Infra Atlas">
+<meta property="og:description" content="Open-source observability tools — lnav, btop, jq, Vector, GoAccess, logcli.">
+<meta property="og:url" content="https://infraatlas.dev/toolbox/observability/">
+<meta property="og:image" content="https://infraatlas.dev/og.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Observability &amp; Logs Toolbox · Infra Atlas">
+<meta name="twitter:description" content="Open-source observability tools for platform and SRE engineers.">
+<meta name="twitter:image" content="https://infraatlas.dev/og.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@300;400;500;600&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/tools/shared.css">
+<style>.subtitle { max-width: 760px; }</style>
+</head>
+<body>
+<div class="grain"></div>
+<div class="scanlines"></div>
+<div class="page">
+
+  <header class="masthead">
+    <a class="eyebrow" href="/toolbox/"><span class="arrow">←</span> Infra Atlas · Toolbox</a>
+    <h1 class="title">Observability &amp; <em>Logs.</em></h1>
+    <p class="subtitle">The terminal-side of observability — not Grafana dashboards but the tools you reach for when SSH'd into a box at 2am. Log navigation that doesn't make you scroll forever, JSON queries that don't require a manual, a process monitor that actually uses colour. Plus the log pipeline and benchmarking tools that belong in every platform team's playbook.</p>
+  </header>
+
+  <main id="ia-main">
+
+    <section class="tbx-filters" aria-label="Filter tools by tag">
+      <div class="tbx-filters__group">
+        <span class="tbx-filters__label">Form</span>
+        <button class="tbx-chip" data-tag="TUI">TUI</button>
+        <button class="tbx-chip" data-tag="CLI">CLI</button>
+        <button class="tbx-chip" data-tag="daemon">Daemon</button>
+      </div>
+      <div class="tbx-filters__group">
+        <span class="tbx-filters__label">Language</span>
+        <button class="tbx-chip" data-tag="Rust">Rust</button>
+        <button class="tbx-chip" data-tag="Go">Go</button>
+        <button class="tbx-chip" data-tag="C">C/C++</button>
+      </div>
+      <div class="tbx-filters__group">
+        <span class="tbx-filters__label">Picks</span>
+        <button class="tbx-chip" data-tag="pick">★ Must-install</button>
+      </div>
+      <button class="tbx-clear" id="tbx-clear" type="button">Clear</button>
+    </section>
+
+    <section class="tbx-list" id="tbx-list" aria-label="Tools">
+
+      <article class="tbx-row" data-tags="TUI C mature SRE pick">
+        <div class="tbx-row__head">
+          <span class="tbx-row__name">lnav</span>
+          <span class="tbx-row__star" title="Must-install pick">★</span>
+          <span class="tbx-row__replaces">replaces <strong>tail -f / less on log files</strong></span>
+        </div>
+        <p class="tbx-row__tldr">Log file navigator: open one or several log files and get syntax highlighting, automatic format detection (syslog, access_log, JSON, strace, many others), a search bar, and the ability to jump by time. <code>lnav /var/log/nginx/access.log</code> is immediately better than <code>less</code> with no configuration. Handles gzipped files and multiple files merged by timestamp.</p>
+        <div class="tbx-row__tags">
+          <span class="tbx-row__tag tbx-row__tag--form">TUI</span>
+          <span class="tbx-row__tag tbx-row__tag--lang">C</span>
+          <span class="tbx-row__tag">mature</span>
+          <span class="tbx-row__tag">SRE</span>
+        </div>
+        <a class="tbx-row__repo" href="https://github.com/tstack/lnav" target="_blank" rel="noopener">tstack/lnav<span class="arr">→</span></a>
+      </article>
+
+      <article class="tbx-row" data-tags="TUI C mature SRE pick">
+        <div class="tbx-row__head">
+          <span class="tbx-row__name">btop</span>
+          <span class="tbx-row__star" title="Must-install pick">★</span>
+          <span class="tbx-row__replaces">replaces <strong>htop / top</strong></span>
+        </div>
+        <p class="tbx-row__tldr">Resource monitor for CPU, memory, disk, and network with smooth graphs, mouse support, and a genuinely readable layout. Better than htop for anything involving per-process I/O or network. The graphs make it clear at a glance whether a machine is CPU-bound, memory-bound, or saturating a disk — faster than parsing <code>vmstat</code> numbers. Works over SSH.</p>
+        <div class="tbx-row__tags">
+          <span class="tbx-row__tag tbx-row__tag--form">TUI</span>
+          <span class="tbx-row__tag tbx-row__tag--lang">C</span>
+          <span class="tbx-row__tag">mature</span>
+          <span class="tbx-row__tag">SRE</span>
+        </div>
+        <a class="tbx-row__repo" href="https://github.com/aristocratos/btop" target="_blank" rel="noopener">aristocratos/btop<span class="arr">→</span></a>
+      </article>
+
+      <article class="tbx-row" data-tags="CLI C mature dev pick">
+        <div class="tbx-row__head">
+          <span class="tbx-row__name">jq</span>
+          <span class="tbx-row__star" title="Must-install pick">★</span>
+          <span class="tbx-row__replaces">replaces <strong>grep / sed for JSON log queries</strong></span>
+        </div>
+        <p class="tbx-row__tldr">The standard for processing JSON on the command line. <code>cat app.log | jq 'select(.level == "error") | {ts: .timestamp, msg: .message}'</code> is a query language, not a hack. Pipe-composable, scriptable, present on almost every engineering machine. If you work with structured logs or any API that returns JSON, jq is as fundamental as grep.</p>
+        <div class="tbx-row__tags">
+          <span class="tbx-row__tag tbx-row__tag--form">CLI</span>
+          <span class="tbx-row__tag tbx-row__tag--lang">C</span>
+          <span class="tbx-row__tag">mature</span>
+          <span class="tbx-row__tag">dev</span>
+        </div>
+        <a class="tbx-row__repo" href="https://github.com/jqlang/jq" target="_blank" rel="noopener">jqlang/jq<span class="arr">→</span></a>
+      </article>
+
+      <article class="tbx-row" data-tags="daemon Rust mature platform">
+        <div class="tbx-row__head">
+          <span class="tbx-row__name">Vector</span>
+          <span class="tbx-row__replaces">replaces <strong>Logstash / Fluentd</strong></span>
+        </div>
+        <p class="tbx-row__tldr">High-performance observability data pipeline: collect logs, metrics, and traces; transform them (parse, filter, enrich, route); deliver to any destination (S3, Elasticsearch, Datadog, Loki, InfluxDB, Kafka). Written in Rust — substantially faster and lighter than Logstash or Fluentd with comparable functionality. Single binary. Used as a sidecar, a node agent, or a standalone aggregator.</p>
+        <div class="tbx-row__tags">
+          <span class="tbx-row__tag tbx-row__tag--form">daemon</span>
+          <span class="tbx-row__tag tbx-row__tag--lang">Rust</span>
+          <span class="tbx-row__tag">mature</span>
+          <span class="tbx-row__tag">platform</span>
+        </div>
+        <a class="tbx-row__repo" href="https://github.com/vectordotdev/vector" target="_blank" rel="noopener">vectordotdev/vector<span class="arr">→</span></a>
+      </article>
+
+      <article class="tbx-row" data-tags="TUI C mature SRE">
+        <div class="tbx-row__head">
+          <span class="tbx-row__name">GoAccess</span>
+          <span class="tbx-row__replaces">replaces <strong>AWStats / manual access log analysis</strong></span>
+        </div>
+        <p class="tbx-row__tldr">Real-time web log analyser for nginx, Apache, CloudFront, and other access log formats. Renders a live TUI dashboard in the terminal or an HTML report. <code>goaccess /var/log/nginx/access.log --log-format=COMBINED</code> gives request counts, top IPs, 4xx/5xx breakdown, bandwidth, and visitor trends — in seconds, without shipping logs anywhere. Invaluable for a quick traffic audit on any server you can SSH into.</p>
+        <div class="tbx-row__tags">
+          <span class="tbx-row__tag tbx-row__tag--form">TUI</span>
+          <span class="tbx-row__tag tbx-row__tag--lang">C</span>
+          <span class="tbx-row__tag">mature</span>
+          <span class="tbx-row__tag">SRE</span>
+        </div>
+        <a class="tbx-row__repo" href="https://github.com/allinurl/goaccess" target="_blank" rel="noopener">allinurl/goaccess<span class="arr">→</span></a>
+      </article>
+
+      <article class="tbx-row" data-tags="CLI Rust mature dev">
+        <div class="tbx-row__head">
+          <span class="tbx-row__name">hyperfine</span>
+          <span class="tbx-row__replaces">replaces <strong>manual time / bash timing loops</strong></span>
+        </div>
+        <p class="tbx-row__tldr">Command-line benchmarking tool: runs a command repeatedly, warms up the cache, accounts for variance, and reports mean/stddev/min/max with a progress bar. <code>hyperfine 'grep -r foo .' 'rg foo .'</code> gives you a statistically sound comparison. Essential for validating that a "performance improvement" actually improves performance before shipping it.</p>
+        <div class="tbx-row__tags">
+          <span class="tbx-row__tag tbx-row__tag--form">CLI</span>
+          <span class="tbx-row__tag tbx-row__tag--lang">Rust</span>
+          <span class="tbx-row__tag">mature</span>
+          <span class="tbx-row__tag">dev</span>
+        </div>
+        <a class="tbx-row__repo" href="https://github.com/sharkdp/hyperfine" target="_blank" rel="noopener">sharkdp/hyperfine<span class="arr">→</span></a>
+      </article>
+
+    </section>
+
+    <div class="tbx-empty" id="tbx-empty" hidden>No tools match every active tag. Drop one and try again.</div>
+
+    <div class="about" style="margin-top: 36px;">
+      <span class="about__mark">*</span>
+      <p>This department covers the terminal-side of observability. Full stack observability (Prometheus, Grafana, Loki, Tempo) involves self-hosted servers and is a deployment decision, not a laptop install — those are out of scope here. The tools listed are either local CLI/TUI tools or lightweight daemons you'd run as a sidecar. Vector is the exception — it is a real pipeline service, but its binary-per-node model makes it toolbox-appropriate.</p>
+    </div>
+
+  </main>
+
+  <footer class="colophon">
+    <p>Infra Atlas · <a href="/toolbox/">Toolbox</a> · <a href="/">Home</a> · <a href="https://github.com/ineslino/infra-atlas" target="_blank" rel="noopener">GitHub</a> · MIT-licensed · Reviewed <time datetime="2026-05-22">2026-05-22</time></p>
+  </footer>
+
+</div>
+<script src="/toolbox/filter.js" defer></script>
+<script src="/nav.js" defer></script>
+</body>
+</html>

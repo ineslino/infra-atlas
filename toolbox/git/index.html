@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="color-scheme" content="dark">
+<title>Git &amp; Source Control Toolbox · Infra Atlas</title>
+<link rel="icon" href="/favicon.svg?v=2" type="image/svg+xml">
+<meta name="description" content="Open-source git tools for engineers — tig, gh, gitui, git-cliff, git-filter-repo, onefetch. Better log browsers, GitHub CLI, changelog automation.">
+<link rel="canonical" href="https://infraatlas.dev/toolbox/git/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Infra Atlas">
+<meta property="og:title" content="Git &amp; Source Control Toolbox · Infra Atlas">
+<meta property="og:description" content="Open-source git tools — tig, gh, gitui, git-cliff, git-filter-repo, onefetch.">
+<meta property="og:url" content="https://infraatlas.dev/toolbox/git/">
+<meta property="og:image" content="https://infraatlas.dev/og.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Git &amp; Source Control Toolbox · Infra Atlas">
+<meta name="twitter:description" content="Open-source git tools for navigating history, automating releases, and managing repos.">
+<meta name="twitter:image" content="https://infraatlas.dev/og.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@300;400;500;600&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/tools/shared.css">
+<style>.subtitle { max-width: 760px; }</style>
+</head>
+<body>
+<div class="grain"></div>
+<div class="scanlines"></div>
+<div class="page">
+
+  <header class="masthead">
+    <a class="eyebrow" href="/toolbox/"><span class="arrow">←</span> Infra Atlas · Toolbox</a>
+    <h1 class="title">Git &amp; <em>Source Control.</em></h1>
+    <p class="subtitle">lazygit and delta are in the Shell &amp; Productivity toolbox since they're general-purpose developer tools. This department covers the git-specific layer: history browsing that isn't <code>git log --graph</code>, the GitHub CLI that replaces opening a browser for every PR, and the maintenance tools for history rewriting and changelog generation. Smaller domain, but each tool eliminates a genuinely tedious workflow.</p>
+  </header>
+
+  <main id="ia-main">
+
+    <section class="tbx-filters" aria-label="Filter tools by tag">
+      <div class="tbx-filters__group">
+        <span class="tbx-filters__label">Form</span>
+        <button class="tbx-chip" data-tag="TUI">TUI</button>
+        <button class="tbx-chip" data-tag="CLI">CLI</button>
+      </div>
+      <div class="tbx-filters__group">
+        <span class="tbx-filters__label">Language</span>
+        <button class="tbx-chip" data-tag="Rust">Rust</button>
+        <button class="tbx-chip" data-tag="Go">Go</button>
+        <button class="tbx-chip" data-tag="C">C</button>
+        <button class="tbx-chip" data-tag="Python">Python</button>
+      </div>
+      <div class="tbx-filters__group">
+        <span class="tbx-filters__label">Picks</span>
+        <button class="tbx-chip" data-tag="pick">★ Must-install</button>
+      </div>
+      <button class="tbx-clear" id="tbx-clear" type="button">Clear</button>
+    </section>
+
+    <section class="tbx-list" id="tbx-list" aria-label="Tools">
+
+      <article class="tbx-row" data-tags="TUI C mature dev pick">
+        <div class="tbx-row__head">
+          <span class="tbx-row__name">tig</span>
+          <span class="tbx-row__star" title="Must-install pick">★</span>
+          <span class="tbx-row__replaces">replaces <strong>git log --graph --all browsing</strong></span>
+        </div>
+        <p class="tbx-row__tldr">Text-mode interface for git: browse commit history with a graph, view diffs, inspect blame, check stashes — all in the terminal without leaving your workflow. <code>tig</code> in any repo opens a navigable history view; <code>tig blame file.go</code> shows an annotated blame you can drill into commit-by-commit. Mature (15+ years), widely installed, and fast. The reference terminal git browser that gitui compares itself against.</p>
+        <div class="tbx-row__tags">
+          <span class="tbx-row__tag tbx-row__tag--form">TUI</span>
+          <span class="tbx-row__tag tbx-row__tag--lang">C</span>
+          <span class="tbx-row__tag">mature</span>
+          <span class="tbx-row__tag">dev</span>
+        </div>
+        <a class="tbx-row__repo" href="https://github.com/jonas/tig" target="_blank" rel="noopener">jonas/tig<span class="arr">→</span></a>
+      </article>
+
+      <article class="tbx-row" data-tags="CLI Go mature dev pick">
+        <div class="tbx-row__head">
+          <span class="tbx-row__name">gh</span>
+          <span class="tbx-row__star" title="Must-install pick">★</span>
+          <span class="tbx-row__replaces">replaces <strong>GitHub web UI for PR and issue management</strong></span>
+        </div>
+        <p class="tbx-row__tldr">The official GitHub CLI. Create PRs, review code, merge branches, manage issues, trigger workflows, clone repos — without opening a browser. <code>gh pr create</code>, <code>gh pr checkout 123</code>, <code>gh run watch</code>. Scriptable (outputs JSON), integrates with fzf for interactive selection. If you use GitHub for more than 30 minutes a day, gh will save at least 5 of them. Extensible via <code>gh extension install</code>.</p>
+        <div class="tbx-row__tags">
+          <span class="tbx-row__tag tbx-row__tag--form">CLI</span>
+          <span class="tbx-row__tag tbx-row__tag--lang">Go</span>
+          <span class="tbx-row__tag">mature</span>
+          <span class="tbx-row__tag">dev</span>
+        </div>
+        <a class="tbx-row__repo" href="https://github.com/cli/cli" target="_blank" rel="noopener">cli/cli<span class="arr">→</span></a>
+      </article>
+
+      <article class="tbx-row" data-tags="TUI Rust emerging dev">
+        <div class="tbx-row__head">
+          <span class="tbx-row__name">gitui</span>
+          <span class="tbx-row__replaces">replaces <strong>tig (faster, more actions)</strong></span>
+        </div>
+        <p class="tbx-row__tldr">Terminal UI for git written in Rust — faster than tig for large repos, with staging/unstaging, commit, push, branch management, and stash operations built in, not just log browsing. If tig is a read-heavy history browser, gitui is closer to a full git client in the terminal. Actively developed, noticeably snappier on repos with deep history. Worth trying if tig feels slow or you want to stage hunks without leaving the terminal.</p>
+        <div class="tbx-row__tags">
+          <span class="tbx-row__tag tbx-row__tag--form">TUI</span>
+          <span class="tbx-row__tag tbx-row__tag--lang">Rust</span>
+          <span class="tbx-row__tag">emerging</span>
+          <span class="tbx-row__tag">dev</span>
+        </div>
+        <a class="tbx-row__repo" href="https://github.com/extrawurst/gitui" target="_blank" rel="noopener">extrawurst/gitui<span class="arr">→</span></a>
+      </article>
+
+      <article class="tbx-row" data-tags="CLI Rust emerging dev">
+        <div class="tbx-row__head">
+          <span class="tbx-row__name">git-cliff</span>
+          <span class="tbx-row__replaces">replaces <strong>manually writing CHANGELOG.md</strong></span>
+        </div>
+        <p class="tbx-row__tldr">Changelog generator driven by git history. Reads conventional commits (<code>feat:</code>, <code>fix:</code>, <code>chore:</code>) and renders a <code>CHANGELOG.md</code> grouped by type and version. Configured via a <code>cliff.toml</code> with a Tera template — full control over grouping, skipping, and formatting. Integrates into CI: <code>git-cliff --latest</code> generates the changelog section for the current tag. Pairs naturally with GoReleaser.</p>
+        <div class="tbx-row__tags">
+          <span class="tbx-row__tag tbx-row__tag--form">CLI</span>
+          <span class="tbx-row__tag tbx-row__tag--lang">Rust</span>
+          <span class="tbx-row__tag">emerging</span>
+          <span class="tbx-row__tag">dev</span>
+        </div>
+        <a class="tbx-row__repo" href="https://github.com/orhun/git-cliff" target="_blank" rel="noopener">orhun/git-cliff<span class="arr">→</span></a>
+      </article>
+
+      <article class="tbx-row" data-tags="CLI Python mature dev">
+        <div class="tbx-row__head">
+          <span class="tbx-row__name">git-filter-repo</span>
+          <span class="tbx-row__replaces">replaces <strong>git filter-branch / BFG Repo-Cleaner</strong></span>
+        </div>
+        <p class="tbx-row__tldr">Fast, safe tool for rewriting git history — remove a file from every commit, rename paths, strip large blobs, split a repo, graft histories. The git project's own recommendation to replace <code>git filter-branch</code> (which is slow, error-prone, and has a warning to not use it for most tasks). Much faster than BFG for large repos. The right answer when a secret or a large binary was accidentally committed and needs to be expunged from history entirely.</p>
+        <div class="tbx-row__tags">
+          <span class="tbx-row__tag tbx-row__tag--form">CLI</span>
+          <span class="tbx-row__tag tbx-row__tag--lang">Python</span>
+          <span class="tbx-row__tag">mature</span>
+          <span class="tbx-row__tag">dev</span>
+        </div>
+        <a class="tbx-row__repo" href="https://github.com/newren/git-filter-repo" target="_blank" rel="noopener">newren/git-filter-repo<span class="arr">→</span></a>
+      </article>
+
+      <article class="tbx-row" data-tags="CLI Rust emerging dev">
+        <div class="tbx-row__head">
+          <span class="tbx-row__name">onefetch</span>
+          <span class="tbx-row__replaces">replaces <strong>"what is this repo and who maintains it?"</strong></span>
+        </div>
+        <p class="tbx-row__tldr">Neofetch for git repos: displays project name, description, primary language, contributor count, commit activity, license, and repo size in a formatted terminal panel — including an ASCII art logo for the detected language. Not a power tool, but genuinely useful when onboarding to an unfamiliar codebase or doing a quick audit of a dependency. <code>onefetch</code> in a repo directory is all it takes.</p>
+        <div class="tbx-row__tags">
+          <span class="tbx-row__tag tbx-row__tag--form">CLI</span>
+          <span class="tbx-row__tag tbx-row__tag--lang">Rust</span>
+          <span class="tbx-row__tag">emerging</span>
+          <span class="tbx-row__tag">dev</span>
+        </div>
+        <a class="tbx-row__repo" href="https://github.com/o2sh/onefetch" target="_blank" rel="noopener">o2sh/onefetch<span class="arr">→</span></a>
+      </article>
+
+    </section>
+
+    <div class="tbx-empty" id="tbx-empty" hidden>No tools match every active tag. Drop one and try again.</div>
+
+    <div class="about" style="margin-top: 36px;">
+      <span class="about__mark">*</span>
+      <p>lazygit (interactive staging and commit) and delta (diff viewer) are in the Shell &amp; Productivity toolbox — they were there from the start and are general-purpose enough to stay. tig vs gitui: both are good; tig is the mature standard, gitui is faster and has more write operations built in. gh is the only tool here that requires network access (it talks to the GitHub API).</p>
+    </div>
+
+  </main>
+
+  <footer class="colophon">
+    <p>Infra Atlas · <a href="/toolbox/">Toolbox</a> · <a href="/">Home</a> · <a href="https://github.com/ineslino/infra-atlas" target="_blank" rel="noopener">GitHub</a> · MIT-licensed · Reviewed <time datetime="2026-05-22">2026-05-22</time></p>
+  </footer>
+
+</div>
+<script src="/toolbox/filter.js" defer></script>
+<script src="/nav.js" defer></script>
+</body>
+</html>

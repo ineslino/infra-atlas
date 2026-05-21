@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="color-scheme" content="dark">
+<title>Local Dev &amp; Runtimes Toolbox · Infra Atlas</title>
+<link rel="icon" href="/favicon.svg?v=2" type="image/svg+xml">
+<meta name="description" content="Open-source local dev runtime tools — OrbStack, Colima, Rancher Desktop, DevPod, Lima. Docker Desktop alternatives for macOS, reproducible dev environments.">
+<link rel="canonical" href="https://infraatlas.dev/toolbox/localdev/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Infra Atlas">
+<meta property="og:title" content="Local Dev &amp; Runtimes Toolbox · Infra Atlas">
+<meta property="og:description" content="Docker Desktop alternatives and reproducible dev environments — OrbStack, Colima, Rancher Desktop, DevPod, Lima.">
+<meta property="og:url" content="https://infraatlas.dev/toolbox/localdev/">
+<meta property="og:image" content="https://infraatlas.dev/og.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Local Dev &amp; Runtimes Toolbox · Infra Atlas">
+<meta name="twitter:description" content="Docker Desktop alternatives and dev container tools.">
+<meta name="twitter:image" content="https://infraatlas.dev/og.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@300;400;500;600&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/tools/shared.css">
+<style>.subtitle { max-width: 760px; }</style>
+</head>
+<body>
+<div class="grain"></div>
+<div class="scanlines"></div>
+<div class="page">
+
+  <header class="masthead">
+    <a class="eyebrow" href="/toolbox/"><span class="arrow">←</span> Infra Atlas · Toolbox</a>
+    <h1 class="title">Local Dev &amp; <em>Runtimes.</em></h1>
+    <p class="subtitle">Docker Desktop requires a paid licence for large organisations and runs noticeably slower than alternatives on Apple Silicon. This department covers the replacement stack: native macOS container runtimes that are faster and free, cross-platform GUI alternatives, and the dev container layer that makes environments reproducible across machines without "it works on my machine."</p>
+  </header>
+
+  <main id="ia-main">
+
+    <section class="tbx-filters" aria-label="Filter tools by tag">
+      <div class="tbx-filters__group">
+        <span class="tbx-filters__label">Form</span>
+        <button class="tbx-chip" data-tag="GUI">GUI</button>
+        <button class="tbx-chip" data-tag="CLI">CLI</button>
+      </div>
+      <div class="tbx-filters__group">
+        <span class="tbx-filters__label">Language</span>
+        <button class="tbx-chip" data-tag="Go">Go</button>
+      </div>
+      <div class="tbx-filters__group">
+        <span class="tbx-filters__label">Platform</span>
+        <button class="tbx-chip" data-tag="macOS">macOS</button>
+        <button class="tbx-chip" data-tag="cross">Cross-platform</button>
+      </div>
+      <div class="tbx-filters__group">
+        <span class="tbx-filters__label">Picks</span>
+        <button class="tbx-chip" data-tag="pick">★ Must-install</button>
+      </div>
+      <button class="tbx-clear" id="tbx-clear" type="button">Clear</button>
+    </section>
+
+    <section class="tbx-list" id="tbx-list" aria-label="Tools">
+
+      <article class="tbx-row" data-tags="GUI Go emerging dev macOS pick">
+        <div class="tbx-row__head">
+          <span class="tbx-row__name">OrbStack</span>
+          <span class="tbx-row__star" title="Must-install pick">★</span>
+          <span class="tbx-row__replaces">replaces <strong>Docker Desktop on macOS</strong></span>
+        </div>
+        <p class="tbx-row__tldr">macOS-only container runtime and Linux VM manager. Faster than Docker Desktop on Apple Silicon (uses Apple Virtualization Framework, not QEMU), lighter on memory, and starts in under a second. Runs Docker containers, Docker Compose, and Kubernetes. Free for personal and small-team use; paid for commercial large-team use. The current default recommendation for macOS-first engineering teams. Closed-source core but the binary is free to download and use.</p>
+        <div class="tbx-row__tags">
+          <span class="tbx-row__tag tbx-row__tag--form">GUI</span>
+          <span class="tbx-row__tag tbx-row__tag--lang">Go</span>
+          <span class="tbx-row__tag">emerging</span>
+          <span class="tbx-row__tag">dev</span>
+          <span class="tbx-row__tag">macOS</span>
+        </div>
+        <a class="tbx-row__repo" href="https://github.com/orbstack/orbstack" target="_blank" rel="noopener">orbstack/orbstack<span class="arr">→</span></a>
+      </article>
+
+      <article class="tbx-row" data-tags="CLI Go mature dev macOS pick">
+        <div class="tbx-row__head">
+          <span class="tbx-row__name">Colima</span>
+          <span class="tbx-row__star" title="Must-install pick">★</span>
+          <span class="tbx-row__replaces">replaces <strong>Docker Desktop (macOS/Linux, fully OSS)</strong></span>
+        </div>
+        <p class="tbx-row__tldr">Container runtime for macOS and Linux via a Lima VM. <code>colima start</code> spins up a VM with Docker (or containerd) and exposes the Docker socket at <code>~/.colima/default/docker.sock</code> — then your existing <code>docker</code> and <code>docker-compose</code> commands work unchanged. MIT-licensed, no paid tier, no GUI. The fully OSS alternative to OrbStack for teams that require it. Also supports Kubernetes via k3s.</p>
+        <div class="tbx-row__tags">
+          <span class="tbx-row__tag tbx-row__tag--form">CLI</span>
+          <span class="tbx-row__tag tbx-row__tag--lang">Go</span>
+          <span class="tbx-row__tag">mature</span>
+          <span class="tbx-row__tag">dev</span>
+          <span class="tbx-row__tag">macOS</span>
+        </div>
+        <a class="tbx-row__repo" href="https://github.com/abiosoft/colima" target="_blank" rel="noopener">abiosoft/colima<span class="arr">→</span></a>
+      </article>
+
+      <article class="tbx-row" data-tags="GUI Go mature dev cross">
+        <div class="tbx-row__head">
+          <span class="tbx-row__name">Rancher Desktop</span>
+          <span class="tbx-row__replaces">replaces <strong>Docker Desktop (cross-platform, with Kubernetes)</strong></span>
+        </div>
+        <p class="tbx-row__tldr">Cross-platform Docker Desktop alternative (macOS, Windows, Linux) from SUSE/Rancher. Bundles containerd or dockerd, nerdctl, and a local k3s Kubernetes cluster in a single GUI application. Free, open-source (Apache 2.0). The right choice for teams that need a consistent setup across OS types and want K8s built in without a separate kind/minikube install. Uses QEMU on macOS (slower than OrbStack) but is OSS with no usage restrictions.</p>
+        <div class="tbx-row__tags">
+          <span class="tbx-row__tag tbx-row__tag--form">GUI</span>
+          <span class="tbx-row__tag tbx-row__tag--lang">Go</span>
+          <span class="tbx-row__tag">mature</span>
+          <span class="tbx-row__tag">dev</span>
+          <span class="tbx-row__tag">cross</span>
+        </div>
+        <a class="tbx-row__repo" href="https://github.com/rancher-sandbox/rancher-desktop" target="_blank" rel="noopener">rancher-sandbox/rancher-desktop<span class="arr">→</span></a>
+      </article>
+
+      <article class="tbx-row" data-tags="CLI GUI Go emerging dev cross pick">
+        <div class="tbx-row__head">
+          <span class="tbx-row__name">DevPod</span>
+          <span class="tbx-row__star" title="Must-install pick">★</span>
+          <span class="tbx-row__replaces">replaces <strong>manually configured dev environments per machine</strong></span>
+        </div>
+        <p class="tbx-row__tldr">Dev containers (the standard used by VS Code Dev Containers and GitHub Codespaces) that can run anywhere — locally in Docker, on a remote VM, on K8s, or in the cloud. Define your dev environment once in a <code>devcontainer.json</code>; <code>devpod up github.com/your/repo</code> on any machine produces the exact same environment. The OSS answer to Codespaces — you bring the compute. Works with VS Code, JetBrains, and any SSH-compatible editor.</p>
+        <div class="tbx-row__tags">
+          <span class="tbx-row__tag tbx-row__tag--form">CLI</span>
+          <span class="tbx-row__tag tbx-row__tag--lang">Go</span>
+          <span class="tbx-row__tag">emerging</span>
+          <span class="tbx-row__tag">dev</span>
+          <span class="tbx-row__tag">cross</span>
+        </div>
+        <a class="tbx-row__repo" href="https://github.com/loft-sh/devpod" target="_blank" rel="noopener">loft-sh/devpod<span class="arr">→</span></a>
+      </article>
+
+      <article class="tbx-row" data-tags="CLI Go mature dev macOS">
+        <div class="tbx-row__head">
+          <span class="tbx-row__name">Lima</span>
+          <span class="tbx-row__replaces">replaces <strong>direct QEMU/VM management for Linux VMs on macOS</strong></span>
+        </div>
+        <p class="tbx-row__tldr">Lightweight Linux VMs on macOS with automatic file sharing and port forwarding. The underlying engine that Colima wraps. Use Lima directly when you need more control — custom VM config, multiple VMs with different distros, or running Linux processes without Docker overhead. <code>limactl start</code> gives you a shell into an Ubuntu VM with your home directory mounted. Essential for macOS engineers who sometimes need a real Linux userspace.</p>
+        <div class="tbx-row__tags">
+          <span class="tbx-row__tag tbx-row__tag--form">CLI</span>
+          <span class="tbx-row__tag tbx-row__tag--lang">Go</span>
+          <span class="tbx-row__tag">mature</span>
+          <span class="tbx-row__tag">dev</span>
+          <span class="tbx-row__tag">macOS</span>
+        </div>
+        <a class="tbx-row__repo" href="https://github.com/lima-vm/lima" target="_blank" rel="noopener">lima-vm/lima<span class="arr">→</span></a>
+      </article>
+
+    </section>
+
+    <div class="tbx-empty" id="tbx-empty" hidden>No tools match every active tag. Drop one and try again.</div>
+
+    <div class="about" style="margin-top: 36px;">
+      <span class="about__mark">*</span>
+      <p>OrbStack is not fully OSS (closed-source core) but is included because it is the pragmatic default for macOS engineers. Colima is the fully OSS alternative. Rancher Desktop is the right choice for cross-platform teams. DevPod is about environment reproducibility, not the runtime itself — it can use any of the above as its local backend. Lima is included for engineers who want direct VM access, not a Docker abstraction.</p>
+    </div>
+
+  </main>
+
+  <footer class="colophon">
+    <p>Infra Atlas · <a href="/toolbox/">Toolbox</a> · <a href="/">Home</a> · <a href="https://github.com/ineslino/infra-atlas" target="_blank" rel="noopener">GitHub</a> · MIT-licensed · Reviewed <time datetime="2026-05-22">2026-05-22</time></p>
+  </footer>
+
+</div>
+<script src="/toolbox/filter.js" defer></script>
+<script src="/nav.js" defer></script>
+</body>
+</html>

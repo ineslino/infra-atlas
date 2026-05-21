@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="color-scheme" content="dark">
+<title>Cost &amp; FinOps Toolbox · Infra Atlas</title>
+<link rel="icon" href="/favicon.svg?v=2" type="image/svg+xml">
+<meta name="description" content="Open-source FinOps tools for cloud engineers — Infracost, OpenCost, Komiser, Cloud Custodian, Goldilocks. Estimate, allocate, govern, and right-size cloud spend.">
+<link rel="canonical" href="https://infraatlas.dev/toolbox/finops/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Infra Atlas">
+<meta property="og:title" content="Cost &amp; FinOps Toolbox · Infra Atlas">
+<meta property="og:description" content="Open-source FinOps tools — Infracost, OpenCost, Komiser, Cloud Custodian, Goldilocks.">
+<meta property="og:url" content="https://infraatlas.dev/toolbox/finops/">
+<meta property="og:image" content="https://infraatlas.dev/og.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Cost &amp; FinOps Toolbox · Infra Atlas">
+<meta name="twitter:description" content="Open-source tools for cloud cost estimation, allocation, and governance.">
+<meta name="twitter:image" content="https://infraatlas.dev/og.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@300;400;500;600&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/tools/shared.css">
+<style>.subtitle { max-width: 760px; }</style>
+</head>
+<body>
+<div class="grain"></div>
+<div class="scanlines"></div>
+<div class="page">
+
+  <header class="masthead">
+    <a class="eyebrow" href="/toolbox/"><span class="arrow">←</span> Infra Atlas · Toolbox</a>
+    <h1 class="title">Cost &amp; <em>FinOps.</em></h1>
+    <p class="subtitle">The OSS FinOps landscape is thinner than the SaaS one, but the tools here cover the cases that matter most: knowing the cost of an IaC change before it merges, attributing K8s spend to teams, governing resource usage with policies, and right-sizing workloads that are obviously over-provisioned. No vendor dashboards, no agents phoning home.</p>
+  </header>
+
+  <main id="ia-main">
+
+    <section class="tbx-filters" aria-label="Filter tools by tag">
+      <div class="tbx-filters__group">
+        <span class="tbx-filters__label">Form</span>
+        <button class="tbx-chip" data-tag="CLI">CLI</button>
+        <button class="tbx-chip" data-tag="Web UI">Web UI</button>
+      </div>
+      <div class="tbx-filters__group">
+        <span class="tbx-filters__label">Language</span>
+        <button class="tbx-chip" data-tag="Go">Go</button>
+        <button class="tbx-chip" data-tag="Python">Python</button>
+      </div>
+      <div class="tbx-filters__group">
+        <span class="tbx-filters__label">Picks</span>
+        <button class="tbx-chip" data-tag="pick">★ Must-install</button>
+      </div>
+      <button class="tbx-clear" id="tbx-clear" type="button">Clear</button>
+    </section>
+
+    <section class="tbx-list" id="tbx-list" aria-label="Tools">
+
+      <article class="tbx-row" data-tags="CLI Go mature platform pick">
+        <div class="tbx-row__head">
+          <span class="tbx-row__name">Infracost</span>
+          <span class="tbx-row__star" title="Must-install pick">★</span>
+          <span class="tbx-row__replaces">replaces <strong>guessing cost impact of an IaC change</strong></span>
+        </div>
+        <p class="tbx-row__tldr">Shows the monthly cost delta of a Terraform/OpenTofu diff before you apply it, posted as a PR comment. Covers AWS, GCP, Azure resource pricing. The feedback loop is: write the IaC change → open a PR → immediately see "this adds $47/month". Prevents the classic "accidentally provisioned three NAT gateways" class of surprise. Free for self-hosted use.</p>
+        <div class="tbx-row__tags">
+          <span class="tbx-row__tag tbx-row__tag--form">CLI</span>
+          <span class="tbx-row__tag tbx-row__tag--lang">Go</span>
+          <span class="tbx-row__tag">mature</span>
+          <span class="tbx-row__tag">platform</span>
+        </div>
+        <a class="tbx-row__repo" href="https://github.com/infracost/infracost" target="_blank" rel="noopener">infracost/infracost<span class="arr">→</span></a>
+      </article>
+
+      <article class="tbx-row" data-tags="Web UI Go mature platform pick">
+        <div class="tbx-row__head">
+          <span class="tbx-row__name">OpenCost</span>
+          <span class="tbx-row__star" title="Must-install pick">★</span>
+          <span class="tbx-row__replaces">replaces <strong>guessing which team is spending what in K8s</strong></span>
+        </div>
+        <p class="tbx-row__tldr">CNCF standard for Kubernetes cost allocation: attributes cloud spend to namespaces, deployments, labels, and teams in real time. Reads cloud billing APIs to get node prices; allocates shared costs (cluster overhead, shared namespaces) configurable by policy. Exposes a REST API and a web UI. The OSS answer to Kubecost without the enterprise upsell. Runs as a container alongside your Prometheus stack.</p>
+        <div class="tbx-row__tags">
+          <span class="tbx-row__tag tbx-row__tag--form">Web UI</span>
+          <span class="tbx-row__tag tbx-row__tag--lang">Go</span>
+          <span class="tbx-row__tag">mature</span>
+          <span class="tbx-row__tag">platform</span>
+        </div>
+        <a class="tbx-row__repo" href="https://github.com/opencost/opencost" target="_blank" rel="noopener">opencost/opencost<span class="arr">→</span></a>
+      </article>
+
+      <article class="tbx-row" data-tags="Web UI Go emerging platform">
+        <div class="tbx-row__head">
+          <span class="tbx-row__name">Komiser</span>
+          <span class="tbx-row__replaces">replaces <strong>cloud console cost/inventory spelunking</strong></span>
+        </div>
+        <p class="tbx-row__tldr">Cloud-agnostic asset inventory and cost explorer: connects to AWS, GCP, Azure, OCI, and others; renders a web dashboard of all resources grouped by service, region, and tag. Surfaces forgotten resources (unused EIPs, idle NAT gateways, orphaned volumes) and estimated monthly cost without requiring cloud cost-explorer access or billing permissions beyond read-only describe calls. Self-hosted, single binary.</p>
+        <div class="tbx-row__tags">
+          <span class="tbx-row__tag tbx-row__tag--form">Web UI</span>
+          <span class="tbx-row__tag tbx-row__tag--lang">Go</span>
+          <span class="tbx-row__tag">emerging</span>
+          <span class="tbx-row__tag">platform</span>
+        </div>
+        <a class="tbx-row__repo" href="https://github.com/tailwarden/komiser" target="_blank" rel="noopener">tailwarden/komiser<span class="arr">→</span></a>
+      </article>
+
+      <article class="tbx-row" data-tags="CLI Python mature platform">
+        <div class="tbx-row__head">
+          <span class="tbx-row__name">Cloud Custodian</span>
+          <span class="tbx-row__replaces">replaces <strong>manual cloud governance and cost scripts</strong></span>
+        </div>
+        <p class="tbx-row__tldr">Rules engine for cloud resource governance: define YAML policies like "tag all untagged EC2 instances", "stop dev instances on weekends", "delete S3 buckets with no access in 90 days", "alert if any resource costs over $500/month." Runs as a CLI, Lambda, or Kubernetes CronJob. Multi-cloud (AWS, GCP, Azure). Mature, CNCF-hosted. The OSS answer to "how do we enforce tagging and cost policies at scale."</p>
+        <div class="tbx-row__tags">
+          <span class="tbx-row__tag tbx-row__tag--form">CLI</span>
+          <span class="tbx-row__tag tbx-row__tag--lang">Python</span>
+          <span class="tbx-row__tag">mature</span>
+          <span class="tbx-row__tag">platform</span>
+        </div>
+        <a class="tbx-row__repo" href="https://github.com/cloud-custodian/cloud-custodian" target="_blank" rel="noopener">cloud-custodian/cloud-custodian<span class="arr">→</span></a>
+      </article>
+
+      <article class="tbx-row" data-tags="Web UI Go emerging platform">
+        <div class="tbx-row__head">
+          <span class="tbx-row__name">Goldilocks</span>
+          <span class="tbx-row__replaces">replaces <strong>manual K8s resource request tuning</strong></span>
+        </div>
+        <p class="tbx-row__tldr">Reads VPA (Vertical Pod Autoscaler) recommendations and surfaces them in a web dashboard: "your payments service should request 200m CPU / 256Mi memory, not the 1 CPU / 2Gi you declared." Makes right-sizing actionable — you see the recommendation, click copy, paste into your Helm values. Reduces both over-provisioning waste and OOMKill risk from under-provisioning. Requires VPA CRDs installed in the cluster.</p>
+        <div class="tbx-row__tags">
+          <span class="tbx-row__tag tbx-row__tag--form">Web UI</span>
+          <span class="tbx-row__tag tbx-row__tag--lang">Go</span>
+          <span class="tbx-row__tag">emerging</span>
+          <span class="tbx-row__tag">platform</span>
+        </div>
+        <a class="tbx-row__repo" href="https://github.com/FairwindsOps/goldilocks" target="_blank" rel="noopener">FairwindsOps/goldilocks<span class="arr">→</span></a>
+      </article>
+
+    </section>
+
+    <div class="tbx-empty" id="tbx-empty" hidden>No tools match every active tag. Drop one and try again.</div>
+
+    <div class="about" style="margin-top: 36px;">
+      <span class="about__mark">*</span>
+      <p>Infracost also appears in the Provisioning &amp; IaC department — it belongs to both. Cloud Custodian and OpenCost require cloud permissions (read-only for inventory, billing reader for cost). Goldilocks requires VPA CRDs in the cluster. The Web UI tools (OpenCost, Komiser, Goldilocks) are self-hosted — deploy to your cluster or a VM; they do not phone home.</p>
+    </div>
+
+  </main>
+
+  <footer class="colophon">
+    <p>Infra Atlas · <a href="/toolbox/">Toolbox</a> · <a href="/">Home</a> · <a href="https://github.com/ineslino/infra-atlas" target="_blank" rel="noopener">GitHub</a> · MIT-licensed · Reviewed <time datetime="2026-05-22">2026-05-22</time></p>
+  </footer>
+
+</div>
+<script src="/toolbox/filter.js" defer></script>
+<script src="/nav.js" defer></script>
+</body>
+</html>

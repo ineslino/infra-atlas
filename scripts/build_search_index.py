@@ -36,10 +36,20 @@ MATRIX = [
 ]
 COMPUTE = ["ec2", "azure-vm", "gcp-compute", "oci-compute", "ovh-instances"]
 TOOLBOX = [
-    ("toolbox/kubernetes", "/toolbox/kubernetes/"),
-    ("toolbox/networking", "/toolbox/networking/"),
-    ("toolbox/shell",      "/toolbox/shell/"),
-    ("toolbox/auth",       "/toolbox/auth/"),
+    ("toolbox/kubernetes",    "/toolbox/kubernetes/"),
+    ("toolbox/networking",    "/toolbox/networking/"),
+    ("toolbox/shell",         "/toolbox/shell/"),
+    ("toolbox/auth",          "/toolbox/auth/"),
+    ("toolbox/iac",           "/toolbox/iac/"),
+    ("toolbox/security",      "/toolbox/security/"),
+    ("toolbox/observability", "/toolbox/observability/"),
+    ("toolbox/finops",        "/toolbox/finops/"),
+    ("toolbox/cicd",          "/toolbox/cicd/"),
+    ("toolbox/database",      "/toolbox/database/"),
+    ("toolbox/api",           "/toolbox/api/"),
+    ("toolbox/containers",    "/toolbox/containers/"),
+    ("toolbox/localdev",      "/toolbox/localdev/"),
+    ("toolbox/git",           "/toolbox/git/"),
 ]
 
 # Keys whose string values get indexed. `value` catches the per-cell vendor

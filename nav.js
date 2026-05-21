@@ -42,7 +42,17 @@
     ["/toolbox/kubernetes/", "Kubernetes Toolbox",         "Toolbox", "k9s kubectx stern kubefwd popeye helm krew kind k3d skaffold tilt argocd dive lazydocker"],
     ["/toolbox/networking/", "Networking Toolbox",         "Toolbox", "mtr doggo dog bandwhich gping termshark bmon nload httpie xh mkcert nmap cloudflared dns traceroute"],
     ["/toolbox/shell/",      "Shell & Productivity Toolbox","Toolbox","fzf ripgrep rg fd zoxide atuin starship mise direnv chezmoi zellij lazygit helix yazi gum bat delta"],
-    ["/toolbox/auth/",       "Auth & Identity Toolbox",    "Toolbox", "aws-vault granted sops age saml2aws chamber credentials secrets encryption kms ssm iam identity"]
+    ["/toolbox/auth/",       "Auth & Identity Toolbox",    "Toolbox", "aws-vault granted sops age saml2aws chamber credentials secrets encryption kms ssm iam identity"],
+    ["/toolbox/iac/",          "IaC & Provisioning Toolbox",  "Toolbox", "opentofu terragrunt tflint atlantis infracost pulumi terraform iac state drift plan apply provisioning"],
+    ["/toolbox/security/",     "Security & Compliance Toolbox","Toolbox", "trivy gitleaks checkov cosign grype falco cve scan secrets supply chain sbom signing vulnerability"],
+    ["/toolbox/observability/","Observability & Logs Toolbox", "Toolbox", "lnav btop jq vector goaccess hyperfine logs metrics benchmark performance monitoring json"],
+    ["/toolbox/finops/",       "Cost & FinOps Toolbox",       "Toolbox", "infracost opencost komiser cloud-custodian goldilocks cost finops kubernetes budget rightsizing"],
+    ["/toolbox/cicd/",         "CI/CD & Pipelines Toolbox",   "Toolbox", "act flux goreleaser earthly ko dagger ci cd pipeline github actions gitops release build"],
+    ["/toolbox/database/",     "Database & Data Toolbox",     "Toolbox", "pgcli usql atlas dbeaver dbmate postgres sql migration schema client universal database"],
+    ["/toolbox/api/",          "API & Testing Toolbox",       "Toolbox", "bruno hurl k6 hey oha wrk postman load testing api http benchmark rest insomnia"],
+    ["/toolbox/containers/",   "Container & Images Toolbox",  "Toolbox", "skopeo crane syft grype cosign sbom oci image registry sign scan supply chain docker"],
+    ["/toolbox/localdev/",     "Local Dev & Runtimes Toolbox","Toolbox", "orbstack colima rancher-desktop devpod lima docker desktop containers vm macos runtime devcontainer"],
+    ["/toolbox/git/",          "Git & Source Control Toolbox","Toolbox", "tig gh gitui git-cliff git-filter-repo onefetch github changelog history tui cli log blame"]
   ];
   var DECISIONS = [
     ["/decisions/",                                          "Decisions — the hub",                   "Decisions", "decision guide which one should i use compare versus vs choose"],

@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="color-scheme" content="dark">
+<title>CI/CD &amp; Pipelines Toolbox · Infra Atlas</title>
+<link rel="icon" href="/favicon.svg?v=2" type="image/svg+xml">
+<meta name="description" content="Open-source CI/CD tools — act, Flux, GoReleaser, Earthly, ko, Dagger. Run GitHub Actions locally, automate releases, ship Go services without Dockerfiles.">
+<link rel="canonical" href="https://infraatlas.dev/toolbox/cicd/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Infra Atlas">
+<meta property="og:title" content="CI/CD &amp; Pipelines Toolbox · Infra Atlas">
+<meta property="og:description" content="Open-source CI/CD tools — act, Flux, GoReleaser, Earthly, ko, Dagger.">
+<meta property="og:url" content="https://infraatlas.dev/toolbox/cicd/">
+<meta property="og:image" content="https://infraatlas.dev/og.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="CI/CD &amp; Pipelines Toolbox · Infra Atlas">
+<meta name="twitter:description" content="Open-source CI/CD tools for platform and dev-loop engineers.">
+<meta name="twitter:image" content="https://infraatlas.dev/og.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@300;400;500;600&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/tools/shared.css">
+<style>.subtitle { max-width: 760px; }</style>
+</head>
+<body>
+<div class="grain"></div>
+<div class="scanlines"></div>
+<div class="page">
+
+  <header class="masthead">
+    <a class="eyebrow" href="/toolbox/"><span class="arrow">←</span> Infra Atlas · Toolbox</a>
+    <h1 class="title">CI/CD &amp; <em>Pipelines.</em></h1>
+    <p class="subtitle">The CI/CD toolbox is narrower than you'd think: ArgoCD, Skaffold, and Tilt belong to the Kubernetes toolbox since their primary value is K8s-specific. This department covers what's left — running Actions locally without a push, GitOps for the delivery side, reproducible build systems, and release automation that doesn't require maintaining a custom script per repo.</p>
+  </header>
+
+  <main id="ia-main">
+
+    <section class="tbx-filters" aria-label="Filter tools by tag">
+      <div class="tbx-filters__group">
+        <span class="tbx-filters__label">Form</span>
+        <button class="tbx-chip" data-tag="CLI">CLI</button>
+      </div>
+      <div class="tbx-filters__group">
+        <span class="tbx-filters__label">Language</span>
+        <button class="tbx-chip" data-tag="Go">Go</button>
+      </div>
+      <div class="tbx-filters__group">
+        <span class="tbx-filters__label">Use case</span>
+        <button class="tbx-chip" data-tag="dev">Dev loop</button>
+        <button class="tbx-chip" data-tag="platform">Platform</button>
+      </div>
+      <div class="tbx-filters__group">
+        <span class="tbx-filters__label">Picks</span>
+        <button class="tbx-chip" data-tag="pick">★ Must-install</button>
+      </div>
+      <button class="tbx-clear" id="tbx-clear" type="button">Clear</button>
+    </section>
+
+    <section class="tbx-list" id="tbx-list" aria-label="Tools">
+
+      <article class="tbx-row" data-tags="CLI Go mature dev pick">
+        <div class="tbx-row__head">
+          <span class="tbx-row__name">act</span>
+          <span class="tbx-row__star" title="Must-install pick">★</span>
+          <span class="tbx-row__replaces">replaces <strong>push to test GitHub Actions</strong></span>
+        </div>
+        <p class="tbx-row__tldr">Runs GitHub Actions workflows locally in Docker containers. <code>act push</code> triggers all workflows registered for the push event. The feedback loop for Actions development goes from "commit, push, wait 3 minutes" to "edit, run, see result in 15 seconds". Supports matrix builds, secrets, environment variables, and most action types. Requires Docker.</p>
+        <div class="tbx-row__tags">
+          <span class="tbx-row__tag tbx-row__tag--form">CLI</span>
+          <span class="tbx-row__tag tbx-row__tag--lang">Go</span>
+          <span class="tbx-row__tag">mature</span>
+          <span class="tbx-row__tag">dev</span>
+        </div>
+        <a class="tbx-row__repo" href="https://github.com/nektos/act" target="_blank" rel="noopener">nektos/act<span class="arr">→</span></a>
+      </article>
+
+      <article class="tbx-row" data-tags="CLI Go mature platform pick">
+        <div class="tbx-row__head">
+          <span class="tbx-row__name">Flux</span>
+          <span class="tbx-row__star" title="Must-install pick">★</span>
+          <span class="tbx-row__replaces">replaces <strong>push-based kubectl apply in CI</strong></span>
+        </div>
+        <p class="tbx-row__tldr">CNCF GitOps toolkit: a set of controllers that run in your cluster, watch git repositories and Helm charts, and apply changes without CI pushing credentials into the cluster. The pull model means your CD pipeline never needs cluster access — the cluster pulls its own desired state. Pairs with ArgoCD on larger teams (ArgoCD for UI-driven ops, Flux for automation-heavy pipelines). Also manages Helm releases and image update automation.</p>
+        <div class="tbx-row__tags">
+          <span class="tbx-row__tag tbx-row__tag--form">CLI</span>
+          <span class="tbx-row__tag tbx-row__tag--lang">Go</span>
+          <span class="tbx-row__tag">mature</span>
+          <span class="tbx-row__tag">platform</span>
+        </div>
+        <a class="tbx-row__repo" href="https://github.com/fluxcd/flux2" target="_blank" rel="noopener">fluxcd/flux2<span class="arr">→</span></a>
+      </article>
+
+      <article class="tbx-row" data-tags="CLI Go mature dev pick">
+        <div class="tbx-row__head">
+          <span class="tbx-row__name">GoReleaser</span>
+          <span class="tbx-row__star" title="Must-install pick">★</span>
+          <span class="tbx-row__replaces">replaces <strong>custom release scripts per repo</strong></span>
+        </div>
+        <p class="tbx-row__tldr">Automates the release process for Go projects: build cross-platform binaries, create archives and checksums, build and push Docker images, publish to GitHub Releases, Homebrew, Scoop, and more — all from a single <code>.goreleaser.yaml</code>. Tag a commit, CI runs <code>goreleaser release</code>, and users can <code>brew install your-tool</code> within minutes. Works for non-Go projects too (pre-built binary distribution).</p>
+        <div class="tbx-row__tags">
+          <span class="tbx-row__tag tbx-row__tag--form">CLI</span>
+          <span class="tbx-row__tag tbx-row__tag--lang">Go</span>
+          <span class="tbx-row__tag">mature</span>
+          <span class="tbx-row__tag">dev</span>
+        </div>
+        <a class="tbx-row__repo" href="https://github.com/goreleaser/goreleaser" target="_blank" rel="noopener">goreleaser/goreleaser<span class="arr">→</span></a>
+      </article>
+
+      <article class="tbx-row" data-tags="CLI Go emerging dev">
+        <div class="tbx-row__head">
+          <span class="tbx-row__name">Earthly</span>
+          <span class="tbx-row__replaces">replaces <strong>Makefile + Dockerfile duplication</strong></span>
+        </div>
+        <p class="tbx-row__tldr">Build system that combines Makefile targets with Dockerfile-style isolation. An <code>Earthfile</code> defines build targets that run in containers — reproducible on any developer's machine and in CI without "it works on my machine." Each target declares its inputs and outputs, enabling caching. Sits between raw Dockerfiles and complex CI YAML — particularly useful for polyglot repos where <code>make</code> is showing its age.</p>
+        <div class="tbx-row__tags">
+          <span class="tbx-row__tag tbx-row__tag--form">CLI</span>
+          <span class="tbx-row__tag tbx-row__tag--lang">Go</span>
+          <span class="tbx-row__tag">emerging</span>
+          <span class="tbx-row__tag">dev</span>
+        </div>
+        <a class="tbx-row__repo" href="https://github.com/earthly/earthly" target="_blank" rel="noopener">earthly/earthly<span class="arr">→</span></a>
+      </article>
+
+      <article class="tbx-row" data-tags="CLI Go mature dev">
+        <div class="tbx-row__head">
+          <span class="tbx-row__name">ko</span>
+          <span class="tbx-row__replaces">replaces <strong>Dockerfile + docker build for Go services</strong></span>
+        </div>
+        <p class="tbx-row__tldr">Builds container images for Go binaries without a Dockerfile. <code>ko build ./cmd/server</code> compiles the binary, picks a minimal distroless base, and pushes the image — in seconds. Images are reproducible (no timestamps, no build context noise), minimal (no shell, no package manager), and signed by default with cosign. The fastest path from Go code to a production-ready OCI image.</p>
+        <div class="tbx-row__tags">
+          <span class="tbx-row__tag tbx-row__tag--form">CLI</span>
+          <span class="tbx-row__tag tbx-row__tag--lang">Go</span>
+          <span class="tbx-row__tag">mature</span>
+          <span class="tbx-row__tag">dev</span>
+        </div>
+        <a class="tbx-row__repo" href="https://github.com/ko-build/ko" target="_blank" rel="noopener">ko-build/ko<span class="arr">→</span></a>
+      </article>
+
+      <article class="tbx-row" data-tags="CLI Go emerging dev platform">
+        <div class="tbx-row__head">
+          <span class="tbx-row__name">Dagger</span>
+          <span class="tbx-row__replaces">replaces <strong>YAML-based CI pipelines</strong></span>
+        </div>
+        <p class="tbx-row__tldr">CI/CD engine where pipelines are code (Go, Python, TypeScript) not YAML. Each step runs in a container; the Dagger engine caches at the function level and can run locally or on any CI provider. The pitch: test your pipeline on your laptop before pushing it. The tradeoff: you trade YAML verbosity for the full power and complexity of a programming language in your CI definition. Best suited for complex pipelines that have outgrown YAML readability.</p>
+        <div class="tbx-row__tags">
+          <span class="tbx-row__tag tbx-row__tag--form">CLI</span>
+          <span class="tbx-row__tag tbx-row__tag--lang">Go</span>
+          <span class="tbx-row__tag">emerging</span>
+          <span class="tbx-row__tag">dev</span>
+          <span class="tbx-row__tag">platform</span>
+        </div>
+        <a class="tbx-row__repo" href="https://github.com/dagger/dagger" target="_blank" rel="noopener">dagger/dagger<span class="arr">→</span></a>
+      </article>
+
+    </section>
+
+    <div class="tbx-empty" id="tbx-empty" hidden>No tools match every active tag. Drop one and try again.</div>
+
+    <div class="about" style="margin-top: 36px;">
+      <span class="about__mark">*</span>
+      <p>ArgoCD, Skaffold, and Tilt are in the Kubernetes toolbox since their primary context is K8s. Flux is here because its model is fundamentally about delivery automation independent of the runtime. act, GoReleaser, and ko are developer-loop tools — they belong on every Go/Actions developer's machine. Dagger and Earthly are bets on "CI as code" — useful when YAML complexity has become the bottleneck.</p>
+    </div>
+
+  </main>
+
+  <footer class="colophon">
+    <p>Infra Atlas · <a href="/toolbox/">Toolbox</a> · <a href="/">Home</a> · <a href="https://github.com/ineslino/infra-atlas" target="_blank" rel="noopener">GitHub</a> · MIT-licensed · Reviewed <time datetime="2026-05-22">2026-05-22</time></p>
+  </footer>
+
+</div>
+<script src="/toolbox/filter.js" defer></script>
+<script src="/nav.js" defer></script>
+</body>
+</html>

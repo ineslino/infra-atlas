@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="color-scheme" content="dark">
+<title>Container &amp; Images Toolbox · Infra Atlas</title>
+<link rel="icon" href="/favicon.svg?v=2" type="image/svg+xml">
+<meta name="description" content="Open-source container image tools — Skopeo, Crane, Syft, Grype, Cosign, regctl. Copy images between registries, generate SBOMs, scan for CVEs, sign artifacts.">
+<link rel="canonical" href="https://infraatlas.dev/toolbox/containers/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Infra Atlas">
+<meta property="og:title" content="Container &amp; Images Toolbox · Infra Atlas">
+<meta property="og:description" content="Open-source container image tools — Skopeo, Crane, Syft, Grype, Cosign, regctl.">
+<meta property="og:url" content="https://infraatlas.dev/toolbox/containers/">
+<meta property="og:image" content="https://infraatlas.dev/og.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Container &amp; Images Toolbox · Infra Atlas">
+<meta name="twitter:description" content="Open-source tools for container image management, scanning, and signing.">
+<meta name="twitter:image" content="https://infraatlas.dev/og.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@300;400;500;600&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/tools/shared.css">
+<style>.subtitle { max-width: 760px; }</style>
+</head>
+<body>
+<div class="grain"></div>
+<div class="scanlines"></div>
+<div class="page">
+
+  <header class="masthead">
+    <a class="eyebrow" href="/toolbox/"><span class="arrow">←</span> Infra Atlas · Toolbox</a>
+    <h1 class="title">Container &amp; <em>Images.</em></h1>
+    <p class="subtitle">The Docker CLI is good for building and running containers locally, but it is a poor tool for registry operations, SBOM generation, or signing. This department covers the OCI supply chain: moving images between registries without a daemon, knowing exactly what is inside them, scanning for vulnerabilities, and proving they haven't been tampered with. Note: dive and lazydocker (runtime tools) live in the Kubernetes toolbox.</p>
+  </header>
+
+  <main id="ia-main">
+
+    <section class="tbx-filters" aria-label="Filter tools by tag">
+      <div class="tbx-filters__group">
+        <span class="tbx-filters__label">Form</span>
+        <button class="tbx-chip" data-tag="CLI">CLI</button>
+      </div>
+      <div class="tbx-filters__group">
+        <span class="tbx-filters__label">Language</span>
+        <button class="tbx-chip" data-tag="Go">Go</button>
+      </div>
+      <div class="tbx-filters__group">
+        <span class="tbx-filters__label">Focus</span>
+        <button class="tbx-chip" data-tag="registry">Registry</button>
+        <button class="tbx-chip" data-tag="scan">Scanning</button>
+        <button class="tbx-chip" data-tag="sign">Signing</button>
+      </div>
+      <div class="tbx-filters__group">
+        <span class="tbx-filters__label">Picks</span>
+        <button class="tbx-chip" data-tag="pick">★ Must-install</button>
+      </div>
+      <button class="tbx-clear" id="tbx-clear" type="button">Clear</button>
+    </section>
+
+    <section class="tbx-list" id="tbx-list" aria-label="Tools">
+
+      <article class="tbx-row" data-tags="CLI Go mature registry platform pick">
+        <div class="tbx-row__head">
+          <span class="tbx-row__name">Skopeo</span>
+          <span class="tbx-row__star" title="Must-install pick">★</span>
+          <span class="tbx-row__replaces">replaces <strong>docker pull + docker push for registry-to-registry copies</strong></span>
+        </div>
+        <p class="tbx-row__tldr">Copies container images between registries without a Docker daemon and without pulling them to disk. <code>skopeo copy docker://docker.io/nginx:latest docker://my-ecr.dkr.ecr.eu-west-1.amazonaws.com/nginx:latest</code> streams the layers directly. Also inspects image manifests, lists tags, and syncs an entire repository. The right tool for mirroring public images into a private registry as part of an air-gapped or network-policy workflow.</p>
+        <div class="tbx-row__tags">
+          <span class="tbx-row__tag tbx-row__tag--form">CLI</span>
+          <span class="tbx-row__tag tbx-row__tag--lang">Go</span>
+          <span class="tbx-row__tag">mature</span>
+          <span class="tbx-row__tag">registry</span>
+          <span class="tbx-row__tag">platform</span>
+        </div>
+        <a class="tbx-row__repo" href="https://github.com/containers/skopeo" target="_blank" rel="noopener">containers/skopeo<span class="arr">→</span></a>
+      </article>
+
+      <article class="tbx-row" data-tags="CLI Go mature registry platform">
+        <div class="tbx-row__head">
+          <span class="tbx-row__name">Crane</span>
+          <span class="tbx-row__replaces">replaces <strong>docker CLI for image inspection and manipulation</strong></span>
+        </div>
+        <p class="tbx-row__tldr">OCI image manipulation tool from Google: pull, push, copy, tag, mutate (add layers, change entrypoint, set labels), and inspect images — all without a running daemon. The Go library underneath (<code>go-containerregistry</code>) is what ko and many other tools build on. <code>crane ls gcr.io/distroless/base</code> lists all tags; <code>crane digest image:tag</code> returns the manifest digest for pinning. Lighter than Skopeo for single-image operations.</p>
+        <div class="tbx-row__tags">
+          <span class="tbx-row__tag tbx-row__tag--form">CLI</span>
+          <span class="tbx-row__tag tbx-row__tag--lang">Go</span>
+          <span class="tbx-row__tag">mature</span>
+          <span class="tbx-row__tag">registry</span>
+          <span class="tbx-row__tag">platform</span>
+        </div>
+        <a class="tbx-row__repo" href="https://github.com/google/go-containerregistry" target="_blank" rel="noopener">google/go-containerregistry<span class="arr">→</span></a>
+      </article>
+
+      <article class="tbx-row" data-tags="CLI Go mature scan platform pick">
+        <div class="tbx-row__head">
+          <span class="tbx-row__name">Syft</span>
+          <span class="tbx-row__star" title="Must-install pick">★</span>
+          <span class="tbx-row__replaces">replaces <strong>manually tracking what's inside an image</strong></span>
+        </div>
+        <p class="tbx-row__tldr">Generates Software Bill of Materials (SBOMs) from container images, filesystems, and directories. <code>syft image:tag -o syclone-json</code> produces a structured list of every package, library, and binary inside the image with version and license. Used as input to Grype (vulnerability scanning) and compliance workflows. SBOM generation is becoming a regulatory requirement for software supply chains — Syft is the OSS standard tool.</p>
+        <div class="tbx-row__tags">
+          <span class="tbx-row__tag tbx-row__tag--form">CLI</span>
+          <span class="tbx-row__tag tbx-row__tag--lang">Go</span>
+          <span class="tbx-row__tag">mature</span>
+          <span class="tbx-row__tag">scan</span>
+          <span class="tbx-row__tag">platform</span>
+        </div>
+        <a class="tbx-row__repo" href="https://github.com/anchore/syft" target="_blank" rel="noopener">anchore/syft<span class="arr">→</span></a>
+      </article>
+
+      <article class="tbx-row" data-tags="CLI Go mature scan platform">
+        <div class="tbx-row__head">
+          <span class="tbx-row__name">Grype</span>
+          <span class="tbx-row__replaces">replaces <strong>Trivy for Anchore-lineage vulnerability scanning</strong></span>
+        </div>
+        <p class="tbx-row__tldr">Vulnerability scanner from Anchore — pairs naturally with Syft since both use the same package model. <code>grype sbom:syft-output.json</code> scans a pre-generated SBOM, enabling the pattern of "generate SBOM once per build, scan it multiple times against updated CVE databases." The Trivy vs Grype choice is mostly about CVE database coverage and integration preference; both are solid. Also in the Security &amp; Compliance department.</p>
+        <div class="tbx-row__tags">
+          <span class="tbx-row__tag tbx-row__tag--form">CLI</span>
+          <span class="tbx-row__tag tbx-row__tag--lang">Go</span>
+          <span class="tbx-row__tag">mature</span>
+          <span class="tbx-row__tag">scan</span>
+          <span class="tbx-row__tag">platform</span>
+        </div>
+        <a class="tbx-row__repo" href="https://github.com/anchore/grype" target="_blank" rel="noopener">anchore/grype<span class="arr">→</span></a>
+      </article>
+
+      <article class="tbx-row" data-tags="CLI Go mature sign platform">
+        <div class="tbx-row__head">
+          <span class="tbx-row__name">Cosign</span>
+          <span class="tbx-row__replaces">replaces <strong>unsigned container images in production</strong></span>
+        </div>
+        <p class="tbx-row__tldr">Image signing and verification via Sigstore. Keyless signing uses OIDC (your CI identity) so there is no key to rotate or leak. <code>cosign sign</code> in CI; <code>cosign verify</code> in admission policy. Pairs with Kyverno or OPA Gatekeeper to enforce that only signed images enter the cluster. Part of the SLSA supply chain security framework. Also in the Security &amp; Compliance department.</p>
+        <div class="tbx-row__tags">
+          <span class="tbx-row__tag tbx-row__tag--form">CLI</span>
+          <span class="tbx-row__tag tbx-row__tag--lang">Go</span>
+          <span class="tbx-row__tag">mature</span>
+          <span class="tbx-row__tag">sign</span>
+          <span class="tbx-row__tag">platform</span>
+        </div>
+        <a class="tbx-row__repo" href="https://github.com/sigstore/cosign" target="_blank" rel="noopener">sigstore/cosign<span class="arr">→</span></a>
+      </article>
+
+    </section>
+
+    <div class="tbx-empty" id="tbx-empty" hidden>No tools match every active tag. Drop one and try again.</div>
+
+    <div class="about" style="margin-top: 36px;">
+      <span class="about__mark">*</span>
+      <p>Grype and Cosign also appear in the Security &amp; Compliance department — the overlap is intentional since their primary use case spans both contexts. dive and lazydocker are in the Kubernetes toolbox since their focus is runtime (what's running, what's consuming resources) rather than supply chain (what's inside the image before it runs).</p>
+    </div>
+
+  </main>
+
+  <footer class="colophon">
+    <p>Infra Atlas · <a href="/toolbox/">Toolbox</a> · <a href="/">Home</a> · <a href="https://github.com/ineslino/infra-atlas" target="_blank" rel="noopener">GitHub</a> · MIT-licensed · Reviewed <time datetime="2026-05-22">2026-05-22</time></p>
+  </footer>
+
+</div>
+<script src="/toolbox/filter.js" defer></script>
+<script src="/nav.js" defer></script>
+</body>
+</html>

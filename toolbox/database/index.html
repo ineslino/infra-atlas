@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="color-scheme" content="dark">
+<title>Database &amp; Data Toolbox · Infra Atlas</title>
+<link rel="icon" href="/favicon.svg?v=2" type="image/svg+xml">
+<meta name="description" content="Open-source database tools for engineers — pgcli, usql, Atlas, DBeaver, dbmate. Better SQL clients, schema migration, universal DB access.">
+<link rel="canonical" href="https://infraatlas.dev/toolbox/database/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Infra Atlas">
+<meta property="og:title" content="Database &amp; Data Toolbox · Infra Atlas">
+<meta property="og:description" content="Open-source database tools — pgcli, usql, Atlas, DBeaver, dbmate.">
+<meta property="og:url" content="https://infraatlas.dev/toolbox/database/">
+<meta property="og:image" content="https://infraatlas.dev/og.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Database &amp; Data Toolbox · Infra Atlas">
+<meta name="twitter:description" content="Open-source database and schema management tools.">
+<meta name="twitter:image" content="https://infraatlas.dev/og.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@300;400;500;600&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/tools/shared.css">
+<style>.subtitle { max-width: 760px; }</style>
+</head>
+<body>
+<div class="grain"></div>
+<div class="scanlines"></div>
+<div class="page">
+
+  <header class="masthead">
+    <a class="eyebrow" href="/toolbox/"><span class="arrow">←</span> Infra Atlas · Toolbox</a>
+    <h1 class="title">Database &amp; <em>Data.</em></h1>
+    <p class="subtitle">The default SQL clients that ship with databases — <code>psql</code>, <code>mysql</code> — are functional but hostile. Better clients exist. Beyond the client problem, this department covers schema migration (the part that bites you in production) and the universal query layer that lets you forget which CLI each database needs.</p>
+  </header>
+
+  <main id="ia-main">
+
+    <section class="tbx-filters" aria-label="Filter tools by tag">
+      <div class="tbx-filters__group">
+        <span class="tbx-filters__label">Form</span>
+        <button class="tbx-chip" data-tag="CLI">CLI</button>
+        <button class="tbx-chip" data-tag="TUI">TUI</button>
+        <button class="tbx-chip" data-tag="GUI">GUI</button>
+      </div>
+      <div class="tbx-filters__group">
+        <span class="tbx-filters__label">Language</span>
+        <button class="tbx-chip" data-tag="Go">Go</button>
+        <button class="tbx-chip" data-tag="Python">Python</button>
+        <button class="tbx-chip" data-tag="Java">Java</button>
+      </div>
+      <div class="tbx-filters__group">
+        <span class="tbx-filters__label">Use case</span>
+        <button class="tbx-chip" data-tag="dev">Dev</button>
+        <button class="tbx-chip" data-tag="platform">Platform</button>
+      </div>
+      <div class="tbx-filters__group">
+        <span class="tbx-filters__label">Picks</span>
+        <button class="tbx-chip" data-tag="pick">★ Must-install</button>
+      </div>
+      <button class="tbx-clear" id="tbx-clear" type="button">Clear</button>
+    </section>
+
+    <section class="tbx-list" id="tbx-list" aria-label="Tools">
+
+      <article class="tbx-row" data-tags="CLI Python mature dev pick">
+        <div class="tbx-row__head">
+          <span class="tbx-row__name">pgcli</span>
+          <span class="tbx-row__star" title="Must-install pick">★</span>
+          <span class="tbx-row__replaces">replaces <strong>psql</strong></span>
+        </div>
+        <p class="tbx-row__tldr">A better PostgreSQL CLI: auto-completion for table names, columns, functions, and keywords with a popup menu; syntax highlighting; multi-line editing that doesn't break pasting; <code>\d</code> commands that work. Same connection syntax as psql — <code>pgcli postgres://user:pass@host/db</code> — so it's a drop-in replacement. If you use PostgreSQL at all, there is no reason to use psql over pgcli.</p>
+        <div class="tbx-row__tags">
+          <span class="tbx-row__tag tbx-row__tag--form">CLI</span>
+          <span class="tbx-row__tag tbx-row__tag--lang">Python</span>
+          <span class="tbx-row__tag">mature</span>
+          <span class="tbx-row__tag">dev</span>
+        </div>
+        <a class="tbx-row__repo" href="https://github.com/dbcli/pgcli" target="_blank" rel="noopener">dbcli/pgcli<span class="arr">→</span></a>
+      </article>
+
+      <article class="tbx-row" data-tags="CLI Go mature dev pick">
+        <div class="tbx-row__head">
+          <span class="tbx-row__name">usql</span>
+          <span class="tbx-row__star" title="Must-install pick">★</span>
+          <span class="tbx-row__replaces">replaces <strong>db-specific CLI per engine</strong></span>
+        </div>
+        <p class="tbx-row__tldr">Universal SQL CLI: one binary, one syntax, one set of backslash commands for PostgreSQL, MySQL, SQLite, SQL Server, Oracle, BigQuery, Redshift, DynamoDB, and 40+ others. <code>usql pg://host/db</code> vs <code>usql mysql://host/db</code> — the connection string prefix is the only thing that changes. Removes the friction of remembering which client, which port, which flags for each database you touch.</p>
+        <div class="tbx-row__tags">
+          <span class="tbx-row__tag tbx-row__tag--form">CLI</span>
+          <span class="tbx-row__tag tbx-row__tag--lang">Go</span>
+          <span class="tbx-row__tag">mature</span>
+          <span class="tbx-row__tag">dev</span>
+        </div>
+        <a class="tbx-row__repo" href="https://github.com/xo/usql" target="_blank" rel="noopener">xo/usql<span class="arr">→</span></a>
+      </article>
+
+      <article class="tbx-row" data-tags="CLI Go mature platform pick">
+        <div class="tbx-row__head">
+          <span class="tbx-row__name">Atlas</span>
+          <span class="tbx-row__star" title="Must-install pick">★</span>
+          <span class="tbx-row__replaces">replaces <strong>hand-written migration files</strong></span>
+        </div>
+        <p class="tbx-row__tldr">Schema migration tool with a declarative model: define the desired schema state, let Atlas figure out the diff, generate the migration. Works with PostgreSQL, MySQL, MariaDB, SQLite, and others. Unlike Flyway or Liquibase, Atlas validates migrations against lint rules (no DROP COLUMN without backfill, no unique index creation on a non-empty table without CONCURRENTLY) before you run them. Also does schema inspection and drift detection.</p>
+        <div class="tbx-row__tags">
+          <span class="tbx-row__tag tbx-row__tag--form">CLI</span>
+          <span class="tbx-row__tag tbx-row__tag--lang">Go</span>
+          <span class="tbx-row__tag">mature</span>
+          <span class="tbx-row__tag">platform</span>
+        </div>
+        <a class="tbx-row__repo" href="https://github.com/ariga/atlas" target="_blank" rel="noopener">ariga/atlas<span class="arr">→</span></a>
+      </article>
+
+      <article class="tbx-row" data-tags="GUI Java mature dev">
+        <div class="tbx-row__head">
+          <span class="tbx-row__name">DBeaver Community</span>
+          <span class="tbx-row__replaces">replaces <strong>Sequel Pro / TablePlus / DataGrip for OSS use</strong></span>
+        </div>
+        <p class="tbx-row__tldr">Cross-platform desktop GUI client for practically every database: PostgreSQL, MySQL, SQLite, MongoDB, Redis, Cassandra, and 100+ more via JDBC. Schema browser, query editor with auto-complete, data export, ER diagrams. The Community edition is fully OSS (Apache 2.0) and covers all database types without a paywall. Heavier than TablePlus (Java-based), but the only OSS option with true multi-database breadth.</p>
+        <div class="tbx-row__tags">
+          <span class="tbx-row__tag tbx-row__tag--form">GUI</span>
+          <span class="tbx-row__tag tbx-row__tag--lang">Java</span>
+          <span class="tbx-row__tag">mature</span>
+          <span class="tbx-row__tag">dev</span>
+        </div>
+        <a class="tbx-row__repo" href="https://github.com/dbeaver/dbeaver" target="_blank" rel="noopener">dbeaver/dbeaver<span class="arr">→</span></a>
+      </article>
+
+      <article class="tbx-row" data-tags="CLI Go mature platform">
+        <div class="tbx-row__head">
+          <span class="tbx-row__name">dbmate</span>
+          <span class="tbx-row__replaces">replaces <strong>raw SQL migration files with no tooling</strong></span>
+        </div>
+        <p class="tbx-row__tldr">Lightweight migration tool: up/down SQL files, a <code>db/migrations/</code> directory, and a <code>schema.sql</code> that's always in sync with your migrations. Language-agnostic (runs as a standalone binary), works with PostgreSQL, MySQL, SQLite, and ClickHouse. The minimal choice when you want migration versioning without pulling in an ORM or a heavyweight framework. Popular in polyglot services and Go projects that don't want to add an ORM dependency.</p>
+        <div class="tbx-row__tags">
+          <span class="tbx-row__tag tbx-row__tag--form">CLI</span>
+          <span class="tbx-row__tag tbx-row__tag--lang">Go</span>
+          <span class="tbx-row__tag">mature</span>
+          <span class="tbx-row__tag">platform</span>
+        </div>
+        <a class="tbx-row__repo" href="https://github.com/amacneil/dbmate" target="_blank" rel="noopener">amacneil/dbmate<span class="arr">→</span></a>
+      </article>
+
+    </section>
+
+    <div class="tbx-empty" id="tbx-empty" hidden>No tools match every active tag. Drop one and try again.</div>
+
+    <div class="about" style="margin-top: 36px;">
+      <span class="about__mark">*</span>
+      <p>DBeaver is the only GUI-form tool in this department — it installs as a native desktop application, not a web interface. Atlas and dbmate solve similar problems differently: Atlas is declarative (desired state → migration generated); dbmate is imperative (you write the SQL, it tracks versions). Atlas is the more powerful choice; dbmate is the simpler one for teams that want full control over their SQL.</p>
+    </div>
+
+  </main>
+
+  <footer class="colophon">
+    <p>Infra Atlas · <a href="/toolbox/">Toolbox</a> · <a href="/">Home</a> · <a href="https://github.com/ineslino/infra-atlas" target="_blank" rel="noopener">GitHub</a> · MIT-licensed · Reviewed <time datetime="2026-05-22">2026-05-22</time></p>
+  </footer>
+
+</div>
+<script src="/toolbox/filter.js" defer></script>
+<script src="/nav.js" defer></script>
+</body>
+</html>

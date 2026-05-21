@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="color-scheme" content="dark">
+<title>API &amp; Testing Toolbox · Infra Atlas</title>
+<link rel="icon" href="/favicon.svg?v=2" type="image/svg+xml">
+<meta name="description" content="Open-source API and load testing tools — Bruno, Hurl, k6, hey, oha, wrk. Postman replacement, HTTP file runner, load testing without JMeter.">
+<link rel="canonical" href="https://infraatlas.dev/toolbox/api/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Infra Atlas">
+<meta property="og:title" content="API &amp; Testing Toolbox · Infra Atlas">
+<meta property="og:description" content="Open-source API testing tools — Bruno, Hurl, k6, hey, oha, wrk.">
+<meta property="og:url" content="https://infraatlas.dev/toolbox/api/">
+<meta property="og:image" content="https://infraatlas.dev/og.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="API &amp; Testing Toolbox · Infra Atlas">
+<meta name="twitter:description" content="Open-source API and load testing tools for developers and SREs.">
+<meta name="twitter:image" content="https://infraatlas.dev/og.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@300;400;500;600&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/tools/shared.css">
+<style>.subtitle { max-width: 760px; }</style>
+</head>
+<body>
+<div class="grain"></div>
+<div class="scanlines"></div>
+<div class="page">
+
+  <header class="masthead">
+    <a class="eyebrow" href="/toolbox/"><span class="arrow">←</span> Infra Atlas · Toolbox</a>
+    <h1 class="title">API &amp; <em>Testing.</em></h1>
+    <p class="subtitle">Two distinct problems live here: API exploration (Postman replacements that don't require a cloud account and store collections as files) and load testing (JMeter replacements that don't require a Java degree). The tools are different enough in use that the ★ picks are one from each group.</p>
+  </header>
+
+  <main id="ia-main">
+
+    <section class="tbx-filters" aria-label="Filter tools by tag">
+      <div class="tbx-filters__group">
+        <span class="tbx-filters__label">Form</span>
+        <button class="tbx-chip" data-tag="GUI">GUI</button>
+        <button class="tbx-chip" data-tag="CLI">CLI</button>
+      </div>
+      <div class="tbx-filters__group">
+        <span class="tbx-filters__label">Language</span>
+        <button class="tbx-chip" data-tag="Rust">Rust</button>
+        <button class="tbx-chip" data-tag="Go">Go</button>
+        <button class="tbx-chip" data-tag="JS">JavaScript</button>
+        <button class="tbx-chip" data-tag="C">C</button>
+      </div>
+      <div class="tbx-filters__group">
+        <span class="tbx-filters__label">Use case</span>
+        <button class="tbx-chip" data-tag="dev">API testing</button>
+        <button class="tbx-chip" data-tag="load">Load testing</button>
+      </div>
+      <div class="tbx-filters__group">
+        <span class="tbx-filters__label">Picks</span>
+        <button class="tbx-chip" data-tag="pick">★ Must-install</button>
+      </div>
+      <button class="tbx-clear" id="tbx-clear" type="button">Clear</button>
+    </section>
+
+    <section class="tbx-list" id="tbx-list" aria-label="Tools">
+
+      <article class="tbx-row" data-tags="GUI JS emerging dev pick">
+        <div class="tbx-row__head">
+          <span class="tbx-row__name">Bruno</span>
+          <span class="tbx-row__star" title="Must-install pick">★</span>
+          <span class="tbx-row__replaces">replaces <strong>Postman / Insomnia</strong></span>
+        </div>
+        <p class="tbx-row__tldr">Desktop API client where collections are stored as plain files in your repo (not in a cloud account). Open a folder → your requests load. Collaborate via git, diff in PRs, no account required, no sync service. The main reason to switch from Postman: your collections are yours and they're version-controlled. MIT-licensed, Electron-based, fast enough for daily use. Growing quickly since Postman removed its offline mode in 2023.</p>
+        <div class="tbx-row__tags">
+          <span class="tbx-row__tag tbx-row__tag--form">GUI</span>
+          <span class="tbx-row__tag tbx-row__tag--lang">JS</span>
+          <span class="tbx-row__tag">emerging</span>
+          <span class="tbx-row__tag">dev</span>
+        </div>
+        <a class="tbx-row__repo" href="https://github.com/usebruno/bruno" target="_blank" rel="noopener">usebruno/bruno<span class="arr">→</span></a>
+      </article>
+
+      <article class="tbx-row" data-tags="CLI Rust emerging dev pick">
+        <div class="tbx-row__head">
+          <span class="tbx-row__name">Hurl</span>
+          <span class="tbx-row__star" title="Must-install pick">★</span>
+          <span class="tbx-row__replaces">replaces <strong>curl scripts / Postman for CI API tests</strong></span>
+        </div>
+        <p class="tbx-row__tldr">Runs HTTP requests defined in plain text files (<code>.hurl</code>), with assertions. A test file looks like annotated curl commands: request, headers, body, then <code>HTTP 200</code>, <code>jsonpath "$.id" exists</code>, <code>header "Content-Type" contains "json"</code>. Git-versionable, CI-runnable, readable by anyone who knows HTTP. The right tool for API contract testing that belongs in a repo, not a Postman workspace.</p>
+        <div class="tbx-row__tags">
+          <span class="tbx-row__tag tbx-row__tag--form">CLI</span>
+          <span class="tbx-row__tag tbx-row__tag--lang">Rust</span>
+          <span class="tbx-row__tag">emerging</span>
+          <span class="tbx-row__tag">dev</span>
+        </div>
+        <a class="tbx-row__repo" href="https://github.com/Orange-OpenSource/hurl" target="_blank" rel="noopener">Orange-OpenSource/hurl<span class="arr">→</span></a>
+      </article>
+
+      <article class="tbx-row" data-tags="CLI JS mature load pick">
+        <div class="tbx-row__head">
+          <span class="tbx-row__name">k6</span>
+          <span class="tbx-row__star" title="Must-install pick">★</span>
+          <span class="tbx-row__replaces">replaces <strong>JMeter / Gatling</strong></span>
+        </div>
+        <p class="tbx-row__tldr">Load testing tool where tests are JavaScript: define virtual users, ramp up, run for N minutes, collect metrics. <code>k6 run script.js</code> gives you throughput, latency percentiles, error rate, and checks in the terminal. Integrates with Grafana, InfluxDB, and Prometheus for long-running tests. The developer-ergonomics answer to JMeter — no GUI required, no XML config, version-controlled test scripts.</p>
+        <div class="tbx-row__tags">
+          <span class="tbx-row__tag tbx-row__tag--form">CLI</span>
+          <span class="tbx-row__tag tbx-row__tag--lang">JS</span>
+          <span class="tbx-row__tag">mature</span>
+          <span class="tbx-row__tag">load</span>
+        </div>
+        <a class="tbx-row__repo" href="https://github.com/grafana/k6" target="_blank" rel="noopener">grafana/k6<span class="arr">→</span></a>
+      </article>
+
+      <article class="tbx-row" data-tags="CLI Go mature load">
+        <div class="tbx-row__head">
+          <span class="tbx-row__name">hey</span>
+          <span class="tbx-row__replaces">replaces <strong>ab (Apache Bench)</strong></span>
+        </div>
+        <p class="tbx-row__tldr">HTTP load generator: fire N requests at a URL, get throughput and latency distribution. <code>hey -n 10000 -c 200 https://api.example.com/health</code> — that's the whole API. No scripting, no config file, just a quick sanity check that an endpoint can handle your expected concurrency. Output includes response time histogram, which <code>ab</code> lacks. The right tool for a 30-second "can this handle load?" question.</p>
+        <div class="tbx-row__tags">
+          <span class="tbx-row__tag tbx-row__tag--form">CLI</span>
+          <span class="tbx-row__tag tbx-row__tag--lang">Go</span>
+          <span class="tbx-row__tag">mature</span>
+          <span class="tbx-row__tag">load</span>
+        </div>
+        <a class="tbx-row__repo" href="https://github.com/rakyll/hey" target="_blank" rel="noopener">rakyll/hey<span class="arr">→</span></a>
+      </article>
+
+      <article class="tbx-row" data-tags="CLI Rust emerging load">
+        <div class="tbx-row__head">
+          <span class="tbx-row__name">oha</span>
+          <span class="tbx-row__replaces">replaces <strong>hey (with live TUI output)</strong></span>
+        </div>
+        <p class="tbx-row__tldr">HTTP load testing tool similar to hey but with a live TUI showing requests per second, latency distribution, and error rate as the test runs — not just at the end. The real-time view makes it easy to spot when a service starts degrading under ramp-up. Written in Rust; faster than hey at high concurrency. Same single-command API: <code>oha -n 10000 -c 200 https://example.com</code>.</p>
+        <div class="tbx-row__tags">
+          <span class="tbx-row__tag tbx-row__tag--form">CLI</span>
+          <span class="tbx-row__tag tbx-row__tag--lang">Rust</span>
+          <span class="tbx-row__tag">emerging</span>
+          <span class="tbx-row__tag">load</span>
+        </div>
+        <a class="tbx-row__repo" href="https://github.com/hatoo/oha" target="_blank" rel="noopener">hatoo/oha<span class="arr">→</span></a>
+      </article>
+
+      <article class="tbx-row" data-tags="CLI C mature load">
+        <div class="tbx-row__head">
+          <span class="tbx-row__name">wrk</span>
+          <span class="tbx-row__replaces">replaces <strong>ab for high-throughput benchmarking</strong></span>
+        </div>
+        <p class="tbx-row__tldr">The classic HTTP benchmarking tool: multi-threaded, uses async I/O, can sustain very high request rates to measure maximum throughput. <code>wrk -t12 -c400 -d30s https://api.example.com/</code> — 12 threads, 400 connections, 30 seconds. Minimal but accurate. Accepts a Lua script for custom request generation. Still the reference point many teams use for "what is the ceiling of this endpoint." The newer oha/hey have better UX; wrk still wins for raw throughput measurement.</p>
+        <div class="tbx-row__tags">
+          <span class="tbx-row__tag tbx-row__tag--form">CLI</span>
+          <span class="tbx-row__tag tbx-row__tag--lang">C</span>
+          <span class="tbx-row__tag">mature</span>
+          <span class="tbx-row__tag">load</span>
+        </div>
+        <a class="tbx-row__repo" href="https://github.com/wg/wrk" target="_blank" rel="noopener">wg/wrk<span class="arr">→</span></a>
+      </article>
+
+    </section>
+
+    <div class="tbx-empty" id="tbx-empty" hidden>No tools match every active tag. Drop one and try again.</div>
+
+    <div class="about" style="margin-top: 36px;">
+      <span class="about__mark">*</span>
+      <p>Bruno and Hurl solve the same "Postman replacement" problem differently — Bruno is a desktop GUI for exploration and collaboration; Hurl is a CLI runner for CI-integrated contract testing. Pick based on whether the primary use case is interactive or automated. For load testing: hey/oha for quick sanity checks; k6 for scripted scenarios with ramp-up, assertions, and metrics export; wrk for maximum-throughput measurement.</p>
+    </div>
+
+  </main>
+
+  <footer class="colophon">
+    <p>Infra Atlas · <a href="/toolbox/">Toolbox</a> · <a href="/">Home</a> · <a href="https://github.com/ineslino/infra-atlas" target="_blank" rel="noopener">GitHub</a> · MIT-licensed · Reviewed <time datetime="2026-05-22">2026-05-22</time></p>
+  </footer>
+
+</div>
+<script src="/toolbox/filter.js" defer></script>
+<script src="/nav.js" defer></script>
+</body>
+</html>

@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="color-scheme" content="dark">
+<title>Provisioning &amp; IaC Toolbox · Infra Atlas</title>
+<link rel="icon" href="/favicon.svg?v=2" type="image/svg+xml">
+<meta name="description" content="Open-source IaC tools for platform engineers — OpenTofu, Terragrunt, Atlantis, Infracost, tflint, Pulumi. The canonical stack for infrastructure-as-code at scale.">
+<link rel="canonical" href="https://infraatlas.dev/toolbox/iac/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Infra Atlas">
+<meta property="og:title" content="Provisioning &amp; IaC Toolbox · Infra Atlas">
+<meta property="og:description" content="Open-source IaC tools — OpenTofu, Terragrunt, Atlantis, Infracost, tflint, Pulumi.">
+<meta property="og:url" content="https://infraatlas.dev/toolbox/iac/">
+<meta property="og:image" content="https://infraatlas.dev/og.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Provisioning &amp; IaC Toolbox · Infra Atlas">
+<meta name="twitter:description" content="Open-source IaC tools for platform engineers.">
+<meta name="twitter:image" content="https://infraatlas.dev/og.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@300;400;500;600&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/tools/shared.css">
+<style>.subtitle { max-width: 760px; }</style>
+</head>
+<body>
+<div class="grain"></div>
+<div class="scanlines"></div>
+<div class="page">
+
+  <header class="masthead">
+    <a class="eyebrow" href="/toolbox/"><span class="arrow">←</span> Infra Atlas · Toolbox</a>
+    <h1 class="title">Provisioning &amp; <em>IaC.</em></h1>
+    <p class="subtitle">Terraform's BSL relicensing in 2023 changed the calculus for new projects. OpenTofu is the answer. Everything else in this department is about making infrastructure code maintainable at the scale where plain Terraform starts to fall apart — modules that diverge, plans nobody reviews, costs nobody estimates before merging.</p>
+  </header>
+
+  <main id="ia-main">
+
+    <section class="tbx-filters" aria-label="Filter tools by tag">
+      <div class="tbx-filters__group">
+        <span class="tbx-filters__label">Form</span>
+        <button class="tbx-chip" data-tag="CLI">CLI</button>
+        <button class="tbx-chip" data-tag="Web UI">Web UI</button>
+      </div>
+      <div class="tbx-filters__group">
+        <span class="tbx-filters__label">Language</span>
+        <button class="tbx-chip" data-tag="Go">Go</button>
+        <button class="tbx-chip" data-tag="HCL">HCL</button>
+        <button class="tbx-chip" data-tag="multi">Multi-lang</button>
+      </div>
+      <div class="tbx-filters__group">
+        <span class="tbx-filters__label">Picks</span>
+        <button class="tbx-chip" data-tag="pick">★ Must-install</button>
+      </div>
+      <button class="tbx-clear" id="tbx-clear" type="button">Clear</button>
+    </section>
+
+    <section class="tbx-list" id="tbx-list" aria-label="Tools">
+
+      <article class="tbx-row" data-tags="CLI HCL mature platform pick">
+        <div class="tbx-row__head">
+          <span class="tbx-row__name">OpenTofu</span>
+          <span class="tbx-row__star" title="Must-install pick">★</span>
+          <span class="tbx-row__replaces">replaces <strong>Terraform (BSL)</strong></span>
+        </div>
+        <p class="tbx-row__tldr">The Linux Foundation fork of Terraform, created after HashiCorp switched from MPL to BSL 1.1 in 2023. API-compatible drop-in: rename the binary, point at your state, done. CNCF project; active community; receives improvements (native functions, provider mocking) that Terraform hasn't merged. The safe default for any new project.</p>
+        <div class="tbx-row__tags">
+          <span class="tbx-row__tag tbx-row__tag--form">CLI</span>
+          <span class="tbx-row__tag tbx-row__tag--lang">HCL</span>
+          <span class="tbx-row__tag">mature</span>
+          <span class="tbx-row__tag">platform</span>
+        </div>
+        <a class="tbx-row__repo" href="https://github.com/opentofu/opentofu" target="_blank" rel="noopener">opentofu/opentofu<span class="arr">→</span></a>
+      </article>
+
+      <article class="tbx-row" data-tags="CLI Go mature platform pick">
+        <div class="tbx-row__head">
+          <span class="tbx-row__name">Terragrunt</span>
+          <span class="tbx-row__star" title="Must-install pick">★</span>
+          <span class="tbx-row__replaces">replaces <strong>copy-pasted Terraform root modules</strong></span>
+        </div>
+        <p class="tbx-row__tldr">A thin wrapper over Terraform/OpenTofu that solves the "DRY infrastructure" problem — define backend, provider, and common inputs once; every environment inherits. <code>run-all apply</code> runs across module stacks in dependency order. Unavoidable at medium-to-large scale where the alternative is 15 near-identical <code>main.tf</code> files with different variable overrides.</p>
+        <div class="tbx-row__tags">
+          <span class="tbx-row__tag tbx-row__tag--form">CLI</span>
+          <span class="tbx-row__tag tbx-row__tag--lang">Go</span>
+          <span class="tbx-row__tag">mature</span>
+          <span class="tbx-row__tag">platform</span>
+        </div>
+        <a class="tbx-row__repo" href="https://github.com/gruntwork-io/terragrunt" target="_blank" rel="noopener">gruntwork-io/terragrunt<span class="arr">→</span></a>
+      </article>
+
+      <article class="tbx-row" data-tags="CLI Go mature platform">
+        <div class="tbx-row__head">
+          <span class="tbx-row__name">tflint</span>
+          <span class="tbx-row__replaces">replaces <strong>terraform validate (provider-aware linting)</strong></span>
+        </div>
+        <p class="tbx-row__tldr">Linter for Terraform/OpenTofu that goes beyond <code>terraform validate</code> — catches provider-specific issues (wrong instance type, deprecated attributes, missing required tags) before plan. Plugin architecture means AWS, GCP, and Azure rules are maintained separately and stay current with provider releases. Runs in CI in seconds.</p>
+        <div class="tbx-row__tags">
+          <span class="tbx-row__tag tbx-row__tag--form">CLI</span>
+          <span class="tbx-row__tag tbx-row__tag--lang">Go</span>
+          <span class="tbx-row__tag">mature</span>
+          <span class="tbx-row__tag">platform</span>
+        </div>
+        <a class="tbx-row__repo" href="https://github.com/terraform-linters/tflint" target="_blank" rel="noopener">terraform-linters/tflint<span class="arr">→</span></a>
+      </article>
+
+      <article class="tbx-row" data-tags="Web UI Go mature platform">
+        <div class="tbx-row__head">
+          <span class="tbx-row__name">Atlantis</span>
+          <span class="tbx-row__replaces">replaces <strong>manual terraform plan/apply in PRs</strong></span>
+        </div>
+        <p class="tbx-row__tldr">Self-hosted GitOps bot: opens a PR touching <code>.tf</code> files → Atlantis automatically posts the plan output as a PR comment. Merge → <code>atlantis apply</code> executes it. Replaces the "run plan locally, paste output as a comment, hope the reviewer trusts you" workflow. Works with GitHub, GitLab, Bitbucket. Requires a server process with cloud credentials.</p>
+        <div class="tbx-row__tags">
+          <span class="tbx-row__tag tbx-row__tag--form">Web UI</span>
+          <span class="tbx-row__tag tbx-row__tag--lang">Go</span>
+          <span class="tbx-row__tag">mature</span>
+          <span class="tbx-row__tag">platform</span>
+        </div>
+        <a class="tbx-row__repo" href="https://github.com/runatlantis/atlantis" target="_blank" rel="noopener">runatlantis/atlantis<span class="arr">→</span></a>
+      </article>
+
+      <article class="tbx-row" data-tags="CLI Go mature platform pick">
+        <div class="tbx-row__head">
+          <span class="tbx-row__name">Infracost</span>
+          <span class="tbx-row__star" title="Must-install pick">★</span>
+          <span class="tbx-row__replaces">replaces <strong>guessing the cost of an IaC diff</strong></span>
+        </div>
+        <p class="tbx-row__tldr">Shows the monthly cost delta of a Terraform/OpenTofu diff before you apply it. Integrates into CI as a PR comment: "this change will add $47/month". Covers AWS, GCP, Azure resource pricing. Catches the classic mistake of accidentally provisioning a <code>p4d.24xlarge</code> in a shared module. Free for OSS and most self-hosted use cases.</p>
+        <div class="tbx-row__tags">
+          <span class="tbx-row__tag tbx-row__tag--form">CLI</span>
+          <span class="tbx-row__tag tbx-row__tag--lang">Go</span>
+          <span class="tbx-row__tag">mature</span>
+          <span class="tbx-row__tag">platform</span>
+        </div>
+        <a class="tbx-row__repo" href="https://github.com/infracost/infracost" target="_blank" rel="noopener">infracost/infracost<span class="arr">→</span></a>
+      </article>
+
+      <article class="tbx-row" data-tags="CLI multi mature platform">
+        <div class="tbx-row__head">
+          <span class="tbx-row__name">Pulumi</span>
+          <span class="tbx-row__replaces">replaces <strong>HCL for teams that prefer real languages</strong></span>
+        </div>
+        <p class="tbx-row__tldr">IaC in TypeScript, Python, Go, Java, or C# instead of HCL. Same state-machine model as Terraform: resources declared, diffed, applied. The tradeoff is real: you get loops, functions, and testing frameworks natively, but you also get all the complexity of a general-purpose language in infrastructure code. OSS core; Pulumi Cloud is the managed backend (self-host with S3/GCS is straightforward).</p>
+        <div class="tbx-row__tags">
+          <span class="tbx-row__tag tbx-row__tag--form">CLI</span>
+          <span class="tbx-row__tag tbx-row__tag--lang">multi</span>
+          <span class="tbx-row__tag">mature</span>
+          <span class="tbx-row__tag">platform</span>
+        </div>
+        <a class="tbx-row__repo" href="https://github.com/pulumi/pulumi" target="_blank" rel="noopener">pulumi/pulumi<span class="arr">→</span></a>
+      </article>
+
+    </section>
+
+    <div class="tbx-empty" id="tbx-empty" hidden>No tools match every active tag. Drop one and try again.</div>
+
+    <div class="about" style="margin-top: 36px;">
+      <span class="about__mark">*</span>
+      <p>The IaC space moved fast post-2023. OpenTofu is the OSS answer to Terraform's relicensing. Terragrunt and tflint work with both. Atlantis and Infracost are independent of the HCL runtime — they work with either. Pulumi is the serious alternative for teams that find HCL limiting. Open a PR if something obvious is missing.</p>
+    </div>
+
+  </main>
+
+  <footer class="colophon">
+    <p>Infra Atlas · <a href="/toolbox/">Toolbox</a> · <a href="/">Home</a> · <a href="https://github.com/ineslino/infra-atlas" target="_blank" rel="noopener">GitHub</a> · MIT-licensed · Reviewed <time datetime="2026-05-22">2026-05-22</time></p>
+  </footer>
+
+</div>
+<script src="/toolbox/filter.js" defer></script>
+<script src="/nav.js" defer></script>
+</body>
+</html>
