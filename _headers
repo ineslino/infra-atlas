@@ -26,6 +26,10 @@
 /tools/shared.css
   Cache-Control: public, max-age=3600, s-maxage=3600, stale-while-revalidate=86400
 
+# Filter JS for /toolbox/ department pages — same cache shape.
+/toolbox/filter.js
+  Cache-Control: public, max-age=3600, s-maxage=3600, stale-while-revalidate=86400
+
 # Future static assets bucket — immutable, year-long
 /assets/*
   Cache-Control: public, max-age=31536000, immutable

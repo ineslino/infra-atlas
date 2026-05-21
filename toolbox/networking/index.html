@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="color-scheme" content="dark">
+<title>Networking Toolbox · Infra Atlas</title>
+<link rel="icon" href="/favicon.svg?v=2" type="image/svg+xml">
+<meta name="description" content="Open-source networking diagnostics and CLIs every cloud engineer should know — mtr, doggo, bandwhich, gping, termshark, mkcert, nmap. Tagged by form and language, filterable.">
+<link rel="canonical" href="https://infraatlas.dev/toolbox/networking/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Infra Atlas">
+<meta property="og:title" content="Networking Toolbox · Infra Atlas">
+<meta property="og:description" content="Open-source networking diagnostics — modern dig, traceroute, bandwidth monitors, HTTP clients. Curated.">
+<meta property="og:url" content="https://infraatlas.dev/toolbox/networking/">
+<meta property="og:image" content="https://infraatlas.dev/og.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Networking Toolbox · Infra Atlas">
+<meta name="twitter:description" content="Open-source networking diagnostics — modern dig, traceroute, bandwidth monitors, HTTP clients.">
+<meta name="twitter:image" content="https://infraatlas.dev/og.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@300;400;500;600&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/tools/shared.css">
+
+<style>
+.subtitle { max-width: 760px; }
+</style>
+</head>
+<body>
+
+<div class="grain"></div>
+<div class="scanlines"></div>
+
+<div class="page">
+
+  <header class="masthead">
+    <a class="eyebrow" href="/toolbox/"><span class="arrow">←</span> Infra Atlas · Toolbox</a>
+    <h1 class="title">Networking <em>Toolbox.</em></h1>
+    <p class="subtitle">When the latency graph spikes or DNS goes sideways, you do not want to learn a new tool — you want the right one already on your <code>$PATH</code>. These are the modern replacements for <code>dig</code>, <code>traceroute</code>, <code>ping</code>, plus a handful of niche TUIs worth knowing. ★ marks the picks.</p>
+  </header>
+
+  <main id="ia-main">
+
+    <section class="tbx-filters" aria-label="Filter tools by tag">
+      <div class="tbx-filters__group">
+        <span class="tbx-filters__label">Form</span>
+        <button class="tbx-chip" data-tag="TUI">TUI</button>
+        <button class="tbx-chip" data-tag="CLI">CLI</button>
+      </div>
+      <div class="tbx-filters__group">
+        <span class="tbx-filters__label">Language</span>
+        <button class="tbx-chip" data-tag="Go">Go</button>
+        <button class="tbx-chip" data-tag="Rust">Rust</button>
+        <button class="tbx-chip" data-tag="Python">Python</button>
+        <button class="tbx-chip" data-tag="C">C</button>
+      </div>
+      <div class="tbx-filters__group">
+        <span class="tbx-filters__label">Use case</span>
+        <button class="tbx-chip" data-tag="SRE">SRE</button>
+        <button class="tbx-chip" data-tag="dev">Dev</button>
+      </div>
+      <div class="tbx-filters__group">
+        <span class="tbx-filters__label">Picks</span>
+        <button class="tbx-chip" data-tag="pick">★ Must-install</button>
+      </div>
+      <button class="tbx-clear" id="tbx-clear" type="button">Clear</button>
+    </section>
+
+    <section class="tbx-list" id="tbx-list" aria-label="Tools">
+
+      <article class="tbx-row" data-tags="TUI C mature SRE pick">
+        <div class="tbx-row__head">
+          <span class="tbx-row__name">mtr</span>
+          <span class="tbx-row__star" title="Must-install pick">★</span>
+          <span class="tbx-row__replaces">replaces <strong>traceroute + ping (separate)</strong></span>
+        </div>
+        <p class="tbx-row__tldr">Continuous traceroute that pings every hop and shows packet loss and latency at each. When a transit network is dropping packets two hops upstream of you, this is how you find out.</p>
+        <div class="tbx-row__tags">
+          <span class="tbx-row__tag tbx-row__tag--form">TUI</span>
+          <span class="tbx-row__tag tbx-row__tag--lang">C</span>
+          <span class="tbx-row__tag">mature</span>
+          <span class="tbx-row__tag">SRE</span>
+        </div>
+        <a class="tbx-row__repo" href="https://github.com/traviscross/mtr" target="_blank" rel="noopener">traviscross/mtr<span class="arr">→</span></a>
+      </article>
+
+      <article class="tbx-row" data-tags="CLI Go emerging pick">
+        <div class="tbx-row__head">
+          <span class="tbx-row__name">doggo</span>
+          <span class="tbx-row__star" title="Must-install pick">★</span>
+          <span class="tbx-row__replaces">replaces <strong>dig</strong></span>
+        </div>
+        <p class="tbx-row__tldr">A modern DNS client — colourised output, JSON mode, DNS-over-HTTPS and DNS-over-TLS support. Reads as English: <code>doggo example.com MX @1.1.1.1</code>.</p>
+        <div class="tbx-row__tags">
+          <span class="tbx-row__tag tbx-row__tag--form">CLI</span>
+          <span class="tbx-row__tag tbx-row__tag--lang">Go</span>
+          <span class="tbx-row__tag">emerging</span>
+        </div>
+        <a class="tbx-row__repo" href="https://github.com/mr-karan/doggo" target="_blank" rel="noopener">mr-karan/doggo<span class="arr">→</span></a>
+      </article>
+
+      <article class="tbx-row" data-tags="CLI Rust emerging">
+        <div class="tbx-row__head">
+          <span class="tbx-row__name">dog</span>
+          <span class="tbx-row__replaces">replaces <strong>dig</strong></span>
+        </div>
+        <p class="tbx-row__tldr">Rust alternative to <code>doggo</code> — same idea, slightly different output. Pick whichever you like the look of; both are vast improvements over BIND's <code>dig</code>.</p>
+        <div class="tbx-row__tags">
+          <span class="tbx-row__tag tbx-row__tag--form">CLI</span>
+          <span class="tbx-row__tag tbx-row__tag--lang">Rust</span>
+          <span class="tbx-row__tag">emerging</span>
+        </div>
+        <a class="tbx-row__repo" href="https://github.com/ogham/dog" target="_blank" rel="noopener">ogham/dog<span class="arr">→</span></a>
+      </article>
+
+      <article class="tbx-row" data-tags="TUI Rust mature SRE pick">
+        <div class="tbx-row__head">
+          <span class="tbx-row__name">bandwhich</span>
+          <span class="tbx-row__star" title="Must-install pick">★</span>
+          <span class="tbx-row__replaces">replaces <strong>nethogs / iftop</strong></span>
+        </div>
+        <p class="tbx-row__tldr">Bandwidth-per-process TUI. When "why is the network slow?" needs an answer in under a minute, this tells you exactly which process and which remote address are eating it.</p>
+        <div class="tbx-row__tags">
+          <span class="tbx-row__tag tbx-row__tag--form">TUI</span>
+          <span class="tbx-row__tag tbx-row__tag--lang">Rust</span>
+          <span class="tbx-row__tag">mature</span>
+          <span class="tbx-row__tag">SRE</span>
+        </div>
+        <a class="tbx-row__repo" href="https://github.com/imsnif/bandwhich" target="_blank" rel="noopener">imsnif/bandwhich<span class="arr">→</span></a>
+      </article>
+
+      <article class="tbx-row" data-tags="TUI Rust emerging">
+        <div class="tbx-row__head">
+          <span class="tbx-row__name">gping</span>
+          <span class="tbx-row__replaces">replaces <strong>ping</strong></span>
+        </div>
+        <p class="tbx-row__tldr"><code>ping</code> with a live graph in the terminal. Tiny tool, but you will not go back — when you are debugging an intermittent latency issue, the graph tells the story faster than scrolling text.</p>
+        <div class="tbx-row__tags">
+          <span class="tbx-row__tag tbx-row__tag--form">TUI</span>
+          <span class="tbx-row__tag tbx-row__tag--lang">Rust</span>
+          <span class="tbx-row__tag">emerging</span>
+        </div>
+        <a class="tbx-row__repo" href="https://github.com/orf/gping" target="_blank" rel="noopener">orf/gping<span class="arr">→</span></a>
+      </article>
+
+      <article class="tbx-row" data-tags="TUI Go mature SRE">
+        <div class="tbx-row__head">
+          <span class="tbx-row__name">termshark</span>
+          <span class="tbx-row__replaces">replaces <strong>wireshark on headless hosts</strong></span>
+        </div>
+        <p class="tbx-row__tldr">Wireshark-style packet inspection in the terminal, on top of <code>tshark</code>. Read a pcap or sniff live; navigate frames, follow streams, filter expressions. Indispensable when SSH is your only window.</p>
+        <div class="tbx-row__tags">
+          <span class="tbx-row__tag tbx-row__tag--form">TUI</span>
+          <span class="tbx-row__tag tbx-row__tag--lang">Go</span>
+          <span class="tbx-row__tag">mature</span>
+          <span class="tbx-row__tag">SRE</span>
+        </div>
+        <a class="tbx-row__repo" href="https://github.com/gcla/termshark" target="_blank" rel="noopener">gcla/termshark<span class="arr">→</span></a>
+      </article>
+
+      <article class="tbx-row" data-tags="TUI C mature">
+        <div class="tbx-row__head">
+          <span class="tbx-row__name">bmon</span>
+          <span class="tbx-row__replaces">replaces <strong>ifconfig + watch</strong></span>
+        </div>
+        <p class="tbx-row__tldr">Per-interface bandwidth monitor with sparkline graphs. Old, stable, in most distros. Quick way to confirm whether traffic is hitting the right NIC.</p>
+        <div class="tbx-row__tags">
+          <span class="tbx-row__tag tbx-row__tag--form">TUI</span>
+          <span class="tbx-row__tag tbx-row__tag--lang">C</span>
+          <span class="tbx-row__tag">mature</span>
+        </div>
+        <a class="tbx-row__repo" href="https://github.com/tgraf/bmon" target="_blank" rel="noopener">tgraf/bmon<span class="arr">→</span></a>
+      </article>
+
+      <article class="tbx-row" data-tags="TUI C mature">
+        <div class="tbx-row__head">
+          <span class="tbx-row__name">nload</span>
+          <span class="tbx-row__replaces">replaces <strong>ifstat</strong></span>
+        </div>
+        <p class="tbx-row__tldr">Real-time graph of incoming/outgoing bandwidth, split per interface. The classic Linux server "is this link saturated?" check.</p>
+        <div class="tbx-row__tags">
+          <span class="tbx-row__tag tbx-row__tag--form">TUI</span>
+          <span class="tbx-row__tag tbx-row__tag--lang">C</span>
+          <span class="tbx-row__tag">mature</span>
+        </div>
+        <a class="tbx-row__repo" href="https://github.com/rolandriegel/nload" target="_blank" rel="noopener">rolandriegel/nload<span class="arr">→</span></a>
+      </article>
+
+      <article class="tbx-row" data-tags="CLI Python mature dev">
+        <div class="tbx-row__head">
+          <span class="tbx-row__name">httpie</span>
+          <span class="tbx-row__replaces">replaces <strong>curl for daily REST work</strong></span>
+        </div>
+        <p class="tbx-row__tldr">Human-readable HTTP client. <code>http POST api.example.com/users name=Inês</code> instead of remembering curl's flag soup. Coloured, formatted JSON output, sessions, plugins.</p>
+        <div class="tbx-row__tags">
+          <span class="tbx-row__tag tbx-row__tag--form">CLI</span>
+          <span class="tbx-row__tag tbx-row__tag--lang">Python</span>
+          <span class="tbx-row__tag">mature</span>
+          <span class="tbx-row__tag">dev</span>
+        </div>
+        <a class="tbx-row__repo" href="https://github.com/httpie/cli" target="_blank" rel="noopener">httpie/cli<span class="arr">→</span></a>
+      </article>
+
+      <article class="tbx-row" data-tags="CLI Rust emerging dev">
+        <div class="tbx-row__head">
+          <span class="tbx-row__name">xh</span>
+          <span class="tbx-row__replaces">replaces <strong>httpie when you want speed</strong></span>
+        </div>
+        <p class="tbx-row__tldr">httpie syntax, Rust speed, single binary. Startup is instant compared to httpie's Python boot. Same flags, drop-in if you already know httpie.</p>
+        <div class="tbx-row__tags">
+          <span class="tbx-row__tag tbx-row__tag--form">CLI</span>
+          <span class="tbx-row__tag tbx-row__tag--lang">Rust</span>
+          <span class="tbx-row__tag">emerging</span>
+          <span class="tbx-row__tag">dev</span>
+        </div>
+        <a class="tbx-row__repo" href="https://github.com/ducaale/xh" target="_blank" rel="noopener">ducaale/xh<span class="arr">→</span></a>
+      </article>
+
+      <article class="tbx-row" data-tags="CLI Go mature dev pick">
+        <div class="tbx-row__head">
+          <span class="tbx-row__name">mkcert</span>
+          <span class="tbx-row__star" title="Must-install pick">★</span>
+          <span class="tbx-row__replaces">replaces <strong>self-signed openssl scripts</strong></span>
+        </div>
+        <p class="tbx-row__tldr">Creates a locally-trusted root CA and emits TLS certs for whatever hostnames you ask. No more "your connection is not private" red banner when developing against <code>https://*.dev.local</code>.</p>
+        <div class="tbx-row__tags">
+          <span class="tbx-row__tag tbx-row__tag--form">CLI</span>
+          <span class="tbx-row__tag tbx-row__tag--lang">Go</span>
+          <span class="tbx-row__tag">mature</span>
+          <span class="tbx-row__tag">dev</span>
+        </div>
+        <a class="tbx-row__repo" href="https://github.com/FiloSottile/mkcert" target="_blank" rel="noopener">FiloSottile/mkcert<span class="arr">→</span></a>
+      </article>
+
+      <article class="tbx-row" data-tags="CLI C mature SRE">
+        <div class="tbx-row__head">
+          <span class="tbx-row__name">nmap</span>
+          <span class="tbx-row__replaces">replaces <strong>(foundational)</strong></span>
+        </div>
+        <p class="tbx-row__tldr">The port scanner. Banner detection, OS fingerprinting, script engine. Old, ubiquitous, still the right tool for "what is exposed on this subnet?" — though use it on networks you own, please.</p>
+        <div class="tbx-row__tags">
+          <span class="tbx-row__tag tbx-row__tag--form">CLI</span>
+          <span class="tbx-row__tag tbx-row__tag--lang">C</span>
+          <span class="tbx-row__tag">mature</span>
+          <span class="tbx-row__tag">SRE</span>
+        </div>
+        <a class="tbx-row__repo" href="https://github.com/nmap/nmap" target="_blank" rel="noopener">nmap/nmap<span class="arr">→</span></a>
+      </article>
+
+      <article class="tbx-row" data-tags="CLI Go mature dev">
+        <div class="tbx-row__head">
+          <span class="tbx-row__name">cloudflared</span>
+          <span class="tbx-row__replaces">replaces <strong>ngrok for public local tunnels</strong></span>
+        </div>
+        <p class="tbx-row__tldr">Cloudflare's tunnel CLI — expose a local port to the public internet via Cloudflare's edge. OSS daemon, free for the basic case, no NAT/firewall surgery needed. Useful for webhooks during dev.</p>
+        <div class="tbx-row__tags">
+          <span class="tbx-row__tag tbx-row__tag--form">CLI</span>
+          <span class="tbx-row__tag tbx-row__tag--lang">Go</span>
+          <span class="tbx-row__tag">mature</span>
+          <span class="tbx-row__tag">dev</span>
+        </div>
+        <a class="tbx-row__repo" href="https://github.com/cloudflare/cloudflared" target="_blank" rel="noopener">cloudflare/cloudflared<span class="arr">→</span></a>
+      </article>
+
+    </section>
+
+    <div class="tbx-empty" id="tbx-empty" hidden>No tools match every active tag. Drop one and try again.</div>
+
+    <div class="about" style="margin-top: 36px;">
+      <span class="about__mark">*</span>
+      <p>Networking tools age slowly — <code>nmap</code> from 1997 is still on this list — so the curation here is more about replacing the rusty defaults (<code>dig</code>, <code>traceroute</code>, <code>ping</code>) with their modern equivalents and noting the niche TUIs that justify themselves when SSH is your only window.</p>
+    </div>
+
+  </main>
+
+  <footer class="colophon">
+    <p>Infra Atlas · <a href="/toolbox/">Toolbox</a> · <a href="/">Home</a> · <a href="https://github.com/ineslino/infra-atlas" target="_blank" rel="noopener">GitHub</a> · MIT-licensed · Reviewed <time datetime="2026-05-21">2026-05-21</time></p>
+  </footer>
+
+</div>
+
+<script src="/toolbox/filter.js" defer></script>
+<script src="/nav.js" defer></script>
+</body>
+</html>

@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="color-scheme" content="dark">
+<title>Shell &amp; Productivity Toolbox · Infra Atlas</title>
+<link rel="icon" href="/favicon.svg?v=2" type="image/svg+xml">
+<meta name="description" content="Open-source shell productivity tools every engineer should know — fzf, ripgrep, fd, zoxide, atuin, starship, mise, direnv, lazygit, helix, bat, delta. Tagged by form and language.">
+<link rel="canonical" href="https://infraatlas.dev/toolbox/shell/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Infra Atlas">
+<meta property="og:title" content="Shell &amp; Productivity Toolbox · Infra Atlas">
+<meta property="og:description" content="The modern shell stack — fzf, ripgrep, fd, zoxide, atuin, starship, mise, lazygit, helix. Curated, tagged.">
+<meta property="og:url" content="https://infraatlas.dev/toolbox/shell/">
+<meta property="og:image" content="https://infraatlas.dev/og.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Shell &amp; Productivity Toolbox · Infra Atlas">
+<meta name="twitter:description" content="The modern shell stack — fzf, ripgrep, fd, zoxide, atuin, lazygit, helix.">
+<meta name="twitter:image" content="https://infraatlas.dev/og.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@300;400;500;600&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/tools/shared.css">
+
+<style>
+.subtitle { max-width: 760px; }
+</style>
+</head>
+<body>
+
+<div class="grain"></div>
+<div class="scanlines"></div>
+
+<div class="page">
+
+  <header class="masthead">
+    <a class="eyebrow" href="/toolbox/"><span class="arrow">←</span> Infra Atlas · Toolbox</a>
+    <h1 class="title">Shell &amp; <em>Productivity.</em></h1>
+    <p class="subtitle">The modern shell stack. Pick three of these and your <code>$PATH</code> stops feeling like 1995. Most are single binaries, most are written in Rust or Go, all replace something you have been quietly tolerating for a decade. ★ marks the picks that change the way you work the moment you install them.</p>
+  </header>
+
+  <main id="ia-main">
+
+    <section class="tbx-filters" aria-label="Filter tools by tag">
+      <div class="tbx-filters__group">
+        <span class="tbx-filters__label">Form</span>
+        <button class="tbx-chip" data-tag="TUI">TUI</button>
+        <button class="tbx-chip" data-tag="CLI">CLI</button>
+      </div>
+      <div class="tbx-filters__group">
+        <span class="tbx-filters__label">Language</span>
+        <button class="tbx-chip" data-tag="Rust">Rust</button>
+        <button class="tbx-chip" data-tag="Go">Go</button>
+      </div>
+      <div class="tbx-filters__group">
+        <span class="tbx-filters__label">Maturity</span>
+        <button class="tbx-chip" data-tag="mature">Mature</button>
+        <button class="tbx-chip" data-tag="emerging">Emerging</button>
+      </div>
+      <div class="tbx-filters__group">
+        <span class="tbx-filters__label">Picks</span>
+        <button class="tbx-chip" data-tag="pick">★ Must-install</button>
+      </div>
+      <button class="tbx-clear" id="tbx-clear" type="button">Clear</button>
+    </section>
+
+    <section class="tbx-list" id="tbx-list" aria-label="Tools">
+
+      <article class="tbx-row" data-tags="CLI Go mature pick">
+        <div class="tbx-row__head">
+          <span class="tbx-row__name">fzf</span>
+          <span class="tbx-row__star" title="Must-install pick">★</span>
+          <span class="tbx-row__replaces">replaces <strong>nothing — it adds fuzzy finding to everything</strong></span>
+        </div>
+        <p class="tbx-row__tldr">The fuzzy finder. Bind to <code>Ctrl-R</code> and your shell history becomes searchable. Compose with anything that pipes — files, git branches, kubernetes contexts. The single most life-changing CLI tool on this list.</p>
+        <div class="tbx-row__tags">
+          <span class="tbx-row__tag tbx-row__tag--form">CLI</span>
+          <span class="tbx-row__tag tbx-row__tag--lang">Go</span>
+          <span class="tbx-row__tag">mature</span>
+        </div>
+        <a class="tbx-row__repo" href="https://github.com/junegunn/fzf" target="_blank" rel="noopener">junegunn/fzf<span class="arr">→</span></a>
+      </article>
+
+      <article class="tbx-row" data-tags="CLI Rust mature pick">
+        <div class="tbx-row__head">
+          <span class="tbx-row__name">ripgrep (rg)</span>
+          <span class="tbx-row__star" title="Must-install pick">★</span>
+          <span class="tbx-row__replaces">replaces <strong>grep</strong></span>
+        </div>
+        <p class="tbx-row__tldr">Recursive grep, ~10× faster, ignores <code>.gitignore</code> by default. Coloured output, smart-case search, Unicode. Once installed, you alias <code>grep=rg</code> and forget grep exists.</p>
+        <div class="tbx-row__tags">
+          <span class="tbx-row__tag tbx-row__tag--form">CLI</span>
+          <span class="tbx-row__tag tbx-row__tag--lang">Rust</span>
+          <span class="tbx-row__tag">mature</span>
+        </div>
+        <a class="tbx-row__repo" href="https://github.com/BurntSushi/ripgrep" target="_blank" rel="noopener">BurntSushi/ripgrep<span class="arr">→</span></a>
+      </article>
+
+      <article class="tbx-row" data-tags="CLI Rust mature pick">
+        <div class="tbx-row__head">
+          <span class="tbx-row__name">fd</span>
+          <span class="tbx-row__star" title="Must-install pick">★</span>
+          <span class="tbx-row__replaces">replaces <strong>find</strong></span>
+        </div>
+        <p class="tbx-row__tldr"><code>fd '\.py$'</code> instead of <code>find . -name '*.py'</code>. Sane defaults, regex, colourised, parallel. Pairs naturally with fzf.</p>
+        <div class="tbx-row__tags">
+          <span class="tbx-row__tag tbx-row__tag--form">CLI</span>
+          <span class="tbx-row__tag tbx-row__tag--lang">Rust</span>
+          <span class="tbx-row__tag">mature</span>
+        </div>
+        <a class="tbx-row__repo" href="https://github.com/sharkdp/fd" target="_blank" rel="noopener">sharkdp/fd<span class="arr">→</span></a>
+      </article>
+
+      <article class="tbx-row" data-tags="CLI Rust mature pick">
+        <div class="tbx-row__head">
+          <span class="tbx-row__name">zoxide</span>
+          <span class="tbx-row__star" title="Must-install pick">★</span>
+          <span class="tbx-row__replaces">replaces <strong>cd</strong></span>
+        </div>
+        <p class="tbx-row__tldr">A <code>cd</code> that learns your habits. After visiting <code>~/work/projects/infraatlas</code> a few times, <code>z infra</code> takes you there from anywhere. Sounds trivial, ends up saving a minute every hour.</p>
+        <div class="tbx-row__tags">
+          <span class="tbx-row__tag tbx-row__tag--form">CLI</span>
+          <span class="tbx-row__tag tbx-row__tag--lang">Rust</span>
+          <span class="tbx-row__tag">mature</span>
+        </div>
+        <a class="tbx-row__repo" href="https://github.com/ajeetdsouza/zoxide" target="_blank" rel="noopener">ajeetdsouza/zoxide<span class="arr">→</span></a>
+      </article>
+
+      <article class="tbx-row" data-tags="CLI Rust mature">
+        <div class="tbx-row__head">
+          <span class="tbx-row__name">atuin</span>
+          <span class="tbx-row__replaces">replaces <strong>shell history (.bash_history / .zsh_history)</strong></span>
+        </div>
+        <p class="tbx-row__tldr">SQLite-backed shell history with sync across machines. Search by command, host, directory, exit code. Replaces <code>Ctrl-R</code> with something searchable and shareable across laptops.</p>
+        <div class="tbx-row__tags">
+          <span class="tbx-row__tag tbx-row__tag--form">CLI</span>
+          <span class="tbx-row__tag tbx-row__tag--lang">Rust</span>
+          <span class="tbx-row__tag">mature</span>
+        </div>
+        <a class="tbx-row__repo" href="https://github.com/atuinsh/atuin" target="_blank" rel="noopener">atuinsh/atuin<span class="arr">→</span></a>
+      </article>
+
+      <article class="tbx-row" data-tags="CLI Rust mature">
+        <div class="tbx-row__head">
+          <span class="tbx-row__name">starship</span>
+          <span class="tbx-row__replaces">replaces <strong>handcrafted PROMPT scripts</strong></span>
+        </div>
+        <p class="tbx-row__tldr">Cross-shell prompt — shows git branch, dirty state, kubernetes context, AWS profile, language version, all conditionally. TOML config. Fast (Rust), portable across bash / zsh / fish.</p>
+        <div class="tbx-row__tags">
+          <span class="tbx-row__tag tbx-row__tag--form">CLI</span>
+          <span class="tbx-row__tag tbx-row__tag--lang">Rust</span>
+          <span class="tbx-row__tag">mature</span>
+        </div>
+        <a class="tbx-row__repo" href="https://github.com/starship/starship" target="_blank" rel="noopener">starship/starship<span class="arr">→</span></a>
+      </article>
+
+      <article class="tbx-row" data-tags="CLI Rust mature pick">
+        <div class="tbx-row__head">
+          <span class="tbx-row__name">mise</span>
+          <span class="tbx-row__star" title="Must-install pick">★</span>
+          <span class="tbx-row__replaces">replaces <strong>asdf + nvm + pyenv + rbenv + tfenv</strong></span>
+        </div>
+        <p class="tbx-row__tldr">One version manager for every runtime — Node, Python, Go, Ruby, Java, Terraform, kubectl. Per-project <code>.mise.toml</code> auto-switches versions on <code>cd</code>. Fast (Rust). The asdf successor everyone is migrating to.</p>
+        <div class="tbx-row__tags">
+          <span class="tbx-row__tag tbx-row__tag--form">CLI</span>
+          <span class="tbx-row__tag tbx-row__tag--lang">Rust</span>
+          <span class="tbx-row__tag">mature</span>
+        </div>
+        <a class="tbx-row__repo" href="https://github.com/jdx/mise" target="_blank" rel="noopener">jdx/mise<span class="arr">→</span></a>
+      </article>
+
+      <article class="tbx-row" data-tags="CLI Go mature">
+        <div class="tbx-row__head">
+          <span class="tbx-row__name">direnv</span>
+          <span class="tbx-row__replaces">replaces <strong>manually exporting env vars per project</strong></span>
+        </div>
+        <p class="tbx-row__tldr">Auto-loads <code>.envrc</code> when you <code>cd</code> into a directory, unloads on exit. AWS profiles, secrets, language paths — anything env-shaped. Pairs naturally with mise.</p>
+        <div class="tbx-row__tags">
+          <span class="tbx-row__tag tbx-row__tag--form">CLI</span>
+          <span class="tbx-row__tag tbx-row__tag--lang">Go</span>
+          <span class="tbx-row__tag">mature</span>
+        </div>
+        <a class="tbx-row__repo" href="https://github.com/direnv/direnv" target="_blank" rel="noopener">direnv/direnv<span class="arr">→</span></a>
+      </article>
+
+      <article class="tbx-row" data-tags="CLI Go mature">
+        <div class="tbx-row__head">
+          <span class="tbx-row__name">chezmoi</span>
+          <span class="tbx-row__replaces">replaces <strong>a bare git repo of dotfiles</strong></span>
+        </div>
+        <p class="tbx-row__tldr">Dotfile manager with templates, secrets integration, per-machine variations. <code>chezmoi apply</code> on a new laptop bootstraps your shell, editor, git config, ssh keys. Supports Go templates, age/PGP encryption.</p>
+        <div class="tbx-row__tags">
+          <span class="tbx-row__tag tbx-row__tag--form">CLI</span>
+          <span class="tbx-row__tag tbx-row__tag--lang">Go</span>
+          <span class="tbx-row__tag">mature</span>
+        </div>
+        <a class="tbx-row__repo" href="https://github.com/twpayne/chezmoi" target="_blank" rel="noopener">twpayne/chezmoi<span class="arr">→</span></a>
+      </article>
+
+      <article class="tbx-row" data-tags="TUI Rust emerging">
+        <div class="tbx-row__head">
+          <span class="tbx-row__name">zellij</span>
+          <span class="tbx-row__replaces">replaces <strong>tmux</strong></span>
+        </div>
+        <p class="tbx-row__tldr">Modern terminal multiplexer — sane defaults, layouts, plugin system. The status bar tells you the keybindings, so you do not need to memorise <code>Ctrl-B</code> the hard way. Strong choice for tmux refugees.</p>
+        <div class="tbx-row__tags">
+          <span class="tbx-row__tag tbx-row__tag--form">TUI</span>
+          <span class="tbx-row__tag tbx-row__tag--lang">Rust</span>
+          <span class="tbx-row__tag">emerging</span>
+        </div>
+        <a class="tbx-row__repo" href="https://github.com/zellij-org/zellij" target="_blank" rel="noopener">zellij-org/zellij<span class="arr">→</span></a>
+      </article>
+
+      <article class="tbx-row" data-tags="TUI Go mature pick">
+        <div class="tbx-row__head">
+          <span class="tbx-row__name">lazygit</span>
+          <span class="tbx-row__star" title="Must-install pick">★</span>
+          <span class="tbx-row__replaces">replaces <strong>tig / git CLI for daily ops</strong></span>
+        </div>
+        <p class="tbx-row__tldr">Git TUI — stage hunks, amend, rebase, cherry-pick, squash. Everything is one key press. Once installed, the pattern of "git status / git add / git commit" gets replaced by <code>lg</code>.</p>
+        <div class="tbx-row__tags">
+          <span class="tbx-row__tag tbx-row__tag--form">TUI</span>
+          <span class="tbx-row__tag tbx-row__tag--lang">Go</span>
+          <span class="tbx-row__tag">mature</span>
+        </div>
+        <a class="tbx-row__repo" href="https://github.com/jesseduffield/lazygit" target="_blank" rel="noopener">jesseduffield/lazygit<span class="arr">→</span></a>
+      </article>
+
+      <article class="tbx-row" data-tags="TUI Rust emerging">
+        <div class="tbx-row__head">
+          <span class="tbx-row__name">helix</span>
+          <span class="tbx-row__replaces">replaces <strong>neovim for the no-config crowd</strong></span>
+        </div>
+        <p class="tbx-row__tldr">Modal editor inspired by vim and Kakoune. Selection-first model (verb after noun, reading more like English). Built-in LSP, tree-sitter, no plugins required out of the box.</p>
+        <div class="tbx-row__tags">
+          <span class="tbx-row__tag tbx-row__tag--form">TUI</span>
+          <span class="tbx-row__tag tbx-row__tag--lang">Rust</span>
+          <span class="tbx-row__tag">emerging</span>
+        </div>
+        <a class="tbx-row__repo" href="https://github.com/helix-editor/helix" target="_blank" rel="noopener">helix-editor/helix<span class="arr">→</span></a>
+      </article>
+
+      <article class="tbx-row" data-tags="TUI Rust emerging">
+        <div class="tbx-row__head">
+          <span class="tbx-row__name">yazi</span>
+          <span class="tbx-row__replaces">replaces <strong>ranger / nnn</strong></span>
+        </div>
+        <p class="tbx-row__tldr">Fast file manager TUI with image previews (in Kitty / iTerm / wezterm) and async I/O. Vim-style keys, plugin system. If you do enough work in directory trees to want a TUI for it, this is the modern pick.</p>
+        <div class="tbx-row__tags">
+          <span class="tbx-row__tag tbx-row__tag--form">TUI</span>
+          <span class="tbx-row__tag tbx-row__tag--lang">Rust</span>
+          <span class="tbx-row__tag">emerging</span>
+        </div>
+        <a class="tbx-row__repo" href="https://github.com/sxyazi/yazi" target="_blank" rel="noopener">sxyazi/yazi<span class="arr">→</span></a>
+      </article>
+
+      <article class="tbx-row" data-tags="CLI Go mature">
+        <div class="tbx-row__head">
+          <span class="tbx-row__name">gum</span>
+          <span class="tbx-row__replaces">replaces <strong>read / select / printf in shell scripts</strong></span>
+        </div>
+        <p class="tbx-row__tldr">TUI building blocks from Charm. <code>gum input</code>, <code>gum choose</code>, <code>gum spin</code> turn shell scripts into something that looks like an application. Especially useful for bootstrappers and CLI prompts.</p>
+        <div class="tbx-row__tags">
+          <span class="tbx-row__tag tbx-row__tag--form">CLI</span>
+          <span class="tbx-row__tag tbx-row__tag--lang">Go</span>
+          <span class="tbx-row__tag">mature</span>
+        </div>
+        <a class="tbx-row__repo" href="https://github.com/charmbracelet/gum" target="_blank" rel="noopener">charmbracelet/gum<span class="arr">→</span></a>
+      </article>
+
+      <article class="tbx-row" data-tags="CLI Rust mature pick">
+        <div class="tbx-row__head">
+          <span class="tbx-row__name">bat</span>
+          <span class="tbx-row__star" title="Must-install pick">★</span>
+          <span class="tbx-row__replaces">replaces <strong>cat</strong></span>
+        </div>
+        <p class="tbx-row__tldr"><code>cat</code> with syntax highlighting, git diff markers, line numbers, paging. <code>alias cat=bat</code> and read source files like a civilised human.</p>
+        <div class="tbx-row__tags">
+          <span class="tbx-row__tag tbx-row__tag--form">CLI</span>
+          <span class="tbx-row__tag tbx-row__tag--lang">Rust</span>
+          <span class="tbx-row__tag">mature</span>
+        </div>
+        <a class="tbx-row__repo" href="https://github.com/sharkdp/bat" target="_blank" rel="noopener">sharkdp/bat<span class="arr">→</span></a>
+      </article>
+
+      <article class="tbx-row" data-tags="CLI Rust mature pick">
+        <div class="tbx-row__head">
+          <span class="tbx-row__name">delta</span>
+          <span class="tbx-row__star" title="Must-install pick">★</span>
+          <span class="tbx-row__replaces">replaces <strong>git's default diff viewer</strong></span>
+        </div>
+        <p class="tbx-row__tldr">Syntax-highlighted, side-by-side diffs as your <code>git</code> pager. Drop two lines into <code>~/.gitconfig</code> and every <code>git diff</code> / <code>git log -p</code> becomes readable.</p>
+        <div class="tbx-row__tags">
+          <span class="tbx-row__tag tbx-row__tag--form">CLI</span>
+          <span class="tbx-row__tag tbx-row__tag--lang">Rust</span>
+          <span class="tbx-row__tag">mature</span>
+        </div>
+        <a class="tbx-row__repo" href="https://github.com/dandavison/delta" target="_blank" rel="noopener">dandavison/delta<span class="arr">→</span></a>
+      </article>
+
+    </section>
+
+    <div class="tbx-empty" id="tbx-empty" hidden>No tools match every active tag. Drop one and try again.</div>
+
+    <div class="about" style="margin-top: 36px;">
+      <span class="about__mark">*</span>
+      <p>This department leans heavily Rust — that is not ideology, it is just where the shell-tool renaissance has happened over the last few years. Most of these tools have direct GNU/BSD ancestors and improve on them in measurable ways (speed, defaults, output). Try one a week; you will not roll any back.</p>
+    </div>
+
+  </main>
+
+  <footer class="colophon">
+    <p>Infra Atlas · <a href="/toolbox/">Toolbox</a> · <a href="/">Home</a> · <a href="https://github.com/ineslino/infra-atlas" target="_blank" rel="noopener">GitHub</a> · MIT-licensed · Reviewed <time datetime="2026-05-21">2026-05-21</time></p>
+  </footer>
+
+</div>
+
+<script src="/toolbox/filter.js" defer></script>
+<script src="/nav.js" defer></script>
+</body>
+</html>

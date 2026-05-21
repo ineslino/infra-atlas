@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="color-scheme" content="dark">
+<title>Kubernetes Toolbox · Infra Atlas</title>
+<link rel="icon" href="/favicon.svg?v=2" type="image/svg+xml">
+<meta name="description" content="Open-source Kubernetes tools we'd put on every operator's $PATH — k9s, kubectx, stern, kubefwd, popeye, kind, helm, argocd, skaffold, tilt, dive. Tagged by form (TUI/CLI), language, persona.">
+<link rel="canonical" href="https://infraatlas.dev/toolbox/kubernetes/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Infra Atlas">
+<meta property="og:title" content="Kubernetes Toolbox · Infra Atlas">
+<meta property="og:description" content="Open-source Kubernetes tools curated — TUIs, CLIs, local clusters, dev loops. Tagged and filterable.">
+<meta property="og:url" content="https://infraatlas.dev/toolbox/kubernetes/">
+<meta property="og:image" content="https://infraatlas.dev/og.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Kubernetes Toolbox · Infra Atlas">
+<meta name="twitter:description" content="Open-source Kubernetes tools curated — TUIs, CLIs, local clusters, dev loops.">
+<meta name="twitter:image" content="https://infraatlas.dev/og.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@300;400;500;600&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/tools/shared.css">
+
+<style>
+.subtitle { max-width: 760px; }
+</style>
+</head>
+<body>
+
+<div class="grain"></div>
+<div class="scanlines"></div>
+
+<div class="page">
+
+  <header class="masthead">
+    <a class="eyebrow" href="/toolbox/"><span class="arrow">←</span> Infra Atlas · Toolbox</a>
+    <h1 class="title">Kubernetes <em>Toolbox.</em></h1>
+    <p class="subtitle">If you operate Kubernetes for a living, these are the tools that make the difference between cursor-typing <code>kubectl</code> commands all day and actually seeing what is happening. TUIs in green, languages in gold. ★ marks the picks we install everywhere.</p>
+  </header>
+
+  <main id="ia-main">
+
+    <section class="tbx-filters" aria-label="Filter tools by tag">
+      <div class="tbx-filters__group">
+        <span class="tbx-filters__label">Form</span>
+        <button class="tbx-chip" data-tag="TUI">TUI</button>
+        <button class="tbx-chip" data-tag="CLI">CLI</button>
+      </div>
+      <div class="tbx-filters__group">
+        <span class="tbx-filters__label">Language</span>
+        <button class="tbx-chip" data-tag="Go">Go</button>
+        <button class="tbx-chip" data-tag="Rust">Rust</button>
+      </div>
+      <div class="tbx-filters__group">
+        <span class="tbx-filters__label">Use case</span>
+        <button class="tbx-chip" data-tag="SRE">SRE</button>
+        <button class="tbx-chip" data-tag="dev">Dev loop</button>
+        <button class="tbx-chip" data-tag="platform">Platform</button>
+      </div>
+      <div class="tbx-filters__group">
+        <span class="tbx-filters__label">Picks</span>
+        <button class="tbx-chip" data-tag="pick">★ Must-install</button>
+      </div>
+      <button class="tbx-clear" id="tbx-clear" type="button">Clear</button>
+    </section>
+
+    <section class="tbx-list" id="tbx-list" aria-label="Tools">
+
+      <article class="tbx-row" data-tags="TUI Go mature SRE pick">
+        <div class="tbx-row__head">
+          <span class="tbx-row__name">k9s</span>
+          <span class="tbx-row__star" title="Must-install pick">★</span>
+          <span class="tbx-row__replaces">replaces <strong>kubectl + watch loops</strong></span>
+        </div>
+        <p class="tbx-row__tldr">The Kubernetes TUI — navigate namespaces, pods, deployments; tail logs; exec into containers; port-forward; describe; trigger rollouts. If you only install one tool, install this.</p>
+        <div class="tbx-row__tags">
+          <span class="tbx-row__tag tbx-row__tag--form">TUI</span>
+          <span class="tbx-row__tag tbx-row__tag--lang">Go</span>
+          <span class="tbx-row__tag">mature</span>
+          <span class="tbx-row__tag">SRE</span>
+        </div>
+        <a class="tbx-row__repo" href="https://github.com/derailed/k9s" target="_blank" rel="noopener">derailed/k9s<span class="arr">→</span></a>
+      </article>
+
+      <article class="tbx-row" data-tags="CLI Go mature pick">
+        <div class="tbx-row__head">
+          <span class="tbx-row__name">kubectx + kubens</span>
+          <span class="tbx-row__star" title="Must-install pick">★</span>
+          <span class="tbx-row__replaces">replaces <strong>kubectl config use-context / -n flag</strong></span>
+        </div>
+        <p class="tbx-row__tldr">Switch between clusters and namespaces interactively (with <code>fzf</code> if installed). The fact that this is not built into kubectl is one of those small kubernetes-CLI ergonomic gaps that everyone fills the same way.</p>
+        <div class="tbx-row__tags">
+          <span class="tbx-row__tag tbx-row__tag--form">CLI</span>
+          <span class="tbx-row__tag tbx-row__tag--lang">Go</span>
+          <span class="tbx-row__tag">mature</span>
+        </div>
+        <a class="tbx-row__repo" href="https://github.com/ahmetb/kubectx" target="_blank" rel="noopener">ahmetb/kubectx<span class="arr">→</span></a>
+      </article>
+
+      <article class="tbx-row" data-tags="CLI Go mature SRE pick">
+        <div class="tbx-row__head">
+          <span class="tbx-row__name">stern</span>
+          <span class="tbx-row__star" title="Must-install pick">★</span>
+          <span class="tbx-row__replaces">replaces <strong>kubectl logs (single pod)</strong></span>
+        </div>
+        <p class="tbx-row__tldr">Tail logs from multiple pods at once, with regex selectors and a colour per pod. Indispensable when you need to debug a service with N replicas during an incident.</p>
+        <div class="tbx-row__tags">
+          <span class="tbx-row__tag tbx-row__tag--form">CLI</span>
+          <span class="tbx-row__tag tbx-row__tag--lang">Go</span>
+          <span class="tbx-row__tag">mature</span>
+          <span class="tbx-row__tag">SRE</span>
+        </div>
+        <a class="tbx-row__repo" href="https://github.com/stern/stern" target="_blank" rel="noopener">stern/stern<span class="arr">→</span></a>
+      </article>
+
+      <article class="tbx-row" data-tags="CLI Go mature dev">
+        <div class="tbx-row__head">
+          <span class="tbx-row__name">kubefwd</span>
+          <span class="tbx-row__replaces">replaces <strong>N separate kubectl port-forwards</strong></span>
+        </div>
+        <p class="tbx-row__tldr">Bulk-forwards every service in a namespace to localhost in one command, patches <code>/etc/hosts</code> so the names resolve. Lets you run your laptop app against a remote cluster without rewriting any URL.</p>
+        <div class="tbx-row__tags">
+          <span class="tbx-row__tag tbx-row__tag--form">CLI</span>
+          <span class="tbx-row__tag tbx-row__tag--lang">Go</span>
+          <span class="tbx-row__tag">mature</span>
+          <span class="tbx-row__tag">dev</span>
+        </div>
+        <a class="tbx-row__repo" href="https://github.com/txn2/kubefwd" target="_blank" rel="noopener">txn2/kubefwd<span class="arr">→</span></a>
+      </article>
+
+      <article class="tbx-row" data-tags="CLI Go mature SRE">
+        <div class="tbx-row__head">
+          <span class="tbx-row__name">popeye</span>
+          <span class="tbx-row__replaces">replaces <strong>manual cluster audit</strong></span>
+        </div>
+        <p class="tbx-row__tldr">Sanity-scans a cluster for the classic foot-guns — deprecated APIs, missing resource requests, dangling configmaps, pods without probes. Run it before every Kubernetes upgrade.</p>
+        <div class="tbx-row__tags">
+          <span class="tbx-row__tag tbx-row__tag--form">CLI</span>
+          <span class="tbx-row__tag tbx-row__tag--lang">Go</span>
+          <span class="tbx-row__tag">mature</span>
+          <span class="tbx-row__tag">SRE</span>
+        </div>
+        <a class="tbx-row__repo" href="https://github.com/derailed/popeye" target="_blank" rel="noopener">derailed/popeye<span class="arr">→</span></a>
+      </article>
+
+      <article class="tbx-row" data-tags="CLI Go mature platform pick">
+        <div class="tbx-row__head">
+          <span class="tbx-row__name">helm</span>
+          <span class="tbx-row__star" title="Must-install pick">★</span>
+          <span class="tbx-row__replaces">replaces <strong>kubectl apply on a folder of YAMLs</strong></span>
+        </div>
+        <p class="tbx-row__tldr">Package manager for Kubernetes. Templates with values, release tracking, rollback. Despite the dragging history with v2 → v3 and Tiller, charts are still the lingua franca for distributing platform components.</p>
+        <div class="tbx-row__tags">
+          <span class="tbx-row__tag tbx-row__tag--form">CLI</span>
+          <span class="tbx-row__tag tbx-row__tag--lang">Go</span>
+          <span class="tbx-row__tag">mature</span>
+          <span class="tbx-row__tag">platform</span>
+        </div>
+        <a class="tbx-row__repo" href="https://github.com/helm/helm" target="_blank" rel="noopener">helm/helm<span class="arr">→</span></a>
+      </article>
+
+      <article class="tbx-row" data-tags="CLI Go mature">
+        <div class="tbx-row__head">
+          <span class="tbx-row__name">krew</span>
+          <span class="tbx-row__replaces">replaces <strong>manual plugin installation</strong></span>
+        </div>
+        <p class="tbx-row__tldr">Plugin manager for <code>kubectl</code>. Once installed, <code>kubectl krew install neat</code> gets you better YAML diffs, or <code>kubectl krew install tree</code> for hierarchical views. The kubectl equivalent of apt.</p>
+        <div class="tbx-row__tags">
+          <span class="tbx-row__tag tbx-row__tag--form">CLI</span>
+          <span class="tbx-row__tag tbx-row__tag--lang">Go</span>
+          <span class="tbx-row__tag">mature</span>
+        </div>
+        <a class="tbx-row__repo" href="https://github.com/kubernetes-sigs/krew" target="_blank" rel="noopener">kubernetes-sigs/krew<span class="arr">→</span></a>
+      </article>
+
+      <article class="tbx-row" data-tags="CLI Go mature dev pick">
+        <div class="tbx-row__head">
+          <span class="tbx-row__name">kind</span>
+          <span class="tbx-row__star" title="Must-install pick">★</span>
+          <span class="tbx-row__replaces">replaces <strong>minikube</strong></span>
+        </div>
+        <p class="tbx-row__tldr">Spins up a real Kubernetes cluster inside Docker in under a minute. Multi-node, multi-cluster, supports any kubelet version. The default local cluster choice in CI pipelines for the last few years.</p>
+        <div class="tbx-row__tags">
+          <span class="tbx-row__tag tbx-row__tag--form">CLI</span>
+          <span class="tbx-row__tag tbx-row__tag--lang">Go</span>
+          <span class="tbx-row__tag">mature</span>
+          <span class="tbx-row__tag">dev</span>
+        </div>
+        <a class="tbx-row__repo" href="https://github.com/kubernetes-sigs/kind" target="_blank" rel="noopener">kubernetes-sigs/kind<span class="arr">→</span></a>
+      </article>
+
+      <article class="tbx-row" data-tags="CLI Go mature dev">
+        <div class="tbx-row__head">
+          <span class="tbx-row__name">k3d</span>
+          <span class="tbx-row__replaces">replaces <strong>kind for tiny clusters</strong></span>
+        </div>
+        <p class="tbx-row__tldr">k3s wrapped in Docker — lighter than kind, faster to start, fewer features. Pick this when you want a minimal cluster for a quick smoke test on a laptop without a fan running at full speed.</p>
+        <div class="tbx-row__tags">
+          <span class="tbx-row__tag tbx-row__tag--form">CLI</span>
+          <span class="tbx-row__tag tbx-row__tag--lang">Go</span>
+          <span class="tbx-row__tag">mature</span>
+          <span class="tbx-row__tag">dev</span>
+        </div>
+        <a class="tbx-row__repo" href="https://github.com/k3d-io/k3d" target="_blank" rel="noopener">k3d-io/k3d<span class="arr">→</span></a>
+      </article>
+
+      <article class="tbx-row" data-tags="CLI Go mature dev">
+        <div class="tbx-row__head">
+          <span class="tbx-row__name">skaffold</span>
+          <span class="tbx-row__replaces">replaces <strong>docker build + kubectl apply loop</strong></span>
+        </div>
+        <p class="tbx-row__tldr">Inner-loop dev for Kubernetes — watches the filesystem, rebuilds the image, syncs into the running pod, port-forwards. The "save-the-file, see-the-change-in-the-cluster" workflow.</p>
+        <div class="tbx-row__tags">
+          <span class="tbx-row__tag tbx-row__tag--form">CLI</span>
+          <span class="tbx-row__tag tbx-row__tag--lang">Go</span>
+          <span class="tbx-row__tag">mature</span>
+          <span class="tbx-row__tag">dev</span>
+        </div>
+        <a class="tbx-row__repo" href="https://github.com/GoogleContainerTools/skaffold" target="_blank" rel="noopener">GoogleContainerTools/skaffold<span class="arr">→</span></a>
+      </article>
+
+      <article class="tbx-row" data-tags="TUI Go mature dev">
+        <div class="tbx-row__head">
+          <span class="tbx-row__name">tilt</span>
+          <span class="tbx-row__replaces">replaces <strong>docker-compose for k8s-native dev</strong></span>
+        </div>
+        <p class="tbx-row__tldr">Multi-service live-update for Kubernetes development. Define <code>Tiltfile</code>, get a TUI showing every service's build, deploy and log status. Strong when your dev environment has 5+ microservices.</p>
+        <div class="tbx-row__tags">
+          <span class="tbx-row__tag tbx-row__tag--form">TUI</span>
+          <span class="tbx-row__tag tbx-row__tag--lang">Go</span>
+          <span class="tbx-row__tag">mature</span>
+          <span class="tbx-row__tag">dev</span>
+        </div>
+        <a class="tbx-row__repo" href="https://github.com/tilt-dev/tilt" target="_blank" rel="noopener">tilt-dev/tilt<span class="arr">→</span></a>
+      </article>
+
+      <article class="tbx-row" data-tags="CLI Go mature platform">
+        <div class="tbx-row__head">
+          <span class="tbx-row__name">argocd CLI</span>
+          <span class="tbx-row__replaces">replaces <strong>manual kubectl apply for prod</strong></span>
+        </div>
+        <p class="tbx-row__tldr">CLI half of Argo CD — list apps, force-sync, view diffs against git. If your cluster is GitOps-managed by Argo, this is your day-to-day verb for emergencies and ad-hoc checks.</p>
+        <div class="tbx-row__tags">
+          <span class="tbx-row__tag tbx-row__tag--form">CLI</span>
+          <span class="tbx-row__tag tbx-row__tag--lang">Go</span>
+          <span class="tbx-row__tag">mature</span>
+          <span class="tbx-row__tag">platform</span>
+        </div>
+        <a class="tbx-row__repo" href="https://github.com/argoproj/argo-cd" target="_blank" rel="noopener">argoproj/argo-cd<span class="arr">→</span></a>
+      </article>
+
+      <article class="tbx-row" data-tags="TUI Go mature pick">
+        <div class="tbx-row__head">
+          <span class="tbx-row__name">dive</span>
+          <span class="tbx-row__star" title="Must-install pick">★</span>
+          <span class="tbx-row__replaces">replaces <strong>docker history (less detail)</strong></span>
+        </div>
+        <p class="tbx-row__tldr">Interactive explorer for Docker / OCI image layers — see exactly what files each <code>RUN</code> adds and what they cost. Most "why is this image 1.2 GB" questions get answered in 30 seconds with dive.</p>
+        <div class="tbx-row__tags">
+          <span class="tbx-row__tag tbx-row__tag--form">TUI</span>
+          <span class="tbx-row__tag tbx-row__tag--lang">Go</span>
+          <span class="tbx-row__tag">mature</span>
+        </div>
+        <a class="tbx-row__repo" href="https://github.com/wagoodman/dive" target="_blank" rel="noopener">wagoodman/dive<span class="arr">→</span></a>
+      </article>
+
+      <article class="tbx-row" data-tags="TUI Go mature">
+        <div class="tbx-row__head">
+          <span class="tbx-row__name">lazydocker</span>
+          <span class="tbx-row__replaces">replaces <strong>docker CLI for daily ops</strong></span>
+        </div>
+        <p class="tbx-row__tldr">TUI for the local Docker daemon — containers, images, volumes, networks, logs, exec. Pairs with <code>lazygit</code> from the same author; if you live in the terminal, both are worth installing.</p>
+        <div class="tbx-row__tags">
+          <span class="tbx-row__tag tbx-row__tag--form">TUI</span>
+          <span class="tbx-row__tag tbx-row__tag--lang">Go</span>
+          <span class="tbx-row__tag">mature</span>
+        </div>
+        <a class="tbx-row__repo" href="https://github.com/jesseduffield/lazydocker" target="_blank" rel="noopener">jesseduffield/lazydocker<span class="arr">→</span></a>
+      </article>
+
+    </section>
+
+    <div class="tbx-empty" id="tbx-empty" hidden>No tools match every active tag. Drop one and try again.</div>
+
+    <div class="about" style="margin-top: 36px;">
+      <span class="about__mark">*</span>
+      <p>"Replaces" is the mental hook most engineers already use — once you know <em>k9s</em> replaces <code>kubectl + watch</code>, you stop reaching for the old reflex. The tag set is deliberately small (form / language / use case) so the filter stays scanable. Open a PR if there is something obvious we missed.</p>
+    </div>
+
+  </main>
+
+  <footer class="colophon">
+    <p>Infra Atlas · <a href="/toolbox/">Toolbox</a> · <a href="/">Home</a> · <a href="https://github.com/ineslino/infra-atlas" target="_blank" rel="noopener">GitHub</a> · MIT-licensed · Reviewed <time datetime="2026-05-21">2026-05-21</time></p>
+  </footer>
+
+</div>
+
+<script src="/toolbox/filter.js" defer></script>
+<script src="/nav.js" defer></script>
+</body>
+</html>

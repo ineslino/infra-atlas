@@ -37,6 +37,12 @@
     ["/tools/subnet/",       "Subnet Calculator",          "Tool", "subnet cidr calculator vpc vnet vcn reserved ips usable hosts aws azure gcp oci ipv4 ipv6"],
     ["/tools/apim-limits/",  "APIM Limits Picker",         "Tool", "apim api gateway limits timeout payload rate limit websocket pick choose vendor mulesoft apigee"]
   ];
+  var TOOLBOX = [
+    ["/toolbox/",            "The Toolbox — hub",          "Toolbox", "tools curated open source TUI CLI list recommended path engineer kubernetes networking shell"],
+    ["/toolbox/kubernetes/", "Kubernetes Toolbox",         "Toolbox", "k9s kubectx stern kubefwd popeye helm krew kind k3d skaffold tilt argocd dive lazydocker"],
+    ["/toolbox/networking/", "Networking Toolbox",         "Toolbox", "mtr doggo dog bandwhich gping termshark bmon nload httpie xh mkcert nmap cloudflared dns traceroute"],
+    ["/toolbox/shell/",      "Shell & Productivity Toolbox","Toolbox","fzf ripgrep rg fd zoxide atuin starship mise direnv chezmoi zellij lazygit helix yazi gum bat delta"]
+  ];
   var DECISIONS = [
     ["/decisions/",                                          "Decisions — the hub",                   "Decisions", "decision guide which one should i use compare versus vs choose"],
     ["/decisions/app-engine-vs-compute-engine/",             "App Engine vs Compute Engine",          "GCP",       "google paas iaas serverless vm app engine compute engine"],
@@ -100,6 +106,7 @@
   pushGroup(APIM, "API Management");
   pushGroup(XCLOUD, "Cross-Cloud");
   pushGroup(TOOLS, "Tools");
+  pushGroup(TOOLBOX, "Toolbox");
   pushGroup(DECISIONS, "Decisions");
 
   var current = null;

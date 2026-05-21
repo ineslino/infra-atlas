@@ -86,3 +86,134 @@ h1.title em { font-style: italic; color: var(--accent); }
   font-family: var(--mono); font-size: 11px; letter-spacing: 0.06em; color: var(--paper-3); }
 .colophon a { color: var(--paper-2); text-decoration: underline; text-decoration-color: var(--line-2); text-underline-offset: 3px; }
 .colophon a:hover { color: var(--accent); }
+
+/* ════════════════════════════════════════════════════════════════════
+   Toolbox components — used by /toolbox/ department pages
+   (filter chips + tool row cards). Lives here so the chrome stays in
+   one file.
+   ════════════════════════════════════════════════════════════════════ */
+
+/* Filter bar — sticky group of tag chips above the tool list */
+.tbx-filters {
+  display: flex; flex-wrap: wrap; align-items: center; gap: 6px;
+  padding: 18px 20px; margin-bottom: 22px;
+  background: linear-gradient(180deg, var(--surface) 0%, var(--ink-2) 100%);
+  border: 1px solid var(--line-2); border-radius: 6px;
+}
+.tbx-filters__group { display: inline-flex; flex-wrap: wrap; align-items: center; gap: 6px; margin-right: 14px; }
+.tbx-filters__group:last-of-type { margin-right: 0; }
+.tbx-filters__label {
+  font-family: var(--mono); font-size: 9.5px; letter-spacing: 0.18em;
+  text-transform: uppercase; color: var(--paper-3); margin-right: 4px;
+}
+.tbx-chip {
+  display: inline-flex; align-items: center; gap: 4px;
+  font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.04em;
+  color: var(--paper-2);
+  border: 1px solid var(--line-2); border-radius: 99px;
+  padding: 5px 11px; cursor: pointer; user-select: none;
+  background: transparent; transition: all 0.15s;
+}
+.tbx-chip:hover { color: var(--paper); border-color: var(--paper-3); }
+.tbx-chip.is-active { background: var(--accent); color: var(--ink); border-color: var(--accent); }
+.tbx-clear {
+  margin-left: auto;
+  font-family: var(--mono); font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--paper-3); background: transparent; border: 0; cursor: pointer;
+  padding: 4px 8px;
+}
+.tbx-clear:hover { color: var(--paper); }
+
+/* Tools list — vertical stack of compact card rows */
+.tbx-list { display: flex; flex-direction: column; gap: 10px; }
+.tbx-row {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 8px 18px;
+  padding: 18px 22px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 5px;
+  transition: border-color 0.15s;
+}
+.tbx-row:hover { border-color: var(--line-3); }
+.tbx-row.is-hidden { display: none; }
+.tbx-row__head { display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap; }
+.tbx-row__name {
+  font-family: var(--mono); font-size: 14px; font-weight: 600;
+  letter-spacing: 0.02em; color: var(--paper);
+}
+.tbx-row__star {
+  font-family: var(--serif); font-style: italic; font-size: 14px;
+  color: var(--gold); margin-right: -8px;
+}
+.tbx-row__replaces {
+  font-family: var(--mono); font-size: 10.5px; color: var(--paper-3);
+}
+.tbx-row__replaces strong { color: var(--paper-2); font-weight: 500; }
+.tbx-row__tldr {
+  font-family: var(--sans); font-size: 13.5px; color: var(--paper-2);
+  line-height: 1.5; grid-column: 1;
+}
+.tbx-row__tags { grid-column: 1; display: flex; flex-wrap: wrap; gap: 5px; align-items: center; }
+.tbx-row__tag {
+  font-family: var(--mono); font-size: 9.5px; letter-spacing: 0.06em;
+  color: var(--paper-3); border: 1px solid var(--line-2);
+  border-radius: 99px; padding: 2px 8px;
+}
+.tbx-row__tag--form { color: var(--mint); border-color: rgba(111,231,181,0.32); }
+.tbx-row__tag--lang { color: var(--gold); border-color: rgba(244,198,96,0.32); }
+.tbx-row__repo {
+  grid-column: 2; grid-row: 1 / span 3; align-self: stretch;
+  display: flex; align-items: center;
+  font-family: var(--mono); font-size: 11px;
+  color: var(--paper-3); text-decoration: none;
+  white-space: nowrap; transition: color 0.15s;
+}
+.tbx-row__repo:hover { color: var(--accent); }
+.tbx-row__repo .arr { color: var(--accent); margin-left: 6px; }
+
+.tbx-empty {
+  padding: 40px 24px; text-align: center;
+  font-family: var(--mono); font-size: 12px; color: var(--paper-3);
+  border: 1px dashed var(--line-2); border-radius: 5px;
+}
+
+/* Hub cards — used on /toolbox/index.html */
+.tbx-hub {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 14px;
+}
+.tbx-hub__card {
+  display: flex; flex-direction: column; gap: 10px;
+  padding: 22px;
+  background: linear-gradient(180deg, var(--surface) 0%, var(--ink-2) 100%);
+  border: 1px solid var(--line-2);
+  border-radius: 5px;
+  text-decoration: none; color: var(--paper);
+  transition: border-color 0.2s, transform 0.15s;
+  position: relative;
+}
+.tbx-hub__card:not(.is-stub):hover { border-color: var(--accent); transform: translateY(-2px); }
+.tbx-hub__card.is-stub { opacity: 0.48; cursor: default; pointer-events: none; }
+.tbx-hub__num {
+  font-family: var(--mono); font-size: 10px; letter-spacing: 0.16em;
+  text-transform: uppercase; color: var(--paper-3);
+}
+.tbx-hub__title {
+  font-family: var(--serif); font-size: 22px; line-height: 1.1;
+  color: var(--paper);
+}
+.tbx-hub__title em { font-style: italic; color: var(--accent); }
+.tbx-hub__count {
+  font-family: var(--mono); font-size: 10.5px; color: var(--paper-3);
+  margin-top: auto;
+}
+.tbx-hub__count em { font-style: italic; color: var(--paper-2); }
+.tbx-hub__card.is-stub .tbx-hub__count { color: var(--paper-3); }
+
+@media (max-width: 760px) {
+  .tbx-row { grid-template-columns: 1fr; }
+  .tbx-row__repo { grid-column: 1; grid-row: auto; align-self: start; }
+}

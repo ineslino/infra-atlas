@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url><loc>https://infraatlas.dev/</loc><lastmod>2026-05-19</lastmod></url>
+  <url><loc>https://infraatlas.dev/</loc><lastmod>2026-05-21</lastmod></url>
   <url><loc>https://infraatlas.dev/ai-atlas/</loc><lastmod>2026-05-19</lastmod></url>
   <url><loc>https://infraatlas.dev/api/</loc><lastmod>2026-05-19</lastmod></url>
   <url><loc>https://infraatlas.dev/apigee/</loc><lastmod>2026-05-18</lastmod></url>
@@ -24,6 +24,7 @@
   <url><loc>https://infraatlas.dev/regions/</loc><lastmod>2026-05-19</lastmod></url>
   <url><loc>https://infraatlas.dev/self-hosted-apim/</loc><lastmod>2026-05-18</lastmod></url>
   <url><loc>https://infraatlas.dev/support/</loc><lastmod>2026-05-18</lastmod></url>
+  <url><loc>https://infraatlas.dev/toolbox/</loc><lastmod>2026-05-21</lastmod></url>
   <url><loc>https://infraatlas.dev/tools/</loc><lastmod>2026-05-20</lastmod></url>
   <url><loc>https://infraatlas.dev/decisions/api-gateway-vs-proxy-vs-load-balancer/</loc><lastmod>2026-05-19</lastmod></url>
   <url><loc>https://infraatlas.dev/decisions/app-engine-vs-compute-engine/</loc><lastmod>2026-05-19</lastmod></url>
@@ -33,6 +34,9 @@
   <url><loc>https://infraatlas.dev/decisions/fargate-vs-ec2/</loc><lastmod>2026-05-19</lastmod></url>
   <url><loc>https://infraatlas.dev/decisions/nat-gateway-vs-instance-vs-no-nat/</loc><lastmod>2026-05-19</lastmod></url>
   <url><loc>https://infraatlas.dev/decisions/rest-api-vs-http-api/</loc><lastmod>2026-05-19</lastmod></url>
+  <url><loc>https://infraatlas.dev/toolbox/kubernetes/</loc><lastmod>2026-05-21</lastmod></url>
+  <url><loc>https://infraatlas.dev/toolbox/networking/</loc><lastmod>2026-05-21</lastmod></url>
+  <url><loc>https://infraatlas.dev/toolbox/shell/</loc><lastmod>2026-05-21</lastmod></url>
   <url><loc>https://infraatlas.dev/tools/apim-limits/</loc><lastmod>2026-05-20</lastmod></url>
   <url><loc>https://infraatlas.dev/tools/egress-cost/</loc><lastmod>2026-05-20</lastmod></url>
   <url><loc>https://infraatlas.dev/tools/subnet/</loc><lastmod>2026-05-20</lastmod></url>

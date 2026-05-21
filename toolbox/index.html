@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="color-scheme" content="dark">
+<title>Toolbox · Infra Atlas</title>
+<link rel="icon" href="/favicon.svg?v=2" type="image/svg+xml">
+<meta name="description" content="A curated, opinionated list of open-source tools cloud engineers actually keep on their $PATH — Kubernetes TUIs, networking diagnostics, shell productivity, IaC, secrets, FinOps. Sorted by domain, tagged by form and language. No SaaS pitches.">
+<link rel="canonical" href="https://infraatlas.dev/toolbox/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Infra Atlas">
+<meta property="og:title" content="Toolbox · Infra Atlas">
+<meta property="og:description" content="Curated open-source tools for cloud engineers — Kubernetes TUIs, networking diagnostics, shell productivity. Tagged by form, language, maturity.">
+<meta property="og:url" content="https://infraatlas.dev/toolbox/">
+<meta property="og:image" content="https://infraatlas.dev/og.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Toolbox · Infra Atlas">
+<meta name="twitter:description" content="Curated open-source tools for cloud engineers — sorted by domain, tagged by form.">
+<meta name="twitter:image" content="https://infraatlas.dev/og.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@300;400;500;600&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/tools/shared.css">
+
+<style>
+.masthead { margin-bottom: 40px; }
+.subtitle { max-width: 760px; }
+</style>
+</head>
+<body>
+
+<div class="grain"></div>
+<div class="scanlines"></div>
+
+<div class="page">
+
+  <header class="masthead">
+    <a class="eyebrow" href="/"><span class="arrow">←</span> Infra Atlas</a>
+    <h1 class="title">The <em>Toolbox.</em></h1>
+    <p class="subtitle">Open-source tools we'd actually put on every cloud engineer's <code>$PATH</code> — Kubernetes TUIs, networking diagnostics, shell productivity, IaC, secrets, FinOps. Grouped by domain, tagged by form and language. No SaaS pitches, no rankings. Just what's worth knowing.</p>
+  </header>
+
+  <main id="ia-main">
+
+    <section class="tbx-hub" aria-label="Tool departments">
+
+      <a class="tbx-hub__card" href="/toolbox/kubernetes/">
+        <div class="tbx-hub__num">03 · Department</div>
+        <h2 class="tbx-hub__title">Kubernetes &amp; <em>Containers</em></h2>
+        <div class="tbx-hub__count"><em>14</em> tools · TUIs, debug, log tailers</div>
+      </a>
+
+      <a class="tbx-hub__card" href="/toolbox/networking/">
+        <div class="tbx-hub__num">04 · Department</div>
+        <h2 class="tbx-hub__title">Networking &amp; <em>DNS</em></h2>
+        <div class="tbx-hub__count"><em>13</em> tools · diagnose, trace, inspect</div>
+      </a>
+
+      <a class="tbx-hub__card" href="/toolbox/shell/">
+        <div class="tbx-hub__num">10 · Department</div>
+        <h2 class="tbx-hub__title">Shell &amp; <em>Productivity</em></h2>
+        <div class="tbx-hub__count"><em>16</em> tools · fzf, ripgrep, zoxide, lazygit</div>
+      </a>
+
+      <!-- Departments not yet populated. Stubs make the structure visible
+           without pretending to ship something we have not curated yet. -->
+      <div class="tbx-hub__card is-stub">
+        <div class="tbx-hub__num">01 · Department</div>
+        <h2 class="tbx-hub__title">Auth &amp; <em>Identity</em></h2>
+        <div class="tbx-hub__count">soon · aws-vault, granted, sops, age</div>
+      </div>
+
+      <div class="tbx-hub__card is-stub">
+        <div class="tbx-hub__num">02 · Department</div>
+        <h2 class="tbx-hub__title">Provisioning &amp; <em>IaC</em></h2>
+        <div class="tbx-hub__count">soon · opentofu, terragrunt, atlantis, infracost</div>
+      </div>
+
+      <div class="tbx-hub__card is-stub">
+        <div class="tbx-hub__num">05 · Department</div>
+        <h2 class="tbx-hub__title">Observability &amp; <em>Logs</em></h2>
+        <div class="tbx-hub__count">soon · lnav, vector, btop, delta</div>
+      </div>
+
+      <div class="tbx-hub__card is-stub">
+        <div class="tbx-hub__num">06 · Department</div>
+        <h2 class="tbx-hub__title">Cost &amp; <em>FinOps</em></h2>
+        <div class="tbx-hub__count">soon · infracost, opencost, komiser</div>
+      </div>
+
+      <div class="tbx-hub__card is-stub">
+        <div class="tbx-hub__num">07 · Department</div>
+        <h2 class="tbx-hub__title">Security &amp; <em>Compliance</em></h2>
+        <div class="tbx-hub__count">soon · trivy, gitleaks, checkov, cosign</div>
+      </div>
+
+      <div class="tbx-hub__card is-stub">
+        <div class="tbx-hub__num">08 · Department</div>
+        <h2 class="tbx-hub__title">CI/CD &amp; <em>Pipelines</em></h2>
+        <div class="tbx-hub__count">soon · act, atlantis, skaffold, az pipelines</div>
+      </div>
+
+      <div class="tbx-hub__card is-stub">
+        <div class="tbx-hub__num">09 · Department</div>
+        <h2 class="tbx-hub__title">Database &amp; <em>Data</em></h2>
+        <div class="tbx-hub__count">soon · pgcli, atlas, usql, dbeaver</div>
+      </div>
+
+    </section>
+
+    <div class="about" style="margin-top: 36px;">
+      <span class="about__mark">*</span>
+      <p>Each entry has a one-line description, the tool it <strong>replaces</strong> (the mental hook most engineers use), a link to the repo, and tags for form (<code>TUI</code> · <code>CLI</code> · <code>GUI</code>) and language (<code>Rust</code> · <code>Go</code> · <code>Python</code> · …). The ★ marks the picks worth installing on every machine — opinionated, not exhaustive. Open a PR on <a href="https://github.com/ineslino/infra-atlas" target="_blank" rel="noopener">GitHub</a> if you think we missed something obvious.</p>
+    </div>
+
+  </main>
+
+  <footer class="colophon">
+    <p>Infra Atlas · <a href="/">Home</a> · <a href="/tools/">Calculators</a> · <a href="https://github.com/ineslino/infra-atlas" target="_blank" rel="noopener">GitHub</a> · MIT-licensed · Reviewed <time datetime="2026-05-21">2026-05-21</time></p>
+  </footer>
+
+</div>
+
+<script src="/nav.js" defer></script>
+</body>
+</html>
