@@ -58,28 +58,38 @@
   // Per-page related instruments — hrefs must match ITEMS entries. Curated, not
   // a full graph: 2–4 genuinely relevant siblings per page is the right size.
   var RELATED = {
-    "/ec2/":                    ["/azure-vm/", "/equivalent-sku/", "/regions/"],
-    "/azure-vm/":               ["/ec2/", "/equivalent-sku/", "/regions/"],
-    "/gcp-compute/":            ["/equivalent-sku/", "/regions/", "/ai-atlas/"],
+    // Instruments
+    "/ec2/":                    ["/azure-vm/", "/equivalent-sku/", "/regions/", "/decisions/fargate-vs-ec2/"],
+    "/azure-vm/":               ["/ec2/", "/equivalent-sku/", "/regions/", "/decisions/azure-app-service-vs-container-apps-vs-vm/"],
+    "/gcp-compute/":            ["/equivalent-sku/", "/regions/", "/ai-atlas/", "/decisions/app-engine-vs-compute-engine/"],
     "/oci-compute/":            ["/equivalent-sku/", "/regions/", "/iam-matrix/"],
     "/ovh-instances/":          ["/equivalent-sku/", "/regions/"],
     "/regions/":                ["/ec2/", "/azure-vm/", "/gcp-compute/"],
     "/equivalent-sku/":         ["/ec2/", "/azure-vm/", "/gcp-compute/", "/oci-compute/"],
     "/kubernetes/":             ["/networking-matrix/", "/iam-matrix/", "/equivalent-sku/"],
     "/iam-matrix/":             ["/networking-matrix/", "/kubernetes/", "/confidential-computing/"],
-    "/aws-api-gateway/":        ["/apim-matrix/", "/apigee/", "/mulesoft/"],
-    "/apigee/":                 ["/apim-matrix/", "/aws-api-gateway/", "/mulesoft/"],
-    "/mulesoft/":               ["/apim-matrix/", "/aws-api-gateway/", "/apigee/"],
-    "/self-hosted-apim/":       ["/apim-matrix/", "/aws-api-gateway/"],
+    "/aws-api-gateway/":        ["/apim-matrix/", "/apigee/", "/mulesoft/", "/decisions/rest-api-vs-http-api/"],
+    "/apigee/":                 ["/apim-matrix/", "/aws-api-gateway/", "/mulesoft/", "/decisions/api-gateway-vs-proxy-vs-load-balancer/"],
+    "/mulesoft/":               ["/apim-matrix/", "/aws-api-gateway/", "/apigee/", "/decisions/api-gateway-vs-proxy-vs-load-balancer/"],
+    "/self-hosted-apim/":       ["/apim-matrix/", "/aws-api-gateway/", "/decisions/api-gateway-vs-proxy-vs-load-balancer/"],
     "/compliance/":             ["/regions/", "/confidential-computing/"],
     "/confidential-computing/": ["/compliance/", "/iam-matrix/"],
     "/ai-atlas/":               ["/gcp-compute/", "/networking-matrix/"],
     "/networking-matrix/":      ["/egress/", "/tools/subnet/", "/iam-matrix/", "/kubernetes/"],
-    "/egress/":                 ["/tools/egress-cost/", "/networking-matrix/", "/regions/"],
+    "/egress/":                 ["/tools/egress-cost/", "/networking-matrix/", "/regions/", "/decisions/nat-gateway-vs-instance-vs-no-nat/"],
     "/apim-matrix/":            ["/tools/apim-limits/", "/aws-api-gateway/", "/apigee/", "/mulesoft/"],
-    "/tools/egress-cost/":      ["/egress/", "/networking-matrix/"],
+    "/tools/egress-cost/":      ["/egress/", "/networking-matrix/", "/decisions/nat-gateway-vs-instance-vs-no-nat/"],
     "/tools/subnet/":           ["/networking-matrix/", "/regions/"],
-    "/tools/apim-limits/":      ["/apim-matrix/", "/aws-api-gateway/"]
+    "/tools/apim-limits/":      ["/apim-matrix/", "/aws-api-gateway/", "/decisions/rest-api-vs-http-api/"],
+    // Decisions → related instruments (bidirectional)
+    "/decisions/fargate-vs-ec2/":                            ["/ec2/", "/kubernetes/", "/equivalent-sku/"],
+    "/decisions/azure-app-service-vs-container-apps-vs-vm/": ["/azure-vm/", "/kubernetes/", "/equivalent-sku/"],
+    "/decisions/app-engine-vs-compute-engine/":              ["/gcp-compute/", "/equivalent-sku/"],
+    "/decisions/cloud-run-vs-app-engine-flex/":              ["/gcp-compute/", "/equivalent-sku/"],
+    "/decisions/rest-api-vs-http-api/":                      ["/aws-api-gateway/", "/apim-matrix/"],
+    "/decisions/api-gateway-vs-proxy-vs-load-balancer/":     ["/apim-matrix/", "/networking-matrix/"],
+    "/decisions/aurora-vs-rds/":                             ["/regions/", "/compliance/"],
+    "/decisions/nat-gateway-vs-instance-vs-no-nat/":         ["/egress/", "/networking-matrix/", "/tools/egress-cost/"]
   };
 
   // Normalise current path → "/ec2/" form
