@@ -448,7 +448,7 @@ body {
   </div>
 
   <div class="matrix-wrap">
-    <table class="matrix" id="matrix"></table>
+    <table class="matrix" id="matrix" aria-label="APIM feature matrix across API management vendors"></table>
   </div>
 
   </main>
@@ -992,9 +992,9 @@ function init() {
 function renderMatrix() {
   const table = $("#matrix");
   let html = "<thead><tr>";
-  html += '<th class="feature-col">Capability</th>';
+  html += '<th class="feature-col" scope="col">Capability</th>';
   VENDORS.forEach(v => {
-    html += `<th class="col-${v.key}"><span class="vendor-tag"><span class="swatch" style="background:${v.swatch}"></span>${v.short}</span></th>`;
+    html += `<th class="col-${v.key}" scope="col"><span class="vendor-tag"><span class="swatch" style="background:${v.swatch}"></span>${v.short}</span></th>`;
   });
   html += "</tr></thead><tbody>";
 
@@ -1004,7 +1004,7 @@ function renderMatrix() {
     html += `<tr class="category-row" data-cat="${cat.key}"><td colspan="${VENDORS.length + 1}"><span class="cat-label">▸ ${cat.label}</span></td></tr>`;
     features.forEach(f => {
       html += `<tr class="feature-row" data-feature="${f.id}" data-cat="${cat.key}">`;
-      html += `<td class="feature-col" data-action="open-feature">${f.name}</td>`;
+      html += `<th class="feature-col" scope="row" data-action="open-feature" tabindex="0" role="button" aria-label="${f.name} — full breakdown">${f.name}</th>`;
       VENDORS.forEach(v => {
         const s = f.support[v.key] || { level: "no", note: "" };
         const sym = s.level === "yes" ? "✓" : s.level === "part" ? "◐" : "✗";

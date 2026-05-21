@@ -483,7 +483,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, [tabindex]:focus-vis
   </div>
 
   <div class="matrix-wrap">
-    <table class="matrix" id="matrix"></table>
+    <table class="matrix" id="matrix" aria-label="Networking primitives comparison across cloud providers"></table>
   </div>
 
   </main>
@@ -948,7 +948,7 @@ function renderMatrix() {
     html += `<tr class="category-row" data-cat="${cat.key}"><td colspan="${VENDORS.length + 1}"><span class="cat-label">▸ ${escapeHtml(cat.label)}</span></td></tr>`;
     features.forEach(f => {
       html += `<tr class="feature-row" data-feature="${f.id}" data-cat="${cat.key}">`;
-      html += `<td class="feature-col" data-action="open-feature" tabindex="0" role="button" aria-label="Open per-cloud breakdown for ${escapeHtml(f.name)}">${escapeHtml(f.name)}</td>`;
+      html += `<th class="feature-col" scope="row" data-action="open-feature" tabindex="0" role="button" aria-label="Open per-cloud breakdown for ${escapeHtml(f.name)}">${escapeHtml(f.name)}</th>`;
       VENDORS.forEach(v => {
         const s = f.support[v.key] || { level: "no", value: "—", note: "" };
         const hasNote = s.note && s.note.length > 0;

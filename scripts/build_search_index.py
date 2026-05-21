@@ -11,10 +11,11 @@ What gets indexed (kept compact on purpose — names and short labels, NOT
 the long per-cell `note` strings which would blow up the bundle):
   · Matrix instruments — VENDORS / PROVIDERS / CATEGORIES / GROUPS /
     FEATURES / TRANSFERS — `name`, `short`, `label`, `desc`, `sub` fields.
-  · Compute instruments — region codes/names + family keys/names from
-    `data.json`.
+  · Compute instruments — region codes/names + family keys/names +
+    full instance-type names (family.size, e.g. "m5.xlarge") from data.json.
   · The Region Map — city names + per-city region codes/names.
   · Decision pages — the per-page `<h1>` title and `<p class="subtitle">`.
+  · Toolbox pages — tool names scraped from .tbx-row__name spans.
 
 Re-run after editing matrix data or after a data refresh:
     python3 scripts/build_search_index.py
@@ -34,6 +35,11 @@ MATRIX = [
     "confidential-computing", "ai-atlas", "networking-matrix", "egress",
 ]
 COMPUTE = ["ec2", "azure-vm", "gcp-compute", "oci-compute", "ovh-instances"]
+TOOLBOX = [
+    ("toolbox/kubernetes", "/toolbox/kubernetes/"),
+    ("toolbox/networking", "/toolbox/networking/"),
+    ("toolbox/shell",      "/toolbox/shell/"),
+]
 
 # Keys whose string values get indexed. `value` catches the per-cell vendor
 # terms ("VPC peering", "Direct Connect", "Cloud NAT") that people actually
@@ -100,6 +106,12 @@ for slug in COMPUTE:
             v = f.get(k)
             if v:
                 push(f"/{slug}/", str(v))
+        # Full instance-type names (e.g. "m5.xlarge") so palette matches
+        # specific SKUs like "c7g.16xlarge" or "Standard_D4s_v5".
+        fkey = f.get("key", "")
+        if fkey:
+            for size in f.get("sizes", []):
+                push(f"/{slug}/", f"{fkey}.{size}")
 
 # ── Regions instrument — city-modelled
 data = json.load(open("regions/data.json", encoding="utf-8"))
@@ -128,6 +140,17 @@ for path in sorted(glob.glob("decisions/*/index.html")):
         txt = txt.replace("&amp;", "&").replace("&rsquo;", "’").replace("&ldquo;", "“").replace("&rdquo;", "”")
         if txt:
             push(href, txt)
+
+# ── Toolbox pages — tool names from .tbx-row__name spans
+for slug, href in TOOLBOX:
+    path = f"{slug}/index.html"
+    if not os.path.exists(path):
+        continue
+    html = open(path, encoding="utf-8").read()
+    for m in re.finditer(r'class="tbx-row__name"[^>]*>([^<]+)<', html):
+        name = m.group(1).strip()
+        if name:
+            push(href, name)
 
 # ── Dedupe (same href + same lower-cased term)
 seen = set()

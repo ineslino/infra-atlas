@@ -3,6 +3,9 @@
    AND-mode across the active tag chips. A `.tbx-row` is kept when every
    active tag appears in its `data-tags`. No dependencies, no framework.
    Used by every /toolbox/<department>/ page.
+
+   Filter state is deep-linkable: active tags are written to ?tags=TUI,Go
+   and restored on load so shared URLs preserve the filter.
    ════════════════════════════════════════════════════════════════════ */
 (function () {
   "use strict";
@@ -27,7 +30,28 @@
       if (match) anyMatch = true;
     });
     if (empty) empty.hidden = anyMatch || tags.length === 0;
+    // Sync filter state to URL so it is shareable / bookmarkable.
+    var p = new URLSearchParams();
+    if (tags.length) p.set("tags", tags.join(","));
+    var q = p.toString();
+    history.replaceState(null, "", q ? "?" + q : location.pathname);
   }
+
+  // Restore filter state from URL on page load.
+  (function () {
+    var p = new URLSearchParams(location.search);
+    var tagStr = p.get("tags");
+    if (!tagStr) return;
+    var urlTags = tagStr.split(",");
+    var activated = 0;
+    chips.forEach(function (c) {
+      if (urlTags.indexOf(c.dataset.tag) !== -1) {
+        c.classList.add("is-active");
+        activated++;
+      }
+    });
+    if (activated) apply();
+  })();
 
   chips.forEach(function (c) {
     c.addEventListener("click", function () {
