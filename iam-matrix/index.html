@@ -189,6 +189,13 @@ a:focus-visible, button:focus-visible, input:focus-visible, [tabindex]:focus-vis
   border: 1px solid var(--line); border-radius: 6px;
   background: linear-gradient(180deg, var(--ink-2) 0%, var(--ink) 100%);
 }
+.scroll-hint { position: relative; }
+.scroll-hint::after {
+  content: ''; position: absolute; top: 0; right: 0; bottom: 0;
+  width: 48px; background: linear-gradient(to left, var(--ink), transparent);
+  pointer-events: none; border-radius: 0 5px 5px 0;
+}
+@media (min-width: 1001px) { .scroll-hint::after { display: none; } }
 .matrix {
   width: 100%; border-collapse: collapse; min-width: 1000px;
   font-family: var(--sans); font-size: 13px;
@@ -469,9 +476,11 @@ a:focus-visible, button:focus-visible, input:focus-visible, [tabindex]:focus-vis
     <span class="legend__item"><span class="cell-mark cell-mark--yes" style="position:relative">✓<span class="cell-mark__star">*</span></span> Click any cell for the note &amp; source</span>
   </div>
 
+  <div class="scroll-hint">
   <div class="matrix-wrap">
     <table class="matrix" id="matrix" aria-label="Cross-provider IAM capability matrix"></table>
     <div class="matrix-empty" id="matrix-empty" aria-live="polite">No capabilities match the current filter.</div>
+  </div>
   </div>
 
   </main>
