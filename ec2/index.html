@@ -1137,7 +1137,7 @@ button:focus-visible,
         <option value="vcpu-desc">Sort · vCPU ↓</option>
         <option value="mem-desc">Sort · Memory ↓</option>
       </select>
-      <div class="result-meta__count" aria-live="polite"><strong id="result-count">0</strong> shown</div>
+      <div class="result-meta__count" aria-live="polite"><strong id="result-count">0</strong><span id="result-of-label"> shown</span></div>
     </div>
   </div>
 
@@ -1952,6 +1952,8 @@ function renderRegionView() {
   });
 
   $("#result-count").textContent = filtered.length;
+  $("#result-of-label").textContent = (state.query.trim() || state.cat !== "all" || state.arch !== "all")
+    ? " of " + state.data.regions.length : " shown";
   $("#result-title").textContent = q
     ? `Regions matching "${state.query}"`
     : (state.cat === "all" && state.arch === "all")
@@ -2032,6 +2034,8 @@ function renderInstanceView() {
   });
 
   $("#result-count").textContent = entries.length;
+  $("#result-of-label").textContent = (state.query.trim() || state.cat !== "all" || state.arch !== "all")
+    ? " of " + state.data.totalInstanceTypes : " shown";
   $("#result-title").textContent = q
     ? `Instance types matching "${state.query}"`
     : (state.cat === "all" && state.arch === "all")
