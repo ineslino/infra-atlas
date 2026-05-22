@@ -220,7 +220,8 @@
     + 'text-transform:uppercase;color:var(--paper-3,rgba(244,239,230,0.55));'
     + 'padding:0 11px;transition:color .15s;white-space:nowrap;}'
     + '.ia-nav__sec:hover{color:var(--paper,#F4EFE6);}'
-    + '.ia-nav__sec.is-cur{color:var(--paper-2,rgba(244,239,230,0.66));}'
+    + '.ia-nav__sec.is-cur{color:var(--paper,#F4EFE6);'
+    + 'border-bottom:1px solid rgba(244,239,230,0.4);padding-bottom:2px;}'
     + '@media(max-width:840px){.ia-nav__sections{display:none;}}'
     /* keep page sticky elements clear of the 46px nav bar */
     + '.filters{top:60px !important;}'
@@ -287,7 +288,11 @@
   var nav = document.createElement("header");
   nav.className = "ia-nav";
 
-  var hereHtml = current
+  // Section hub pages: ia-nav__here is redundant — the section link is already highlighted.
+  // Only show it on leaf pages (individual instrument, decision article, dept, calculator).
+  var sectionHubs = ['/', '/decisions/', '/tools/', '/toolbox/'];
+  var isHub = sectionHubs.indexOf(here) !== -1;
+  var hereHtml = (current && !isHub)
     ? '<span class="ia-nav__here">' + current.vendor + ' · <em>' + current.name + '</em></span>'
     : '';
 
