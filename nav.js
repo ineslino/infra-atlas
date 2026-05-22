@@ -127,7 +127,7 @@
   pushGroup(CLOUD, "Cloud Compute");
   pushGroup(APIM, "API Management");
   pushGroup(XCLOUD, "Cross-Cloud");
-  pushGroup(TOOLS, "Tools");
+  pushGroup(TOOLS, "Calculators");
   pushGroup(TOOLBOX, "Toolbox");
   pushGroup(DECISIONS, "Decisions");
 
@@ -211,6 +211,14 @@
     + '.ia-cmdk__foot kbd{font-family:inherit;border:1px solid var(--line-2,rgba(244,239,230,0.14));'
     + 'border-radius:3px;padding:1px 5px;margin-right:4px;}'
     + '@media(max-width:560px){.ia-nav__btn kbd{display:none;}.ia-cmdk__foot{display:none;}}'
+    /* section nav links */
+    + '.ia-nav__sections{display:flex;align-items:center;}'
+    + '.ia-nav__sec{font-family:var(--mono,monospace);font-size:10px;letter-spacing:0.15em;'
+    + 'text-transform:uppercase;color:var(--paper-3,rgba(244,239,230,0.55));'
+    + 'padding:0 11px;transition:color .15s;white-space:nowrap;}'
+    + '.ia-nav__sec:hover{color:var(--paper,#F4EFE6);}'
+    + '.ia-nav__sec.is-cur{color:var(--paper-2,rgba(244,239,230,0.66));}'
+    + '@media(max-width:840px){.ia-nav__sections{display:none;}}'
     /* keep page sticky elements clear of the 46px nav bar */
     + '.filters{top:60px !important;}'
     + '.section__head{top:62px !important;}'
@@ -280,6 +288,15 @@
     ? '<span class="ia-nav__here">' + current.vendor + ' · <em>' + current.name + '</em></span>'
     : '';
 
+  var sec = here.startsWith('/decisions/') ? 'decisions'
+          : here.startsWith('/tools/')      ? 'calculators'
+          : here.startsWith('/toolbox/')    ? 'toolbox'
+          : 'instruments';
+
+  function secLink(s, label, href) {
+    return '<a class="ia-nav__sec' + (sec === s ? ' is-cur' : '') + '" href="' + href + '">' + label + '</a>';
+  }
+
   nav.innerHTML =
       '<a class="ia-nav__brand" href="/">'
     +   '<svg class="ia-nav__glyph" viewBox="-116 -116 232 232" aria-hidden="true">'
@@ -288,6 +305,12 @@
     +   '<span class="ia-nav__word">Infra Atlas</span>'
     +   hereHtml
     + '</a>'
+    + '<nav class="ia-nav__sections" aria-label="Site sections">'
+    +   secLink('instruments', 'Instruments', '/')
+    +   secLink('decisions',   'Decisions',   '/decisions/')
+    +   secLink('calculators', 'Calculators', '/tools/')
+    +   secLink('toolbox',     'Toolbox',     '/toolbox/')
+    + '</nav>'
     + '<div class="ia-nav__right">'
     +   '<a class="ia-nav__action" href="https://github.com/ineslino/infra-atlas/issues/new/choose" target="_blank" rel="noopener">Report a fix</a>'
     +   '<a class="ia-nav__support" href="/support/" data-ia-cta="nav">Support us</a>'
@@ -296,7 +319,7 @@
     +       'stroke="currentColor" stroke-width="1.7">'
     +       '<circle cx="6.8" cy="6.8" r="4.3"/><path d="M10 10 L14 14" stroke-linecap="round"/>'
     +     '</svg>'
-    +     'Instruments <kbd>' + kLabel + '</kbd>'
+    +     'Search <kbd>' + kLabel + '</kbd>'
     +   '</button>'
     + '</div>';
 
