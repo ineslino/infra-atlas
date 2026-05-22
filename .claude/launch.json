@@ -1,0 +1,11 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "infraatlas",
+      "runtimeExecutable": "python3",
+      "runtimeArgs": ["-m", "http.server", "7474"],
+      "port": 7474
+    }
+  ]
+}
