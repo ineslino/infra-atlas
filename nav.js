@@ -453,20 +453,26 @@
     masthead.parentNode.insertBefore(rel, masthead.nextSibling);
   })();
 
-  // ── Source attribution note — instrument pages ────────────────────
+  // ── Source attribution note — instruments + calculators ──────────────
   (function () {
     var MATRIX_GROUPS = { "Cloud Compute": 1, "API Management": 1, "Cross-Cloud": 1 };
-    if (!current || !MATRIX_GROUPS[current.group]) return;
+    var CALC_GROUPS   = { "Calculators": 1 };
+    if (!current) return;
+    var isMatrix = !!MATRIX_GROUPS[current.group];
+    var isCalc   = !!CALC_GROUPS[current.group];
+    if (!isMatrix && !isCalc) return;
     var masthead = document.querySelector(".masthead");
     if (!masthead) return;
     var rel = document.querySelector(".ia-related");
     var insertRef = rel ? rel.nextSibling : masthead.nextSibling;
+    var txt = isMatrix
+      ? 'Every cell cites an official vendor documentation page — click any cell to see the exact source URL and notes.'
+      : 'All figures sourced from official vendor documentation — the source link appears below each result card.';
     var note = document.createElement("div");
     note.className = "ia-src-note";
     note.innerHTML =
         '<span class="ia-src-note__label">Sources</span>'
-      + '<span class="ia-src-note__txt">Every cell cites an official vendor documentation page'
-      + ' — click any cell to see the exact source URL and notes.</span>';
+      + '<span class="ia-src-note__txt">' + txt + '</span>';
     masthead.parentNode.insertBefore(note, insertRef);
   })();
 
