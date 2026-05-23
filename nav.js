@@ -275,6 +275,16 @@
     + '.ia-support a:hover{color:var(--accent,#FF7849);}'
     + '@media(max-width:560px){.ia-grat__in{padding:22px;}'
     + '.ia-grat__cta{width:100%;justify-content:center;}}'
+    /* source attribution note — instrument pages */
+    + '.ia-src-note{display:flex;align-items:baseline;gap:10px;'
+    + 'margin:-8px 0 28px 0;padding:8px 14px;'
+    + 'border-left:2px solid var(--mint,#6FE7B5);'
+    + 'background:rgba(111,231,181,0.04);border-radius:0 3px 3px 0;}'
+    + '.ia-src-note__label{font-family:var(--mono,monospace);font-size:9px;'
+    + 'letter-spacing:0.22em;text-transform:uppercase;'
+    + 'color:var(--mint,#6FE7B5);flex-shrink:0;margin-right:2px;}'
+    + '.ia-src-note__txt{font-family:var(--mono,monospace);font-size:11px;'
+    + 'color:var(--paper-2,rgba(244,239,230,0.66));line-height:1.5;}'
     /* honour the OS reduced-motion setting on every page that loads nav.js */
     + '@media(prefers-reduced-motion:reduce){*,*::before,*::after{'
     + 'animation-duration:0.01ms !important;animation-iteration-count:1 !important;'
@@ -441,6 +451,23 @@
         return '<a class="ia-related__item" href="' + it.href + '">' + relEsc(it.name) + '</a>';
       }).join("");
     masthead.parentNode.insertBefore(rel, masthead.nextSibling);
+  })();
+
+  // ── Source attribution note — instrument pages ────────────────────
+  (function () {
+    var MATRIX_GROUPS = { "Cloud Compute": 1, "API Management": 1, "Cross-Cloud": 1 };
+    if (!current || !MATRIX_GROUPS[current.group]) return;
+    var masthead = document.querySelector(".masthead");
+    if (!masthead) return;
+    var rel = document.querySelector(".ia-related");
+    var insertRef = rel ? rel.nextSibling : masthead.nextSibling;
+    var note = document.createElement("div");
+    note.className = "ia-src-note";
+    note.innerHTML =
+        '<span class="ia-src-note__label">Sources</span>'
+      + '<span class="ia-src-note__txt">Every cell cites an official vendor documentation page'
+      + ' — click any cell to see the exact source URL and notes.</span>';
+    masthead.parentNode.insertBefore(note, insertRef);
   })();
 
   // ── Behaviour ────────────────────────────────────────────────────

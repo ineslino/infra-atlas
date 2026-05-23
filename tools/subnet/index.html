@@ -77,7 +77,7 @@
 .ccard__list code { color: var(--paper-3); font-size: 10.5px; }
 .ccard__note { font-family: var(--sans); font-size: 12px; color: var(--paper-2); line-height: 1.5; border-top: 1px solid var(--line); padding-top: 10px; }
 .ccard__src { font-family: var(--mono); font-size: 10px; }
-.ccard__src a { color: var(--paper-3); text-decoration: underline; text-decoration-color: var(--line-2); text-underline-offset: 3px; word-break: break-all; }
+.ccard__src a { color: var(--paper-2); text-decoration: underline; text-decoration-color: var(--line-3); text-underline-offset: 3px; word-break: break-all; }
 .ccard__src a:hover { color: var(--accent); }
 
 @media (max-width: 1000px) {
@@ -135,7 +135,7 @@
     <!-- About / caveat -->
     <div class="about">
       <span class="about__mark">*</span>
-      <p><strong>Usable</strong> here means routable for workloads. AWS and Azure each reserve <code>first 4 + last 1</code>; GCP reserves <code>first 2 + last 2</code>; OCI reserves <code>first 2 + last 1</code>. IPv6 subnets are <code>/64</code> almost everywhere — the host count is meaningless at that size (~18 quintillion), so the panel shows the prefix you get and the reservations that still apply. Built on the cross-cloud <a href="/networking-matrix/">Networking Matrix</a>.</p>
+      <p><strong>Usable</strong> here means routable for workloads. AWS and Azure each reserve <code>first 4 + last 1</code>; GCP reserves <code>first 2 + last 2</code>; OCI reserves <code>first 2 + last 1</code>. IPv6 subnets are <code>/64</code> almost everywhere — the host count is meaningless at that size (~18 quintillion), so the panel shows the prefix you get and the reservations that still apply. <strong>Reservation rules are sourced from official cloud VPC documentation</strong> — the source link appears below each cloud's result card. Built on the cross-cloud <a href="/networking-matrix/">Networking Matrix</a>.</p>
     </div>
 
   </main>
