@@ -285,6 +285,26 @@
     + 'color:var(--mint,#6FE7B5);flex-shrink:0;margin-right:2px;}'
     + '.ia-src-note__txt{font-family:var(--mono,monospace);font-size:11px;'
     + 'color:var(--paper-2,rgba(244,239,230,0.66));line-height:1.5;}'
+    /* smooth scroll */
+    + 'html{scroll-behavior:smooth;}'
+    /* cross-page fade — View Transitions Level 2, Chrome 126+, ignored elsewhere */
+    + '@view-transition{navigation:auto;}'
+    + '::view-transition-old(root){animation:180ms ease-out both ia-vt-out;}'
+    + '::view-transition-new(root){animation:220ms ease-in both ia-vt-in;}'
+    + '@keyframes ia-vt-out{to{opacity:0;}}'
+    + '@keyframes ia-vt-in{from{opacity:0;}}'
+    /* tool-page content fade-in on tab/filter switch
+       @starting-style fires only on fresh DOM insertion, not on pre-existing elements,
+       so injecting this stylesheet after initial render causes no flash */
+    + '.region-grid,.instance-list,.cloud-grid{'
+    +   'opacity:1;transform:none;'
+    +   'transition:opacity .22s ease-out,transform .22s ease-out;}'
+    + '@starting-style{'
+    +   '.region-grid,.instance-list,.cloud-grid{opacity:0;transform:translateY(6px);}}'
+    /* scroll-reveal helpers — class applied by IIFE below, homepage only */
+    + '.ia-reveal{opacity:0;transform:translateY(14px);'
+    +   'transition:opacity .5s ease-out,transform .5s ease-out;}'
+    + '.ia-reveal.ia-revealed{opacity:1;transform:none;}'
     /* honour the OS reduced-motion setting on every page that loads nav.js */
     + '@media(prefers-reduced-motion:reduce){*,*::before,*::after{'
     + 'animation-duration:0.01ms !important;animation-iteration-count:1 !important;'
@@ -611,6 +631,22 @@
   function toggle() {
     overlay.classList.contains("is-open") ? closeCmdk() : openCmdk();
   }
+
+  /* ── Section scroll-reveal (homepage only) ──────────────────────── */
+  (function () {
+    if (here !== '/') return;
+    if (!('IntersectionObserver' in window)) return;
+    var SELS = '.instruments,.dx,.dispatches,.providers,.manifesto,.colophon,.signature';
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (e.isIntersecting) { e.target.classList.add('ia-revealed'); io.unobserve(e.target); }
+      });
+    }, { threshold: 0.06 });
+    document.querySelectorAll(SELS).forEach(function (el) {
+      el.classList.add('ia-reveal');
+      io.observe(el);
+    });
+  })();
 
   btn.addEventListener("click", function (e) { e.stopPropagation(); toggle(); });
   input.addEventListener("input", function () { sel = 0; render(); });
