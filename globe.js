@@ -128,9 +128,9 @@
     })
   ));
 
-  /* ── Atmosphere glow (BackSide additive shader) ──────────────── */
+  /* ── Atmosphere glow (FrontSide additive shader) ─────────────── */
   globe.add(new THREE.Mesh(
-    new THREE.SphereGeometry(1.08, 64, 64),
+    new THREE.SphereGeometry(1.15, 64, 64),
     new THREE.ShaderMaterial({
       uniforms: { uColor: { value: new THREE.Color('#FF7849') } },
       vertexShader: [
@@ -144,11 +144,13 @@
         'uniform vec3 uColor;',
         'varying vec3 vNormal;',
         'void main(){',
-        '  float i=pow(0.65-dot(vNormal,vec3(0.0,0.0,1.0)),2.2);',
-        '  gl_FragColor=vec4(uColor,i*0.40);',
+        // Edge glow: max strength at limb (dot≈0), zero at dead-center (dot≈1)
+        '  float edge=1.0-abs(dot(vNormal,vec3(0.0,0.0,1.0)));',
+        '  float i=pow(edge,2.5)*0.55;',
+        '  gl_FragColor=vec4(uColor,i);',
         '}'
       ].join('\n'),
-      side:        THREE.BackSide,
+      side:        THREE.FrontSide,
       blending:    THREE.AdditiveBlending,
       transparent: true,
       depthWrite:  false
