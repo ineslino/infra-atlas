@@ -36,6 +36,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@300;400;500;600&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js" defer></script>
+<script src="/globe.js" defer></script>
 
 <style>
 :root {
@@ -137,6 +139,7 @@ body {
   margin: 0 auto;
   padding: 64px 56px 96px;
   position: relative;
+  z-index: 1; /* sit above fixed globe canvas */
 }
 
 /* ─────────────── TOP RULE ─────────────── */
@@ -180,6 +183,7 @@ body {
   padding: 80px 0 90px;
   border-bottom: 1px solid var(--line);
   align-items: end;
+  min-height: 100svh; /* fill viewport so globe reads as hero background */
 }
 
 .hero__eyebrow {
@@ -831,6 +835,13 @@ body {
   vertical-align: middle;
   font-style: normal;
 }
+
+/* ─────────────── GLOBE CANVAS ─────────────── */
+/* Below-hero sections need an opaque bg to cover the fixed canvas */
+.instruments, .dx, .dispatches, .providers, .manifesto,
+.colophon, .signature { background: var(--ink); }
+
+/* No-WebGL: canvas is never injected, nothing to hide */
 
 @media (max-width: 980px) {
   .page { padding: 36px 24px 64px; }
