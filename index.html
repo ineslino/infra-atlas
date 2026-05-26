@@ -837,9 +837,9 @@ body {
 }
 
 /* ─────────────── GLOBE CANVAS ─────────────── */
-/* Below-hero sections need an opaque bg to cover the fixed canvas */
+/* Semi-transparent bg lets the globe glow bleed through while scrolling */
 .instruments, .dx, .dispatches, .providers, .manifesto,
-.colophon, .signature { background: var(--ink); }
+.colophon, .signature { background: rgba(10, 9, 7, 0.88); }
 
 /* No-WebGL: canvas is never injected, nothing to hide */
 

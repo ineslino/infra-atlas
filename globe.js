@@ -92,7 +92,7 @@
   canvas.style.cssText =
     'position:fixed;inset:0;width:100vw;height:100vh;' +
     'z-index:0;pointer-events:none;' +
-    'opacity:1;transition:opacity 0.5s ease;';
+    'opacity:1;';
   document.body.prepend(canvas);
 
   var renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: !MOBILE, alpha: true });
@@ -308,29 +308,6 @@
     else { startLoop(); }
   });
 
-  /* ── Scroll fade — IntersectionObserver on .hero ─────────────── */
-  function setupScrollFade() {
-    var hero = document.querySelector('.hero');
-    if (!hero) return;
-
-    // 21 thresholds → smooth opacity ramp
-    var thresholds = [];
-    for (var i = 0; i <= 20; i++) thresholds.push(i / 20);
-
-    new IntersectionObserver(function (entries) {
-      var ratio = entries[0].intersectionRatio;
-      canvas.style.opacity = String(ratio);
-
-      if (ratio === 0) {
-        paused = true;
-        stopLoop();
-      } else if (paused) {
-        paused = false;
-        startLoop();
-      }
-    }, { threshold: thresholds }).observe(hero);
-  }
-
   /* ── Resize ──────────────────────────────────────────────────── */
   window.addEventListener('resize', function () {
     W = window.innerWidth;
@@ -407,7 +384,6 @@
 
   /* ── Init ────────────────────────────────────────────────────── */
   function init() {
-    setupScrollFade();
     startLoop();
   }
 
