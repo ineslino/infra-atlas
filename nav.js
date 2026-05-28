@@ -126,6 +126,9 @@
   }, {
     href: "/api/", name: "The Data — public data.json API", vendor: "Data",
     group: "", keywords: "api data json endpoint feed download cors developer build"
+  }, {
+    href: "/atlas/", name: "The Constellation — visual instrument map", vendor: "Map",
+    group: "", keywords: "atlas map constellation graph visual explore instruments navigate star chart network diagram"
   }];
   function pushGroup(arr, label) {
     arr.forEach(function (it) {
@@ -144,6 +147,11 @@
     it.cur = (it.href === "/") ? (here === "/") : (here === it.href);
     if (it.cur && it.href !== "/") current = it;
   });
+
+  // Expose the node/edge data so /atlas/ (the visual constellation) renders from
+  // the same source as ⌘K — add an instrument and it appears on the map for free.
+  window.IA = window.IA || {};
+  window.IA.nav = { items: ITEMS, related: RELATED };
 
   // ── Styles ───────────────────────────────────────────────────────
   var css = ''
@@ -341,13 +349,14 @@
 
   // Section hub pages: ia-nav__here is redundant — the section link is already highlighted.
   // Only show it on leaf pages (individual instrument, decision article, dept, calculator).
-  var sectionHubs = ['/', '/decisions/', '/tools/', '/toolbox/'];
+  var sectionHubs = ['/', '/atlas/', '/decisions/', '/tools/', '/toolbox/'];
   var isHub = sectionHubs.indexOf(here) !== -1;
   var hereHtml = (current && !isHub)
     ? '<span class="ia-nav__here">' + current.vendor + ' · <em>' + current.name + '</em></span>'
     : '';
 
-  var sec = here.startsWith('/decisions/') ? 'decisions'
+  var sec = here.startsWith('/atlas/')     ? 'atlas'
+          : here.startsWith('/decisions/') ? 'decisions'
           : here.startsWith('/tools/')      ? 'calculators'
           : here.startsWith('/toolbox/')    ? 'toolbox'
           : 'instruments';
@@ -366,6 +375,7 @@
     + '</a>'
     + '<nav class="ia-nav__sections" aria-label="Site sections">'
     +   secLink('instruments', 'Instruments', '/')
+    +   secLink('atlas',       'Atlas',       '/atlas/')
     +   secLink('decisions',   'Decisions',   '/decisions/')
     +   secLink('calculators', 'Calculators', '/tools/')
     +   secLink('toolbox',     'Toolbox',     '/toolbox/')

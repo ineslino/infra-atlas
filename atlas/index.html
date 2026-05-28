@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="color-scheme" content="dark">
+<title>The Constellation · Atlas · Infra Atlas</title>
+<link rel="icon" href="/favicon.svg?v=2" type="image/svg+xml">
+<meta name="description" content="A visual map of every Infra Atlas instrument — 21 instruments across Cloud Compute, API Management, and Cross-Cloud, drawn as a constellation with the relationships between them. Click a star to open it.">
+<link rel="canonical" href="https://infraatlas.dev/atlas/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Infra Atlas">
+<meta property="og:title" content="The Constellation · Atlas · Infra Atlas">
+<meta property="og:description" content="Every instrument, mapped — a navigable constellation of the Infra Atlas, grouped by department with the relationships drawn in.">
+<meta property="og:url" content="https://infraatlas.dev/atlas/">
+<meta property="og:image" content="https://infraatlas.dev/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="The Constellation · Atlas · Infra Atlas">
+<meta name="twitter:description" content="Every instrument, mapped — a navigable constellation of the Infra Atlas.">
+<meta name="twitter:image" content="https://infraatlas.dev/og.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@300;400;500;600&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+:root {
+  --ink: #0A0907; --ink-2: #100E0C; --surface: #161310; --surface-2: #1E1A15; --surface-3: #2A241C;
+  --line: rgba(244, 239, 230, 0.06); --line-2: rgba(244, 239, 230, 0.14); --line-3: rgba(244, 239, 230, 0.28);
+  --paper: #F4EFE6; --paper-2: rgba(244, 239, 230, 0.66); --paper-3: rgba(244, 239, 230, 0.55); --paper-4: rgba(244, 239, 230, 0.20);
+  --accent: #FF7849; --accent-2: #FFA66E; --accent-glow: rgba(255, 120, 73, 0.22);
+  --mint: #6FE7B5; --gold: #F4C660; --plum: #C586E8; --sky: #7CD7F1; --rose: #F47B7B; --teal: #5BCCC9;
+  --serif: 'Instrument Serif', 'Times New Roman', serif;
+  --mono: 'JetBrains Mono', ui-monospace, monospace;
+  --sans: 'Manrope', -apple-system, system-ui, sans-serif;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body {
+  background: var(--ink); color: var(--paper);
+  font-family: var(--sans); font-size: 15px; line-height: 1.5;
+  -webkit-font-smoothing: antialiased; min-height: 100vh;
+}
+body {
+  background:
+    radial-gradient(ellipse at 18% 12%, rgba(124, 215, 241, 0.06), transparent 50%),
+    radial-gradient(ellipse at 82% 12%, rgba(244, 198, 96, 0.05), transparent 50%),
+    radial-gradient(ellipse at 50% 92%, rgba(197, 134, 232, 0.06), transparent 55%),
+    var(--ink);
+  background-attachment: fixed; overflow-x: hidden;
+}
+
+.grain {
+  pointer-events: none; position: fixed; inset: 0; z-index: 100; opacity: 0.08; mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml;utf8,<svg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.6 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+}
+.scanlines {
+  pointer-events: none; position: fixed; inset: 0; z-index: 99;
+  background: repeating-linear-gradient(180deg, transparent, transparent 2px, rgba(244,239,230,0.012) 2px, rgba(244,239,230,0.012) 3px);
+}
+::selection { background: var(--accent); color: var(--ink); }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 2px; }
+
+.page { max-width: 1280px; margin: 0 auto; padding: 56px 48px 96px; position: relative; }
+
+/* ─── MASTHEAD ─── */
+.masthead { display: grid; grid-template-columns: 1fr auto; gap: 48px; align-items: end; padding-bottom: 30px; border-bottom: 1px solid var(--line); margin-bottom: 28px; }
+.masthead__eyebrow { font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.22em; color: var(--paper-3); text-transform: uppercase; display: inline-flex; align-items: center; gap: 12px; text-decoration: none; transition: color 0.2s; }
+.masthead__eyebrow:hover { color: var(--paper); }
+.masthead__eyebrow-arrow { color: var(--accent); transition: transform 0.2s; }
+.masthead__eyebrow:hover .masthead__eyebrow-arrow { transform: translateX(-4px); }
+.masthead__title { font-family: var(--serif); font-weight: 400; font-size: clamp(46px, 7vw, 100px); line-height: 0.95; letter-spacing: -0.02em; margin-top: 14px; }
+.masthead__title em { font-style: italic; color: var(--accent); }
+.masthead__subtitle { margin-top: 16px; font-size: 15.5px; color: var(--paper-2); max-width: 600px; line-height: 1.55; }
+.masthead__subtitle span { font-family: var(--serif); font-style: italic; color: var(--paper); }
+.masthead__status { text-align: right; display: flex; gap: 26px; padding-bottom: 6px; }
+.masthead__status > div { font-family: var(--mono); font-size: 10px; letter-spacing: 0.13em; text-transform: uppercase; color: var(--paper-3); display: flex; flex-direction: column; gap: 3px; }
+.masthead__status strong { font-family: var(--serif); font-style: italic; font-weight: 400; font-size: 27px; color: var(--paper); letter-spacing: -0.01em; text-transform: none; }
+
+/* ─── LEGEND ─── */
+.cmap-legend { display: flex; flex-wrap: wrap; gap: 8px 18px; align-items: center; margin-bottom: 14px; font-family: var(--mono); font-size: 11px; color: var(--paper-2); }
+.cmap-legend__label { font-size: 9.5px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--paper-3); margin-right: 2px; }
+.cmap-legend__item { display: inline-flex; align-items: center; gap: 8px; }
+.cmap-legend__dot { width: 9px; height: 9px; border-radius: 50%; }
+.cmap-legend__hint { margin-left: auto; color: var(--paper-3); font-size: 10.5px; }
+@media (max-width: 680px) { .cmap-legend__hint { display: none; } }
+
+/* ─── CONSTELLATION ─── */
+.cmap-wrap {
+  border: 1px solid var(--line); border-radius: 8px;
+  background: radial-gradient(ellipse at 50% 40%, rgba(20,18,15,0.6), var(--ink) 78%);
+  padding: 8px; margin-bottom: 40px; position: relative;
+}
+.cmap { width: 100%; height: auto; display: block; }
+
+.cmap__edge { stroke: var(--line-2); stroke-width: 1; }
+.cmap__edge.is-cross { stroke: var(--line); stroke-dasharray: 3 5; }
+.cmap.is-focusing .cmap__edge { opacity: 0.08; }
+.cmap.is-focusing .cmap__edge.is-lit { opacity: 1; stroke: var(--accent); stroke-width: 1.5; stroke-dasharray: none; }
+
+.cmap__node { cursor: pointer; }
+.cmap__node:focus-visible { outline: none; }
+.cmap__halo { fill: none; stroke: var(--c); stroke-opacity: 0.22; }
+.cmap__dot { fill: var(--c); transition: r 0.15s ease; }
+.cmap__hit { fill: transparent; }
+.cmap__label { fill: var(--paper-2); font-family: var(--mono); font-size: 9.5px; letter-spacing: 0.02em; }
+.cmap__node:hover .cmap__dot,
+.cmap__node:focus-visible .cmap__dot { r: 8.5; }
+.cmap__node:hover .cmap__label,
+.cmap__node:focus-visible .cmap__label { fill: var(--paper); }
+.cmap__node:focus-visible .cmap__halo { stroke: var(--paper); stroke-opacity: 0.9; stroke-width: 1.5; }
+.cmap.is-focusing .cmap__node.is-dim { opacity: 0.28; }
+.cmap.is-focusing .cmap__node.is-lit .cmap__label { fill: var(--paper); }
+.cmap.is-focusing .cmap__node.is-lit .cmap__halo { stroke-opacity: 0.7; }
+
+@media (prefers-reduced-motion: no-preference) {
+  .cmap__dot { animation: twinkle 4s ease-in-out infinite; }
+  @keyframes twinkle { 0%,100% { opacity: 0.92; } 50% { opacity: 1; } }
+}
+
+/* ─── PAIRED LIST (canonical + mobile fallback) ─── */
+.cmap-index { margin-top: 8px; }
+.cmap-index__intro { font-family: var(--mono); font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--paper-3); margin-bottom: 18px; display: flex; align-items: center; gap: 12px; }
+.cmap-index__intro::after { content: ''; flex: 1; height: 1px; background: var(--line); }
+.cmap-index__grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px; }
+.cmap-dept__name { font-family: var(--mono); font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--paper-2); margin-bottom: 12px; display: flex; align-items: center; gap: 9px; }
+.cmap-dept__dot { width: 8px; height: 8px; border-radius: 50%; }
+.cmap-dept__list { list-style: none; }
+.cmap-dept__list li { margin: 0 0 2px; }
+.cmap-dept__list a { display: block; text-decoration: none; font-family: var(--sans); font-size: 14px; color: var(--paper-2); padding: 6px 10px; border-radius: 5px; border: 1px solid transparent; transition: color 0.15s, border-color 0.15s, background 0.15s; }
+.cmap-dept__list a:hover { color: var(--paper); border-color: var(--line-2); background: var(--surface); }
+
+/* ─── COLOPHON ─── */
+.colophon { margin-top: 56px; padding-top: 30px; border-top: 1px solid var(--line); font-size: 13px; color: var(--paper-3); line-height: 1.6; max-width: 760px; }
+.colophon a { color: var(--paper-2); text-decoration: underline; text-decoration-color: var(--line-2); text-underline-offset: 3px; }
+.colophon a:hover { color: var(--accent); }
+
+@media (max-width: 900px) {
+  .page { padding: 32px 22px 72px; }
+  .masthead { grid-template-columns: 1fr; gap: 22px; }
+  .masthead__status { text-align: left; }
+  .cmap-index__grid { grid-template-columns: 1fr; gap: 22px; }
+}
+/* Narrow screens: the graph gets cramped — hide it, lean on the index list */
+@media (max-width: 680px) {
+  .cmap-wrap { display: none; }
+  .cmap-index__intro { margin-top: 4px; }
+}
+</style>
+</head>
+<body>
+<div class="grain"></div>
+<div class="scanlines"></div>
+
+<div class="page">
+
+  <header class="masthead">
+    <div class="masthead__brand">
+      <a class="masthead__eyebrow" href="/"><span class="masthead__eyebrow-arrow">←</span> Infra Atlas · The Atlas</a>
+      <h1 class="masthead__title">The <em>Constellation.</em></h1>
+      <p class="masthead__subtitle">Every instrument, mapped. <span>The whole atlas as a star chart</span> — grouped by department, with the lines between related instruments drawn in. Pick a star to open it.</p>
+    </div>
+    <aside class="masthead__status">
+      <div>Instruments<strong id="stat-nodes">21</strong></div>
+      <div>Departments<strong>3</strong></div>
+      <div>Links<strong id="stat-edges">—</strong></div>
+    </aside>
+  </header>
+
+  <main id="ia-main">
+
+    <div class="cmap-legend" aria-hidden="true">
+      <span class="cmap-legend__label">Departments</span>
+      <span class="cmap-legend__item"><span class="cmap-legend__dot" style="background:var(--sky)"></span>Cloud Compute</span>
+      <span class="cmap-legend__item"><span class="cmap-legend__dot" style="background:var(--gold)"></span>API Management</span>
+      <span class="cmap-legend__item"><span class="cmap-legend__dot" style="background:var(--plum)"></span>Cross-Cloud</span>
+      <span class="cmap-legend__hint">Hover a star to trace its links · click to open</span>
+    </div>
+
+    <div class="cmap-wrap" id="cmap-wrap"><!-- SVG injected by JS --></div>
+
+    <nav class="cmap-index" aria-label="All instruments">
+      <div class="cmap-index__intro">All instruments</div>
+      <div class="cmap-index__grid" id="cmap-index"><!-- grouped link list injected by JS --></div>
+    </nav>
+
+  </main>
+
+  <footer class="colophon">
+    The constellation is drawn from the same index that powers <kbd>⌘K</kbd> — every instrument and the curated links between them. Add an instrument and it appears here automatically. The map is an enhancement; the grouped list above is the full, keyboard-navigable index. Part of <a href="/">Infra Atlas</a>.
+  </footer>
+
+</div>
+
+<script>
+"use strict";
+(function () {
+  var GROUPS = [
+    { key: "Cloud Compute",  color: "var(--sky)",  cx: 270, cy: 210, r: 95  },
+    { key: "API Management", color: "var(--gold)", cx: 730, cy: 210, r: 88  },
+    { key: "Cross-Cloud",    color: "var(--plum)", cx: 500, cy: 545, r: 152 }
+  ];
+  var DOT = { "Cloud Compute": "var(--sky)", "API Management": "var(--gold)", "Cross-Cloud": "var(--plum)" };
+
+  function esc(s) {
+    return String(s).replace(/[&<>"]/g, function (c) {
+      return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c];
+    });
+  }
+
+  function init() {
+    if (!window.IA || !window.IA.nav) { setTimeout(init, 20); return; }
+    var DATA = window.IA.nav;
+    var groupOf = {}; GROUPS.forEach(function (g) { groupOf[g.key] = g; });
+
+    // Nodes = the three instrument departments only
+    var nodes = DATA.items.filter(function (it) { return groupOf[it.group]; });
+    var inSet = {}; nodes.forEach(function (n) { inSet[n.href] = true; });
+
+    // Lay each department out on a ring around its cluster centre
+    var pos = {};
+    GROUPS.forEach(function (g) {
+      var arr = nodes.filter(function (n) { return n.group === g.key; });
+      arr.forEach(function (node, i) {
+        var ang = (i / arr.length) * Math.PI * 2 - Math.PI / 2;
+        pos[node.href] = {
+          x: g.cx + g.r * Math.cos(ang),
+          y: g.cy + g.r * Math.sin(ang),
+          ang: ang, g: g
+        };
+      });
+    });
+
+    // Edges = RELATED pairs where both endpoints are instruments, de-duplicated
+    var seen = {}, edges = [], adj = {};
+    nodes.forEach(function (n) { adj[n.href] = []; });
+    Object.keys(DATA.related).forEach(function (a) {
+      if (!inSet[a]) return;
+      DATA.related[a].forEach(function (b) {
+        if (!inSet[b] || a === b) return;
+        var key = a < b ? a + "|" + b : b + "|" + a;
+        if (seen[key]) return; seen[key] = true;
+        edges.push({ a: a, b: b, cross: pos[a].g.key !== pos[b].g.key });
+        adj[a].push(b); adj[b].push(a);
+      });
+    });
+
+    // ── Build the SVG ──
+    var svg = '<svg class="cmap" viewBox="0 0 1000 760" role="img" '
+            + 'aria-label="Constellation of ' + nodes.length + ' instruments in 3 departments. '
+            + 'The grouped list below is the navigable index.">';
+    // edges first (under the nodes)
+    svg += '<g class="cmap__edges">';
+    edges.forEach(function (e) {
+      var p = pos[e.a], q = pos[e.b];
+      svg += '<line class="cmap__edge' + (e.cross ? ' is-cross' : '') + '" '
+           + 'data-a="' + esc(e.a) + '" data-b="' + esc(e.b) + '" '
+           + 'x1="' + p.x.toFixed(1) + '" y1="' + p.y.toFixed(1) + '" '
+           + 'x2="' + q.x.toFixed(1) + '" y2="' + q.y.toFixed(1) + '" />';
+    });
+    svg += '</g><g class="cmap__nodes">';
+    // nodes, ordered by department for a logical tab order
+    nodes.forEach(function (n) {
+      var p = pos[n.href];
+      var cos = Math.cos(p.ang), sin = Math.sin(p.ang);
+      var lx = p.x + cos * 16, ly = p.y + sin * 16 + 3;
+      var anchor = cos < -0.35 ? "end" : (cos > 0.35 ? "start" : "middle");
+      svg += '<a class="cmap__node" href="' + esc(n.href) + '" data-id="' + esc(n.href) + '" '
+           + 'aria-label="' + esc(n.name) + ' — ' + esc(n.group) + '" '
+           + 'style="--c:' + p.g.color + '">'
+           +   '<circle class="cmap__halo" cx="' + p.x.toFixed(1) + '" cy="' + p.y.toFixed(1) + '" r="13" />'
+           +   '<circle class="cmap__dot" cx="' + p.x.toFixed(1) + '" cy="' + p.y.toFixed(1) + '" r="5.5" />'
+           +   '<circle class="cmap__hit" cx="' + p.x.toFixed(1) + '" cy="' + p.y.toFixed(1) + '" r="22" />'
+           +   '<text class="cmap__label" x="' + lx.toFixed(1) + '" y="' + ly.toFixed(1) + '" '
+           +     'text-anchor="' + anchor + '">' + esc(n.name) + '</text>'
+           + '</a>';
+    });
+    svg += '</g></svg>';
+
+    var wrap = document.getElementById("cmap-wrap");
+    wrap.innerHTML = svg;
+    var svgEl = wrap.querySelector("svg");
+
+    document.getElementById("stat-nodes").textContent = nodes.length;
+    document.getElementById("stat-edges").textContent = edges.length;
+
+    // ── Highlight a node + its neighbours on hover / focus ──
+    function setFocus(href) {
+      var keep = {}; keep[href] = true;
+      (adj[href] || []).forEach(function (h) { keep[h] = true; });
+      svgEl.classList.add("is-focusing");
+      svgEl.querySelectorAll(".cmap__node").forEach(function (a) {
+        var on = !!keep[a.getAttribute("data-id")];
+        a.classList.toggle("is-lit", on);
+        a.classList.toggle("is-dim", !on);
+      });
+      svgEl.querySelectorAll(".cmap__edge").forEach(function (l) {
+        l.classList.toggle("is-lit", l.getAttribute("data-a") === href || l.getAttribute("data-b") === href);
+      });
+    }
+    function clearFocus() {
+      svgEl.classList.remove("is-focusing");
+      svgEl.querySelectorAll(".is-lit, .is-dim").forEach(function (el) {
+        el.classList.remove("is-lit", "is-dim");
+      });
+    }
+    svgEl.querySelectorAll(".cmap__node").forEach(function (a) {
+      var id = a.getAttribute("data-id");
+      a.addEventListener("mouseenter", function () { setFocus(id); });
+      a.addEventListener("mouseleave", clearFocus);
+      a.addEventListener("focus", function () { setFocus(id); });
+      a.addEventListener("blur", clearFocus);
+    });
+
+    // ── Grouped link list — canonical index + mobile fallback ──
+    var idx = "";
+    GROUPS.forEach(function (g) {
+      var arr = nodes.filter(function (n) { return n.group === g.key; });
+      idx += '<section class="cmap-dept">'
+          +    '<h2 class="cmap-dept__name"><span class="cmap-dept__dot" style="background:' + g.color + '"></span>'
+          +      esc(g.key) + ' · ' + arr.length + '</h2>'
+          +    '<ul class="cmap-dept__list">'
+          +      arr.map(function (n) { return '<li><a href="' + esc(n.href) + '">' + esc(n.name) + '</a></li>'; }).join("")
+          +    '</ul></section>';
+    });
+    document.getElementById("cmap-index").innerHTML = idx;
+  }
+
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init);
+  else init();
+})();
+</script>
+<script src="/nav.js" defer></script>
+</body>
+</html>
