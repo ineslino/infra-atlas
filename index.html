@@ -476,44 +476,62 @@ body {
   display: flex;
   align-items: center;
   flex-wrap: wrap;
-  gap: 6px 24px;
-  padding: 14px clamp(20px, 4vw, 48px);
-  border-top: 1px solid var(--line-2);
-  border-bottom: 1px solid var(--line-2);
+  gap: 10px;
+  padding: 16px 20px;
+  border: 1px solid var(--line-2);
+  border-radius: 10px;
+  background: var(--surface);
   margin: 0 auto 44px;
   max-width: 1280px;
 }
 .ia-pageindex__label {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
   font-family: var(--mono);
-  font-size: 9px;
-  letter-spacing: 0.2em;
+  font-size: 10px;
+  letter-spacing: 0.18em;
   text-transform: uppercase;
   color: var(--paper-3);
-  margin-right: 8px;
+  margin-right: 4px;
   white-space: nowrap;
+}
+.ia-pageindex__label::before {
+  content: '↓';
+  color: var(--accent);
+  font-size: 13px;
+  line-height: 1;
 }
 .ia-pageindex__item {
-  display: flex;
+  display: inline-flex;
   align-items: center;
-  gap: 8px;
+  gap: 9px;
   font-family: var(--mono);
-  font-size: 11px;
-  letter-spacing: 0.06em;
+  font-size: 12px;
+  letter-spacing: 0.04em;
   color: var(--paper-2);
   text-decoration: none;
-  transition: color 0.15s, border-color 0.15s;
+  transition: color 0.15s, border-color 0.15s, background 0.15s;
   white-space: nowrap;
-  padding: 4px 2px;
-  border-bottom: 1px solid transparent;
+  padding: 8px 14px;
+  border: 1px solid var(--line-2);
+  border-radius: 99px;
+  background: var(--ink-2);
 }
-.ia-pageindex__item:hover { color: var(--paper); }
+.ia-pageindex__item:hover {
+  color: var(--paper);
+  border-color: var(--paper-3);
+  background: var(--surface-2);
+}
 .ia-pageindex__item.is-current {
-  color: var(--paper); border-bottom-color: var(--paper-3);
+  color: var(--paper);
+  border-color: var(--accent);
+  background: rgba(255, 120, 73, 0.08);
 }
 .ia-pageindex__item:focus-visible {
-  outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 2px;
+  outline: 2px solid var(--accent); outline-offset: 2px;
 }
-.ia-pageindex__item .dot { width: 6px; height: 6px; border-radius: 50%; flex: none; }
+.ia-pageindex__item .dot { width: 7px; height: 7px; border-radius: 50%; flex: none; }
 /* anchor jumps shouldn't land under the sticky 46px nav bar */
 .department { scroll-margin-top: 64px; }
 .ia-pageindex__count {
@@ -523,6 +541,10 @@ body {
   padding: 1px 7px;
   font-size: 9.5px;
   color: var(--paper-3);
+}
+.ia-pageindex__item.is-current .ia-pageindex__count {
+  border-color: var(--accent);
+  color: var(--accent-2);
 }
 
 /* ───────── WHAT CHANGED · feed ───────── */
@@ -976,7 +998,7 @@ body {
     </p>
 
     <nav class="ia-pageindex" aria-label="Jump to department">
-      <span class="ia-pageindex__label" aria-hidden="true">On this page</span>
+      <span class="ia-pageindex__label" aria-hidden="true">Jump to</span>
       <a href="#dept-cloud" class="ia-pageindex__item" aria-label="Jump to Department I, Cloud Compute, 6 instruments">
         <span class="dot" style="background:var(--sky)" aria-hidden="true"></span>
         <span>Dept I — Cloud Compute</span>

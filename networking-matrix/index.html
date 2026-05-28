@@ -216,12 +216,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, [tabindex]:focus-vis
 }
 @media (min-width: 1081px) { .scroll-hint::after { display: none; } }
 .matrix { min-width: 1080px; /* 5 columns — wider than the shared default */ }
-.matrix thead th.feature-col {
-  text-align: left; padding-left: 22px; min-width: 280px;
-  font-family: var(--serif); font-style: italic; font-size: 16px;
-  letter-spacing: 0; text-transform: none; color: var(--paper);
-  font-weight: 400;
-}
+.matrix thead th.feature-col { min-width: 280px; /* wider label column; padding/serif from matrix.css */ }
 /* Cell mark "star" badge — networking-specific positioning for the corner-attached footnote indicator */
 .cell-mark__star {
   position: absolute; top: -3px; right: -6px;

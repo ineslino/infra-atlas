@@ -42,8 +42,10 @@
 .matrix tbody tr.category-row td .cat-label::after {
   content: ''; flex: 1; height: 1px; background: var(--line);
 }
-.matrix tbody tr.feature-row td { padding: 12px; border-bottom: 1px solid var(--line); vertical-align: middle; }
-.matrix tbody tr.feature-row td.feature-col {
+/* row cells — the row-label is a <th scope=row>, the values are <td>, so target both */
+.matrix tbody tr.feature-row td,
+.matrix tbody tr.feature-row th { padding: 12px; border-bottom: 1px solid var(--line); vertical-align: middle; }
+.matrix tbody tr.feature-row .feature-col {
   padding-left: 28px; color: var(--paper); font-size: 14px; text-align: left;
   border-right: 1px solid var(--line);
 }

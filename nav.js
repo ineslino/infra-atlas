@@ -313,6 +313,19 @@
     + '.ia-reveal{opacity:0;transform:translateY(14px);'
     +   'transition:opacity .5s ease-out,transform .5s ease-out;}'
     + '.ia-reveal.ia-revealed{opacity:1;transform:none;}'
+    /* back-to-top — floating button, every page, appears after scrolling down */
+    + '.ia-totop{position:fixed;bottom:24px;right:24px;z-index:80;'
+    + 'width:44px;height:44px;border-radius:50%;cursor:pointer;'
+    + 'display:flex;align-items:center;justify-content:center;'
+    + 'background:var(--accent,#FF7849);color:var(--ink,#0A0907);'
+    + 'border:none;font-size:18px;line-height:1;'
+    + 'box-shadow:0 6px 20px rgba(0,0,0,0.4);'
+    + 'opacity:0;transform:translateY(12px);pointer-events:none;'
+    + 'transition:opacity .2s ease,transform .2s ease,background .15s;}'
+    + '.ia-totop.is-shown{opacity:1;transform:translateY(0);pointer-events:auto;}'
+    + '.ia-totop:hover{background:var(--accent-2,#FFA66E);}'
+    + '.ia-totop:focus-visible{outline:2px solid var(--paper,#F4EFE6);outline-offset:3px;}'
+    + '@media(max-width:560px){.ia-totop{bottom:16px;right:16px;width:40px;height:40px;}}'
     /* honour the OS reduced-motion setting on every page that loads nav.js */
     + '@media(prefers-reduced-motion:reduce){*,*::before,*::after{'
     + 'animation-duration:0.01ms !important;animation-iteration-count:1 !important;'
@@ -451,6 +464,30 @@
         });
       }
     });
+  })();
+
+  // ── Back-to-top — floating button on every page, shown after scrolling ──
+  (function () {
+    var btnTop = document.createElement("button");
+    btnTop.className = "ia-totop";
+    btnTop.type = "button";
+    btnTop.setAttribute("aria-label", "Back to top");
+    btnTop.innerHTML = '<span aria-hidden="true">↑</span>';
+    document.body.appendChild(btnTop);
+
+    var shown = false;
+    function sync() {
+      var should = window.scrollY > 600;
+      if (should !== shown) {
+        shown = should;
+        btnTop.classList.toggle("is-shown", shown);
+      }
+    }
+    btnTop.addEventListener("click", function () {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    });
+    window.addEventListener("scroll", sync, { passive: true });
+    sync();
   })();
 
   // ── Related instruments — small pill strip after the masthead ─────
