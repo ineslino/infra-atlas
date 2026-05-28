@@ -31,7 +31,8 @@
     ["/ai-atlas/",               "Generative AI Atlas",   "Cross-cloud", "ai generative model llm foundation model bedrock vertex azure foundry oci ovh openai gpt claude anthropic gemini google llama meta mistral cohere deepseek grok fine-tuning rag agents guardrails inference"],
     ["/egress/",                 "Egress & Transfer Cost Map","Cross-cloud", "egress data transfer cost networking bandwidth nat gateway interconnect direct connect expressroute cross-region cross-az internet bill price gigabyte"],
     ["/networking-matrix/",      "Networking Matrix",      "Cross-cloud", "networking primitives vpc vnet vcn subnet route table peering transit gateway virtual wan ncc drg firewall security group nsg network acl nat load balancer privatelink private link rosetta aws azure gcp oci"],
-    ["/observability/",          "Observability Matrix",   "Cross-cloud", "observability monitoring metrics logs traces profiling cloudwatch azure monitor gcp cloud monitoring oci datadog grafana new relic honeycomb dynatrace opentelemetry otel otlp kubernetes"]
+    ["/observability/",          "Observability Matrix",   "Cross-cloud", "observability monitoring metrics logs traces profiling cloudwatch azure monitor gcp cloud monitoring oci datadog grafana new relic honeycomb dynatrace opentelemetry otel otlp kubernetes"],
+    ["/observability-stacks/",   "Observability Stacks",   "Cross-cloud", "observability open source self-hosted prometheus grafana mimir loki tempo pyroscope elk elastic stack elasticsearch kibana logstash opensearch jaeger victoriametrics signoz oss self host"]
   ];
   var TOOLS = [
     ["/tools/egress-cost/",  "Egress Cost Calculator",     "Tool", "egress cost calculator bandwidth bill data transfer aws azure gcp price tier compare"],
@@ -65,7 +66,8 @@
     ["/decisions/cloud-run-vs-app-engine-flex/",             "Cloud Run vs App Engine Flexible",      "GCP",       "google cloud run app engine flexible containers serverless"],
     ["/decisions/aurora-vs-rds/",                            "Aurora vs RDS",                         "AWS",       "amazon database relational managed aurora rds mysql postgres"],
     ["/decisions/azure-app-service-vs-container-apps-vs-vm/","App Service vs Container Apps vs VM",    "Azure",     "azure app service container apps virtual machine paas web worker role"],
-    ["/decisions/nat-gateway-vs-instance-vs-no-nat/",        "NAT gateway vs instance vs no NAT",      "AWS",       "aws vpc nat gateway instance egress private subnet networking"]
+    ["/decisions/nat-gateway-vs-instance-vs-no-nat/",        "NAT gateway vs instance vs no NAT",      "AWS",       "aws vpc nat gateway instance egress private subnet networking"],
+    ["/decisions/cloud-native-vs-managed-vs-self-hosted-observability/", "Cloud-native vs managed vs self-hosted observability", "Patterns", "observability cloudwatch azure monitor datadog grafana prometheus elk loki tempo decision build vs buy"]
   ];
 
   // Per-page related instruments — hrefs must match ITEMS entries. Curated, not
@@ -89,14 +91,16 @@
     "/confidential-computing/": ["/compliance/", "/iam-matrix/"],
     "/ai-atlas/":               ["/gcp-compute/", "/networking-matrix/"],
     "/networking-matrix/":      ["/egress/", "/tools/subnet/", "/iam-matrix/", "/kubernetes/"],
-    "/observability/":          ["/networking-matrix/", "/iam-matrix/", "/kubernetes/", "/toolbox/observability/"],
+    "/observability/":          ["/observability-stacks/", "/kubernetes/", "/toolbox/observability/", "/decisions/cloud-native-vs-managed-vs-self-hosted-observability/"],
+    "/observability-stacks/":   ["/observability/", "/kubernetes/", "/toolbox/observability/", "/decisions/cloud-native-vs-managed-vs-self-hosted-observability/"],
+    "/decisions/cloud-native-vs-managed-vs-self-hosted-observability/": ["/observability/", "/observability-stacks/", "/toolbox/observability/"],
     "/egress/":                 ["/tools/egress-cost/", "/networking-matrix/", "/regions/", "/decisions/nat-gateway-vs-instance-vs-no-nat/"],
     "/apim-matrix/":            ["/tools/apim-limits/", "/aws-api-gateway/", "/apigee/", "/mulesoft/"],
     "/tools/egress-cost/":      ["/egress/", "/networking-matrix/", "/decisions/nat-gateway-vs-instance-vs-no-nat/"],
     "/tools/subnet/":           ["/networking-matrix/", "/regions/"],
     "/tools/apim-limits/":      ["/apim-matrix/", "/aws-api-gateway/", "/decisions/rest-api-vs-http-api/"],
     "/toolbox/auth/":           ["/iam-matrix/", "/compliance/", "/confidential-computing/"],
-    "/toolbox/observability/":  ["/observability/", "/kubernetes/", "/networking-matrix/"],
+    "/toolbox/observability/":  ["/observability/", "/observability-stacks/", "/kubernetes/"],
     // Decisions → related instruments (bidirectional)
     "/decisions/fargate-vs-ec2/":                            ["/ec2/", "/kubernetes/", "/equivalent-sku/"],
     "/decisions/azure-app-service-vs-container-apps-vs-vm/": ["/azure-vm/", "/kubernetes/", "/equivalent-sku/"],
@@ -416,7 +420,7 @@
           '<div class="ia-grat__in">'
         +   '<div class="ia-grat__txt">'
         +     '<div class="ia-grat__kick">Free to read · no ads · no vendor money</div>'
-        +     '<p>One of twenty instruments, kept current and kept honest by one '
+        +     '<p>One of twenty-one instruments, kept current and kept honest by one '
         +     'person. If it saved you a detour through the vendor docs, you can '
         +     'help keep the atlas running.</p>'
         +   '</div>'

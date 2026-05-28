@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="color-scheme" content="dark">
+<title>Cloud-native, managed or self-hosted observability? · Decisions · Infra Atlas</title>
+<link rel="icon" href="/favicon.svg?v=2" type="image/svg+xml">
+<meta name="description" content="The three observability buying decisions — use the cloud's bundle, buy a managed platform, or self-host an open-source stack — and when each one is the right answer.">
+<link rel="canonical" href="https://infraatlas.dev/decisions/cloud-native-vs-managed-vs-self-hosted-observability/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Infra Atlas">
+<meta property="og:title" content="Cloud-native, managed or self-hosted observability? · Infra Atlas Decisions">
+<meta property="og:description" content="Three buying decisions, three operating models, three answers — for the same observability problem.">
+<meta property="og:url" content="https://infraatlas.dev/decisions/cloud-native-vs-managed-vs-self-hosted-observability/">
+<meta property="og:image" content="https://infraatlas.dev/og.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Cloud-native, managed or self-hosted observability? · Infra Atlas Decisions">
+<meta name="twitter:description" content="Three buying decisions for the same observability problem.">
+<meta name="twitter:image" content="https://infraatlas.dev/og.png">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "TechArticle",
+  "headline": "Cloud-native, managed or self-hosted observability?",
+  "description": "The three observability buying decisions and when each is right.",
+  "url": "https://infraatlas.dev/decisions/cloud-native-vs-managed-vs-self-hosted-observability/",
+  "datePublished": "2026-05-28",
+  "dateModified": "2026-05-28",
+  "inLanguage": "en",
+  "isPartOf": { "@type": "WebSite", "name": "Infra Atlas", "url": "https://infraatlas.dev/" }
+}
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@300;400;500;600&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/decisions/decision.css">
+</head>
+<body>
+<div class="grain"></div>
+<div class="scanlines"></div>
+<div class="page">
+  <header class="masthead">
+    <a class="eyebrow" href="/decisions/"><span class="arrow">←</span> Infra Atlas · Decisions</a>
+    <h1 class="title">Cloud-native, managed <em>or</em> self-hosted observability?</h1>
+    <p class="subtitle">Three operating models for the same problem: where you sit on the build-vs-buy spectrum.</p>
+    <div class="reviewed"><span class="dot"></span>Reviewed <time datetime="2026-05-28">2026-05-28</time></div>
+  </header>
+  <section class="verdict">
+    <div class="sec-label">The verdict</div>
+    <p>Pick the <strong>cloud-native</strong> bundle (CloudWatch, Azure Monitor, GCP Cloud Monitoring, OCI Observability) when you live mostly inside one hyperscaler and want zero operational overhead — you trade vendor lock-in for time-to-value. Pick a <strong>managed platform</strong> (Datadog, Grafana Cloud, New Relic, Honeycomb, Dynatrace) when you need a unified view across multiple clouds, high cardinality, or top-tier UX, and the per-host pricing fits your budget. Pick a <strong>self-hosted OSS stack</strong> (Prometheus, Grafana stack, ELK, OpenSearch, Jaeger, VictoriaMetrics) when ingest volume makes per-host pricing punitive, when data must stay inside your perimeter, or when the team has the SRE bandwidth to operate it. The deciding factor is your team&rsquo;s capacity to operate observability infrastructure versus the dollar cost of having someone else operate it.</p>
+  </section>
+  <section>
+    <div class="sec-label">Head to head</div>
+    <div class="compare-wrap"><table class="compare">
+      <thead><tr><th>Criterion</th><th>Cloud-native</th><th>Managed platform</th><th>Self-hosted OSS</th></tr></thead>
+      <tbody>
+        <tr><td class="criterion">Who operates it</td><td class="val">The hyperscaler</td><td class="val">The vendor</td><td class="val">You</td></tr>
+        <tr><td class="criterion">Time to first dashboard</td><td class="val">Minutes — already on by default</td><td class="val">Hours — sign-up, agent install, dashboards</td><td class="val">Days to weeks — Helm, storage, retention policy, alerting</td></tr>
+        <tr><td class="criterion">Pricing shape</td><td class="val">Per GB ingest + per metric — bundled in cloud bill</td><td class="val">Per host / per million events / per GB — separate vendor bill</td><td class="val">Underlying compute + storage cost; no licence fee on the OSS distribution</td></tr>
+        <tr><td class="criterion">Cost at high cardinality</td><td class="val">Punishing — custom metric pricing scales linearly</td><td class="val">Punishing — most vendors price per cardinality dimension</td><td class="val">Best — VictoriaMetrics, Mimir, ClickHouse-backed stacks designed for it</td></tr>
+        <tr><td class="criterion">Multi-cloud unified view</td><td class="val">Limited — each cloud silo</td><td class="val">Yes — the headline reason most teams choose this</td><td class="val">Yes — you ship telemetry from anywhere</td></tr>
+        <tr><td class="criterion">Vendor lock-in</td><td class="val">High — telemetry tied to one cloud</td><td class="val">Medium — OTel mitigates if you instrument that way</td><td class="val">Low — you own the data, choose the storage</td></tr>
+        <tr><td class="criterion">Data sovereignty</td><td class="val">Stays in the cloud region you chose</td><td class="val">Goes to the vendor — verify their data-residency posture</td><td class="val">Stays wherever you run it</td></tr>
+        <tr><td class="criterion">Ops headcount required</td><td class="val">Zero dedicated</td><td class="val">~0.25 FTE — agent maintenance, dashboard hygiene</td><td class="val">1–3 FTE for a serious deployment — storage, scaling, upgrades, on-call</td></tr>
+        <tr><td class="criterion">Best for</td><td class="val">Single-cloud teams, simple workloads, lean ops</td><td class="val">Multi-cloud teams, growth-stage, premium UX needs</td><td class="val">Large scale, regulated environments, OSS-culture teams</td></tr>
+      </tbody>
+    </table></div>
+  </section>
+  <section>
+    <div class="sec-label">When to pick which</div>
+    <div class="pickwhen">
+      <div class="pick"><h4>Pick cloud-native when</h4><ul><li>Your stack lives on one cloud and you have no plans to leave.</li><li>You want observability on by default with no extra contract or agent install.</li><li>The team is small and unwilling to dedicate any FTE to operating telemetry infrastructure.</li><li>Custom-metric and log-ingest volume is modest enough that the cloud&rsquo;s pricing is acceptable.</li></ul></div>
+      <div class="pick"><h4>Pick a managed platform when</h4><ul><li>You operate across multiple clouds and need a single pane of glass.</li><li>You need premium UX — session replay, BubbleUp, Watchdog AI, etc.</li><li>The business is willing to pay the per-host or per-event premium for time saved.</li><li>You instrument with OpenTelemetry from day one so you can swap vendors later.</li></ul></div>
+      <div class="pick"><h4>Pick a self-hosted OSS stack when</h4><ul><li>Telemetry volume makes managed-platform pricing untenable (typically: very high cardinality, high log volume, or both).</li><li>Data must stay inside your perimeter for regulatory or contractual reasons.</li><li>You have SRE bandwidth to operate it and the team is comfortable with Helm, object storage, and storage-tier decisions.</li><li>You want the freedom to compose — Prometheus for metrics + Loki for logs + Tempo for traces, or whichever combination fits.</li></ul></div>
+    </div>
+  </section>
+  <section>
+    <div class="sec-label">The hybrid reality</div>
+    <p>In practice, most production teams run <em>two</em> of the three: cloud-native for the always-on basics (CloudWatch alarms on managed services, GKE metrics) plus a managed platform OR a self-hosted stack for the application layer. The decision is rarely either-or — it&rsquo;s about where the application telemetry goes once you instrument it with OpenTelemetry. The cloud-native layer is almost free with the cloud bill; the question is what you bolt on top.</p>
+  </section>
+  <section class="sources">
+    <div class="sec-label">Sources</div>
+    <ol>
+      <li>OpenTelemetry — vendor-neutral instrumentation — <a href="https://opentelemetry.io/docs/" target="_blank" rel="noopener">https://opentelemetry.io/docs/</a></li>
+      <li>AWS CloudWatch pricing — <a href="https://aws.amazon.com/cloudwatch/pricing/" target="_blank" rel="noopener">https://aws.amazon.com/cloudwatch/pricing/</a></li>
+      <li>Datadog pricing — <a href="https://www.datadoghq.com/pricing/" target="_blank" rel="noopener">https://www.datadoghq.com/pricing/</a></li>
+      <li>Grafana Cloud pricing — <a href="https://grafana.com/pricing/" target="_blank" rel="noopener">https://grafana.com/pricing/</a></li>
+      <li>Mimir — high-cardinality metrics — <a href="https://grafana.com/docs/mimir/latest/" target="_blank" rel="noopener">https://grafana.com/docs/mimir/latest/</a></li>
+      <li>VictoriaMetrics — high-cardinality TSDB — <a href="https://docs.victoriametrics.com/" target="_blank" rel="noopener">https://docs.victoriametrics.com/</a></li>
+    </ol>
+  </section>
+  <section>
+    <div class="sec-label">Related instruments</div>
+    <div class="crosslinks"><span class="lbl">See also</span><a href="/observability/">Observability Matrix</a><a href="/observability-stacks/">Observability Stacks</a><a href="/toolbox/observability/">Observability Toolbox</a></div>
+  </section>
+  <footer class="colophon">
+    Reviewed <time datetime="2026-05-28">2026-05-28</time> against vendor documentation — every
+    comparison-table row and the verdict carry a source. Part of <a href="/">Infra Atlas</a>
+    · <a href="/decisions/">Decisions</a>. Spot a stale fact?
+    <a href="https://github.com/ineslino/infra-atlas/issues/new" target="_blank" rel="noopener">Open an issue</a>.
+  </footer>
+</div>
+<script src="/nav.js" defer></script>
+</body>
+</html>

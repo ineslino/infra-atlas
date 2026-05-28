@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="color-scheme" content="dark">
+<title>Cross-Cloud · Observability Stacks · Infra Atlas</title>
+<link rel="icon" href="/favicon.svg?v=2" type="image/svg+xml">
+<meta name="description" content="Self-hosted open-source observability stacks compared — Prometheus, Grafana stack (Mimir/Loki/Tempo/Pyroscope), Elastic Stack, OpenSearch, Jaeger, VictoriaMetrics — across signals, OTEL, Kubernetes, multi-tenancy and licensing.">
+<link rel="canonical" href="https://infraatlas.dev/observability-stacks/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Infra Atlas">
+<meta property="og:title" content="Cross-Cloud · Observability Stacks · Infra Atlas">
+<meta property="og:description" content="Self-hosted OSS observability stacks — Prometheus, Grafana, ELK, OpenSearch, Jaeger, VictoriaMetrics — compared across signals, OTLP, K8s and licensing.">
+<meta property="og:url" content="https://infraatlas.dev/observability-stacks/">
+<meta property="og:image" content="https://infraatlas.dev/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Cross-Cloud · Observability Stacks · Infra Atlas">
+<meta name="twitter:description" content="Self-hosted OSS observability stacks compared across signals, OTLP, K8s, and licensing.">
+<meta name="twitter:image" content="https://infraatlas.dev/og.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@300;400;500;600&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/matrix.css">
+
+<style>
+:root {
+  --ink: #0A0907; --ink-2: #100E0C; --surface: #161310; --surface-2: #1E1A15; --surface-3: #2A241C;
+  --line: rgba(244, 239, 230, 0.06); --line-2: rgba(244, 239, 230, 0.14); --line-3: rgba(244, 239, 230, 0.28);
+  --paper: #F4EFE6; --paper-2: rgba(244, 239, 230, 0.66); --paper-3: rgba(244, 239, 230, 0.55); --paper-4: rgba(244, 239, 230, 0.20);
+  --accent: #FF7849; --accent-2: #FFA66E; --accent-glow: rgba(255, 120, 73, 0.22);
+  --mint: #6FE7B5; --gold: #F4C660; --plum: #C586E8; --sky: #7CD7F1; --rose: #F47B7B; --teal: #5BCCC9;
+  --yes: #6FE7B5; --no: #F47B7B; --part: #F4C660;
+  --serif: 'Instrument Serif', 'Times New Roman', serif;
+  --mono: 'JetBrains Mono', ui-monospace, monospace;
+  --sans: 'Manrope', -apple-system, system-ui, sans-serif;
+  /* the OSS / DIY companion to the cloud-native+managed matrix — plum accent to distinguish */
+  --matrix-accent: var(--plum);
+  --matrix-hover: rgba(197, 134, 232, 0.05);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body {
+  background: var(--ink); color: var(--paper);
+  font-family: var(--sans); font-size: 15px; line-height: 1.5;
+  -webkit-font-smoothing: antialiased; min-height: 100vh;
+}
+body {
+  background:
+    radial-gradient(ellipse at 100% -10%, rgba(197, 134, 232, 0.06), transparent 55%),
+    radial-gradient(ellipse at -10% 110%, rgba(111, 231, 181, 0.04), transparent 65%),
+    var(--ink);
+  background-attachment: fixed; overflow-x: hidden;
+}
+
+.grain {
+  pointer-events: none; position: fixed; inset: 0; z-index: 100; opacity: 0.08; mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml;utf8,<svg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.6 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+}
+.scanlines {
+  pointer-events: none; position: fixed; inset: 0; z-index: 99;
+  background: repeating-linear-gradient(180deg, transparent, transparent 2px, rgba(244,239,230,0.012) 2px, rgba(244,239,230,0.012) 3px);
+}
+::selection { background: var(--plum); color: var(--ink); }
+
+.page { max-width: 1500px; margin: 0 auto; padding: 56px 48px 96px; position: relative; }
+
+/* ─── MASTHEAD ─── */
+.masthead {
+  display: grid; grid-template-columns: 1fr auto; gap: 48px; align-items: end;
+  padding-bottom: 36px; border-bottom: 1px solid var(--line); margin-bottom: 32px;
+}
+.masthead__eyebrow {
+  font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.22em; color: var(--paper-3);
+  text-transform: uppercase; display: inline-flex; align-items: center; gap: 12px;
+  text-decoration: none; transition: color 0.2s;
+}
+.masthead__eyebrow:hover { color: var(--paper); }
+.masthead__eyebrow-arrow { color: var(--accent); transition: transform 0.2s; }
+.masthead__eyebrow:hover .masthead__eyebrow-arrow { transform: translateX(-4px); }
+.masthead__title {
+  font-family: var(--serif); font-weight: 400;
+  font-size: clamp(48px, 7vw, 108px); line-height: 0.95; letter-spacing: -0.02em;
+  margin-top: 16px;
+}
+.masthead__title em { font-style: italic; color: var(--plum); }
+.masthead__subtitle { margin-top: 18px; font-size: 16px; color: var(--paper-2); max-width: 640px; line-height: 1.55; }
+.masthead__subtitle span { font-family: var(--serif); font-style: italic; color: var(--paper); }
+.masthead__status { text-align: right; display: flex; flex-direction: column; align-items: flex-end; gap: 14px; padding-bottom: 6px; }
+.status-line { display: inline-flex; align-items: center; gap: 10px; font-family: var(--mono); font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--plum); }
+.status-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--plum); }
+@media (prefers-reduced-motion: no-preference) {
+  .status-dot { animation: pulse 2.4s infinite; }
+  @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(197,134,232,0.5); } 70% { box-shadow: 0 0 0 14px rgba(197,134,232,0); } 100% { box-shadow: 0 0 0 0 rgba(197,134,232,0); } }
+}
+.status-time { font-family: var(--mono); font-size: 12px; color: var(--paper-3); }
+.status-counts { display: flex; gap: 24px; margin-top: 4px; }
+.status-counts > div { text-align: right; font-family: var(--mono); font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--paper-3); display: flex; flex-direction: column; gap: 2px; }
+.status-counts strong { font-family: var(--serif); font-style: italic; font-weight: 400; font-size: 28px; color: var(--paper); letter-spacing: -0.01em; text-transform: none; }
+
+/* ─── READ NOTE ─── */
+.readnote { display: flex; gap: 18px; align-items: flex-start; padding: 20px 24px; margin-bottom: 28px; background: linear-gradient(180deg, rgba(197,134,232,0.06), rgba(197,134,232,0.01)); border: 1px solid rgba(197,134,232,0.18); border-radius: 5px; }
+.readnote__mark { font-family: var(--serif); font-style: italic; font-size: 40px; color: var(--plum); line-height: 0.7; flex-shrink: 0; }
+.readnote__text { font-size: 13.5px; color: var(--paper-2); line-height: 1.62; }
+.readnote__text strong { color: var(--paper); font-weight: 600; }
+.readnote__text em { font-family: var(--serif); font-style: italic; color: var(--paper); font-size: 15px; }
+.readnote__text a { color: var(--plum); text-decoration: underline; text-decoration-color: rgba(197,134,232,0.4); text-underline-offset: 3px; }
+.readnote__text a:hover { text-decoration-color: var(--plum); }
+
+/* ─── FILTERS ─── */
+.filters { display: flex; flex-direction: column; gap: 14px; padding: 18px 22px; background: linear-gradient(180deg, var(--surface) 0%, var(--ink-2) 100%); border: 1px solid var(--line); border-radius: 4px; position: sticky; top: 16px; z-index: 50; backdrop-filter: blur(12px); margin-bottom: 28px; }
+.filter-search { position: relative; }
+.filter-search input { width: 100%; background: var(--ink); border: 1px solid var(--line); color: var(--paper); font-family: var(--mono); font-size: 13px; padding: 12px 16px 12px 42px; border-radius: 3px; outline: none; transition: border-color 0.2s; }
+.filter-search input::placeholder { color: var(--paper-3); }
+.filter-search input:focus { border-color: var(--plum); }
+.filter-search::before { content: '⌕'; position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: var(--paper-3); font-size: 18px; pointer-events: none; }
+.filter-row { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+.filter-chips__label { font-family: var(--mono); font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--paper-3); margin-right: 4px; }
+.chip { background: transparent; border: 1px solid var(--line-2); color: var(--paper-2); font-family: var(--mono); font-size: 11px; letter-spacing: 0.06em; padding: 6px 12px; border-radius: 99px; cursor: pointer; transition: all 0.15s; display: inline-flex; align-items: center; gap: 8px; white-space: nowrap; }
+.chip:hover { border-color: var(--paper-3); color: var(--paper); }
+.chip.is-active { background: var(--paper); border-color: var(--paper); color: var(--ink); }
+
+/* ─── MATRIX overrides ─── */
+.matrix-wrap { margin-bottom: 48px; border: 1px solid var(--line); border-radius: 6px; background: linear-gradient(180deg, var(--ink-2) 0%, var(--ink) 100%); }
+.scroll-hint { position: relative; }
+.scroll-hint::after { content: ''; position: absolute; top: 0; right: 0; bottom: 0; width: 48px; background: linear-gradient(to left, var(--ink), transparent); pointer-events: none; border-radius: 0 5px 5px 0; }
+@media (min-width: 1201px) { .scroll-hint::after { display: none; } }
+.matrix { min-width: 1100px; /* 7 columns; 6 stacks + dimension */ }
+.matrix tbody tr.feature-row td.cell { min-width: 150px; }
+
+/* ─── LEGEND ─── */
+.legend { display: flex; flex-wrap: wrap; gap: 18px; align-items: center; margin-bottom: 28px; padding: 16px 22px; background: var(--surface); border: 1px solid var(--line); border-radius: 4px; font-family: var(--mono); font-size: 11px; color: var(--paper-2); }
+.legend__label { font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--paper-3); }
+.legend__item { display: inline-flex; align-items: center; gap: 8px; }
+
+/* ─── COLOPHON ─── */
+.colophon { margin-top: 64px; padding-top: 32px; border-top: 1px solid var(--line); display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 32px; font-size: 13px; color: var(--paper-3); }
+.colophon h5 { font-family: var(--mono); font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--paper-2); margin-bottom: 10px; font-weight: 500; }
+.colophon p { font-size: 13px; line-height: 1.6; }
+.colophon p a { color: var(--paper-2); text-decoration: underline; text-decoration-color: var(--line-2); text-underline-offset: 3px; }
+.colophon p a:hover { color: var(--plum); }
+
+@media (max-width: 900px) {
+  .page { padding: 32px 22px 72px; }
+  .masthead { grid-template-columns: 1fr; gap: 24px; }
+  .masthead__status { text-align: left; align-items: flex-start; }
+  .filters { position: static; padding: 14px; }
+  .colophon { grid-template-columns: 1fr; gap: 24px; }
+}
+</style>
+</head>
+<body>
+<div class="grain"></div>
+<div class="scanlines"></div>
+
+<div class="page">
+
+  <header class="masthead">
+    <div class="masthead__brand">
+      <a class="masthead__eyebrow" href="../">
+        <span class="masthead__eyebrow-arrow">←</span>
+        Infra Atlas · Cross-Cloud · Observability Stacks
+      </a>
+      <h1 class="masthead__title">Observability <em>Stacks.</em></h1>
+      <p class="masthead__subtitle">
+        Self-hosted open-source stacks compared across
+        <span>signal coverage, OpenTelemetry, Kubernetes integration,
+        multi-tenancy, and licensing.</span> The third buying decision
+        after the cloud-native bundle and the managed platform.
+      </p>
+    </div>
+    <aside class="masthead__status">
+      <div class="status-line">
+        <span class="status-dot"></span>
+        <span class="status-text">Curated · v1</span>
+      </div>
+      <div class="status-time">Verified · <time datetime="2026-05-28">2026-05-28</time></div>
+      <div class="status-counts">
+        <div>Stacks<strong>6</strong></div>
+        <div>Dimensions<strong>14</strong></div>
+        <div>Licenses<strong>3</strong></div>
+      </div>
+    </aside>
+  </header>
+
+  <main id="ia-main">
+
+  <div class="readnote">
+    <span class="readnote__mark">*</span>
+    <p class="readnote__text">
+      <strong>Reading the &quot;stack&quot; column.</strong> Most rows compare a <em>component</em> within a wider deployment — Loki is the logs component of the Grafana stack, Elasticsearch is the storage tier of ELK, etc. A ✓ means the stack covers that signal natively; ◐ means it covers it via a peripheral or with caveats; ✗ means you would pair the stack with something else for that signal. The licence and storage rows describe the open-source distribution; commercial editions may differ. The companion <a href="/observability/">Observability Matrix</a> covers the cloud-native and managed-platform options.
+    </p>
+  </div>
+
+  <section class="filters">
+    <div class="filter-search">
+      <label for="search" class="sr-only">Search stacks, components, or dimensions</label>
+      <input id="search" type="search" autocomplete="off" spellcheck="false" placeholder="Search — component name, dimension, stack…" aria-label="Search stacks, components, or dimensions">
+    </div>
+    <div class="filter-row" id="cat-chips">
+      <!-- populated by JS -->
+    </div>
+  </section>
+
+  <div class="sr-only" id="filter-status" role="status" aria-live="polite"></div>
+
+  <div class="legend">
+    <span class="legend__label">Legend</span>
+    <span class="legend__item"><span class="cell-mark cell-mark--yes" style="width:20px;height:20px;font-size:12px">✓</span> Covered natively</span>
+    <span class="legend__item"><span class="cell-mark cell-mark--part" style="width:20px;height:20px;font-size:12px">◐</span> Peripheral / caveats</span>
+    <span class="legend__item"><span class="cell-mark cell-mark--no" style="width:20px;height:20px;font-size:12px">✗</span> Not covered</span>
+    <span class="legend__item" style="color:var(--plum);font-family:var(--mono);font-size:11px">* footnote in drawer</span>
+  </div>
+
+  <div class="matrix-wrap scroll-hint" id="matrix-wrap">
+    <table class="matrix" id="matrix" aria-label="Self-hosted observability stacks comparison"></table>
+  </div>
+
+  <div class="matrix-empty" id="matrix-empty" role="status" aria-live="polite">
+    <strong>No dimensions match your filters.</strong><br>
+    Try a broader search term, or switch the category to &ldquo;All&rdquo;.
+  </div>
+
+  <footer class="colophon">
+    <div>
+      <h5>Scope</h5>
+      <p>Open-source stacks you deploy and operate yourself. Excludes vendor-hosted versions (Grafana Cloud, Elastic Cloud, Aiven Loki, etc.) — those live in the <a href="/observability/">Observability Matrix</a> Section B. Commercial extensions (Elastic paid tier, Grafana Enterprise) are noted in cell footnotes only where the OSS distribution alone is materially limited.</p>
+    </div>
+    <div>
+      <h5>Sources</h5>
+      <p>Every cell cites the project&rsquo;s official documentation. Licences change — Elastic and Grafana have both made non-trivial changes since 2021. Verify the current licence on the project repo before adopting. Spot an error? <a href="https://github.com/ineslino/infra-atlas/issues/new/choose" target="_blank" rel="noopener">Open an issue →</a></p>
+    </div>
+    <div>
+      <h5>What&rsquo;s not here</h5>
+      <p>Newer all-in-one OSS APMs (SigNoz, HyperDX, OpenObserve) — strong candidates but each has fewer than 3 years of mainstream production references at the time of writing. Operational burden estimates (storage cost, ops headcount) — too deployment-specific to compare meaningfully. See also: <a href="/decisions/cloud-native-vs-managed-vs-self-hosted-observability/">Cloud-native vs managed vs self-hosted decision</a>.</p>
+    </div>
+  </footer>
+
+  </main>
+</div>
+
+<div class="drawer-backdrop" id="drawer-backdrop"></div>
+<aside class="drawer" id="drawer" role="dialog" aria-modal="true" aria-labelledby="drawer-title" hidden>
+  <div class="drawer__head">
+    <button class="drawer__close" id="drawer-close" aria-label="Close (Esc)" type="button" data-action="close-drawer">✕</button>
+    <div class="drawer__eyebrow" id="drawer-eyebrow"></div>
+    <h2 class="drawer__title" id="drawer-title"></h2>
+    <p class="drawer__desc" id="drawer-desc"></p>
+  </div>
+  <div class="drawer__body" id="drawer-body"></div>
+</aside>
+
+<script>
+"use strict";
+const $ = s => document.querySelector(s);
+const $$ = s => [...document.querySelectorAll(s)];
+
+const VENDORS = [
+  { key: "prom",     name: "Prometheus",         short: "Prometheus", swatch: "#E6522C" },
+  { key: "grafana",  name: "Grafana stack",      short: "Grafana",    swatch: "#F46800" },
+  { key: "elk",      name: "Elastic Stack",      short: "ELK",        swatch: "#00BFB3" },
+  { key: "opensearch",name:"OpenSearch",          short: "OpenSearch", swatch: "#005EB8" },
+  { key: "jaeger",   name: "Jaeger",             short: "Jaeger",     swatch: "#A0D8EF" },
+  { key: "vm",       name: "VictoriaMetrics",    short: "VictoriaMetrics", swatch: "#621773" }
+];
+
+const CATEGORIES = [
+  { key: "signals",    label: "Signal Coverage" },
+  { key: "otel",       label: "OpenTelemetry" },
+  { key: "kubernetes", label: "Kubernetes" },
+  { key: "operations", label: "Operations" },
+  { key: "distribution",label:"Distribution" }
+];
+
+const FEATURES = [
+  // ── Signal Coverage ──
+  { id:"metrics", category:"signals", name:"Metrics",
+    desc:"Numeric time-series ingest, storage, and query.",
+    support:{
+      prom:      { level:"yes", value:"Prometheus",      note:"The de-facto OSS metrics standard. Pull-based scrape model with PromQL query language. Single binary; long-term/HA via Thanos sidecar or remote_write.", src:"https://prometheus.io/docs/introduction/overview/" },
+      grafana:   { level:"yes", value:"Mimir",            note:"Horizontally-scalable Prometheus-compatible backend. Stateless ingesters write to object storage. Multi-tenant by design.", src:"https://grafana.com/docs/mimir/latest/" },
+      elk:       { level:"part", value:"Metricbeat",      note:"Metricbeat ships host/process metrics to Elasticsearch. Functional but Elastic Stack is designed log-first; query via Kibana.", src:"https://www.elastic.co/guide/en/beats/metricbeat/current/index.html" },
+      opensearch:{ level:"part", value:"Data Prepper",     note:"Metrics via OpenSearch Data Prepper + index templates. Less polished than the logs/traces path.", src:"https://opensearch.org/docs/latest/data-prepper/" },
+      jaeger:    { level:"no",  value:"—",                note:"Tracing-only — no metrics ingest. Pair with Prometheus or VictoriaMetrics.", src:"https://www.jaegertracing.io/" },
+      vm:        { level:"yes", value:"VictoriaMetrics",   note:"Prometheus-compatible TSDB optimised for very high cardinality. Single-binary (vmsingle) or cluster (vminsert/vmselect/vmstorage).", src:"https://docs.victoriametrics.com/" }
+    }
+  },
+  { id:"logs", category:"signals", name:"Logs",
+    desc:"Log aggregation, storage, and search.",
+    support:{
+      prom:      { level:"no",  value:"—",                note:"Metrics-only — pair with Loki, ELK, or VictoriaLogs.", src:"https://prometheus.io/docs/introduction/overview/" },
+      grafana:   { level:"yes", value:"Loki",              note:"Label-indexed log aggregator with object-storage backend. Cheap by design — labels only, no full-text index. LogQL query language.", src:"https://grafana.com/docs/loki/latest/" },
+      elk:       { level:"yes", value:"Elasticsearch + Logstash", note:"The industry standard for full-text log search. Logstash for ingest pipelines, Kibana for UI. Production-proven at very large scale.", src:"https://www.elastic.co/guide/en/logstash/current/index.html" },
+      opensearch:{ level:"yes", value:"OpenSearch + Data Prepper", note:"Apache-2.0 fork of the ELK stack. Same architecture and query syntax; fully open.", src:"https://opensearch.org/docs/latest/" },
+      jaeger:    { level:"no",  value:"—",                note:"Tracing-only.", src:"https://www.jaegertracing.io/" },
+      vm:        { level:"yes", value:"VictoriaLogs",      note:"Compact log aggregator with LogsQL query language. GA reached 2024; emphasises low storage overhead.", src:"https://docs.victoriametrics.com/victorialogs/" }
+    }
+  },
+  { id:"traces", category:"signals", name:"Traces",
+    desc:"Distributed tracing ingest, storage, and query.",
+    support:{
+      prom:      { level:"no",  value:"—",                note:"No native tracing — pair with Jaeger or Tempo.", src:"https://prometheus.io/docs/introduction/overview/" },
+      grafana:   { level:"yes", value:"Tempo",             note:"Object-storage-backed trace store. Designed without a search index — queried by trace ID or via exemplars from metrics. Massive scale at low cost.", src:"https://grafana.com/docs/tempo/latest/" },
+      elk:       { level:"yes", value:"Elastic APM",       note:"APM server plus agents for Java, Node, Python, .NET, Go. Traces stored in Elasticsearch indices.", src:"https://www.elastic.co/guide/en/apm/guide/current/index.html" },
+      opensearch:{ level:"yes", value:"Trace Analytics",   note:"OTLP traces via Data Prepper into OpenSearch; the Trace Analytics plugin provides visualisation.", src:"https://opensearch.org/docs/latest/observing-your-data/trace/" },
+      jaeger:    { level:"yes", value:"Jaeger",            note:"The CNCF graduated reference tracing system. Storage pluggable across Cassandra, Elasticsearch, OpenSearch, or local Badger.", src:"https://www.jaegertracing.io/docs/latest/architecture/" },
+      vm:        { level:"part", value:"VictoriaTraces (beta)", note:"Newer addition; OTLP traces in beta as of 2025. Most users still pair VictoriaMetrics with Tempo or Jaeger.", src:"https://docs.victoriametrics.com/" }
+    }
+  },
+  { id:"profiling", category:"signals", name:"Continuous profiling",
+    desc:"Always-on CPU and memory profiling for production code.",
+    support:{
+      prom:      { level:"no",  value:"—",                note:"Out of scope. Pair with Pyroscope or a commercial profiler.", src:"https://prometheus.io/docs/introduction/overview/" },
+      grafana:   { level:"yes", value:"Pyroscope",         note:"Merged into the Grafana stack. eBPF-based and SDK-instrumented profiling across Go, Java, Python, Ruby, Node, .NET.", src:"https://grafana.com/docs/pyroscope/latest/" },
+      elk:       { level:"part", value:"Universal Profiling", note:"Elastic Universal Profiling uses eBPF; available only in the paid commercial tier as of 2026.", src:"https://www.elastic.co/observability/universal-profiling" },
+      opensearch:{ level:"no",  value:"—",                note:"Not part of OpenSearch.", src:"https://opensearch.org/" },
+      jaeger:    { level:"no",  value:"—",                note:"Tracing-only.", src:"https://www.jaegertracing.io/" },
+      vm:        { level:"no",  value:"—",                note:"Not part of VictoriaMetrics.", src:"https://docs.victoriametrics.com/" }
+    }
+  },
+  { id:"rum", category:"signals", name:"RUM / Frontend monitoring",
+    desc:"Real-user monitoring for web and mobile applications.",
+    support:{
+      prom:      { level:"no",  value:"—",                note:"Server-side only.", src:"https://prometheus.io/docs/introduction/overview/" },
+      grafana:   { level:"yes", value:"Faro",              note:"Grafana Faro Web SDK for frontend observability — Core Web Vitals, JS errors, browser-to-backend correlation through Tempo.", src:"https://grafana.com/docs/grafana-cloud/monitor-applications/frontend-observability/" },
+      elk:       { level:"yes", value:"Elastic RUM",       note:"RUM agent ships browser metrics and errors to Elasticsearch via the APM server.", src:"https://www.elastic.co/guide/en/apm/agent/rum-js/current/index.html" },
+      opensearch:{ level:"no",  value:"—",                note:"No first-party RUM agent.", src:"https://opensearch.org/" },
+      jaeger:    { level:"no",  value:"—",                note:"No frontend agent.", src:"https://www.jaegertracing.io/" },
+      vm:        { level:"no",  value:"—",                note:"No frontend monitoring product.", src:"https://docs.victoriametrics.com/" }
+    }
+  },
+  // ── OTel ──
+  { id:"otlp", category:"otel", name:"OTLP ingest",
+    desc:"Accepts telemetry data via the OpenTelemetry Protocol.",
+    support:{
+      prom:      { level:"yes", value:"OTLP receiver",     note:"OTLP metrics receiver since Prometheus 2.55 (November 2024); logs and traces are still routed through an external OpenTelemetry Collector.", src:"https://prometheus.io/docs/prometheus/latest/feature_flags/#otlp-receiver" },
+      grafana:   { level:"yes", value:"OTLP native",       note:"Mimir, Loki, Tempo all accept OTLP. Grafana Alloy is the recommended OTel Collector distribution.", src:"https://grafana.com/docs/alloy/latest/" },
+      elk:       { level:"yes", value:"Elastic OTLP",      note:"OTLP endpoint via the APM Server / EDOT (Elastic Distribution of OpenTelemetry). GA in 2024.", src:"https://www.elastic.co/guide/en/observability/current/apm-open-telemetry-direct.html" },
+      opensearch:{ level:"yes", value:"Data Prepper OTLP", note:"OpenSearch Data Prepper accepts OTLP traces and metrics natively.", src:"https://opensearch.org/docs/latest/data-prepper/pipelines/configuration/sources/otel-trace/" },
+      jaeger:    { level:"yes", value:"OTLP",              note:"Native OTLP receiver in Jaeger v2 (2024); replaces the older Jaeger ingest protocols as the recommended path.", src:"https://www.jaegertracing.io/docs/latest/architecture/" },
+      vm:        { level:"yes", value:"OTLP",              note:"VictoriaMetrics and VictoriaLogs both accept OTLP via dedicated endpoints.", src:"https://docs.victoriametrics.com/" }
+    }
+  },
+  { id:"otelsdk", category:"otel", name:"OTel SDK / instrumentation",
+    desc:"Curated language SDKs or auto-instrumentation distribution.",
+    support:{
+      prom:      { level:"part", value:"Standard OTel SDK", note:"Applications instrument with the OTel SDK and export to Prometheus via OTLP (2.55+) or the classic exposition format.", src:"https://opentelemetry.io/docs/" },
+      grafana:   { level:"yes", value:"OTel-native",       note:"The Grafana stack is OTel-first — every signal accepts OTLP. Auto-instrumentation supported across Java, Python, Node, .NET, Go.", src:"https://opentelemetry.io/docs/" },
+      elk:       { level:"yes", value:"EDOT",              note:"Elastic Distribution of OpenTelemetry covers Java, Node, Python, .NET, iOS. Recommended path on Elastic since 2024.", src:"https://www.elastic.co/guide/en/observability/current/apm-open-telemetry-direct.html" },
+      opensearch:{ level:"part", value:"Standard OTel SDK", note:"No curated OpenSearch distribution; standard OTel SDK ships via Data Prepper.", src:"https://opentelemetry.io/docs/" },
+      jaeger:    { level:"part", value:"Standard OTel SDK", note:"OTel SDK ships traces via OTLP; Jaeger itself no longer provides its own SDKs (deprecated 2022).", src:"https://www.jaegertracing.io/docs/latest/client-libraries/" },
+      vm:        { level:"part", value:"Standard OTel SDK", note:"No curated VictoriaMetrics distribution; standard OTel SDK works against the OTLP endpoint.", src:"https://opentelemetry.io/docs/" }
+    }
+  },
+  // ── Kubernetes ──
+  { id:"operator", category:"kubernetes", name:"Operator / Helm chart",
+    desc:"Maturity of the canonical K8s installation path.",
+    support:{
+      prom:      { level:"yes", value:"Prometheus Operator", note:"CRD-based operator (kube-prometheus) is the de-facto K8s installation method. Includes Grafana, Alertmanager, exporters.", src:"https://github.com/prometheus-operator/prometheus-operator" },
+      grafana:   { level:"yes", value:"Helm + Tanka",       note:"Comprehensive Helm charts (grafana/loki-stack, grafana/k8s-monitoring). Multiple operator projects for individual components.", src:"https://grafana.com/docs/grafana-cloud/monitor-infrastructure/kubernetes-monitoring/" },
+      elk:       { level:"yes", value:"ECK Operator",       note:"Elastic Cloud on Kubernetes — official, production-mature operator. Supports Elasticsearch, Kibana, APM Server, Beats, Logstash.", src:"https://www.elastic.co/guide/en/cloud-on-k8s/current/index.html" },
+      opensearch:{ level:"yes", value:"OpenSearch Operator", note:"Community-maintained operator under the OpenSearch project. Helm charts mature.", src:"https://github.com/opensearch-project/opensearch-k8s-operator" },
+      jaeger:    { level:"yes", value:"Jaeger Operator",    note:"CNCF-graduated operator. Production-ready.", src:"https://www.jaegertracing.io/docs/latest/operator/" },
+      vm:        { level:"yes", value:"VictoriaMetrics Operator", note:"Comprehensive operator covering vmagent, vmsingle, vmcluster, vmalert, and the long-term storage components.", src:"https://docs.victoriametrics.com/operator/" }
+    }
+  },
+  { id:"k8smetrics", category:"kubernetes", name:"Cluster metrics (built-in)",
+    desc:"Out-of-the-box collection of node, pod, and control-plane metrics.",
+    support:{
+      prom:      { level:"yes", value:"node-exporter + kube-state-metrics", note:"Industry-standard exporter pattern; assembled via kube-prometheus.", src:"https://github.com/prometheus-operator/kube-prometheus" },
+      grafana:   { level:"yes", value:"grafana/k8s-monitoring", note:"One Helm chart deploys Alloy + node-exporter + cAdvisor + kube-state-metrics + Loki agents.", src:"https://grafana.com/docs/grafana-cloud/monitor-infrastructure/kubernetes-monitoring/" },
+      elk:       { level:"yes", value:"Metricbeat k8s module", note:"Beats Kubernetes module deployed as a DaemonSet collects node/pod/state metrics.", src:"https://www.elastic.co/guide/en/beats/metricbeat/current/metricbeat-module-kubernetes.html" },
+      opensearch:{ level:"part", value:"Via Beats or Vector", note:"No first-party agent; use generic Kubernetes metric shippers (Filebeat, Fluent Bit, Vector) into Data Prepper.", src:"https://opensearch.org/docs/latest/" },
+      jaeger:    { level:"no",  value:"—",                 note:"Tracing-only.", src:"https://www.jaegertracing.io/" },
+      vm:        { level:"yes", value:"vmagent + standard exporters", note:"vmagent is a Prometheus-compatible scraper; pairs with node-exporter and kube-state-metrics directly.", src:"https://docs.victoriametrics.com/vmagent/" }
+    }
+  },
+  // ── Operations ──
+  { id:"multitenancy", category:"operations", name:"Multi-tenancy",
+    desc:"Native isolation between tenants in a shared deployment.",
+    support:{
+      prom:      { level:"no",  value:"Single-tenant",     note:"No native multi-tenancy. Run per-team Prometheus instances or front with Thanos/Cortex.", src:"https://prometheus.io/docs/introduction/faq/" },
+      grafana:   { level:"yes", value:"X-Scope-OrgID",     note:"Mimir, Loki, and Tempo all support tenant headers. First-class multi-tenancy throughout the stack.", src:"https://grafana.com/docs/mimir/latest/manage/secure/" },
+      elk:       { level:"part", value:"Index-level",      note:"Document-level security in the paid commercial tier; OSS distribution is index-isolation only.", src:"https://www.elastic.co/guide/en/elasticsearch/reference/current/security-features.html" },
+      opensearch:{ level:"part", value:"Fine-grained ACL", note:"Index- and document-level access control; no soft-tenant header model like Mimir.", src:"https://opensearch.org/docs/latest/security/access-control/index/" },
+      jaeger:    { level:"no",  value:"Per-deployment",    note:"No tenancy header. Isolate via separate Jaeger instances or backend ACLs.", src:"https://www.jaegertracing.io/" },
+      vm:        { level:"yes", value:"Native accountID",  note:"Cluster version is natively multi-tenant via accountID/projectID labels routed through vminsert/vmselect.", src:"https://docs.victoriametrics.com/cluster-victoriametrics/" }
+    }
+  },
+  { id:"ha", category:"operations", name:"HA / clustered mode",
+    desc:"Built-in support for high availability and horizontal scale.",
+    support:{
+      prom:      { level:"part", value:"Pair / Thanos",    note:"Single Prometheus is not HA — run two with identical scrape configs. Long-term HA via Thanos sidecar or remote_write to a clustered backend.", src:"https://thanos.io/" },
+      grafana:   { level:"yes", value:"Stateless + object storage", note:"Every Grafana stack component separates compute from storage — scale ingesters and queriers horizontally with zero state.", src:"https://grafana.com/docs/mimir/latest/" },
+      elk:       { level:"yes", value:"Clustered ES",      note:"Multi-master, shard-replicated Elasticsearch cluster. HA is the default deployment posture.", src:"https://www.elastic.co/guide/en/elasticsearch/reference/current/high-availability.html" },
+      opensearch:{ level:"yes", value:"Clustered",         note:"Same model as Elasticsearch — multi-node cluster with shard replication.", src:"https://opensearch.org/docs/latest/cluster/" },
+      jaeger:    { level:"yes", value:"Multi-instance",    note:"Stateless collectors and query services; HA fully depends on the chosen storage backend (Cassandra, ES, OpenSearch).", src:"https://www.jaegertracing.io/docs/latest/architecture/" },
+      vm:        { level:"yes", value:"Cluster version",   note:"vminsert / vmselect / vmstorage components scale independently with replicated storage.", src:"https://docs.victoriametrics.com/cluster-victoriametrics/" }
+    }
+  },
+  { id:"longterm", category:"operations", name:"Long-term / object storage",
+    desc:"Native support for cheap, long-term retention.",
+    support:{
+      prom:      { level:"part", value:"Via Thanos / remote_write", note:"Local TSDB is short-term (15 days default); long-term via Thanos to S3 or remote_write to Mimir / VictoriaMetrics.", src:"https://thanos.io/" },
+      grafana:   { level:"yes", value:"S3 / GCS / Azure Blob native", note:"All Grafana stack components use object storage as their primary persistent layer.", src:"https://grafana.com/docs/mimir/latest/" },
+      elk:       { level:"yes", value:"Snapshot to S3 / GCS", note:"Snapshot/restore to object storage. Data tiers (hot/warm/cold/frozen) enable tiered retention.", src:"https://www.elastic.co/guide/en/elasticsearch/reference/current/snapshot-restore.html" },
+      opensearch:{ level:"yes", value:"Snapshot to S3",    note:"Same snapshot mechanism as Elasticsearch. Searchable snapshots are commercial-tier on Elastic but open on OpenSearch.", src:"https://opensearch.org/docs/latest/tuning-your-cluster/availability-and-recovery/snapshots/" },
+      jaeger:    { level:"part", value:"Depends on storage", note:"Backend-dependent — Cassandra and Elasticsearch are most common production choices. Badger is single-node / dev only.", src:"https://www.jaegertracing.io/docs/latest/deployment/" },
+      vm:        { level:"yes", value:"Long-term TSDB",    note:"Native long-term storage with strong compression. vmbackup/vmrestore for snapshots to S3 or GCS.", src:"https://docs.victoriametrics.com/#backups" }
+    }
+  },
+  // ── Distribution ──
+  { id:"license", category:"distribution", name:"License",
+    desc:"Open-source licence of the core distribution as of 2026.",
+    support:{
+      prom:      { level:"yes", value:"Apache 2.0",        note:"CNCF graduated; fully permissive open source.", src:"https://github.com/prometheus/prometheus/blob/main/LICENSE" },
+      grafana:   { level:"part", value:"AGPLv3",           note:"Grafana moved to AGPLv3 in 2021; Mimir, Loki, Tempo and Pyroscope also shifted to AGPLv3 in late 2023. Source-available — not Apache-permissive.", src:"https://grafana.com/blog/2024/01/02/grafana-loki-pyroscope-tempo-license-update/" },
+      elk:       { level:"part", value:"AGPLv3 (since 2024)", note:"Reverted from SSPL/Elastic License v2 to AGPLv3 in 2024 — still source-available, not Apache-permissive. Kibana follows the same path.", src:"https://www.elastic.co/blog/elastic-license-fork-aws" },
+      opensearch:{ level:"yes", value:"Apache 2.0",        note:"AWS-led Apache 2.0 fork after Elastic's 2021 license change. Permissive.", src:"https://github.com/opensearch-project/OpenSearch/blob/main/LICENSE.txt" },
+      jaeger:    { level:"yes", value:"Apache 2.0",        note:"CNCF graduated; fully permissive.", src:"https://github.com/jaegertracing/jaeger/blob/main/LICENSE" },
+      vm:        { level:"yes", value:"Apache 2.0",        note:"Apache 2.0 for the open-source edition; Enterprise edition adds proprietary features.", src:"https://github.com/VictoriaMetrics/VictoriaMetrics/blob/master/LICENSE" }
+    }
+  },
+  { id:"storage", category:"distribution", name:"Primary backend storage",
+    desc:"What the stack writes its persistent data to.",
+    support:{
+      prom:      { level:"yes", value:"Local TSDB",        note:"On-disk Time Series Database; ~15-day default retention. Longer via remote_write or Thanos sidecar to object storage.", src:"https://prometheus.io/docs/prometheus/latest/storage/" },
+      grafana:   { level:"yes", value:"Object storage",    note:"S3, GCS, Azure Blob — every component is designed to write directly to object storage.", src:"https://grafana.com/docs/mimir/latest/" },
+      elk:       { level:"yes", value:"Elasticsearch indices", note:"Sharded inverted-index on local disk; cluster-replicated. Object-storage tier available for older data.", src:"https://www.elastic.co/guide/en/elasticsearch/reference/current/" },
+      opensearch:{ level:"yes", value:"OpenSearch indices", note:"Same Elasticsearch-derived storage model with sharded indices on local disk.", src:"https://opensearch.org/docs/latest/" },
+      jaeger:    { level:"yes", value:"Pluggable backend", note:"Choose per deployment — Cassandra and Elasticsearch are the production-grade options; Badger is single-node only.", src:"https://www.jaegertracing.io/docs/latest/deployment/" },
+      vm:        { level:"yes", value:"Custom TSDB",       note:"Custom columnar TSDB; published benchmarks claim ~7× the compression ratio of Prometheus on equivalent data.", src:"https://docs.victoriametrics.com/" }
+    }
+  }
+];
+
+const state = { query: "", category: "all" };
+
+function applyFilter() {
+  const q = state.query.trim().toLowerCase();
+  const anyFilter = !!q || state.category !== "all";
+  IA.matrix.applyVisibility({
+    table: $("#matrix"), features: FEATURES, categories: CATEGORIES,
+    isVisibleFn: (f) => {
+      if (state.category !== "all" && f.category !== state.category) return false;
+      if (!q) return true;
+      const hay = ([f.name, f.desc,
+        ...VENDORS.map(v => { const s = f.support[v.key]||{}; return `${v.name} ${v.short} ${s.value||""} ${s.note||""}`; })
+      ]).join(" ").toLowerCase();
+      return hay.includes(q);
+    },
+    emptyEl: $("#matrix-empty"),
+    statusEl: $("#filter-status"),
+    statusNoun: "dimension",
+    anyFilterActive: anyFilter
+  });
+}
+
+function renderChips() {
+  const chips = $("#cat-chips");
+  chips.innerHTML = `<span class="filter-chips__label">Category</span>
+    <button class="chip is-active" data-cat="all" aria-pressed="true">All</button>` +
+    CATEGORIES.map(c => `<button class="chip" data-cat="${c.key}" aria-pressed="false">${IA.matrix.escapeHtml(c.label)}</button>`).join("");
+  chips.querySelectorAll(".chip[data-cat]").forEach(b => {
+    b.addEventListener("click", () => {
+      state.category = b.dataset.cat;
+      chips.querySelectorAll(".chip[data-cat]").forEach(x => {
+        const active = x.dataset.cat === state.category;
+        x.classList.toggle("is-active", active);
+        x.setAttribute("aria-pressed", active ? "true" : "false");
+      });
+      applyFilter();
+    });
+  });
+}
+
+function openFeatureDrawer(featureId, vendorKey) {
+  const f = FEATURES.find(x => x.id === featureId);
+  if (!f) return;
+  const cat = (CATEGORIES.find(c => c.key === f.category) || {}).label || "";
+  const head = `
+    <button class="drawer__close" id="drawer-close" type="button" aria-label="Close (Esc)" data-action="close-drawer">✕</button>
+    <div class="drawer__eyebrow">${IA.matrix.escapeHtml(cat)}</div>
+    <h2 class="drawer__title" id="drawer-title">${IA.matrix.escapeHtml(f.name)}</h2>
+    <p class="drawer__desc">${IA.matrix.escapeHtml(f.desc)}</p>
+  `;
+  let body = `<div class="drawer__section"><h4>Per-stack detail</h4>`;
+  VENDORS.forEach(v => {
+    const s = f.support[v.key] || { level:"no", value:"—", note:"" };
+    const val = s.value || (s.level==="yes"?"✓":s.level==="part"?"◐":"✗");
+    const mark = s.level==="yes"?"✓":s.level==="part"?"◐":"✗";
+    const markLabel = s.level === "yes" ? "Covered" : s.level === "part" ? "Peripheral / caveats" : "Not covered";
+    const focusStyle = vendorKey === v.key
+      ? 'style="border-color: var(--plum); background: rgba(197,134,232,0.05);"'
+      : '';
+    body += `<div class="vendor-row" ${focusStyle}>
+      <span class="vendor-row__mark vendor-row__mark--${s.level}" role="img" aria-label="${markLabel}">${mark}</span>
+      <div>
+        <div class="vendor-row__name"><span class="swatch" style="background:${v.swatch}" aria-hidden="true"></span>${IA.matrix.escapeHtml(v.name)}</div>
+        <div class="vendor-row__value vendor-row__value--${s.level !== "yes" ? s.level : ""}">${IA.matrix.escapeHtml(val)}</div>
+        ${s.note ? `<div class="vendor-row__note">${IA.matrix.escapeHtml(s.note)}</div>` : ""}
+        ${s.src ? `<div class="vendor-row__src"><a href="${IA.matrix.escapeHtml(s.src)}" target="_blank" rel="noopener">Official docs →</a></div>` : ""}
+      </div></div>`;
+  });
+  body += `</div>`;
+  IA.matrix.drawer.open(head, body);
+}
+
+function init() {
+  if (!window.IA || !window.IA.matrix) { setTimeout(init, 20); return; }
+  IA.matrix.drawer.init();
+  IA.matrix.wireDelegation(openFeatureDrawer);
+  IA.matrix.renderTable({
+    tableEl: $("#matrix"),
+    vendors: VENDORS, categories: CATEGORIES, features: FEATURES,
+    dimensionLabel: "Dimension"
+  });
+  renderChips();
+  $("#search").addEventListener("input", function() { state.query = this.value; applyFilter(); });
+  applyFilter();
+}
+
+if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init);
+else init();
+</script>
+<script src="/assets/matrix.js" defer></script>
+<script src="/nav.js" defer></script>
+</body>
+</html>
