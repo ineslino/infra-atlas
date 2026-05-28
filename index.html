@@ -970,15 +970,15 @@ body {
     <aside class="hero__status">
       <div class="hero__stat">
         <div class="hero__stat-label">Instruments<br>shipping today</div>
-        <div class="hero__stat-value">19<span class="unit">/ 19</span></div>
+        <div class="hero__stat-value" id="stat-instruments">21</div>
       </div>
       <div class="hero__stat">
         <div class="hero__stat-label">Cloud providers<br>tracked</div>
         <div class="hero__stat-value">5</div>
       </div>
       <div class="hero__stat">
-        <div class="hero__stat-label">APIM platforms<br>compared</div>
-        <div class="hero__stat-value">7</div>
+        <div class="hero__stat-label">Sourced from<br>vendor docs</div>
+        <div class="hero__stat-value">100<span class="unit">%</span></div>
       </div>
     </aside>
   </section>
@@ -1705,6 +1705,26 @@ body {
     });
   }, { rootMargin: "-40% 0px -55% 0px", threshold: 0 });
   deps.forEach(function (d) { io.observe(d); });
+})();
+
+/* Instrument counts — derived from the DOM so the hero stat and the section
+   header can never drift out of sync with the actual cards again. */
+(function () {
+  var cards = document.querySelectorAll(".instruments .instrument");
+  if (!cards.length) return;
+  var live = 0, dev = 0, planned = 0;
+  cards.forEach(function (c) {
+    if (c.classList.contains("is-live")) live++;
+    else if (c.classList.contains("is-dev")) dev++;
+    else if (c.classList.contains("is-planned")) planned++;
+  });
+  var stat = document.getElementById("stat-instruments");
+  if (stat) stat.textContent = live;
+  var meta = document.querySelector(".instruments .section-head__meta");
+  if (meta) {
+    meta.innerHTML = "<strong>" + live + "</strong> Live · <strong>" + dev +
+      "</strong> In Dev · <strong>" + planned + "</strong> Planned";
+  }
 })();
 </script>
 <script src="/nav.js" defer></script>
