@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="color-scheme" content="dark">
+<title>Testing &amp; Integration Toolbox · Infra Atlas</title>
+<link rel="icon" href="/favicon.svg?v=2" type="image/svg+xml">
+<meta name="description" content="Open-source tools for cloud integration testing and infrastructure validation — floci, LocalStack, Testcontainers, Terratest, BATS, Mockoon, Pact. Test locally before you deploy.">
+<link rel="canonical" href="https://infraatlas.dev/toolbox/testing/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Infra Atlas">
+<meta property="og:title" content="Testing &amp; Integration Toolbox · Infra Atlas">
+<meta property="og:description" content="Cloud emulators, integration test frameworks, service mocks, and contract testing tools for infrastructure engineers.">
+<meta property="og:url" content="https://infraatlas.dev/toolbox/testing/">
+<meta property="og:image" content="https://infraatlas.dev/og.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Testing &amp; Integration Toolbox · Infra Atlas">
+<meta name="twitter:description" content="Cloud emulators, integration test frameworks, service mocks, and contract testing tools for infrastructure engineers.">
+<meta name="twitter:image" content="https://infraatlas.dev/og.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@300;400;500;600&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/tools/shared.css">
+<style>.subtitle { max-width: 760px; }</style>
+</head>
+<body>
+<div class="grain"></div>
+<div class="scanlines"></div>
+<div class="page">
+
+  <header class="masthead">
+    <a class="eyebrow" href="/toolbox/"><span class="arrow">←</span> Infra Atlas · Toolbox</a>
+    <h1 class="title">Testing &amp; <em>Integration.</em></h1>
+    <p class="subtitle">The tools that let you test infrastructure before it touches a real cloud account. Cloud service emulators that start in milliseconds, integration test frameworks for Terraform and Kubernetes, disposable database containers for CI, and API mocks that live in your repo. Test locally, test cheaply, test without credentials.</p>
+  </header>
+
+  <main id="ia-main">
+
+    <section class="tbx-filters" aria-label="Filter tools by tag">
+      <div class="tbx-filters__group">
+        <span class="tbx-filters__label">Form</span>
+        <button class="tbx-chip" data-tag="CLI">CLI</button>
+        <button class="tbx-chip" data-tag="GUI">GUI</button>
+        <button class="tbx-chip" data-tag="lib">Library</button>
+      </div>
+      <div class="tbx-filters__group">
+        <span class="tbx-filters__label">Language</span>
+        <button class="tbx-chip" data-tag="Go">Go</button>
+        <button class="tbx-chip" data-tag="Rust">Rust</button>
+        <button class="tbx-chip" data-tag="Python">Python</button>
+        <button class="tbx-chip" data-tag="JS">JS</button>
+        <button class="tbx-chip" data-tag="Shell">Shell</button>
+      </div>
+      <div class="tbx-filters__group">
+        <span class="tbx-filters__label">Picks</span>
+        <button class="tbx-chip" data-tag="pick">★ Must-install</button>
+      </div>
+      <button class="tbx-clear" id="tbx-clear" type="button">Clear</button>
+    </section>
+
+    <section class="tbx-list" id="tbx-list" aria-label="Tools">
+
+      <article class="tbx-row" data-tags="CLI Rust dev pick">
+        <div class="tbx-row__head">
+          <span class="tbx-row__name">floci</span>
+          <span class="tbx-row__star" title="Must-install pick">★</span>
+          <span class="tbx-row__replaces">replaces <strong>LocalStack</strong></span>
+        </div>
+        <p class="tbx-row__tldr">Drop-in local cloud emulator suite: 47 AWS services, 8 Azure services, and 7 GCP services on a single native binary. Starts in 24 ms and idles at 13 MiB — compared to LocalStack's Docker container that takes seconds to spin up and hundreds of MB of RAM. MIT-licensed with no pricing tiers and no community-edition sunset. Listens on port 4566 so existing LocalStack clients work unchanged. The main reason to switch: it runs wherever a Rust binary runs, needs no Docker daemon, and has no authentication gates.</p>
+        <div class="tbx-row__tags">
+          <span class="tbx-row__tag tbx-row__tag--form">CLI</span>
+          <span class="tbx-row__tag tbx-row__tag--lang">Rust</span>
+          <span class="tbx-row__tag">dev</span>
+        </div>
+        <a class="tbx-row__repo" href="https://github.com/floci-io/floci" target="_blank" rel="noopener">floci-io/floci<span class="arr">→</span></a>
+      </article>
+
+      <article class="tbx-row" data-tags="CLI Python mature dev">
+        <div class="tbx-row__head">
+          <span class="tbx-row__name">LocalStack</span>
+          <span class="tbx-row__replaces">replaces <strong>real AWS accounts in dev/CI</strong></span>
+        </div>
+        <p class="tbx-row__tldr">The original local AWS emulator. Runs as a Docker container and emulates S3, SQS, DynamoDB, Lambda, IAM, and ~80 other services. Community edition covers the most common services; Pro adds more. The dominant choice for existing projects and the one most SDKs and tutorials target — if you're starting a new project, consider floci for the lighter footprint, but LocalStack's ecosystem depth (CDK local, SAM local, Terraform provider) is unmatched.</p>
+        <div class="tbx-row__tags">
+          <span class="tbx-row__tag tbx-row__tag--form">CLI</span>
+          <span class="tbx-row__tag tbx-row__tag--lang">Python</span>
+          <span class="tbx-row__tag">mature</span>
+          <span class="tbx-row__tag">dev</span>
+        </div>
+        <a class="tbx-row__repo" href="https://github.com/localstack/localstack" target="_blank" rel="noopener">localstack/localstack<span class="arr">→</span></a>
+      </article>
+
+      <article class="tbx-row" data-tags="lib Go dev">
+        <div class="tbx-row__head">
+          <span class="tbx-row__name">Testcontainers</span>
+          <span class="tbx-row__replaces">replaces <strong>Docker Compose stubs in CI</strong></span>
+        </div>
+        <p class="tbx-row__tldr">Spin up real Docker containers as throwaway test dependencies — a Postgres instance, a Redis cluster, a Kafka broker — directly from your test code, with automatic lifecycle management and port mapping. Polyglot: official SDKs for Go, Java, .NET, Node, Python, and Rust. The key insight is that your test spins up a real database rather than a mock, giving you confidence that your code works against the actual engine. Containers are destroyed at the end of the test run with no manual cleanup.</p>
+        <div class="tbx-row__tags">
+          <span class="tbx-row__tag tbx-row__tag--form">lib</span>
+          <span class="tbx-row__tag tbx-row__tag--lang">Go</span>
+          <span class="tbx-row__tag">dev</span>
+        </div>
+        <a class="tbx-row__repo" href="https://github.com/testcontainers/testcontainers-go" target="_blank" rel="noopener">testcontainers/testcontainers-go<span class="arr">→</span></a>
+      </article>
+
+      <article class="tbx-row" data-tags="lib Go dev IaC">
+        <div class="tbx-row__head">
+          <span class="tbx-row__name">Terratest</span>
+          <span class="tbx-row__replaces">replaces <strong>manual post-apply validation</strong></span>
+        </div>
+        <p class="tbx-row__tldr">Go library for writing automated tests for Terraform modules, Helm charts, Packer templates, and Kubernetes configs. Tests run <code>terraform apply</code>, make real cloud API calls to verify resources, then run <code>terraform destroy</code>. Built-in helpers cover SSH, HTTP, Kubernetes, AWS, GCP, and Azure SDKs. The pattern: write a test that deploys your module, asserts the outputs are correct, and tears it down — the same module you ship is the one being tested. Essential for shared Terraform modules that need regression coverage.</p>
+        <div class="tbx-row__tags">
+          <span class="tbx-row__tag tbx-row__tag--form">lib</span>
+          <span class="tbx-row__tag tbx-row__tag--lang">Go</span>
+          <span class="tbx-row__tag">dev</span>
+          <span class="tbx-row__tag">IaC</span>
+        </div>
+        <a class="tbx-row__repo" href="https://github.com/gruntwork-io/terratest" target="_blank" rel="noopener">gruntwork-io/terratest<span class="arr">→</span></a>
+      </article>
+
+      <article class="tbx-row" data-tags="CLI Shell dev">
+        <div class="tbx-row__head">
+          <span class="tbx-row__name">BATS</span>
+          <span class="tbx-row__replaces">replaces <strong>ad-hoc shell assertions</strong></span>
+        </div>
+        <p class="tbx-row__tldr">Bash Automated Testing System — write tests for shell scripts, CLI tools, and anything that runs as a command. Tests look like: <code>@test "curl returns 200" { run curl -s -o /dev/null -w "%{http_code}" http://localhost; [ "$output" = "200" ]; }</code>. TAP-compatible output integrates with any CI system. Invaluable for testing deployment scripts, wrapper scripts, and CI pipeline helpers that nobody tests because "it's just bash". BATS-core is the actively maintained fork.</p>
+        <div class="tbx-row__tags">
+          <span class="tbx-row__tag tbx-row__tag--form">CLI</span>
+          <span class="tbx-row__tag tbx-row__tag--lang">Shell</span>
+          <span class="tbx-row__tag">dev</span>
+        </div>
+        <a class="tbx-row__repo" href="https://github.com/bats-core/bats-core" target="_blank" rel="noopener">bats-core/bats-core<span class="arr">→</span></a>
+      </article>
+
+      <article class="tbx-row" data-tags="CLI GUI JS dev">
+        <div class="tbx-row__head">
+          <span class="tbx-row__name">Mockoon</span>
+          <span class="tbx-row__replaces">replaces <strong>Postman mock server</strong></span>
+        </div>
+        <p class="tbx-row__tldr">API mock server where the mock definition is a plain JSON file that lives in your repo. Desktop GUI for designing mocks and a CLI (<code>mockoon-cli start --data api.json</code>) for running them in CI with no GUI. Define routes, response bodies, status codes, delays, and dynamic templating. The main reason to switch from Postman mock server: collections are files you own, diff in PRs, and run offline — no account, no sync service, no cloud dependency. MIT-licensed.</p>
+        <div class="tbx-row__tags">
+          <span class="tbx-row__tag tbx-row__tag--form">CLI</span>
+          <span class="tbx-row__tag tbx-row__tag--form">GUI</span>
+          <span class="tbx-row__tag tbx-row__tag--lang">JS</span>
+          <span class="tbx-row__tag">dev</span>
+        </div>
+        <a class="tbx-row__repo" href="https://github.com/mockoon/mockoon" target="_blank" rel="noopener">mockoon/mockoon<span class="arr">→</span></a>
+      </article>
+
+      <article class="tbx-row" data-tags="lib Go JS dev">
+        <div class="tbx-row__head">
+          <span class="tbx-row__name">Pact</span>
+          <span class="tbx-row__replaces">replaces <strong>integration tests between services</strong></span>
+        </div>
+        <p class="tbx-row__tldr">Consumer-driven contract testing framework. The consumer (client) writes tests that define what API contract it expects; those tests generate a "pact" file. The provider (server) then verifies it honours that contract — without both services needing to run at the same time. The key benefit in microservice architectures: you know a contract is broken before deploying, not after. SDKs for Go, JS/TS, Java, Python, Ruby, .NET. PactFlow provides a hosted broker; the OSS broker runs on Docker for self-hosted use.</p>
+        <div class="tbx-row__tags">
+          <span class="tbx-row__tag tbx-row__tag--form">lib</span>
+          <span class="tbx-row__tag tbx-row__tag--lang">Go</span>
+          <span class="tbx-row__tag tbx-row__tag--lang">JS</span>
+          <span class="tbx-row__tag">dev</span>
+        </div>
+        <a class="tbx-row__repo" href="https://github.com/pact-foundation/pact-go" target="_blank" rel="noopener">pact-foundation/pact-go<span class="arr">→</span></a>
+      </article>
+
+    </section>
+
+    <div class="tbx-empty" id="tbx-empty" hidden>No tools match every active tag. Drop one and try again.</div>
+
+    <div class="about" style="margin-top: 36px;">
+      <span class="about__mark">*</span>
+      <p>This department focuses on local-first and CI-friendly infrastructure testing. Unit testing frameworks for application code (Jest, pytest, Go testing) are out of scope — those are language choices, not infrastructure choices. Load testing tools (k6, oha, wrk) are in the <a href="/toolbox/api/">API &amp; Testing toolbox</a>.</p>
+    </div>
+
+  </main>
+
+  <footer class="colophon">
+    <p>Infra Atlas · <a href="/toolbox/">Toolbox</a> · <a href="/">Home</a> · <a href="https://github.com/ineslino/infra-atlas" target="_blank" rel="noopener">GitHub</a> · MIT-licensed · Reviewed <time datetime="2026-05-28">2026-05-28</time></p>
+  </footer>
+
+</div>
+<script src="/toolbox/filter.js" defer></script>
+<script src="/nav.js" defer></script>
+</body>
+</html>

@@ -1,0 +1,737 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="color-scheme" content="dark">
+<title>Cross-Cloud · Observability Matrix · Infra Atlas</title>
+<link rel="icon" href="/favicon.svg?v=2" type="image/svg+xml">
+<meta name="description" content="Cloud-native observability stacks and managed platforms compared across metrics, logs, traces, OTEL support, Kubernetes integration, and pricing. CloudWatch, Azure Monitor, GCP Monitoring, OCI, Datadog, Grafana Cloud, New Relic, Honeycomb, Dynatrace.">
+<link rel="canonical" href="https://infraatlas.dev/observability/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Infra Atlas">
+<meta property="og:title" content="Cross-Cloud · Observability Matrix · Infra Atlas">
+<meta property="og:description" content="Cloud-native observability and managed platforms compared across metrics, logs, traces, OTEL, Kubernetes, and free tiers.">
+<meta property="og:url" content="https://infraatlas.dev/observability/">
+<meta property="og:image" content="https://infraatlas.dev/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Cross-Cloud · Observability Matrix · Infra Atlas">
+<meta name="twitter:description" content="Cloud-native observability and managed platforms compared across metrics, logs, traces, OTEL, Kubernetes, and free tiers.">
+<meta name="twitter:image" content="https://infraatlas.dev/og.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@300;400;500;600&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+:root {
+  --ink: #0A0907; --ink-2: #100E0C; --surface: #161310; --surface-2: #1E1A15; --surface-3: #2A241C;
+  --line: rgba(244, 239, 230, 0.06); --line-2: rgba(244, 239, 230, 0.14); --line-3: rgba(244, 239, 230, 0.28);
+  --paper: #F4EFE6; --paper-2: rgba(244, 239, 230, 0.66); --paper-3: rgba(244, 239, 230, 0.55); --paper-4: rgba(244, 239, 230, 0.20);
+  --accent: #FF7849; --accent-2: #FFA66E; --accent-glow: rgba(255, 120, 73, 0.22);
+  --mint: #6FE7B5; --gold: #F4C660; --plum: #C586E8; --sky: #7CD7F1; --rose: #F47B7B; --teal: #5BCCC9;
+  --yes: #6FE7B5; --no: #F47B7B; --part: #F4C660;
+  --serif: 'Instrument Serif', 'Times New Roman', serif;
+  --mono: 'JetBrains Mono', ui-monospace, monospace;
+  --sans: 'Manrope', -apple-system, system-ui, sans-serif;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body {
+  background: var(--ink); color: var(--paper);
+  font-family: var(--sans); font-size: 15px; line-height: 1.5;
+  -webkit-font-smoothing: antialiased; min-height: 100vh;
+}
+body {
+  background:
+    radial-gradient(ellipse at 100% -10%, rgba(111, 231, 181, 0.06), transparent 55%),
+    radial-gradient(ellipse at -10% 110%, rgba(92, 204, 201, 0.05), transparent 65%),
+    var(--ink);
+  background-attachment: fixed; overflow-x: hidden;
+}
+
+.grain {
+  pointer-events: none; position: fixed; inset: 0; z-index: 100; opacity: 0.08; mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml;utf8,<svg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.6 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+}
+.scanlines {
+  pointer-events: none; position: fixed; inset: 0; z-index: 99;
+  background: repeating-linear-gradient(180deg, transparent, transparent 2px, rgba(244,239,230,0.012) 2px, rgba(244,239,230,0.012) 3px);
+}
+::selection { background: var(--mint); color: var(--ink); }
+
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 2px; }
+a:focus-visible, button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+.page { max-width: 1500px; margin: 0 auto; padding: 56px 48px 96px; position: relative; }
+
+/* ─── MASTHEAD ─── */
+.masthead {
+  display: grid; grid-template-columns: 1fr auto; gap: 48px; align-items: end;
+  padding-bottom: 36px; border-bottom: 1px solid var(--line); margin-bottom: 32px;
+}
+.masthead__eyebrow {
+  font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.22em; color: var(--paper-3);
+  text-transform: uppercase; display: inline-flex; align-items: center; gap: 12px;
+  text-decoration: none; transition: color 0.2s;
+}
+.masthead__eyebrow:hover { color: var(--paper); }
+.masthead__eyebrow-arrow { color: var(--accent); transition: transform 0.2s; }
+.masthead__eyebrow:hover .masthead__eyebrow-arrow { transform: translateX(-4px); }
+.masthead__title {
+  font-family: var(--serif); font-weight: 400;
+  font-size: clamp(48px, 7vw, 108px); line-height: 0.95; letter-spacing: -0.02em;
+  margin-top: 16px;
+}
+.masthead__title em { font-style: italic; color: var(--mint); }
+.masthead__subtitle { margin-top: 18px; font-size: 16px; color: var(--paper-2); max-width: 640px; line-height: 1.55; }
+.masthead__subtitle span { font-family: var(--serif); font-style: italic; color: var(--paper); }
+.masthead__status { text-align: right; display: flex; flex-direction: column; align-items: flex-end; gap: 14px; padding-bottom: 6px; }
+.status-line { display: inline-flex; align-items: center; gap: 10px; font-family: var(--mono); font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--mint); }
+.status-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--mint); animation: pulse 2.4s infinite; }
+@keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(111,231,181,0.5); } 70% { box-shadow: 0 0 0 14px rgba(111,231,181,0); } 100% { box-shadow: 0 0 0 0 rgba(111,231,181,0); } }
+.status-time { font-family: var(--mono); font-size: 12px; color: var(--paper-3); }
+.status-counts { display: flex; gap: 24px; margin-top: 4px; }
+.status-counts > div { text-align: right; font-family: var(--mono); font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--paper-3); display: flex; flex-direction: column; gap: 2px; }
+.status-counts strong { font-family: var(--serif); font-style: italic; font-weight: 400; font-size: 28px; color: var(--paper); letter-spacing: -0.01em; text-transform: none; }
+
+/* ─── READ NOTE ─── */
+.readnote { display: flex; gap: 18px; align-items: flex-start; padding: 20px 24px; margin-bottom: 28px; background: linear-gradient(180deg, rgba(111,231,181,0.06), rgba(111,231,181,0.01)); border: 1px solid rgba(111,231,181,0.18); border-radius: 5px; }
+.readnote__mark { font-family: var(--serif); font-style: italic; font-size: 40px; color: var(--mint); line-height: 0.7; flex-shrink: 0; }
+.readnote__text { font-size: 13.5px; color: var(--paper-2); line-height: 1.62; }
+.readnote__text strong { color: var(--paper); font-weight: 600; }
+.readnote__text em { font-family: var(--serif); font-style: italic; color: var(--paper); font-size: 15px; }
+
+/* ─── FILTERS ─── */
+.filters { display: flex; flex-direction: column; gap: 14px; padding: 18px 22px; background: linear-gradient(180deg, var(--surface) 0%, var(--ink-2) 100%); border: 1px solid var(--line); border-radius: 4px; position: sticky; top: 16px; z-index: 50; backdrop-filter: blur(12px); margin-bottom: 28px; }
+.filter-search { position: relative; }
+.filter-search input { width: 100%; background: var(--ink); border: 1px solid var(--line); color: var(--paper); font-family: var(--mono); font-size: 13px; padding: 12px 16px 12px 42px; border-radius: 3px; outline: none; transition: border-color 0.2s; }
+.filter-search input::placeholder { color: var(--paper-3); }
+.filter-search input:focus { border-color: var(--mint); }
+.filter-search::before { content: '⌕'; position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: var(--paper-3); font-size: 18px; pointer-events: none; }
+.filter-row { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+.filter-chips__label { font-family: var(--mono); font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--paper-3); margin-right: 4px; }
+.chip { background: transparent; border: 1px solid var(--line-2); color: var(--paper-2); font-family: var(--mono); font-size: 11px; letter-spacing: 0.06em; padding: 6px 12px; border-radius: 99px; cursor: pointer; transition: all 0.15s; display: inline-flex; align-items: center; gap: 8px; white-space: nowrap; }
+.chip:hover { border-color: var(--paper-3); color: var(--paper); }
+.chip.is-active { background: var(--paper); border-color: var(--paper); color: var(--ink); }
+.chip--section.is-active { background: var(--mint); border-color: var(--mint); color: var(--ink); }
+.chip .swatch { width: 8px; height: 8px; border-radius: 2px; }
+
+/* ─── SECTION HEADER ─── */
+.section-divider { display: flex; align-items: center; gap: 18px; margin: 48px 0 24px; }
+.section-divider__title { font-family: var(--mono); font-size: 10px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--mint); white-space: nowrap; }
+.section-divider::after { content: ''; flex: 1; height: 1px; background: var(--line-2); }
+
+/* ─── MATRIX TABLE ─── */
+.matrix-wrap { overflow-x: auto; margin-bottom: 48px; border: 1px solid var(--line); border-radius: 6px; background: linear-gradient(180deg, var(--ink-2) 0%, var(--ink) 100%); }
+.scroll-hint { position: relative; }
+.scroll-hint::after { content: ''; position: absolute; top: 0; right: 0; bottom: 0; width: 48px; background: linear-gradient(to left, var(--ink), transparent); pointer-events: none; border-radius: 0 5px 5px 0; }
+@media (min-width: 1081px) { .scroll-hint::after { display: none; } }
+.matrix { width: 100%; border-collapse: collapse; min-width: 900px; font-family: var(--sans); font-size: 13px; }
+.matrix thead th { position: sticky; top: 0; z-index: 10; background: var(--ink-2); font-family: var(--mono); font-weight: 500; font-size: 10.5px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--paper-2); padding: 18px 12px 12px; vertical-align: bottom; text-align: center; border-bottom: 1px solid var(--line-2); white-space: nowrap; }
+.matrix thead th.feature-col { text-align: left; padding-left: 22px; min-width: 260px; font-family: var(--serif); font-style: italic; font-size: 16px; letter-spacing: 0; text-transform: none; color: var(--paper); font-weight: 400; }
+.matrix th .vendor-tag { display: inline-flex; align-items: center; gap: 6px; }
+.matrix th .swatch { width: 6px; height: 6px; border-radius: 1px; }
+.matrix tbody tr.category-row td { padding: 22px 22px 10px; border-top: 1px dashed var(--line); background: linear-gradient(180deg, rgba(0,0,0,0.2), transparent); }
+.matrix tbody tr.category-row td .cat-label { font-family: var(--mono); font-size: 10px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--paper-3); display: flex; align-items: center; gap: 10px; }
+.matrix tbody tr.category-row td .cat-label::after { content: ''; flex: 1; height: 1px; background: var(--line); }
+.matrix tbody tr.feature-row td { padding: 12px; border-bottom: 1px solid var(--line); vertical-align: middle; }
+.matrix tbody tr.feature-row td.feature-col { padding-left: 22px; color: var(--paper); font-size: 14px; text-align: left; cursor: pointer; border-right: 1px solid var(--line); }
+.matrix tbody tr.feature-row td.feature-col:hover { color: var(--accent-2); }
+.matrix tbody tr.feature-row td.cell { text-align: center; min-width: 140px; cursor: pointer; transition: background 0.15s; position: relative; }
+.matrix tbody tr.feature-row td.cell:hover { background: rgba(111, 231, 181, 0.04); }
+.matrix tbody tr.feature-row:hover { background: linear-gradient(90deg, transparent, rgba(111, 231, 181, 0.015), transparent); }
+.cell-mark { display: inline-flex; align-items: center; justify-content: center; width: 24px; height: 24px; border-radius: 50%; font-family: var(--mono); font-size: 14px; font-weight: 500; position: relative; }
+.cell-mark--yes  { background: rgba(111, 231, 181, 0.15); color: var(--yes); }
+.cell-mark--no   { background: rgba(244, 123, 123, 0.12); color: var(--no); }
+.cell-mark--part { background: rgba(244, 198, 96, 0.15);  color: var(--part); }
+.cell-value { display: inline-flex; align-items: baseline; justify-content: center; gap: 2px; font-family: var(--mono); font-size: 11.5px; line-height: 1.35; padding: 4px 8px; border-radius: 3px; max-width: 200px; }
+.cell-value--yes  { color: var(--paper); }
+.cell-value--part { color: var(--part); }
+.cell-value--no   { color: var(--no); opacity: 0.7; }
+.cell-value__star { font-size: 10px; color: var(--accent); align-self: flex-start; margin-left: 1px; }
+.matrix tbody tr.feature-row.is-hidden,
+.matrix tbody tr.category-row.is-hidden { display: none; }
+.matrix-section.is-hidden { display: none; }
+
+/* ─── LEGEND ─── */
+.legend { display: flex; flex-wrap: wrap; gap: 18px; align-items: center; margin-bottom: 28px; padding: 16px 22px; background: var(--surface); border: 1px solid var(--line); border-radius: 4px; font-family: var(--mono); font-size: 11px; color: var(--paper-2); }
+.legend__label { font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--paper-3); }
+.legend__item { display: inline-flex; align-items: center; gap: 8px; }
+
+/* ─── DRAWER ─── */
+.drawer-backdrop { position: fixed; inset: 0; background: rgba(10, 9, 7, 0.7); backdrop-filter: blur(8px); z-index: 200; opacity: 0; pointer-events: none; transition: opacity 0.25s; }
+.drawer-backdrop.is-open { opacity: 1; pointer-events: auto; }
+.drawer { position: fixed; top: 0; right: 0; bottom: 0; width: min(640px, 100%); background: var(--ink-2); border-left: 1px solid var(--line-2); z-index: 201; transform: translateX(100%); transition: transform 0.32s cubic-bezier(0.2, 0.8, 0.2, 1); display: flex; flex-direction: column; }
+.drawer.is-open { transform: translateX(0); }
+.drawer__head { padding: 28px 32px 22px; border-bottom: 1px solid var(--line); position: relative; flex-shrink: 0; }
+.drawer__close { position: absolute; top: 20px; right: 20px; background: transparent; border: 1px solid var(--line-2); color: var(--paper-2); font-family: var(--mono); font-size: 11px; padding: 6px 10px; cursor: pointer; border-radius: 2px; letter-spacing: 0.1em; text-transform: uppercase; }
+.drawer__close:hover { border-color: var(--paper); color: var(--paper); }
+.drawer__eyebrow { font-family: var(--mono); font-size: 10px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--mint); }
+.drawer__title { font-family: var(--serif); font-size: 32px; font-weight: 400; letter-spacing: -0.012em; line-height: 1.05; margin-top: 8px; }
+.drawer__desc { margin-top: 12px; font-size: 14px; color: var(--paper-2); line-height: 1.6; }
+.drawer__body { padding: 22px 32px 32px; overflow-y: auto; flex: 1; }
+.drawer__section { margin-bottom: 24px; }
+.drawer__section h4 { font-family: var(--mono); font-size: 10.5px; font-weight: 500; letter-spacing: 0.18em; text-transform: uppercase; color: var(--paper-3); margin-bottom: 12px; display: flex; align-items: center; gap: 10px; }
+.drawer__section h4::after { content: ''; flex: 1; height: 1px; background: var(--line); }
+.vendor-row { display: grid; grid-template-columns: auto 1fr; gap: 14px; padding: 14px 16px; background: var(--surface); border: 1px solid var(--line); border-radius: 3px; margin-bottom: 6px; align-items: start; }
+.vendor-row__name { font-family: var(--mono); font-size: 12.5px; font-weight: 500; color: var(--paper); display: flex; align-items: center; gap: 9px; }
+.vendor-row__name .swatch { width: 8px; height: 8px; border-radius: 2px; }
+.vendor-row__value { font-family: var(--mono); font-size: 12px; color: var(--paper); margin-top: 6px; }
+.vendor-row__value--part { color: var(--part); }
+.vendor-row__value--no   { color: var(--no); }
+.vendor-row__note { font-family: var(--sans); font-size: 12.5px; color: var(--paper-2); line-height: 1.55; margin-top: 6px; }
+.vendor-row__src { margin-top: 8px; font-family: var(--mono); font-size: 10.5px; }
+.vendor-row__src a { color: var(--paper-3); text-decoration: underline; text-decoration-color: var(--line-2); text-underline-offset: 3px; word-break: break-all; }
+.vendor-row__src a:hover { color: var(--mint); }
+.vendor-row__mark { font-family: var(--mono); font-size: 16px; font-weight: 500; width: 30px; height: 30px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; }
+.vendor-row__mark--yes  { background: rgba(111, 231, 181, 0.15); color: var(--yes); }
+.vendor-row__mark--no   { background: rgba(244, 123, 123, 0.12); color: var(--no); opacity: 0.65; }
+.vendor-row__mark--part { background: rgba(244, 198, 96, 0.15);  color: var(--part); }
+
+/* ─── COLOPHON ─── */
+.colophon { margin-top: 64px; padding-top: 32px; border-top: 1px solid var(--line); display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 32px; font-size: 13px; color: var(--paper-3); }
+.colophon h5 { font-family: var(--mono); font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--paper-2); margin-bottom: 10px; font-weight: 500; }
+.colophon p { font-size: 13px; line-height: 1.6; }
+.colophon p a { color: var(--paper-2); text-decoration: underline; text-decoration-color: var(--line-2); text-underline-offset: 3px; }
+.colophon p a:hover { color: var(--mint); }
+
+@media (max-width: 900px) {
+  .page { padding: 32px 22px 72px; }
+  .masthead { grid-template-columns: 1fr; gap: 24px; }
+  .masthead__status { text-align: left; align-items: flex-start; }
+  .filters { position: static; padding: 14px; }
+  .colophon { grid-template-columns: 1fr; gap: 24px; }
+}
+</style>
+</head>
+<body>
+<div class="grain"></div>
+<div class="scanlines"></div>
+
+<div class="page">
+
+  <header class="masthead">
+    <div class="masthead__brand">
+      <a class="masthead__eyebrow" href="../">
+        <span class="masthead__eyebrow-arrow">←</span>
+        Infra Atlas · Cross-Cloud · Observability
+      </a>
+      <h1 class="masthead__title">Observability <em>Matrix.</em></h1>
+      <p class="masthead__subtitle">
+        Cloud-native stacks and managed platforms compared across
+        <span>metrics, logs, traces, OTEL support, Kubernetes integration,
+        and free tiers.</span> Two views: the built-in stack you get with
+        the cloud, and the platforms you buy on top of it.
+      </p>
+    </div>
+    <aside class="masthead__status">
+      <div class="status-line">
+        <span class="status-dot"></span>
+        <span class="status-text">Curated · v1</span>
+      </div>
+      <div class="status-time">Verified · <time datetime="2026-05-28">2026-05-28</time></div>
+      <div class="status-counts">
+        <div>Cloud-native<strong>4</strong></div>
+        <div>Managed<strong>5</strong></div>
+        <div>Dimensions<strong id="count-dims">—</strong></div>
+      </div>
+    </aside>
+  </header>
+
+  <main id="ia-main">
+
+  <div class="readnote">
+    <span class="readnote__mark">*</span>
+    <p class="readnote__text">
+      <strong>Two distinct buying decisions.</strong> The cloud-native section covers the observability stack you get by default with each hyperscaler — no extra vendor contract. The managed platforms section covers the tools teams buy separately to unify telemetry across multiple clouds, add higher cardinality, or get better UX. The ◐ marks flag partial support or meaningful caveats; click any cell for the note.
+    </p>
+  </div>
+
+  <section class="filters">
+    <div class="filter-search">
+      <input id="search" type="search" autocomplete="off" spellcheck="false" placeholder="Search — service name, feature, vendor…">
+    </div>
+    <div class="filter-row">
+      <span class="filter-chips__label">Section</span>
+      <button class="chip chip--section is-active" data-section="cloud-native">Cloud-Native (4)</button>
+      <button class="chip chip--section" data-section="managed">Managed Platforms (5)</button>
+    </div>
+    <div class="filter-row" id="cat-chips">
+      <!-- populated by JS -->
+    </div>
+  </section>
+
+  <div class="legend">
+    <span class="legend__label">Legend</span>
+    <span class="legend__item"><span class="cell-mark cell-mark--yes" style="width:20px;height:20px;font-size:12px">✓</span> First-class support</span>
+    <span class="legend__item"><span class="cell-mark cell-mark--part" style="width:20px;height:20px;font-size:12px">◐</span> Partial / caveats apply</span>
+    <span class="legend__item"><span class="cell-mark cell-mark--no" style="width:20px;height:20px;font-size:12px">✗</span> Not available</span>
+    <span class="legend__item" style="color:var(--accent);font-family:var(--mono);font-size:11px">* footnote in drawer</span>
+  </div>
+
+  <!-- ── SECTION A: CLOUD-NATIVE ── -->
+  <div class="matrix-section" id="section-cloud-native">
+    <div class="section-divider">
+      <span class="section-divider__title">Section A · Cloud-Native Observability</span>
+    </div>
+    <div class="matrix-wrap scroll-hint">
+      <table class="matrix" id="matrix-a" aria-label="Cloud-native observability comparison"></table>
+    </div>
+  </div>
+
+  <!-- ── SECTION B: MANAGED PLATFORMS ── -->
+  <div class="matrix-section is-hidden" id="section-managed">
+    <div class="section-divider">
+      <span class="section-divider__title">Section B · Managed Observability Platforms</span>
+    </div>
+    <div class="matrix-wrap scroll-hint">
+      <table class="matrix" id="matrix-b" aria-label="Managed observability platforms comparison"></table>
+    </div>
+  </div>
+
+  <footer class="colophon">
+    <div>
+      <h5>Scope</h5>
+      <p>Section A covers the observability tooling built into each hyperscaler and consumed through the same billing account. Section B covers standalone platforms purchased separately — typically for multi-cloud environments or teams that need more than the cloud-native stack provides.</p>
+    </div>
+    <div>
+      <h5>Sources</h5>
+      <p>Every cell cites an official vendor documentation page. Retention defaults change without notice; verify against current pricing pages before committing a retention budget. Spot an error? <a href="https://github.com/ineslino/infra-atlas/issues/new/choose" target="_blank" rel="noopener">Open an issue →</a></p>
+    </div>
+    <div>
+      <h5>What's not here</h5>
+      <p>Pricing beyond free tiers is excluded — the permutations are too vendor-specific and change too often. For detailed pricing, use the <a href="/tools/egress-cost/">Egress Cost Calculator</a> or each vendor's pricing page directly. See also: <a href="/toolbox/observability/">Observability CLI Toolbox</a>.</p>
+    </div>
+  </footer>
+
+  </main>
+</div>
+
+<div class="drawer-backdrop" id="drawer-backdrop"></div>
+<aside class="drawer" id="drawer" role="dialog" aria-modal="true" aria-label="Feature detail">
+  <div class="drawer__head">
+    <button class="drawer__close" id="drawer-close" aria-label="Close">ESC</button>
+    <div class="drawer__eyebrow" id="drawer-eyebrow"></div>
+    <h2 class="drawer__title" id="drawer-title"></h2>
+    <p class="drawer__desc" id="drawer-desc"></p>
+  </div>
+  <div class="drawer__body" id="drawer-body"></div>
+</aside>
+
+<script>
+"use strict";
+const $ = s => document.querySelector(s);
+const $$ = s => [...document.querySelectorAll(s)];
+const esc = s => String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"})[c]);
+
+// ─── SECTION A: CLOUD-NATIVE ─────────────────────────────────────────
+
+const VENDORS_A = [
+  { key: "cw",    name: "AWS CloudWatch",        short: "CloudWatch",    swatch: "#FF9F66" },
+  { key: "azmon", name: "Azure Monitor",          short: "Azure Monitor", swatch: "#7CD7F1" },
+  { key: "gcpm",  name: "GCP Cloud Monitoring",   short: "GCP Monitor",   swatch: "#F4C660" },
+  { key: "ocimon",name: "OCI Observability",       short: "OCI",           swatch: "#F47B7B" }
+];
+
+const CATEGORIES_A = [
+  { key: "signals",    label: "Signals & Data Types" },
+  { key: "retention",  label: "Data Retention" },
+  { key: "otel",       label: "OpenTelemetry" },
+  { key: "kubernetes", label: "Kubernetes" },
+  { key: "alerting",   label: "Alerting" }
+];
+
+const FEATURES_A = [
+  // ── Signals ──
+  { id:"a-metrics", category:"signals", name:"Metrics",
+    desc:"Numeric time-series data for cloud resources and custom applications.",
+    support:{
+      cw:    { level:"yes", value:"CloudWatch Metrics",  note:"AWS resources emit metrics at no extra cost. Custom metrics ~$0.30/metric/month. 15-month retention by default.", src:"https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/working_with_metrics.html" },
+      azmon: { level:"yes", value:"Azure Metrics",       note:"Platform metrics are free; custom and logs-based metrics are billable. 93 days default retention; custom metrics configurable to 2 years.", src:"https://learn.microsoft.com/en-us/azure/azure-monitor/essentials/metrics-getting-started" },
+      gcpm:  { level:"yes", value:"Cloud Monitoring",    note:"System metrics included free. Custom metrics charged per MiB ingested. 6-week retention for system metrics; 24 months for custom.", src:"https://cloud.google.com/monitoring/docs/metrics" },
+      ocimon:{ level:"yes", value:"OCI Metrics",         note:"Raw data retained 90 days; aggregated data up to 14 months. OCI resources emit metrics for free.", src:"https://docs.oracle.com/en-us/iaas/Content/Monitoring/Concepts/monitoringoverview.htm" }
+    }
+  },
+  { id:"a-logs", category:"signals", name:"Logs",
+    desc:"Structured and unstructured log ingestion, storage, and query.",
+    support:{
+      cw:    { level:"yes", value:"CloudWatch Logs",     note:"Retention configurable from 1 day to 10 years (or never expire). Charged per GB ingested and stored. Log Insights for query.", src:"https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/Working-with-log-groups-and-streams.html" },
+      azmon: { level:"yes", value:"Log Analytics",       note:"30-day default retention (free). Interactive retention 90 days. Long-term retention up to 12 years via archive. Ingestion charged per GB.", src:"https://learn.microsoft.com/en-us/azure/azure-monitor/logs/data-retention-configure" },
+      gcpm:  { level:"yes", value:"Cloud Logging",       note:"_Required and _Default buckets have 30-day retention. User-defined buckets configurable. 1 GiB/project/day free; then per-GiB charge.", src:"https://cloud.google.com/logging/docs/routing/overview" },
+      ocimon:{ level:"yes", value:"OCI Logging",         note:"Default 30-day retention (max 6 months). Logging Analytics addon provides longer retention and ML-powered analysis.", src:"https://docs.oracle.com/en-us/iaas/Content/Logging/Concepts/loggingoverview.htm" }
+    }
+  },
+  { id:"a-traces", category:"signals", name:"Traces",
+    desc:"Distributed tracing to follow a request across services.",
+    support:{
+      cw:    { level:"yes", value:"AWS X-Ray",           note:"Separate service (X-Ray) integrated into CloudWatch. Sampled by default; Trace Map shows service graph. 30-day retention.", src:"https://docs.aws.amazon.com/xray/latest/devguide/aws-xray.html" },
+      azmon: { level:"yes", value:"App Insights",        note:"Application Insights provides distributed tracing; end-to-end transaction search. 90-day default workspace retention; up to 730 days.", src:"https://learn.microsoft.com/en-us/azure/azure-monitor/app/distributed-tracing-telemetry-correlation" },
+      gcpm:  { level:"yes", value:"Cloud Trace",         note:"Automatic sampling for GCP services; custom instrumentation via OTEL or OpenCensus. 30-day retention.", src:"https://cloud.google.com/trace/docs/overview" },
+      ocimon:{ level:"yes", value:"OCI APM Tracing",     note:"Application Performance Monitoring (APM) service provides distributed tracing with OTLP endpoint. 30-day retention on standard tier.", src:"https://docs.oracle.com/en-us/iaas/application-performance-monitoring/doc/get-started-application-performance-monitoring.html" }
+    }
+  },
+  { id:"a-profiling", category:"signals", name:"Continuous profiling",
+    desc:"CPU and memory profiling for production applications.",
+    support:{
+      cw:    { level:"part", value:"CodeGuru Profiler",  note:"Amazon CodeGuru Profiler is a separate service (not part of CloudWatch). Supports JVM and Python. Limited compared to purpose-built profilers.", src:"https://docs.aws.amazon.com/codeguru/latest/profiler-ug/what-is-codeguru-profiler.html" },
+      azmon: { level:"part", value:"App Insights Profiler", note:"Application Insights Profiler captures call stacks for .NET and Java. Not a general-purpose always-on profiler; triggers on high-CPU or HTTP slowness.", src:"https://learn.microsoft.com/en-us/azure/azure-monitor/profiler/profiler-overview" },
+      gcpm:  { level:"yes", value:"Cloud Profiler",      note:"Always-on profiling for Go, Java, Node, Python, Ruby applications running on GCP. No performance overhead (<1%). Free for GCP-hosted apps.", src:"https://cloud.google.com/profiler/docs" },
+      ocimon:{ level:"part", value:"APM (limited)",      note:"OCI APM provides basic application profiling as part of APM; not a dedicated continuous profiling service.", src:"https://docs.oracle.com/en-us/iaas/application-performance-monitoring/doc/get-started-application-performance-monitoring.html" }
+    }
+  },
+  // ── Retention ──
+  { id:"a-ret-metrics", category:"retention", name:"Metrics default retention",
+    desc:"How long metric data is kept without explicit configuration.",
+    support:{
+      cw:    { level:"yes", value:"15 months",           note:"CloudWatch keeps metrics for 15 months. High-resolution (1-second) metrics retained 3 hours; 1-minute for 15 days; 5-minute for 63 days.", src:"https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/cloudwatch_concepts.html" },
+      azmon: { level:"yes", value:"93 days",             note:"Platform metrics retained 93 days by default. Custom metrics: 30 days standard, configurable to 2 years.", src:"https://learn.microsoft.com/en-us/azure/azure-monitor/essentials/data-platform-metrics#retention-of-metrics" },
+      gcpm:  { level:"part", value:"6 weeks / 24 months",note:"System metrics: 6 weeks. Custom metrics: 24 months. Shorter-than-expected default for system metrics is a common surprise.", src:"https://cloud.google.com/monitoring/docs/retention-policy" },
+      ocimon:{ level:"yes", value:"90 days (raw)",       note:"Raw data points retained 90 days. Aggregated rollups kept up to 14 months.", src:"https://docs.oracle.com/en-us/iaas/Content/Monitoring/Concepts/monitoringoverview.htm" }
+    }
+  },
+  { id:"a-ret-logs", category:"retention", name:"Log retention",
+    desc:"Default and maximum log retention, and whether it's free.",
+    support:{
+      cw:    { level:"yes", value:"Never expire (default)", note:"Default is 'never expire' — logs accumulate indefinitely. You are charged for storage. Best practice is to explicitly set a retention policy per log group.", src:"https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/Working-with-log-groups-and-streams.html" },
+      azmon: { level:"yes", value:"30 days free",        note:"First 31 days free per workspace. Archive tier extends to 12 years at reduced cost.", src:"https://learn.microsoft.com/en-us/azure/azure-monitor/logs/data-retention-configure" },
+      gcpm:  { level:"yes", value:"30 days default",     note:"Configurable per bucket: _Required bucket is 400 days, _Default is 30 days. Custom retention up to 3650 days.", src:"https://cloud.google.com/logging/docs/routing/overview" },
+      ocimon:{ level:"yes", value:"30 days default",     note:"Standard Logging up to 6 months. Logging Analytics adds longer retention and querying against archived logs.", src:"https://docs.oracle.com/en-us/iaas/Content/Logging/Concepts/loggingoverview.htm" }
+    }
+  },
+  // ── OpenTelemetry ──
+  { id:"a-otlp", category:"otel", name:"OTLP ingest",
+    desc:"Accept telemetry data via the OpenTelemetry Protocol (OTLP).",
+    support:{
+      cw:    { level:"yes", value:"OTLP (metrics + traces)", note:"CloudWatch accepts OTLP for metrics and traces via the CloudWatch OTLP endpoint (launched 2024). Traces route to X-Ray; metrics to CloudWatch Metrics.", src:"https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/CloudWatch-OTel-collector.html" },
+      azmon: { level:"yes", value:"OTLP (metrics + traces)", note:"Azure Monitor OpenTelemetry Distro supports OTLP; data routes to Application Insights. First-class support for OTLP since 2023.", src:"https://learn.microsoft.com/en-us/azure/azure-monitor/app/opentelemetry-enable" },
+      gcpm:  { level:"yes", value:"OTLP (all signals)",   note:"Cloud Monitoring and Cloud Trace accept OTLP for metrics, traces, and logs. Managed service compatible with the OTel Collector.", src:"https://cloud.google.com/trace/docs/setup/python-ot" },
+      ocimon:{ level:"yes", value:"APM OTLP endpoint",   note:"OCI APM exposes a native OTLP endpoint for both metrics and traces. Requires APM Domain creation.", src:"https://docs.oracle.com/en-us/iaas/application-performance-monitoring/doc/configure-open-source-tracing-systems.html" }
+    }
+  },
+  { id:"a-otel-sdk", category:"otel", name:"OTel SDK auto-instrumentation",
+    desc:"Support for OpenTelemetry SDK automatic instrumentation libraries.",
+    support:{
+      cw:    { level:"yes", value:"ADOT",                note:"AWS Distro for OpenTelemetry (ADOT) provides auto-instrumentation for Java, Python, Node, .NET. Recommended path for OTEL on AWS.", src:"https://aws.amazon.com/otel/" },
+      azmon: { level:"yes", value:"Azure Monitor Distro", note:"Azure Monitor OpenTelemetry Distro wraps the OTEL SDK for Java, Python, Node, .NET. GA for Java and Node; preview for others.", src:"https://learn.microsoft.com/en-us/azure/azure-monitor/app/opentelemetry-enable" },
+      gcpm:  { level:"yes", value:"Cloud Ops Agent",     note:"Google Cloud Ops Agent and native OTEL SDK support. GCP also publishes language-specific guides for OTEL SDK integration.", src:"https://cloud.google.com/logging/docs/agent/opentelemetry/cloud-ops-agent" },
+      ocimon:{ level:"yes", value:"OCI APM Agents",      note:"OCI APM provides Java, Node, and Python agents. OTEL SDK support via the APM OTLP endpoint for all other languages.", src:"https://docs.oracle.com/en-us/iaas/application-performance-monitoring/doc/configure-open-source-tracing-systems.html" }
+    }
+  },
+  // ── Kubernetes ──
+  { id:"a-k8s-metrics", category:"kubernetes", name:"Kubernetes cluster metrics",
+    desc:"Node, pod, container CPU/memory/network metrics from the managed Kubernetes service.",
+    support:{
+      cw:    { level:"yes", value:"Container Insights",  note:"Amazon CloudWatch Container Insights for EKS provides node, pod, and container metrics using a CloudWatch agent DaemonSet.", src:"https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/ContainerInsights.html" },
+      azmon: { level:"yes", value:"Container Insights",  note:"Azure Monitor Container Insights for AKS. Prometheus scraping now supported; Managed Prometheus (Azure Monitor for Prometheus) GA since 2023.", src:"https://learn.microsoft.com/en-us/azure/azure-monitor/containers/container-insights-overview" },
+      gcpm:  { level:"yes", value:"GKE Observability",   note:"GKE System Metrics and Google Cloud Managed Prometheus for node/pod metrics. Native integration — no agent installation required.", src:"https://cloud.google.com/stackdriver/docs/solutions/gke/observing" },
+      ocimon:{ level:"yes", value:"OKE Monitoring",      note:"OCI Container Engine for Kubernetes emits cluster metrics to OCI Monitoring. Node metrics via the OCI Management Agent.", src:"https://docs.oracle.com/en-us/iaas/Content/ContEng/Concepts/contengaboutmonitoringclusters.htm" }
+    }
+  },
+  { id:"a-k8s-cp", category:"kubernetes", name:"Control plane logs",
+    desc:"API server, scheduler, controller manager, and etcd logs.",
+    support:{
+      cw:    { level:"yes", value:"EKS control plane logs", note:"Optional, per log type. Enabled per cluster; routes to a CloudWatch log group. Not enabled by default.", src:"https://docs.aws.amazon.com/eks/latest/userguide/control-plane-logs.html" },
+      azmon: { level:"yes", value:"AKS diagnostics logs", note:"Kube-apiserver, kube-scheduler, kube-controller-manager logs available via AKS Diagnostic settings. Sent to Log Analytics or Storage.", src:"https://learn.microsoft.com/en-us/azure/aks/monitor-aks" },
+      gcpm:  { level:"yes", value:"GKE audit logs",       note:"GKE system components emit to Cloud Audit Logs. Admin Activity logs always on; Data Access logs configurable.", src:"https://cloud.google.com/kubernetes-engine/docs/how-to/audit-logging" },
+      ocimon:{ level:"yes", value:"OKE audit logs",       note:"Kubernetes API server audit logs sent to OCI Audit service. Enabled via OKE cluster settings.", src:"https://docs.oracle.com/en-us/iaas/Content/ContEng/Concepts/contengaboutmonitoringclusters.htm" }
+    }
+  },
+  // ── Alerting ──
+  { id:"a-alert-threshold", category:"alerting", name:"Threshold alerting",
+    desc:"Alert when a metric crosses a numeric threshold.",
+    support:{
+      cw:    { level:"yes", value:"CloudWatch Alarms",   note:"Static and anomaly detection alarms. Per-alarm pricing. Supports M of N alarm state logic.", src:"https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/AlarmThatSendsEmail.html" },
+      azmon: { level:"yes", value:"Azure Monitor Alerts", note:"Metric, log query, and activity log alert types. Action groups route to email, webhook, PagerDuty, and more.", src:"https://learn.microsoft.com/en-us/azure/azure-monitor/alerts/alerts-overview" },
+      gcpm:  { level:"yes", value:"Alerting policies",   note:"Conditions on metric time-series; threshold, rate-of-change, or absence conditions. Routes to Notification Channels.", src:"https://cloud.google.com/monitoring/alerts" },
+      ocimon:{ level:"yes", value:"OCI Alarms",          note:"Threshold and absence alarms with MQL query language. Routes to OCI Notifications (email, PagerDuty, Slack).", src:"https://docs.oracle.com/en-us/iaas/Content/Monitoring/Tasks/managingalarms.htm" }
+    }
+  },
+  { id:"a-alert-anomaly", category:"alerting", name:"Anomaly detection",
+    desc:"ML-based alerting that learns normal patterns and flags deviations.",
+    support:{
+      cw:    { level:"yes", value:"CloudWatch Anomaly", note:"CloudWatch Anomaly Detection uses ML to create a band around expected metric values; alarms trigger outside the band.", src:"https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/CloudWatch_Anomaly_Detection.html" },
+      azmon: { level:"part", value:"Smart Detection",   note:"App Insights Smart Detection flags anomalies in failure rates and performance. Azure Monitor Alerts has preview anomaly detection for metric alerts as of 2024.", src:"https://learn.microsoft.com/en-us/azure/azure-monitor/alerts/alerts-overview" },
+      gcpm:  { level:"yes", value:"Alert policies",     note:"Rate-of-change and absence conditions approximate anomaly detection. Dedicated ML anomaly detection is part of Cloud Operations suite add-on.", src:"https://cloud.google.com/monitoring/alerts" },
+      ocimon:{ level:"part", value:"Threshold-based",   note:"OCI Alarms support threshold and absence conditions but not ML-based anomaly detection as a native feature (2026-05).", src:"https://docs.oracle.com/en-us/iaas/Content/Monitoring/Tasks/managingalarms.htm" }
+    }
+  }
+];
+
+// ─── SECTION B: MANAGED PLATFORMS ─────────────────────────────────────
+
+const VENDORS_B = [
+  { key: "dd",       name: "Datadog",       short: "Datadog",       swatch: "#774AA4" },
+  { key: "grafana",  name: "Grafana Cloud", short: "Grafana",       swatch: "#F46800" },
+  { key: "nr",       name: "New Relic",     short: "New Relic",     swatch: "#1CE783" },
+  { key: "honeycomb",name: "Honeycomb",     short: "Honeycomb",     swatch: "#F5A623" },
+  { key: "dynatrace",name: "Dynatrace",     short: "Dynatrace",     swatch: "#1A8FFF" }
+];
+
+const CATEGORIES_B = [
+  { key: "signals",  label: "Signals & Data Types" },
+  { key: "otel",     label: "OpenTelemetry" },
+  { key: "k8s",      label: "Kubernetes" },
+  { key: "free",     label: "Free Tier" }
+];
+
+const FEATURES_B = [
+  // ── Signals ──
+  { id:"b-metrics", category:"signals", name:"Metrics",
+    desc:"Numeric time-series collection and query.",
+    support:{
+      dd:       { level:"yes", value:"Metrics",         note:"DogStatsD and custom metrics. Custom metrics pricing is per host/metric. 15-month retention. Excellent query language (DDMetrics QL).", src:"https://docs.datadoghq.com/metrics/" },
+      grafana:  { level:"yes", value:"Prometheus/Mimir",note:"Prometheus-compatible Mimir backend. Unlimited cardinality on paid tiers. 13-month retention on free tier.", src:"https://grafana.com/docs/grafana-cloud/data-configuration/metrics/" },
+      nr:       { level:"yes", value:"NRDB Metrics",    note:"All telemetry stored in NRDB (New Relic Database). 8-day retention on free tier; 13 months on paid. Powerful NRQL query language.", src:"https://docs.newrelic.com/docs/data-apis/understand-data/new-relic-data-types/" },
+      honeycomb:{ level:"part", value:"Events-model",   note:"Honeycomb uses a high-cardinality wide-events model — metrics are derived from events/traces rather than a separate metrics store. Excellent for high-cardinality analysis; not a traditional metrics system.", src:"https://docs.honeycomb.io/concepts/metrics/" },
+      dynatrace:{ level:"yes", value:"Davis AI Metrics",note:"All metrics enriched by Smartscape topology. Davis AI auto-baselines and detects anomalies. 14-month retention on paid.", src:"https://www.dynatrace.com/support/help/observe-and-explore/metrics/" }
+    }
+  },
+  { id:"b-logs", category:"signals", name:"Logs",
+    desc:"Log ingestion, indexing, and search.",
+    support:{
+      dd:       { level:"yes", value:"Log Management",  note:"Separate product add-on with per-GB pricing. Powerful parsing pipeline. Live Tail for streaming. 15-day standard retention.", src:"https://docs.datadoghq.com/logs/" },
+      grafana:  { level:"yes", value:"Grafana Loki",    note:"Loki-based log aggregation. Label-indexed (no full-text index by default, unlike Elasticsearch). Efficient storage. 30 days on free tier.", src:"https://grafana.com/docs/loki/latest/" },
+      nr:       { level:"yes", value:"New Relic Logs",  note:"Included in free 100 GB/month data ingest. Query via NRQL or Lucene syntax. 30-day retention free.", src:"https://docs.newrelic.com/docs/logs/get-started/get-started-log-management/" },
+      honeycomb:{ level:"yes", value:"Events (structured)", note:"Honeycomb treats logs as structured events — same store and query engine as traces. Excellent for structured logs; less suited for unstructured log text.", src:"https://docs.honeycomb.io/" },
+      dynatrace:{ level:"yes", value:"Log Monitoring",  note:"AI-assisted log detection; integrates with PurePath traces for correlation. Logs linked to problem cards automatically.", src:"https://www.dynatrace.com/support/help/observe-and-explore/logs/" }
+    }
+  },
+  { id:"b-traces", category:"signals", name:"Traces",
+    desc:"Distributed request tracing.",
+    support:{
+      dd:       { level:"yes", value:"APM",             note:"Distributed tracing, Service Map, Watchdog AI insights. Trace sampling is head-based by default; Intelligent Ingestion available.", src:"https://docs.datadoghq.com/tracing/" },
+      grafana:  { level:"yes", value:"Grafana Tempo",   note:"Object-storage-backed traces (S3/GCS/Azure Blob). No indexing by default — traces are queried by trace ID or via exemplars from metrics. Unlimited scale.", src:"https://grafana.com/docs/tempo/latest/" },
+      nr:       { level:"yes", value:"Distributed Tracing", note:"Infinite Tracing (all traces, no sampling) available on paid tiers. Standard tracing (sampled) on free tier.", src:"https://docs.newrelic.com/docs/distributed-tracing/concepts/introduction-distributed-tracing/" },
+      honeycomb:{ level:"yes", value:"Wide-event Tracing", note:"Honeycomb's core product. High-cardinality, high-dimensionality trace analysis with BubbleUp to identify which fields correlate with slow spans. No mandatory sampling.", src:"https://docs.honeycomb.io/getting-data-in/opentelemetry/" },
+      dynatrace:{ level:"yes", value:"PurePath",        note:"Automatic code-level tracing with full topology context (Smartscape). Davis AI identifies root causes. No instrumentation changes needed for .NET/Java/Node.", src:"https://www.dynatrace.com/support/help/observe-and-explore/purepath-distributed-traces/" }
+    }
+  },
+  { id:"b-profiling", category:"signals", name:"Continuous profiling",
+    desc:"Always-on code-level CPU and memory profiling.",
+    support:{
+      dd:       { level:"yes", value:"Continuous Profiler", note:"Always-on production profiling for Go, Java, Python, Ruby, .NET, Node. Separate billing per host per month.", src:"https://docs.datadoghq.com/profiler/" },
+      grafana:  { level:"yes", value:"Grafana Pyroscope", note:"Open-source Pyroscope (merged into Grafana). Supports Go, Java, Python, Ruby, Rust, Node. 100 GB/month free tier.", src:"https://grafana.com/docs/pyroscope/latest/" },
+      nr:       { level:"part", value:"Pixie (K8s only)", note:"Pixie by New Relic provides eBPF-based profiling for Kubernetes workloads. Not available for non-K8s environments.", src:"https://docs.newrelic.com/docs/kubernetes-pixie/auto-telemetry-pixie/get-started-auto-telemetry-pixie/" },
+      honeycomb:{ level:"no",  value:"Not available",   note:"Honeycomb does not offer profiling. It is a traces-first, high-cardinality analysis tool — profiling is outside its scope.", src:"https://docs.honeycomb.io/" },
+      dynatrace:{ level:"yes", value:"Continuous Profiling", note:"Integrated with OneAgent. Code-level hotspot analysis correlated with PurePath traces and anomaly detection.", src:"https://www.dynatrace.com/support/help/observe-and-explore/profiling-and-code-analysis/" }
+    }
+  },
+  { id:"b-rum", category:"signals", name:"RUM / Frontend monitoring",
+    desc:"Real user monitoring for web and mobile applications.",
+    support:{
+      dd:       { level:"yes", value:"RUM",             note:"Session replay, error tracking, Core Web Vitals, user journeys. Per-session pricing.", src:"https://docs.datadoghq.com/real_user_monitoring/" },
+      grafana:  { level:"yes", value:"Grafana Faro",    note:"Grafana Faro for frontend observability (errors, web vitals, logs from browser). Integrated with Tempo for browser-to-backend correlation.", src:"https://grafana.com/docs/grafana-cloud/monitor-applications/frontend-observability/" },
+      nr:       { level:"yes", value:"Browser Monitoring", note:"Core Web Vitals, JavaScript error tracking, Ajax monitoring, session traces. Free tier includes browser monitoring.", src:"https://docs.newrelic.com/docs/browser/browser-monitoring/getting-started/introduction-browser-monitoring/" },
+      honeycomb:{ level:"no",  value:"Not available",   note:"Honeycomb is focused on backend/server-side distributed tracing. No RUM or frontend monitoring product.", src:"https://docs.honeycomb.io/" },
+      dynatrace:{ level:"yes", value:"Digital Experience", note:"Full session replay, user journey analysis, apdex scoring. OneAgent for native apps; JavaScript tag for web. Highly automated.", src:"https://www.dynatrace.com/support/help/observe-and-explore/digital-experience/" }
+    }
+  },
+  // ── OTEL ──
+  { id:"b-otlp", category:"otel", name:"OTLP ingest",
+    desc:"Accepts traces, metrics, and logs via OTLP.",
+    support:{
+      dd:       { level:"yes", value:"OTLP (all signals)", note:"Datadog Agent accepts OTLP gRPC and HTTP. All three signals routed to appropriate Datadog products.", src:"https://docs.datadoghq.com/opentelemetry/interoperability/otlp_ingest_in_the_agent/" },
+      grafana:  { level:"yes", value:"OTLP (all signals)", note:"OTLP-native: Mimir, Loki, Tempo all accept OTLP. Grafana Alloy (OpenTelemetry Collector distribution) is the recommended agent.", src:"https://grafana.com/docs/grafana-cloud/data-configuration/otlp/send-data-otlp/" },
+      nr:       { level:"yes", value:"OTLP (all signals)", note:"New Relic OTLP endpoint accepts metrics, traces, and logs. The recommended instrumentation path for new projects.", src:"https://docs.newrelic.com/docs/more-integrations/open-source-telemetry-integrations/opentelemetry/opentelemetry-introduction/" },
+      honeycomb:{ level:"yes", value:"OTLP (traces + logs)", note:"Honeycomb is OTEL-first. Direct OTLP ingest for traces and logs (events). Metrics via events model. Co-authored the OTEL specification.", src:"https://docs.honeycomb.io/getting-data-in/opentelemetry/" },
+      dynatrace:{ level:"yes", value:"OTLP (all signals)", note:"Dynatrace OTLP endpoint accepts metrics, traces, and logs. Grail data lakehouse indexes all OTLP data with full topology context.", src:"https://www.dynatrace.com/support/help/extend-dynatrace/opentelemetry/" }
+    }
+  },
+  // ── K8s ──
+  { id:"b-k8s-agent", category:"k8s", name:"Kubernetes cluster agent",
+    desc:"Native agent for K8s state, events, and metrics collection.",
+    support:{
+      dd:       { level:"yes", value:"Cluster Agent",   note:"Datadog Agent with Cluster Agent. DaemonSet for node metrics + Deployment for cluster-level state. Autodiscovery for pods and services.", src:"https://docs.datadoghq.com/containers/kubernetes/" },
+      grafana:  { level:"yes", value:"Grafana k8s-monitoring", note:"Helm chart (grafana/k8s-monitoring) deploys Grafana Alloy (OTEL Collector) + Prometheus node_exporter. Full metrics, logs, traces, and events collection.", src:"https://grafana.com/docs/grafana-cloud/monitor-infrastructure/kubernetes-monitoring/" },
+      nr:       { level:"yes", value:"K8s Integration", note:"Kubernetes Cluster Explorer with infra agent DaemonSet + events integration. Pixie auto-instruments K8s workloads via eBPF with no code changes.", src:"https://docs.newrelic.com/docs/kubernetes-pixie/kubernetes-integration/get-started/introduction-kubernetes-integration/" },
+      honeycomb:{ level:"yes", value:"via OTel Collector", note:"No native Kubernetes agent; recommended approach is the OTel Collector with k8sattributes processor and k8s_events receiver for full enrichment.", src:"https://docs.honeycomb.io/getting-data-in/opentelemetry/" },
+      dynatrace:{ level:"yes", value:"Dynatrace Operator", note:"Dynatrace Operator automatically injects OneAgent into pods. Full autopilot: no manual instrumentation needed for supported runtimes.", src:"https://www.dynatrace.com/support/help/setup-and-configuration/setup-on-container-platforms/kubernetes/" }
+    }
+  },
+  // ── Free Tier ──
+  { id:"b-free", category:"free", name:"Free tier available",
+    desc:"Whether a permanent free tier exists (not just a time-limited trial).",
+    support:{
+      dd:       { level:"no",  value:"Trial only",      note:"No permanent free tier. 14-day trial. All features require a paid plan.", src:"https://www.datadoghq.com/pricing/" },
+      grafana:  { level:"yes", value:"Generous free tier", note:"Permanent free tier: 10k active metric series, 50 GB logs, 50 GB traces, 50 GB profiles/month. 13-month metric retention.", src:"https://grafana.com/pricing/" },
+      nr:       { level:"yes", value:"100 GB/month",    note:"Free forever: 100 GB/month data ingest across all telemetry types. 1 full-platform user. 8-day retention on free tier.", src:"https://newrelic.com/pricing" },
+      honeycomb:{ level:"yes", value:"20M events/month",note:"Free tier: 20 million events per month with 90-day retention. All features available on free tier.", src:"https://www.honeycomb.io/pricing" },
+      dynatrace:{ level:"part", value:"Playground / Trial", note:"No permanent free tier for production use. Developer Playground available for limited exploration; 30-day full trial.", src:"https://www.dynatrace.com/trial/" }
+    }
+  },
+  { id:"b-free-retention", category:"free", name:"Free tier data retention",
+    desc:"How long data is kept on the free plan.",
+    support:{
+      dd:       { level:"no",  value:"N/A — no free tier", note:"14-day trial includes standard retention during trial period.", src:"https://www.datadoghq.com/pricing/" },
+      grafana:  { level:"yes", value:"13 months",       note:"13-month metric retention on free Grafana Cloud tier. Logs and traces: 30 days.", src:"https://grafana.com/pricing/" },
+      nr:       { level:"part", value:"8 days",         note:"8-day data retention on the free tier. Paid plans: 13 months for metrics and events.", src:"https://newrelic.com/pricing" },
+      honeycomb:{ level:"yes", value:"90 days",         note:"90-day event retention on the free tier across all data types.", src:"https://www.honeycomb.io/pricing" },
+      dynatrace:{ level:"part", value:"Trial period",   note:"Data retained during the trial period only; no permanent free tier.", src:"https://www.dynatrace.com/trial/" }
+    }
+  }
+];
+
+// ─── RENDER ─────────────────────────────────────────────────────────
+
+const state = { section: "cloud-native", query: "", category: "all" };
+
+function renderMatrix(tableId, vendors, categories, features) {
+  const table = $("#" + tableId);
+  let html = "<thead><tr>";
+  html += '<th class="feature-col" scope="col">Dimension</th>';
+  vendors.forEach(v => {
+    html += `<th class="col-${v.key}" scope="col"><span class="vendor-tag"><span class="swatch" style="background:${v.swatch}"></span>${esc(v.short)}</span></th>`;
+  });
+  html += "</tr></thead><tbody>";
+  categories.forEach(cat => {
+    const rows = features.filter(f => f.category === cat.key);
+    if (!rows.length) return;
+    html += `<tr class="category-row" data-cat="${cat.key}"><td colspan="${vendors.length + 1}"><span class="cat-label">▸ ${esc(cat.label)}</span></td></tr>`;
+    rows.forEach(f => {
+      html += `<tr class="feature-row" data-feature="${f.id}" data-cat="${cat.key}">`;
+      html += `<th class="feature-col" scope="row" data-action="open-feature" data-tid="${tableId}" tabindex="0" role="button">${esc(f.name)}</th>`;
+      vendors.forEach(v => {
+        const s = f.support[v.key] || { level:"no", value:"—", note:"" };
+        const hasNote = !!(s.note && s.note.length > 2);
+        const val = s.value || (s.level==="yes"?"✓":s.level==="part"?"◐":"✗");
+        html += `<td class="cell col-${v.key}" data-feature="${f.id}" data-vendor="${v.key}" data-tid="${tableId}" tabindex="0" role="button" aria-label="${esc(f.name)} — ${esc(v.name)}: ${esc(val)}">`;
+        html += `<span class="cell-value cell-value--${s.level}">${esc(val)}${hasNote?'<span class="cell-value__star">*</span>':''}</span>`;
+        html += `</td>`;
+      });
+      html += `</tr>`;
+    });
+  });
+  html += "</tbody>";
+  table.innerHTML = html;
+}
+
+function getContext(tableId) {
+  return tableId === "matrix-a"
+    ? { vendors: VENDORS_A, categories: CATEGORIES_A, features: FEATURES_A }
+    : { vendors: VENDORS_B, categories: CATEGORIES_B, features: FEATURES_B };
+}
+
+function applyFilter() {
+  const q = state.query.trim().toLowerCase();
+  ["matrix-a", "matrix-b"].forEach(tid => {
+    const { vendors, categories, features } = getContext(tid);
+    const table = $("#" + tid);
+    if (!table) return;
+    table.querySelectorAll("tbody tr.feature-row").forEach(row => {
+      const f = features.find(x => x.id === row.dataset.feature);
+      if (!f) return;
+      let show = (state.category === "all" || f.category === state.category);
+      if (show && q) {
+        const hay = ([f.name, f.desc,
+          ...vendors.map(v => { const s = f.support[v.key]||{}; return `${v.name} ${v.short} ${s.value||""} ${s.note||""}`; })
+        ]).join(" ").toLowerCase();
+        show = hay.includes(q);
+      }
+      row.classList.toggle("is-hidden", !show);
+    });
+    categories.forEach(cat => {
+      const visible = [...table.querySelectorAll(`tbody tr.feature-row[data-cat="${cat.key}"]`)].some(r => !r.classList.contains("is-hidden"));
+      const catRow = table.querySelector(`tbody tr.category-row[data-cat="${cat.key}"]`);
+      if (catRow) catRow.classList.toggle("is-hidden", !visible);
+    });
+  });
+}
+
+function setSection(sec) {
+  state.section = sec;
+  state.category = "all";
+  $$(".chip--section").forEach(b => b.classList.toggle("is-active", b.dataset.section === sec));
+  $("#section-cloud-native").classList.toggle("is-hidden", sec !== "cloud-native");
+  $("#section-managed").classList.toggle("is-hidden", sec !== "managed");
+  const { categories } = getContext(sec === "cloud-native" ? "matrix-a" : "matrix-b");
+  const chips = $("#cat-chips");
+  chips.innerHTML = `<span class="filter-chips__label">Category</span>
+    <button class="chip is-active" data-cat="all">All</button>` +
+    categories.map(c => `<button class="chip" data-cat="${c.key}">${esc(c.label)}</button>`).join("");
+  chips.querySelectorAll(".chip[data-cat]").forEach(b => {
+    b.addEventListener("click", () => {
+      state.category = b.dataset.cat;
+      chips.querySelectorAll(".chip[data-cat]").forEach(x => x.classList.toggle("is-active", x.dataset.cat === state.category));
+      applyFilter();
+    });
+  });
+  applyFilter();
+}
+
+// ─── DRAWER ─────────────────────────────────────────────────────────
+
+let lastFocus = null;
+function openDrawer(featureId, tableId) {
+  const { vendors, features } = getContext(tableId);
+  const f = features.find(x => x.id === featureId);
+  if (!f) return;
+  lastFocus = document.activeElement;
+  $("#drawer-eyebrow").textContent = tableId === "matrix-a" ? "Cloud-Native Observability" : "Managed Platforms";
+  $("#drawer-title").textContent = f.name;
+  $("#drawer-desc").textContent = f.desc;
+  let body = `<div class="drawer__section"><h4>Per-platform detail</h4>`;
+  vendors.forEach(v => {
+    const s = f.support[v.key] || { level:"no", value:"—", note:"" };
+    const val = s.value || (s.level==="yes"?"✓":s.level==="part"?"◐":"✗");
+    body += `<div class="vendor-row">
+      <span class="vendor-row__mark vendor-row__mark--${s.level}">${s.level==="yes"?"✓":s.level==="part"?"◐":"✗"}</span>
+      <div>
+        <div class="vendor-row__name"><span class="swatch" style="background:${v.swatch}"></span>${esc(v.name)}</div>
+        <div class="vendor-row__value vendor-row__value--${s.level !== "yes" ? s.level : ""}">${esc(val)}</div>
+        ${s.note ? `<div class="vendor-row__note">${esc(s.note)}</div>` : ""}
+        ${s.src ? `<div class="vendor-row__src"><a href="${esc(s.src)}" target="_blank" rel="noopener">Official docs →</a></div>` : ""}
+      </div></div>`;
+  });
+  body += `</div>`;
+  $("#drawer-body").innerHTML = body;
+  $("#drawer-backdrop").classList.add("is-open");
+  $("#drawer").classList.add("is-open");
+  $("#drawer-close").focus();
+}
+function closeDrawer() {
+  $("#drawer-backdrop").classList.remove("is-open");
+  $("#drawer").classList.remove("is-open");
+  if (lastFocus) lastFocus.focus();
+}
+document.addEventListener("click", e => {
+  const cell = e.target.closest(".cell[data-feature]");
+  const feat = e.target.closest(".feature-col[data-action='open-feature']");
+  if (cell) openDrawer(cell.dataset.feature, cell.dataset.tid);
+  else if (feat) openDrawer(feat.dataset.feature || feat.closest("tr").dataset.feature, feat.dataset.tid);
+});
+document.addEventListener("keydown", e => {
+  if (e.key === "Escape") closeDrawer();
+  if (e.key === "Enter" || e.key === " ") {
+    const cell = e.target.closest(".cell[data-feature]");
+    const feat = e.target.closest(".feature-col[data-action='open-feature']");
+    if (cell) { e.preventDefault(); openDrawer(cell.dataset.feature, cell.dataset.tid); }
+    else if (feat) { e.preventDefault(); openDrawer(feat.dataset.feature || feat.closest("tr").dataset.feature, feat.dataset.tid); }
+  }
+});
+$("#drawer-backdrop").addEventListener("click", closeDrawer);
+$("#drawer-close").addEventListener("click", closeDrawer);
+
+// ─── SECTION TOGGLE + SEARCH ─────────────────────────────────────────
+
+$$(".chip--section").forEach(b => b.addEventListener("click", () => setSection(b.dataset.section)));
+$("#search").addEventListener("input", function() { state.query = this.value; applyFilter(); });
+
+// ─── INIT ─────────────────────────────────────────────────────────────
+
+function init() {
+  const dims = FEATURES_A.length + FEATURES_B.length;
+  $("#count-dims").textContent = dims;
+  renderMatrix("matrix-a", VENDORS_A, CATEGORIES_A, FEATURES_A);
+  renderMatrix("matrix-b", VENDORS_B, CATEGORIES_B, FEATURES_B);
+  setSection("cloud-native");
+}
+
+if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init);
+else init();
+</script>
+<script src="/nav.js" defer></script>
+</body>
+</html>

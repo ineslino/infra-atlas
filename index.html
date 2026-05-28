@@ -471,6 +471,50 @@ body {
 }
 .instruments__intro a:hover { color: var(--accent); }
 
+/* ───────── PAGE INDEX ───────── */
+.ia-pageindex {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px 24px;
+  padding: 14px clamp(20px, 4vw, 48px);
+  border-top: 1px solid var(--line-2);
+  border-bottom: 1px solid var(--line-2);
+  margin: 0 auto 44px;
+  max-width: 1280px;
+}
+.ia-pageindex__label {
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--paper-3);
+  margin-right: 8px;
+  white-space: nowrap;
+}
+.ia-pageindex__item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  color: var(--paper-2);
+  text-decoration: none;
+  transition: color 0.15s;
+  white-space: nowrap;
+}
+.ia-pageindex__item:hover { color: var(--paper); }
+.ia-pageindex__item .dot { width: 6px; height: 6px; border-radius: 50%; flex: none; }
+.ia-pageindex__count {
+  background: var(--surface-2);
+  border: 1px solid var(--line-2);
+  border-radius: 99px;
+  padding: 1px 7px;
+  font-size: 9.5px;
+  color: var(--paper-3);
+}
+
 /* ───────── WHAT CHANGED · feed ───────── */
 .dispatches { margin-top: 100px; }
 .dispatch-list { list-style: none; margin: 0; padding: 0; }
@@ -913,7 +957,7 @@ body {
       <div class="section-head__num">01</div>
       <h2 class="section-head__title">The <em>Instruments</em></h2>
       <div class="section-head__meta">
-        <strong>19</strong> Live · <strong>0</strong> In Dev · <strong>0</strong> Planned
+        <strong>20</strong> Live · <strong>0</strong> In Dev · <strong>0</strong> Planned
       </div>
     </header>
 
@@ -921,8 +965,21 @@ body {
       <strong>New here?</strong> The cross-cloud instruments — <a href="./equivalent-sku/">Equivalent-SKU</a>, <a href="./networking-matrix/">Networking</a>, <a href="./ai-atlas/">Generative AI</a> and <a href="./iam-matrix/">IAM</a> — are what nobody else does neutrally. Start there.
     </p>
 
+    <nav class="ia-pageindex" aria-label="Jump to department">
+      <span class="ia-pageindex__label">On this page</span>
+      <a href="#dept-cloud" class="ia-pageindex__item">
+        <span class="dot" style="background:var(--sky)"></span>Dept I — Cloud Compute<span class="ia-pageindex__count">6</span>
+      </a>
+      <a href="#dept-apim" class="ia-pageindex__item">
+        <span class="dot" style="background:var(--gold)"></span>Dept II — API Management<span class="ia-pageindex__count">5</span>
+      </a>
+      <a href="#dept-xcloud" class="ia-pageindex__item">
+        <span class="dot" style="background:var(--plum)"></span>Dept III — Cross-Cloud<span class="ia-pageindex__count">9</span>
+      </a>
+    </nav>
+
     <!-- ───── DEPARTMENT I: CLOUD COMPUTE ───── -->
-    <div class="department" data-dept="cloud">
+    <div class="department" id="dept-cloud" data-dept="cloud">
       <div class="department__title">
         <div class="department__kicker"><span class="dot"></span>Department I</div>
         <h3 class="department__name">Cloud <em>Compute</em></h3>
@@ -1054,7 +1111,7 @@ body {
     </div>
 
     <!-- ───── DEPARTMENT II: API MANAGEMENT ───── -->
-    <div class="department" data-dept="apim">
+    <div class="department" id="dept-apim" data-dept="apim">
       <div class="department__title">
         <div class="department__kicker"><span class="dot"></span>Department II</div>
         <h3 class="department__name">API <em>Management</em></h3>
@@ -1166,7 +1223,7 @@ body {
     </div>
 
     <!-- ───── DEPARTMENT III: CROSS-CLOUD ───── -->
-    <div class="department" data-dept="xcloud">
+    <div class="department" id="dept-xcloud" data-dept="xcloud">
       <div class="department__title">
         <div class="department__kicker"><span class="dot"></span>Department III</div>
         <h3 class="department__name">Cross-<em>Cloud</em></h3>
@@ -1327,6 +1384,26 @@ body {
             </p>
             <div class="instrument__tags">
               <span>4 clouds</span><span>17 primitives</span><span>VPC · Firewall · Peering</span><span>68 footnotes</span>
+            </div>
+          </div>
+          <div class="instrument__side">
+            <div class="instrument__cta"><span>Open</span><span class="instrument__cta-arrow">→</span></div>
+          </div>
+        </a>
+
+        <a class="instrument is-live" href="./observability/">
+          <div class="instrument__num">20</div>
+          <div class="instrument__main">
+            <div class="instrument__head">
+              <span class="instrument__vendor" data-v="multi">CROSS-CLOUD</span>
+              <h3 class="instrument__title">Observability <em>Matrix</em></h3>
+              <span class="instrument__type" data-type="matrix">Matrix</span>
+            </div>
+            <p class="instrument__desc">
+              Cloud-native stacks and managed platforms compared across metrics, logs, traces, OTEL support, Kubernetes integration and pricing tiers. <em>CloudWatch, Azure Monitor, GCP, OCI</em> alongside Datadog, Grafana Cloud, New Relic, Honeycomb and Dynatrace.
+            </p>
+            <div class="instrument__tags">
+              <span>4 cloud-native</span><span>5 platforms</span><span>Metrics · Logs · Traces</span><span>OTEL coverage</span>
             </div>
           </div>
           <div class="instrument__side">

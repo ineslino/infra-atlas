@@ -30,7 +30,8 @@
     ["/iam-matrix/",             "IAM Matrix",            "Cross-cloud", "iam identity access management rbac abac policy entra id permissions roles authorization"],
     ["/ai-atlas/",               "Generative AI Atlas",   "Cross-cloud", "ai generative model llm foundation model bedrock vertex azure foundry oci ovh openai gpt claude anthropic gemini google llama meta mistral cohere deepseek grok fine-tuning rag agents guardrails inference"],
     ["/egress/",                 "Egress & Transfer Cost Map","Cross-cloud", "egress data transfer cost networking bandwidth nat gateway interconnect direct connect expressroute cross-region cross-az internet bill price gigabyte"],
-    ["/networking-matrix/",      "Networking Matrix",      "Cross-cloud", "networking primitives vpc vnet vcn subnet route table peering transit gateway virtual wan ncc drg firewall security group nsg network acl nat load balancer privatelink private link rosetta aws azure gcp oci"]
+    ["/networking-matrix/",      "Networking Matrix",      "Cross-cloud", "networking primitives vpc vnet vcn subnet route table peering transit gateway virtual wan ncc drg firewall security group nsg network acl nat load balancer privatelink private link rosetta aws azure gcp oci"],
+    ["/observability/",          "Observability Matrix",   "Cross-cloud", "observability monitoring metrics logs traces profiling cloudwatch azure monitor gcp cloud monitoring oci datadog grafana new relic honeycomb dynatrace opentelemetry otel otlp kubernetes"]
   ];
   var TOOLS = [
     ["/tools/egress-cost/",  "Egress Cost Calculator",     "Tool", "egress cost calculator bandwidth bill data transfer aws azure gcp price tier compare"],
@@ -50,6 +51,7 @@
     ["/toolbox/cicd/",         "CI/CD & Pipelines Toolbox",   "Toolbox", "act flux goreleaser earthly ko dagger ci cd pipeline github actions gitops release build"],
     ["/toolbox/database/",     "Database & Data Toolbox",     "Toolbox", "pgcli usql atlas dbeaver dbmate postgres sql migration schema client universal database"],
     ["/toolbox/api/",          "API & Testing Toolbox",       "Toolbox", "bruno hurl k6 hey oha wrk postman load testing api http benchmark rest insomnia"],
+    ["/toolbox/testing/",      "Testing & Integration Toolbox","Toolbox", "testing integration floci localstack testcontainers terratest bats bats-core mock mockoon pact contract cloud emulator local dev ci cd"],
     ["/toolbox/containers/",   "Container & Images Toolbox",  "Toolbox", "skopeo crane syft grype cosign sbom oci image registry sign scan supply chain docker"],
     ["/toolbox/localdev/",     "Local Dev & Runtimes Toolbox","Toolbox", "orbstack colima rancher-desktop devpod lima docker desktop containers vm macos runtime devcontainer"],
     ["/toolbox/git/",          "Git & Source Control Toolbox","Toolbox", "tig gh gitui git-cliff git-filter-repo onefetch github changelog history tui cli log blame"]
@@ -77,7 +79,7 @@
     "/ovh-instances/":          ["/equivalent-sku/", "/regions/"],
     "/regions/":                ["/ec2/", "/azure-vm/", "/gcp-compute/"],
     "/equivalent-sku/":         ["/ec2/", "/azure-vm/", "/gcp-compute/", "/oci-compute/"],
-    "/kubernetes/":             ["/networking-matrix/", "/iam-matrix/", "/equivalent-sku/"],
+    "/kubernetes/":             ["/networking-matrix/", "/iam-matrix/", "/equivalent-sku/", "/observability/"],
     "/iam-matrix/":             ["/networking-matrix/", "/kubernetes/", "/confidential-computing/", "/toolbox/auth/"],
     "/aws-api-gateway/":        ["/apim-matrix/", "/apigee/", "/mulesoft/", "/decisions/rest-api-vs-http-api/"],
     "/apigee/":                 ["/apim-matrix/", "/aws-api-gateway/", "/mulesoft/", "/decisions/api-gateway-vs-proxy-vs-load-balancer/"],
@@ -87,12 +89,14 @@
     "/confidential-computing/": ["/compliance/", "/iam-matrix/"],
     "/ai-atlas/":               ["/gcp-compute/", "/networking-matrix/"],
     "/networking-matrix/":      ["/egress/", "/tools/subnet/", "/iam-matrix/", "/kubernetes/"],
+    "/observability/":          ["/networking-matrix/", "/iam-matrix/", "/kubernetes/", "/toolbox/observability/"],
     "/egress/":                 ["/tools/egress-cost/", "/networking-matrix/", "/regions/", "/decisions/nat-gateway-vs-instance-vs-no-nat/"],
     "/apim-matrix/":            ["/tools/apim-limits/", "/aws-api-gateway/", "/apigee/", "/mulesoft/"],
     "/tools/egress-cost/":      ["/egress/", "/networking-matrix/", "/decisions/nat-gateway-vs-instance-vs-no-nat/"],
     "/tools/subnet/":           ["/networking-matrix/", "/regions/"],
     "/tools/apim-limits/":      ["/apim-matrix/", "/aws-api-gateway/", "/decisions/rest-api-vs-http-api/"],
     "/toolbox/auth/":           ["/iam-matrix/", "/compliance/", "/confidential-computing/"],
+    "/toolbox/observability/":  ["/observability/", "/kubernetes/", "/networking-matrix/"],
     // Decisions → related instruments (bidirectional)
     "/decisions/fargate-vs-ec2/":                            ["/ec2/", "/kubernetes/", "/equivalent-sku/"],
     "/decisions/azure-app-service-vs-container-apps-vs-vm/": ["/azure-vm/", "/kubernetes/", "/equivalent-sku/"],
@@ -412,7 +416,7 @@
           '<div class="ia-grat__in">'
         +   '<div class="ia-grat__txt">'
         +     '<div class="ia-grat__kick">Free to read · no ads · no vendor money</div>'
-        +     '<p>One of nineteen instruments, kept current and kept honest by one '
+        +     '<p>One of twenty instruments, kept current and kept honest by one '
         +     'person. If it saved you a detour through the vendor docs, you can '
         +     'help keep the atlas running.</p>'
         +   '</div>'

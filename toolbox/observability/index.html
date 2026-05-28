@@ -152,6 +152,50 @@
         <a class="tbx-row__repo" href="https://github.com/sharkdp/hyperfine" target="_blank" rel="noopener">sharkdp/hyperfine<span class="arr">→</span></a>
       </article>
 
+      <article class="tbx-row" data-tags="TUI Go SRE">
+        <div class="tbx-row__head">
+          <span class="tbx-row__name">ctop</span>
+          <span class="tbx-row__replaces">replaces <strong>docker stats</strong></span>
+        </div>
+        <p class="tbx-row__tldr">Container-level resource monitor: a real-time TUI that shows CPU, memory, network I/O, and block I/O per container in a compact table. <code>ctop</code> is to Docker what <code>btop</code> is to the host — a single-pane view of what's actually consuming resources. Particularly useful on a host running many containers where <code>docker stats</code> outputs an unwieldy flat list. Supports Docker and Kubernetes (via kubectl). Read-only, no config required.</p>
+        <div class="tbx-row__tags">
+          <span class="tbx-row__tag tbx-row__tag--form">TUI</span>
+          <span class="tbx-row__tag tbx-row__tag--lang">Go</span>
+          <span class="tbx-row__tag">SRE</span>
+        </div>
+        <a class="tbx-row__repo" href="https://github.com/bcicen/ctop" target="_blank" rel="noopener">bcicen/ctop<span class="arr">→</span></a>
+      </article>
+
+      <article class="tbx-row" data-tags="daemon Go SRE platform pick">
+        <div class="tbx-row__head">
+          <span class="tbx-row__name">OpenTelemetry Collector</span>
+          <span class="tbx-row__star" title="Must-install pick">★</span>
+          <span class="tbx-row__replaces">replaces <strong>Logstash / Fluentd for OTEL pipelines</strong></span>
+        </div>
+        <p class="tbx-row__tldr">The vendor-neutral OTEL agent for receiving, processing, and exporting telemetry. Runs as a sidecar or a node agent; accepts OTLP, Jaeger, Zipkin, Prometheus scrape, and Fluent Bit; exports to any backend (Datadog, Grafana Cloud, New Relic, Honeycomb, Jaeger, S3, Kafka). The two distributions: <code>otelcol</code> (core, minimal) and <code>otelcol-contrib</code> (all connectors). If you're instrumenting anything with OpenTelemetry SDK, the Collector is how you decouple your app from the backend — change vendors without touching code.</p>
+        <div class="tbx-row__tags">
+          <span class="tbx-row__tag tbx-row__tag--form">daemon</span>
+          <span class="tbx-row__tag tbx-row__tag--lang">Go</span>
+          <span class="tbx-row__tag">SRE</span>
+          <span class="tbx-row__tag">platform</span>
+        </div>
+        <a class="tbx-row__repo" href="https://github.com/open-telemetry/opentelemetry-collector" target="_blank" rel="noopener">open-telemetry/opentelemetry-collector<span class="arr">→</span></a>
+      </article>
+
+      <article class="tbx-row" data-tags="CLI Go dev">
+        <div class="tbx-row__head">
+          <span class="tbx-row__name">Tracetest</span>
+          <span class="tbx-row__replaces">replaces <strong>manual trace validation</strong></span>
+        </div>
+        <p class="tbx-row__tldr">Trace-based testing tool: run an HTTP request, capture the distributed trace it produces (via OTEL), and assert against span attributes, durations, and service graph structure. Write tests like "the database query span must be under 200ms" or "no N+1 queries — there must be exactly 1 SQL SELECT span". Integrates with Jaeger, Tempo, and any OTLP-compatible backend. Bridges the gap between functional testing ("did it return 200?") and performance/architecture testing ("did it behave efficiently?").</p>
+        <div class="tbx-row__tags">
+          <span class="tbx-row__tag tbx-row__tag--form">CLI</span>
+          <span class="tbx-row__tag tbx-row__tag--lang">Go</span>
+          <span class="tbx-row__tag">dev</span>
+        </div>
+        <a class="tbx-row__repo" href="https://github.com/kubeshop/tracetest" target="_blank" rel="noopener">kubeshop/tracetest<span class="arr">→</span></a>
+      </article>
+
     </section>
 
     <div class="tbx-empty" id="tbx-empty" hidden>No tools match every active tag. Drop one and try again.</div>
