@@ -125,12 +125,14 @@ a:focus-visible, button:focus-visible, input:focus-visible, [tabindex]:focus-vis
 }
 .status-dot {
   width: 8px; height: 8px; border-radius: 50%; background: var(--gold);
-  animation: pulse 2.4s infinite;
 }
-@keyframes pulse {
-  0% { box-shadow: 0 0 0 0 rgba(244,198,96,0.5); }
-  70% { box-shadow: 0 0 0 14px rgba(244,198,96,0); }
-  100% { box-shadow: 0 0 0 0 rgba(244,198,96,0); }
+@media (prefers-reduced-motion: no-preference) {
+  .status-dot { animation: pulse 2.4s infinite; }
+  @keyframes pulse {
+    0% { box-shadow: 0 0 0 0 rgba(244,198,96,0.5); }
+    70% { box-shadow: 0 0 0 14px rgba(244,198,96,0); }
+    100% { box-shadow: 0 0 0 0 rgba(244,198,96,0); }
+  }
 }
 .status-time { font-family: var(--mono); font-size: 12px; color: var(--paper-3); }
 .status-counts { display: flex; gap: 24px; margin-top: 4px; }
@@ -311,6 +313,35 @@ a:focus-visible, button:focus-visible, input:focus-visible, [tabindex]:focus-vis
 .matrix tbody tr.feature-row.is-hidden,
 .matrix tbody tr.category-row.is-hidden { display: none; }
 
+/* button-wrappers — preserve <th>/<td> semantics while keeping cells clickable */
+.cell__btn, .feature-col__btn {
+  background: none; border: 0; margin: 0; padding: 0;
+  color: inherit; font: inherit; line-height: inherit;
+  cursor: pointer; width: 100%; display: block;
+}
+.cell__btn { padding: 4px 0; text-align: center; }
+.feature-col__btn { text-align: left; color: var(--paper); }
+.feature-col__btn:hover { color: var(--accent-2); }
+.cell__btn:focus-visible, .feature-col__btn:focus-visible {
+  outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 3px;
+}
+
+/* empty state — search yields no matches */
+.matrix-empty {
+  display: none; padding: 32px 28px; text-align: center;
+  font-family: var(--mono); font-size: 12.5px; color: var(--paper-3);
+  border: 1px dashed var(--line-2); border-radius: 6px; margin: 24px 0;
+}
+.matrix-empty.is-shown { display: block; }
+.matrix-empty strong { color: var(--paper); font-weight: 500; }
+
+/* visually-hidden — for aria-live filter announcements and labels */
+.sr-only {
+  position: absolute; width: 1px; height: 1px; padding: 0;
+  margin: -1px; overflow: hidden; clip: rect(0,0,0,0);
+  white-space: nowrap; border: 0;
+}
+
 /* ─────────── LEGEND ─────────── */
 .legend {
   display: flex; flex-wrap: wrap; gap: 18px; align-items: center;
@@ -399,7 +430,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, [tabindex]:focus-vis
   display: inline-flex; align-items: center; justify-content: center;
 }
 .vendor-row__mark--yes  { background: rgba(111, 231, 181, 0.15); color: var(--yes); }
-.vendor-row__mark--no   { background: rgba(244, 123, 123, 0.12); color: var(--no); opacity: 0.65; }
+.vendor-row__mark--no   { background: rgba(244, 123, 123, 0.12); color: var(--no); }
 .vendor-row__mark--part { background: rgba(244, 198, 96, 0.15); color: var(--part); }
 
 /* ─────────── COLOPHON ─────────── */
@@ -475,11 +506,14 @@ a:focus-visible, button:focus-visible, input:focus-visible, [tabindex]:focus-vis
 
   <section class="filters">
     <div class="filter-search">
-      <input id="search" type="search" autocomplete="off" spellcheck="false" placeholder="Filter — search by primitive, product name, cloud…">
+      <label for="search" class="sr-only">Search primitives, product names, or clouds</label>
+      <input id="search" type="search" autocomplete="off" spellcheck="false" placeholder="Filter — search by primitive, product name, cloud…" aria-label="Search primitives, product names, or clouds">
     </div>
     <div class="filter-chips" id="cat-chips"></div>
     <div class="filter-chips" id="vendor-chips"></div>
   </section>
+
+  <div class="sr-only" id="filter-status" role="status" aria-live="polite"></div>
 
   <div class="legend">
     <span class="legend__label">Legend</span>
@@ -490,9 +524,14 @@ a:focus-visible, button:focus-visible, input:focus-visible, [tabindex]:focus-vis
   </div>
 
   <div class="scroll-hint">
-  <div class="matrix-wrap">
+  <div class="matrix-wrap" id="matrix-wrap">
     <table class="matrix" id="matrix" aria-label="Networking primitives comparison across cloud providers"></table>
   </div>
+  </div>
+
+  <div class="matrix-empty" id="matrix-empty" role="status" aria-live="polite">
+    <strong>No primitives match your filters.</strong><br>
+    Try a broader search term, or switch the category to “All”.
   </div>
 
   </main>
@@ -516,7 +555,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, [tabindex]:focus-vis
 
 <!-- DRAWER -->
 <div class="drawer-backdrop" id="drawer-backdrop"></div>
-<aside class="drawer" id="drawer" aria-hidden="true">
+<aside class="drawer" id="drawer" role="dialog" aria-modal="true" aria-labelledby="drawer-title" aria-hidden="true" hidden>
   <div class="drawer__head" id="drawer-head"></div>
   <div class="drawer__body" id="drawer-body"></div>
 </aside>
@@ -927,18 +966,21 @@ function init() {
   // Category chips
   const catChips = $("#cat-chips");
   catChips.innerHTML = `<span class="filter-chips__label">Category</span>
-    <button class="chip is-active" data-cat="all">All</button>` +
-    CATEGORIES.map(c => `<button class="chip" data-cat="${c.key}">${escapeHtml(c.label)}</button>`).join("");
+    <button class="chip is-active" data-cat="all" aria-pressed="true">All</button>` +
+    CATEGORIES.map(c => `<button class="chip" data-cat="${c.key}" aria-pressed="false">${escapeHtml(c.label)}</button>`).join("");
 
   // Vendor chips
   const vChips = $("#vendor-chips");
   vChips.innerHTML = `<span class="filter-chips__label">Clouds</span>
-    <button class="chip is-active" data-v="all">All</button>` +
-    VENDORS.map(v => `<button class="chip" data-v="${v.key}"><span class="swatch" style="background:${v.swatch}"></span>${escapeHtml(v.short)}</button>`).join("");
+    <button class="chip is-active" data-v="all" aria-pressed="true">All</button>` +
+    VENDORS.map(v => `<button class="chip" data-v="${v.key}" aria-pressed="false"><span class="swatch" style="background:${v.swatch}" aria-hidden="true"></span>${escapeHtml(v.short)}</button>`).join("");
 
   applyHash();
   renderMatrix();
   wireEvents();
+  // sync aria-pressed once after applyHash may have flipped is-active states
+  syncChipsAria('.chip[data-cat]');
+  syncChipsAria('.chip[data-v]');
   window.addEventListener("hashchange", () => { applyHash(); applyFilter(); });
 }
 
@@ -947,23 +989,27 @@ function renderMatrix() {
   let html = "<thead><tr>";
   html += '<th class="feature-col" scope="col">Primitive</th>';
   VENDORS.forEach(v => {
-    html += `<th class="col-${v.key}" scope="col"><span class="vendor-tag"><span class="swatch" style="background:${v.swatch}"></span>${escapeHtml(v.short)}</span></th>`;
+    html += `<th class="col-${v.key}" scope="col"><span class="vendor-tag"><span class="swatch" style="background:${v.swatch}" aria-hidden="true"></span>${escapeHtml(v.short)}</span></th>`;
   });
   html += "</tr></thead><tbody>";
 
   CATEGORIES.forEach(cat => {
     const features = FEATURES.filter(f => f.category === cat.key);
     if (features.length === 0) return;
-    html += `<tr class="category-row" data-cat="${cat.key}"><td colspan="${VENDORS.length + 1}"><span class="cat-label">▸ ${escapeHtml(cat.label)}</span></td></tr>`;
+    html += `<tr class="category-row" data-cat="${cat.key}"><td colspan="${VENDORS.length + 1}"><span class="cat-label"><span aria-hidden="true">▸ </span>${escapeHtml(cat.label)}</span></td></tr>`;
     features.forEach(f => {
       html += `<tr class="feature-row" data-feature="${f.id}" data-cat="${cat.key}">`;
-      html += `<th class="feature-col" scope="row" data-action="open-feature" tabindex="0" role="button" aria-label="Open per-cloud breakdown for ${escapeHtml(f.name)}">${escapeHtml(f.name)}</th>`;
+      // <th> preserves row-header semantics; <button> inside makes it actionable without overriding the role
+      html += `<th class="feature-col" scope="row"><button type="button" class="feature-col__btn" data-action="open-feature" data-feature="${f.id}" aria-haspopup="dialog" aria-label="Open per-cloud breakdown for ${escapeHtml(f.name)}">${escapeHtml(f.name)}</button></th>`;
       VENDORS.forEach(v => {
         const s = f.support[v.key] || { level: "no", value: "—", note: "" };
         const hasNote = s.note && s.note.length > 0;
         const valText = s.value || (s.level === "yes" ? "✓" : s.level === "part" ? "◐" : "✗");
-        html += `<td class="cell col-${v.key}" data-feature="${f.id}" data-vendor="${v.key}" tabindex="0" role="button" aria-label="${escapeHtml(f.name)} — ${escapeHtml(v.name)}: ${escapeHtml(valText)}. Open footnote.">`;
-        html += `<span class="cell-value cell-value--${s.level}">${escapeHtml(valText)}${hasNote ? '<span class="cell-value__star">*</span>' : ''}</span>`;
+        const levelLabel = s.level === "yes" ? "supported" : s.level === "part" ? "partial" : "not available";
+        html += `<td class="cell col-${v.key}" data-feature="${f.id}" data-vendor="${v.key}">`;
+        html += `<button type="button" class="cell__btn" data-feature="${f.id}" data-vendor="${v.key}" aria-haspopup="dialog" aria-label="${escapeHtml(f.name)} — ${escapeHtml(v.name)}: ${escapeHtml(valText)} (${levelLabel}). Open footnote.">`;
+        html += `<span class="cell-value cell-value--${s.level}">${escapeHtml(valText)}${hasNote ? '<span class="cell-value__star" aria-hidden="true">*</span>' : ''}</span>`;
+        html += `</button>`;
         html += `</td>`;
       });
       html += `</tr>`;
@@ -1005,11 +1051,25 @@ function applyFilter() {
   });
 
   // Hide category rows that have no visible features
+  let totalVisible = 0;
   CATEGORIES.forEach(cat => {
-    const visible = $$(`.matrix tbody tr.feature-row[data-cat="${cat.key}"]`).some(r => !r.classList.contains("is-hidden"));
+    const rows = $$(`.matrix tbody tr.feature-row[data-cat="${cat.key}"]`).filter(r => !r.classList.contains("is-hidden"));
+    totalVisible += rows.length;
     const catRow = $(`.matrix tbody tr.category-row[data-cat="${cat.key}"]`);
-    if (catRow) catRow.classList.toggle("is-hidden", !visible);
+    if (catRow) catRow.classList.toggle("is-hidden", rows.length === 0);
   });
+  // empty state + aria-live announcement
+  const empty = $("#matrix-empty");
+  const wrap = $("#matrix-wrap");
+  if (empty) empty.classList.toggle("is-shown", totalVisible === 0);
+  if (wrap) wrap.style.display = totalVisible === 0 ? "none" : "";
+  const status = $("#filter-status");
+  if (status) {
+    const noun = totalVisible === 1 ? "primitive" : "primitives";
+    status.textContent = (q || state.category !== "all" || state.vendors.size < VENDORS.length)
+      ? `${totalVisible} ${noun} match the current filters.`
+      : "";
+  }
   writeHash();
 }
 
@@ -1033,43 +1093,65 @@ function trapFocus(e) {
     first.focus();
   }
 }
+let scrollLockY = 0;
 function openDrawer() {
   lastFocused = document.activeElement;
+  const drawer = $("#drawer");
   $("#drawer-backdrop").classList.add("is-open");
-  $("#drawer").classList.add("is-open");
-  $("#drawer").setAttribute("aria-hidden", "false");
-  $("#drawer").addEventListener("keydown", trapFocus);
+  drawer.classList.add("is-open");
+  drawer.setAttribute("aria-hidden", "false");
+  drawer.hidden = false;
+  drawer.addEventListener("keydown", trapFocus);
+  // scroll lock — capture position so we can restore on close
+  scrollLockY = window.scrollY;
+  document.body.style.position = "fixed";
+  document.body.style.top = `-${scrollLockY}px`;
+  document.body.style.left = "0";
+  document.body.style.right = "0";
+  document.body.style.width = "100%";
   const closeBtn = $("#drawer .drawer__close");
   if (closeBtn) closeBtn.focus();
 }
 function closeDrawer() {
+  const drawer = $("#drawer");
+  if (!drawer.classList.contains("is-open")) return;
   $("#drawer-backdrop").classList.remove("is-open");
-  $("#drawer").classList.remove("is-open");
-  $("#drawer").setAttribute("aria-hidden", "true");
-  $("#drawer").removeEventListener("keydown", trapFocus);
+  drawer.classList.remove("is-open");
+  drawer.setAttribute("aria-hidden", "true");
+  drawer.removeEventListener("keydown", trapFocus);
+  // restore scroll
+  document.body.style.position = "";
+  document.body.style.top = "";
+  document.body.style.left = "";
+  document.body.style.right = "";
+  document.body.style.width = "";
+  window.scrollTo(0, scrollLockY);
+  // hide after the slide-out transition completes so AT doesn't see briefly-hidden content
+  setTimeout(() => { if (!drawer.classList.contains("is-open")) drawer.hidden = true; }, 350);
   if (lastFocused && typeof lastFocused.focus === "function") lastFocused.focus();
 }
 
 function openFeatureDrawer(feature, focusVendor) {
   const cat = (CATEGORIES.find(c => c.key === feature.category) || {}).label || "";
   $("#drawer-head").innerHTML = `
+    <button class="drawer__close" type="button" data-action="close-drawer" aria-label="Close (Esc)">✕</button>
     <div class="drawer__eyebrow">${escapeHtml(cat)}</div>
-    <h3 class="drawer__title">${escapeHtml(feature.name)}</h3>
+    <h2 class="drawer__title" id="drawer-title">${escapeHtml(feature.name)}</h2>
     <p class="drawer__desc">${escapeHtml(feature.desc)}</p>
-    <button class="drawer__close" type="button" onclick="closeDrawer()">Close <span aria-hidden="true">⤬</span></button>
   `;
   const body = VENDORS.map(v => {
     const s = feature.support[v.key] || { level: "no", value: "—", note: "" };
     const sym = s.level === "yes" ? "✓" : s.level === "part" ? "◐" : "✗";
+    const markLabel = s.level === "yes" ? "Supported" : s.level === "part" ? "Partial" : "Not available";
     const isFocus = focusVendor === v.key;
     const valText = s.value || sym;
     const srcHtml = s.src
       ? `<div class="vendor-row__src">Source · <a href="${escapeHtml(s.src)}" target="_blank" rel="noopener">${escapeHtml(s.src)}</a></div>`
       : "";
     return `<div class="vendor-row" ${isFocus ? 'style="border-color: var(--accent); background: rgba(255,120,73,0.05);"' : ''}>
-      <span class="vendor-row__mark vendor-row__mark--${s.level}">${sym}</span>
+      <span class="vendor-row__mark vendor-row__mark--${s.level}" role="img" aria-label="${markLabel}">${sym}</span>
       <div>
-        <div class="vendor-row__name"><span class="swatch" style="background:${v.swatch}"></span>${escapeHtml(v.name)}</div>
+        <div class="vendor-row__name"><span class="swatch" style="background:${v.swatch}" aria-hidden="true"></span>${escapeHtml(v.name)}</div>
         <div class="vendor-row__value vendor-row__value--${s.level}">${escapeHtml(valText)}</div>
         <div class="vendor-row__note">${escapeHtml(s.note || (s.level === "no" ? "No native equivalent." : "—"))}</div>
         ${srcHtml}
@@ -1080,13 +1162,20 @@ function openFeatureDrawer(feature, focusVendor) {
   openDrawer();
 }
 
+function syncChipsAria(selector) {
+  $$(selector).forEach(b => b.setAttribute("aria-pressed", b.classList.contains("is-active") ? "true" : "false"));
+}
+
 function wireEvents() {
   document.addEventListener("click", (e) => {
+    // Drawer close
+    if (e.target.closest("[data-action='close-drawer']")) { closeDrawer(); return; }
     // Category chips
     const c = e.target.closest(".chip[data-cat]");
     if (c) {
       state.category = c.dataset.cat;
       $$('.chip[data-cat]').forEach(b => b.classList.toggle("is-active", b.dataset.cat === state.category));
+      syncChipsAria('.chip[data-cat]');
       applyFilter();
       return;
     }
@@ -1112,44 +1201,27 @@ function wireEvents() {
           }
         }
       }
+      syncChipsAria('.chip[data-v]');
       applyFilter();
       return;
     }
-    // Cell → footnote
-    const cell = e.target.closest("td.cell");
-    if (cell) {
-      const f = FEATURES.find(x => x.id === cell.dataset.feature);
-      if (f) openFeatureDrawer(f, cell.dataset.vendor);
+    // Cell or feature-name button → open drawer
+    const cellBtn = e.target.closest("button.cell__btn");
+    if (cellBtn) {
+      const f = FEATURES.find(x => x.id === cellBtn.dataset.feature);
+      if (f) openFeatureDrawer(f, cellBtn.dataset.vendor);
       return;
     }
-    // Primitive name → full breakdown
-    const featureCol = e.target.closest("td.feature-col[data-action='open-feature']");
-    if (featureCol) {
-      const row = featureCol.closest("tr.feature-row");
-      const f = FEATURES.find(x => x.id === row.dataset.feature);
+    const featBtn = e.target.closest("button.feature-col__btn");
+    if (featBtn) {
+      const f = FEATURES.find(x => x.id === featBtn.dataset.feature);
       if (f) openFeatureDrawer(f, null);
       return;
     }
   });
 
-  // Keyboard activation for cells & primitive names
-  document.addEventListener("keydown", (e) => {
-    if (e.key !== "Enter" && e.key !== " ") return;
-    const cell = e.target.closest("td.cell");
-    if (cell) {
-      e.preventDefault();
-      const f = FEATURES.find(x => x.id === cell.dataset.feature);
-      if (f) openFeatureDrawer(f, cell.dataset.vendor);
-      return;
-    }
-    const featureCol = e.target.closest("td.feature-col[data-action='open-feature']");
-    if (featureCol) {
-      e.preventDefault();
-      const row = featureCol.closest("tr.feature-row");
-      const f = FEATURES.find(x => x.id === row.dataset.feature);
-      if (f) openFeatureDrawer(f, null);
-    }
-  });
+  // Cells and feature-col buttons are real <button>s now — they get native Enter/Space handling.
+  // No extra keyboard wiring needed for those.
 
   $("#drawer-backdrop").addEventListener("click", closeDrawer);
   $("#search").addEventListener("input", (e) => {

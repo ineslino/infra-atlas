@@ -501,11 +501,21 @@ body {
   letter-spacing: 0.06em;
   color: var(--paper-2);
   text-decoration: none;
-  transition: color 0.15s;
+  transition: color 0.15s, border-color 0.15s;
   white-space: nowrap;
+  padding: 4px 2px;
+  border-bottom: 1px solid transparent;
 }
 .ia-pageindex__item:hover { color: var(--paper); }
+.ia-pageindex__item.is-current {
+  color: var(--paper); border-bottom-color: var(--paper-3);
+}
+.ia-pageindex__item:focus-visible {
+  outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 2px;
+}
 .ia-pageindex__item .dot { width: 6px; height: 6px; border-radius: 50%; flex: none; }
+/* anchor jumps shouldn't land under the sticky 46px nav bar */
+.department { scroll-margin-top: 64px; }
 .ia-pageindex__count {
   background: var(--surface-2);
   border: 1px solid var(--line-2);
@@ -966,15 +976,21 @@ body {
     </p>
 
     <nav class="ia-pageindex" aria-label="Jump to department">
-      <span class="ia-pageindex__label">On this page</span>
-      <a href="#dept-cloud" class="ia-pageindex__item">
-        <span class="dot" style="background:var(--sky)"></span>Dept I — Cloud Compute<span class="ia-pageindex__count">6</span>
+      <span class="ia-pageindex__label" aria-hidden="true">On this page</span>
+      <a href="#dept-cloud" class="ia-pageindex__item" aria-label="Jump to Department I, Cloud Compute, 6 instruments">
+        <span class="dot" style="background:var(--sky)" aria-hidden="true"></span>
+        <span>Dept I — Cloud Compute</span>
+        <span class="ia-pageindex__count" aria-hidden="true">6</span>
       </a>
-      <a href="#dept-apim" class="ia-pageindex__item">
-        <span class="dot" style="background:var(--gold)"></span>Dept II — API Management<span class="ia-pageindex__count">5</span>
+      <a href="#dept-apim" class="ia-pageindex__item" aria-label="Jump to Department II, API Management, 5 instruments">
+        <span class="dot" style="background:var(--gold)" aria-hidden="true"></span>
+        <span>Dept II — API Management</span>
+        <span class="ia-pageindex__count" aria-hidden="true">5</span>
       </a>
-      <a href="#dept-xcloud" class="ia-pageindex__item">
-        <span class="dot" style="background:var(--plum)"></span>Dept III — Cross-Cloud<span class="ia-pageindex__count">9</span>
+      <a href="#dept-xcloud" class="ia-pageindex__item" aria-label="Jump to Department III, Cross-Cloud, 9 instruments">
+        <span class="dot" style="background:var(--plum)" aria-hidden="true"></span>
+        <span>Dept III — Cross-Cloud</span>
+        <span class="ia-pageindex__count" aria-hidden="true">9</span>
       </a>
     </nav>
 
@@ -1619,6 +1635,33 @@ body {
       }).join("");
     })
     .catch(function () { /* leave section hidden */ });
+})();
+
+/* Page-index — highlight the department currently in view */
+(function () {
+  if (!("IntersectionObserver" in window)) return;
+  var items = document.querySelectorAll(".ia-pageindex__item");
+  if (!items.length) return;
+  var byId = {};
+  items.forEach(function (a) {
+    var id = a.getAttribute("href").replace(/^#/, "");
+    byId[id] = a;
+  });
+  var deps = document.querySelectorAll(".department[id]");
+  if (!deps.length) return;
+  // 0px top inset ensures the department doesn't activate until its top crosses below the nav bar
+  var io = new IntersectionObserver(function (entries) {
+    entries.forEach(function (e) {
+      var a = byId[e.target.id];
+      if (!a) return;
+      if (e.isIntersecting) {
+        items.forEach(function (x) { x.classList.remove("is-current"); x.removeAttribute("aria-current"); });
+        a.classList.add("is-current");
+        a.setAttribute("aria-current", "true");
+      }
+    });
+  }, { rootMargin: "-40% 0px -55% 0px", threshold: 0 });
+  deps.forEach(function (d) { io.observe(d); });
 })();
 </script>
 <script src="/nav.js" defer></script>

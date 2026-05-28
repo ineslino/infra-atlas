@@ -90,8 +90,11 @@ a:focus-visible, button:focus-visible { outline: 2px solid var(--accent); outlin
 .masthead__subtitle span { font-family: var(--serif); font-style: italic; color: var(--paper); }
 .masthead__status { text-align: right; display: flex; flex-direction: column; align-items: flex-end; gap: 14px; padding-bottom: 6px; }
 .status-line { display: inline-flex; align-items: center; gap: 10px; font-family: var(--mono); font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--mint); }
-.status-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--mint); animation: pulse 2.4s infinite; }
-@keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(111,231,181,0.5); } 70% { box-shadow: 0 0 0 14px rgba(111,231,181,0); } 100% { box-shadow: 0 0 0 0 rgba(111,231,181,0); } }
+.status-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--mint); }
+@media (prefers-reduced-motion: no-preference) {
+  .status-dot { animation: pulse 2.4s infinite; }
+  @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(111,231,181,0.5); } 70% { box-shadow: 0 0 0 14px rgba(111,231,181,0); } 100% { box-shadow: 0 0 0 0 rgba(111,231,181,0); } }
+}
 .status-time { font-family: var(--mono); font-size: 12px; color: var(--paper-3); }
 .status-counts { display: flex; gap: 24px; margin-top: 4px; }
 .status-counts > div { text-align: right; font-family: var(--mono); font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--paper-3); display: flex; flex-direction: column; gap: 2px; }
@@ -150,11 +153,70 @@ a:focus-visible, button:focus-visible { outline: 2px solid var(--accent); outlin
 .cell-value { display: inline-flex; align-items: baseline; justify-content: center; gap: 2px; font-family: var(--mono); font-size: 11.5px; line-height: 1.35; padding: 4px 8px; border-radius: 3px; max-width: 200px; }
 .cell-value--yes  { color: var(--paper); }
 .cell-value--part { color: var(--part); }
-.cell-value--no   { color: var(--no); opacity: 0.7; }
+.cell-value--no   { color: var(--no); }
 .cell-value__star { font-size: 10px; color: var(--accent); align-self: flex-start; margin-left: 1px; }
 .matrix tbody tr.feature-row.is-hidden,
 .matrix tbody tr.category-row.is-hidden { display: none; }
 .matrix-section.is-hidden { display: none; }
+
+/* button-wrappers — preserve <th>/<td> semantics while keeping cells clickable */
+.cell__btn, .feature-col__btn {
+  background: none; border: 0; margin: 0; padding: 0;
+  color: inherit; font: inherit; line-height: inherit;
+  cursor: pointer; width: 100%; display: block;
+}
+.cell__btn { padding: 4px 0; text-align: center; }
+.feature-col__btn { text-align: left; color: var(--paper); }
+.feature-col__btn:hover { color: var(--accent-2); }
+.cell__btn:focus-visible, .feature-col__btn:focus-visible {
+  outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 3px;
+}
+
+/* section tabs — semantically distinct from filter chips */
+.tablist {
+  display: flex; flex-wrap: wrap; gap: 4px; align-items: stretch;
+  border-bottom: 1px solid var(--line-2); margin-bottom: 18px;
+}
+.tab {
+  background: transparent; border: 0;
+  font-family: var(--mono); font-size: 12.5px; letter-spacing: 0.06em;
+  color: var(--paper-3); padding: 12px 18px; cursor: pointer;
+  border-bottom: 2px solid transparent; margin-bottom: -1px;
+  transition: color 0.15s, border-color 0.15s;
+}
+.tab:hover { color: var(--paper-2); }
+.tab[aria-selected="true"] {
+  color: var(--mint); border-bottom-color: var(--mint);
+}
+.tab__count {
+  font-size: 10.5px; color: var(--paper-4); margin-left: 6px;
+}
+.tab[aria-selected="true"] .tab__count { color: var(--mint); opacity: 0.7; }
+.tab:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; border-radius: 2px; }
+
+/* heading hierarchy — real <h2> for each section */
+.matrix-section__title {
+  font-family: var(--mono); font-size: 10px; letter-spacing: 0.22em;
+  text-transform: uppercase; color: var(--mint); font-weight: 500;
+  margin: 32px 0 16px; display: flex; align-items: center; gap: 18px;
+}
+.matrix-section__title::after { content: ''; flex: 1; height: 1px; background: var(--line-2); }
+
+/* empty state — search yields no matches */
+.matrix-empty {
+  display: none; padding: 32px 28px; text-align: center;
+  font-family: var(--mono); font-size: 12.5px; color: var(--paper-3);
+  border: 1px dashed var(--line-2); border-radius: 6px; margin-bottom: 28px;
+}
+.matrix-empty.is-shown { display: block; }
+.matrix-empty strong { color: var(--paper); font-weight: 500; }
+
+/* visually-hidden — for aria-live filter announcements */
+.sr-only {
+  position: absolute; width: 1px; height: 1px; padding: 0;
+  margin: -1px; overflow: hidden; clip: rect(0,0,0,0);
+  white-space: nowrap; border: 0;
+}
 
 /* ─── LEGEND ─── */
 .legend { display: flex; flex-wrap: wrap; gap: 18px; align-items: center; margin-bottom: 28px; padding: 16px 22px; background: var(--surface); border: 1px solid var(--line); border-radius: 4px; font-family: var(--mono); font-size: 11px; color: var(--paper-2); }
@@ -188,7 +250,7 @@ a:focus-visible, button:focus-visible { outline: 2px solid var(--accent); outlin
 .vendor-row__src a:hover { color: var(--mint); }
 .vendor-row__mark { font-family: var(--mono); font-size: 16px; font-weight: 500; width: 30px; height: 30px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; }
 .vendor-row__mark--yes  { background: rgba(111, 231, 181, 0.15); color: var(--yes); }
-.vendor-row__mark--no   { background: rgba(244, 123, 123, 0.12); color: var(--no); opacity: 0.65; }
+.vendor-row__mark--no   { background: rgba(244, 123, 123, 0.12); color: var(--no); }
 .vendor-row__mark--part { background: rgba(244, 198, 96, 0.15);  color: var(--part); }
 
 /* ─── COLOPHON ─── */
@@ -236,7 +298,7 @@ a:focus-visible, button:focus-visible { outline: 2px solid var(--accent); outlin
       <div class="status-counts">
         <div>Cloud-native<strong>4</strong></div>
         <div>Managed<strong>5</strong></div>
-        <div>Dimensions<strong id="count-dims">—</strong></div>
+        <div>Dimensions<strong id="count-dims">24</strong></div>
       </div>
     </aside>
   </header>
@@ -250,19 +312,26 @@ a:focus-visible, button:focus-visible { outline: 2px solid var(--accent); outlin
     </p>
   </div>
 
+  <div class="tablist" role="tablist" aria-label="Observability view">
+    <button class="tab" role="tab" id="tab-cloud-native" aria-selected="true" aria-controls="section-cloud-native" data-section="cloud-native">
+      Cloud-Native <span class="tab__count" aria-hidden="true">(4)</span><span class="sr-only">, 4 vendors</span>
+    </button>
+    <button class="tab" role="tab" id="tab-managed" aria-selected="false" aria-controls="section-managed" tabindex="-1" data-section="managed">
+      Managed Platforms <span class="tab__count" aria-hidden="true">(5)</span><span class="sr-only">, 5 vendors</span>
+    </button>
+  </div>
+
   <section class="filters">
     <div class="filter-search">
-      <input id="search" type="search" autocomplete="off" spellcheck="false" placeholder="Search — service name, feature, vendor…">
-    </div>
-    <div class="filter-row">
-      <span class="filter-chips__label">Section</span>
-      <button class="chip chip--section is-active" data-section="cloud-native">Cloud-Native (4)</button>
-      <button class="chip chip--section" data-section="managed">Managed Platforms (5)</button>
+      <label for="search" class="sr-only">Search dimensions, vendors, or features</label>
+      <input id="search" type="search" autocomplete="off" spellcheck="false" placeholder="Search — service name, feature, vendor…" aria-label="Search dimensions, vendors, or features">
     </div>
     <div class="filter-row" id="cat-chips">
       <!-- populated by JS -->
     </div>
   </section>
+
+  <div class="sr-only" id="filter-status" role="status" aria-live="polite"></div>
 
   <div class="legend">
     <span class="legend__label">Legend</span>
@@ -273,22 +342,26 @@ a:focus-visible, button:focus-visible { outline: 2px solid var(--accent); outlin
   </div>
 
   <!-- ── SECTION A: CLOUD-NATIVE ── -->
-  <div class="matrix-section" id="section-cloud-native">
-    <div class="section-divider">
-      <span class="section-divider__title">Section A · Cloud-Native Observability</span>
-    </div>
+  <div class="matrix-section" id="section-cloud-native" role="tabpanel" aria-labelledby="tab-cloud-native">
+    <h2 class="matrix-section__title" id="section-cloud-native-title">Cloud-Native Observability</h2>
     <div class="matrix-wrap scroll-hint">
-      <table class="matrix" id="matrix-a" aria-label="Cloud-native observability comparison"></table>
+      <table class="matrix" id="matrix-a" aria-labelledby="section-cloud-native-title"></table>
+    </div>
+    <div class="matrix-empty" id="empty-a" role="status" aria-live="polite">
+      <strong>No dimensions match your filters.</strong><br>
+      Try a broader search term, or switch the category to “All”.
     </div>
   </div>
 
   <!-- ── SECTION B: MANAGED PLATFORMS ── -->
-  <div class="matrix-section is-hidden" id="section-managed">
-    <div class="section-divider">
-      <span class="section-divider__title">Section B · Managed Observability Platforms</span>
-    </div>
+  <div class="matrix-section is-hidden" id="section-managed" role="tabpanel" aria-labelledby="tab-managed" hidden>
+    <h2 class="matrix-section__title" id="section-managed-title">Managed Observability Platforms</h2>
     <div class="matrix-wrap scroll-hint">
-      <table class="matrix" id="matrix-b" aria-label="Managed observability platforms comparison"></table>
+      <table class="matrix" id="matrix-b" aria-labelledby="section-managed-title"></table>
+    </div>
+    <div class="matrix-empty" id="empty-b" role="status" aria-live="polite">
+      <strong>No dimensions match your filters.</strong><br>
+      Try a broader search term, or switch the category to “All”.
     </div>
   </div>
 
@@ -311,9 +384,9 @@ a:focus-visible, button:focus-visible { outline: 2px solid var(--accent); outlin
 </div>
 
 <div class="drawer-backdrop" id="drawer-backdrop"></div>
-<aside class="drawer" id="drawer" role="dialog" aria-modal="true" aria-label="Feature detail">
+<aside class="drawer" id="drawer" role="dialog" aria-modal="true" aria-labelledby="drawer-title" hidden>
   <div class="drawer__head">
-    <button class="drawer__close" id="drawer-close" aria-label="Close">ESC</button>
+    <button class="drawer__close" id="drawer-close" aria-label="Close (Esc)" type="button">✕</button>
     <div class="drawer__eyebrow" id="drawer-eyebrow"></div>
     <h2 class="drawer__title" id="drawer-title"></h2>
     <p class="drawer__desc" id="drawer-desc"></p>
@@ -474,6 +547,7 @@ const CATEGORIES_B = [
   { key: "signals",  label: "Signals & Data Types" },
   { key: "otel",     label: "OpenTelemetry" },
   { key: "k8s",      label: "Kubernetes" },
+  { key: "alerting", label: "Alerting" },
   { key: "free",     label: "Free Tier" }
 ];
 
@@ -551,6 +625,27 @@ const FEATURES_B = [
       dynatrace:{ level:"yes", value:"Dynatrace Operator", note:"Dynatrace Operator automatically injects OneAgent into pods. Full autopilot: no manual instrumentation needed for supported runtimes.", src:"https://www.dynatrace.com/support/help/setup-and-configuration/setup-on-container-platforms/kubernetes/" }
     }
   },
+  // ── Alerting ──
+  { id:"b-alert-threshold", category:"alerting", name:"Threshold alerting",
+    desc:"Alert when a metric or query crosses a defined threshold.",
+    support:{
+      dd:       { level:"yes", value:"Monitors",         note:"Comprehensive monitor types (metric, log, APM, RUM, composite). Granular threshold tuning UI with preview. Routes via 60+ integrations.", src:"https://docs.datadoghq.com/monitors/" },
+      grafana:  { level:"yes", value:"Grafana Alerting", note:"Unified alerting across Mimir/Loki/Tempo. Multi-dimensional rules; contact points for Slack, PagerDuty, webhooks, OnCall.", src:"https://grafana.com/docs/grafana/latest/alerting/" },
+      nr:       { level:"yes", value:"NRQL Alerts",      note:"Condition alerts on any NRQL query. Workflows route to PagerDuty, Slack, webhooks. Static and baseline thresholds.", src:"https://docs.newrelic.com/docs/alerts/get-started/intro-alerts/" },
+      honeycomb:{ level:"yes", value:"Triggers + SLOs",  note:"Threshold triggers on event aggregates. SLO burn-rate alerts built in. Slack and PagerDuty integration native.", src:"https://docs.honeycomb.io/notify/triggers/" },
+      dynatrace:{ level:"yes", value:"Problems",         note:"Threshold alerts integrate with Davis AI; multiple signals collapsed into a single 'Problem' card with root-cause context.", src:"https://docs.dynatrace.com/docs/platform/davis-ai" }
+    }
+  },
+  { id:"b-alert-anomaly", category:"alerting", name:"ML anomaly detection",
+    desc:"Machine-learning-based detection of unexpected metric or trace patterns.",
+    support:{
+      dd:       { level:"yes", value:"Watchdog + Anomaly", note:"Watchdog AI auto-detects anomalies across metrics/traces/logs without config. Anomaly Detection monitor type uses ML baselining.", src:"https://docs.datadoghq.com/monitors/types/anomaly/" },
+      grafana:  { level:"part", value:"Adaptive thresholds (preview)", note:"Native ML anomaly detection limited; adaptive thresholds in Grafana Cloud are in preview. Often supplemented with Prometheus recording rules.", src:"https://grafana.com/docs/grafana-cloud/alerting-and-irm/alerting/" },
+      nr:       { level:"yes", value:"Applied Intelligence", note:"NRAI learns baselines for any NRQL query; auto-groups related incidents and suppresses correlated noise.", src:"https://docs.newrelic.com/docs/alerts/applied-intelligence/overview/" },
+      honeycomb:{ level:"part", value:"BubbleUp (manual)",  note:"BubbleUp surfaces correlated dimensions on outliers — a powerful manual analysis tool, but not autonomous ML alerting.", src:"https://docs.honeycomb.io/investigate/bubbleup/" },
+      dynatrace:{ level:"yes", value:"Davis AI",          note:"Davis AI auto-baselines every metric with zero configuration; anomalies open Problem tickets automatically with causal analysis.", src:"https://docs.dynatrace.com/docs/platform/davis-ai" }
+    }
+  },
   // ── Free Tier ──
   { id:"b-free", category:"free", name:"Free tier available",
     desc:"Whether a permanent free tier exists (not just a time-limited trial).",
@@ -583,22 +678,26 @@ function renderMatrix(tableId, vendors, categories, features) {
   let html = "<thead><tr>";
   html += '<th class="feature-col" scope="col">Dimension</th>';
   vendors.forEach(v => {
-    html += `<th class="col-${v.key}" scope="col"><span class="vendor-tag"><span class="swatch" style="background:${v.swatch}"></span>${esc(v.short)}</span></th>`;
+    html += `<th class="col-${v.key}" scope="col"><span class="vendor-tag"><span class="swatch" style="background:${v.swatch}" aria-hidden="true"></span>${esc(v.short)}</span></th>`;
   });
   html += "</tr></thead><tbody>";
   categories.forEach(cat => {
     const rows = features.filter(f => f.category === cat.key);
     if (!rows.length) return;
-    html += `<tr class="category-row" data-cat="${cat.key}"><td colspan="${vendors.length + 1}"><span class="cat-label">▸ ${esc(cat.label)}</span></td></tr>`;
+    html += `<tr class="category-row" data-cat="${cat.key}"><td colspan="${vendors.length + 1}"><span class="cat-label"><span aria-hidden="true">▸ </span>${esc(cat.label)}</span></td></tr>`;
     rows.forEach(f => {
       html += `<tr class="feature-row" data-feature="${f.id}" data-cat="${cat.key}">`;
-      html += `<th class="feature-col" scope="row" data-action="open-feature" data-tid="${tableId}" tabindex="0" role="button">${esc(f.name)}</th>`;
+      // <th> preserves row-header semantics; <button> inside makes it actionable without overriding the role
+      html += `<th class="feature-col" scope="row"><button type="button" class="feature-col__btn" data-action="open-feature" data-feature="${f.id}" data-tid="${tableId}" aria-haspopup="dialog" aria-label="Open detail for ${esc(f.name)}">${esc(f.name)}</button></th>`;
       vendors.forEach(v => {
         const s = f.support[v.key] || { level:"no", value:"—", note:"" };
         const hasNote = !!(s.note && s.note.length > 2);
         const val = s.value || (s.level==="yes"?"✓":s.level==="part"?"◐":"✗");
-        html += `<td class="cell col-${v.key}" data-feature="${f.id}" data-vendor="${v.key}" data-tid="${tableId}" tabindex="0" role="button" aria-label="${esc(f.name)} — ${esc(v.name)}: ${esc(val)}">`;
-        html += `<span class="cell-value cell-value--${s.level}">${esc(val)}${hasNote?'<span class="cell-value__star">*</span>':''}</span>`;
+        const levelLabel = s.level === "yes" ? "supported" : s.level === "part" ? "partial" : "not available";
+        html += `<td class="cell col-${v.key}" data-feature="${f.id}" data-vendor="${v.key}" data-tid="${tableId}">`;
+        html += `<button type="button" class="cell__btn" data-feature="${f.id}" data-vendor="${v.key}" data-tid="${tableId}" aria-haspopup="dialog" aria-label="${esc(f.name)} — ${esc(v.name)}: ${esc(val)} (${levelLabel}). Open detail.">`;
+        html += `<span class="cell-value cell-value--${s.level}">${esc(val)}${hasNote?'<span class="cell-value__star" aria-hidden="true">*</span>':''}</span>`;
+        html += `</button>`;
         html += `</td>`;
       });
       html += `</tr>`;
@@ -616,10 +715,12 @@ function getContext(tableId) {
 
 function applyFilter() {
   const q = state.query.trim().toLowerCase();
+  let totalVisible = 0;
   ["matrix-a", "matrix-b"].forEach(tid => {
     const { vendors, categories, features } = getContext(tid);
     const table = $("#" + tid);
     if (!table) return;
+    let sectionVisible = 0;
     table.querySelectorAll("tbody tr.feature-row").forEach(row => {
       const f = features.find(x => x.id === row.dataset.feature);
       if (!f) return;
@@ -631,39 +732,108 @@ function applyFilter() {
         show = hay.includes(q);
       }
       row.classList.toggle("is-hidden", !show);
+      if (show) sectionVisible++;
     });
     categories.forEach(cat => {
       const visible = [...table.querySelectorAll(`tbody tr.feature-row[data-cat="${cat.key}"]`)].some(r => !r.classList.contains("is-hidden"));
       const catRow = table.querySelector(`tbody tr.category-row[data-cat="${cat.key}"]`);
       if (catRow) catRow.classList.toggle("is-hidden", !visible);
     });
+    // empty state per section
+    const emptyId = tid === "matrix-a" ? "empty-a" : "empty-b";
+    const empty = $("#" + emptyId);
+    if (empty) empty.classList.toggle("is-shown", sectionVisible === 0);
+    const wrap = table.closest(".matrix-wrap");
+    if (wrap) wrap.style.display = sectionVisible === 0 ? "none" : "";
+    // track the currently visible section's count
+    const isCurrent = (state.section === "cloud-native" && tid === "matrix-a") ||
+                      (state.section === "managed" && tid === "matrix-b");
+    if (isCurrent) totalVisible = sectionVisible;
   });
+  // announce result to screen readers (debounced via simple replace)
+  const status = $("#filter-status");
+  if (status) {
+    const noun = totalVisible === 1 ? "dimension" : "dimensions";
+    status.textContent = (q || state.category !== "all")
+      ? `${totalVisible} ${noun} match the current filters.`
+      : "";
+  }
 }
 
 function setSection(sec) {
+  const prevCategory = state.category;
   state.section = sec;
-  state.category = "all";
-  $$(".chip--section").forEach(b => b.classList.toggle("is-active", b.dataset.section === sec));
-  $("#section-cloud-native").classList.toggle("is-hidden", sec !== "cloud-native");
-  $("#section-managed").classList.toggle("is-hidden", sec !== "managed");
+  // section panels — use hidden attr for true accessibility hiding
+  const cn = $("#section-cloud-native");
+  const mg = $("#section-managed");
+  cn.classList.toggle("is-hidden", sec !== "cloud-native");
+  mg.classList.toggle("is-hidden", sec !== "managed");
+  cn.hidden = sec !== "cloud-native";
+  mg.hidden = sec !== "managed";
+  // tabs — aria-selected + roving tabindex
+  $$(".tab").forEach(b => {
+    const on = b.dataset.section === sec;
+    b.setAttribute("aria-selected", on ? "true" : "false");
+    b.tabIndex = on ? 0 : -1;
+  });
+  // rebuild category chips for this section
   const { categories } = getContext(sec === "cloud-native" ? "matrix-a" : "matrix-b");
+  const validKeys = new Set(categories.map(c => c.key));
+  // preserve category filter if it still exists in the new section, else reset to "all"
+  if (prevCategory !== "all" && !validKeys.has(prevCategory)) {
+    state.category = "all";
+  }
   const chips = $("#cat-chips");
   chips.innerHTML = `<span class="filter-chips__label">Category</span>
-    <button class="chip is-active" data-cat="all">All</button>` +
-    categories.map(c => `<button class="chip" data-cat="${c.key}">${esc(c.label)}</button>`).join("");
+    <button class="chip${state.category === "all" ? " is-active" : ""}" data-cat="all" aria-pressed="${state.category === "all"}">All</button>` +
+    categories.map(c => `<button class="chip${state.category === c.key ? " is-active" : ""}" data-cat="${c.key}" aria-pressed="${state.category === c.key}">${esc(c.label)}</button>`).join("");
   chips.querySelectorAll(".chip[data-cat]").forEach(b => {
     b.addEventListener("click", () => {
       state.category = b.dataset.cat;
-      chips.querySelectorAll(".chip[data-cat]").forEach(x => x.classList.toggle("is-active", x.dataset.cat === state.category));
+      chips.querySelectorAll(".chip[data-cat]").forEach(x => {
+        const active = x.dataset.cat === state.category;
+        x.classList.toggle("is-active", active);
+        x.setAttribute("aria-pressed", active ? "true" : "false");
+      });
       applyFilter();
     });
   });
   applyFilter();
 }
 
+// keyboard nav for tabs — Left/Right arrows per WAI-ARIA tab pattern
+document.addEventListener("keydown", function(e) {
+  const tab = e.target.closest('[role="tab"]');
+  if (!tab) return;
+  if (e.key !== "ArrowRight" && e.key !== "ArrowLeft" && e.key !== "Home" && e.key !== "End") return;
+  e.preventDefault();
+  const tabs = $$('[role="tab"]');
+  let idx = tabs.indexOf(tab);
+  if (e.key === "ArrowRight") idx = (idx + 1) % tabs.length;
+  else if (e.key === "ArrowLeft") idx = (idx - 1 + tabs.length) % tabs.length;
+  else if (e.key === "Home") idx = 0;
+  else if (e.key === "End") idx = tabs.length - 1;
+  tabs[idx].focus();
+  setSection(tabs[idx].dataset.section);
+});
+
 // ─── DRAWER ─────────────────────────────────────────────────────────
 
 let lastFocus = null;
+let scrollLockY = 0;
+const FOCUSABLE = 'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"]), input, select, textarea';
+
+function trapFocus(e) {
+  if (e.key !== "Tab") return;
+  const drawer = $("#drawer");
+  if (!drawer.classList.contains("is-open")) return;
+  const focusables = drawer.querySelectorAll(FOCUSABLE);
+  if (!focusables.length) return;
+  const first = focusables[0], last = focusables[focusables.length - 1];
+  if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+  else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+}
+
 function openDrawer(featureId, tableId) {
   const { vendors, features } = getContext(tableId);
   const f = features.find(x => x.id === featureId);
@@ -676,10 +846,12 @@ function openDrawer(featureId, tableId) {
   vendors.forEach(v => {
     const s = f.support[v.key] || { level:"no", value:"—", note:"" };
     const val = s.value || (s.level==="yes"?"✓":s.level==="part"?"◐":"✗");
+    const mark = s.level==="yes"?"✓":s.level==="part"?"◐":"✗";
+    const markLabel = s.level === "yes" ? "Supported" : s.level === "part" ? "Partial" : "Not available";
     body += `<div class="vendor-row">
-      <span class="vendor-row__mark vendor-row__mark--${s.level}">${s.level==="yes"?"✓":s.level==="part"?"◐":"✗"}</span>
+      <span class="vendor-row__mark vendor-row__mark--${s.level}" role="img" aria-label="${markLabel}">${mark}</span>
       <div>
-        <div class="vendor-row__name"><span class="swatch" style="background:${v.swatch}"></span>${esc(v.name)}</div>
+        <div class="vendor-row__name"><span class="swatch" style="background:${v.swatch}" aria-hidden="true"></span>${esc(v.name)}</div>
         <div class="vendor-row__value vendor-row__value--${s.level !== "yes" ? s.level : ""}">${esc(val)}</div>
         ${s.note ? `<div class="vendor-row__note">${esc(s.note)}</div>` : ""}
         ${s.src ? `<div class="vendor-row__src"><a href="${esc(s.src)}" target="_blank" rel="noopener">Official docs →</a></div>` : ""}
@@ -688,35 +860,51 @@ function openDrawer(featureId, tableId) {
   body += `</div>`;
   $("#drawer-body").innerHTML = body;
   $("#drawer-backdrop").classList.add("is-open");
-  $("#drawer").classList.add("is-open");
+  const drawer = $("#drawer");
+  drawer.classList.add("is-open");
+  drawer.hidden = false;
+  // scroll lock — capture position so we can restore it on close
+  scrollLockY = window.scrollY;
+  document.body.style.position = "fixed";
+  document.body.style.top = `-${scrollLockY}px`;
+  document.body.style.left = "0";
+  document.body.style.right = "0";
+  document.body.style.width = "100%";
   $("#drawer-close").focus();
+  document.addEventListener("keydown", trapFocus);
 }
 function closeDrawer() {
+  const drawer = $("#drawer");
+  if (!drawer.classList.contains("is-open")) return;
   $("#drawer-backdrop").classList.remove("is-open");
-  $("#drawer").classList.remove("is-open");
-  if (lastFocus) lastFocus.focus();
+  drawer.classList.remove("is-open");
+  // restore scroll
+  document.body.style.position = "";
+  document.body.style.top = "";
+  document.body.style.left = "";
+  document.body.style.right = "";
+  document.body.style.width = "";
+  window.scrollTo(0, scrollLockY);
+  document.removeEventListener("keydown", trapFocus);
+  // wait for transform animation before hidden-attribute hide so AT doesn't see briefly-hidden content
+  setTimeout(() => { if (!drawer.classList.contains("is-open")) drawer.hidden = true; }, 350);
+  if (lastFocus && typeof lastFocus.focus === "function") lastFocus.focus();
 }
+
+// click delegation — handles both the cell button and the row-header button
 document.addEventListener("click", e => {
-  const cell = e.target.closest(".cell[data-feature]");
-  const feat = e.target.closest(".feature-col[data-action='open-feature']");
-  if (cell) openDrawer(cell.dataset.feature, cell.dataset.tid);
-  else if (feat) openDrawer(feat.dataset.feature || feat.closest("tr").dataset.feature, feat.dataset.tid);
+  const btn = e.target.closest("button.cell__btn, button.feature-col__btn");
+  if (btn) openDrawer(btn.dataset.feature, btn.dataset.tid);
 });
 document.addEventListener("keydown", e => {
   if (e.key === "Escape") closeDrawer();
-  if (e.key === "Enter" || e.key === " ") {
-    const cell = e.target.closest(".cell[data-feature]");
-    const feat = e.target.closest(".feature-col[data-action='open-feature']");
-    if (cell) { e.preventDefault(); openDrawer(cell.dataset.feature, cell.dataset.tid); }
-    else if (feat) { e.preventDefault(); openDrawer(feat.dataset.feature || feat.closest("tr").dataset.feature, feat.dataset.tid); }
-  }
 });
 $("#drawer-backdrop").addEventListener("click", closeDrawer);
 $("#drawer-close").addEventListener("click", closeDrawer);
 
-// ─── SECTION TOGGLE + SEARCH ─────────────────────────────────────────
+// ─── SECTION TABS + SEARCH ─────────────────────────────────────────
 
-$$(".chip--section").forEach(b => b.addEventListener("click", () => setSection(b.dataset.section)));
+$$(".tab").forEach(b => b.addEventListener("click", () => setSection(b.dataset.section)));
 $("#search").addEventListener("input", function() { state.query = this.value; applyFilter(); });
 
 // ─── INIT ─────────────────────────────────────────────────────────────
