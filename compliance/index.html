@@ -24,6 +24,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@300;400;500;600&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/matrix.css">
 
 <style>
 :root {
@@ -72,16 +73,6 @@ body {
 }
 ::selection { background: var(--accent); color: var(--ink); }
 
-/* Focus-visible — keyboard navigation made obvious, mouse clicks left clean */
-:focus-visible {
-  outline: 2px solid var(--accent);
-  outline-offset: 2px;
-  border-radius: 2px;
-}
-.cell:focus-visible, .feature-col[data-action]:focus-visible {
-  outline-offset: -2px;
-}
-
 .page { max-width: 1640px; margin: 0 auto; padding: 56px 48px 96px; position: relative; }
 
 /* ─────────── MASTHEAD ─────────── */
@@ -120,12 +111,14 @@ body {
 }
 .status-dot {
   width: 8px; height: 8px; border-radius: 50%; background: var(--gold);
-  animation: pulse 2.4s infinite;
 }
-@keyframes pulse {
-  0% { box-shadow: 0 0 0 0 rgba(244,198,96,0.5); }
-  70% { box-shadow: 0 0 0 14px rgba(244,198,96,0); }
-  100% { box-shadow: 0 0 0 0 rgba(244,198,96,0); }
+@media (prefers-reduced-motion: no-preference) {
+  .status-dot { animation: pulse 2.4s infinite; }
+  @keyframes pulse {
+    0% { box-shadow: 0 0 0 0 rgba(244,198,96,0.5); }
+    70% { box-shadow: 0 0 0 14px rgba(244,198,96,0); }
+    100% { box-shadow: 0 0 0 0 rgba(244,198,96,0); }
+  }
 }
 .status-time { font-family: var(--mono); font-size: 12px; color: var(--paper-3); }
 .status-counts { display: flex; gap: 24px; margin-top: 4px; }
@@ -178,94 +171,22 @@ body {
   width: 8px; height: 8px; border-radius: 2px;
 }
 
-/* ─────────── MATRIX ─────────── */
+/* ─────────── MATRIX (compliance-specific overrides) ─────────── */
+/* base matrix table + button-wrappers + drawer + vendor-row + empty state in /assets/matrix.css */
 .matrix-wrap {
-  overflow-x: auto; margin-bottom: 48px;
+  margin-bottom: 48px;
   border: 1px solid var(--line); border-radius: 6px;
   background: linear-gradient(180deg, var(--ink-2) 0%, var(--ink) 100%);
 }
-.matrix {
-  width: 100%; border-collapse: collapse; min-width: 1000px;
-  font-family: var(--sans); font-size: 13px;
-}
-.matrix thead th {
-  position: sticky; top: 0; z-index: 10; background: var(--ink-2);
-  font-family: var(--mono); font-weight: 500; font-size: 10.5px;
-  letter-spacing: 0.14em; text-transform: uppercase; color: var(--paper-2);
-  padding: 18px 12px 12px; vertical-align: bottom; text-align: center;
-  border-bottom: 1px solid var(--line-2);
-  white-space: nowrap;
-}
-.matrix thead th.feature-col {
-  text-align: left; padding-left: 22px; min-width: 300px;
-  font-family: var(--serif); font-style: italic; font-size: 16px;
-  letter-spacing: 0; text-transform: none; color: var(--paper);
-  font-weight: 400;
-}
-.matrix th .vendor-tag {
-  display: inline-flex; align-items: center; gap: 6px;
-}
-.matrix th .swatch {
-  width: 6px; height: 6px; border-radius: 1px;
-}
+.matrix { min-width: 1000px; /* 6 columns — wider than the shared default */ }
+.matrix thead th.feature-col { min-width: 300px; }
 
-.matrix tbody tr.category-row td {
-  padding: 22px 22px 10px;
-  border-top: 1px dashed var(--line);
-  background: linear-gradient(180deg, rgba(0,0,0,0.2), transparent);
-}
-.matrix tbody tr.category-row td .cat-label {
-  font-family: var(--mono); font-size: 10px; letter-spacing: 0.22em;
-  text-transform: uppercase; color: var(--paper-3);
-  display: flex; align-items: center; gap: 10px;
-}
-.matrix tbody tr.category-row td .cat-label::after {
-  content: ''; flex: 1; height: 1px; background: var(--line);
-}
-.matrix tbody tr.feature-row td {
-  padding: 12px 12px; border-bottom: 1px solid var(--line);
-  vertical-align: middle;
-}
-.matrix tbody tr.feature-row td.feature-col {
-  padding-left: 22px; color: var(--paper); font-size: 14px;
-  text-align: left;
-  border-right: 1px solid var(--line);
-}
-.matrix tbody tr.feature-row td.feature-col .feature-sub {
-  display: block; font-family: var(--mono); font-size: 10.5px;
-  letter-spacing: 0.04em; color: var(--paper-3); margin-top: 3px; text-transform: uppercase;
-}
-.matrix tbody tr.feature-row td.cell {
-  text-align: center; min-width: 96px; cursor: pointer;
-  transition: background 0.15s ease;
-  position: relative;
-}
-.matrix tbody tr.feature-row td.cell:hover {
-  background: rgba(255, 120, 73, 0.04);
-}
-.matrix tbody tr.feature-row:hover {
-  background: linear-gradient(90deg, transparent, rgba(255, 120, 73, 0.02), transparent);
-}
-
-.cell-mark {
-  display: inline-flex; align-items: center; justify-content: center;
-  width: 24px; height: 24px; border-radius: 50%;
-  font-family: var(--mono); font-size: 14px; font-weight: 500;
-  position: relative;
-}
-.cell-mark--yes  { background: rgba(111, 231, 181, 0.15); color: var(--yes); }
-.cell-mark--no   { background: rgba(244, 123, 123, 0.12); color: var(--no); }
-.cell-mark--part { background: rgba(244, 198, 96, 0.15); color: var(--part); }
+/* Cell-mark "star" badge — compliance-specific positioning for the corner footnote indicator (used in legend only; cells use the shared cell-value rendering) */
 .cell-mark__star {
   position: absolute; top: -3px; right: -6px;
   font-size: 10px; color: var(--accent);
   background: var(--ink-2); border-radius: 50%; width: 12px; height: 12px;
   display: inline-flex; align-items: center; justify-content: center;
-}
-.cell-tier {
-  display: block; font-family: var(--mono); font-size: 9px;
-  letter-spacing: 0.06em; color: var(--paper-3); margin-top: 5px;
-  text-transform: uppercase; white-space: nowrap;
 }
 
 /* Hide columns when vendor filtered out */
@@ -274,10 +195,6 @@ body {
 .matrix.hide-gcp    .col-gcp,
 .matrix.hide-oci    .col-oci,
 .matrix.hide-ovh    .col-ovh { display: none; }
-
-/* Hide rows when filtered/searched */
-.matrix tbody tr.feature-row.is-hidden,
-.matrix tbody tr.category-row.is-hidden { display: none; }
 
 /* ─────────── LEGEND ─────────── */
 .legend {
@@ -304,85 +221,15 @@ body {
 }
 .caveat em { font-family: var(--serif); font-style: italic; color: var(--paper); }
 
-/* ─────────── DRAWER ─────────── */
-.drawer-backdrop {
-  position: fixed; inset: 0; background: rgba(10, 9, 7, 0.7); backdrop-filter: blur(8px);
-  z-index: 200; opacity: 0; pointer-events: none; transition: opacity 0.25s ease;
-}
-.drawer-backdrop.is-open { opacity: 1; pointer-events: auto; }
-.drawer {
-  position: fixed; top: 0; right: 0; bottom: 0; width: min(640px, 100%);
-  background: var(--ink-2); border-left: 1px solid var(--line-2); z-index: 201;
-  transform: translateX(100%); transition: transform 0.32s cubic-bezier(0.2, 0.8, 0.2, 1);
-  display: flex; flex-direction: column;
-}
-.drawer.is-open { transform: translateX(0); }
-.drawer__head {
-  padding: 28px 32px 22px; border-bottom: 1px solid var(--line); position: relative; flex-shrink: 0;
-}
-.drawer__close {
-  position: absolute; top: 20px; right: 20px;
-  background: transparent; border: 1px solid var(--line-2); color: var(--paper-2);
-  font-family: var(--mono); font-size: 11px; padding: 6px 10px; cursor: pointer;
-  border-radius: 2px; letter-spacing: 0.1em; text-transform: uppercase;
-}
-.drawer__close:hover { border-color: var(--paper); color: var(--paper); }
-.drawer__eyebrow {
-  font-family: var(--mono); font-size: 10px; letter-spacing: 0.22em;
-  text-transform: uppercase; color: var(--accent);
-}
-.drawer__title {
-  font-family: var(--serif); font-size: 32px; font-weight: 400;
-  letter-spacing: -0.012em; line-height: 1.05; margin-top: 8px;
-}
-.drawer__desc {
-  margin-top: 12px; font-size: 14px; color: var(--paper-2); line-height: 1.6;
-}
-.drawer__body { padding: 22px 32px 32px; overflow-y: auto; flex: 1; }
-.drawer__section { margin-bottom: 24px; }
-.drawer__section h4 {
-  font-family: var(--mono); font-size: 10.5px; font-weight: 500;
-  letter-spacing: 0.18em; text-transform: uppercase; color: var(--paper-3);
-  margin-bottom: 12px; display: flex; align-items: center; gap: 10px;
-}
-.drawer__section h4::after { content: ''; flex: 1; height: 1px; background: var(--line); }
+/* drawer + vendor-row in /assets/matrix.css */
 
-.vendor-row {
-  display: grid; grid-template-columns: auto 1fr; gap: 14px;
-  padding: 14px 16px; background: var(--surface);
-  border: 1px solid var(--line); border-radius: 3px; margin-bottom: 6px;
-  align-items: start;
-}
-.vendor-row__name {
-  font-family: var(--mono); font-size: 12.5px; font-weight: 500; color: var(--paper);
-  display: flex; align-items: center; gap: 9px; flex-wrap: wrap;
-}
-.vendor-row__name .swatch { width: 8px; height: 8px; border-radius: 2px; flex: none; }
+/* Compliance-specific drawer additions: tier pill in vendor-row name */
+.vendor-row__name { flex-wrap: wrap; }
 .vendor-row__tier {
   font-family: var(--mono); font-size: 9px; letter-spacing: 0.08em;
   text-transform: uppercase; color: var(--ink); background: var(--paper-3);
   padding: 2px 7px; border-radius: 99px;
 }
-.vendor-row__note {
-  font-family: var(--sans); font-size: 12.5px; color: var(--paper-2); line-height: 1.55;
-  margin-top: 7px;
-}
-.vendor-row__src {
-  display: inline-block; margin-top: 8px;
-  font-family: var(--mono); font-size: 10.5px;
-  color: var(--paper-3); text-decoration: underline;
-  text-decoration-color: var(--line-2); text-underline-offset: 3px;
-  word-break: break-all;
-}
-.vendor-row__src:hover { color: var(--accent); }
-.vendor-row__mark {
-  font-family: var(--mono); font-size: 18px; font-weight: 500;
-  width: 30px; height: 30px; border-radius: 50%;
-  display: inline-flex; align-items: center; justify-content: center; flex: none;
-}
-.vendor-row__mark--yes  { background: rgba(111, 231, 181, 0.15); color: var(--yes); }
-.vendor-row__mark--no   { background: rgba(244, 123, 123, 0.12); color: var(--no); opacity: 0.65; }
-.vendor-row__mark--part { background: rgba(244, 198, 96, 0.15); color: var(--part); }
 
 /* ─────────── COLOPHON ─────────── */
 .colophon {
@@ -450,11 +297,14 @@ body {
 
   <section class="filters">
     <div class="filter-search">
-      <input id="search" type="search" autocomplete="off" spellcheck="false" placeholder="Filter programs — search by name, region, framework, cloud…">
+      <label for="search" class="sr-only">Search compliance programs, frameworks, or clouds</label>
+      <input id="search" type="search" autocomplete="off" spellcheck="false" placeholder="Filter programs — search by name, region, framework, cloud…" aria-label="Search compliance programs, frameworks, or clouds">
     </div>
     <div class="filter-chips" id="cat-chips"></div>
     <div class="filter-chips" id="vendor-chips"></div>
   </section>
+
+  <div class="sr-only" id="filter-status" role="status" aria-live="polite"></div>
 
   <div class="caveat">
     <strong>Read the asterisks.</strong> A compliance certification is almost never a property of "the cloud" as a whole. It is scoped — to a <em>set of regions</em>, to an <em>in-scope service list</em>, sometimes to a <em>dedicated government or sovereign environment</em> that is a different product with different pricing. A "✓" here means the provider holds the attestation and publishes it; the footnote tells you the boundary. Treat the footnote, not the tick, as the answer — and always confirm scope against the vendor's current audit report before you design to it.
@@ -468,8 +318,13 @@ body {
     <span class="legend__item"><span class="cell-mark cell-mark--yes" style="position:relative">✓<span class="cell-mark__star">*</span></span> Click any cell for the note &amp; source</span>
   </div>
 
-  <div class="matrix-wrap">
-    <table class="matrix" id="matrix"></table>
+  <div class="matrix-wrap" id="matrix-wrap">
+    <table class="matrix" id="matrix" aria-label="Compliance certifications comparison across cloud providers"></table>
+  </div>
+
+  <div class="matrix-empty" id="matrix-empty" role="status" aria-live="polite">
+    <strong>No programs match your filters.</strong><br>
+    Try a broader search term, or switch the category to &ldquo;All&rdquo;.
   </div>
 
   </main>
@@ -493,7 +348,7 @@ body {
 
 <!-- DRAWER -->
 <div class="drawer-backdrop" id="drawer-backdrop"></div>
-<aside class="drawer" id="drawer" aria-hidden="true">
+<aside class="drawer" id="drawer" role="dialog" aria-modal="true" aria-labelledby="drawer-title" aria-hidden="true" hidden>
   <div class="drawer__head" id="drawer-head"></div>
   <div class="drawer__body" id="drawer-body"></div>
 </aside>
@@ -892,18 +747,21 @@ function init() {
   // Category chips
   const catChips = $("#cat-chips");
   catChips.innerHTML = `<span class="filter-chips__label">Domain</span>
-    <button class="chip is-active" data-cat="all">All</button>` +
-    CATEGORIES.map(c => `<button class="chip" data-cat="${c.key}">${c.label}</button>`).join("");
+    <button class="chip is-active" data-cat="all" aria-pressed="true">All</button>` +
+    CATEGORIES.map(c => `<button class="chip" data-cat="${c.key}" aria-pressed="false">${c.label}</button>`).join("");
 
   // Cloud chips
   const vChips = $("#vendor-chips");
   vChips.innerHTML = `<span class="filter-chips__label">Clouds</span>
-    <button class="chip is-active" data-v="all">All</button>` +
-    VENDORS.map(v => `<button class="chip" data-v="${v.key}"><span class="swatch" style="background:${v.swatch}"></span>${v.short}</button>`).join("");
+    <button class="chip is-active" data-v="all" aria-pressed="true">All</button>` +
+    VENDORS.map(v => `<button class="chip" data-v="${v.key}" aria-pressed="false"><span class="swatch" style="background:${v.swatch}" aria-hidden="true"></span>${v.short}</button>`).join("");
 
   applyHash();
   renderMatrix();
   wireEvents();
+  // sync aria-pressed once after applyHash may have flipped is-active states
+  IA.matrix.syncChipsAria('.chip[data-cat]');
+  IA.matrix.syncChipsAria('.chip[data-v]');
   window.addEventListener("hashchange", () => { applyHash(); applyFilter(); });
 }
 
@@ -912,36 +770,20 @@ function symFor(level) {
 }
 
 function renderMatrix() {
-  const table = $("#matrix");
-  let html = "<thead><tr>";
-  html += '<th class="feature-col" scope="col">Compliance program</th>';
-  VENDORS.forEach(v => {
-    html += `<th class="col-${v.key}" scope="col"><span class="vendor-tag"><span class="swatch" style="background:${v.swatch}"></span>${v.short}</span></th>`;
-  });
-  html += "</tr></thead><tbody>";
-
-  CATEGORIES.forEach(cat => {
-    const features = FEATURES.filter(f => f.category === cat.key);
-    if (features.length === 0) return;
-    html += `<tr class="category-row" data-cat="${cat.key}"><td colspan="${VENDORS.length + 1}"><span class="cat-label">▸ ${cat.label}</span></td></tr>`;
-    features.forEach(f => {
-      html += `<tr class="feature-row" data-feature="${f.id}" data-cat="${cat.key}">`;
-      html += `<td class="feature-col" data-action="open-feature" tabindex="0" role="button" aria-label="Per-cloud breakdown for ${f.name}">${f.name}${f.sub ? `<span class="feature-sub">${f.sub}</span>` : ""}</td>`;
-      VENDORS.forEach(v => {
-        const s = f.support[v.key] || { level: "no", note: "" };
-        const sym = symFor(s.level);
-        const hasNote = s.note && s.note.length > 0;
-        html += `<td class="cell col-${v.key}" data-feature="${f.id}" data-vendor="${v.key}" tabindex="0" role="button" aria-label="${v.short} — ${f.name}: ${s.level === 'yes' ? 'holds' : s.level === 'part' ? 'partial' : 'not held'}${s.tier ? ', ' + s.tier : ''}. Click for footnote.">`;
-        html += `<span class="cell-mark cell-mark--${s.level}">${sym}${hasNote ? '<span class="cell-mark__star">*</span>' : ''}</span>`;
-        if (s.tier) html += `<span class="cell-tier">${s.tier}</span>`;
-        html += `</td>`;
-      });
-      html += `</tr>`;
+  // Compliance data uses {level, tier} but no value; surface the tier as the
+  // cell text so users see "FedRAMP High", "IL4–6" etc. at a glance (was the
+  // pre-migration behaviour). Done once, idempotent.
+  FEATURES.forEach(f => {
+    Object.keys(f.support).forEach(k => {
+      const s = f.support[k];
+      if (!s.value && s.tier) s.value = s.tier;
     });
   });
-
-  html += "</tbody>";
-  table.innerHTML = html;
+  IA.matrix.renderTable({
+    tableEl: $("#matrix"),
+    vendors: VENDORS, categories: CATEGORIES, features: FEATURES,
+    dimensionLabel: "Compliance program"
+  });
   applyFilter();
 }
 
@@ -949,99 +791,64 @@ function applyFilter() {
   const q = state.query.trim().toLowerCase();
   const table = $("#matrix");
 
-  // Cloud visibility (via class on table)
+  // Cloud visibility (via class on table) — compliance-specific
   VENDORS.forEach(v => {
     table.classList.toggle(`hide-${v.key}`, !state.vendors.has(v.key));
   });
 
-  // Row visibility
-  $$(".matrix tbody tr.feature-row").forEach(row => {
-    const f = FEATURES.find(x => x.id === row.dataset.feature);
-    if (!f) return;
-    let matches = state.category === "all" || f.category === state.category;
-    if (matches && q) {
+  const anyFilter = !!q || state.category !== "all" || state.vendors.size < VENDORS.length;
+  IA.matrix.applyVisibility({
+    table, features: FEATURES, categories: CATEGORIES,
+    isVisibleFn: (f) => {
+      if (state.category !== "all" && f.category !== state.category) return false;
+      if (!q) return true;
       const catLabel = (CATEGORIES.find(c => c.key === f.category) || {}).label || "";
-      const hay = `${f.name} ${f.sub || ""} ${f.desc} ${catLabel}`.toLowerCase();
-      matches = hay.includes(q);
-    }
-    row.classList.toggle("is-hidden", !matches);
-  });
-
-  // Hide category rows that have no visible features
-  CATEGORIES.forEach(cat => {
-    const visible = $$(`.matrix tbody tr.feature-row[data-cat="${cat.key}"]`).some(r => !r.classList.contains("is-hidden"));
-    const catRow = $(`.matrix tbody tr.category-row[data-cat="${cat.key}"]`);
-    if (catRow) catRow.classList.toggle("is-hidden", !visible);
+      const vendorHay = VENDORS
+        .filter(v => state.vendors.has(v.key))
+        .map(v => { const s = f.support[v.key] || {}; return `${v.name} ${v.short} ${s.tier || ""} ${s.note || ""}`; })
+        .join(" ");
+      return `${f.name} ${f.sub || ""} ${f.desc} ${catLabel} ${vendorHay}`.toLowerCase().includes(q);
+    },
+    emptyEl: $("#matrix-empty"),
+    statusEl: $("#filter-status"),
+    statusNoun: "program",
+    anyFilterActive: anyFilter
   });
   writeHash();
 }
 
-// ─── Drawer ───
-let lastFocused = null;
-
-function getDrawerFocusable() {
-  return $$("#drawer a[href], #drawer button, #drawer input, #drawer select, #drawer textarea, #drawer [tabindex]:not([tabindex='-1'])")
-    .filter(el => !el.disabled && el.offsetParent !== null);
-}
-function trapFocus(e) {
-  if (e.key !== "Tab") return;
-  const focusable = getDrawerFocusable();
-  if (!focusable.length) { e.preventDefault(); return; }
-  const first = focusable[0];
-  const last = focusable[focusable.length - 1];
-  if (e.shiftKey && document.activeElement === first) {
-    e.preventDefault();
-    last.focus();
-  } else if (!e.shiftKey && document.activeElement === last) {
-    e.preventDefault();
-    first.focus();
-  }
-}
-function openDrawer() {
-  lastFocused = document.activeElement;
-  $("#drawer-backdrop").classList.add("is-open");
-  $("#drawer").classList.add("is-open");
-  $("#drawer").setAttribute("aria-hidden", "false");
-  $("#drawer").addEventListener("keydown", trapFocus);
-  const closeBtn = $("#drawer .drawer__close");
-  if (closeBtn) closeBtn.focus();
-}
-function closeDrawer() {
-  $("#drawer-backdrop").classList.remove("is-open");
-  $("#drawer").classList.remove("is-open");
-  $("#drawer").setAttribute("aria-hidden", "true");
-  $("#drawer").removeEventListener("keydown", trapFocus);
-  if (lastFocused && typeof lastFocused.focus === "function") lastFocused.focus();
-  lastFocused = null;
-}
+// Drawer infrastructure (focus trap, scroll lock, ESC, backdrop click) lives in
+// /assets/matrix.js (IA.matrix.drawer). This page only builds the head + body.
 
 function openFeatureDrawer(feature, focusVendor) {
-  $("#drawer-head").innerHTML = `
-    <div class="drawer__eyebrow">${(CATEGORIES.find(c => c.key === feature.category) || {}).label || ""}</div>
-    <h3 class="drawer__title">${feature.name}</h3>
+  const catLabel = (CATEGORIES.find(c => c.key === feature.category) || {}).label || "";
+  const head = `
+    <button class="drawer__close" type="button" data-action="close-drawer" aria-label="Close (Esc)">✕</button>
+    <div class="drawer__eyebrow">${catLabel}</div>
+    <h2 class="drawer__title" id="drawer-title">${feature.name}</h2>
     <p class="drawer__desc">${feature.desc}</p>
-    <button class="drawer__close" type="button" onclick="closeDrawer()">Close <span aria-hidden="true">⤬</span></button>
   `;
-  const body = VENDORS.map(v => {
-    const s = feature.support[v.key] || { level: "no", note: "" };
-    const sym = symFor(s.level);
-    const isFocus = focusVendor === v.key;
-    const tier = s.tier ? `<span class="vendor-row__tier">${s.tier}</span>` : "";
-    const srcHost = s.src ? s.src.replace(/^https?:\/\//, "").replace(/\/$/, "") : "";
-    const src = s.src
-      ? `<a class="vendor-row__src" href="${s.src}" target="_blank" rel="noopener">Source — ${srcHost}</a>`
-      : "";
-    return `<div class="vendor-row" ${isFocus ? 'style="border-color: var(--accent); background: rgba(255,120,73,0.05);"' : ''}>
-      <span class="vendor-row__mark vendor-row__mark--${s.level}">${sym}</span>
-      <div>
-        <div class="vendor-row__name"><span class="swatch" style="background:${v.swatch}"></span>${v.name}${tier}</div>
-        <div class="vendor-row__note">${s.note || (s.level === "no" ? "Not held." : "—")}</div>
-        ${src}
-      </div>
-    </div>`;
-  }).join("");
-  $("#drawer-body").innerHTML = `<div class="drawer__section"><h4>Per-cloud footprint</h4>${body}</div>`;
-  openDrawer();
+  const body = `<div class="drawer__section"><h4>Per-cloud footprint</h4>` +
+    VENDORS.map(v => {
+      const s = feature.support[v.key] || { level: "no", note: "" };
+      const sym = symFor(s.level);
+      const markLabel = s.level === "yes" ? "Holds" : s.level === "part" ? "Partial" : "Not held";
+      const isFocus = focusVendor === v.key;
+      const tier = s.tier ? `<span class="vendor-row__tier">${s.tier}</span>` : "";
+      const srcHost = s.src ? s.src.replace(/^https?:\/\//, "").replace(/\/$/, "") : "";
+      const src = s.src
+        ? `<a class="vendor-row__src" href="${s.src}" target="_blank" rel="noopener">Source — ${srcHost}</a>`
+        : "";
+      return `<div class="vendor-row" ${isFocus ? 'style="border-color: var(--accent); background: rgba(255,120,73,0.05);"' : ''}>
+        <span class="vendor-row__mark vendor-row__mark--${s.level}" role="img" aria-label="${markLabel}">${sym}</span>
+        <div>
+          <div class="vendor-row__name"><span class="swatch" style="background:${v.swatch}" aria-hidden="true"></span>${v.name}${tier}</div>
+          <div class="vendor-row__note">${s.note || (s.level === "no" ? "Not held." : "—")}</div>
+          ${src}
+        </div>
+      </div>`;
+    }).join("") + `</div>`;
+  IA.matrix.drawer.open(head, body);
 }
 
 function wireEvents() {
@@ -1051,9 +858,11 @@ function wireEvents() {
     if (c) {
       state.category = c.dataset.cat;
       $$('.chip[data-cat]').forEach(b => b.classList.toggle("is-active", b.dataset.cat === state.category));
+      IA.matrix.syncChipsAria('.chip[data-cat]');
       applyFilter();
       return;
     }
+    // Vendor chips — compliance-specific 6-button toggle (all + 5 clouds)
     const v = e.target.closest(".chip[data-v]");
     if (v) {
       const key = v.dataset.v;
@@ -1075,46 +884,38 @@ function wireEvents() {
           }
         }
       }
+      IA.matrix.syncChipsAria('.chip[data-v]');
       applyFilter();
       return;
     }
-    const cell = e.target.closest("td.cell");
-    if (cell) {
-      const f = FEATURES.find(x => x.id === cell.dataset.feature);
-      if (f) openFeatureDrawer(f, cell.dataset.vendor);
-      return;
-    }
-    const featureCol = e.target.closest("td.feature-col[data-action='open-feature']");
-    if (featureCol) {
-      const row = featureCol.closest("tr.feature-row");
-      const f = FEATURES.find(x => x.id === row.dataset.feature);
-      if (f) openFeatureDrawer(f, null);
-      return;
-    }
   });
 
-  // Keyboard activation for matrix cells / program names (Enter or Space)
-  $("#matrix").addEventListener("keydown", (e) => {
-    if (e.key !== "Enter" && e.key !== " ") return;
-    const target = e.target.closest("td.cell, td.feature-col[data-action='open-feature']");
-    if (!target) return;
-    e.preventDefault();
-    target.click();
-  });
-
-  $("#drawer-backdrop").addEventListener("click", closeDrawer);
   $("#search").addEventListener("input", (e) => {
     state.query = e.target.value;
     applyFilter();
   });
+  // "/" focus shortcut — compliance-specific
   document.addEventListener("keydown", (e) => {
-    if (e.key === "Escape") closeDrawer();
     if (e.key === "/" && e.target.tagName !== "INPUT") { e.preventDefault(); $("#search").focus(); }
+  });
+
+  // Shared module owns: drawer modal open/close, ESC, backdrop click, focus trap, scroll lock,
+  // and the cell/feature-col click delegation that opens the drawer.
+  IA.matrix.drawer.init();
+  IA.matrix.wireDelegation((featureId, vendorKey) => {
+    const f = FEATURES.find(x => x.id === featureId);
+    if (f) openFeatureDrawer(f, vendorKey);
   });
 }
 
-init();
+// Wait for the deferred /assets/matrix.js to populate window.IA before init runs.
+function bootstrap() {
+  if (!window.IA || !window.IA.matrix) { setTimeout(bootstrap, 20); return; }
+  init();
+}
+bootstrap();
 </script>
+<script src="/assets/matrix.js" defer></script>
 <script src="/nav.js" defer></script>
 </body>
 </html>

@@ -124,8 +124,11 @@
         opts.vendors.forEach(function (v) {
           var s = (f.support && f.support[v.key]) || { level: "no", value: "—", note: "" };
           var hasNote = !!(s.note && s.note.length > 2);
-          var val = s.value || (s.level === "yes" ? "✓" : s.level === "part" ? "◐" : "✗");
-          var levelLabel = s.level === "yes" ? "supported" : s.level === "part" ? "partial" : "not available";
+          var val = s.value || (s.level === "yes" ? "✓" : s.level === "part" ? "◐" : s.level === "info" ? "≈" : "✗");
+          var levelLabel = s.level === "yes" ? "supported"
+                         : s.level === "part" ? "partial"
+                         : s.level === "info" ? "informational"
+                         : "not available";
           html += "<td class='cell col-" + esc(v.key) + "' data-feature='" + esc(f.id) + "' data-vendor='" + esc(v.key) + "'>"
                +    "<button type='button' class='cell__btn' data-feature='" + esc(f.id) + "' data-vendor='" + esc(v.key)
                +      "' aria-haspopup='dialog' aria-label='" + esc(f.name) + " — " + esc(v.name) + ": " + esc(val) + " (" + levelLabel + "). Open detail.'>"
@@ -171,7 +174,9 @@
     var wrap = opts.table.closest(".matrix-wrap");
     if (wrap) wrap.style.display = totalVisible === 0 ? "none" : "";
     if (opts.statusEl) {
-      var noun = totalVisible === 1 ? (opts.statusNoun || "item") : ((opts.statusNoun || "item") + "s");
+      var singular = opts.statusNoun || "item";
+      var plural = opts.statusNounPlural || (singular + "s");
+      var noun = totalVisible === 1 ? singular : plural;
       opts.statusEl.textContent = opts.anyFilterActive
         ? (totalVisible + " " + noun + " match the current filters.")
         : "";

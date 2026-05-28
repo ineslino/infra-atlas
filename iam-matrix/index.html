@@ -24,6 +24,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@300;400;500;600&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/matrix.css">
 
 <style>
 :root {
@@ -81,11 +82,6 @@ a:focus-visible, button:focus-visible, input:focus-visible, [tabindex]:focus-vis
   outline: 2px solid var(--accent);
   outline-offset: 2px;
 }
-.matrix tbody tr.feature-row td.cell:focus-visible,
-.matrix tbody tr.feature-row td.feature-col:focus-visible {
-  outline: 2px solid var(--accent);
-  outline-offset: -2px;
-}
 
 .page { max-width: 1640px; margin: 0 auto; padding: 56px 48px 96px; position: relative; }
 
@@ -125,12 +121,14 @@ a:focus-visible, button:focus-visible, input:focus-visible, [tabindex]:focus-vis
 }
 .status-dot {
   width: 8px; height: 8px; border-radius: 50%; background: var(--gold);
-  animation: pulse 2.4s infinite;
 }
-@keyframes pulse {
-  0% { box-shadow: 0 0 0 0 rgba(244,198,96,0.5); }
-  70% { box-shadow: 0 0 0 14px rgba(244,198,96,0); }
-  100% { box-shadow: 0 0 0 0 rgba(244,198,96,0); }
+@media (prefers-reduced-motion: no-preference) {
+  .status-dot { animation: pulse 2.4s infinite; }
+  @keyframes pulse {
+    0% { box-shadow: 0 0 0 0 rgba(244,198,96,0.5); }
+    70% { box-shadow: 0 0 0 14px rgba(244,198,96,0); }
+    100% { box-shadow: 0 0 0 0 rgba(244,198,96,0); }
+  }
 }
 .status-time { font-family: var(--mono); font-size: 12px; color: var(--paper-3); }
 .status-counts { display: flex; gap: 24px; margin-top: 4px; }
@@ -183,9 +181,10 @@ a:focus-visible, button:focus-visible, input:focus-visible, [tabindex]:focus-vis
   width: 8px; height: 8px; border-radius: 2px;
 }
 
-/* ─────────── MATRIX ─────────── */
+/* ─────────── MATRIX (IAM-specific overrides) ─────────── */
+/* base matrix table + button-wrappers + drawer + vendor-row + empty state in /assets/matrix.css */
 .matrix-wrap {
-  overflow-x: auto; margin-bottom: 48px;
+  margin-bottom: 48px;
   border: 1px solid var(--line); border-radius: 6px;
   background: linear-gradient(180deg, var(--ink-2) 0%, var(--ink) 100%);
 }
@@ -196,82 +195,21 @@ a:focus-visible, button:focus-visible, input:focus-visible, [tabindex]:focus-vis
   pointer-events: none; border-radius: 0 5px 5px 0;
 }
 @media (min-width: 1001px) { .scroll-hint::after { display: none; } }
-.matrix {
-  width: 100%; border-collapse: collapse; min-width: 1000px;
-  font-family: var(--sans); font-size: 13px;
-}
-.matrix thead th {
-  position: sticky; top: 0; z-index: 10; background: var(--ink-2);
-  font-family: var(--mono); font-weight: 500; font-size: 10.5px;
-  letter-spacing: 0.14em; text-transform: uppercase; color: var(--paper-2);
-  padding: 18px 12px 12px; vertical-align: bottom; text-align: center;
-  border-bottom: 1px solid var(--line-2);
-  white-space: nowrap;
-}
-.matrix thead th.feature-col {
-  text-align: left; padding-left: 22px; min-width: 280px;
-  font-family: var(--serif); font-style: italic; font-size: 16px;
-  letter-spacing: 0; text-transform: none; color: var(--paper);
-  font-weight: 400;
-}
-.matrix th .vendor-tag {
-  display: inline-flex; align-items: center; gap: 6px;
-}
-.matrix th .swatch {
-  width: 6px; height: 6px; border-radius: 1px;
-}
+.matrix { min-width: 1000px; }
+.matrix tbody tr.feature-row td.cell { min-width: 110px; }
 
-.matrix tbody tr.category-row td {
-  padding: 22px 22px 10px;
-  border-top: 1px dashed var(--line);
-  background: linear-gradient(180deg, rgba(0,0,0,0.2), transparent);
-}
-.matrix tbody tr.category-row td .cat-label {
-  font-family: var(--mono); font-size: 10px; letter-spacing: 0.22em;
-  text-transform: uppercase; color: var(--paper-3);
-  display: flex; align-items: center; gap: 10px;
-}
-.matrix tbody tr.category-row td .cat-label::after {
-  content: ''; flex: 1; height: 1px; background: var(--line);
-}
-.matrix tbody tr.feature-row td {
-  padding: 12px 12px; border-bottom: 1px solid var(--line);
-  vertical-align: middle;
-}
-.matrix tbody tr.feature-row td.feature-col {
-  padding-left: 22px; color: var(--paper); font-size: 14px;
-  text-align: left;
-  border-right: 1px solid var(--line);
-  cursor: pointer;
-}
-.matrix tbody tr.feature-row td.cell {
-  text-align: center; min-width: 110px; cursor: pointer;
-  transition: background 0.15s ease;
-  position: relative;
-}
-.matrix tbody tr.feature-row td.cell:hover {
-  background: rgba(255, 120, 73, 0.04);
-}
-.matrix tbody tr.feature-row:hover {
-  background: linear-gradient(90deg, transparent, rgba(255, 120, 73, 0.02), transparent);
-}
-/* Compact note preview inside the cell */
+/* IAM-specific "info" level (≈) — shared CSS only covers yes/part/no */
+.cell-mark--info { background: rgba(124, 215, 241, 0.13); color: var(--sky); }
+.cell-value--info { color: var(--sky); }
+
+/* Compact note preview inside the cell — IAM-specific */
 .cell-note {
   display: block; margin-top: 6px;
   font-family: var(--mono); font-size: 9.5px; line-height: 1.4;
   color: var(--paper-3); max-width: 200px; margin-left: auto; margin-right: auto;
 }
 
-.cell-mark {
-  display: inline-flex; align-items: center; justify-content: center;
-  width: 24px; height: 24px; border-radius: 50%;
-  font-family: var(--mono); font-size: 14px; font-weight: 500;
-  position: relative;
-}
-.cell-mark--yes  { background: rgba(111, 231, 181, 0.15); color: var(--yes); }
-.cell-mark--no   { background: rgba(244, 123, 123, 0.12); color: var(--no); }
-.cell-mark--part { background: rgba(244, 198, 96, 0.15); color: var(--part); }
-.cell-mark--info { background: rgba(124, 215, 241, 0.13); color: var(--sky); }
+/* Cell-mark "star" badge — IAM-specific positioning */
 .cell-mark__star {
   position: absolute; top: -3px; right: -6px;
   font-size: 10px; color: var(--accent);
@@ -284,16 +222,6 @@ a:focus-visible, button:focus-visible, input:focus-visible, [tabindex]:focus-vis
 .matrix.hide-azure .col-azure,
 .matrix.hide-gcp   .col-gcp,
 .matrix.hide-oci   .col-oci { display: none; }
-
-/* Hide rows when filtered/searched */
-.matrix tbody tr.feature-row.is-hidden,
-.matrix tbody tr.category-row.is-hidden { display: none; }
-
-.matrix-empty {
-  display: none; padding: 40px 22px; text-align: center;
-  font-family: var(--mono); font-size: 12px; color: var(--paper-3);
-}
-.matrix-empty.is-visible { display: block; }
 
 /* ─────────── LEGEND ─────────── */
 .legend {
@@ -317,78 +245,10 @@ a:focus-visible, button:focus-visible, input:focus-visible, [tabindex]:focus-vis
 .preamble strong { color: var(--paper); font-weight: 600; }
 .preamble em { font-family: var(--serif); font-style: italic; color: var(--paper); font-size: 15px; }
 
-/* ─────────── DRAWER ─────────── */
-.drawer-backdrop {
-  position: fixed; inset: 0; background: rgba(10, 9, 7, 0.7); backdrop-filter: blur(8px);
-  z-index: 200; opacity: 0; pointer-events: none; transition: opacity 0.25s ease;
-}
-.drawer-backdrop.is-open { opacity: 1; pointer-events: auto; }
-.drawer {
-  position: fixed; top: 0; right: 0; bottom: 0; width: min(660px, 100%);
-  background: var(--ink-2); border-left: 1px solid var(--line-2); z-index: 201;
-  transform: translateX(100%); transition: transform 0.32s cubic-bezier(0.2, 0.8, 0.2, 1);
-  display: flex; flex-direction: column;
-}
-.drawer.is-open { transform: translateX(0); }
-.drawer__head {
-  padding: 28px 32px 22px; border-bottom: 1px solid var(--line); position: relative; flex-shrink: 0;
-}
-.drawer__close {
-  position: absolute; top: 20px; right: 20px;
-  background: transparent; border: 1px solid var(--line-2); color: var(--paper-2);
-  font-family: var(--mono); font-size: 11px; padding: 6px 10px; cursor: pointer;
-  border-radius: 2px; letter-spacing: 0.1em; text-transform: uppercase;
-}
-.drawer__close:hover { border-color: var(--paper); color: var(--paper); }
-.drawer__eyebrow {
-  font-family: var(--mono); font-size: 10px; letter-spacing: 0.22em;
-  text-transform: uppercase; color: var(--accent);
-}
-.drawer__title {
-  font-family: var(--serif); font-size: 32px; font-weight: 400;
-  letter-spacing: -0.012em; line-height: 1.05; margin-top: 8px; padding-right: 80px;
-}
-.drawer__desc {
-  margin-top: 12px; font-size: 14px; color: var(--paper-2); line-height: 1.6;
-}
-.drawer__body { padding: 22px 32px 32px; overflow-y: auto; flex: 1; }
-.drawer__section { margin-bottom: 24px; }
-.drawer__section h4 {
-  font-family: var(--mono); font-size: 10.5px; font-weight: 500;
-  letter-spacing: 0.18em; text-transform: uppercase; color: var(--paper-3);
-  margin-bottom: 12px; display: flex; align-items: center; gap: 10px;
-}
-.drawer__section h4::after { content: ''; flex: 1; height: 1px; background: var(--line); }
-
-.vendor-row {
-  display: grid; grid-template-columns: auto 1fr; gap: 14px;
-  padding: 14px 16px; background: var(--surface);
-  border: 1px solid var(--line); border-radius: 3px; margin-bottom: 6px;
-  align-items: start;
-}
-.vendor-row__name {
-  font-family: var(--mono); font-size: 12.5px; font-weight: 500; color: var(--paper);
-  display: flex; align-items: center; gap: 9px;
-}
-.vendor-row__name .swatch { width: 8px; height: 8px; border-radius: 2px; flex: none; }
-.vendor-row__note {
-  font-family: var(--sans); font-size: 12.5px; color: var(--paper-2); line-height: 1.58; margin-top: 5px;
-}
-.vendor-row__src {
-  display: inline-block; margin-top: 7px;
-  font-family: var(--mono); font-size: 10px; letter-spacing: 0.04em;
-  color: var(--paper-3); text-decoration: underline;
-  text-decoration-color: var(--line-2); text-underline-offset: 3px;
-}
-.vendor-row__src:hover { color: var(--accent); }
-.vendor-row__mark {
-  font-family: var(--mono); font-size: 16px; font-weight: 500;
-  width: 30px; height: 30px; border-radius: 50%;
-  display: inline-flex; align-items: center; justify-content: center; flex: none;
-}
-.vendor-row__mark--yes  { background: rgba(111, 231, 181, 0.15); color: var(--yes); }
-.vendor-row__mark--no   { background: rgba(244, 123, 123, 0.12); color: var(--no); opacity: 0.65; }
-.vendor-row__mark--part { background: rgba(244, 198, 96, 0.15); color: var(--part); }
+/* ─────────── DRAWER (IAM-specific overrides) ─────────── */
+/* base drawer + vendor-row in /assets/matrix.css */
+.drawer__title { padding-right: 80px; }
+/* IAM-specific "info" level (≈) for the per-vendor card */
 .vendor-row__mark--info { background: rgba(124, 215, 241, 0.13); color: var(--sky); }
 
 /* ─────────── COLOPHON ─────────── */
@@ -461,11 +321,14 @@ a:focus-visible, button:focus-visible, input:focus-visible, [tabindex]:focus-vis
 
   <section class="filters">
     <div class="filter-search">
+      <label for="search" class="sr-only">Filter capabilities — search by name, category, provider</label>
       <input id="search" type="search" autocomplete="off" spellcheck="false" placeholder="Filter capabilities — search by name, category, provider…" aria-label="Filter capabilities">
     </div>
     <div class="filter-chips" id="cat-chips" role="group" aria-label="Filter by category"></div>
     <div class="filter-chips" id="vendor-chips" role="group" aria-label="Filter by provider"></div>
   </section>
+
+  <div class="sr-only" id="filter-status" role="status" aria-live="polite"></div>
 
   <div class="legend">
     <span class="legend__label">Legend</span>
@@ -477,10 +340,14 @@ a:focus-visible, button:focus-visible, input:focus-visible, [tabindex]:focus-vis
   </div>
 
   <div class="scroll-hint">
-  <div class="matrix-wrap">
+  <div class="matrix-wrap" id="matrix-wrap">
     <table class="matrix" id="matrix" aria-label="Cross-provider IAM capability matrix"></table>
-    <div class="matrix-empty" id="matrix-empty" aria-live="polite">No capabilities match the current filter.</div>
   </div>
+  </div>
+
+  <div class="matrix-empty" id="matrix-empty" role="status" aria-live="polite">
+    <strong>No capabilities match your filters.</strong><br>
+    Try a broader search term, or switch the category to “All”.
   </div>
 
   </main>
@@ -504,7 +371,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, [tabindex]:focus-vis
 
 <!-- DRAWER -->
 <div class="drawer-backdrop" id="drawer-backdrop"></div>
-<aside class="drawer" id="drawer" role="dialog" aria-modal="true" aria-labelledby="drawer-title" aria-hidden="true">
+<aside class="drawer" id="drawer" role="dialog" aria-modal="true" aria-labelledby="drawer-title" aria-hidden="true" hidden>
   <div class="drawer__head" id="drawer-head"></div>
   <div class="drawer__body" id="drawer-body"></div>
 </aside>
@@ -928,11 +795,10 @@ const $$ = (s) => Array.from(document.querySelectorAll(s));
 
 const SYM = { yes: "✓", part: "◐", no: "✗", info: "≈" };
 
-function escapeHtml(str) {
-  return String(str)
-    .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;").replace(/'/g, "&#39;");
-}
+// Shared escape helper, exposed locally for the page's drawer body template.
+const escapeHtml = (s) => (window.IA && window.IA.matrix)
+  ? window.IA.matrix.escapeHtml(s)
+  : String(s).replace(/[&<>"]/g, c => ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;" }[c]));
 
 // ─── Permalinks — filter state <-> URL hash ───
 function writeHash() {
@@ -973,192 +839,123 @@ function init() {
   // Category chips
   const catChips = $("#cat-chips");
   catChips.innerHTML = `<span class="filter-chips__label">Category</span>
-    <button class="chip is-active" data-cat="all">All</button>` +
-    CATEGORIES.map(c => `<button class="chip" data-cat="${c.key}">${escapeHtml(c.label)}</button>`).join("");
+    <button class="chip is-active" data-cat="all" aria-pressed="true">All</button>` +
+    CATEGORIES.map(c => `<button class="chip" data-cat="${c.key}" aria-pressed="false">${escapeHtml(c.label)}</button>`).join("");
 
   // Provider chips
   const vChips = $("#vendor-chips");
   vChips.innerHTML = `<span class="filter-chips__label">Providers</span>
-    <button class="chip is-active" data-v="all">All</button>` +
-    VENDORS.map(v => `<button class="chip" data-v="${v.key}"><span class="swatch" style="background:${v.swatch}"></span>${escapeHtml(v.short)}</button>`).join("");
+    <button class="chip is-active" data-v="all" aria-pressed="true">All</button>` +
+    VENDORS.map(v => `<button class="chip" data-v="${v.key}" aria-pressed="false"><span class="swatch" style="background:${v.swatch}" aria-hidden="true"></span>${escapeHtml(v.short)}</button>`).join("");
 
   applyHash();
   renderMatrix();
   wireEvents();
+  // sync aria-pressed once after applyHash may have flipped is-active states
+  IA.matrix.syncChipsAria('.chip[data-cat]');
+  IA.matrix.syncChipsAria('.chip[data-v]');
   window.addEventListener("hashchange", () => { applyHash(); applyFilter(); });
 }
 
+// IAM has a 4th level ("info" ≈ — model differs) that the shared renderer doesn't
+// know about: it falls back to "✗" for any non-yes/part level. We inject a `value`
+// field per support entry so the renderer surfaces the correct symbol (✓ / ◐ / ✗ / ≈)
+// while keeping FEATURES itself unchanged. The drawer body template (below) still
+// reads `support[v.key].level` directly, so it preserves the full 4-state distinction.
+function buildRenderFeatures() {
+  return FEATURES.map(f => ({
+    ...f,
+    support: Object.fromEntries(VENDORS.map(v => {
+      const s = f.support[v.key] || { level: "no" };
+      return [v.key, { ...s, value: SYM[s.level] || SYM.no }];
+    }))
+  }));
+}
+
 function renderMatrix() {
-  const table = $("#matrix");
-  let html = "<thead><tr>";
-  html += '<th class="feature-col" scope="col">Capability</th>';
-  VENDORS.forEach(v => {
-    html += `<th class="col-${v.key}" scope="col"><span class="vendor-tag"><span class="swatch" style="background:${v.swatch}"></span>${escapeHtml(v.short)}</span></th>`;
+  IA.matrix.renderTable({
+    tableEl: $("#matrix"),
+    vendors: VENDORS, categories: CATEGORIES, features: buildRenderFeatures(),
+    dimensionLabel: "Capability"
   });
-  html += "</tr></thead><tbody>";
-
-  CATEGORIES.forEach(cat => {
-    const features = FEATURES.filter(f => f.category === cat.key);
-    if (features.length === 0) return;
-    html += `<tr class="category-row" data-cat="${cat.key}"><td colspan="${VENDORS.length + 1}"><span class="cat-label">▸ ${escapeHtml(cat.label)}</span></td></tr>`;
-    features.forEach(f => {
-      html += `<tr class="feature-row" data-feature="${f.id}" data-cat="${cat.key}">`;
-      html += `<th class="feature-col" scope="row" data-action="open-feature" tabindex="0" role="button" aria-label="${escapeHtml(f.name)} — full breakdown">${escapeHtml(f.name)}</th>`;
-      VENDORS.forEach(v => {
-        const s = f.support[v.key] || { level: "no", note: "" };
-        const sym = SYM[s.level] || SYM.no;
-        const hasNote = s.note && s.note.length > 0;
-        const preview = hasNote ? truncate(s.note, 96) : "";
-        const aria = `${f.name} — ${v.short}: ${labelFor(s.level)}`;
-        html += `<td class="cell col-${v.key}" data-feature="${f.id}" data-vendor="${v.key}" tabindex="0" role="button" aria-label="${escapeHtml(aria)}">`;
-        html += `<span class="cell-mark cell-mark--${s.level}">${sym}${hasNote ? '<span class="cell-mark__star">*</span>' : ''}</span>`;
-        if (preview) html += `<span class="cell-note">${escapeHtml(preview)}</span>`;
-        html += `</td>`;
-      });
-      html += `</tr>`;
-    });
-  });
-
-  html += "</tbody>";
-  table.innerHTML = html;
   applyFilter();
-}
-
-function labelFor(level) {
-  return level === "yes" ? "native support"
-    : level === "part" ? "partial or scoped support"
-    : level === "info" ? "supported but model differs"
-    : "not supported";
-}
-
-function truncate(str, n) {
-  if (str.length <= n) return str;
-  return str.slice(0, n).replace(/[\s.,;:]+\S*$/, "") + "…";
 }
 
 function applyFilter() {
   const q = state.query.trim().toLowerCase();
   const table = $("#matrix");
 
-  // Provider visibility (via class on table)
+  // Provider visibility (via class on table) — IAM-specific
   VENDORS.forEach(v => {
     table.classList.toggle(`hide-${v.key}`, !state.vendors.has(v.key));
   });
 
-  // Row visibility
-  let visibleCount = 0;
-  $$(".matrix tbody tr.feature-row").forEach(row => {
-    const f = FEATURES.find(x => x.id === row.dataset.feature);
-    if (!f) return;
-    let matches = state.category === "all" || f.category === state.category;
-    if (matches && q) {
-      const catLabel = (CATEGORIES.find(c => c.key === f.category) || {}).label || "";
+  const anyFilter = !!q || state.category !== "all" || state.vendors.size < VENDORS.length;
+  IA.matrix.applyVisibility({
+    table, features: FEATURES, categories: CATEGORIES,
+    isVisibleFn: (f) => {
+      if (state.category !== "all" && f.category !== state.category) return false;
+      if (!q) return true;
+      const cat = (CATEGORIES.find(c => c.key === f.category) || {}).label || "";
       const notes = Object.values(f.support).map(s => s.note || "").join(" ");
-      const hay = `${f.name} ${f.desc} ${catLabel} ${notes}`.toLowerCase();
-      matches = hay.includes(q);
-    }
-    row.classList.toggle("is-hidden", !matches);
-    if (matches) visibleCount++;
+      return `${f.name} ${f.desc} ${cat} ${notes}`.toLowerCase().includes(q);
+    },
+    emptyEl: $("#matrix-empty"),
+    statusEl: $("#filter-status"),
+    statusNoun: "capability",
+    anyFilterActive: anyFilter
   });
-
-  // Hide category rows that have no visible features
-  CATEGORIES.forEach(cat => {
-    const visible = $$(`.matrix tbody tr.feature-row[data-cat="${cat.key}"]`).some(r => !r.classList.contains("is-hidden"));
-    const catRow = $(`.matrix tbody tr.category-row[data-cat="${cat.key}"]`);
-    if (catRow) catRow.classList.toggle("is-hidden", !visible);
-  });
-
-  $("#matrix-empty").classList.toggle("is-visible", visibleCount === 0);
   writeHash();
 }
 
-// ─── Drawer ───
-let lastFocused = null;
-
-function getDrawerFocusable() {
-  return $$("#drawer a[href], #drawer button, #drawer input, #drawer select, #drawer textarea, #drawer [tabindex]:not([tabindex='-1'])")
-    .filter(el => !el.disabled && el.offsetParent !== null);
-}
-function trapFocus(e) {
-  if (e.key !== "Tab") return;
-  const focusable = getDrawerFocusable();
-  if (!focusable.length) { e.preventDefault(); return; }
-  const first = focusable[0];
-  const last = focusable[focusable.length - 1];
-  if (e.shiftKey && document.activeElement === first) {
-    e.preventDefault();
-    last.focus();
-  } else if (!e.shiftKey && document.activeElement === last) {
-    e.preventDefault();
-    first.focus();
-  }
-}
-function openDrawer() {
-  lastFocused = document.activeElement;
-  $("#drawer-backdrop").classList.add("is-open");
-  $("#drawer").classList.add("is-open");
-  $("#drawer").setAttribute("aria-hidden", "false");
-  $("#drawer").addEventListener("keydown", trapFocus);
-  const closeBtn = $("#drawer .drawer__close");
-  if (closeBtn) closeBtn.focus();
-}
-function closeDrawer() {
-  $("#drawer-backdrop").classList.remove("is-open");
-  $("#drawer").classList.remove("is-open");
-  $("#drawer").setAttribute("aria-hidden", "true");
-  $("#drawer").removeEventListener("keydown", trapFocus);
-  if (lastFocused && typeof lastFocused.focus === "function") lastFocused.focus();
-  lastFocused = null;
-}
+// Drawer infrastructure (focus trap, scroll lock, ESC, backdrop click) lives in
+// /assets/matrix.js (IA.matrix.drawer). This page only builds the head + body.
 
 function openFeatureDrawer(feature, focusVendor) {
   const catLabel = (CATEGORIES.find(c => c.key === feature.category) || {}).label || "";
-  $("#drawer-head").innerHTML = `
+  const head = `
+    <button class="drawer__close" type="button" data-action="close-drawer" aria-label="Close (Esc)">✕</button>
     <div class="drawer__eyebrow">${escapeHtml(catLabel)}</div>
-    <h3 class="drawer__title" id="drawer-title">${escapeHtml(feature.name)}</h3>
+    <h2 class="drawer__title" id="drawer-title">${escapeHtml(feature.name)}</h2>
     <p class="drawer__desc">${escapeHtml(feature.desc)}</p>
-    <button class="drawer__close" type="button" data-action="close-drawer">Close <span aria-hidden="true">⤬</span></button>
   `;
-  const body = VENDORS.map(v => {
-    const s = feature.support[v.key] || { level: "no", note: "" };
-    const sym = SYM[s.level] || SYM.no;
-    const isFocus = focusVendor === v.key;
-    const noteText = s.note || (s.level === "no" ? "Not supported." : "—");
-    let srcHtml = "";
-    if (s.src) {
-      let host = s.src;
-      try { host = new URL(s.src).hostname.replace(/^www\./, ""); } catch (e) {}
-      srcHtml = `<a class="vendor-row__src" href="${escapeHtml(s.src)}" target="_blank" rel="noopener">Source · ${escapeHtml(host)} ↗</a>`;
-    }
-    return `<div class="vendor-row" ${isFocus ? 'style="border-color: var(--accent); background: rgba(255,120,73,0.05);"' : ''}>
-      <span class="vendor-row__mark vendor-row__mark--${s.level}">${sym}</span>
-      <div>
-        <div class="vendor-row__name"><span class="swatch" style="background:${v.swatch}"></span>${escapeHtml(v.name)}</div>
-        <div class="vendor-row__note">${escapeHtml(noteText)}</div>
-        ${srcHtml}
-      </div>
-    </div>`;
-  }).join("");
-  $("#drawer-body").innerHTML = `<div class="drawer__section"><h4>Per-provider detail</h4>${body}</div>`;
-  openDrawer();
+  const body = `<div class="drawer__section"><h4>Per-provider detail</h4>` +
+    VENDORS.map(v => {
+      const s = feature.support[v.key] || { level: "no", note: "" };
+      const sym = SYM[s.level] || SYM.no;
+      const markLabel = s.level === "yes" ? "Supported" : s.level === "part" ? "Partial" : s.level === "info" ? "Differs" : "Not supported";
+      const isFocus = focusVendor === v.key;
+      const noteText = s.note || (s.level === "no" ? "Not supported." : "—");
+      let srcHtml = "";
+      if (s.src) {
+        let host = s.src;
+        try { host = new URL(s.src).hostname.replace(/^www\./, ""); } catch (e) {}
+        srcHtml = `<div class="vendor-row__src"><a href="${escapeHtml(s.src)}" target="_blank" rel="noopener">Source · ${escapeHtml(host)} ↗</a></div>`;
+      }
+      return `<div class="vendor-row" ${isFocus ? 'style="border-color: var(--accent); background: rgba(255,120,73,0.05);"' : ''}>
+        <span class="vendor-row__mark vendor-row__mark--${s.level}" role="img" aria-label="${markLabel}">${sym}</span>
+        <div>
+          <div class="vendor-row__name"><span class="swatch" style="background:${v.swatch}" aria-hidden="true"></span>${escapeHtml(v.name)}</div>
+          <div class="vendor-row__note">${escapeHtml(noteText)}</div>
+          ${srcHtml}
+        </div>
+      </div>`;
+    }).join("") + `</div>`;
+  IA.matrix.drawer.open(head, body);
 }
 
 function wireEvents() {
   document.addEventListener("click", (e) => {
-    // Close drawer button
-    if (e.target.closest("[data-action='close-drawer']")) {
-      closeDrawer();
-      return;
-    }
     // Category chips
     const c = e.target.closest(".chip[data-cat]");
     if (c) {
       state.category = c.dataset.cat;
       $$('.chip[data-cat]').forEach(b => b.classList.toggle("is-active", b.dataset.cat === state.category));
+      IA.matrix.syncChipsAria('.chip[data-cat]');
       applyFilter();
       return;
     }
-    // Provider chips
+    // Provider chips — IAM 5-button toggle (all + 4 providers)
     const v = e.target.closest(".chip[data-v]");
     if (v) {
       const key = v.dataset.v;
@@ -1180,58 +977,41 @@ function wireEvents() {
           }
         }
       }
+      IA.matrix.syncChipsAria('.chip[data-v]');
       applyFilter();
       return;
     }
-    // Cell click
-    const cell = e.target.closest("td.cell");
-    if (cell) {
-      const f = FEATURES.find(x => x.id === cell.dataset.feature);
-      if (f) openFeatureDrawer(f, cell.dataset.vendor);
-      return;
-    }
-    // Feature-name click
-    const featureCol = e.target.closest("td.feature-col[data-action='open-feature']");
-    if (featureCol) {
-      const row = featureCol.closest("tr.feature-row");
-      const f = FEATURES.find(x => x.id === row.dataset.feature);
-      if (f) openFeatureDrawer(f, null);
-      return;
-    }
   });
 
-  // Keyboard activation for matrix cells / feature names
-  $("#matrix").addEventListener("keydown", (e) => {
-    if (e.key !== "Enter" && e.key !== " ") return;
-    const target = e.target.closest("td.cell, td.feature-col[data-action='open-feature']");
-    if (!target) return;
-    e.preventDefault();
-    if (target.classList.contains("cell")) {
-      const f = FEATURES.find(x => x.id === target.dataset.feature);
-      if (f) openFeatureDrawer(f, target.dataset.vendor);
-    } else {
-      const row = target.closest("tr.feature-row");
-      const f = FEATURES.find(x => x.id === row.dataset.feature);
-      if (f) openFeatureDrawer(f, null);
-    }
-  });
-
-  $("#drawer-backdrop").addEventListener("click", closeDrawer);
   $("#search").addEventListener("input", (e) => {
     state.query = e.target.value;
     applyFilter();
   });
+  // "/" focus shortcut — IAM-specific
   document.addEventListener("keydown", (e) => {
-    if (e.key === "Escape") closeDrawer();
     if (e.key === "/" && e.target.tagName !== "INPUT" && e.target.tagName !== "TEXTAREA") {
       e.preventDefault();
       $("#search").focus();
     }
   });
+
+  // Shared module owns: drawer modal open/close, ESC, backdrop click, focus trap, scroll lock,
+  // and the cell/feature-col click delegation that opens the drawer.
+  IA.matrix.drawer.init();
+  IA.matrix.wireDelegation((featureId, vendorKey) => {
+    const f = FEATURES.find(x => x.id === featureId);
+    if (f) openFeatureDrawer(f, vendorKey);
+  });
 }
 
-init();
+// Wait for the deferred /assets/matrix.js to populate window.IA before init runs.
+function bootstrap() {
+  if (!window.IA || !window.IA.matrix) { setTimeout(bootstrap, 20); return; }
+  init();
+}
+bootstrap();
 </script>
+<script src="/assets/matrix.js" defer></script>
 <script src="/nav.js" defer></script>
 </body>
 </html>
