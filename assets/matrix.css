@@ -23,7 +23,7 @@
   border-bottom: 1px solid var(--line-2); white-space: nowrap;
 }
 .matrix thead th.feature-col {
-  text-align: left; padding-left: 22px; min-width: 260px;
+  text-align: left; padding-left: 28px; min-width: 260px;
   font-family: var(--serif); font-style: italic; font-size: 16px;
   letter-spacing: 0; text-transform: none; color: var(--paper); font-weight: 400;
 }
@@ -44,7 +44,7 @@
 }
 .matrix tbody tr.feature-row td { padding: 12px; border-bottom: 1px solid var(--line); vertical-align: middle; }
 .matrix tbody tr.feature-row td.feature-col {
-  padding-left: 22px; color: var(--paper); font-size: 14px; text-align: left;
+  padding-left: 28px; color: var(--paper); font-size: 14px; text-align: left;
   border-right: 1px solid var(--line);
 }
 .matrix tbody tr.feature-row td.cell {
