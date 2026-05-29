@@ -1,0 +1,97 @@
+/* ──────────────────────────────────────────────────────────────────
+   Infra Atlas · shared compute-observatory list + compare
+   Linked by ec2 / azure-vm / gcp-compute / oci-compute / ovh-instances.
+   Renders the "By Instance" view as a sortable, scannable column table
+   with a compare tray — the job a card grid can't do: "find the cheapest
+   4-vCPU box in this region" needs aligned columns you can sort down.
+   Uses the shared design tokens already defined on every observatory page.
+   ────────────────────────────────────────────────────────────────── */
+
+.ctbl-sr { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
+
+/* ─── the table ─── */
+.ctbl-wrap {
+  overflow-x: auto; border: 1px solid var(--line); border-radius: 8px;
+  background: linear-gradient(180deg, var(--ink-2), var(--ink));
+}
+.ctbl { width: 100%; border-collapse: collapse; font-family: var(--sans); font-size: 13px; min-width: 760px; }
+.ctbl thead th {
+  position: sticky; top: 0; z-index: 5; background: var(--surface);
+  border-bottom: 1px solid var(--line-2); padding: 0; text-align: right; white-space: nowrap;
+}
+.ctbl thead th.ctbl__check, .ctbl thead th.ctbl__name, .ctbl thead th.ctbl__class { text-align: left; }
+.ctbl__colhead {
+  font-family: var(--mono); font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--paper-3); font-weight: 500; padding: 13px 14px; display: block;
+}
+.ctbl__sort {
+  background: none; border: 0; color: var(--paper-3); cursor: pointer;
+  font-family: var(--mono); font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; font-weight: 500;
+  width: 100%; padding: 13px 14px; text-align: right; white-space: nowrap;
+  display: inline-flex; align-items: center; gap: 5px; justify-content: flex-end;
+  transition: color 0.12s ease;
+}
+.ctbl thead th.ctbl__name .ctbl__sort { justify-content: flex-start; text-align: left; }
+.ctbl__sort:hover { color: var(--paper); }
+.ctbl__sort.is-active { color: var(--accent); }
+.ctbl__sort:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; border-radius: 2px; }
+.ctbl__unit { opacity: 0.5; text-transform: none; letter-spacing: 0; }
+.ctbl__arrow { font-size: 8px; }
+
+.ctbl tbody td {
+  padding: 11px 14px; border-bottom: 1px solid var(--line);
+  text-align: right; font-family: var(--mono); font-size: 12.5px; white-space: nowrap; color: var(--paper-2);
+}
+.ctbl tbody tr { transition: background 0.12s ease; cursor: pointer; }
+.ctbl tbody tr:hover { background: rgba(255,120,73,0.05); }
+.ctbl tbody tr.is-sel { background: rgba(255,120,73,0.08); }
+.ctbl tbody td.ctbl__name { text-align: left; font-size: 13.5px; color: var(--paper); font-weight: 500; }
+.ctbl tbody td.ctbl__class { text-align: left; font-family: var(--sans); color: var(--paper-2); font-size: 12px; }
+.ctbl__price { color: var(--paper) !important; }
+.ctbl__na { color: var(--paper-4); }
+.ctbl__dot { display: inline-block; width: 7px; height: 7px; border-radius: 2px; margin-right: 8px; vertical-align: middle; }
+.ctbl__check { width: 44px; text-align: center !important; }
+.ctbl__check input { width: 15px; height: 15px; accent-color: var(--accent); cursor: pointer; vertical-align: middle; }
+
+/* ─── compare dock (floats while you build a selection) ─── */
+.ctbl-dock {
+  position: fixed; left: 50%; transform: translateX(-50%); bottom: 18px; z-index: 120;
+  display: none; align-items: center; gap: 14px; max-width: calc(100vw - 28px);
+  background: var(--surface-2); border: 1px solid var(--line-2); border-radius: 99px;
+  padding: 9px 12px 9px 18px; box-shadow: 0 14px 44px rgba(0,0,0,0.5);
+}
+.ctbl-dock.is-shown { display: flex; }
+.ctbl-dock__label { font-family: var(--mono); font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--paper-3); flex-shrink: 0; }
+.ctbl-dock__chips { display: flex; gap: 6px; flex-wrap: wrap; }
+.ctbl-chip { display: inline-flex; align-items: center; gap: 4px; font-family: var(--mono); font-size: 11px; color: var(--paper); background: var(--surface-3); border: 1px solid var(--line-2); border-radius: 99px; padding: 4px 6px 4px 11px; }
+.ctbl-chip button { background: none; border: 0; color: var(--paper-3); cursor: pointer; font-size: 13px; line-height: 1; padding: 0 3px; }
+.ctbl-chip button:hover { color: var(--accent); }
+.ctbl-dock__go { font-family: var(--mono); font-size: 11px; letter-spacing: 0.04em; background: var(--accent); color: var(--ink); border: 0; border-radius: 99px; padding: 8px 16px; cursor: pointer; white-space: nowrap; flex-shrink: 0; }
+.ctbl-dock__go[disabled] { opacity: 0.4; cursor: not-allowed; }
+.ctbl-dock__clear { background: none; border: 0; color: var(--paper-3); font-family: var(--mono); font-size: 11px; cursor: pointer; flex-shrink: 0; }
+.ctbl-dock__clear:hover { color: var(--paper); }
+
+/* ─── compare overlay (side-by-side spec sheet) ─── */
+.ctbl-cmp {
+  position: fixed; inset: 0; z-index: 200; display: none; align-items: center; justify-content: center; padding: 24px;
+  background: rgba(10,9,7,0.72); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+}
+.ctbl-cmp.is-open { display: flex; }
+.ctbl-cmp__panel { background: var(--ink-2); border: 1px solid var(--line-2); border-radius: 10px; width: min(880px, 100%); max-height: 86vh; overflow: auto; }
+.ctbl-cmp__head { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; padding: 22px 26px 16px; border-bottom: 1px solid var(--line); position: sticky; top: 0; background: var(--ink-2); z-index: 1; }
+.ctbl-cmp__title { font-family: var(--serif); font-size: 26px; color: var(--paper); }
+.ctbl-cmp__close { background: transparent; border: 1px solid var(--line-2); color: var(--paper-2); font-family: var(--mono); font-size: 13px; padding: 6px 12px; border-radius: 3px; cursor: pointer; white-space: nowrap; }
+.ctbl-cmp__close:hover { border-color: var(--paper); color: var(--paper); }
+.ctbl-cmp__grid { width: 100%; border-collapse: collapse; }
+.ctbl-cmp__grid th, .ctbl-cmp__grid td { padding: 12px 16px; border-bottom: 1px solid var(--line); font-family: var(--mono); font-size: 12.5px; text-align: right; }
+.ctbl-cmp__grid th { text-align: left; font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--paper-3); font-weight: 500; white-space: nowrap; }
+.ctbl-cmp__grid thead td { font-family: var(--serif); font-size: 18px; color: var(--paper); }
+.ctbl-cmp__grid tbody td { color: var(--paper-2); }
+.ctbl-cmp__grid td.is-best { color: var(--mint); position: relative; }
+.ctbl-cmp__grid td.is-best::after { content: ' ✓'; font-size: 10px; }
+.ctbl-cmp__grid tbody tr:hover { background: rgba(255,255,255,0.02); }
+.ctbl-cmp__hint { padding: 14px 26px 22px; font-family: var(--mono); font-size: 10.5px; color: var(--paper-3); letter-spacing: 0.03em; }
+
+@media (max-width: 600px) {
+  .ctbl-dock { border-radius: 16px; flex-wrap: wrap; padding: 12px 14px; gap: 10px; }
+}

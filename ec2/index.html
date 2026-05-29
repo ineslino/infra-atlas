@@ -24,6 +24,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@300;400;500;600&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/compute-table.css?v=1">
+<script src="/assets/compute-table.js?v=1"></script>
 <style>
 :root {
   --ink: #0A0907;
@@ -1972,10 +1974,9 @@ function renderInstanceView() {
   const q = state.query.trim().toLowerCase();
   const visible = filterFamilies();
   const results = $("#results");
-  results.innerHTML = '<div class="instance-list"></div>';
-  const list = results.firstElementChild;
 
-  // Flatten into instance-type entries, applying search + price-tier filters
+  // Flatten into normalized instance entries, applying search + price-tier filters.
+  // The shared module (IA.computeTable) owns the sortable column table + compare tray.
   const entries = [];
   visible.forEach(fam => {
     fam.sizes.forEach(size => {
@@ -1984,54 +1985,39 @@ function renderInstanceView() {
       const price = typeof spec.price === "number" ? spec.price : null;
       if (!priceInTier(price, state.priceTier)) return;
       entries.push({
-        fam, size,
-        full: `${fam.key}.${size}`,
-        availCount: state.data.familyRegions.get(fam.key).size,
-        price,
+        id: `${fam.key}.${size}`,
+        name: `${fam.key}.${size}`,
+        cat: fam.cat,
+        catLabel: CAT_LABEL[fam.cat],
+        catColor: CAT_COLOR[fam.cat],
+        arch: fam.arch === "x86" ? "x86_64" : "arm64",
+        vendor: fam.vendor,
         vcpu: spec.vcpu != null ? spec.vcpu : null,
-        mem: spec.mem != null ? spec.mem : null
+        mem: spec.mem != null ? spec.mem : null,
+        price,
+        regions: state.data.familyRegions.get(fam.key).size,
+        _fam: fam, _size: size
       });
     });
   });
 
-  sortEntries(entries);
-
-  entries.forEach((entry, idx) => {
-    const row = document.createElement("div");
-    row.className = "instance-row fade-in";
-    row.style.animationDelay = Math.min(idx * 0.004, 0.6) + "s";
-    if (entry.fam.desc) row.title = entry.fam.desc;
-    row.tabIndex = 0;
-    row.setAttribute("role", "button");
-    row.setAttribute("aria-label", `Instance type ${entry.full} — ${CAT_LABEL[entry.fam.cat]}. Open instance detail.`);
-    const priceStr = fmtPrice(entry.price, state.currency);
-    const specBits = [];
-    if (entry.vcpu != null) specBits.push(`${entry.vcpu} vCPU`);
-    if (entry.mem != null)  specBits.push(`${entry.mem} GB`);
-    specBits.push(`${entry.availCount} reg`);
-    const normBits = [];
-    if (entry.price != null && entry.vcpu) normBits.push(`${fmtPrice(entry.price / entry.vcpu, state.currency)}/vCPU`);
-    if (entry.price != null && entry.mem)  normBits.push(`${fmtPrice(entry.price / entry.mem, state.currency)}/GB`);
-    row.innerHTML = `
-      <div>
-        <div class="instance-row__name">${entry.full}</div>
-        <div class="instance-row__cat">
-          <span class="dot" style="background:${CAT_COLOR[entry.fam.cat]}"></span>
-          ${CAT_LABEL[entry.fam.cat]} · ${entry.fam.vendor} · ${entry.fam.arch === "x86" ? "x86_64" : "arm64"}
-        </div>
-      </div>
-      <div class="instance-row__right">
-        <div class="instance-row__price${priceStr ? "" : " is-na"}" title="On-demand Linux · ${state.priceRef}">${priceStr ? `${priceStr}<span class="unit">/hr</span>` : "—"}</div>
-        <div class="instance-row__spec">${specBits.join(" · ")}</div>
-        ${normBits.length ? `<div class="instance-row__norm" title="Hourly on-demand list price ÷ resource — a normalised comparison figure, not the invoiced price.">${normBits.join(" · ")}</div>` : ""}
-      </div>
-    `;
-    row.addEventListener("click", () => openInstanceDrawer(entry.fam, entry.size));
-    row.addEventListener("keydown", (e) => {
-      if (e.key === "Enter" || e.key === " ") { e.preventDefault(); openInstanceDrawer(entry.fam, entry.size); }
+  if (entries.length === 0) {
+    results.innerHTML = `<div class="empty">
+      <div class="empty__title">Nothing matches.</div>
+      <div class="empty__sub">Loosen filters or try a different search.</div>
+    </div>`;
+    if (window.IA && IA.computeTable) IA.computeTable.hideDock();
+  } else {
+    IA.computeTable.render(results, entries, {
+      currency: state.currency,
+      priceRef: state.priceRef,
+      sort: state.sort,
+      onSort: (s) => { state.sort = s; writeHash(); },
+      onOpen: (e) => openInstanceDrawer(e._fam, e._size),
+      fmtPrice: (p) => fmtPrice(p, state.currency),
+      maxCompare: 4
     });
-    list.appendChild(row);
-  });
+  }
 
   $("#result-count").textContent = entries.length;
   $("#result-of-label").textContent = (state.query.trim() || state.cat !== "all" || state.arch !== "all")
@@ -2041,13 +2027,6 @@ function renderInstanceView() {
     : (state.cat === "all" && state.arch === "all")
       ? "All instance types"
       : `${state.cat === "all" ? "All categories" : CAT_LABEL[state.cat]}${state.arch !== "all" ? ` · ${state.arch === "x86" ? "x86_64" : "arm64"}` : ""}`;
-
-  if (entries.length === 0) {
-    list.outerHTML = `<div class="empty">
-      <div class="empty__title">Nothing matches.</div>
-      <div class="empty__sub">Loosen filters or try a different search.</div>
-    </div>`;
-  }
 }
 
 // ─────────────────────────────────────────────────────────────────
@@ -2273,12 +2252,15 @@ function applyHash() {
 
 function render() {
   if (!state.data) return;   // guard: keyboard shortcut may fire before data.json loads
-  // Sort + price-tier controls apply to the instance view only.
+  // The instance table now sorts via its column headers, so the old sort
+  // dropdown is retired; the price-tier chips remain an instance-only filter.
   const instanceOnly = state.mode === "instance";
-  const sortSel = $("#sort");           if (sortSel)    sortSel.style.display    = instanceOnly ? "" : "none";
+  const sortSel = $("#sort");           if (sortSel)    sortSel.style.display    = "none";
   const priceChips = $("#price-chips"); if (priceChips) priceChips.style.display = instanceOnly ? "" : "none";
-  if (state.mode === "region") renderRegionView();
-  else renderInstanceView();
+  if (state.mode === "region") {
+    if (window.IA && IA.computeTable) IA.computeTable.hideDock();
+    renderRegionView();
+  } else renderInstanceView();
   writeHash();
 }
 
