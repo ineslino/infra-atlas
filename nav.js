@@ -93,6 +93,7 @@
     "/networking-matrix/":      ["/egress/", "/tools/subnet/", "/iam-matrix/", "/kubernetes/"],
     "/observability/":          ["/observability-stacks/", "/kubernetes/", "/toolbox/observability/", "/decisions/cloud-native-vs-managed-vs-self-hosted-observability/"],
     "/observability-stacks/":   ["/observability/", "/kubernetes/", "/toolbox/observability/", "/decisions/cloud-native-vs-managed-vs-self-hosted-observability/"],
+    "/changelog/":              ["/atlas/", "/api/", "/regions/"],
     "/decisions/cloud-native-vs-managed-vs-self-hosted-observability/": ["/observability/", "/observability-stacks/", "/toolbox/observability/"],
     "/egress/":                 ["/tools/egress-cost/", "/networking-matrix/", "/regions/", "/decisions/nat-gateway-vs-instance-vs-no-nat/"],
     "/apim-matrix/":            ["/tools/apim-limits/", "/aws-api-gateway/", "/apigee/", "/mulesoft/"],
@@ -129,6 +130,9 @@
   }, {
     href: "/atlas/", name: "The Constellation — visual instrument map", vendor: "Map",
     group: "", keywords: "atlas map constellation graph visual explore instruments navigate star chart network diagram"
+  }, {
+    href: "/changelog/", name: "The Changelog", vendor: "What Changed",
+    group: "", keywords: "changelog what changed feed rss dispatches updates new regions families price changes withdrawn subscribe periodical this week in cloud"
   }];
   function pushGroup(arr, label) {
     arr.forEach(function (it) {

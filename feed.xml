@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Infra Atlas · What Changed</title>
+    <link>https://infraatlas.dev/changelog/</link>
+    <atom:link href="https://infraatlas.dev/feed.xml" rel="self" type="application/rss+xml"/>
+    <description>A neutral, sourced changelog of cloud infrastructure — new instance families, regions, withdrawals and price moves across AWS, Azure, GCP, OCI and OVHcloud.</description>
+    <language>en</language>
+    <lastBuildDate>Sat, 16 May 2026 00:00:00 +0000</lastBuildDate>
+    <item>
+      <title>Azure VM · new family DCesv6</title>
+      <link>https://infraatlas.dev/azure-vm/</link>
+      <guid isPermaLink="false">b6aa93c036e8d1e1e7a23b23ce23a781</guid>
+      <category>family-added</category>
+      <pubDate>Sat, 16 May 2026 00:00:00 +0000</pubDate>
+      <description>Azure VM · new family DCesv6</description>
+    </item>
+    <item>
+      <title>GCP Compute · new family c4d</title>
+      <link>https://infraatlas.dev/gcp-compute/</link>
+      <guid isPermaLink="false">7bde0633e4120cad630e546676872571</guid>
+      <category>family-added</category>
+      <pubDate>Sat, 16 May 2026 00:00:00 +0000</pubDate>
+      <description>GCP Compute · new family c4d</description>
+    </item>
+    <item>
+      <title>GCP Compute · new family m4</title>
+      <link>https://infraatlas.dev/gcp-compute/</link>
+      <guid isPermaLink="false">4ed82570f733b609a26fa28c21ddcd21</guid>
+      <category>family-added</category>
+      <pubDate>Sat, 16 May 2026 00:00:00 +0000</pubDate>
+      <description>GCP Compute · new family m4</description>
+    </item>
+    <item>
+      <title>GCP Compute · new family n4a</title>
+      <link>https://infraatlas.dev/gcp-compute/</link>
+      <guid isPermaLink="false">fc08fd286f7167596721007f9ad58e5f</guid>
+      <category>family-added</category>
+      <pubDate>Sat, 16 May 2026 00:00:00 +0000</pubDate>
+      <description>GCP Compute · new family n4a</description>
+    </item>
+    <item>
+      <title>GCP Compute · new family n4d</title>
+      <link>https://infraatlas.dev/gcp-compute/</link>
+      <guid isPermaLink="false">b209228eaec150f91c8e7685eda09765</guid>
+      <category>family-added</category>
+      <pubDate>Sat, 16 May 2026 00:00:00 +0000</pubDate>
+      <description>GCP Compute · new family n4d</description>
+    </item>
+    <item>
+      <title>GCP Compute · new region europe-north2</title>
+      <link>https://infraatlas.dev/gcp-compute/</link>
+      <guid isPermaLink="false">5127de20223113c7601473482ad5bf97</guid>
+      <category>region-added</category>
+      <pubDate>Sat, 16 May 2026 00:00:00 +0000</pubDate>
+      <description>GCP Compute · new region europe-north2</description>
+    </item>
+    <item>
+      <title>GCP Compute · new region asia-southeast3</title>
+      <link>https://infraatlas.dev/gcp-compute/</link>
+      <guid isPermaLink="false">92d1cb8f64e4d9c1d85547d8e1633b5e</guid>
+      <category>region-added</category>
+      <pubDate>Sat, 16 May 2026 00:00:00 +0000</pubDate>
+      <description>GCP Compute · new region asia-southeast3</description>
+    </item>
+    <item>
+      <title>OVHcloud · new region PAR</title>
+      <link>https://infraatlas.dev/ovh-instances/</link>
+      <guid isPermaLink="false">3b2edde835d1ce258a0b2867f097e010</guid>
+      <category>region-added</category>
+      <pubDate>Sat, 16 May 2026 00:00:00 +0000</pubDate>
+      <description>OVHcloud · new region PAR</description>
+    </item>
+    <item>
+      <title>Regions · 54 new regions (ap-batam-1, ap-east-2, ap-kulai-2…)</title>
+      <link>https://infraatlas.dev/regions/</link>
+      <guid isPermaLink="false">3ef047f1b79bc92049a35429f1909596</guid>
+      <category>region-added</category>
+      <pubDate>Sat, 16 May 2026 00:00:00 +0000</pubDate>
+      <description>Regions · 54 new regions (ap-batam-1, ap-east-2, ap-kulai-2…)</description>
+    </item>
+    <item>
+      <title>Regions · region asia-southeast4 withdrawn</title>
+      <link>https://infraatlas.dev/regions/</link>
+      <guid isPermaLink="false">8a9383cd29b89154d6a820584cac163d</guid>
+      <category>region-removed</category>
+      <pubDate>Sat, 16 May 2026 00:00:00 +0000</pubDate>
+      <description>Regions · region asia-southeast4 withdrawn</description>
+    </item>
+    <item>
+      <title>Regions · region taiwannorth withdrawn</title>
+      <link>https://infraatlas.dev/regions/</link>
+      <guid isPermaLink="false">d2ee5c4661c3e52d0422b6c5ad2cbe86</guid>
+      <category>region-removed</category>
+      <pubDate>Sat, 16 May 2026 00:00:00 +0000</pubDate>
+      <description>Regions · region taiwannorth withdrawn</description>
+    </item>
+    <item>
+      <title>Regions · region TOR withdrawn</title>
+      <link>https://infraatlas.dev/regions/</link>
+      <guid isPermaLink="false">1d9a0550142515510dc4183263e8670c</guid>
+      <category>region-removed</category>
+      <pubDate>Sat, 16 May 2026 00:00:00 +0000</pubDate>
+      <description>Regions · region TOR withdrawn</description>
+    </item>
+    <item>
+      <title>AWS EC2 · new family mac-m3ultra</title>
+      <link>https://infraatlas.dev/ec2/</link>
+      <guid isPermaLink="false">135aa155ebecfcb6827850fc8c6da183</guid>
+      <category>family-added</category>
+      <pubDate>Fri, 15 May 2026 00:00:00 +0000</pubDate>
+      <description>AWS EC2 · new family mac-m3ultra</description>
+    </item>
+    <item>
+      <title>OVHcloud · 6 size groups expanded (b3, c3, h100…)</title>
+      <link>https://infraatlas.dev/ovh-instances/</link>
+      <guid isPermaLink="false">52430a37baf4f815106b6c473ce1a6c6</guid>
+      <category>instance-added</category>
+      <pubDate>Fri, 15 May 2026 00:00:00 +0000</pubDate>
+      <description>OVHcloud · 6 size groups expanded (b3, c3, h100…)</description>
+    </item>
+    <item>
+      <title>OVHcloud · h100: 4 sizes withdrawn</title>
+      <link>https://infraatlas.dev/ovh-instances/</link>
+      <guid isPermaLink="false">00558ef104e7cc8a391413badadfded7</guid>
+      <category>instance-removed</category>
+      <pubDate>Fri, 15 May 2026 00:00:00 +0000</pubDate>
+      <description>OVHcloud · h100: 4 sizes withdrawn</description>
+    </item>
+    <item>
+      <title>OVHcloud · i1: 3 sizes withdrawn</title>
+      <link>https://infraatlas.dev/ovh-instances/</link>
+      <guid isPermaLink="false">b28dfeefa6eb926804b84b646c618328</guid>
+      <category>instance-removed</category>
+      <pubDate>Fri, 15 May 2026 00:00:00 +0000</pubDate>
+      <description>OVHcloud · i1: 3 sizes withdrawn</description>
+    </item>
+    <item>
+      <title>OVHcloud · t2: 1 size withdrawn</title>
+      <link>https://infraatlas.dev/ovh-instances/</link>
+      <guid isPermaLink="false">bbfe90074b5d348ce91fc5983e0cfc72</guid>
+      <category>instance-removed</category>
+      <pubDate>Fri, 15 May 2026 00:00:00 +0000</pubDate>
+      <description>OVHcloud · t2: 1 size withdrawn</description>
+    </item>
+  </channel>
+</rss>

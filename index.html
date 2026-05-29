@@ -36,6 +36,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@300;400;500;600&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/feed.css">
+<link rel="alternate" type="application/rss+xml" title="Infra Atlas · What Changed" href="/feed.xml">
 <script src="/assets/three.min.js" defer></script>
 <script src="/globe.js" defer></script>
 
@@ -551,48 +553,10 @@ body {
 }
 
 /* ───────── WHAT CHANGED · feed ───────── */
+/* .dispatch-* row styles live in /assets/feed.css (shared with /changelog/) */
 .dispatches { margin-top: 100px; }
-.dispatch-list { list-style: none; margin: 0; padding: 0; }
-.dispatch-item {
-  display: grid;
-  grid-template-columns: 88px 1fr;
-  gap: 20px;
-  align-items: baseline;
-  padding: 14px 2px;
-  border-bottom: 1px solid var(--line);
-}
-.dispatch-item:first-child { border-top: 1px solid var(--line); }
-.dispatch-date {
-  font-family: var(--mono);
-  font-size: 11px;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--paper-3);
-}
-.dispatch-body { display: flex; flex-wrap: wrap; align-items: baseline; gap: 8px 12px; }
-.dispatch-inst {
-  font-family: var(--mono);
-  font-size: 10px;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: var(--paper-2);
-  min-width: 74px;
-}
-.dispatch-kind {
-  font-family: var(--mono);
-  font-size: 8.5px;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  padding: 3px 8px;
-  border-radius: 99px;
-  border: 1px solid var(--line-2);
-  color: var(--paper-3);
-  white-space: nowrap;
-}
-.dispatch-kind[data-tone="add"]   { color: var(--mint);   border-color: rgba(111, 231, 181, 0.32); }
-.dispatch-kind[data-tone="drop"]  { color: var(--rose);   border-color: rgba(244, 123, 123, 0.32); }
-.dispatch-kind[data-tone="price"] { color: var(--accent); border-color: rgba(255, 120, 73, 0.32); }
-.dispatch-text { font-family: var(--mono); font-size: 12.5px; color: var(--paper); flex: 1 1 280px; }
+.dispatches .section-head__meta a { color: var(--accent); text-decoration: none; }
+.dispatches .section-head__meta a:hover { text-decoration: underline; }
 
 .department {
   margin-top: 56px;
@@ -1557,7 +1521,7 @@ body {
     <header class="section-head">
       <div class="section-head__num">05</div>
       <h2 class="section-head__title">What <em>Changed</em></h2>
-      <div class="section-head__meta"><strong id="dispatch-count">0</strong> recent · daily diff</div>
+      <div class="section-head__meta"><strong id="dispatch-count">0</strong> recent · <a href="./changelog/">full changelog →</a></div>
     </header>
     <ol class="dispatch-list" id="dispatch-list"></ol>
   </section>
@@ -1631,34 +1595,16 @@ body {
 
 </div>
 
+<script src="/assets/feed.js"></script>
 <script>
-/* What Changed — render the daily-diff feed from feed.json */
+/* What Changed — render the daily-diff feed from feed.json (shared row markup
+   + label/tone maps live in /assets/feed.js → window.IA.feed). */
 (function () {
   "use strict";
   var sec = document.getElementById("dispatches");
   var list = document.getElementById("dispatch-list");
-  if (!sec || !list) return;
-
-  var TONE = {
-    "price-change": "price",
-    "instance-added": "add", "family-added": "add", "region-added": "add",
-    "instance-removed": "drop", "family-removed": "drop", "region-removed": "drop"
-  };
-  var INST = {
-    "ec2": "AWS EC2", "azure-vm": "Azure VM", "gcp-compute": "GCP Compute",
-    "oci-compute": "OCI", "ovh-instances": "OVHcloud", "regions": "Regions"
-  };
-
-  function esc(s) {
-    return String(s).replace(/[&<>"]/g, function (c) {
-      return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c];
-    });
-  }
-  function fmtDate(ts) {
-    var d = new Date(ts);
-    if (isNaN(d.getTime())) return esc(ts || "—");
-    return d.toLocaleDateString("en-GB", { day: "2-digit", month: "short" }).toUpperCase();
-  }
+  var F = window.IA && window.IA.feed;
+  if (!sec || !list || !F) return;
 
   fetch("./feed.json", { cache: "no-cache" })
     .then(function (r) { return r.ok ? r.json() : null; })
@@ -1670,14 +1616,7 @@ body {
       var count = document.getElementById("dispatch-count");
       if (count) count.textContent = entries.length;
       list.innerHTML = entries.slice(0, 18).map(function (e) {
-        return '<li class="dispatch-item">'
-          + '<span class="dispatch-date">' + fmtDate(e.ts) + '</span>'
-          + '<span class="dispatch-body">'
-          +   '<span class="dispatch-inst">' + esc(INST[e.instrument] || e.instrument || "") + '</span>'
-          +   '<span class="dispatch-kind" data-tone="' + (TONE[e.kind] || "") + '">'
-          +     esc((e.kind || "").replace(/-/g, " ")) + '</span>'
-          +   '<span class="dispatch-text">' + esc(e.text || "") + '</span>'
-          + '</span></li>';
+        return '<li class="dispatch-item">' + F.row(e) + '</li>';
       }).join("");
     })
     .catch(function () { /* leave section hidden */ });

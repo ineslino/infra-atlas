@@ -105,11 +105,13 @@ jobs:
             git push
           fi
 
-  # Rebuild the ⌘K content-search index after the data refresh. Independent
-  # of any individual instrument's success — the script reads what is on
-  # disk, so even a partial refresh produces a consistent index.
-  build-search-index:
-    name: Rebuild the search index
+  # Rebuild derived artifacts after the data refresh — the ⌘K content-search
+  # index and the changelog RSS feed. Independent of any individual
+  # instrument's success: the scripts read what is on disk, so even a partial
+  # refresh produces consistent output. Runs after `refresh` so feed.json
+  # (committed there by diff_feed) is already on main.
+  build-derived:
+    name: Rebuild search index + RSS feed
     needs: refresh
     if: always() && !cancelled()
     runs-on: ubuntu-latest
@@ -124,16 +126,18 @@ jobs:
         run: sudo apt-get update && sudo apt-get install -y --no-install-recommends python3
       - name: Rebuild search-index.json
         run: python3 scripts/build_search_index.py
+      - name: Rebuild feed.xml (changelog RSS)
+        run: python3 scripts/build_feed_rss.py
       - name: Commit if changed
         run: |
           git pull --rebase --autostash
           git config user.name "infraatlas-bot"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add search-index.json
+          git add search-index.json feed.xml
           if git diff --cached --quiet; then
-            echo "::notice::search-index.json unchanged — skipping commit."
+            echo "::notice::derived artifacts unchanged — skipping commit."
           else
-            git commit -m "chore(search): rebuild index $(date -u +%Y-%m-%d)"
+            git commit -m "chore(site): rebuild search index + RSS $(date -u +%Y-%m-%d)"
             git push
           fi
 

@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="color-scheme" content="dark">
+<title>What Changed · The Changelog · Infra Atlas</title>
+<link rel="icon" href="/favicon.svg?v=2" type="image/svg+xml">
+<meta name="description" content="A neutral, sourced changelog of cloud infrastructure — new instance families, new regions, withdrawn services and price moves across AWS, Azure, GCP, OCI and OVHcloud, detected daily from the data and dated. Subscribe via RSS.">
+<link rel="canonical" href="https://infraatlas.dev/changelog/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Infra Atlas">
+<meta property="og:title" content="What Changed · The Changelog · Infra Atlas">
+<meta property="og:description" content="A neutral, sourced cross-cloud changelog — new families, regions, withdrawals and price moves, detected daily. Subscribe via RSS.">
+<meta property="og:url" content="https://infraatlas.dev/changelog/">
+<meta property="og:image" content="https://infraatlas.dev/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="What Changed · The Changelog · Infra Atlas">
+<meta name="twitter:description" content="A neutral, sourced cross-cloud changelog of cloud infrastructure. Subscribe via RSS.">
+<meta name="twitter:image" content="https://infraatlas.dev/og.png">
+<link rel="alternate" type="application/rss+xml" title="Infra Atlas · What Changed" href="/feed.xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@300;400;500;600&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/feed.css">
+
+<style>
+:root {
+  --ink: #0A0907; --ink-2: #100E0C; --surface: #161310; --surface-2: #1E1A15; --surface-3: #2A241C;
+  --line: rgba(244, 239, 230, 0.06); --line-2: rgba(244, 239, 230, 0.14); --line-3: rgba(244, 239, 230, 0.28);
+  --paper: #F4EFE6; --paper-2: rgba(244, 239, 230, 0.66); --paper-3: rgba(244, 239, 230, 0.55); --paper-4: rgba(244, 239, 230, 0.20);
+  --accent: #FF7849; --accent-2: #FFA66E; --accent-glow: rgba(255, 120, 73, 0.22);
+  --mint: #6FE7B5; --gold: #F4C660; --plum: #C586E8; --sky: #7CD7F1; --rose: #F47B7B; --teal: #5BCCC9;
+  --serif: 'Instrument Serif', 'Times New Roman', serif;
+  --mono: 'JetBrains Mono', ui-monospace, monospace;
+  --sans: 'Manrope', -apple-system, system-ui, sans-serif;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { background: var(--ink); color: var(--paper); font-family: var(--sans); font-size: 15px; line-height: 1.5; -webkit-font-smoothing: antialiased; min-height: 100vh; }
+body { background: radial-gradient(ellipse at 100% -10%, rgba(255,120,73,0.06), transparent 55%), radial-gradient(ellipse at -10% 110%, rgba(111,231,181,0.04), transparent 65%), var(--ink); background-attachment: fixed; overflow-x: hidden; }
+.grain { pointer-events: none; position: fixed; inset: 0; z-index: 100; opacity: 0.08; mix-blend-mode: overlay; background-image: url("data:image/svg+xml;utf8,<svg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.6 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>"); }
+.scanlines { pointer-events: none; position: fixed; inset: 0; z-index: 99; background: repeating-linear-gradient(180deg, transparent, transparent 2px, rgba(244,239,230,0.012) 2px, rgba(244,239,230,0.012) 3px); }
+::selection { background: var(--accent); color: var(--ink); }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 2px; }
+
+.page { max-width: 1080px; margin: 0 auto; padding: 56px 48px 96px; position: relative; }
+
+/* masthead */
+.masthead { display: grid; grid-template-columns: 1fr auto; gap: 40px; align-items: end; padding-bottom: 30px; border-bottom: 1px solid var(--line); margin-bottom: 26px; }
+.masthead__eyebrow { font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.22em; color: var(--paper-3); text-transform: uppercase; display: inline-flex; align-items: center; gap: 12px; text-decoration: none; transition: color 0.2s; }
+.masthead__eyebrow:hover { color: var(--paper); }
+.masthead__eyebrow-arrow { color: var(--accent); transition: transform 0.2s; }
+.masthead__eyebrow:hover .masthead__eyebrow-arrow { transform: translateX(-4px); }
+.masthead__title { font-family: var(--serif); font-weight: 400; font-size: clamp(46px, 7vw, 96px); line-height: 0.95; letter-spacing: -0.02em; margin-top: 14px; }
+.masthead__title em { font-style: italic; color: var(--accent); }
+.masthead__subtitle { margin-top: 16px; font-size: 15.5px; color: var(--paper-2); max-width: 600px; line-height: 1.55; }
+.masthead__subtitle span { font-family: var(--serif); font-style: italic; color: var(--paper); }
+.sub-rss { display: inline-flex; align-items: center; gap: 8px; margin-top: 18px; font-family: var(--mono); font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink); background: var(--accent); border-radius: 99px; padding: 9px 16px; text-decoration: none; transition: background 0.15s; }
+.sub-rss:hover { background: var(--accent-2); }
+.masthead__status { text-align: right; font-family: var(--mono); font-size: 10px; letter-spacing: 0.13em; text-transform: uppercase; color: var(--paper-3); display: flex; flex-direction: column; gap: 3px; padding-bottom: 6px; }
+.masthead__status strong { font-family: var(--serif); font-style: italic; font-weight: 400; font-size: 27px; color: var(--paper); letter-spacing: -0.01em; text-transform: none; }
+
+/* filters */
+.cl-filters { display: flex; flex-direction: column; gap: 12px; margin-bottom: 30px; }
+.cl-search { position: relative; }
+.cl-search input { width: 100%; background: var(--ink); border: 1px solid var(--line); color: var(--paper); font-family: var(--mono); font-size: 13px; padding: 11px 14px 11px 38px; border-radius: 3px; outline: none; transition: border-color 0.2s; }
+.cl-search input::placeholder { color: var(--paper-3); }
+.cl-search input:focus { border-color: var(--accent); }
+.cl-search::before { content: '⌕'; position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: var(--paper-3); font-size: 17px; pointer-events: none; }
+.cl-chips { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+.cl-chips__label { font-family: var(--mono); font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--paper-3); margin-right: 4px; }
+.chip { background: transparent; border: 1px solid var(--line-2); color: var(--paper-2); font-family: var(--mono); font-size: 11px; letter-spacing: 0.06em; padding: 6px 12px; border-radius: 99px; cursor: pointer; transition: all 0.15s; white-space: nowrap; }
+.chip:hover { border-color: var(--paper-3); color: var(--paper); }
+.chip.is-active { background: var(--paper); border-color: var(--paper); color: var(--ink); }
+
+/* weeks */
+.cl-week { margin-bottom: 30px; }
+.cl-week__label { font-family: var(--mono); font-size: 10px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--paper-3); margin-bottom: 8px; display: flex; align-items: center; gap: 12px; }
+.cl-week__label::after { content: ''; flex: 1; height: 1px; background: var(--line); }
+.cl-empty { display: none; padding: 32px 28px; text-align: center; font-family: var(--mono); font-size: 12.5px; color: var(--paper-3); border: 1px dashed var(--line-2); border-radius: 6px; }
+.cl-empty.is-shown { display: block; }
+.cl-empty strong { color: var(--paper); font-weight: 500; }
+.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
+
+/* colophon */
+.colophon { margin-top: 56px; padding-top: 28px; border-top: 1px solid var(--line); font-size: 13px; color: var(--paper-3); line-height: 1.6; max-width: 760px; }
+.colophon a { color: var(--paper-2); text-decoration: underline; text-decoration-color: var(--line-2); text-underline-offset: 3px; }
+.colophon a:hover { color: var(--accent); }
+
+@media (max-width: 900px) {
+  .page { padding: 32px 22px 72px; }
+  .masthead { grid-template-columns: 1fr; gap: 20px; }
+  .masthead__status { text-align: left; flex-direction: row; gap: 24px; }
+}
+</style>
+</head>
+<body>
+<div class="grain"></div>
+<div class="scanlines"></div>
+
+<div class="page">
+
+  <header class="masthead">
+    <div>
+      <a class="masthead__eyebrow" href="/"><span class="masthead__eyebrow-arrow">←</span> Infra Atlas</a>
+      <h1 class="masthead__title">What <em>Changed.</em></h1>
+      <p class="masthead__subtitle"><span>A neutral, sourced changelog of the cloud itself</span> — new instance families, new regions, withdrawals and price moves across every major vendor, detected from the data and dated. No vendor blog spin.</p>
+      <a class="sub-rss" href="/feed.xml"><span aria-hidden="true">⌁</span> Subscribe · RSS</a>
+    </div>
+    <aside class="masthead__status">
+      <div>Changes<strong id="cl-count">—</strong></div>
+    </aside>
+  </header>
+
+  <main id="ia-main">
+
+    <div class="cl-filters">
+      <div class="cl-search">
+        <label for="cl-q" class="sr-only">Search the changelog</label>
+        <input id="cl-q" type="search" autocomplete="off" spellcheck="false" placeholder="Search — region, family, vendor…" aria-label="Search the changelog">
+      </div>
+      <div class="cl-chips" id="cl-inst" aria-label="Filter by instrument"></div>
+      <div class="cl-chips" id="cl-type" aria-label="Filter by type">
+        <span class="cl-chips__label">Type</span>
+        <button class="chip is-active" data-tone="all" aria-pressed="true">All</button>
+        <button class="chip" data-tone="add" aria-pressed="false">Added</button>
+        <button class="chip" data-tone="drop" aria-pressed="false">Withdrawn</button>
+        <button class="chip" data-tone="price" aria-pressed="false">Price</button>
+      </div>
+    </div>
+
+    <div class="sr-only" id="cl-status" role="status" aria-live="polite"></div>
+    <div id="cl-weeks"></div>
+    <div class="cl-empty" id="cl-empty" role="status" aria-live="polite">
+      <strong>No changes match your filters.</strong><br>Try a broader term, or reset the chips to “All”.
+    </div>
+
+  </main>
+
+  <footer class="colophon">
+    Generated from Infra Atlas's own daily data diffs (<code>scripts/diff_feed.py</code>) — every entry is a real change detected between dated snapshots of the <a href="/api/">public data feed</a>. Compute instruments refresh daily; matrices are curated snapshots. New here? Start at <a href="/">the Atlas</a> or browse <a href="/atlas/">the constellation</a>. Spot a wrong call? <a href="https://github.com/ineslino/infra-atlas/issues/new/choose" target="_blank" rel="noopener">Open an issue</a>.
+  </footer>
+
+</div>
+
+<script src="/assets/feed.js"></script>
+<script>
+"use strict";
+(function () {
+  var F = window.IA && window.IA.feed;
+  if (!F) return;
+  var $ = function (s) { return document.querySelector(s); };
+  var state = { instrument: "all", tone: "all", query: "" };
+  var ENTRIES = [];
+
+  function weekStart(ts) {
+    var d = new Date(ts + "T00:00:00Z");
+    if (isNaN(d.getTime())) return ts;
+    var dow = (d.getUTCDay() + 6) % 7;        // 0 = Monday
+    d.setUTCDate(d.getUTCDate() - dow);
+    return d.toISOString().slice(0, 10);
+  }
+  function weekLabel(ws) {
+    var d = new Date(ws + "T00:00:00Z");
+    if (isNaN(d.getTime())) return ws;
+    return "Week of " + d.toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric", timeZone: "UTC" });
+  }
+
+  function visible(e) {
+    if (state.instrument !== "all" && e.instrument !== state.instrument) return false;
+    if (state.tone !== "all" && (F.TONE[e.kind] || "") !== state.tone) return false;
+    if (state.query) {
+      var hay = (F.instLabel(e.instrument) + " " + e.instrument + " " + e.kind + " " + (e.text || "")).toLowerCase();
+      if (hay.indexOf(state.query) === -1) return false;
+    }
+    return true;
+  }
+
+  function render() {
+    var weeks = $("#cl-weeks");
+    var shown = ENTRIES.filter(visible);
+    // group by week, preserving newest-first order
+    var order = [], groups = {};
+    shown.forEach(function (e) {
+      var ws = weekStart(e.ts);
+      if (!groups[ws]) { groups[ws] = []; order.push(ws); }
+      groups[ws].push(e);
+    });
+    weeks.innerHTML = order.map(function (ws) {
+      return '<section class="cl-week"><h2 class="cl-week__label">' + F.esc(weekLabel(ws)) + '</h2>'
+        + '<ol class="dispatch-list">'
+        + groups[ws].map(function (e) { return '<li class="dispatch-item">' + F.row(e) + '</li>'; }).join("")
+        + '</ol></section>';
+    }).join("");
+    $("#cl-empty").classList.toggle("is-shown", shown.length === 0);
+    var anyFilter = state.instrument !== "all" || state.tone !== "all" || !!state.query;
+    var s = $("#cl-status");
+    if (s) s.textContent = anyFilter ? (shown.length + (shown.length === 1 ? " change" : " changes") + " match the filters.") : "";
+  }
+
+  function buildInstChips() {
+    var present = [];
+    ENTRIES.forEach(function (e) { if (present.indexOf(e.instrument) === -1) present.push(e.instrument); });
+    var host = $("#cl-inst");
+    host.innerHTML = '<span class="cl-chips__label">Instrument</span>'
+      + '<button class="chip is-active" data-inst="all" aria-pressed="true">All</button>'
+      + present.map(function (i) {
+          return '<button class="chip" data-inst="' + F.esc(i) + '" aria-pressed="false">' + F.esc(F.instLabel(i)) + '</button>';
+        }).join("");
+  }
+
+  function wireChips(host, key) {
+    host.addEventListener("click", function (ev) {
+      var b = ev.target.closest("button.chip");
+      if (!b) return;
+      state[key] = b.getAttribute(key === "instrument" ? "data-inst" : "data-tone");
+      host.querySelectorAll("button.chip").forEach(function (x) {
+        var on = x === b;
+        x.classList.toggle("is-active", on);
+        x.setAttribute("aria-pressed", on ? "true" : "false");
+      });
+      render();
+    });
+  }
+
+  function init() {
+    fetch("/feed.json", { cache: "no-cache" })
+      .then(function (r) { return r.ok ? r.json() : null; })
+      .then(function (feed) {
+        ENTRIES = (feed && Array.isArray(feed.entries)) ? feed.entries : [];
+        $("#cl-count").textContent = ENTRIES.length;
+        buildInstChips();
+        wireChips($("#cl-inst"), "instrument");
+        wireChips($("#cl-type"), "tone");
+        $("#cl-q").addEventListener("input", function () { state.query = this.value.trim().toLowerCase(); render(); });
+        render();
+      })
+      .catch(function () { $("#cl-count").textContent = "0"; });
+  }
+
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init);
+  else init();
+})();
+</script>
+<script src="/nav.js" defer></script>
+</body>
+</html>
