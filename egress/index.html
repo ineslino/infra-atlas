@@ -75,11 +75,6 @@ a:focus-visible, button:focus-visible, input:focus-visible, [tabindex]:focus-vis
   outline: 2px solid var(--accent);
   outline-offset: 2px;
 }
-.matrix tbody tr.feature-row td.cell:focus-visible,
-.matrix tbody tr.feature-row td.feature-col:focus-visible {
-  outline: 2px solid var(--accent);
-  outline-offset: -2px;
-}
 
 .page { max-width: 1400px; margin: 0 auto; padding: 56px 48px 96px; position: relative; }
 
@@ -194,33 +189,72 @@ a:focus-visible, button:focus-visible, input:focus-visible, [tabindex]:focus-vis
   width: 8px; height: 8px; border-radius: 2px;
 }
 
-/* ─────────── MATRIX (egress-specific overrides) ─────────── */
-/* base matrix table + button-wrappers + drawer + empty state in /assets/matrix.css */
-.matrix-wrap {
-  margin-bottom: 48px;
+/* ─────────── ROUTE LEDGER (replaces the capability matrix) ───────────
+   Egress is priced by volume tier, not a single rate — a matrix cell that
+   shows one headline (e.g. "$0.09/GB") hides the free allowance and the
+   step-downs. Each transfer is a route card; tiered routes show the full
+   price ladder inline with proportional bars, flat routes show one rate. */
+.routes { display: flex; flex-direction: column; gap: 16px; margin-bottom: 48px; }
+.route {
   border: 1px solid var(--line); border-radius: 6px;
   background: linear-gradient(180deg, var(--ink-2) 0%, var(--ink) 100%);
+  padding: 22px 24px;
 }
-.matrix { min-width: 760px; }
-.matrix thead th.feature-col {
-  min-width: 280px;
+.route.is-hidden { display: none; }
+.route__head { display: flex; align-items: baseline; gap: 14px; flex-wrap: wrap; margin-bottom: 18px; }
+.route__name { font-family: var(--serif); font-size: 23px; color: var(--paper); letter-spacing: -0.01em; }
+.route__sub { font-family: var(--mono); font-size: 11px; color: var(--paper-3); letter-spacing: 0.02em; }
+.route__tag {
+  margin-left: auto; font-family: var(--mono); font-size: 9.5px; letter-spacing: 0.16em;
+  text-transform: uppercase; padding: 4px 10px; border-radius: 99px;
+  border: 1px solid var(--line-2); color: var(--paper-3); white-space: nowrap;
 }
-/* Egress cell value sizing — bigger than the shared default since the headline is the rate */
-.matrix tbody tr.feature-row td.cell .cell-value {
-  font-size: 14px; line-height: 1.3;
-}
-/* Transfer-row sub-text (the secondary monospace description beneath the label) */
-.feature-col__btn .transfer-sub {
-  display: block; font-family: var(--mono); font-size: 10.5px;
-  color: var(--paper-3); margin-top: 3px; letter-spacing: 0.02em;
-}
-.feature-col__btn .transfer-name { font-weight: 500; }
-.feature-col__btn:hover { color: var(--accent-2); }
+.route__tag--tiered { color: var(--gold); border-color: rgba(244,198,96,0.4); }
+.route__grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 12px; }
 
-/* Hide columns when a provider is filtered out */
-.matrix.hide-aws   .col-aws,
-.matrix.hide-azure .col-azure,
-.matrix.hide-gcp   .col-gcp { display: none; }
+.prov {
+  border: 1px solid var(--line); border-radius: 4px; background: var(--surface);
+  padding: 0; overflow: hidden; cursor: pointer; text-align: left;
+  font: inherit; color: inherit; width: 100%; display: block;
+  transition: border-color 0.15s ease, background 0.15s ease;
+}
+.prov:hover { border-color: var(--line-3); background: var(--surface-2); }
+.prov.is-hidden { display: none; }
+.prov__head {
+  display: flex; align-items: center; gap: 8px; padding: 11px 14px;
+  border-bottom: 1px solid var(--line);
+}
+.prov__swatch { width: 8px; height: 8px; border-radius: 2px; flex-shrink: 0; }
+.prov__name {
+  font-family: var(--mono); font-size: 11px; letter-spacing: 0.08em;
+  text-transform: uppercase; color: var(--paper-2);
+}
+.prov__star { margin-left: auto; color: var(--accent); font-size: 13px; line-height: 1; }
+
+/* flat route — one prominent rate */
+.prov__flat { padding: 16px 14px; }
+.prov__flat-rate { font-family: var(--mono); font-size: 19px; color: var(--paper); }
+.prov__flat-rate--free { color: var(--mint); }
+.prov__flat-rate--na { color: var(--paper-3); font-size: 15px; }
+.prov__flat-label {
+  font-family: var(--mono); font-size: 9px; letter-spacing: 0.14em;
+  text-transform: uppercase; color: var(--paper-4); margin-top: 5px;
+}
+
+/* tiered route — the price ladder (bar width ∝ $/GB within the route) */
+.ladder { padding: 6px 14px 10px; }
+.rung {
+  position: relative; display: flex; align-items: baseline; justify-content: space-between;
+  gap: 10px; padding: 8px 0; border-bottom: 1px solid var(--line);
+}
+.rung:last-child { border-bottom: none; }
+.rung__bar {
+  position: absolute; left: 0; top: 3px; bottom: 3px; z-index: 0;
+  background: rgba(255,120,73,0.12); border-radius: 2px;
+}
+.rung__band { font-family: var(--mono); font-size: 10px; color: var(--paper-3); position: relative; z-index: 1; }
+.rung__price { font-family: var(--mono); font-size: 12.5px; color: var(--paper); white-space: nowrap; position: relative; z-index: 1; }
+.rung__price--free { color: var(--mint); }
 
 /* ─────────── LEGEND ─────────── */
 .legend {
@@ -345,7 +379,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, [tabindex]:focus-vis
   <div class="readnote">
     <span class="readnote__mark">*</span>
     <p class="readnote__text">
-      <strong>Egress pricing is conditional.</strong> Free monthly tiers, same-region exemptions, CDN-routed discounts and committed-use deals all move the real number. Treat the headline rate as the map and the footnote as the <em>territory</em> — and read every figure as a US-dollar <em>list</em> price, never the invoiced price. Click any cell for the tier ladder and the vendor source.
+      <strong>Egress pricing is conditional.</strong> Free monthly tiers, same-region exemptions, CDN-routed discounts and committed-use deals all move the real number. The per-GB rate <em>steps down with volume</em> — so each route shows the whole ladder, not one headline. Read every figure as a US-dollar <em>list</em> price, never the invoiced price. Click any cloud for the note and the vendor source.
     </p>
   </div>
 
@@ -362,14 +396,12 @@ a:focus-visible, button:focus-visible, input:focus-visible, [tabindex]:focus-vis
 
   <div class="legend">
     <span class="legend__label">Legend</span>
-    <span class="legend__item"><span class="legend__dot" style="background:var(--paper-2)"></span> Metered — a published per-GB list rate</span>
+    <span class="legend__item"><span class="legend__dot" style="background:rgba(255,120,73,0.5)"></span> Bar — relative $/GB within a route (shorter = cheaper)</span>
     <span class="legend__item"><span class="legend__dot" style="background:var(--mint)"></span> Free — no charge for this transfer</span>
-    <span class="legend__item"><span class="legend__star">*</span> Click any cell for the note &amp; source</span>
+    <span class="legend__item"><span class="legend__star">*</span> Click any cloud for the note &amp; source</span>
   </div>
 
-  <div class="matrix-wrap" id="matrix-wrap">
-    <table class="matrix" id="matrix" aria-label="Egress and data-transfer cost comparison across cloud providers"></table>
-  </div>
+  <div class="routes" id="routes" aria-label="Egress and data-transfer cost ladder across cloud providers"></div>
 
   <div class="matrix-empty" id="matrix-empty" role="status" aria-live="polite">
     <strong>No transfers match your filters.</strong><br>
@@ -381,7 +413,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, [tabindex]:focus-vis
   <footer class="colophon">
     <div>
       <h5>About</h5>
-      <p>Instrument 18 of <a href="../">Infra Atlas</a>. The cross-cloud data-transfer cost map — what AWS, Azure and Google Cloud charge to move a gigabyte: out to the internet, between zones and regions, and through a NAT gateway or a private interconnect. Click any cell for the tier ladder and the source.</p>
+      <p>Instrument 18 of <a href="../">Infra Atlas</a>. The cross-cloud data-transfer cost map — what AWS, Azure and Google Cloud charge to move a gigabyte: out to the internet, between zones and regions, and through a NAT gateway or a private interconnect. Each route shows the price ladder inline; click any cloud for the note and the source.</p>
     </div>
     <div>
       <h5>Sources &amp; method</h5>
@@ -389,7 +421,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, [tabindex]:focus-vis
     </div>
     <div>
       <h5>Shortcuts</h5>
-      <p><code>/</code> search · <code>Esc</code> close drawer · click a cell for the tier ladder, click a row name for the full per-cloud breakdown. The same data is published as JSON at <code>/egress/data.json</code>.</p>
+      <p><code>/</code> search · <code>Esc</code> close drawer · click any cloud panel for the full note, the tier ladder and the source. The same data is published as JSON at <code>/egress/data.json</code>.</p>
     </div>
   </footer>
 
@@ -561,27 +593,20 @@ const escapeHtml = (s) => String(s).replace(/[&<>"']/g, (c) => ({
 
 const rateOf = (t, k) => t.rates[k] || { level: "na", headline: "—", note: "" };
 
-// Map egress level (rate/free/na) onto the canonical shared-renderer levels (yes/part/no).
-//   rate → yes  (a published per-GB charge; the headline shows in the cell)
-//   free → part (semantically distinct — surfaced as mint via the page-local --part override)
-//   na   → no
-const LEVEL_MAP = { rate: "yes", free: "part", na: "no" };
-
-// Build the shared-API view of the data. PROVIDERS/GROUPS/TRANSFERS remain the source
-// of truth (and what data.json is generated from); these adapters feed IA.matrix.*.
-const VENDORS = PROVIDERS;
-const CATEGORIES = GROUPS;
-const FEATURES = TRANSFERS.map(t => ({
-  id: t.id,
-  category: t.group,
-  name: t.label,
-  sub: t.sub,
-  desc: t.desc,
-  support: Object.fromEntries(PROVIDERS.map(p => {
+// A route is "tiered" when any provider publishes more than one volume band.
+const isTiered = (t) => PROVIDERS.some(p => (rateOf(t, p.key).tiers || []).length > 1);
+// Pull the leading number out of a headline ("$0.09 /GB" → 0.09) for bar scaling.
+const parseRate = (h) => { const m = String(h).match(/([\d.]+)/); return m ? parseFloat(m[1]) : 0; };
+// Highest $/unit anywhere in a route — the 100%-width reference for the ladder bars.
+function routeMaxUsd(t) {
+  let max = 0;
+  PROVIDERS.forEach(p => {
     const r = rateOf(t, p.key);
-    return [p.key, { level: LEVEL_MAP[r.level] || "no", value: r.headline, note: r.note || "" }];
-  }))
-}));
+    (r.tiers || []).forEach(x => { if (x.usd > max) max = x.usd; });
+    if (r.level === "rate") { const n = parseRate(r.headline); if (n > max) max = n; }
+  });
+  return max;
+}
 
 // ─── Permalinks — filter state ⇄ URL hash ───
 function writeHash() {
@@ -629,7 +654,7 @@ function init() {
     PROVIDERS.map(p => `<button class="chip" data-p="${p.key}" aria-pressed="false"><span class="swatch" style="background:${p.swatch}" aria-hidden="true"></span>${escapeHtml(p.short)}</button>`).join("");
 
   applyHash();
-  renderMatrix();
+  renderRoutes();
   wireEvents();
   // sync aria-pressed once after applyHash may have flipped is-active states
   IA.matrix.syncChipsAria('.chip[data-group]');
@@ -637,56 +662,83 @@ function init() {
   window.addEventListener("hashchange", () => { applyHash(); applyFilter(); });
 }
 
-function renderMatrix() {
-  IA.matrix.renderTable({
-    tableEl: $("#matrix"),
-    vendors: VENDORS, categories: CATEGORIES, features: FEATURES,
-    dimensionLabel: "Transfer type"
-  });
-  // Inject the egress-only secondary sub-text inside each row-header button.
-  // The shared renderer only emits `f.name`; the original page rendered both
-  // a transfer-name and a transfer-sub line. We re-attach the sub after render
-  // so the visual UX is preserved without forking the shared template.
-  FEATURES.forEach(f => {
-    const btn = $(`tr.feature-row[data-feature="${f.id}"] .feature-col__btn`);
-    if (!btn) return;
-    btn.innerHTML = `<span class="transfer-name">${escapeHtml(f.name)}</span>` +
-                    `<span class="transfer-sub">${escapeHtml(f.sub || "")}</span>`;
-  });
+// ─── Render — one route card per transfer; tiered routes get the ladder ───
+function renderRoutes() {
+  $("#routes").innerHTML = TRANSFERS.map(routeCard).join("");
   applyFilter();
+}
+
+function routeCard(t) {
+  const tiered = isTiered(t);
+  const maxUsd = routeMaxUsd(t);
+  const cols = PROVIDERS.map(p => providerPanel(t, p, tiered, maxUsd)).join("");
+  return `<div class="route" data-route="${escapeHtml(t.id)}" data-group="${escapeHtml(t.group)}">
+    <div class="route__head">
+      <span class="route__name">${escapeHtml(t.label)}</span>
+      <span class="route__sub">${escapeHtml(t.sub || "")}</span>
+      <span class="route__tag route__tag--${tiered ? "tiered" : "flat"}">${tiered ? "Tiered by volume" : "Flat rate"}</span>
+    </div>
+    <div class="route__grid">${cols}</div>
+  </div>`;
+}
+
+function providerPanel(t, p, tiered, maxUsd) {
+  const r = rateOf(t, p.key);
+  const hasNote = !!(r.note && r.note.length > 2);
+  const star = hasNote ? `<span class="prov__star" aria-hidden="true">*</span>` : "";
+  const head = `<div class="prov__head">
+      <span class="prov__swatch" style="background:${p.swatch}"></span>
+      <span class="prov__name">${escapeHtml(p.short)}</span>${star}
+    </div>`;
+  let body;
+  if (tiered && (r.tiers || []).length) {
+    body = `<div class="ladder">` + r.tiers.map(x => {
+      const free = x.usd === 0;
+      const price = free ? "Free" : `$${x.usd} /${escapeHtml(r.unit)}`;
+      const w = (!free && maxUsd > 0) ? Math.max(4, Math.round(x.usd / maxUsd * 100)) : 0;
+      const bar = free ? "" : `<span class="rung__bar" style="width:${w}%"></span>`;
+      return `<div class="rung">${bar}<span class="rung__band">${escapeHtml(x.band)}</span><span class="rung__price ${free ? "rung__price--free" : ""}">${price}</span></div>`;
+    }).join("") + `</div>`;
+  } else {
+    const free = r.level === "free", na = r.level === "na";
+    const cls = free ? "prov__flat-rate--free" : na ? "prov__flat-rate--na" : "";
+    const label = na ? "not offered" : "flat · any volume";
+    body = `<div class="prov__flat"><div class="prov__flat-rate ${cls}">${escapeHtml(r.headline)}</div><div class="prov__flat-label">${label}</div></div>`;
+  }
+  return `<button type="button" class="prov" data-route="${escapeHtml(t.id)}" data-prov="${escapeHtml(p.key)}" aria-label="${escapeHtml(t.label)} — ${escapeHtml(p.name)}. Open rates, note and source.">${head}${body}</button>`;
 }
 
 function applyFilter() {
   const q = state.query.trim().toLowerCase();
-  const table = $("#matrix");
 
-  // Provider visibility (via class on table) — egress-specific column hiding
+  // Provider-column visibility
   PROVIDERS.forEach(p => {
-    table.classList.toggle(`hide-${p.key}`, !state.providers.has(p.key));
+    $$(`.prov[data-prov="${p.key}"]`).forEach(el => el.classList.toggle("is-hidden", !state.providers.has(p.key)));
   });
 
-  const anyFilter = !!q || state.group !== "all" || state.providers.size < PROVIDERS.length;
-  IA.matrix.applyVisibility({
-    table, features: FEATURES, categories: CATEGORIES,
-    isVisibleFn: (f) => {
-      if (state.group !== "all" && f.category !== state.group) return false;
-      if (!q) return true;
-      const groupLabel = (GROUPS.find(g => g.key === f.category) || {}).label || "";
-      const provHay = PROVIDERS
-        .filter(p => state.providers.has(p.key))
-        .map(p => {
-          const t = TRANSFERS.find(x => x.id === f.id);
-          const r = rateOf(t, p.key);
-          return `${p.name} ${p.short} ${r.headline} ${r.note || ""}`;
-        })
-        .join(" ");
-      return `${f.name} ${f.sub || ""} ${f.desc} ${groupLabel} ${provHay}`.toLowerCase().includes(q);
-    },
-    emptyEl: $("#matrix-empty"),
-    statusEl: $("#filter-status"),
-    statusNoun: "transfer",
-    anyFilterActive: anyFilter
+  // Route (card) visibility
+  let visible = 0;
+  TRANSFERS.forEach(t => {
+    const card = $(`.route[data-route="${t.id}"]`);
+    if (!card) return;
+    let show = state.group === "all" || t.group === state.group;
+    if (show && q) {
+      const groupLabel = (GROUPS.find(g => g.key === t.group) || {}).label || "";
+      const provHay = PROVIDERS.filter(p => state.providers.has(p.key)).map(p => {
+        const r = rateOf(t, p.key);
+        return `${p.name} ${p.short} ${r.headline} ${r.note || ""}`;
+      }).join(" ");
+      show = `${t.label} ${t.sub || ""} ${t.desc} ${groupLabel} ${provHay}`.toLowerCase().includes(q);
+    }
+    card.classList.toggle("is-hidden", !show);
+    if (show) visible++;
   });
+
+  $("#matrix-empty").classList.toggle("is-shown", visible === 0);
+  const statusEl = $("#filter-status");
+  if (statusEl) statusEl.textContent = visible === 0
+    ? "No transfers match your filters."
+    : `${visible} transfer${visible === 1 ? "" : "s"} shown.`;
   writeHash();
 }
 
@@ -779,12 +831,15 @@ function wireEvents() {
     if (e.key === "/" && e.target.tagName !== "INPUT") { e.preventDefault(); $("#search").focus(); }
   });
 
-  // Shared module owns: drawer modal open/close, ESC, backdrop click, focus trap, scroll lock,
-  // and the cell/feature-col click delegation that opens the drawer.
+  // Shared module owns the drawer modal: open/close, ESC, backdrop click, focus
+  // trap and scroll lock. The route ledger has its own cards, so we delegate the
+  // open-on-click ourselves (each provider panel is a button).
   IA.matrix.drawer.init();
-  IA.matrix.wireDelegation((featureId, vendorKey) => {
-    const t = TRANSFERS.find(x => x.id === featureId);
-    if (t) openTransferDrawer(t, vendorKey);
+  $("#routes").addEventListener("click", (e) => {
+    const panel = e.target.closest(".prov");
+    if (!panel) return;
+    const t = TRANSFERS.find(x => x.id === panel.dataset.route);
+    if (t) openTransferDrawer(t, panel.dataset.prov);
   });
 }
 
