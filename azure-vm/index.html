@@ -594,102 +594,6 @@ body {
   margin-right: 4px;
 }
 
-/* ─────────────── INSTANCE LIST ─────────────── */
-.instance-list {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 8px;
-}
-
-.instance-row {
-  background: var(--surface);
-  border: 1px solid var(--line);
-  border-radius: 3px;
-  padding: 14px 16px;
-  cursor: pointer;
-  transition: all 0.15s ease;
-  display: grid;
-  grid-template-columns: 1fr auto;
-  gap: 10px;
-  align-items: center;
-}
-
-.instance-row:hover {
-  border-color: var(--line-3);
-  background: var(--surface-2);
-}
-
-.instance-row:focus-visible {
-  outline: 2px solid var(--accent);
-  outline-offset: 2px;
-}
-
-.instance-row__name {
-  font-family: var(--mono);
-  font-size: 13.5px;
-  color: var(--paper);
-  font-weight: 500;
-  letter-spacing: 0.02em;
-}
-
-.instance-row__cat {
-  font-family: var(--mono);
-  font-size: 9.5px;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: var(--paper-3);
-  margin-top: 4px;
-  display: flex;
-  align-items: center;
-  gap: 7px;
-}
-
-.instance-row__right {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  gap: 3px;
-  text-align: right;
-}
-
-.instance-row__price {
-  font-family: var(--mono);
-  font-size: 14px;
-  font-weight: 600;
-  color: var(--accent);
-  letter-spacing: 0.01em;
-  white-space: nowrap;
-}
-
-.instance-row__price .unit {
-  font-size: 9.5px;
-  font-weight: 400;
-  color: var(--paper-3);
-  letter-spacing: 0.05em;
-  margin-left: 1px;
-}
-
-.instance-row__price.is-na {
-  color: var(--paper-4);
-  font-weight: 400;
-}
-
-.instance-row__spec {
-  font-family: var(--mono);
-  font-size: 10px;
-  color: var(--paper-3);
-  letter-spacing: 0.05em;
-  white-space: nowrap;
-}
-
-.instance-row__norm {
-  font-family: var(--mono);
-  font-size: 9.5px;
-  color: var(--paper-4);
-  letter-spacing: 0.04em;
-  white-space: nowrap;
-}
-
 /* ─────────────── DRAWER (region/instance detail) ─────────────── */
 .drawer-backdrop {
   position: fixed;
@@ -1473,25 +1377,6 @@ function fmtPrice(price, currency) {
   if (dot === -1) s += ".00";
   else if (s.length - dot - 1 === 1) s += "0";
   return sym + s;
-}
-
-// Sort the flattened instance-type entries by state.sort; nulls always last.
-function sortEntries(entries) {
-  const byName = (a, b) => a.full.localeCompare(b.full, undefined, { numeric: true });
-  const cmp = (key, dir) => (a, b) => {
-    const av = a[key], bv = b[key];
-    if (av == null && bv == null) return byName(a, b);
-    if (av == null) return 1;
-    if (bv == null) return -1;
-    return dir * (av - bv) || byName(a, b);
-  };
-  switch (state.sort) {
-    case "price-asc":  entries.sort(cmp("price", 1));  break;
-    case "price-desc": entries.sort(cmp("price", -1)); break;
-    case "vcpu-desc":  entries.sort(cmp("vcpu", -1));  break;
-    case "mem-desc":   entries.sort(cmp("mem", -1));   break;
-    default:           entries.sort(byName);
-  }
 }
 
 function expandIn(rawIn, allCodes) {
