@@ -457,13 +457,17 @@ function applyFilter() {
     statusNoun: "dimension",
     anyFilterActive: anyFilter
   });
+  // make the current filter a shareable URL
+  IA.matrix.urlState.write({ cat: state.category, q: state.query }, { cat: "all", q: "" });
 }
 
 function renderChips() {
   const chips = $("#cat-chips");
-  chips.innerHTML = `<span class="filter-chips__label">Category</span>
-    <button class="chip is-active" data-cat="all" aria-pressed="true">All</button>` +
-    CATEGORIES.map(c => `<button class="chip" data-cat="${c.key}" aria-pressed="false">${IA.matrix.escapeHtml(c.label)}</button>`).join("");
+  chips.innerHTML = `<span class="filter-chips__label">Category</span>` +
+    [{ key: "all", label: "All" }].concat(CATEGORIES).map(c => {
+      const on = state.category === c.key;
+      return `<button class="chip${on ? " is-active" : ""}" data-cat="${c.key}" aria-pressed="${on}">${IA.matrix.escapeHtml(c.label)}</button>`;
+    }).join("");
   chips.querySelectorAll(".chip[data-cat]").forEach(b => {
     b.addEventListener("click", () => {
       state.category = b.dataset.cat;
@@ -518,6 +522,10 @@ function init() {
     vendors: VENDORS, categories: CATEGORIES, features: FEATURES,
     dimensionLabel: "Dimension"
   });
+  // restore a shared/bookmarked view from the URL before first render
+  var u = IA.matrix.urlState.read();
+  if (u.cat) state.category = u.cat;
+  if (u.q) { state.query = u.q; $("#search").value = u.q; }
   renderChips();
   $("#search").addEventListener("input", function() { state.query = this.value; applyFilter(); });
   applyFilter();

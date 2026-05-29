@@ -201,4 +201,34 @@
     });
   };
 
+  // ─── shareable URL state — encode filter state in the location hash ───
+  // read() → { key: value } parsed from "#k=v&k2=v2"; write(obj, defaults)
+  // serialises obj into the hash (omitting empty + default values) via
+  // replaceState (no scroll jump, no history spam). Multi-value state (e.g.
+  // a vendor set) should be passed as a "."-joined string by the caller.
+  IA.matrix.urlState = {
+    read: function () {
+      var out = {}, h = location.hash.replace(/^#/, "");
+      if (!h) return out;
+      h.split("&").forEach(function (kv) {
+        var i = kv.indexOf("=");
+        if (i < 0) return;
+        var k = decodeURIComponent(kv.slice(0, i));
+        if (k) out[k] = decodeURIComponent(kv.slice(i + 1));
+      });
+      return out;
+    },
+    write: function (obj, defaults) {
+      defaults = defaults || {};
+      var parts = [];
+      Object.keys(obj).forEach(function (k) {
+        var v = obj[k];
+        if (v == null || v === "" || defaults[k] === v) return;
+        parts.push(encodeURIComponent(k) + "=" + encodeURIComponent(v));
+      });
+      var url = parts.length ? "#" + parts.join("&") : location.pathname + location.search;
+      try { history.replaceState(null, "", url); } catch (e) { /* file:// etc. */ }
+    }
+  };
+
 })(window);
