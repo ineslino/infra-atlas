@@ -212,6 +212,36 @@ a:focus-visible, button:focus-visible, input:focus-visible, [tabindex]:focus-vis
 .matrix.hide-oci     .col-oci,
 .matrix.hide-ovh     .col-ovh { display: none; }
 
+/* ─────────── SECTION TABS + PANELS (models vs capabilities) ───────────
+   The atlas answers two different questions — "which models are hosted"
+   and "what can the platform do". They were one scrolling matrix that
+   mixed model rows with capability rows; each is now its own table behind
+   a tab, so you compare like with like. */
+.tablist {
+  display: flex; flex-wrap: wrap; gap: 4px; align-items: stretch;
+  border-bottom: 1px solid var(--line-2); margin-bottom: 22px;
+}
+.tab {
+  background: transparent; border: 0;
+  font-family: var(--mono); font-size: 12.5px; letter-spacing: 0.06em;
+  color: var(--paper-3); padding: 12px 18px; cursor: pointer;
+  border-bottom: 2px solid transparent; margin-bottom: -1px;
+  transition: color 0.15s ease, border-color 0.15s ease;
+}
+.tab:hover { color: var(--paper-2); }
+.tab[aria-selected="true"] { color: var(--accent); border-bottom-color: var(--accent); }
+.tab__count { font-size: 10.5px; color: var(--paper-4); margin-left: 6px; }
+.tab[aria-selected="true"] .tab__count { color: var(--accent); opacity: 0.75; }
+.tab:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; border-radius: 2px; }
+
+.matrix-section.is-hidden { display: none; }
+.matrix-section__title {
+  font-family: var(--mono); font-size: 10px; letter-spacing: 0.22em;
+  text-transform: uppercase; color: var(--accent); font-weight: 500;
+  margin: 4px 0 16px; display: flex; align-items: center; gap: 18px;
+}
+.matrix-section__title::after { content: ''; flex: 1; height: 1px; background: var(--line-2); }
+
 /* ─────────── LEGEND ─────────── */
 .legend {
   display: flex; flex-wrap: wrap; gap: 18px; align-items: center;
@@ -282,6 +312,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, [tabindex]:focus-vis
       <div class="status-time">Verified · <time datetime="2026-05-19">2026-05-19</time></div>
       <div class="status-counts">
         <div>Platforms<strong id="count-vendors">5</strong></div>
+        <div>Models<strong id="count-models">—</strong></div>
         <div>Capabilities<strong id="count-features">—</strong></div>
         <div>Footnotes<strong id="count-stars">—</strong></div>
       </div>
@@ -289,6 +320,15 @@ a:focus-visible, button:focus-visible, input:focus-visible, [tabindex]:focus-vis
   </header>
 
   <main id="ia-main">
+
+  <div class="tablist" role="tablist" aria-label="Atlas view">
+    <button class="tab" role="tab" id="tab-models" aria-selected="true" aria-controls="section-models" data-section="models">
+      Hosted Models <span class="tab__count" data-count="models" aria-hidden="true"></span>
+    </button>
+    <button class="tab" role="tab" id="tab-caps" aria-selected="false" aria-controls="section-caps" tabindex="-1" data-section="caps">
+      Platform Capabilities <span class="tab__count" data-count="caps" aria-hidden="true"></span>
+    </button>
+  </div>
 
   <section class="filters">
     <div class="filter-search">
@@ -310,13 +350,28 @@ a:focus-visible, button:focus-visible, input:focus-visible, [tabindex]:focus-vis
     <span class="legend__item"><span class="cell-mark cell-mark--yes" style="position:relative">✓<span class="cell-mark__star">*</span></span> Click any cell for the note &amp; source</span>
   </div>
 
-  <div class="matrix-wrap" id="matrix-wrap">
-    <table class="matrix" id="matrix" aria-label="Generative AI platform comparison across cloud providers"></table>
+  <!-- ── SECTION: HOSTED MODELS ── -->
+  <div class="matrix-section" id="section-models" role="tabpanel" aria-labelledby="tab-models">
+    <h2 class="matrix-section__title" id="section-models-title">Hosted Model Families</h2>
+    <div class="matrix-wrap">
+      <table class="matrix" id="matrix-models" aria-labelledby="section-models-title"></table>
+    </div>
+    <div class="matrix-empty" id="empty-models" role="status" aria-live="polite">
+      <strong>No models match your filters.</strong><br>
+      Try a broader search term, or re-add a platform.
+    </div>
   </div>
 
-  <div class="matrix-empty" id="matrix-empty" role="status" aria-live="polite">
-    <strong>No capabilities match your filters.</strong><br>
-    Try a broader search term, or switch the category to “All”.
+  <!-- ── SECTION: PLATFORM CAPABILITIES ── -->
+  <div class="matrix-section is-hidden" id="section-caps" role="tabpanel" aria-labelledby="tab-caps" hidden>
+    <h2 class="matrix-section__title" id="section-caps-title">Platform Capabilities</h2>
+    <div class="matrix-wrap">
+      <table class="matrix" id="matrix-caps" aria-labelledby="section-caps-title"></table>
+    </div>
+    <div class="matrix-empty" id="empty-caps" role="status" aria-live="polite">
+      <strong>No capabilities match your filters.</strong><br>
+      Try a broader search term, or switch the category to “All”.
+    </div>
   </div>
 
   </main>
@@ -669,7 +724,21 @@ const FEATURES = [
 // ───────────────────────────────────────────────────────────────────
 // STATE + RENDER
 // ───────────────────────────────────────────────────────────────────
+// ─── Two comparisons from one dataset: hosted models vs platform capabilities ───
+// Model rows answer "which families can I run here"; capability rows answer "what
+// can the platform do". They are different questions, so each gets its own table.
+const MODEL_CAT = "families";
+const CATS_MODELS = CATEGORIES.filter(c => c.key === MODEL_CAT);
+const CATS_CAPS   = CATEGORIES.filter(c => c.key !== MODEL_CAT);
+const FEATURES_MODELS = FEATURES.filter(f => f.category === MODEL_CAT);
+const FEATURES_CAPS   = FEATURES.filter(f => f.category !== MODEL_CAT);
+const SECTIONS = {
+  models: { tableId: "matrix-models", panel: "section-models", empty: "empty-models", cats: CATS_MODELS, features: FEATURES_MODELS, label: "Model family" },
+  caps:   { tableId: "matrix-caps",   panel: "section-caps",   empty: "empty-caps",   cats: CATS_CAPS,   features: FEATURES_CAPS,   label: "Capability" }
+};
+
 const state = {
+  section: "models",
   vendors: new Set(VENDORS.map(v => v.key)),
   category: "all",
   query: ""
@@ -686,6 +755,7 @@ const escapeHtml = (s) => String(s).replace(/[&<>"']/g, (c) => ({
 function writeHash() {
   const keys = VENDORS.map(v => v.key);
   const p = new URLSearchParams();
+  if (state.section !== "models") p.set("sec", state.section);
   if (state.vendors.size < keys.length) p.set("vendors", keys.filter(k => state.vendors.has(k)).join(","));
   if (state.category !== "all") p.set("cat", state.category);
   if (state.query.trim())       p.set("q", state.query.trim());
@@ -695,6 +765,7 @@ function writeHash() {
 function applyHash() {
   const keys = VENDORS.map(v => v.key);
   const p = new URLSearchParams(location.hash.slice(1));
+  const sec = p.get("sec"); if (sec && SECTIONS[sec]) state.section = sec;
   const vd = p.get("vendors");
   if (vd) {
     const valid = vd.split(",").filter(x => keys.includes(x));
@@ -702,63 +773,92 @@ function applyHash() {
   }
   const cat = p.get("cat"); if (cat) state.category = cat;
   state.query = p.get("q") || "";
+  // vendor chips reflect state; category chips are (re)built per-section in setSection
   const allV = state.vendors.size === keys.length;
   $$('.chip[data-v]').forEach(b => {
     if (b.dataset.v === "all") b.classList.toggle("is-active", allV);
     else b.classList.toggle("is-active", !allV && state.vendors.has(b.dataset.v));
   });
-  $$('.chip[data-cat]').forEach(b => b.classList.toggle("is-active", b.dataset.cat === state.category));
   const sb = $("#search"); if (sb) sb.value = state.query;
 }
 
 function init() {
   // Counts
-  $("#count-features").textContent = FEATURES.length;
+  $("#count-models").textContent = FEATURES_MODELS.length;
+  $("#count-features").textContent = FEATURES_CAPS.length;
   const stars = FEATURES.reduce((acc, f) => acc + Object.values(f.support).filter(s => s.note && s.note.length > 0).length, 0);
   $("#count-stars").textContent = stars;
+  // Tab counts
+  $('[data-count="models"]').textContent = `(${FEATURES_MODELS.length})`;
+  $('[data-count="caps"]').textContent = `(${FEATURES_CAPS.length})`;
 
-  // Category chips
-  const catChips = $("#cat-chips");
-  catChips.innerHTML = `<span class="filter-chips__label">Category</span>
-    <button class="chip is-active" data-cat="all" aria-pressed="true">All</button>` +
-    CATEGORIES.map(c => `<button class="chip" data-cat="${c.key}" aria-pressed="false">${escapeHtml(c.label)}</button>`).join("");
-
-  // Vendor chips
+  // Vendor chips — shared by both sections (same 5 platforms)
   const vChips = $("#vendor-chips");
   vChips.innerHTML = `<span class="filter-chips__label">Services</span>
     <button class="chip is-active" data-v="all" aria-pressed="true">All</button>` +
     VENDORS.map(v => `<button class="chip" data-v="${v.key}" aria-pressed="false"><span class="swatch" style="background:${v.swatch}" aria-hidden="true"></span>${escapeHtml(v.short)}</button>`).join("");
 
+  // Render both tables once — vendors are shared, only the rows differ
+  IA.matrix.renderTable({ tableEl: $("#matrix-models"), vendors: VENDORS, categories: CATS_MODELS, features: FEATURES_MODELS, dimensionLabel: SECTIONS.models.label });
+  IA.matrix.renderTable({ tableEl: $("#matrix-caps"),   vendors: VENDORS, categories: CATS_CAPS,   features: FEATURES_CAPS,   dimensionLabel: SECTIONS.caps.label });
+
   applyHash();
-  renderMatrix();
+  setSection(state.section);   // builds category chips + toggles panels/tabs, then filters
   wireEvents();
-  // sync aria-pressed once after applyHash may have flipped is-active states
-  IA.matrix.syncChipsAria('.chip[data-cat]');
   IA.matrix.syncChipsAria('.chip[data-v]');
-  window.addEventListener("hashchange", () => { applyHash(); applyFilter(); });
+  window.addEventListener("hashchange", () => { applyHash(); setSection(state.section); });
 }
 
-function renderMatrix() {
-  IA.matrix.renderTable({
-    tableEl: $("#matrix"),
-    vendors: VENDORS, categories: CATEGORIES, features: FEATURES,
-    dimensionLabel: "Capability"
+// Show one comparison; rebuild the per-section category chips; re-filter.
+function setSection(sec) {
+  if (!SECTIONS[sec]) sec = "models";
+  state.section = sec;
+
+  // panels — hidden attr for true accessibility hiding
+  Object.keys(SECTIONS).forEach(k => {
+    const panel = $("#" + SECTIONS[k].panel);
+    const on = k === sec;
+    panel.classList.toggle("is-hidden", !on);
+    panel.hidden = !on;
   });
+  // tabs — aria-selected + roving tabindex
+  $$(".tab").forEach(b => {
+    const on = b.dataset.section === sec;
+    b.setAttribute("aria-selected", on ? "true" : "false");
+    b.tabIndex = on ? 0 : -1;
+  });
+
+  // category chips for this section — hidden when there is only one category (models)
+  const cats = SECTIONS[sec].cats;
+  const catChips = $("#cat-chips");
+  if (cats.length <= 1) {
+    catChips.innerHTML = "";
+    catChips.style.display = "none";
+    state.category = "all";
+  } else {
+    catChips.style.display = "";
+    const validKeys = new Set(cats.map(c => c.key));
+    if (state.category !== "all" && !validKeys.has(state.category)) state.category = "all";
+    catChips.innerHTML = `<span class="filter-chips__label">Category</span>
+      <button class="chip${state.category === "all" ? " is-active" : ""}" data-cat="all" aria-pressed="${state.category === "all"}">All</button>` +
+      cats.map(c => `<button class="chip${state.category === c.key ? " is-active" : ""}" data-cat="${c.key}" aria-pressed="${state.category === c.key}">${escapeHtml(c.label)}</button>`).join("");
+  }
   applyFilter();
 }
 
 function applyFilter() {
   const q = state.query.trim().toLowerCase();
-  const table = $("#matrix");
+  const sec = SECTIONS[state.section];
 
-  // Vendor visibility (via class on table) — ai-atlas-specific
-  VENDORS.forEach(v => {
-    table.classList.toggle(`hide-${v.key}`, !state.vendors.has(v.key));
+  // Vendor visibility — apply to BOTH tables so it persists across section switches
+  ["matrix-models", "matrix-caps"].forEach(tid => {
+    const t = $("#" + tid); if (!t) return;
+    VENDORS.forEach(v => t.classList.toggle(`hide-${v.key}`, !state.vendors.has(v.key)));
   });
 
   const anyFilter = !!q || state.category !== "all" || state.vendors.size < VENDORS.length;
   IA.matrix.applyVisibility({
-    table, features: FEATURES, categories: CATEGORIES,
+    table: $("#" + sec.tableId), features: sec.features, categories: sec.cats,
     isVisibleFn: (f) => {
       if (state.category !== "all" && f.category !== state.category) return false;
       if (!q) return true;
@@ -769,9 +869,10 @@ function applyFilter() {
         .join(" ");
       return `${f.name} ${f.desc} ${cat} ${vendorHay}`.toLowerCase().includes(q);
     },
-    emptyEl: $("#matrix-empty"),
+    emptyEl: $("#" + sec.empty),
     statusEl: $("#filter-status"),
-    statusNoun: "capability", statusNounPlural: "capabilities",
+    statusNoun: state.section === "models" ? "model" : "capability",
+    statusNounPlural: state.section === "models" ? "models" : "capabilities",
     anyFilterActive: anyFilter
   });
   writeHash();
@@ -857,6 +958,22 @@ function wireEvents() {
   // "/" focus shortcut — ai-atlas-specific
   document.addEventListener("keydown", (e) => {
     if (e.key === "/" && e.target.tagName !== "INPUT") { e.preventDefault(); $("#search").focus(); }
+  });
+
+  // Section tabs — click + WAI-ARIA Left/Right/Home/End keyboard navigation
+  $$(".tab").forEach(b => b.addEventListener("click", () => setSection(b.dataset.section)));
+  document.addEventListener("keydown", (e) => {
+    const tab = e.target.closest('[role="tab"]');
+    if (!tab || !["ArrowRight", "ArrowLeft", "Home", "End"].includes(e.key)) return;
+    e.preventDefault();
+    const tabs = $$('[role="tab"]');
+    let idx = tabs.indexOf(tab);
+    if (e.key === "ArrowRight") idx = (idx + 1) % tabs.length;
+    else if (e.key === "ArrowLeft") idx = (idx - 1 + tabs.length) % tabs.length;
+    else if (e.key === "Home") idx = 0;
+    else idx = tabs.length - 1;
+    tabs[idx].focus();
+    setSection(tabs[idx].dataset.section);
   });
 
   // Shared module owns: drawer modal open/close, ESC, backdrop click, focus trap, scroll lock,
