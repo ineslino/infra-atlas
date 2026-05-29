@@ -1,4 +1,107 @@
 {
-  "generated": "",
-  "entries": []
+  "generated": "2026-05-16",
+  "entries": [
+    {
+      "ts": "2026-05-16",
+      "instrument": "azure-vm",
+      "kind": "family-added",
+      "text": "new family DCesv6"
+    },
+    {
+      "ts": "2026-05-16",
+      "instrument": "gcp-compute",
+      "kind": "family-added",
+      "text": "new family c4d"
+    },
+    {
+      "ts": "2026-05-16",
+      "instrument": "gcp-compute",
+      "kind": "family-added",
+      "text": "new family m4"
+    },
+    {
+      "ts": "2026-05-16",
+      "instrument": "gcp-compute",
+      "kind": "family-added",
+      "text": "new family n4a"
+    },
+    {
+      "ts": "2026-05-16",
+      "instrument": "gcp-compute",
+      "kind": "family-added",
+      "text": "new family n4d"
+    },
+    {
+      "ts": "2026-05-16",
+      "instrument": "gcp-compute",
+      "kind": "region-added",
+      "text": "new region europe-north2"
+    },
+    {
+      "ts": "2026-05-16",
+      "instrument": "gcp-compute",
+      "kind": "region-added",
+      "text": "new region asia-southeast3"
+    },
+    {
+      "ts": "2026-05-16",
+      "instrument": "ovh-instances",
+      "kind": "region-added",
+      "text": "new region PAR"
+    },
+    {
+      "ts": "2026-05-16",
+      "instrument": "regions",
+      "kind": "region-added",
+      "text": "54 new regions (ap-batam-1, ap-east-2, ap-kulai-2…)"
+    },
+    {
+      "ts": "2026-05-16",
+      "instrument": "regions",
+      "kind": "region-removed",
+      "text": "region asia-southeast4 withdrawn"
+    },
+    {
+      "ts": "2026-05-16",
+      "instrument": "regions",
+      "kind": "region-removed",
+      "text": "region taiwannorth withdrawn"
+    },
+    {
+      "ts": "2026-05-16",
+      "instrument": "regions",
+      "kind": "region-removed",
+      "text": "region TOR withdrawn"
+    },
+    {
+      "ts": "2026-05-15",
+      "instrument": "ec2",
+      "kind": "family-added",
+      "text": "new family mac-m3ultra"
+    },
+    {
+      "ts": "2026-05-15",
+      "instrument": "ovh-instances",
+      "kind": "instance-added",
+      "text": "6 size groups expanded (b3, c3, h100…)"
+    },
+    {
+      "ts": "2026-05-15",
+      "instrument": "ovh-instances",
+      "kind": "instance-removed",
+      "text": "h100: 4 sizes withdrawn"
+    },
+    {
+      "ts": "2026-05-15",
+      "instrument": "ovh-instances",
+      "kind": "instance-removed",
+      "text": "i1: 3 sizes withdrawn"
+    },
+    {
+      "ts": "2026-05-15",
+      "instrument": "ovh-instances",
+      "kind": "instance-removed",
+      "text": "t2: 1 size withdrawn"
+    }
+  ]
 }
