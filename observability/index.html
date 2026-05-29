@@ -631,6 +631,11 @@ function applyFilter() {
     });
     if (isCurrent) visibleInCurrent = visible;
   });
+  // make the current section + filter a shareable URL
+  IA.matrix.urlState.write(
+    { sec: state.section, cat: state.category, q: state.query },
+    { sec: "cloud-native", cat: "all", q: "" }
+  );
 }
 
 function setSection(sec) {
@@ -753,7 +758,11 @@ function init() {
   $("#count-dims").textContent = dims;
   renderMatrix("matrix-a", VENDORS_A, CATEGORIES_A, FEATURES_A);
   renderMatrix("matrix-b", VENDORS_B, CATEGORIES_B, FEATURES_B);
-  setSection("cloud-native");
+  // restore a shared/bookmarked view from the URL
+  var u = IA.matrix.urlState.read();
+  if (u.cat) state.category = u.cat;
+  if (u.q) { state.query = u.q; $("#search").value = u.q; }
+  setSection(u.sec === "managed" ? "managed" : "cloud-native");
 }
 
 if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init);
