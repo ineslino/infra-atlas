@@ -58,6 +58,12 @@
 .matrix tbody tr.category-row.is-hidden { display: none; }
 .matrix-wrap { overflow-x: auto; }
 
+/* keep the dimension label visible while the table scrolls sideways — the
+   left column sticks; the top-left corner cell sits above both axes */
+.matrix .feature-col { position: sticky; left: 0; z-index: 5; }
+.matrix tbody tr.feature-row th.feature-col { background: var(--ink-2); }
+.matrix thead th.feature-col { z-index: 11; }
+
 /* ─── Cell marks + values ─── */
 .cell-mark {
   display: inline-flex; align-items: center; justify-content: center;
@@ -76,7 +82,12 @@
 .cell-value--yes  { color: var(--paper); }
 .cell-value--part { color: var(--part); }
 .cell-value--no   { color: var(--no); }
-.cell-value__star { font-size: 10px; color: var(--matrix-accent); align-self: flex-start; margin-left: 1px; }
+.cell-value__star { font-size: 11px; color: var(--matrix-accent); align-self: flex-start; margin-left: 1px; }
+/* footnoted cells get a dotted underline — a consistent "click for the sourced
+   note" affordance (most cells are sourced, so this also signals the table is
+   interactive, which the audit found wasn't discoverable) */
+.cell__btn.has-note .cell-value { text-decoration: underline dotted; text-decoration-color: var(--line-3); text-underline-offset: 4px; }
+.cell__btn.has-note:hover .cell-value { text-decoration-color: var(--matrix-accent); }
 
 /* ─── Button wrappers — preserve <th>/<td> semantics while keeping cells clickable ─── */
 .cell__btn, .feature-col__btn {
@@ -183,3 +194,56 @@
 .vendor-row__mark--yes  { background: rgba(111, 231, 181, 0.15); color: var(--yes); }
 .vendor-row__mark--no   { background: rgba(244, 123, 123, 0.12); color: var(--no); }
 .vendor-row__mark--part { background: rgba(244, 198, 96, 0.15);  color: var(--part); }
+
+/* ─── Mobile: collapse the matrix into stacked cards (below 680px) ───
+   A 900px+ table can't survive a phone — it forces a pinch-zoom horizontal
+   scroll that the audit flagged. Below 680px each dimension row becomes a
+   card: the dimension name is the title, and every vendor stacks as a
+   labelled row (vendor name via the data-vlabel attribute). The button
+   aria-labels already read "<dimension> — <vendor>: <value> (<level>)", so
+   screen-reader users keep full context even though the visual label is CSS.
+   min-width:0 !important beats the page-local min-width overrides that load
+   after this file. Hidden (filtered-out) rows keep higher specificity, so
+   the chip filters still work in card mode. */
+@media (max-width: 680px) {
+  .matrix-wrap { overflow-x: visible; }
+  .matrix { display: block; min-width: 0 !important; }
+  .matrix thead { display: none; }
+  .matrix tbody { display: block; }
+
+  /* category label → a section heading between card groups */
+  .matrix tbody tr.category-row { display: block; }
+  .matrix tbody tr.category-row td { display: block; padding: 20px 2px 8px; border-top: 0; background: none; }
+
+  /* each dimension row → a card */
+  .matrix tbody tr.feature-row {
+    display: block; margin: 0 0 12px; padding: 14px 16px;
+    border: 1px solid var(--line); border-radius: 6px;
+    background: var(--surface, rgba(255, 255, 255, 0.02));
+  }
+  .matrix tbody tr.feature-row:hover { background: var(--surface, rgba(255, 255, 255, 0.02)); }
+
+  /* drop the sticky-left column + reset the table-cell padding for cards */
+  .matrix .feature-col { position: static; }
+  .matrix tbody tr.feature-row th.feature-col {
+    display: block; width: auto; padding: 0 0 10px; margin-bottom: 8px;
+    border-right: 0; border-bottom: 1px solid var(--line-2);
+    background: none; font-size: 15px;
+  }
+  .matrix tbody tr.feature-row .feature-col__btn { width: 100%; }
+
+  /* each vendor cell → a labelled row inside the card */
+  .matrix tbody tr.feature-row td.cell {
+    display: flex; align-items: center; justify-content: space-between; gap: 14px;
+    min-width: 0; padding: 7px 0; border-bottom: 1px dashed var(--line); text-align: left;
+  }
+  .matrix tbody tr.feature-row td.cell:last-child { border-bottom: 0; padding-bottom: 0; }
+  .matrix tbody tr.feature-row td.cell:hover { background: none; }
+  .matrix tbody tr.feature-row td.cell::before {
+    content: attr(data-vlabel); flex-shrink: 0;
+    font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.1em;
+    text-transform: uppercase; color: var(--paper-3);
+  }
+  .matrix tbody tr.feature-row td.cell .cell__btn { width: auto; padding: 0; text-align: right; }
+  .matrix .cell-value { max-width: none; padding: 0; justify-content: flex-end; text-align: right; }
+}
