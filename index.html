@@ -1636,12 +1636,8 @@ body {
   var F = window.IA && window.IA.feed;
   if (!sec || !list || !F) return;
 
-  fetch("./feed.json", { cache: "no-cache" })
-    .then(function (r) { return r.ok ? r.json() : null; })
-    .then(function (feed) {
-      if (!feed) return;                         // no feed.json — leave section hidden
-      var entries = Array.isArray(feed.entries) ? feed.entries : [];
-      if (!entries.length) return;               // empty feed — leave the section hidden instead of showing a placeholder
+  F.load(function (entries) {
+      if (!entries.length) return;               // nothing to show — leave the section hidden
       sec.hidden = false;
       var count = document.getElementById("dispatch-count");
       if (count) count.textContent = entries.length;
@@ -1672,8 +1668,7 @@ body {
           }, 4200);
         }
       }
-    })
-    .catch(function () { /* leave section hidden */ });
+  });
 })();
 
 /* Page-index — highlight the department currently in view */

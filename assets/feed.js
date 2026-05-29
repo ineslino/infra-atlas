@@ -11,13 +11,15 @@
   var INST = {
     "ec2": "AWS EC2", "azure-vm": "Azure VM", "gcp-compute": "GCP Compute",
     "oci-compute": "OCI", "ovh-instances": "OVHcloud", "regions": "Regions",
-    "egress": "Egress"
+    "egress": "Egress", "atlas": "Infra Atlas"
   };
-  // kind → tone (drives the badge colour: add=mint, drop=rose, price=accent)
+  // kind → tone (drives the badge colour: add=mint, drop=rose, price=accent,
+  // note=gold for curated editorial dispatches)
   var TONE = {
     "price-change": "price",
     "instance-added": "add", "family-added": "add", "region-added": "add",
-    "instance-removed": "drop", "family-removed": "drop", "region-removed": "drop"
+    "instance-removed": "drop", "family-removed": "drop", "region-removed": "drop",
+    "dispatch": "note"
   };
 
   function esc(s) {
@@ -48,6 +50,25 @@
         +     esc(this.kindLabel(e.kind)) + '</span>'
         +   '<span class="dispatch-text">' + esc(e.text || "") + '</span>'
         + '</span>';
+    },
+
+    // Load + merge the auto-detected feed (/feed.json) with curated editorial
+    // dispatches (/dispatches.json), newest-first. Keeping them in separate
+    // files means the daily auto-pipeline can never clobber editorial entries.
+    // cb receives the merged, sorted entry array (possibly empty).
+    load: function (cb) {
+      function get(u) {
+        return fetch(u, { cache: "no-cache" })
+          .then(function (r) { return r.ok ? r.json() : null; })
+          .catch(function () { return null; });
+      }
+      Promise.all([get("/feed.json"), get("/dispatches.json")]).then(function (res) {
+        var a = (res[0] && res[0].entries) || [];
+        var b = (res[1] && res[1].entries) || [];
+        var all = a.concat(b).filter(function (e) { return e && e.ts; });
+        all.sort(function (x, y) { return x.ts < y.ts ? 1 : (x.ts > y.ts ? -1 : 0); });
+        cb(all);
+      });
     }
   };
 })(window);

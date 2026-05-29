@@ -22,8 +22,15 @@ SITE = "https://infraatlas.dev"
 LABELS = {
     "ec2": "AWS EC2", "azure-vm": "Azure VM", "gcp-compute": "GCP Compute",
     "oci-compute": "OCI", "ovh-instances": "OVHcloud", "regions": "Regions",
-    "egress": "Egress",
+    "egress": "Egress", "atlas": "Infra Atlas",
 }
+
+
+def load_entries(name):
+    try:
+        return (json.load(open(os.path.join(ROOT, name), encoding="utf-8")).get("entries")) or []
+    except Exception:
+        return []
 
 
 def rfc822(ts):
@@ -35,12 +42,12 @@ def rfc822(ts):
 
 def main():
     out_p = sys.argv[1] if len(sys.argv) > 1 else os.path.join(ROOT, "feed.xml")
-    try:
-        feed = json.load(open(os.path.join(ROOT, "feed.json"), encoding="utf-8"))
-    except Exception:
-        feed = {"entries": []}
-    entries = feed.get("entries") or []
-    built = rfc822(feed.get("generated") or (entries[0]["ts"] if entries else ""))
+    # Merge the auto-detected feed with curated editorial dispatches, newest-first
+    # (same model as the client's IA.feed.load).
+    entries = load_entries("feed.json") + load_entries("dispatches.json")
+    entries = [e for e in entries if e.get("ts")]
+    entries.sort(key=lambda e: e.get("ts", ""), reverse=True)
+    built = rfc822(entries[0]["ts"] if entries else "")
 
     items = []
     for e in entries:

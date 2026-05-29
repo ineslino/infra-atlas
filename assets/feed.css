@@ -43,4 +43,5 @@
 .dispatch-kind[data-tone="add"]   { color: var(--mint);   border-color: rgba(111, 231, 181, 0.32); }
 .dispatch-kind[data-tone="drop"]  { color: var(--rose);   border-color: rgba(244, 123, 123, 0.32); }
 .dispatch-kind[data-tone="price"] { color: var(--accent); border-color: rgba(255, 120, 73, 0.32); }
+.dispatch-kind[data-tone="note"]  { color: var(--gold);   border-color: rgba(244, 198, 96, 0.32); }
 .dispatch-text { font-family: var(--mono); font-size: 12.5px; color: var(--paper); flex: 1 1 280px; }

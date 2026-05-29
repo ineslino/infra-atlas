@@ -6,7 +6,39 @@
     <atom:link href="https://infraatlas.dev/feed.xml" rel="self" type="application/rss+xml"/>
     <description>A neutral, sourced changelog of cloud infrastructure — new instance families, regions, withdrawals and price moves across AWS, Azure, GCP, OCI and OVHcloud.</description>
     <language>en</language>
-    <lastBuildDate>Sat, 16 May 2026 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Fri, 29 May 2026 00:00:00 +0000</lastBuildDate>
+    <item>
+      <title>Infra Atlas · New: a public changelog + RSS feed — every cloud change we detect, dated and sourced. Subscribe at /feed.xml.</title>
+      <link>https://infraatlas.dev/atlas/</link>
+      <guid isPermaLink="false">56ed6f723b8b3abe03c5e7c975c9cfa2</guid>
+      <category>dispatch</category>
+      <pubDate>Fri, 29 May 2026 00:00:00 +0000</pubDate>
+      <description>Infra Atlas · New: a public changelog + RSS feed — every cloud change we detect, dated and sourced. Subscribe at /feed.xml.</description>
+    </item>
+    <item>
+      <title>Infra Atlas · New instrument: the Constellation — a visual, navigable map of all 21 instruments at /atlas/.</title>
+      <link>https://infraatlas.dev/atlas/</link>
+      <guid isPermaLink="false">bd1df0d9a2f40ac4e74584cf4485e0f2</guid>
+      <category>dispatch</category>
+      <pubDate>Fri, 29 May 2026 00:00:00 +0000</pubDate>
+      <description>Infra Atlas · New instrument: the Constellation — a visual, navigable map of all 21 instruments at /atlas/.</description>
+    </item>
+    <item>
+      <title>Infra Atlas · Two new instruments: the Observability Matrix (cloud-native + managed) and Observability Stacks (self-hosted OSS).</title>
+      <link>https://infraatlas.dev/atlas/</link>
+      <guid isPermaLink="false">30dafb978765a4072c78ad56ddedb3d6</guid>
+      <category>dispatch</category>
+      <pubDate>Thu, 28 May 2026 00:00:00 +0000</pubDate>
+      <description>Infra Atlas · Two new instruments: the Observability Matrix (cloud-native + managed) and Observability Stacks (self-hosted OSS).</description>
+    </item>
+    <item>
+      <title>Infra Atlas · New: a Testing &amp; Integration toolbox — floci, Testcontainers, Terratest, BATS, Mockoon and Pact.</title>
+      <link>https://infraatlas.dev/atlas/</link>
+      <guid isPermaLink="false">fafbeda148f1e60aa92a94442f9f345f</guid>
+      <category>dispatch</category>
+      <pubDate>Thu, 28 May 2026 00:00:00 +0000</pubDate>
+      <description>Infra Atlas · New: a Testing &amp; Integration toolbox — floci, Testcontainers, Terratest, BATS, Mockoon and Pact.</description>
+    </item>
     <item>
       <title>Azure VM · new family DCesv6</title>
       <link>https://infraatlas.dev/azure-vm/</link>
