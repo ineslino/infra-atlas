@@ -953,10 +953,10 @@ body {
 <div class="page">
 
   <div class="top-rule">
-    <div class="top-rule__center">Issue No. 01 · Compare cloud infrastructure across every major vendor</div>
+    <div class="top-rule__center">Compare cloud infrastructure across every major vendor</div>
     <div class="top-rule__sync">
       <span class="pulse"></span>
-      Synced daily · 06:00 UTC
+      <span id="sync-label">Updated daily · 06:00 UTC</span>
     </div>
   </div>
 
@@ -1728,6 +1728,36 @@ body {
     meta.innerHTML = "<strong>" + live + "</strong> Live · <strong>" + dev +
       "</strong> In Dev · <strong>" + planned + "</strong> Planned";
   }
+})();
+
+/* Sync label — surface the real last-updated date from the data feed instead of
+   stating a schedule. Every data.json carries a "generated" ISO timestamp; we
+   pull just the first bytes via a Range request (Python's server and Cloudflare
+   both honour it) and regex the date out. Falls back to the static label. */
+(function () {
+  var el = document.getElementById("sync-label");
+  if (!el || !window.fetch) return;
+  fetch("./ec2/data.json", { headers: { Range: "bytes=0-200" }, cache: "no-cache" })
+    .then(function (r) { return (r.ok || r.status === 206) ? r.text() : null; })
+    .then(function (txt) {
+      if (!txt) return;
+      var m = txt.match(/"generated"\s*:\s*"([^"]+)"/);
+      if (!m) return;
+      var gen = new Date(m[1]);
+      if (isNaN(gen.getTime())) return;
+      var now = new Date();
+      var DAY = 86400000;
+      var g = Date.UTC(gen.getUTCFullYear(), gen.getUTCMonth(), gen.getUTCDate());
+      var n = Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate());
+      var diff = Math.round((n - g) / DAY);
+      var label;
+      if (diff <= 0) label = "Updated today";
+      else if (diff === 1) label = "Updated yesterday";
+      else if (diff < 7) label = "Updated " + diff + " days ago";
+      else label = "Updated · " + gen.toLocaleDateString("en-GB", { day: "2-digit", month: "short", timeZone: "UTC" });
+      el.textContent = label;
+    })
+    .catch(function () { /* keep the static fallback */ });
 })();
 </script>
 <script src="/nav.js" defer></script>
