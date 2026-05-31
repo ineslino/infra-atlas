@@ -21,6 +21,12 @@ import os
 
 REVIEWED = "2026-05-19"
 
+# Social-share image. Keep the ?v= in sync with the site-wide cache-bust:
+# the bump touches generated *.html, but this generator is a separate source,
+# so without the version here a regen would silently revert the cards to a
+# stale OG image.
+OG_IMAGE = "https://infraatlas.dev/og.png?v=3"
+
 # ── Curated, sourced decision content ───────────────────────────────
 # Each decision: slug, cloud tag, title HTML (with one <em>), subtitle,
 # verdict (**bold** allowed), column headers, rows [(criterion, [cells], src)],
@@ -291,6 +297,23 @@ DECISIONS = [
  },
 ]
 
+# ── Hand-authored decisions ─────────────────────────────────────────
+# Bespoke pages that don't fit the generated template: they carry custom
+# sections (e.g. observability's "hybrid reality"), hand-crafted meta
+# descriptions, and finer typography (&rsquo; etc.) than render_page emits.
+# They are LISTED in the hub here so a regen never orphans them, but are NOT
+# regenerated — edit their index.html directly. Only render_hub reads these
+# (slug, cloud, title, teaser, reviewed); main() skips them.
+HANDWRITTEN = [
+ {
+  "slug": "cloud-native-vs-managed-vs-self-hosted-observability",
+  "cloud": "Cross-cloud · patterns",
+  "title": "Cloud-native, managed <em>or</em> self-hosted observability?",
+  "teaser": "Three operating models for the same problem — where you sit on the build-vs-buy spectrum.",
+  "reviewed": "2026-05-28",
+ },
+]
+
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 FONTS = ('<link rel="preconnect" href="https://fonts.googleapis.com">\n'
          '<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>\n'
@@ -344,11 +367,11 @@ def render_page(d):
 <meta property="og:title" content="{esc(q)} · Infra Atlas Decisions">
 <meta property="og:description" content="{esc(d['sub'])}">
 <meta property="og:url" content="https://infraatlas.dev/decisions/{d['slug']}/">
-<meta property="og:image" content="https://infraatlas.dev/og.png">
+<meta property="og:image" content="{OG_IMAGE}">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="{esc(q)} · Infra Atlas Decisions">
 <meta name="twitter:description" content="{esc(d['sub'])}">
-<meta name="twitter:image" content="https://infraatlas.dev/og.png">
+<meta name="twitter:image" content="{OG_IMAGE}">
 <script type="application/ld+json">
 {ld}
 </script>
@@ -424,15 +447,15 @@ def render_page(d):
 
 def render_hub():
     cards = []
-    for d in DECISIONS:
+    for d in DECISIONS + HANDWRITTEN:
         cards.append(
             f'        <a class="dcard" href="/decisions/{d["slug"]}/">\n'
             f'          <div class="dcard__cloud">{esc(d["cloud"])}</div>\n'
             f'          <div class="dcard__q">{d["title"]}</div>\n'
             f'          <div class="dcard__teaser">{esc(d["teaser"])}</div>\n'
-            f'          <div class="dcard__foot">Reviewed {REVIEWED}</div>\n'
+            f'          <div class="dcard__foot">Reviewed {d.get("reviewed", REVIEWED)}</div>\n'
             f'        </a>')
-    n = len(DECISIONS)
+    n = len(DECISIONS) + len(HANDWRITTEN)
     return f"""<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -448,11 +471,11 @@ def render_hub():
 <meta property="og:title" content="Decisions · Infra Atlas">
 <meta property="og:description" content="Short, neutral, footnoted 'which one should I use' references for the cloud comparisons engineers ask most.">
 <meta property="og:url" content="https://infraatlas.dev/decisions/">
-<meta property="og:image" content="https://infraatlas.dev/og.png">
+<meta property="og:image" content="{OG_IMAGE}">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Decisions · Infra Atlas">
 <meta name="twitter:description" content="Short, neutral, footnoted 'which one should I use' references for the cloud comparisons engineers ask most.">
-<meta name="twitter:image" content="https://infraatlas.dev/og.png">
+<meta name="twitter:image" content="{OG_IMAGE}">
 {FONTS}
 <link rel="stylesheet" href="/decisions/decision.css">
 </head>
