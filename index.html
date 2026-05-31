@@ -547,7 +547,7 @@ body {
   border: 1px solid var(--line-2);
   border-radius: 10px;
   background: var(--surface);
-  margin: 0 auto 44px;
+  margin: 0 auto 16px;
   max-width: 1280px;
 }
 .ia-pageindex__label {
@@ -612,6 +612,41 @@ body {
   border-color: var(--accent);
   color: var(--accent-2);
 }
+/* a jump chip hides when a type filter empties its department */
+.ia-pageindex__item.is-hidden { display: none; }
+
+/* ─────────────── INSTRUMENT TYPE FILTER ───────────────
+   Browse axis (Tools / Matrices / Guides) — complements the ⌘K search
+   (find a known instrument) and the jump-nav (go to a department). */
+.ia-filter {
+  display: flex; align-items: center; flex-wrap: wrap; gap: 8px;
+  margin: 0 auto 36px; max-width: 1280px;
+}
+.ia-filter__label {
+  font-family: var(--mono); font-size: 10px; letter-spacing: 0.18em;
+  text-transform: uppercase; color: var(--paper-3); margin-right: 6px;
+}
+.ia-filter__chip {
+  display: inline-flex; align-items: center; gap: 7px;
+  font-family: var(--mono); font-size: 12px; letter-spacing: 0.04em;
+  color: var(--paper-2); background: var(--ink-2);
+  border: 1px solid var(--line-2); border-radius: 99px;
+  padding: 7px 13px; cursor: pointer;
+  transition: color 0.15s ease, border-color 0.15s ease, background 0.15s ease;
+}
+.ia-filter__chip:hover { color: var(--paper); border-color: var(--paper-3); }
+.ia-filter__chip.is-active { color: var(--ink); background: var(--paper); border-color: var(--paper); }
+.ia-filter__chip:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.ia-filter__count {
+  font-size: 10px; color: var(--paper-3);
+  border-left: 1px solid var(--line-2); padding-left: 7px;
+}
+.ia-filter__chip.is-active .ia-filter__count { color: var(--ink); border-color: rgba(10, 9, 7, 0.2); }
+
+.instrument.is-filtered { display: none; }
+.department.is-empty { display: none; }
+
+.ia-sr { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
 
 /* ───────── WHAT CHANGED · feed ───────── */
 /* .dispatch-* row styles live in /assets/feed.css (shared with /changelog/) */
@@ -1064,6 +1099,15 @@ body {
         <span class="ia-pageindex__count" aria-hidden="true">10</span>
       </a>
     </nav>
+
+    <div class="ia-filter" id="ia-filter" role="group" aria-label="Filter instruments by type">
+      <span class="ia-filter__label" aria-hidden="true">Show</span>
+      <button type="button" class="ia-filter__chip is-active" data-type="all" aria-pressed="true">All <span class="ia-filter__count">21</span></button>
+      <button type="button" class="ia-filter__chip" data-type="tool" aria-pressed="false">Tools <span class="ia-filter__count">7</span></button>
+      <button type="button" class="ia-filter__chip" data-type="matrix" aria-pressed="false">Matrices <span class="ia-filter__count">10</span></button>
+      <button type="button" class="ia-filter__chip" data-type="guide" aria-pressed="false">Guides <span class="ia-filter__count">4</span></button>
+    </div>
+    <div class="ia-sr" id="ia-filter-status" role="status" aria-live="polite"></div>
 
     <!-- ───── DEPARTMENT I: CLOUD COMPUTE ───── -->
     <div class="department" id="dept-cloud" data-dept="cloud">
@@ -1771,6 +1815,73 @@ body {
     });
   }, { rootMargin: "-40% 0px -55% 0px", threshold: 0 });
   deps.forEach(function (d) { io.observe(d); });
+})();
+
+/* Instrument type filter — a browse axis (Tools / Matrices / Guides) that the
+   ⌘K search (known-item find) and the dept jump-nav don't cover. Hides
+   non-matching cards, collapses emptied departments, and keeps the page-index
+   jump chips in sync so they never point at a hidden section. Initial HTML is
+   already in the "All" state, so no render-on-load flash. */
+(function () {
+  var bar = document.getElementById("ia-filter");
+  var scope = document.querySelector(".instruments");
+  if (!bar || !scope) return;
+  var depts = [].slice.call(scope.querySelectorAll(".department"));
+  var allCards = [].slice.call(scope.querySelectorAll(".instrument"));
+  var statusEl = document.getElementById("ia-filter-status");
+  var LABEL = { tool: "Tools", matrix: "Matrices", guide: "Guides" };
+
+  function typeOf(card) {
+    var t = card.querySelector(".instrument__type");
+    return t ? (t.getAttribute("data-type") || "").toLowerCase() : "";
+  }
+  var jumpByDept = {};
+  [].slice.call(document.querySelectorAll(".ia-pageindex__item")).forEach(function (a) {
+    jumpByDept[a.getAttribute("href").replace(/^#/, "")] = a;
+  });
+  var baseCount = {};
+  depts.forEach(function (d) { baseCount[d.id] = d.querySelectorAll(".instrument").length; });
+
+  // chip counts derived from the DOM so they can't drift from the cards
+  var counts = { all: allCards.length, tool: 0, matrix: 0, guide: 0 };
+  allCards.forEach(function (c) { var t = typeOf(c); if (counts[t] != null) counts[t]++; });
+  [].slice.call(bar.querySelectorAll(".ia-filter__chip")).forEach(function (chip) {
+    var el = chip.querySelector(".ia-filter__count");
+    if (el) el.textContent = counts[chip.getAttribute("data-type")] || 0;
+  });
+
+  function apply(type) {
+    var shown = 0;
+    depts.forEach(function (dept) {
+      var vis = 0;
+      [].slice.call(dept.querySelectorAll(".instrument")).forEach(function (card) {
+        var match = type === "all" || typeOf(card) === type;
+        card.classList.toggle("is-filtered", !match);
+        if (match) vis++;
+      });
+      dept.classList.toggle("is-empty", vis === 0);
+      shown += vis;
+      var chip = jumpByDept[dept.id];
+      if (chip) {
+        chip.classList.toggle("is-hidden", vis === 0);
+        var cnt = chip.querySelector(".ia-pageindex__count");
+        if (cnt) cnt.textContent = (type === "all") ? baseCount[dept.id] : vis;
+      }
+    });
+    [].slice.call(bar.querySelectorAll(".ia-filter__chip")).forEach(function (chip) {
+      var on = chip.getAttribute("data-type") === type;
+      chip.classList.toggle("is-active", on);
+      chip.setAttribute("aria-pressed", on ? "true" : "false");
+    });
+    if (statusEl) statusEl.textContent = type === "all"
+      ? "Showing all " + counts.all + " instruments."
+      : "Showing " + shown + " " + (LABEL[type] || type) + ".";
+  }
+
+  bar.addEventListener("click", function (e) {
+    var chip = e.target.closest(".ia-filter__chip");
+    if (chip) apply(chip.getAttribute("data-type"));
+  });
 })();
 
 /* Hero search — reuse the global ⌘K command palette (injected by nav.js)
