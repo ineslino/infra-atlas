@@ -1671,9 +1671,8 @@ body {
   });
 })();
 
-/* Page-index — highlight the department currently in view */
+/* Page-index — click to jump, and highlight the department currently in view */
 (function () {
-  if (!("IntersectionObserver" in window)) return;
   var items = document.querySelectorAll(".ia-pageindex__item");
   if (!items.length) return;
   var byId = {};
@@ -1681,18 +1680,40 @@ body {
     var id = a.getAttribute("href").replace(/^#/, "");
     byId[id] = a;
   });
+
+  function setCurrent(a) {
+    items.forEach(function (x) { x.classList.remove("is-current"); x.removeAttribute("aria-current"); });
+    if (a) { a.classList.add("is-current"); a.setAttribute("aria-current", "true"); }
+  }
+
+  // Explicit, JS-driven jump. Native smooth in-page #anchor scrolling is
+  // unreliable in some browsers (notably Safari) — when it silently no-ops the
+  // page stays at the top and the first department stays highlighted forever.
+  // Scrolling via scrollIntoView (which honours .department's scroll-margin-top)
+  // and marking the clicked chip on click makes the jump deterministic, and the
+  // scroll-spy below keeps the highlight in sync during free scrolling.
+  var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  items.forEach(function (a) {
+    a.addEventListener("click", function (e) {
+      var id = a.getAttribute("href").replace(/^#/, "");
+      var target = document.getElementById(id);
+      if (!target) return;
+      e.preventDefault();
+      setCurrent(a);
+      target.scrollIntoView({ behavior: reduce ? "auto" : "smooth", block: "start" });
+      try { history.replaceState(null, "", "#" + id); } catch (err) { location.hash = id; }
+    });
+  });
+
+  // Scroll-spy — keep the active chip in sync as the reader scrolls.
+  if (!("IntersectionObserver" in window)) return;
   var deps = document.querySelectorAll(".department[id]");
   if (!deps.length) return;
-  // 0px top inset ensures the department doesn't activate until its top crosses below the nav bar
+  // the thin middle band ensures a department activates only once it's actually in view
   var io = new IntersectionObserver(function (entries) {
     entries.forEach(function (e) {
       var a = byId[e.target.id];
-      if (!a) return;
-      if (e.isIntersecting) {
-        items.forEach(function (x) { x.classList.remove("is-current"); x.removeAttribute("aria-current"); });
-        a.classList.add("is-current");
-        a.setAttribute("aria-current", "true");
-      }
+      if (a && e.isIntersecting) setCurrent(a);
     });
   }, { rootMargin: "-40% 0px -55% 0px", threshold: 0 });
   deps.forEach(function (d) { io.observe(d); });
