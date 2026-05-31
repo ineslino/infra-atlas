@@ -84,3 +84,9 @@ jobs:
       # no longer matches the live instrument count; fix with build_og.py.
       - name: Check OG social card matches instrument count
         run: python3 scripts/check_og_card.py
+
+      # European Sovereignty tracks a fast-moving topic (EUCS, DPF, sovereign
+      # regions). This fails when its "Verified" stamp is older than ~6 months,
+      # forcing a re-verification pass against the primary sources.
+      - name: Check European Sovereignty freshness
+        run: python3 scripts/check_sovereignty_freshness.py
