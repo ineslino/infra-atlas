@@ -78,3 +78,9 @@ jobs:
       # This derives the counts and fails if a card chip no longer matches.
       - name: Check landing-page stat chips match data.json
         run: python3 scripts/check_landing_stats.py
+
+      # The social-share card (og.png) hard-codes "N instruments" and silently
+      # drifted (shipped "16" while the site had 21). This fails if the OG card
+      # no longer matches the live instrument count; fix with build_og.py.
+      - name: Check OG social card matches instrument count
+        run: python3 scripts/check_og_card.py
