@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="color-scheme" content="dark">
+<title>Cross-Cloud · European Sovereignty · Infra Atlas</title>
+<link rel="icon" href="/favicon.svg?v=2" type="image/svg+xml">
+<meta name="description" content="Which EU cloud providers are actually sovereign — and at which layer. Operational vs legal sovereignty, the US CLOUD Act trap on US-parent 'sovereign' regions, EU-native providers, and the regulatory frame (Data Act, EUCS, Schrems II / DPF). Sourced, with the asterisks intact.">
+<link rel="canonical" href="https://infraatlas.dev/sovereignty/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Infra Atlas">
+<meta property="og:title" content="Cross-Cloud · European Sovereignty · Infra Atlas">
+<meta property="og:description" content="Which EU cloud providers are actually sovereign — and at which layer. Operational vs legal sovereignty, the US CLOUD Act trap, EU-native providers, and the regulatory frame. Sourced.">
+<meta property="og:url" content="https://infraatlas.dev/sovereignty/">
+<meta property="og:image" content="https://infraatlas.dev/og.png?v=2">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Infra Atlas — a reference for the infrastructure stack">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Cross-Cloud · European Sovereignty · Infra Atlas">
+<meta name="twitter:description" content="Operational vs legal sovereignty, the US CLOUD Act trap, and which EU providers are actually sovereign. Sourced.">
+<meta name="twitter:image" content="https://infraatlas.dev/og.png?v=2">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@300;400;500;600&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/matrix.css?v=3">
+
+<style>
+:root {
+  --ink: #0A0907; --ink-2: #100E0C; --surface: #161310; --surface-2: #1E1A15; --surface-3: #2A241C;
+  --line: rgba(244, 239, 230, 0.06); --line-2: rgba(244, 239, 230, 0.14); --line-3: rgba(244, 239, 230, 0.28);
+  --paper: #F4EFE6; --paper-2: rgba(244, 239, 230, 0.66); --paper-3: rgba(244, 239, 230, 0.55); --paper-4: rgba(244, 239, 230, 0.20);
+  --accent: #FF7849; --accent-2: #FFA66E; --accent-glow: rgba(255, 120, 73, 0.22);
+  --mint: #6FE7B5; --gold: #F4C660; --plum: #C586E8; --sky: #7CD7F1; --rose: #F47B7B; --teal: #5BCCC9;
+  --yes: #6FE7B5; --no: #F47B7B; --part: #F4C660;
+  --serif: 'Instrument Serif', 'Times New Roman', serif;
+  --mono: 'JetBrains Mono', ui-monospace, monospace;
+  --sans: 'Manrope', -apple-system, system-ui, sans-serif;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { background: var(--ink); color: var(--paper); font-family: var(--sans); font-size: 15px; line-height: 1.5; -webkit-font-smoothing: antialiased; min-height: 100vh; }
+body {
+  background: radial-gradient(ellipse at 100% -10%, rgba(255,120,73,0.07), transparent 55%),
+    radial-gradient(ellipse at -10% 110%, rgba(124,215,241,0.06), transparent 65%), var(--ink);
+  background-attachment: fixed; overflow-x: hidden;
+}
+.grain { pointer-events: none; position: fixed; inset: 0; z-index: 100; opacity: 0.08; mix-blend-mode: overlay; background-image: url("data:image/svg+xml;utf8,<svg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.6 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>"); }
+.scanlines { pointer-events: none; position: fixed; inset: 0; z-index: 99; background: repeating-linear-gradient(180deg, transparent, transparent 2px, rgba(244,239,230,0.012) 2px, rgba(244,239,230,0.012) 3px); }
+::selection { background: var(--accent); color: var(--ink); }
+a:focus-visible, button:focus-visible, input:focus-visible, [tabindex]:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+.page { max-width: 1500px; margin: 0 auto; padding: 56px 48px 96px; position: relative; }
+
+/* ─── MASTHEAD ─── */
+.masthead { display: grid; grid-template-columns: 1fr auto; gap: 48px; align-items: end; padding-bottom: 36px; border-bottom: 1px solid var(--line); margin-bottom: 32px; }
+.masthead__eyebrow { font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.22em; color: var(--paper-3); text-transform: uppercase; display: inline-flex; align-items: center; gap: 12px; text-decoration: none; transition: color 0.2s; }
+.masthead__eyebrow:hover { color: var(--paper); }
+.masthead__eyebrow-arrow { color: var(--accent); transition: transform 0.2s; }
+.masthead__eyebrow:hover .masthead__eyebrow-arrow { transform: translateX(-4px); }
+.masthead__title { font-family: var(--serif); font-weight: 400; font-size: clamp(48px, 7vw, 108px); line-height: 0.95; letter-spacing: -0.02em; margin-top: 16px; }
+.masthead__title em { font-style: italic; color: var(--accent); }
+.masthead__subtitle { margin-top: 18px; font-size: 16px; color: var(--paper-2); max-width: 640px; line-height: 1.55; }
+.masthead__subtitle span { font-family: var(--serif); font-style: italic; color: var(--paper); }
+.masthead__status { text-align: right; display: flex; flex-direction: column; align-items: flex-end; gap: 14px; padding-bottom: 6px; }
+.status-line { display: inline-flex; align-items: center; gap: 10px; font-family: var(--mono); font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--gold); }
+.status-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--gold); }
+@media (prefers-reduced-motion: no-preference) { .status-dot { animation: pulse 2.4s infinite; } @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(244,198,96,0.5); } 70% { box-shadow: 0 0 0 14px rgba(244,198,96,0); } 100% { box-shadow: 0 0 0 0 rgba(244,198,96,0); } } }
+.status-time { font-family: var(--mono); font-size: 12px; color: var(--paper-3); }
+.status-counts { display: flex; gap: 24px; margin-top: 4px; }
+.status-counts > div { text-align: right; font-family: var(--mono); font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--paper-3); display: flex; flex-direction: column; gap: 2px; }
+.status-counts strong { font-family: var(--serif); font-style: italic; font-weight: 400; font-size: 28px; color: var(--paper); letter-spacing: -0.01em; text-transform: none; }
+
+/* ─── READING NOTE (the conceptual spine) ─── */
+.readnote { display: flex; gap: 18px; align-items: flex-start; padding: 20px 24px; margin-bottom: 28px; background: linear-gradient(180deg, rgba(255,120,73,0.075), rgba(255,120,73,0.02)); border: 1px solid rgba(255,120,73,0.22); border-radius: 5px; }
+.readnote__mark { font-family: var(--serif); font-style: italic; font-size: 40px; color: var(--accent); line-height: 0.7; flex-shrink: 0; }
+.readnote__text { font-size: 13.5px; color: var(--paper-2); line-height: 1.62; }
+.readnote__text strong { color: var(--paper); font-weight: 600; }
+.readnote__text em { font-family: var(--serif); font-style: italic; color: var(--paper); font-size: 15px; }
+
+/* ─── FILTERS ─── */
+.filters { display: grid; grid-template-columns: auto 1fr; gap: 14px 28px; align-items: center; padding: 18px 22px; background: linear-gradient(180deg, var(--surface), var(--ink-2)); border: 1px solid var(--line); border-radius: 4px; position: sticky; top: 16px; z-index: 50; backdrop-filter: blur(12px); margin-bottom: 24px; }
+.filter-search { grid-column: 1 / -1; position: relative; }
+.filter-search input { width: 100%; background: var(--ink); border: 1px solid var(--line); color: var(--paper); font-family: var(--mono); font-size: 13px; padding: 12px 16px 12px 42px; border-radius: 3px; outline: none; transition: border-color 0.2s; }
+.filter-search input::placeholder { color: var(--paper-3); }
+.filter-search input:focus { border-color: var(--accent); }
+.filter-search::before { content: '⌕'; position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: var(--paper-3); font-size: 18px; pointer-events: none; }
+.filter-chips { grid-column: 1 / -1; display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+.filter-chips__label { font-family: var(--mono); font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--paper-3); margin-right: 4px; }
+.chip { background: transparent; border: 1px solid var(--line-2); color: var(--paper-2); font-family: var(--mono); font-size: 11px; letter-spacing: 0.06em; padding: 6px 12px; border-radius: 99px; cursor: pointer; transition: all 0.15s; white-space: nowrap; }
+.chip:hover { border-color: var(--paper-3); color: var(--paper); }
+.chip.is-active { background: var(--paper); border-color: var(--paper); color: var(--ink); }
+
+/* ─── LEGEND ─── */
+.legend { display: flex; flex-wrap: wrap; gap: 18px; align-items: center; margin-bottom: 24px; padding: 16px 22px; background: var(--surface); border: 1px solid var(--line); border-radius: 4px; font-family: var(--mono); font-size: 11px; color: var(--paper-2); }
+.legend__label { font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--paper-3); }
+.legend__item { display: inline-flex; align-items: center; gap: 8px; }
+
+.matrix-wrap { margin-bottom: 40px; border: 1px solid var(--line); border-radius: 6px; background: linear-gradient(180deg, var(--ink-2), var(--ink)); }
+.matrix { min-width: 1100px; }
+.matrix thead th.feature-col { min-width: 300px; }
+.cell-value { font-size: 11.5px; max-width: 200px; }
+
+/* ─── REGULATORY BRIEFING ─── */
+.brief { margin: 8px 0 48px; }
+.brief__head { font-family: var(--mono); font-size: 10px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--accent); margin-bottom: 16px; display: flex; align-items: center; gap: 16px; }
+.brief__head::after { content: ''; flex: 1; height: 1px; background: var(--line-2); }
+.brief__grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 12px; }
+.brief__card { border: 1px solid var(--line); border-radius: 6px; background: var(--surface); padding: 18px 20px; }
+.brief__card h3 { font-family: var(--serif); font-size: 20px; font-weight: 400; letter-spacing: -0.01em; margin-bottom: 4px; }
+.brief__flag { font-family: var(--mono); font-size: 9px; letter-spacing: 0.14em; text-transform: uppercase; padding: 2px 8px; border-radius: 99px; border: 1px solid var(--line-2); color: var(--paper-3); }
+.brief__flag--stable { color: var(--mint); border-color: rgba(111,231,181,0.4); }
+.brief__flag--contested { color: var(--gold); border-color: rgba(244,198,96,0.4); }
+.brief__card p { font-size: 13px; color: var(--paper-2); line-height: 1.6; margin-top: 10px; }
+.brief__card a { color: var(--paper-2); text-decoration: underline; text-decoration-color: var(--line-2); text-underline-offset: 3px; }
+.brief__card a:hover { color: var(--accent); }
+.brief__src { display: block; margin-top: 10px; font-family: var(--mono); font-size: 10px; }
+.brief__src a { color: var(--paper-3); word-break: break-all; }
+
+/* ─── COLOPHON ─── */
+.colophon { margin-top: 64px; padding-top: 32px; border-top: 1px solid var(--line); display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 32px; font-size: 13px; color: var(--paper-3); }
+.colophon h5 { font-family: var(--mono); font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--paper-2); margin-bottom: 10px; font-weight: 500; }
+.colophon p { font-size: 13px; line-height: 1.6; }
+.colophon p a { color: var(--paper-2); text-decoration: underline; text-decoration-color: var(--line-2); text-underline-offset: 3px; }
+.colophon p a:hover { color: var(--accent); }
+.colophon code { font-family: var(--mono); font-size: 11.5px; background: var(--surface); padding: 1px 6px; border-radius: 2px; border: 1px solid var(--line); color: var(--accent-2); }
+
+@media (max-width: 900px) {
+  .page { padding: 32px 22px 72px; }
+  .masthead { grid-template-columns: 1fr; gap: 24px; }
+  .masthead__status { text-align: left; align-items: flex-start; }
+  .filters { position: static; }
+  .colophon { grid-template-columns: 1fr; gap: 24px; }
+}
+</style>
+</head>
+<body>
+<div class="grain"></div>
+<div class="scanlines"></div>
+
+<div class="page">
+  <header class="masthead">
+    <div class="masthead__brand">
+      <a class="masthead__eyebrow" href="../"><span class="masthead__eyebrow-arrow">←</span> Infra Atlas · Cross-Cloud · European Sovereignty</a>
+      <h1 class="masthead__title">European <em>Sovereignty.</em></h1>
+      <p class="masthead__subtitle">
+        Which providers are <span>actually</span> sovereign — and at which layer. <span>Operational sovereignty is not legal sovereignty;</span> a US-parent "sovereign region" still answers to the CLOUD Act. The asterisks the marketing pages omit.
+      </p>
+    </div>
+    <aside class="masthead__status">
+      <div class="status-line"><span class="status-dot"></span><span class="status-text">Curated · v1</span></div>
+      <div class="status-time">Verified · <time datetime="2026-05-31">2026-05-31</time></div>
+      <div class="status-counts">
+        <div>Providers<strong id="count-vendors">—</strong></div>
+        <div>Dimensions<strong id="count-features">—</strong></div>
+        <div>Footnotes<strong id="count-stars">—</strong></div>
+      </div>
+    </aside>
+  </header>
+
+  <main id="ia-main">
+
+  <div class="readnote">
+    <span class="readnote__mark">*</span>
+    <p class="readnote__text">
+      <strong>Two sovereignties, often conflated.</strong> <em>Operational</em> sovereignty = where the data and the people sit (EU regions, EU-resident staff). <em>Legal</em> sovereignty = which jurisdiction can <strong>compel disclosure</strong>. The trap: the US <strong>CLOUD Act</strong> reaches any US-headquartered provider — and its EU subsidiaries — regardless of where the bytes live. So an EU "sovereign region" run by a US parent buys operational, not legal, sovereignty. Legal sovereignty needs a parent with <em>no</em> non-EU jurisdiction over it. <strong>v1 covers the cloud layer;</strong> a sovereign-AI/LLM view + per-certification rows land next — every cell links its primary source.
+    </p>
+  </div>
+
+  <section class="filters">
+    <div class="filter-search">
+      <label for="search" class="sr-only">Search providers or sovereignty dimensions</label>
+      <input id="search" type="search" autocomplete="off" spellcheck="false" placeholder="Filter — search by provider, dimension, jurisdiction…" aria-label="Search providers or sovereignty dimensions">
+    </div>
+    <div class="filter-chips" id="cat-chips"></div>
+  </section>
+
+  <div class="sr-only" id="filter-status" role="status" aria-live="polite"></div>
+
+  <div class="legend">
+    <span class="legend__label">Legend</span>
+    <span class="legend__item"><span class="cell-mark cell-mark--yes">✓</span> Sovereign / yes</span>
+    <span class="legend__item"><span class="cell-mark cell-mark--part">◐</span> Partial / caveated</span>
+    <span class="legend__item"><span class="cell-mark cell-mark--no">✗</span> No</span>
+    <span class="legend__item"><span class="cell-mark cell-mark--no">—</span> Not verified for this comparison</span>
+    <span class="legend__item" style="color:var(--accent);font-family:var(--mono);font-size:11px">* click any cell for the note &amp; source</span>
+  </div>
+
+  <div class="matrix-wrap">
+    <table class="matrix" id="matrix" aria-label="European cloud sovereignty comparison"></table>
+  </div>
+  <div class="matrix-empty" id="matrix-empty" role="status" aria-live="polite">
+    <strong>No dimensions match your filters.</strong><br>Try a broader search term, or switch the category to “All”.
+  </div>
+
+  <!-- ─── REGULATORY BRIEFING ─── -->
+  <section class="brief">
+    <div class="brief__head">The regulatory frame — status, not definitions</div>
+    <div class="brief__grid" id="brief-grid"></div>
+  </section>
+
+  </main>
+
+  <footer class="colophon">
+    <div>
+      <h5>About</h5>
+      <p>Instrument 22 of <a href="../">Infra Atlas</a>. European cloud sovereignty, read at the layer that matters: <em>who can compel your data</em>, not just where it sits. Pairs with the <a href="../compliance/">Compliance Footprint</a> (certifications) and the <a href="../ai-atlas/">Generative AI Atlas</a> (model platforms). Click any cell for the note and the source.</p>
+    </div>
+    <div>
+      <h5>Sources &amp; method</h5>
+      <p>Every cell cites a primary source — EUR-Lex, ENISA, the CJEU, the US DOJ, and each provider's own pages (ownership/HQ = legal jurisdiction). Sovereignty law and offerings move fast; this is a dated snapshot, <em>verified 2026-05-31</em>, not a live feed. <em>Spot a stale fact? <a href="https://github.com/ineslino/infra-atlas/issues/new" target="_blank" rel="noopener">Open an issue</a>.</em></p>
+    </div>
+    <div>
+      <h5>Shortcuts</h5>
+      <p><code>/</code> search · <code>Esc</code> close drawer · click a row name or a cell for the per-provider detail. The legal-vs-operational distinction is the whole point — read the <strong>Legal sovereignty</strong> row first.</p>
+    </div>
+  </footer>
+</div>
+
+<!-- DRAWER -->
+<div class="drawer-backdrop" id="drawer-backdrop"></div>
+<aside class="drawer" id="drawer" role="dialog" aria-modal="true" aria-labelledby="drawer-title" aria-hidden="true" hidden>
+  <div class="drawer__head" id="drawer-head"></div>
+  <div class="drawer__body" id="drawer-body"></div>
+</aside>
+
+<script>
+// ═══════════════════════════════════════════════════════════════════
+// INFRA ATLAS · EUROPEAN SOVEREIGNTY (cloud layer, v1)
+// Curated, dated (2026-05-31). Every cell carries a primary `src`.
+// The headline is the "legal" row: US-parent providers cannot grant legal
+// sovereignty (US CLOUD Act, 18 USC §2703) even from EU "sovereign" regions.
+// ═══════════════════════════════════════════════════════════════════
+
+const VENDORS = [
+  { key: "awsesc",   name: "AWS European Sovereign Cloud", short: "AWS ESC",   cloud: "AWS",        swatch: "#FF9F66" },
+  { key: "azurebleu",name: "Microsoft (EU Data Boundary / Bleu)", short: "Azure/Bleu", cloud: "Microsoft", swatch: "#7CD7F1" },
+  { key: "s3ns",     name: "Google (S3NS, with Thales)",  short: "GCP/S3NS",  cloud: "Google",     swatch: "#F4C660" },
+  { key: "ovh",      name: "OVHcloud",                    short: "OVHcloud",  cloud: "France",     swatch: "#C586E8" },
+  { key: "scaleway", name: "Scaleway",                    short: "Scaleway",  cloud: "France",     swatch: "#6FE7B5" },
+  { key: "ionos",    name: "IONOS",                       short: "IONOS",     cloud: "Germany",    swatch: "#5BCCC9" },
+  { key: "stackit",  name: "STACKIT",                     short: "STACKIT",   cloud: "Germany",    swatch: "#FFA66E" },
+  { key: "tsystems", name: "T-Systems (Open Telekom Cloud)", short: "T-Systems", cloud: "Germany", swatch: "#F47B7B" }
+];
+
+const CATEGORIES = [
+  { key: "juris",      label: "Jurisdiction & control" },
+  { key: "residency",  label: "Data residency" },
+  { key: "ecosystem",  label: "Ecosystem & assurance" }
+];
+
+// Source shorthands (primary)
+const S_CLOUDACT = "https://www.justice.gov/criminal/cloud-act-resources";
+const S_AWSESC   = "https://aws.amazon.com/blogs/aws/opening-the-aws-european-sovereign-cloud/";
+const S_EUDB     = "https://learn.microsoft.com/en-us/privacy/eudb/eu-data-boundary-learn";
+const S_S3NS     = "https://www.s3ns.io/";
+const S_OVH      = "https://www.ovhcloud.com/en/about-us/";
+const S_SCW      = "https://www.scaleway.com/en/data-security-trust/";
+const S_IONOS    = "https://cloud.ionos.com/";
+const S_STACKIT  = "https://www.stackit.de/en/";
+const S_TSYS     = "https://open-telekom-cloud.com/en";
+const S_GAIAX    = "https://gaia-x.eu/who-we-are/members/";
+
+const FEATURES = [
+  // ── Jurisdiction & control ──
+  { id: "parent", category: "juris", name: "Parent-company jurisdiction",
+    desc: "Where the controlling company is incorporated — which sets whose courts can compel it. Ownership, not data location, is the determinant.",
+    support: {
+      awsesc:    { level:"no",   value:"🇺🇸 US (Amazon)", note:"Operated via German entities (AWS European Sovereign Cloud GmbH), but the controlling parent is Amazon.com, Inc. (US, Delaware).", src:S_AWSESC },
+      azurebleu: { level:"part", value:"🇺🇸/🇫🇷 mixed", note:"Microsoft (US) is the technology parent; Bleu is operated by a French JV of Orange + Capgemini. Control is split.", src:S_EUDB },
+      s3ns:      { level:"part", value:"🇺🇸/🇫🇷 mixed", note:"Google (US) provides the technology; S3NS is majority-controlled by Thales (France), which operates it.", src:S_S3NS },
+      ovh:       { level:"yes",  value:"🇫🇷 France", note:"OVHcloud SA — French, publicly listed, founder-controlled. No non-EU parent.", src:S_OVH },
+      scaleway:  { level:"yes",  value:"🇫🇷 France", note:"Scaleway, part of the French Iliad group. No non-EU parent.", src:S_SCW },
+      ionos:     { level:"yes",  value:"🇩🇪 Germany", note:"IONOS SE — German, part of United Internet / 1&1. No non-EU parent.", src:S_IONOS },
+      stackit:   { level:"yes",  value:"🇩🇪 Germany", note:"STACKIT — the cloud arm of the Schwarz Group (Germany). No non-EU parent.", src:S_STACKIT },
+      tsystems:  { level:"yes",  value:"🇩🇪 Germany", note:"Open Telekom Cloud, operated by T-Systems, a Deutsche Telekom subsidiary (Germany).", src:S_TSYS }
+    }
+  },
+  { id: "legal", category: "juris", name: "Legal sovereignty — immune to non-EU compulsion?",
+    desc: "Can a non-EU government (esp. the US, via the CLOUD Act) compel disclosure? This is the row the marketing pages avoid. Determined by parent-company jurisdiction, not data residency.",
+    support: {
+      awsesc:    { level:"no",   value:"✗ CLOUD Act applies", note:"The US CLOUD Act (18 USC §2703) reaches a US parent and its subsidiaries regardless of where data sits. AWS guarantees EU residency + EU-only access, but makes no claim of immunity from US legal process.", src:S_CLOUDACT },
+      azurebleu: { level:"part", value:"◐ structure-dependent", note:"Bleu's French operating structure narrows reach for that offering; Microsoft (US) as technology parent still carries US-law obligations. Stronger than the plain EU Data Boundary, short of EU-parent immunity.", src:S_CLOUDACT },
+      s3ns:      { level:"part", value:"◐ Thales-controlled", note:"Thales majority control of S3NS reduces US reach for the French offering; Google (US) remains the technology parent. Short of full EU-parent immunity.", src:S_CLOUDACT },
+      ovh:       { level:"yes",  value:"✓ EU parent", note:"No US jurisdiction over a French parent; disclosure to a non-EU authority requires MLAT / EU legal channels, with EU courts in the loop.", src:S_CLOUDACT },
+      scaleway:  { level:"yes",  value:"✓ EU parent", note:"French parent — outside US CLOUD Act jurisdiction; compulsion runs through EU legal channels.", src:S_CLOUDACT },
+      ionos:     { level:"yes",  value:"✓ EU parent", note:"German parent — outside US CLOUD Act jurisdiction.", src:S_CLOUDACT },
+      stackit:   { level:"yes",  value:"✓ EU parent", note:"German parent (Schwarz Group) — outside US CLOUD Act jurisdiction.", src:S_CLOUDACT },
+      tsystems:  { level:"yes",  value:"✓ EU parent", note:"German parent (Deutsche Telekom) — outside US CLOUD Act jurisdiction.", src:S_CLOUDACT }
+    }
+  },
+  { id: "operational", category: "juris", name: "Operational sovereignty (EU-resident operations)",
+    desc: "Are day-to-day operations, support and administrative access restricted to EU-resident staff inside the EU? This is what the hyperscaler 'sovereign' offerings deliver.",
+    support: {
+      awsesc:    { level:"yes",  value:"✓ EU-resident only", note:"GA January 2026. AWS commits to operation exclusively by EU residents in the EU, with technical controls blocking access from outside the EU.", src:S_AWSESC },
+      azurebleu: { level:"yes",  value:"✓ FR-operated", note:"Bleu is operated by an EU JV with EU staff; the EU Data Boundary confines processing/support to the EU for the in-scope services.", src:S_EUDB },
+      s3ns:      { level:"yes",  value:"✓ FR-operated", note:"S3NS is operated by the French Thales-controlled entity; the offering targets ANSSI SecNumCloud operational requirements.", src:S_S3NS },
+      ovh:       { level:"yes",  value:"✓ EU ops", note:"EU-headquartered with EU operations.", src:S_OVH },
+      scaleway:  { level:"yes",  value:"✓ EU ops", note:"EU-headquartered with EU operations.", src:S_SCW },
+      ionos:     { level:"yes",  value:"✓ EU ops", note:"German operations.", src:S_IONOS },
+      stackit:   { level:"yes",  value:"✓ EU ops", note:"German operations.", src:S_STACKIT },
+      tsystems:  { level:"yes",  value:"✓ EU ops", note:"German operations.", src:S_TSYS }
+    }
+  },
+  // ── Data residency ──
+  { id: "residency", category: "residency", name: "EU data residency guarantee",
+    desc: "Is customer data contractually kept within the EU/EEA? Note: residency answers 'where', never 'who can compel' — see the Legal sovereignty row.",
+    support: {
+      awsesc:    { level:"yes",  value:"✓ Germany (Brandenburg)", note:"All AWS European Sovereign Cloud infrastructure is located in the EU; first region in Brandenburg, Germany.", src:S_AWSESC },
+      azurebleu: { level:"yes",  value:"✓ EU Data Boundary", note:"Microsoft's EU Data Boundary keeps storage + most processing for in-scope services within EU/EFTA datacentres; Bleu is France-resident.", src:S_EUDB },
+      s3ns:      { level:"yes",  value:"✓ France", note:"S3NS infrastructure and the 'France Data Boundary' keep data in France.", src:S_S3NS },
+      ovh:       { level:"yes",  value:"✓ EU regions", note:"EU/EEA regions available (e.g. Gravelines, Roubaix, Strasbourg, Frankfurt, Warsaw).", src:S_OVH },
+      scaleway:  { level:"yes",  value:"✓ FR/EU", note:"French and EU regions (Paris, Amsterdam, Warsaw).", src:S_SCW },
+      ionos:     { level:"yes",  value:"✓ DE/EU", note:"German and EU datacentres.", src:S_IONOS },
+      stackit:   { level:"yes",  value:"✓ DE/EU", note:"German/EU datacentres.", src:S_STACKIT },
+      tsystems:  { level:"yes",  value:"✓ DE/EU", note:"German datacentres (e.g. Biere) and EU regions.", src:S_TSYS }
+    }
+  },
+  // ── Ecosystem & assurance ──
+  { id: "gaiax", category: "ecosystem", name: "Gaia-X member",
+    desc: "Participation in Gaia-X, the EU federated-trust/interop framework (a trust + interoperability layer, not a cloud platform).",
+    support: {
+      awsesc:    { level:"no",   value:"✗", note:"AWS is not a Gaia-X member in the EU-native sense; the AWS ESC offering is positioned on its own sovereignty controls.", src:S_GAIAX },
+      azurebleu: { level:"no",   value:"✗", note:"Not an EU-native Gaia-X member; positioned via Bleu/EU Data Boundary.", src:S_GAIAX },
+      s3ns:      { level:"part", value:"◐", note:"Positioned around French SecNumCloud rather than Gaia-X membership; verify current status.", src:S_GAIAX },
+      ovh:       { level:"yes",  value:"✓ founding member", note:"OVHcloud is a founding/active Gaia-X member.", src:S_GAIAX },
+      scaleway:  { level:"part", value:"◐", note:"Engaged with EU sovereignty initiatives; confirm current Gaia-X membership.", src:S_GAIAX },
+      ionos:     { level:"part", value:"◐", note:"Confirm current Gaia-X membership status.", src:S_GAIAX },
+      stackit:   { level:"yes",  value:"✓ member", note:"STACKIT participates in Gaia-X.", src:S_GAIAX },
+      tsystems:  { level:"yes",  value:"✓ member", note:"Deutsche Telekom / T-Systems is an active Gaia-X member.", src:S_GAIAX }
+    }
+  },
+  { id: "certs", category: "ecosystem", name: "Formal certifications (SecNumCloud / C5 / ENS)",
+    desc: "EU national assurance schemes. SecNumCloud (ANSSI, France) is the strictest and includes immunity-to-non-EU-law criteria; C5 (BSI, Germany) and ENS (Spain) are widely expected by public buyers. Full per-program detail lives in the Compliance Footprint.",
+    support: {
+      awsesc:    { level:"part", value:"◐ see Compliance", note:"AWS holds C5; the ESC offering's SecNumCloud posture is evolving. Per-program detail + region scope in the Compliance Footprint.", src:"/compliance/" },
+      azurebleu: { level:"part", value:"◐ SecNumCloud (Bleu)", note:"Bleu is positioned for SecNumCloud qualification for the French 'cloud de confiance'. See Compliance Footprint for Azure's broader cert set.", src:"/compliance/" },
+      s3ns:      { level:"yes",  value:"✓ SecNumCloud (target)", note:"S3NS targets ANSSI SecNumCloud — the strictest French scheme. Confirm current qualification status.", src:S_S3NS },
+      ovh:       { level:"yes",  value:"✓ SecNumCloud (Hosted Private)", note:"OVHcloud holds SecNumCloud for specific offerings (e.g. Hosted Private Cloud); scope varies by service.", src:S_OVH },
+      scaleway:  { level:"part", value:"◐ see Compliance", note:"ISO 27001 etc.; check SecNumCloud scope per service in the Compliance Footprint.", src:"/compliance/" },
+      ionos:     { level:"part", value:"◐ see Compliance", note:"German BSI-aligned; see Compliance Footprint for current attestations.", src:"/compliance/" },
+      stackit:   { level:"part", value:"◐ see Compliance", note:"German assurance; see Compliance Footprint.", src:"/compliance/" },
+      tsystems:  { level:"part", value:"◐ C5", note:"Open Telekom Cloud holds German C5; see Compliance Footprint for scope.", src:"/compliance/" }
+    }
+  }
+];
+
+// ─── Regulatory briefing data ───
+const BRIEFING = [
+  { t: "EU Data Act", flag: "stable", flagLabel: "In force",
+    body: "Reg (EU) 2023/2854 — applies since 12 Sep 2025. Mandates free, fast provider switching and the phase-out of data-egress/switching charges, plus interoperability. Directly reshapes lock-in and egress economics.",
+    src: "https://eur-lex.europa.eu/eli/reg/2023/2854/oj/eng" },
+  { t: "US CLOUD Act", flag: "stable", flagLabel: "The trap",
+    body: "18 USC §2703 (2018) compels US-jurisdiction providers to disclose data they control regardless of storage location. This is why a US-parent EU 'sovereign region' is operationally, not legally, sovereign.",
+    src: "https://www.justice.gov/criminal/cloud-act-resources" },
+  { t: "EUCS", flag: "contested", flagLabel: "Contested",
+    body: "The EU Cloud Services certification scheme (ENISA). The original 'sovereignty requirements' (EU-HQ / immunity from non-EU law) were watered down to optional in later drafts; the scheme is not yet formally adopted. Status fluid — re-verify.",
+    src: "https://www.enisa.europa.eu/publications/eucs-cloud-service-scheme" },
+  { t: "Schrems II + DPF", flag: "contested", flagLabel: "Valid, litigated",
+    body: "Schrems II (CJEU C-311/18, 2020) struck down Privacy Shield over US surveillance. The EU-US Data Privacy Framework (adequacy decision, 2023) restored a transfer basis and remains valid in 2026 — but is politically contested; no 'Schrems III' ruling yet.",
+    src: "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32023D1795" },
+  { t: "GDPR — Chapter V", flag: "stable", flagLabel: "Baseline",
+    body: "Reg (EU) 2016/679. International transfers need an adequacy decision or Art. 46 safeguards (SCCs/BCRs). Post-Schrems II, controllers must assess third-country government-access law case-by-case — the legal-basis layer beneath provider choice.",
+    src: "https://eur-lex.europa.eu/eli/reg/2016/679/oj/eng" },
+  { t: "Gaia-X", flag: "stable", flagLabel: "Trust layer",
+    body: "A federated trust + interoperability framework, not a cloud. Useful as a portability/trust-label standard adopted by EU-native providers; it underdelivered on the early 'European hyperscaler' hype — judge it as a label, not a platform.",
+    src: "https://gaia-x.eu/about/" }
+];
+
+// ─── State + render ───
+const state = { category: "all", query: "" };
+const $ = (s) => document.querySelector(s);
+const $$ = (s) => Array.from(document.querySelectorAll(s));
+const escapeHtml = (s) => String(s).replace(/[&<>"']/g, (c) => ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;" }[c]));
+
+function writeHash() {
+  const p = new URLSearchParams();
+  if (state.category !== "all") p.set("cat", state.category);
+  if (state.query.trim()) p.set("q", state.query.trim());
+  const h = p.toString();
+  history.replaceState(null, "", h ? "#" + h : location.pathname + location.search);
+}
+function applyHash() {
+  const p = new URLSearchParams(location.hash.slice(1));
+  const cat = p.get("cat"); if (cat) state.category = cat;
+  state.query = p.get("q") || "";
+  $$('.chip[data-cat]').forEach(b => b.classList.toggle("is-active", b.dataset.cat === state.category));
+  const sb = $("#search"); if (sb) sb.value = state.query;
+}
+
+function renderBriefing() {
+  $("#brief-grid").innerHTML = BRIEFING.map(c => `
+    <div class="brief__card">
+      <div style="display:flex;align-items:baseline;justify-content:space-between;gap:12px">
+        <h3>${escapeHtml(c.t)}</h3>
+        <span class="brief__flag brief__flag--${c.flag}">${escapeHtml(c.flagLabel)}</span>
+      </div>
+      <p>${escapeHtml(c.body)}</p>
+      <span class="brief__src">Source · <a href="${escapeHtml(c.src)}" target="_blank" rel="noopener">${escapeHtml(c.src)}</a></span>
+    </div>`).join("");
+}
+
+function init() {
+  $("#count-vendors").textContent = VENDORS.length;
+  $("#count-features").textContent = FEATURES.length;
+  $("#count-stars").textContent = FEATURES.reduce((a,f) => a + Object.values(f.support).filter(s => s.note && s.note.length > 0).length, 0);
+
+  const catChips = $("#cat-chips");
+  catChips.innerHTML = `<span class="filter-chips__label">Category</span>
+    <button class="chip is-active" data-cat="all" aria-pressed="true">All</button>` +
+    CATEGORIES.map(c => `<button class="chip" data-cat="${c.key}" aria-pressed="false">${escapeHtml(c.label)}</button>`).join("");
+
+  IA.matrix.renderTable({ tableEl: $("#matrix"), vendors: VENDORS, categories: CATEGORIES, features: FEATURES, dimensionLabel: "Sovereignty dimension" });
+  renderBriefing();
+  applyHash();
+  applyFilter();
+  wireEvents();
+  IA.matrix.syncChipsAria('.chip[data-cat]');
+  window.addEventListener("hashchange", () => { applyHash(); applyFilter(); });
+}
+
+function applyFilter() {
+  const q = state.query.trim().toLowerCase();
+  IA.matrix.applyVisibility({
+    table: $("#matrix"), features: FEATURES, categories: CATEGORIES,
+    isVisibleFn: (f) => {
+      if (state.category !== "all" && f.category !== state.category) return false;
+      if (!q) return true;
+      const cat = (CATEGORIES.find(c => c.key === f.category) || {}).label || "";
+      const vendorHay = VENDORS.map(v => { const s = f.support[v.key] || {}; return `${v.name} ${v.short} ${v.cloud} ${s.value || ""} ${s.note || ""}`; }).join(" ");
+      return `${f.name} ${f.desc} ${cat} ${vendorHay}`.toLowerCase().includes(q);
+    },
+    emptyEl: $("#matrix-empty"), statusEl: $("#filter-status"),
+    statusNoun: "dimension", statusNounPlural: "dimensions",
+    anyFilterActive: !!q || state.category !== "all"
+  });
+  writeHash();
+}
+
+function openFeatureDrawer(feature, focusVendor) {
+  const cat = (CATEGORIES.find(c => c.key === feature.category) || {}).label || "";
+  const head = `
+    <button class="drawer__close" type="button" data-action="close-drawer" aria-label="Close (Esc)">✕</button>
+    <div class="drawer__eyebrow">${escapeHtml(cat)}</div>
+    <h2 class="drawer__title" id="drawer-title">${escapeHtml(feature.name)}</h2>
+    <p class="drawer__desc">${escapeHtml(feature.desc)}</p>`;
+  const body = `<div class="drawer__section"><h4>Per-provider detail &amp; sources</h4>` +
+    VENDORS.map(v => {
+      const s = feature.support[v.key] || { level:"no", value:"—", note:"" };
+      const sym = s.level === "yes" ? "✓" : s.level === "part" ? "◐" : "✗";
+      const markLabel = s.level === "yes" ? "Yes" : s.level === "part" ? "Partial" : "No";
+      const isFocus = focusVendor === v.key;
+      const srcHtml = s.src ? `<div class="vendor-row__src">Source · <a href="${escapeHtml(s.src)}" target="_blank" rel="noopener">${escapeHtml(s.src)}</a></div>` : "";
+      return `<div class="vendor-row" ${isFocus ? 'style="border-color: var(--accent); background: rgba(255,120,73,0.05);"' : ''}>
+        <span class="vendor-row__mark vendor-row__mark--${s.level}" role="img" aria-label="${markLabel}">${sym}</span>
+        <div>
+          <div class="vendor-row__name"><span class="swatch" style="background:${v.swatch}" aria-hidden="true"></span>${escapeHtml(v.name)}</div>
+          <div class="vendor-row__value vendor-row__value--${s.level}">${escapeHtml(s.value || sym)}</div>
+          <div class="vendor-row__note">${escapeHtml(s.note || "—")}</div>
+          ${srcHtml}
+        </div>
+      </div>`;
+    }).join("") + `</div>`;
+  IA.matrix.drawer.open(head, body);
+}
+
+function wireEvents() {
+  document.addEventListener("click", (e) => {
+    const c = e.target.closest(".chip[data-cat]");
+    if (c) {
+      state.category = c.dataset.cat;
+      $$('.chip[data-cat]').forEach(b => b.classList.toggle("is-active", b.dataset.cat === state.category));
+      IA.matrix.syncChipsAria('.chip[data-cat]');
+      applyFilter();
+    }
+  });
+  $("#search").addEventListener("input", (e) => { state.query = e.target.value; applyFilter(); });
+  document.addEventListener("keydown", (e) => { if (e.key === "/" && e.target.tagName !== "INPUT") { e.preventDefault(); $("#search").focus(); } });
+  IA.matrix.drawer.init();
+  IA.matrix.wireDelegation((featureId, vendorKey) => {
+    const f = FEATURES.find(x => x.id === featureId);
+    if (f) openFeatureDrawer(f, vendorKey);
+  });
+}
+
+function bootstrap() { if (!window.IA || !window.IA.matrix) { setTimeout(bootstrap, 20); return; } init(); }
+bootstrap();
+</script>
+<script src="/assets/matrix.js?v=3" defer></script>
+<script src="/nav.js" defer></script>
+</body>
+</html>
