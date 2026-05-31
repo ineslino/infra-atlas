@@ -191,6 +191,11 @@ body {
   min-height: calc(100svh - 210px);
 }
 
+/* A2 — the hero text sits over the globe canvas; a near-invisible dark
+   shadow guarantees edge legibility for the small mono labels where they
+   cross one of the globe's brighter arcs (no visible change over dark fill). */
+.top-rule, .hero__eyebrow, .hero__stat-label, .hero__stat-value { text-shadow: 0 1px 4px rgba(10, 9, 7, 0.55); }
+
 .hero__eyebrow {
   font-family: var(--mono);
   font-size: 11px;
@@ -237,6 +242,39 @@ body {
   font-style: italic;
   font-size: 22px;
   color: var(--paper);
+}
+
+/* Task layer — a visible way to *find* an instrument, above the fold.
+   The button opens the same ⌘K palette the nav uses; the links are the
+   highest-traffic entry points. Fills the hero's existing whitespace so
+   it doesn't push the live wire below the fold. */
+.hero__find { margin-top: 30px; display: flex; flex-direction: column; gap: 14px; max-width: 580px; }
+.hero__search {
+  display: flex; align-items: center; gap: 12px; width: 100%;
+  background: var(--surface); border: 1px solid var(--line-2); border-radius: 8px;
+  padding: 14px 16px; cursor: text; text-align: left;
+  font-family: var(--mono); font-size: 13px; color: var(--paper-3);
+  transition: border-color 0.15s ease, color 0.15s ease, background 0.15s ease;
+}
+.hero__search:hover { border-color: var(--paper-3); color: var(--paper-2); background: var(--surface-2); }
+.hero__search:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-color: var(--accent); }
+.hero__search-ico { color: var(--accent); font-size: 16px; line-height: 1; flex: none; }
+.hero__search-text { flex: 1; }
+.hero__search-kbd {
+  font-family: var(--mono); font-size: 10px; color: var(--paper-3);
+  border: 1px solid var(--line-2); border-radius: 4px; padding: 2px 7px; flex: none;
+}
+.hero__popular { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 14px; font-family: var(--mono); font-size: 12px; }
+.hero__popular-label { font-size: 9.5px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--paper-3); }
+.hero__popular a {
+  color: var(--paper-2); text-decoration: none;
+  border-bottom: 1px solid var(--line-2); padding-bottom: 2px;
+  transition: color 0.15s ease, border-color 0.15s ease;
+}
+.hero__popular a:hover { color: var(--accent); border-color: var(--accent); }
+@media (max-width: 600px) {
+  .hero__find { margin-top: 24px; }
+  .hero__search-text { font-size: 12px; }
 }
 
 .hero__status {
@@ -299,7 +337,7 @@ body {
 .hero-wire:hover { background: rgba(244, 239, 230, 0.02); }
 .hero-wire:hover .hero-wire__go { color: var(--accent-2); }
 .hero-wire__dot { width: 7px; height: 7px; border-radius: 50%; background: var(--mint); flex: none; }
-.hero-wire__label { font-size: 9px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--paper-4); flex: none; }
+.hero-wire__label { font-size: 9px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--paper-3); flex: none; }
 .hero-wire__text { color: var(--paper); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; flex: 1; transition: opacity 0.4s ease; }
 .hero-wire__go { color: var(--accent); flex: none; white-space: nowrap; transition: color 0.15s; }
 @media (prefers-reduced-motion: no-preference) {
@@ -850,7 +888,7 @@ body {
   color: var(--paper-3);
 }
 
-.colophon__col h5 {
+.colophon__col h2 {
   font-family: var(--mono);
   font-size: 10px;
   letter-spacing: 0.2em;
@@ -956,6 +994,20 @@ body {
       <p class="hero__lead">
         Reference data for the infrastructure stack — <em>cloud regions, instance types, API gateways, service quotas</em> — cross-referenced across every major vendor and laid out the way the documentation always should have been. Free, open, and updated daily from the source.
       </p>
+      <div class="hero__find">
+        <button type="button" class="hero__search" id="hero-search" aria-haspopup="dialog" aria-label="Search all instruments">
+          <span class="hero__search-ico" aria-hidden="true">⌕</span>
+          <span class="hero__search-text">Search instruments — EC2, APIM, egress, IAM…</span>
+          <kbd class="hero__search-kbd" aria-hidden="true">⌘K</kbd>
+        </button>
+        <div class="hero__popular">
+          <span class="hero__popular-label" aria-hidden="true">Popular</span>
+          <a href="./equivalent-sku/">Equivalent-SKU</a>
+          <a href="./ec2/">EC2 Observatory</a>
+          <a href="./ai-atlas/">Generative AI</a>
+          <a href="./networking-matrix/">Networking</a>
+        </div>
+      </div>
     </div>
     <aside class="hero__status">
       <div class="hero__stat">
@@ -1608,15 +1660,15 @@ body {
       Issue No. 01 · 2026
     </div>
     <div class="colophon__col">
-      <h5>The Atlas</h5>
+      <h2>The Atlas</h2>
       <p>An open reference for the infrastructure stack. Built and maintained by independent engineers who got tired of grepping vendor documentation across five tabs.</p>
     </div>
     <div class="colophon__col">
-      <h5>Data</h5>
+      <h2>Data</h2>
       <p>The cloud-compute instruments refresh daily from public datasets and price APIs; the API-management references are curated, dated snapshots. Last sync is shown on each tool. Stale data is a bug. Every dataset is a public, CORS-enabled JSON endpoint — <a href="./api/">browse the data API ↗</a>.</p>
     </div>
     <div class="colophon__col">
-      <h5>Contribute</h5>
+      <h2>Contribute</h2>
       <p>Source is MIT-licensed on <a href="https://github.com/ineslino/infra-atlas" target="_blank" rel="noopener">GitHub</a>. Spotted something wrong, or have an idea? <a href="https://github.com/ineslino/infra-atlas/issues/new/choose" target="_blank" rel="noopener">Open an issue</a>. Want to ship an instrument? <a href="https://github.com/ineslino/infra-atlas/blob/main/CONTRIBUTING.md" target="_blank" rel="noopener">Read the contributor guide</a>.</p>
     </div>
   </footer>
@@ -1641,7 +1693,9 @@ body {
       sec.hidden = false;
       var count = document.getElementById("dispatch-count");
       if (count) count.textContent = entries.length;
-      list.innerHTML = entries.slice(0, 18).map(function (e) {
+      // Homepage shows a short teaser; the full list lives at /changelog/
+      // (linked in the section header). Keeps the page tail from dragging.
+      list.innerHTML = entries.slice(0, 6).map(function (e) {
         return '<li class="dispatch-item">' + F.row(e) + '</li>';
       }).join("");
 
@@ -1717,6 +1771,22 @@ body {
     });
   }, { rootMargin: "-40% 0px -55% 0px", threshold: 0 });
   deps.forEach(function (d) { io.observe(d); });
+})();
+
+/* Hero search — reuse the global ⌘K command palette (injected by nav.js)
+   instead of building a second search. Clicking the nav's button toggles it
+   open and focuses its input. */
+(function () {
+  var hs = document.getElementById("hero-search");
+  if (!hs) return;
+  hs.addEventListener("click", function () {
+    var navBtn = document.getElementById("ia-nav-btn");
+    if (navBtn) navBtn.click();
+  });
+  // match the shortcut hint to the platform (nav.js shows ⌘K on mac, Ctrl K elsewhere)
+  var kbd = hs.querySelector(".hero__search-kbd");
+  var isMac = /Mac|iPhone|iPad|iPod/.test(navigator.platform || navigator.userAgent || "");
+  if (kbd && !isMac) kbd.textContent = "Ctrl K";
 })();
 
 /* Instrument counts — derived from the DOM so the hero stat and the section
