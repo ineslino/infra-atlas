@@ -193,6 +193,15 @@ a:focus-visible, button:focus-visible, input:focus-visible, [tabindex]:focus-vis
     <strong>No dimensions match your filters.</strong><br>Try a broader search term, or switch the category to “All”.
   </div>
 
+  <!-- ─── SOVEREIGN AI / LLMs ─── -->
+  <div class="brief__head" style="margin: 40px 0 8px;">Sovereign AI — the model layer</div>
+  <p style="font-size: 13.5px; color: var(--paper-2); line-height: 1.6; max-width: 800px; margin: 0 0 18px;">
+    The realistic sovereign path for AI is <em style="font-family: var(--serif); font-style: italic; color: var(--paper);">open-weight models on EU infrastructure</em>, not an EU OpenAI — and the rule is unchanged: <strong style="color: var(--paper); font-weight: 600;">provider jurisdiction beats data location</strong>. The <a href="../ai-atlas/" style="color: var(--accent); text-decoration: none;">Generative AI Atlas</a> maps which models each hyperscaler hosts; this adds the sovereignty read.
+  </p>
+  <div class="matrix-wrap">
+    <table class="matrix" id="matrix-llm" aria-label="Sovereign AI / LLM comparison"></table>
+  </div>
+
   <!-- ─── REGULATORY BRIEFING ─── -->
   <section class="brief">
     <div class="brief__head">The regulatory frame — status, not definitions</div>
@@ -346,6 +355,105 @@ const FEATURES = [
 ];
 
 // ─── Regulatory briefing data ───
+// ─── Sovereign AI / LLMs (the model layer) ───
+const L_MISTRAL = "https://mistral.ai/models";
+const L_MISTRAL_LIC = "https://help.mistral.ai/en/articles/347393-under-which-license-are-mistral-s-open-models-available";
+const L_ALEPH = "https://aleph-alpha.com/";
+const L_OVHAI = "https://www.ovhcloud.com/en/public-cloud/ai-endpoints/";
+const L_SCWAI = "https://www.scaleway.com/en/generative-apis/";
+const L_IONOSAI = "https://cloud.ionos.com/managed/ai-model-hub";
+const L_AIACT = "https://digital-strategy.ec.europa.eu/en/policies/regulatory-framework-ai";
+
+const VENDORS_LLM = [
+  { key: "mistral",   name: "Mistral AI",                       short: "Mistral",     cloud: "France",     swatch: "#FF9F66" },
+  { key: "aleph",     name: "Aleph Alpha (PhariaAI)",           short: "Aleph Alpha", cloud: "Germany",    swatch: "#7CD7F1" },
+  { key: "ovhai",     name: "OVHcloud AI Endpoints",            short: "OVHcloud",    cloud: "France",     swatch: "#C586E8" },
+  { key: "scwai",     name: "Scaleway (Generative APIs)",       short: "Scaleway",    cloud: "France",     swatch: "#6FE7B5" },
+  { key: "ionosai",   name: "IONOS AI Model Hub",               short: "IONOS",       cloud: "Germany",    swatch: "#5BCCC9" },
+  { key: "selfhost",  name: "Self-host (open-weight)",          short: "Self-host",   cloud: "Your infra", swatch: "#FFA66E" },
+  { key: "usfrontier",name: "US frontier (OpenAI / Anthropic)", short: "US frontier", cloud: "USA",        swatch: "#F47B7B" }
+];
+
+const CATS_LLM = [
+  { key: "openness",     label: "Openness & control" },
+  { key: "jurisdiction", label: "Jurisdiction & data" }
+];
+
+const FEATURES_LLM = [
+  { id: "llm-openweights", category: "openness", name: "Open weights (self-hostable)",
+    desc: "Can you download the weights and run the model on your own / EU infrastructure, free of one vendor's API?",
+    support: {
+      mistral:   { level:"yes",  value:"✓ many models", note:"Several Mistral models are open-weight (e.g. Mistral Small, Nemo, Devstral); a few are weight-available under restricted terms.", src:L_MISTRAL },
+      aleph:     { level:"part", value:"◐ platform, not a model", note:"Aleph Alpha now sells PhariaAI — a sovereignty/governance platform that runs open or proprietary models — rather than its own frontier open-weight model.", src:L_ALEPH },
+      ovhai:     { level:"yes",  value:"✓ serves open models", note:"Managed endpoints for open-weight models (Llama, Mixtral, Mistral, Qwen…).", src:L_OVHAI },
+      scwai:     { level:"yes",  value:"✓ serves open models", note:"Managed/dedicated inference for open-weight models.", src:L_SCWAI },
+      ionosai:   { level:"yes",  value:"✓ serves open models", note:"AI Model Hub serves open-weight models (Llama, Mistral…).", src:L_IONOSAI },
+      selfhost:  { level:"yes",  value:"✓ by definition", note:"You run the open weights yourself — the maximum-control path.", src:L_MISTRAL },
+      usfrontier:{ level:"no",   value:"✗ API-only", note:"Frontier OpenAI/Anthropic models are proprietary and API-only — not self-hostable.", src:"../ai-atlas/" }
+    }
+  },
+  { id: "llm-licence", category: "openness", name: "Permissive open licence",
+    desc: "Is the licence genuinely permissive (Apache-2.0/MIT-style), or restricted (revenue caps, research-only, proprietary)?",
+    support: {
+      mistral:   { level:"part", value:"◐ mixed", note:"Apache-2.0 for many open models; restricted/commercial terms on others (e.g. a modified licence on some).", src:L_MISTRAL_LIC },
+      aleph:     { level:"part", value:"◐ depends", note:"Depends on the underlying model plugged into PhariaAI.", src:L_ALEPH },
+      ovhai:     { level:"part", value:"◐ per model", note:"The licence is the underlying open model's (Apache-2.0, Llama licence, etc.) — check per model.", src:L_OVHAI },
+      scwai:     { level:"part", value:"◐ per model", note:"Per underlying open model.", src:L_SCWAI },
+      ionosai:   { level:"part", value:"◐ per model", note:"Per underlying open model.", src:L_IONOSAI },
+      selfhost:  { level:"part", value:"◐ per model", note:"Whatever the model you choose ships under.", src:L_MISTRAL_LIC },
+      usfrontier:{ level:"no",   value:"✗ proprietary", note:"Closed, proprietary terms.", src:"../ai-atlas/" }
+    }
+  },
+  { id: "llm-inference-eu", category: "jurisdiction", name: "EU-hosted inference / data residency",
+    desc: "Does managed inference run in the EU by default, with data kept in-region?",
+    support: {
+      mistral:   { level:"yes",  value:"✓ EU default", note:"la Plateforme hosts inference in the EU by default (US routing optional); a zero-data-retention option is available.", src:L_MISTRAL },
+      aleph:     { level:"yes",  value:"✓ Germany / on-prem", note:"German jurisdiction; on-prem / sovereign deployment for government + enterprise.", src:L_ALEPH },
+      ovhai:     { level:"yes",  value:"✓ EU", note:"EU datacentres; GDPR-aligned, no training on your data.", src:L_OVHAI },
+      scwai:     { level:"yes",  value:"✓ France", note:"France-hosted inference (Paris region).", src:L_SCWAI },
+      ionosai:   { level:"yes",  value:"✓ Germany", note:"German datacentres.", src:L_IONOSAI },
+      selfhost:  { level:"yes",  value:"✓ you control", note:"Runs wherever you deploy it — EU by your choice.", src:L_OVHAI },
+      usfrontier:{ level:"part", value:"◐ enterprise add-on", note:"EU data residency is a contractual/enterprise add-on, not the default consumer behaviour.", src:"../ai-atlas/" }
+    }
+  },
+  { id: "llm-notrain", category: "jurisdiction", name: "No training on your inputs",
+    desc: "Are your prompts and outputs kept out of the provider's model training?",
+    support: {
+      mistral:   { level:"yes",  value:"✓", note:"Inputs are not used for training without opt-in; the zero-data-retention option disables retention.", src:L_MISTRAL },
+      aleph:     { level:"yes",  value:"✓", note:"Sovereign/enterprise deployment — your data stays yours.", src:L_ALEPH },
+      ovhai:     { level:"yes",  value:"✓", note:"Not used to train OVHcloud models.", src:L_OVHAI },
+      scwai:     { level:"yes",  value:"✓", note:"Prompts/responses kept in France, not used for training.", src:L_SCWAI },
+      ionosai:   { level:"yes",  value:"✓", note:"Data stays within IONOS Cloud.", src:L_IONOSAI },
+      selfhost:  { level:"yes",  value:"✓ by definition", note:"No third party sees your data.", src:L_OVHAI },
+      usfrontier:{ level:"part", value:"◐ tier-dependent", note:"Enterprise/API tiers offer no-train; default consumer terms differ — confirm per contract.", src:"../ai-atlas/" }
+    }
+  },
+  { id: "llm-jurisdiction", category: "jurisdiction", name: "Provider jurisdiction (CLOUD Act exposure)",
+    desc: "Can a non-EU government compel the provider? Set by the provider's parent jurisdiction — the same rule as the cloud layer.",
+    support: {
+      mistral:   { level:"yes",  value:"✓ France", note:"French company — outside US CLOUD Act jurisdiction.", src:S_CLOUDACT },
+      aleph:     { level:"yes",  value:"✓ Germany", note:"German company — outside US jurisdiction.", src:S_CLOUDACT },
+      ovhai:     { level:"yes",  value:"✓ France", note:"French provider.", src:S_CLOUDACT },
+      scwai:     { level:"yes",  value:"✓ France", note:"French provider.", src:S_CLOUDACT },
+      ionosai:   { level:"yes",  value:"✓ Germany", note:"German provider.", src:S_CLOUDACT },
+      selfhost:  { level:"yes",  value:"✓ none", note:"No third-party provider in the inference path.", src:S_CLOUDACT },
+      usfrontier:{ level:"no",   value:"✗ US", note:"US companies — subject to the CLOUD Act regardless of where inference runs.", src:S_CLOUDACT }
+    }
+  },
+  { id: "llm-transparency", category: "openness", name: "Training-data transparency (AI Act GPAI)",
+    desc: "How much is disclosed about training data — the EU AI Act's general-purpose-AI transparency duties.",
+    support: {
+      mistral:   { level:"part", value:"◐ partial", note:"Publishes model + usage docs; full training-data disclosure is partial, as for most providers. GPAI rules apply.", src:L_AIACT },
+      aleph:     { level:"part", value:"◐ depends", note:"Inherits the underlying model's transparency.", src:L_AIACT },
+      ovhai:     { level:"part", value:"◐ per model", note:"Transparency is the underlying open model's.", src:L_AIACT },
+      scwai:     { level:"part", value:"◐ per model", note:"Per underlying open model.", src:L_AIACT },
+      ionosai:   { level:"part", value:"◐ per model", note:"Per underlying open model.", src:L_AIACT },
+      selfhost:  { level:"part", value:"◐ model-dependent", note:"Depends on the chosen model's published training info.", src:L_AIACT },
+      usfrontier:{ level:"no",   value:"✗ opaque", note:"Proprietary models disclose little about their training data.", src:L_AIACT }
+    }
+  }
+];
+
 const BRIEFING = [
   { t: "EU Data Act", flag: "stable", flagLabel: "In force",
     body: "Reg (EU) 2023/2854 — applies since 12 Sep 2025. Mandates free, fast provider switching and the phase-out of data-egress/switching charges, plus interoperability. Directly reshapes lock-in and egress economics.",
@@ -364,7 +472,10 @@ const BRIEFING = [
     src: "https://eur-lex.europa.eu/eli/reg/2016/679/oj/eng" },
   { t: "Gaia-X", flag: "stable", flagLabel: "Trust layer",
     body: "A federated trust + interoperability framework, not a cloud. Useful as a portability/trust-label standard adopted by EU-native providers; it underdelivered on the early 'European hyperscaler' hype — judge it as a label, not a platform.",
-    src: "https://gaia-x.eu/about/" }
+    src: "https://gaia-x.eu/about/" },
+  { t: "EU AI Act — GPAI", flag: "stable", flagLabel: "Phasing in",
+    body: "Reg (EU) 2024/1689. General-purpose-AI obligations — transparency, a training-data summary, copyright policy — phase in from Aug 2025; broader high-risk duties from Aug 2026. It shapes what a 'sovereign' model must disclose, hence the transparency row above.",
+    src: "https://digital-strategy.ec.europa.eu/en/policies/regulatory-framework-ai" }
 ];
 
 // ─── State + render ───
@@ -411,6 +522,7 @@ function init() {
     CATEGORIES.map(c => `<button class="chip" data-cat="${c.key}" aria-pressed="false">${escapeHtml(c.label)}</button>`).join("");
 
   IA.matrix.renderTable({ tableEl: $("#matrix"), vendors: VENDORS, categories: CATEGORIES, features: FEATURES, dimensionLabel: "Sovereignty dimension" });
+  IA.matrix.renderTable({ tableEl: $("#matrix-llm"), vendors: VENDORS_LLM, categories: CATS_LLM, features: FEATURES_LLM, dimensionLabel: "AI sovereignty criterion" });
   renderBriefing();
   applyHash();
   applyFilter();
@@ -437,15 +549,16 @@ function applyFilter() {
   writeHash();
 }
 
-function openFeatureDrawer(feature, focusVendor) {
-  const cat = (CATEGORIES.find(c => c.key === feature.category) || {}).label || "";
+function openFeatureDrawer(feature, focusVendor, vendors, cats) {
+  vendors = vendors || VENDORS; cats = cats || CATEGORIES;
+  const cat = (cats.find(c => c.key === feature.category) || {}).label || "";
   const head = `
     <button class="drawer__close" type="button" data-action="close-drawer" aria-label="Close (Esc)">✕</button>
     <div class="drawer__eyebrow">${escapeHtml(cat)}</div>
     <h2 class="drawer__title" id="drawer-title">${escapeHtml(feature.name)}</h2>
     <p class="drawer__desc">${escapeHtml(feature.desc)}</p>`;
   const body = `<div class="drawer__section"><h4>Per-provider detail &amp; sources</h4>` +
-    VENDORS.map(v => {
+    vendors.map(v => {
       const s = feature.support[v.key] || { level:"no", value:"—", note:"" };
       const sym = s.level === "yes" ? "✓" : s.level === "part" ? "◐" : "✗";
       const markLabel = s.level === "yes" ? "Yes" : s.level === "part" ? "Partial" : "No";
@@ -478,8 +591,10 @@ function wireEvents() {
   document.addEventListener("keydown", (e) => { if (e.key === "/" && e.target.tagName !== "INPUT") { e.preventDefault(); $("#search").focus(); } });
   IA.matrix.drawer.init();
   IA.matrix.wireDelegation((featureId, vendorKey) => {
-    const f = FEATURES.find(x => x.id === featureId);
-    if (f) openFeatureDrawer(f, vendorKey);
+    let f = FEATURES.find(x => x.id === featureId);
+    if (f) { openFeatureDrawer(f, vendorKey, VENDORS, CATEGORIES); return; }
+    f = FEATURES_LLM.find(x => x.id === featureId);
+    if (f) openFeatureDrawer(f, vendorKey, VENDORS_LLM, CATS_LLM);
   });
 }
 
