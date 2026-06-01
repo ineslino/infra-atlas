@@ -72,6 +72,14 @@ jobs:
         run: ./${{ matrix.instrument }}/refresh.sh
 
       - if: steps.gate.outputs.run == 'true'
+        name: Sync landing-page chips to the refreshed data
+        # Keep the homepage card chips in lockstep with data.json so a count
+        # change (new region/family) never leaves a stale chip for the next
+        # human push to trip over (check_landing_stats). Self-healing, like the
+        # OG card; the chip change is committed with the data below.
+        run: python3 scripts/sync_landing_stats.py "${{ matrix.instrument }}"
+
+      - if: steps.gate.outputs.run == 'true'
         name: Update the What Changed feed
         run: |
           # Baseline = this instrument's PREVIOUS automated refresh, not simply
@@ -97,7 +105,7 @@ jobs:
           git pull --rebase --autostash
           git config user.name "infraatlas-bot"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add ${{ matrix.instrument }}/data.json feed.json
+          git add ${{ matrix.instrument }}/data.json feed.json index.html
           if git diff --cached --quiet; then
             echo "::notice::${{ matrix.instrument }}: no data changes — skipping commit."
           else
