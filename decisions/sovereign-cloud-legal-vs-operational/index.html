@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="color-scheme" content="dark">
+<title>Sovereign region or EU-native provider? · Decisions · Infra Atlas</title>
+<link rel="icon" href="/favicon.svg?v=2" type="image/svg+xml">
+<meta name="description" content="A US hyperscaler&#x27;s &#x27;sovereign&#x27; region gives you operational sovereignty; only an EU-jurisdiction provider gives legal sovereignty — and the CLOUD Act is the reason.">
+<link rel="canonical" href="https://infraatlas.dev/decisions/sovereign-cloud-legal-vs-operational/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Infra Atlas">
+<meta property="og:title" content="Sovereign region or EU-native provider? · Infra Atlas Decisions">
+<meta property="og:description" content="A US hyperscaler&#x27;s &#x27;sovereign&#x27; region gives you operational sovereignty; only an EU-jurisdiction provider gives legal sovereignty — and the CLOUD Act is the reason.">
+<meta property="og:url" content="https://infraatlas.dev/decisions/sovereign-cloud-legal-vs-operational/">
+<meta property="og:image" content="https://infraatlas.dev/og.png?v=3">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Sovereign region or EU-native provider? · Infra Atlas Decisions">
+<meta name="twitter:description" content="A US hyperscaler&#x27;s &#x27;sovereign&#x27; region gives you operational sovereignty; only an EU-jurisdiction provider gives legal sovereignty — and the CLOUD Act is the reason.">
+<meta name="twitter:image" content="https://infraatlas.dev/og.png?v=3">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "TechArticle",
+  "headline": "Sovereign region or EU-native provider?",
+  "description": "A US hyperscaler's 'sovereign' region gives you operational sovereignty; only an EU-jurisdiction provider gives legal sovereignty \u2014 and the CLOUD Act is the reason.",
+  "url": "https://infraatlas.dev/decisions/sovereign-cloud-legal-vs-operational/",
+  "datePublished": "2026-06-01",
+  "dateModified": "2026-06-01",
+  "inLanguage": "en",
+  "isPartOf": {
+    "@type": "WebSite",
+    "name": "Infra Atlas",
+    "url": "https://infraatlas.dev/"
+  }
+}
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@300;400;500;600&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/decisions/decision.css">
+</head>
+<body>
+<div class="grain"></div>
+<div class="scanlines"></div>
+<div class="page">
+  <header class="masthead">
+    <a class="eyebrow" href="/decisions/"><span class="arrow">←</span> Infra Atlas · Decisions</a>
+    <h1 class="title">Sovereign region <em>or</em> EU-native provider?</h1>
+    <p class="subtitle">A US hyperscaler&#x27;s &#x27;sovereign&#x27; region gives you operational sovereignty; only an EU-jurisdiction provider gives legal sovereignty — and the CLOUD Act is the reason.</p>
+    <div class="reviewed"><span class="dot"></span>Reviewed <time datetime="2026-06-01">2026-06-01</time></div>
+  </header>
+  <section class="verdict">
+    <div class="sec-label">The verdict</div>
+    <p>Pick a <strong>hyperscaler sovereign region</strong> — AWS European Sovereign Cloud, Azure with Bleu, Google with S3NS — when you need the hyperscaler&#x27;s full service breadth and scale and your requirement is data residency plus EU-resident operations. That buys operational sovereignty, but the US parent stays reachable under the CLOUD Act, so it is not legal sovereignty. Pick an <strong>EU-native provider</strong> — OVHcloud, Scaleway, IONOS, STACKIT, T-Systems, Aruba — when legal sovereignty is the real requirement: an EU-jurisdiction company with no US parent sits outside the CLOUD Act&#x27;s reach, at the cost of a narrower catalogue and smaller scale. The deciding question is which sovereignty you actually need — <strong>data residency and operational control</strong>, where a sovereign region is enough, or <strong>immunity from foreign legal compulsion</strong>, where you need an EU-parent provider. In a hyperscaler&#x27;s marketing, &#x27;sovereign&#x27; means the first, not the second.</p>
+  </section>
+  <section>
+    <div class="sec-label">Head to head</div>
+    <div class="compare-wrap"><table class="compare">
+      <thead><tr><th>Criterion</th><th>Hyperscaler sovereign region</th><th>EU-native provider</th></tr></thead>
+      <tbody>
+        <tr><!-- src: https://www.justice.gov/criminal/cloud-act-resources --><td class="criterion">Legal sovereignty — immune to US compulsion?</td><td class="val">No — the US parent stays reachable under the CLOUD Act</td><td class="val">Yes — EU-jurisdiction parent, outside US reach</td></tr>
+        <tr><!-- src: /sovereignty/ --><td class="criterion">Operational sovereignty (EU staff + ops)</td><td class="val">Yes — EU regions, EU-resident operations</td><td class="val">Yes — EU-resident by default</td></tr>
+        <tr><!-- src: /sovereignty/ --><td class="criterion">Data residency</td><td class="val">EU region / data boundary</td><td class="val">EU only</td></tr>
+        <tr><!-- src: /sovereignty/ --><td class="criterion">Service breadth &amp; scale</td><td class="val">Full hyperscaler catalogue + global scale</td><td class="val">Narrower catalogue, smaller scale</td></tr>
+        <tr><!-- src: /compliance/ --><td class="criterion">Certifications (SecNumCloud / C5 / ENS)</td><td class="val">Often via an EU partner (Bleu, S3NS) — verify per service</td><td class="val">Several hold SecNumCloud (ANSSI) outright</td></tr>
+        <tr><!-- src: https://www.justice.gov/criminal/cloud-act-resources --><td class="criterion">Provider parent jurisdiction</td><td class="val">US — sometimes operated via an EU joint venture</td><td class="val">EU — company + parent both in-jurisdiction</td></tr>
+      </tbody>
+    </table></div>
+  </section>
+  <section>
+    <div class="sec-label">When to pick which</div>
+    <div class="pickwhen">
+      <div class="pick"><h4>Pick a hyperscaler sovereign region when</h4><ul><li>You need the hyperscaler&#x27;s full service breadth, scale, and ecosystem.</li><li>Your requirement is data residency + EU-resident operations, not immunity from foreign law.</li><li>You are already deep in one hyperscaler and migration cost is high.</li><li>You accept that the US parent stays legally reachable — operational, not legal, sovereignty.</li></ul></div>
+      <div class="pick"><h4>Pick an EU-native provider when</h4><ul><li>Legal sovereignty / CLOUD-Act immunity is a hard requirement — regulated, public-sector, or defence workloads.</li><li>SecNumCloud-grade (ANSSI) assurance is required.</li><li>The workload fits a narrower catalogue and needs no hyperscaler-only services.</li><li>You want an EU-jurisdiction company end to end, parent included.</li></ul></div>
+    </div>
+  </section>
+  <section class="sources">
+    <div class="sec-label">Sources</div>
+    <ol>
+      <li>US CLOUD Act — DOJ resources — <a href="https://www.justice.gov/criminal/cloud-act-resources" target="_blank" rel="noopener">https://www.justice.gov/criminal/cloud-act-resources</a></li>
+      <li>EU Data Act — Reg (EU) 2023/2854 (switching + egress) — <a href="https://eur-lex.europa.eu/eli/reg/2023/2854/oj/eng" target="_blank" rel="noopener">https://eur-lex.europa.eu/eli/reg/2023/2854/oj/eng</a></li>
+      <li>GDPR Chapter V — Reg (EU) 2016/679 (international transfers) — <a href="https://eur-lex.europa.eu/eli/reg/2016/679/oj/eng" target="_blank" rel="noopener">https://eur-lex.europa.eu/eli/reg/2016/679/oj/eng</a></li>
+      <li>EUCS — EU cloud certification scheme (ENISA) — <a href="https://www.enisa.europa.eu/publications/eucs-cloud-service-scheme" target="_blank" rel="noopener">https://www.enisa.europa.eu/publications/eucs-cloud-service-scheme</a></li>
+      <li>Infra Atlas — European Sovereignty (the full sourced matrix) — <a href="/sovereignty/" target="_blank" rel="noopener">/sovereignty/</a></li>
+      <li>Infra Atlas — Compliance Footprint (certifications) — <a href="/compliance/" target="_blank" rel="noopener">/compliance/</a></li>
+    </ol>
+  </section>
+  <section>
+    <div class="sec-label">Related instruments</div>
+    <div class="crosslinks"><span class="lbl">See also</span><a href="/sovereignty/">European Sovereignty</a><a href="/compliance/">Compliance Footprint</a></div>
+  </section>
+  <footer class="colophon">
+    Reviewed <time datetime="2026-06-01">2026-06-01</time> against vendor documentation — every
+    comparison-table row and the verdict carry a source. Part of <a href="/">Infra Atlas</a>
+    · <a href="/decisions/">Decisions</a>. Spot a stale fact?
+    <a href="https://github.com/ineslino/infra-atlas/issues/new" target="_blank" rel="noopener">Open an issue</a>.
+  </footer>
+</div>
+<script src="/nav.js" defer></script>
+</body>
+</html>

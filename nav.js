@@ -68,7 +68,8 @@
     ["/decisions/aurora-vs-rds/",                            "Aurora vs RDS",                         "AWS",       "amazon database relational managed aurora rds mysql postgres"],
     ["/decisions/azure-app-service-vs-container-apps-vs-vm/","App Service vs Container Apps vs VM",    "Azure",     "azure app service container apps virtual machine paas web worker role"],
     ["/decisions/nat-gateway-vs-instance-vs-no-nat/",        "NAT gateway vs instance vs no NAT",      "AWS",       "aws vpc nat gateway instance egress private subnet networking"],
-    ["/decisions/cloud-native-vs-managed-vs-self-hosted-observability/", "Cloud-native vs managed vs self-hosted observability", "Patterns", "observability cloudwatch azure monitor datadog grafana prometheus elk loki tempo decision build vs buy"]
+    ["/decisions/cloud-native-vs-managed-vs-self-hosted-observability/", "Cloud-native vs managed vs self-hosted observability", "Patterns", "observability cloudwatch azure monitor datadog grafana prometheus elk loki tempo decision build vs buy"],
+    ["/decisions/sovereign-cloud-legal-vs-operational/",     "Sovereign cloud: legal vs operational", "Patterns",  "sovereign cloud legal operational sovereignty cloud act cloudact eu native provider hyperscaler sovereign region jurisdiction data residency secnumcloud gdpr aws european"]
   ];
 
   // Per-page related instruments — hrefs must match ITEMS entries. Curated, not
@@ -89,7 +90,7 @@
     "/mulesoft/":               ["/apim-matrix/", "/aws-api-gateway/", "/apigee/", "/decisions/api-gateway-vs-proxy-vs-load-balancer/"],
     "/self-hosted-apim/":       ["/apim-matrix/", "/aws-api-gateway/", "/decisions/api-gateway-vs-proxy-vs-load-balancer/"],
     "/compliance/":             ["/sovereignty/", "/regions/", "/confidential-computing/"],
-    "/sovereignty/":            ["/compliance/", "/ai-atlas/", "/ovh-instances/", "/egress/", "/regions/"],
+    "/sovereignty/":            ["/decisions/sovereign-cloud-legal-vs-operational/", "/compliance/", "/ai-atlas/", "/ovh-instances/", "/egress/"],
     "/confidential-computing/": ["/compliance/", "/iam-matrix/"],
     "/ai-atlas/":               ["/gcp-compute/", "/networking-matrix/", "/sovereignty/"],
     "/networking-matrix/":      ["/egress/", "/tools/subnet/", "/iam-matrix/", "/kubernetes/"],
@@ -112,7 +113,8 @@
     "/decisions/rest-api-vs-http-api/":                      ["/aws-api-gateway/", "/apim-matrix/"],
     "/decisions/api-gateway-vs-proxy-vs-load-balancer/":     ["/apim-matrix/", "/networking-matrix/"],
     "/decisions/aurora-vs-rds/":                             ["/regions/", "/compliance/"],
-    "/decisions/nat-gateway-vs-instance-vs-no-nat/":         ["/egress/", "/networking-matrix/", "/tools/egress-cost/"]
+    "/decisions/nat-gateway-vs-instance-vs-no-nat/":         ["/egress/", "/networking-matrix/", "/tools/egress-cost/"],
+    "/decisions/sovereign-cloud-legal-vs-operational/":      ["/sovereignty/", "/compliance/"]
   };
 
   // Normalise current path → "/ec2/" form

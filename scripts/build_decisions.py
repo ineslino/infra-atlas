@@ -295,6 +295,65 @@ DECISIONS = [
   "crosslinks": [],
   "teaser": "Private-subnet egress on AWS — the managed default, the legacy workaround, and skipping NAT outright.",
  },
+ {
+  "slug": "sovereign-cloud-legal-vs-operational",
+  "cloud": "Cross-cloud · sovereignty",
+  "title": "Sovereign region <em>or</em> EU-native provider?",
+  "sub": "A US hyperscaler's 'sovereign' region gives you operational sovereignty; only an EU-jurisdiction provider gives legal sovereignty — and the CLOUD Act is the reason.",
+  "reviewed": "2026-06-01",
+  "verdict": "Pick a **hyperscaler sovereign region** — AWS European Sovereign Cloud, Azure with Bleu, Google with S3NS — when you need the hyperscaler's full service breadth and scale and your requirement is data residency plus EU-resident operations. That buys operational sovereignty, but the US parent stays reachable under the CLOUD Act, so it is not legal sovereignty. Pick an **EU-native provider** — OVHcloud, Scaleway, IONOS, STACKIT, T-Systems, Aruba — when legal sovereignty is the real requirement: an EU-jurisdiction company with no US parent sits outside the CLOUD Act's reach, at the cost of a narrower catalogue and smaller scale. The deciding question is which sovereignty you actually need — **data residency and operational control**, where a sovereign region is enough, or **immunity from foreign legal compulsion**, where you need an EU-parent provider. In a hyperscaler's marketing, 'sovereign' means the first, not the second.",
+  "cols": ["Hyperscaler sovereign region", "EU-native provider"],
+  "rows": [
+    ("Legal sovereignty — immune to US compulsion?",
+     ["No — the US parent stays reachable under the CLOUD Act",
+      "Yes — EU-jurisdiction parent, outside US reach"],
+     "https://www.justice.gov/criminal/cloud-act-resources"),
+    ("Operational sovereignty (EU staff + ops)",
+     ["Yes — EU regions, EU-resident operations",
+      "Yes — EU-resident by default"],
+     "/sovereignty/"),
+    ("Data residency",
+     ["EU region / data boundary",
+      "EU only"],
+     "/sovereignty/"),
+    ("Service breadth & scale",
+     ["Full hyperscaler catalogue + global scale",
+      "Narrower catalogue, smaller scale"],
+     "/sovereignty/"),
+    ("Certifications (SecNumCloud / C5 / ENS)",
+     ["Often via an EU partner (Bleu, S3NS) — verify per service",
+      "Several hold SecNumCloud (ANSSI) outright"],
+     "/compliance/"),
+    ("Provider parent jurisdiction",
+     ["US — sometimes operated via an EU joint venture",
+      "EU — company + parent both in-jurisdiction"],
+     "https://www.justice.gov/criminal/cloud-act-resources"),
+  ],
+  "pick": [
+    ("Pick a hyperscaler sovereign region when", [
+      "You need the hyperscaler's full service breadth, scale, and ecosystem.",
+      "Your requirement is data residency + EU-resident operations, not immunity from foreign law.",
+      "You are already deep in one hyperscaler and migration cost is high.",
+      "You accept that the US parent stays legally reachable — operational, not legal, sovereignty.",
+    ]),
+    ("Pick an EU-native provider when", [
+      "Legal sovereignty / CLOUD-Act immunity is a hard requirement — regulated, public-sector, or defence workloads.",
+      "SecNumCloud-grade (ANSSI) assurance is required.",
+      "The workload fits a narrower catalogue and needs no hyperscaler-only services.",
+      "You want an EU-jurisdiction company end to end, parent included.",
+    ]),
+  ],
+  "sources": [
+    ("US CLOUD Act — DOJ resources", "https://www.justice.gov/criminal/cloud-act-resources"),
+    ("EU Data Act — Reg (EU) 2023/2854 (switching + egress)", "https://eur-lex.europa.eu/eli/reg/2023/2854/oj/eng"),
+    ("GDPR Chapter V — Reg (EU) 2016/679 (international transfers)", "https://eur-lex.europa.eu/eli/reg/2016/679/oj/eng"),
+    ("EUCS — EU cloud certification scheme (ENISA)", "https://www.enisa.europa.eu/publications/eucs-cloud-service-scheme"),
+    ("Infra Atlas — European Sovereignty (the full sourced matrix)", "/sovereignty/"),
+    ("Infra Atlas — Compliance Footprint (certifications)", "/compliance/"),
+  ],
+  "crosslinks": [("European Sovereignty", "/sovereignty/"), ("Compliance Footprint", "/compliance/")],
+  "teaser": "A US hyperscaler's 'sovereign' region buys operational sovereignty; only an EU-parent provider gives legal sovereignty — the CLOUD Act is why.",
+ },
 ]
 
 # ── Hand-authored decisions ─────────────────────────────────────────
@@ -340,14 +399,15 @@ def plain_title(d):
 
 def render_page(d):
     q = plain_title(d)
+    rev = d.get("reviewed", REVIEWED)
     ld = json.dumps({
         "@context": "https://schema.org",
         "@type": "TechArticle",
         "headline": q,
         "description": d["sub"],
         "url": f"https://infraatlas.dev/decisions/{d['slug']}/",
-        "datePublished": REVIEWED,
-        "dateModified": REVIEWED,
+        "datePublished": rev,
+        "dateModified": rev,
         "inLanguage": "en",
         "isPartOf": {"@type": "WebSite", "name": "Infra Atlas",
                      "url": "https://infraatlas.dev/"},
@@ -388,7 +448,7 @@ def render_page(d):
     <a class="eyebrow" href="/decisions/"><span class="arrow">←</span> Infra Atlas · Decisions</a>
     <h1 class="title">{d['title']}</h1>
     <p class="subtitle">{esc(d['sub'])}</p>
-    <div class="reviewed"><span class="dot"></span>Reviewed <time datetime="{REVIEWED}">{REVIEWED}</time></div>
+    <div class="reviewed"><span class="dot"></span>Reviewed <time datetime="{rev}">{rev}</time></div>
   </header>"""
 
     verdict = f"""
@@ -432,7 +492,7 @@ def render_page(d):
 
     foot = f"""
   <footer class="colophon">
-    Reviewed <time datetime="{REVIEWED}">{REVIEWED}</time> against vendor documentation — every
+    Reviewed <time datetime="{rev}">{rev}</time> against vendor documentation — every
     comparison-table row and the verdict carry a source. Part of <a href="/">Infra Atlas</a>
     · <a href="/decisions/">Decisions</a>. Spot a stale fact?
     <a href="https://github.com/ineslino/infra-atlas/issues/new" target="_blank" rel="noopener">Open an issue</a>.
