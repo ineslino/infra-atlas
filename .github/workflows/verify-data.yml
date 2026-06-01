@@ -79,6 +79,14 @@ jobs:
       - name: Check landing-page stat chips match data.json
         run: python3 scripts/check_landing_stats.py
 
+      # The hero "N instruments" stat + section header + filter chips are
+      # hand-set in static HTML (JS recomputes the first two at runtime, but
+      # crawlers / social scrapers / no-JS clients see the static values). This
+      # fails if any static count drifts from the real cards — the "21 vs 22"
+      # self-report bug the expert panel flagged.
+      - name: Check homepage instrument count is in sync
+        run: python3 scripts/check_instrument_count.py
+
       # The social-share card (og.png) hard-codes "N instruments" and silently
       # drifted (shipped "16" while the site had 21). This fails if the OG card
       # no longer matches the live instrument count; fix with build_og.py.

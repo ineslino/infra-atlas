@@ -2,7 +2,7 @@
   "_comment": "Curated editorial dispatches — the periodical voice, hand-written. Merged with the auto-detected feed.json at render time (client + RSS) so the daily refresh never clobbers these. Shape mirrors feed.json entries: {ts, instrument, kind, text}. Use instrument:'atlas' + kind:'dispatch' for editorial notes. Newest first by ts.",
   "entries": [
     { "ts": "2026-05-29", "instrument": "atlas", "kind": "dispatch", "text": "New: a public changelog + RSS feed — every cloud change we detect, dated and sourced. Subscribe at /feed.xml." },
-    { "ts": "2026-05-29", "instrument": "atlas", "kind": "dispatch", "text": "New instrument: the Constellation — a visual, navigable map of all 21 instruments at /atlas/." },
+    { "ts": "2026-05-29", "instrument": "atlas", "kind": "dispatch", "text": "New instrument: the Constellation — a visual, navigable map of every instrument at /atlas/." },
     { "ts": "2026-05-28", "instrument": "atlas", "kind": "dispatch", "text": "Two new instruments: the Observability Matrix (cloud-native + managed) and Observability Stacks (self-hosted OSS)." },
     { "ts": "2026-05-28", "instrument": "atlas", "kind": "dispatch", "text": "New: a Testing & Integration toolbox — floci, Testcontainers, Terratest, BATS, Mockoon and Pact." }
   ]

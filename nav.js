@@ -451,7 +451,7 @@
           '<div class="ia-grat__in">'
         +   '<div class="ia-grat__txt">'
         +     '<div class="ia-grat__kick">Free to read · no ads · no vendor money</div>'
-        +     '<p>One of twenty-one instruments, kept current and kept honest by one '
+        +     '<p>One of the instruments in Infra Atlas, kept current and kept honest by one '
         +     'person. If it saved you a detour through the vendor docs, you can '
         +     'help keep the atlas running.</p>'
         +   '</div>'

@@ -3,8 +3,8 @@
 [![Data refresh](https://github.com/ineslino/infra-atlas/actions/workflows/refresh.yml/badge.svg)](https://github.com/ineslino/infra-atlas/actions/workflows/refresh.yml)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
-> A reference periodical of cloud and API-management infrastructure — nineteen
-> instruments covering regions, instance types, API gateways, networking,
+> A reference periodical of cloud and API-management infrastructure: instruments
+> covering regions, instance types, API gateways, networking,
 > egress cost and more, cross-referenced and footnoted.
 
 **Live · <https://infraatlas.dev>**
