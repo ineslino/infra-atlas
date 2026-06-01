@@ -35,6 +35,56 @@
   }
 }
 </script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "Pick HTTP API when",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "You want the lowest cost \u2014 about $1.00 vs $3.50 per million requests. Your needs are Lambda or HTTP proxy integrations with JWT, Lambda or IAM authorization. You do not need API keys, request validation, WAF, caching or private endpoints."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Pick REST API when",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "You need API keys with usage plans for per-client throttling and quotas. You need AWS WAF, a private (VPC-only) endpoint, or request validation. You need body transformation, response caching, or an edge-optimized endpoint."
+      }
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Infra Atlas",
+      "item": "https://infraatlas.dev/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Decisions",
+      "item": "https://infraatlas.dev/decisions/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "REST API or HTTP API?",
+      "item": "https://infraatlas.dev/decisions/rest-api-vs-http-api/"
+    }
+  ]
+}
+</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@300;400;500;600&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet">

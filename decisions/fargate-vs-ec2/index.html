@@ -35,6 +35,56 @@
   }
 }
 </script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "Pick Fargate when",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "You want to focus on the application and not provision, patch or scale servers. Workloads are variable \u2014 you would rather pay per task-second than for idle instances. You are starting with containers, or you need strong per-task isolation."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Pick the EC2 launch type when",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "You run large, steady, high-utilisation workloads that must be price-optimised. You need GPUs, privileged containers, the DAEMON strategy, or bridge/host networking. You need custom AMIs, specific instance types, or host-level access."
+      }
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Infra Atlas",
+      "item": "https://infraatlas.dev/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Decisions",
+      "item": "https://infraatlas.dev/decisions/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "Fargate or EC2 for ECS?",
+      "item": "https://infraatlas.dev/decisions/fargate-vs-ec2/"
+    }
+  ]
+}
+</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@300;400;500;600&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet">

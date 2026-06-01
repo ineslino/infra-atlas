@@ -35,6 +35,56 @@
   }
 }
 </script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "Pick App Engine when",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "You have a stateless web app or HTTP API in a supported language and want to deploy code, not servers. Traffic is spiky \u2014 autoscaling absorbs it, and Standard can scale to zero between bursts. You want minimal ops: no VM lifecycle, no instance groups, no networking setup."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Pick Compute Engine when",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "You need root/SSH, a specific OS, kernel modules, or software App Engine will not host. The workload is not a web app \u2014 databases, batch/HPC, GPU/TPU, long-running daemons. You need full VPC control or fine-grained machine sizing and cost levers."
+      }
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Infra Atlas",
+      "item": "https://infraatlas.dev/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Decisions",
+      "item": "https://infraatlas.dev/decisions/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "App Engine or Compute Engine?",
+      "item": "https://infraatlas.dev/decisions/app-engine-vs-compute-engine/"
+    }
+  ]
+}
+</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@300;400;500;600&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet">

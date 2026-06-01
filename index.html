@@ -29,7 +29,15 @@
   "name": "Infra Atlas",
   "url": "https://infraatlas.dev/",
   "description": "A neutral, free reference for cloud and API-management infrastructure — instance types, regions, API gateways, networking and egress cost, cross-referenced across AWS, Azure, GCP, OCI and OVH.",
-  "inLanguage": "en"
+  "inLanguage": "en",
+  "potentialAction": {
+    "@type": "SearchAction",
+    "target": {
+      "@type": "EntryPoint",
+      "urlTemplate": "https://infraatlas.dev/?q={search_term_string}"
+    },
+    "query-input": "required name=search_term_string"
+  }
 }
 </script>
 

@@ -35,6 +35,56 @@
   }
 }
 </script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "Pick Aurora when",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "You need MySQL or PostgreSQL with fast (~30 s) failover and high availability. You need many low-lag read replicas, or a multi-region Global Database. Your workload is spiky \u2014 Serverless v2 pauses to near-zero compute cost."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Pick standard RDS when",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "You need MariaDB, Oracle, SQL Server or Db2 \u2014 Aurora supports none of them. You run a small, steady workload where simple instance + volume pricing is cheaper. You want a straightforward EBS-backed model with predictable provisioned IOPS."
+      }
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Infra Atlas",
+      "item": "https://infraatlas.dev/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Decisions",
+      "item": "https://infraatlas.dev/decisions/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "Aurora or RDS?",
+      "item": "https://infraatlas.dev/decisions/aurora-vs-rds/"
+    }
+  ]
+}
+</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@300;400;500;600&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet">

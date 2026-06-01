@@ -35,6 +35,64 @@
   }
 }
 </script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "Pick NAT Gateway when",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Private workloads need general outbound internet \u2014 it is the AWS-recommended default. You want zero maintenance and built-in per-AZ redundancy. Traffic is moderate-to-high and the per-GB charge is acceptable."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Pick a NAT instance when",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "You need port forwarding, which a NAT Gateway does not support. You want one instance to also serve as a bastion / jump host. Egress is tiny and infrequent, where a small instance undercuts the gateway."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Skip NAT entirely when",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Private workloads only reach S3 or DynamoDB \u2014 use a free Gateway endpoint. Egress is only to other AWS services \u2014 Interface endpoints usually undercut NAT. The workload is genuinely public \u2014 put it in a public subnet behind an internet gateway."
+      }
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Infra Atlas",
+      "item": "https://infraatlas.dev/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Decisions",
+      "item": "https://infraatlas.dev/decisions/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "NAT gateway, NAT instance or no NAT?",
+      "item": "https://infraatlas.dev/decisions/nat-gateway-vs-instance-vs-no-nat/"
+    }
+  ]
+}
+</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@300;400;500;600&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet">

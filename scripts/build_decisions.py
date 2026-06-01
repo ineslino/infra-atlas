@@ -408,6 +408,7 @@ def seo_title(d):
 def render_page(d):
     q = plain_title(d)
     rev = d.get("reviewed", REVIEWED)
+    # TechArticle (main page type)
     ld = json.dumps({
         "@context": "https://schema.org",
         "@type": "TechArticle",
@@ -419,6 +420,27 @@ def render_page(d):
         "inLanguage": "en",
         "isPartOf": {"@type": "WebSite", "name": "Infra Atlas",
                      "url": "https://infraatlas.dev/"},
+    }, indent=2).replace("<", "\\u003c")
+    # FAQPage — each "Pick X when" block maps to a Q&A (picks the search snippet)
+    faq_items = [
+        {"@type": "Question", "name": heading,
+         "acceptedAnswer": {"@type": "Answer", "text": " ".join(bullets)}}
+        for heading, bullets in d["pick"]
+    ]
+    ld_faq = json.dumps({
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": faq_items,
+    }, indent=2).replace("<", "\\u003c")
+    # BreadcrumbList — helps SERPs show the hierarchy
+    ld_bc = json.dumps({
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+            {"@type": "ListItem", "position": 1, "name": "Infra Atlas", "item": "https://infraatlas.dev/"},
+            {"@type": "ListItem", "position": 2, "name": "Decisions", "item": "https://infraatlas.dev/decisions/"},
+            {"@type": "ListItem", "position": 3, "name": q, "item": f"https://infraatlas.dev/decisions/{d['slug']}/"},
+        ],
     }, indent=2).replace("<", "\\u003c")
     head = f"""<!DOCTYPE html>
 <html lang="en">
@@ -442,6 +464,12 @@ def render_page(d):
 <meta name="twitter:image" content="{OG_IMAGE}">
 <script type="application/ld+json">
 {ld}
+</script>
+<script type="application/ld+json">
+{ld_faq}
+</script>
+<script type="application/ld+json">
+{ld_bc}
 </script>
 {FONTS}
 <link rel="stylesheet" href="/decisions/decision.css">

@@ -35,6 +35,56 @@
   }
 }
 </script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "Pick Cloud Run when",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Traffic is spiky \u2014 scale to zero and pay only per request. You are starting a new project \u2014 Google recommends it as the default. You need GPUs, fast deploys, or percentage-based traffic splitting."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Pick App Engine Flexible when",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "You need VM-level control \u2014 SSH into the Compute Engine VM for debugging. Your app must run inside the Compute Engine network. You have an existing Flexible app and migration cost outweighs modernising now."
+      }
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Infra Atlas",
+      "item": "https://infraatlas.dev/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Decisions",
+      "item": "https://infraatlas.dev/decisions/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "Cloud Run or App Engine Flexible?",
+      "item": "https://infraatlas.dev/decisions/cloud-run-vs-app-engine-flex/"
+    }
+  ]
+}
+</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@300;400;500;600&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet">

@@ -35,6 +35,64 @@
   }
 }
 </script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "Reach for an API gateway when",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "You publish APIs and need API keys, usage plans and quotas. You need managed auth and request transformation without running code. You manage APIs as products via OpenAPI, stages and SDKs."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Reach for a reverse proxy when",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "You need full control of routing, rewriting, caching or static content. You want a portable, vendor-neutral intermediary \u2014 on-prem, multi-cloud, or a sidecar. Your needs sit between a plain load balancer and a gateway, and you will operate it."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Reach for a load balancer when",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "The goal is spreading traffic across healthy targets for availability. You need L4 throughput and static IPs (NLB) or L7 path routing (ALB). You want a managed, health-checked entry point without API-product features."
+      }
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Infra Atlas",
+      "item": "https://infraatlas.dev/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Decisions",
+      "item": "https://infraatlas.dev/decisions/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "API gateway, proxy or load balancer?",
+      "item": "https://infraatlas.dev/decisions/api-gateway-vs-proxy-vs-load-balancer/"
+    }
+  ]
+}
+</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@300;400;500;600&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet">

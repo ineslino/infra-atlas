@@ -35,6 +35,64 @@
   }
 }
 </script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "Pick App Service when",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "You have a web app, REST API or mobile back end in a supported language. You want deployment slots, CI/CD and managed certificates without orchestration. Traffic is steady and predictable \u2014 scale-to-zero is not required."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Pick Container Apps when",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "You run containerised microservices or event-driven jobs and want scale-to-zero. You want KEDA autoscaling, Dapr, and revision-based blue/green. You want Kubernetes patterns without managing a cluster or its API."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Pick Virtual Machines when",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "You need full OS control, or must run software no PaaS supports. You are doing a like-for-like lift-and-shift of an existing workload. You run specialty workloads \u2014 SAP, Oracle, HPC, or your own Kubernetes."
+      }
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Infra Atlas",
+      "item": "https://infraatlas.dev/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Decisions",
+      "item": "https://infraatlas.dev/decisions/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "App Service, Container Apps or a VM?",
+      "item": "https://infraatlas.dev/decisions/azure-app-service-vs-container-apps-vs-vm/"
+    }
+  ]
+}
+</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@300;400;500;600&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet">

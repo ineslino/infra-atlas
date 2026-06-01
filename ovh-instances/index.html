@@ -21,6 +21,37 @@
 <meta name="twitter:title" content="OVH · Instance Catalogue · Infra Atlas">
 <meta name="twitter:description" content="Every OVHcloud instance range, charted against the regions that offer it. Ranges, vCPU, memory, architecture — filterable, cross-referenced, updated daily.">
 <meta name="twitter:image" content="https://infraatlas.dev/og.png?v=3">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Dataset",
+  "name": "OVH Instance Catalogue",
+  "description": "OVHcloud Public Cloud instance ranges \u2014 vCPU, memory, price. Updated daily from OVHcloud's public catalogue.",
+  "url": "https://infraatlas.dev/ovh-instances/",
+  "license": "https://creativecommons.org/licenses/by/4.0/",
+  "creator": {
+    "@type": "Organization",
+    "name": "Infra Atlas",
+    "url": "https://infraatlas.dev/"
+  },
+  "keywords": [
+    "OVHcloud",
+    "OVH",
+    "cloud instances",
+    "European cloud"
+  ],
+  "distribution": [
+    {
+      "@type": "DataDownload",
+      "encodingFormat": "application/json",
+      "contentUrl": "https://infraatlas.dev/ovh-instances/data.json",
+      "name": "OVH Instance Catalogue (JSON, CORS-enabled)"
+    }
+  ],
+  "isAccessibleForFree": true,
+  "temporalCoverage": "2024/.."
+}
+</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@300;400;500;600&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet">

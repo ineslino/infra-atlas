@@ -18,6 +18,26 @@
 <meta name="twitter:title" content="The Data · API · Infra Atlas">
 <meta name="twitter:description" content="Every Infra Atlas data instrument publishes its dataset as a public, CORS-enabled data.json. Free, no key.">
 <meta name="twitter:image" content="https://infraatlas.dev/og.png?v=3">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "DataCatalog",
+  "name": "Infra Atlas Data API",
+  "url": "https://infraatlas.dev/api/",
+  "description": "CORS-enabled, free, no-key JSON datasets for cloud infrastructure — EC2, Azure VM, GCP, OCI, OVH compute, regions and egress cost. Updated daily from public APIs.",
+  "license": "https://creativecommons.org/licenses/by/4.0/",
+  "creator": { "@type": "Organization", "name": "Infra Atlas", "url": "https://infraatlas.dev/" },
+  "dataset": [
+    { "@type": "Dataset", "name": "EC2 Observatory", "url": "https://infraatlas.dev/ec2/data.json", "description": "AWS regions and EC2 instance families — vCPU, memory, on-demand price, storage, network, GPU.", "encodingFormat": "application/json", "license": "https://creativecommons.org/licenses/by/4.0/" },
+    { "@type": "Dataset", "name": "Region Map", "url": "https://infraatlas.dev/regions/data.json", "description": "Cities and cloud regions across AWS, Azure, GCP, OCI and OVH — all partitions.", "encodingFormat": "application/json", "license": "https://creativecommons.org/licenses/by/4.0/" },
+    { "@type": "Dataset", "name": "Azure VM Atlas", "url": "https://infraatlas.dev/azure-vm/data.json", "description": "Azure VM series and sizes — vCPU, memory and live Retail-API price.", "encodingFormat": "application/json", "license": "https://creativecommons.org/licenses/by/4.0/" },
+    { "@type": "Dataset", "name": "GCP Compute Index", "url": "https://infraatlas.dev/gcp-compute/data.json", "description": "Google Cloud machine families and types — vCPU, memory.", "encodingFormat": "application/json", "license": "https://creativecommons.org/licenses/by/4.0/" },
+    { "@type": "Dataset", "name": "OCI Compute Observatory", "url": "https://infraatlas.dev/oci-compute/data.json", "description": "Oracle Cloud compute shapes — OCPU, memory and computed price.", "encodingFormat": "application/json", "license": "https://creativecommons.org/licenses/by/4.0/" },
+    { "@type": "Dataset", "name": "OVH Instance Catalogue", "url": "https://infraatlas.dev/ovh-instances/data.json", "description": "OVHcloud Public Cloud instance ranges — vCPU, memory, price.", "encodingFormat": "application/json", "license": "https://creativecommons.org/licenses/by/4.0/" },
+    { "@type": "Dataset", "name": "Egress Cost Map", "url": "https://infraatlas.dev/egress/data.json", "description": "Data-transfer list prices across AWS, Azure and GCP — internet egress, cross-AZ, cross-region, NAT and interconnect.", "encodingFormat": "application/json", "license": "https://creativecommons.org/licenses/by/4.0/" }
+  ]
+}
+</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@300;400;500;600&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet">
