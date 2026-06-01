@@ -47,12 +47,23 @@ def counts(data):
 
 
 def card_block(html, inst):
-    """The landing card <a … href="./<inst>/"> … </a> for one instrument."""
-    start = html.find(f'href="./{inst}/"')
-    if start == -1:
-        return None
-    end = html.find("</a>", start)
-    return html[start:end] if end != -1 else None
+    """The landing instrument card <a class="instrument…" href="./<inst>/"> … </a>.
+
+    Must match the instrument CARD, not an incidental link to the same page
+    (e.g. a hero quick-link), which would otherwise shadow the card and hide
+    its stat chips — the first href="./ec2/" is the hero "EC2 Observatory"
+    link, the card is further down.
+    """
+    needle = f'href="./{inst}/"'
+    pos = 0
+    while True:
+        i = html.find(needle, pos)
+        if i == -1:
+            return None
+        if 'class="instrument' in html[max(0, i - 80):i]:  # enclosing <a> is a card
+            end = html.find("</a>", i)
+            return html[i:end] if end != -1 else None
+        pos = i + len(needle)
 
 
 def main():
