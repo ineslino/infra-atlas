@@ -1,5 +1,5 @@
 {
-  "generated": "2026-06-01T11:50:30Z",
+  "generated": "2026-06-01T22:54:55Z",
   "cities": [
     {
       "city": "Hillsboro",
@@ -425,6 +425,13 @@
           "name": "Toronto",
           "az": 1,
           "since": 2019
+        },
+        {
+          "p": "ovh",
+          "code": "TOR",
+          "name": "Toronto",
+          "az": 1,
+          "since": 2024
         }
       ]
     },
@@ -459,7 +466,7 @@
         },
         {
           "p": "ovh",
-          "code": "BHS5",
+          "code": "BHS",
           "name": "Beauharnois",
           "az": 1,
           "since": 2013
@@ -846,8 +853,8 @@
         },
         {
           "p": "ovh",
-          "code": "UK1",
-          "name": "London",
+          "code": "ERI",
+          "name": "Erith",
           "az": 1,
           "since": 2017
         }
@@ -1018,8 +1025,8 @@
         },
         {
           "p": "ovh",
-          "code": "DE",
-          "name": "Frankfurt",
+          "code": "LIM",
+          "name": "Limburg",
           "az": 1,
           "since": 2016
         }
@@ -1213,13 +1220,6 @@
           "p": "oci",
           "code": "eu-madrid-3",
           "name": "Madrid 3",
-          "az": 1,
-          "since": 2025
-        },
-        {
-          "p": "ovh",
-          "code": "MAD",
-          "name": "Madrid",
           "az": 1,
           "since": 2025
         }

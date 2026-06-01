@@ -1173,7 +1173,7 @@ a.masthead__eyebrow:hover .masthead__eyebrow-arrow { transform: translateX(-4px)
     </div>
     <div>
       <h5>Data source</h5>
-      <p>Curated from each vendor's public regions page. AWS positions cross-checked with <code>aws ec2 describe-regions</code>. Some location coordinates are approximate (vendors don't publish exact lat/lng for security reasons). OVHcloud is mapped at its 14 Public Cloud regions — its 30-plus Local Zones, a separate finer-grained edge tier, aren't charted here.</p>
+      <p>Curated from each vendor's public regions page. AWS positions cross-checked with <code>aws ec2 describe-regions</code>. Some location coordinates are approximate (vendors don't publish exact lat/lng for security reasons). OVHcloud is mapped at its 15 Public Cloud regions — its 30-plus Local Zones, a separate finer-grained edge tier, aren't charted here.</p>
     </div>
     <div>
       <h5>Shortcuts</h5>
@@ -1289,13 +1289,14 @@ let CITIES = [
   { city: "Toronto", area: "Americas", country: "Canada", flag: "🇨🇦", lat: 43.65, lng: -79.38, regions: [
     { p: "azure", code: "canadacentral", name: "Canada Central", az: 3, since: 2016 },
     { p: "gcp",   code: "northamerica-northeast2", name: "Toronto", az: 3, since: 2021 },
-    { p: "oci",   code: "ca-toronto-1", name: "Toronto",       az: 1, since: 2019 }
+    { p: "oci",   code: "ca-toronto-1", name: "Toronto",       az: 1, since: 2019 },
+    { p: "ovh",   code: "TOR",         name: "Toronto",       az: 1, since: 2024 }
   ]},
   { city: "Montreal", area: "Americas", country: "Canada", flag: "🇨🇦", lat: 45.50, lng: -73.57, regions: [
     { p: "aws", code: "ca-central-1", name: "Canada Central", az: 3, since: 2016 },
     { p: "gcp", code: "northamerica-northeast1", name: "Montréal", az: 3, since: 2018 },
     { p: "oci", code: "ca-montreal-1", name: "Montreal",    az: 1, since: 2018 },
-    { p: "ovh", code: "BHS5",          name: "Beauharnois", az: 1, since: 2013 }
+    { p: "ovh", code: "BHS",           name: "Beauharnois", az: 1, since: 2013 }
   ]},
   { city: "Quebec City", area: "Americas", country: "Canada", flag: "🇨🇦", lat: 46.81, lng: -71.21, regions: [
     { p: "azure", code: "canadaeast", name: "Canada East", az: 3, since: 2016 }
@@ -1362,7 +1363,7 @@ let CITIES = [
     { p: "azure", code: "uksouth",       name: "UK South",        az: 3, since: 2016 },
     { p: "gcp",   code: "europe-west2",  name: "London",          az: 3, since: 2017 },
     { p: "oci",   code: "uk-london-1",   name: "London",          az: 3, since: 2018 },
-    { p: "ovh",   code: "UK1",           name: "London",          az: 1, since: 2017 }
+    { p: "ovh",   code: "ERI",           name: "Erith",           az: 1, since: 2017 }
   ]},
   { city: "Cardiff / Newport", area: "Europe", country: "United Kingdom", flag: "🇬🇧", lat: 51.48, lng: -3.18, regions: [
     { p: "azure", code: "ukwest",      name: "UK West",   az: 3, since: 2016 },
@@ -1390,7 +1391,7 @@ let CITIES = [
     { p: "azure", code: "germanywestcentral",   name: "Germany West Central", az: 3, since: 2020 },
     { p: "gcp",   code: "europe-west3",         name: "Frankfurt",            az: 3, since: 2017 },
     { p: "oci",   code: "eu-frankfurt-1",       name: "Frankfurt",            az: 3, since: 2018 },
-    { p: "ovh",   code: "DE",                   name: "Frankfurt",            az: 1, since: 2016 }
+    { p: "ovh",   code: "LIM",                  name: "Limburg",              az: 1, since: 2016 }
   ]},
   { city: "Berlin", area: "Europe", country: "Germany", flag: "🇩🇪", lat: 52.52, lng: 13.41, regions: [
     { p: "azure", code: "germanynorth", name: "Germany North", az: 1, since: 2020 }
@@ -1421,8 +1422,7 @@ let CITIES = [
     { p: "azure", code: "spaincentral",   name: "Spain Central", az: 3, since: 2024 },
     { p: "gcp",   code: "europe-southwest1", name: "Madrid",   az: 3, since: 2022 },
     { p: "oci",   code: "eu-madrid-1",    name: "Madrid",       az: 1, since: 2022 },
-    { p: "oci",   code: "eu-madrid-3",    name: "Madrid 3",     az: 1, since: 2025 },
-    { p: "ovh",   code: "MAD",            name: "Madrid",       az: 1, since: 2025 }
+    { p: "oci",   code: "eu-madrid-3",    name: "Madrid 3",     az: 1, since: 2025 }
   ]},
   { city: "Stockholm", area: "Europe", country: "Sweden", flag: "🇸🇪", lat: 59.33, lng: 18.07, regions: [
     { p: "aws",   code: "eu-north-1",      name: "Stockholm",       az: 3, since: 2018 },

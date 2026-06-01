@@ -1,6 +1,6 @@
 {
   "_comment": "Verified region code set per provider. Commercial / standard-partition GA regions only — see docs/data-policy.md. Regenerate with `python3 scripts/check_region_drift.py --update` ONLY after re-verifying against the source URLs below.",
-  "verified": "2026-05-17",
+  "verified": "2026-06-01",
   "sources": {
     "aws": "https://docs.aws.amazon.com/global-infrastructure/latest/regions/aws-regions.html",
     "azure": "https://learn.microsoft.com/en-us/azure/reliability/regions-list",
@@ -10,11 +10,11 @@
   },
   "expected": {
     "ovh": [
-      "BHS5",
-      "DE",
+      "BHS",
+      "ERI",
       "GRA",
       "HIL",
-      "MAD",
+      "LIM",
       "MIL",
       "MUM",
       "PAR",
@@ -22,7 +22,7 @@
       "SBG",
       "SGP",
       "SYD",
-      "UK1",
+      "TOR",
       "VIN",
       "WAW"
     ],
