@@ -38,8 +38,32 @@
 <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@300;400;500;600&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/assets/feed.css">
 <link rel="alternate" type="application/rss+xml" title="Infra Atlas · What Changed" href="/feed.xml">
-<script src="/assets/three.min.js" defer></script>
-<script src="/globe.js" defer></script>
+<!-- Globe: lazy-loaded — only on desktop, no reduced-motion, no data-saver.
+     Saves 166 KB (Brotli) per first visit on mobile + reduced-motion users.
+     globe.js has its own THREE===undefined + WebGL guard as a safety net. -->
+<script>
+(function () {
+  'use strict';
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  if (window.innerWidth <= 768) return;
+  if (navigator.connection && navigator.connection.saveData) return;
+  function load() {
+    var t = document.createElement('script');
+    t.src = '/assets/three.min.js';
+    t.onload = function () {
+      var g = document.createElement('script');
+      g.src = '/globe.js';
+      document.head.appendChild(g);
+    };
+    document.head.appendChild(t);
+  }
+  if (typeof requestIdleCallback === 'function') {
+    requestIdleCallback(load, { timeout: 4000 });
+  } else {
+    setTimeout(load, 400);
+  }
+})();
+</script>
 
 <style>
 :root {
