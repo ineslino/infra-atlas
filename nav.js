@@ -140,6 +140,9 @@
   }, {
     href: "/about/", name: "About the Methodology", vendor: "About",
     group: "", keywords: "about methodology sourcing how data enters verified reviewed tiers tier 1 2 3 trust credibility open source guards ci freshness policy"
+  }, {
+    href: "/data-layer/", name: "Data Layer Equivalence — databases & storage", vendor: "Cross-cloud",
+    group: "", keywords: "data layer database managed relational postgresql mysql aurora alloydb nosql redis memcached dynamodb cosmos firestore cassandra object storage s3 blob gcs equivalent cross-cloud"
   }];
   function pushGroup(arr, label) {
     arr.forEach(function (it) {

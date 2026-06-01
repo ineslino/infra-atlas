@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="color-scheme" content="dark">
+<title>Cross-Cloud · Data Layer Equivalence Matrix · Infra Atlas</title>
+<link rel="icon" href="/favicon.svg?v=2" type="image/svg+xml">
+<meta name="description" content="Managed relational databases, NoSQL stores and object storage compared across AWS, Azure, GCP and OCI — the cloud data layer with the asterisks intact. Which provider has managed Cassandra? Who offers PostgreSQL-compatible Aurora-style engines? Where does serverless NoSQL actually scale to zero?">
+<link rel="canonical" href="https://infraatlas.dev/data-layer/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Infra Atlas">
+<meta property="og:title" content="Cross-Cloud · Data Layer Equivalence Matrix · Infra Atlas">
+<meta property="og:description" content="Managed relational, NoSQL and object storage across AWS, Azure, GCP and OCI — every managed database service compared, with the asterisks intact.">
+<meta property="og:url" content="https://infraatlas.dev/data-layer/">
+<meta property="og:image" content="https://infraatlas.dev/og.png?v=3">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Cross-Cloud · Data Layer Equivalence Matrix · Infra Atlas">
+<meta name="twitter:description" content="Managed relational, NoSQL and object storage across AWS, Azure, GCP and OCI — with the asterisks intact.">
+<meta name="twitter:image" content="https://infraatlas.dev/og.png?v=3">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "TechArticle",
+  "headline": "Cloud Data Layer Equivalence Matrix",
+  "description": "Managed relational databases, NoSQL stores and object storage compared across AWS, Azure, GCP and OCI — sourced, dated, with the asterisks intact.",
+  "url": "https://infraatlas.dev/data-layer/",
+  "datePublished": "2026-06-02",
+  "dateModified": "2026-06-02",
+  "inLanguage": "en",
+  "isPartOf": { "@type": "WebSite", "name": "Infra Atlas", "url": "https://infraatlas.dev/" }
+}
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@300;400;500;600&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/matrix.css?v=3">
+</head>
+<body>
+<div class="grain"></div>
+<div class="scanlines"></div>
+<div class="page">
+
+  <header class="masthead">
+    <a class="eyebrow" href="/"><span class="arrow">←</span> Infra Atlas</a>
+    <div class="masthead__tags">
+      <span class="tag">Cross-cloud</span>
+      <span class="tag">Data &amp; storage</span>
+    </div>
+    <h1 class="masthead__title">Data Layer <em>Equivalence</em></h1>
+    <p class="masthead__sub">Managed relational, NoSQL, and object storage compared across the four major clouds — where they match, where they diverge, and where one provider genuinely has no equivalent.</p>
+    <div class="masthead__meta">
+      <div class="status-time">Verified · <time datetime="2026-06-02">2026-06-02</time></div>
+      <div class="masthead__counts">
+        <div>Providers<strong id="count-vendors">4</strong></div>
+        <div>Features<strong id="count-features">—</strong></div>
+        <div>Footnotes<strong id="count-stars">—</strong></div>
+      </div>
+    </div>
+  </header>
+
+  <div class="related-bar" id="related-bar"></div>
+  <div class="sources-note">Every cell cites a primary vendor documentation source — click any cell for the note + link.</div>
+
+  <div class="readnote">
+    <span class="readnote__mark">*</span>
+    <p class="readnote__text">
+      <strong>What this is not:</strong> this is not a performance benchmark, a pricing calculator, or a recommendation engine. It is an <em>equivalence map</em> — it tells you what managed service in Cloud B is the closest structural match to the one you use in Cloud A, and where the match breaks down. For pricing, use the <a href="/egress/">Egress Cost Map</a> and the compute observatories. For decisions ("Aurora or RDS?"), see <a href="/decisions/">Decisions</a>.
+    </p>
+  </div>
+
+  <div class="filter-controls">
+    <div class="filter-search">
+      <label for="search" class="sr-only">Search features, product names, or clouds</label>
+      <input id="search" type="search" autocomplete="off" spellcheck="false" placeholder="Filter — search by feature, product name, cloud…" aria-label="Search features, product names, or clouds">
+    </div>
+    <div class="filter-chips" id="cat-chips"></div>
+    <div class="filter-chips" id="vendor-chips"></div>
+  </div>
+
+  <div class="sr-only" id="filter-status" role="status" aria-live="polite"></div>
+
+  <div class="matrix-wrap" id="matrix-wrap">
+    <table class="matrix" id="matrix" aria-label="Cloud data layer equivalence matrix"></table>
+  </div>
+  <div class="matrix-empty" id="matrix-empty" role="status" aria-live="polite">
+    <strong>No rows match your filters.</strong> Try broadening the search or switching to "All" categories.
+  </div>
+
+  <!-- ──── RELATED ──── -->
+  <section class="crosslinks-section">
+    <div class="sec-label">Related instruments</div>
+    <div class="crosslinks">
+      <a href="/equivalent-sku/">Equivalent-SKU — compute shape matching</a>
+      <a href="/networking-matrix/">Networking Primitives</a>
+      <a href="/iam-matrix/">IAM Model Comparison</a>
+      <a href="/decisions/aurora-vs-rds/">Decision: Aurora vs RDS</a>
+      <a href="/egress/">Egress Cost Map</a>
+    </div>
+  </section>
+
+  <footer class="colophon">
+    <p>Instrument of <a href="/">Infra Atlas</a>. Data verified 2026-06-02 against vendor documentation — every cell links its source. Spotted a stale fact? <a href="https://github.com/ineslino/infra-atlas/issues/new" target="_blank" rel="noopener">Open an issue</a>.</p>
+  </footer>
+
+</div>
+
+<!-- DRAWER -->
+<div class="drawer-backdrop" id="drawer-backdrop"></div>
+<aside class="drawer" id="drawer" role="dialog" aria-modal="true" aria-labelledby="drawer-title" aria-hidden="true">
+  <div class="drawer__inner" id="drawer-inner"></div>
+</aside>
+
+<script>
+'use strict';
+var $ = function(s) { return document.querySelector(s); };
+var $$ = function(s) { return document.querySelectorAll(s); };
+function escapeHtml(s) {
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+// ───────────────────────────────────────────────────────────────────
+// DATA
+// ───────────────────────────────────────────────────────────────────
+const VENDORS = [
+  { key: "aws",   name: "Amazon Web Services", short: "AWS",   cloud: "AWS",    swatch: "#FF9F66" },
+  { key: "azure", name: "Microsoft Azure",     short: "Azure", cloud: "Azure",  swatch: "#7CD7F1" },
+  { key: "gcp",   name: "Google Cloud",        short: "GCP",   cloud: "Google", swatch: "#F4C660" },
+  { key: "oci",   name: "Oracle Cloud",        short: "OCI",   cloud: "Oracle", swatch: "#F47B7B" }
+];
+
+const CATEGORIES = [
+  { key: "relational", label: "Managed relational" },
+  { key: "nosql",      label: "Managed NoSQL & cache" },
+  { key: "object",     label: "Object storage" }
+];
+
+const FEATURES = [
+
+  // ══ Managed relational ══
+  { id:"db-postgres", category:"relational", name:"Managed PostgreSQL", desc:"Fully managed PostgreSQL — no engine patching, automated backups, HA.",
+    support: { aws: {level:"yes", value:"RDS for PostgreSQL", note:"Amazon RDS for PostgreSQL manages patching, automated backups, Multi-AZ HA, and PITR. Supports current community PostgreSQL versions.", src:"https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/CHAP_PostgreSQL.html"}, azure: {level:"yes", value:"Azure DB for PostgreSQL Flexible Server", note:"Fully managed with automated patching, zone-redundant HA (synchronous standby), automated backups, and PITR. Supports multiple community PostgreSQL major versions.", src:"https://learn.microsoft.com/en-us/azure/postgresql/flexible-server/overview"}, gcp: {level:"yes", value:"Cloud SQL for PostgreSQL", note:"Fully managed PostgreSQL with automated patching, synchronous HA standby in a second zone, automated backups, read replicas, and PITR. Google manages all infrastructure.", src:"https://docs.cloud.google.com/sql/docs/postgres"}, oci: {level:"yes", value:"OCI Database with PostgreSQL", note:"Fully managed PostgreSQL-compatible service with automated backups (up to 35-day retention), multi-node HA with automatic failover, and read replicas. Supports PostgreSQL 17.", src:"https://docs.oracle.com/en-us/iaas/Content/postgresql/overview.htm"} } },
+  { id:"db-mysql", category:"relational", name:"Managed MySQL", desc:"Fully managed MySQL — no engine patching, automated backups, HA.",
+    support: { aws: {level:"yes", value:"RDS for MySQL", note:"Amazon RDS for MySQL manages patching, backups, Multi-AZ synchronous HA, and PITR. Supports MySQL 5.7 and 8.0.", src:"https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/CHAP_MySQL.html"}, azure: {level:"yes", value:"Azure DB for MySQL Flexible Server", note:"Fully managed MySQL Community Edition (5.7, 8.0) with automated patching, zone-redundant or same-zone HA, automated backups, read replicas (up to 10), and PITR.", src:"https://learn.microsoft.com/en-us/azure/mysql/flexible-server/overview"}, gcp: {level:"yes", value:"Cloud SQL for MySQL", note:"Fully managed MySQL with automated patching, synchronous HA standby, automated backups, read replicas (up to 10 recommended), and PITR.", src:"https://docs.cloud.google.com/sql/docs/mysql"}, oci: {level:"yes", value:"MySQL HeatWave", note:"Fully managed MySQL Enterprise Edition (8.0+) service developed by the Oracle MySQL team. Includes automated backup, patching, and HA. Adds in-database analytics via HeatWave cluster.", src:"https://docs.oracle.com/en-us/iaas/mysql-database/doc/overview-mysql-heatwave-service.html"} } },
+  { id:"db-sqlserver", category:"relational", name:"Managed SQL Server", desc:"Microsoft SQL Server as a managed service.",
+    support: { aws: {level:"yes", value:"RDS for SQL Server", note:"Supports SQL Server 2016–2022 (Express, Web, Standard, Enterprise editions). AWS manages patching, backups, and Multi-AZ HA via DBM or Always On AGs. PITR supported.", src:"https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/CHAP_SQLServer.html"}, azure: {level:"yes", value:"Azure SQL Database", note:"Azure SQL Database is a fully managed SQL Server engine (latest stable version, always patched). Multiple service tiers (General Purpose, Business Critical, Hyperscale). Native Microsoft offering.", src:"https://learn.microsoft.com/en-us/azure/azure-sql/database/sql-database-paas-overview"}, gcp: {level:"yes", value:"Cloud SQL for SQL Server", note:"Fully managed SQL Server with automated patching, HA standby, PITR, and read replicas. Supports SQL Server 2019 and 2022 editions (Standard, Enterprise).", src:"https://docs.cloud.google.com/sql/docs/sqlserver/introduction"}, oci: {level:"no", value:"Not offered", note:"OCI has no native managed SQL Server database service. SQL Server workloads require self-managed deployment on OCI compute or use of Oracle Database services.", src:"https://docs.oracle.com/en-us/iaas/Content/postgresql/overview.htm"} } },
+  { id:"db-compat-postgres", category:"relational", name:"PostgreSQL-compatible engine", desc:"A proprietary engine that speaks the PostgreSQL wire protocol — usually higher performance or scale. Not the same as managed PostgreSQL.",
+    support: { aws: {level:"yes", value:"Aurora PostgreSQL", note:"Aurora PostgreSQL is a proprietary cloud-native engine that is drop-in compatible with PostgreSQL. Uses shared distributed storage (6 copies across 3 AZs), claims up to 3x PostgreSQL throughput, and supports Aurora-specific features (global database, Serverless v2, Parallel Query). Not standard upstream PostgreSQL.", src:"https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/Aurora.AuroraPostgreSQL.html"}, azure: {level:"no", value:"Not offered", note:"Azure has no proprietary PostgreSQL-compatible engine. Azure Database for PostgreSQL Flexible Server runs community PostgreSQL. Azure SQL Database is T-SQL/SQL Server, not PostgreSQL-compatible.", src:"https://learn.microsoft.com/en-us/azure/postgresql/flexible-server/overview"}, gcp: {level:"yes", value:"AlloyDB for PostgreSQL", note:"AlloyDB is a proprietary PostgreSQL-compatible engine with a custom columnar storage engine for HTAP workloads, disaggregated compute and storage, adaptive autovacuum, and built-in index advisor. Claims 4x faster OLTP and 100x faster analytics than standard PostgreSQL on equivalent hardware.", src:"https://docs.cloud.google.com/alloydb/docs/overview"}, oci: {level:"no", value:"Not offered", note:"OCI Database with PostgreSQL runs standard community PostgreSQL and is described as \'PostgreSQL-compatible\' without documented proprietary engine extensions beyond managed infrastructure. There is no distinct higher-performance proprietary PostgreSQL-wire-protocol engine.", src:"https://docs.oracle.com/en-us/iaas/Content/postgresql/overview.htm"} } },
+  { id:"db-ha-standby", category:"relational", name:"Multi-AZ / HA standby", desc:"Synchronous standby in a second AZ for automatic failover without data loss.",
+    support: { aws: {level:"yes", value:"RDS Multi-AZ", note:"RDS Multi-AZ deploys a synchronous standby in a second AZ. Writes are committed to both AZs before acknowledged. Aurora uses 6-copy shared storage across 3 AZs by default with automatic failover in ~30 s.", src:"https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Concepts.MultiAZ.html"}, azure: {level:"yes", value:"Zone-redundant HA", note:"Azure Database for PostgreSQL and MySQL Flexible Servers offer zone-redundant HA with a synchronous warm standby across AZs (zero data loss). Azure SQL Database Business Critical uses Always On-like technology with synchronous replicas. Same-zone HA is also available for regions without AZs.", src:"https://learn.microsoft.com/en-us/azure/postgresql/flexible-server/overview"}, gcp: {level:"yes", value:"Regional HA", note:"Cloud SQL HA uses synchronous disk replication to both zones; all writes are committed to both before acknowledgment, RPO=0. AlloyDB uses synchronous WAL writes to a regional log persistor across zones, also RPO=0. Failover is automatic in both cases.", src:"https://docs.cloud.google.com/sql/docs/postgres/high-availability"}, oci: {level:"part", value:"Multi-node, async metadata", note:"MySQL HeatWave HA uses 3-node configuration with synchronous replication and automatic failover (zero data loss). OCI Database with PostgreSQL multi-node uses asynchronous metadata replication with RPO=0 and RTO <2 min per Oracle SLA, but replication is documented as asynchronous at the metadata layer — data durability relies on shared regional block volumes.", src:"https://docs.oracle.com/en-us/iaas/Content/postgresql/high-availability.htm"} } },
+  { id:"db-read-replicas", category:"relational", name:"Read replicas", desc:"Asynchronous read replicas for horizontal read scaling, typically in the same region.",
+    support: { aws: {level:"yes", value:"Up to 5 (RDS) / 15 (Aurora)", note:"RDS for PostgreSQL and MySQL support up to 5 asynchronous read replicas (cross-region supported). Aurora supports up to 15 Aurora Replicas sharing the same storage, with near-zero replica lag and automatic failover promotion.", src:"https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_PostgreSQL.Replication.ReadReplicas.html"}, azure: {level:"yes", value:"Up to 5 (PG) / 10 (MySQL)", note:"Azure Database for PostgreSQL Flexible Server supports up to 5 asynchronous read replicas (cross-region supported). MySQL Flexible Server supports up to 10 replicas. Azure SQL Database Hyperscale supports up to 30 named read replicas.", src:"https://learn.microsoft.com/en-us/azure/postgresql/flexible-server/concepts-read-replicas"}, gcp: {level:"yes", value:"Up to 10 recommended (Cloud SQL) / Read pool (AlloyDB)", note:"Cloud SQL supports async read replicas (up to 10 recommended direct, with cascading up to 4 levels deep; cross-region supported). AlloyDB uses a read pool of nodes that share storage with the primary, providing horizontally scalable reads with low-latency access.", src:"https://docs.cloud.google.com/sql/docs/postgres/replication"}, oci: {level:"yes", value:"Read replicas (both services)", note:"OCI Database with PostgreSQL supports read replicas sharing regional block volumes; replicas can be promoted to primary. MySQL HeatWave supports read replicas on standard DB systems (not available in Always Free tier).", src:"https://docs.oracle.com/en-us/iaas/Content/postgresql/high-availability.htm"} } },
+  { id:"db-serverless", category:"relational", name:"Serverless / auto-pause option", desc:"Capacity scales to zero when idle, billing stops. Useful for dev/test and intermittent workloads.",
+    support: { aws: {level:"yes", value:"Aurora Serverless v2 (PostgreSQL + MySQL)", note:"Aurora Serverless v2 scales to 0 ACUs (auto-pause) for Aurora PostgreSQL 13.15+/14.12+/15.7+/16.3+ and Aurora MySQL 3.08+. Instance billing stops while paused; storage still billed. Resume latency is typically ~15 s (up to 30 s+ after 24 h pause). Standard RDS has no auto-pause.", src:"https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/aurora-serverless-v2-auto-pause.html"}, azure: {level:"part", value:"Azure SQL Database General Purpose serverless", note:"Azure SQL Database (General Purpose vCore tier) has true serverless auto-pause with configurable delay (min 15 min); compute billing stops to zero when paused. Azure Database for PostgreSQL Flexible Server and MySQL Flexible Server support manual stop/start only (server auto-restarts after 7 days for PG, 30 days for MySQL) — no true auto-pause.", src:"https://learn.microsoft.com/en-us/azure/azure-sql/database/serverless-tier-overview"}, gcp: {level:"no", value:"Not available", note:"Cloud SQL (PostgreSQL, MySQL, SQL Server) has no serverless auto-pause or scale-to-zero option. Instances are always-on provisioned resources. AlloyDB read pools support autoscaling but do not scale to zero. Instances must be manually stopped.", src:"https://docs.cloud.google.com/sql/docs/postgres"}, oci: {level:"no", value:"Not available", note:"Neither OCI MySQL HeatWave nor OCI Database with PostgreSQL offers serverless auto-pause or scale-to-zero for paid tiers. MySQL HeatWave Always Free tier has a fixed small instance with no auto-pause. Manual stop/start is available but not automated by idle detection.", src:"https://docs.oracle.com/en-us/iaas/mysql-database/doc/features-mysql-heatwave-service.html"} } },
+  { id:"db-pitr", category:"relational", name:"Point-in-time restore (PITR)", desc:"Restore to any second within the retention window — not just daily snapshots.",
+    support: { aws: {level:"yes", value:"Any point in retention window", note:"RDS takes transaction log backups approximately every 5 minutes, enabling restore to any point within the retention window (1–35 days). Restore precision is limited by log backup frequency (~5 min granularity in practice). Aurora uses continuous storage snapshots for faster and more precise recovery.", src:"https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_WorkingWithAutomatedBackups.html"}, azure: {level:"yes", value:"Any point in retention window", note:"Azure SQL Database takes transaction log backups approximately every 10 minutes, supporting PITR to any point within 1–35 day retention. Azure Database for PostgreSQL archives WAL continuously with RPO up to ~5 minutes; PITR restores to any point within the retention window (up to 35 days).", src:"https://learn.microsoft.com/en-us/azure/azure-sql/database/automated-backups-overview"}, gcp: {level:"yes", value:"Any point (millisecond precision)", note:"Cloud SQL PITR uses RFC 3339 timestamps with millisecond precision for both PostgreSQL and MySQL, within the configured retention window (up to 35 days). AlloyDB supports PITR to microsecond precision within the recovery window.", src:"https://docs.cloud.google.com/sql/docs/postgres/backup-recovery/pitr"}, oci: {level:"part", value:"MySQL HeatWave yes (~5 min); OCI PG no", note:"MySQL HeatWave supports PITR via binary log archival every 5 minutes — RPO is approximately 5 minutes, not per-second. OCI Database with PostgreSQL currently supports restore only to existing backup points (daily/weekly/monthly snapshots); no continuous WAL-based PITR is documented.", src:"https://docs.oracle.com/en-us/iaas/mysql-database/doc/point-time-recovery.html"} } },
+
+  // ══ Managed NoSQL & cache ══
+  { id:"nosql-kv", category:"nosql", name:"Managed key-value store (Redis-compatible)", desc:"Managed Redis or Valkey-compatible in-memory store. Not Redis OSS self-hosted.",
+    support: { aws: {level:"yes", value:"ElastiCache (Valkey / Redis OSS)", note:"Amazon ElastiCache supports Valkey 7.2+, Redis OSS 7.x, and Memcached. Valkey (BSD-licensed Linux Foundation fork of Redis 7.2) is the strategic direction; priced 20-33% lower than Redis OSS engine. Both self-designed node clusters and a serverless option (instant scale, per-GB-per-hour billing) are available. Valkey 8.1 is latest supported as of 2026.", src:"https://aws.amazon.com/elasticache/"}, azure: {level:"yes", value:"Azure Managed Redis (Redis Enterprise)", note:"Azure Managed Redis (GA) is built on Redis Enterprise software (Redis 7.4.x) with four tiers: Memory Optimized, Balanced, Compute Optimized, and Flash Optimized (preview). The older Azure Cache for Redis (Redis OSS) is retiring September 30 2028; Enterprise tier retires March 2027. Active geo-replication supported on the three in-memory tiers. No Memcached support.", src:"https://learn.microsoft.com/en-us/azure/redis/overview"}, gcp: {level:"yes", value:"Memorystore for Valkey / Redis Cluster", note:"Memorystore for Valkey is GA and the strategic product: fully managed, scales to 250 nodes and up to 14.5 TB, zero-downtime scaling, RDB+AOF persistence, single- or multi-zone. Memorystore for Redis (standalone) also available but Valkey is recommended for new workloads. Both are not self-hosted.", src:"https://cloud.google.com/memorystore"}, oci: {level:"yes", value:"OCI Cache (Valkey 8.1 / Redis 7.0)", note:"OCI Cache is a managed service supporting Valkey 8.1 (recommended), Valkey 7.2, and Redis 7.0. Supports non-sharded clusters (1-5 nodes) and sharded clusters (3-99 shards). Fully managed patching, failover, and auto-replacement. No Memcached support.", src:"https://docs.oracle.com/en-us/iaas/Content/ocicache/overview.htm"} } },
+  { id:"nosql-document", category:"nosql", name:"Managed document store (MongoDB-compatible)", desc:"MongoDB-compatible document database as a managed service — not self-hosted MongoDB.",
+    support: { aws: {level:"part", value:"DocumentDB (MongoDB API-compatible)", note:"Amazon DocumentDB is a managed document database with MongoDB API compatibility (supports MongoDB 3.6, 4.0, 5.0, and 8.0 wire protocol). Importantly, it does NOT run MongoDB code internally — it emulates the API on a proprietary engine. Most standard CRUD and aggregation operations work, but some MongoDB-specific features (e.g., change streams, certain operators) have caveats. Serverless option available.", src:"https://docs.aws.amazon.com/documentdb/latest/devguide/what-is.html"}, azure: {level:"yes", value:"Cosmos DB for MongoDB / Managed Instance", note:"Azure Cosmos DB for MongoDB API (CQL v4 wire-protocol, vCore and RU-based architectures) provides a fully managed MongoDB-compatible service. For lift-and-shift requiring 100% open-source Cassandra compatibility, Azure Managed Instance for Apache Cassandra (note: this row is document, not Cassandra — Cosmos DB for MongoDB covers the document case). Supports multi-region writes, serverless mode, and global distribution across all Azure regions.", src:"https://learn.microsoft.com/en-us/azure/cosmos-db/mongodb/overview"}, gcp: {level:"part", value:"Firestore with MongoDB compatibility (GA Aug 2025)", note:"Firestore with MongoDB compatibility became GA in August 2025. It exposes a MongoDB wire protocol endpoint over Firestore\'s native serverless document store. Supports 200+ MongoDB capabilities, 16 MiB documents, ACID transactions. However, it runs on Firestore\'s engine (not MongoDB), and behavior differences exist (see docs). Available as Firestore Enterprise edition. MongoDB Atlas on GCP is the fully native alternative.", src:"https://cloud.google.com/blog/products/databases/firestore-with-mongodb-compatibility-is-now-ga"}, oci: {level:"part", value:"Autonomous JSON DB (MongoDB API)", note:"Oracle Autonomous JSON Database exposes the Oracle Database API for MongoDB, allowing MongoDB drivers to connect to an Autonomous Database. It is NOT running MongoDB — it is Oracle\'s proprietary engine with a MongoDB-compatible wire protocol layer. Provides ACID transactions, auto-scaling, and Oracle-specific features like spatial and analytics. Fully managed.", src:"https://www.oracle.com/autonomous-database/autonomous-json-database/"} } },
+  { id:"nosql-wide-column", category:"nosql", name:"Managed wide-column (Cassandra-compatible)", desc:"Managed Apache Cassandra-compatible wide-column store.",
+    support: { aws: {level:"part", value:"Amazon Keyspaces (CQL-compatible, not full Cassandra)", note:"Amazon Keyspaces is serverless, CQL-compatible (CQL v3.11), and accepts existing Cassandra drivers. However it runs on a proprietary backend — not Apache Cassandra code. Some Cassandra features are unsupported: logged batches, lightweight transactions with multi-region writes, SASI indexes, CREATE FUNCTION/TRIGGER/AGGREGATE, and others. Scales automatically with on-demand or provisioned capacity.", src:"https://docs.aws.amazon.com/keyspaces/latest/devguide/what-is-keyspaces.html"}, azure: {level:"yes", value:"Cosmos DB Cassandra API + Managed Instance for Cassandra", note:"Two products: (1) Azure Cosmos DB for Apache Cassandra — CQL v3.11-compatible managed service with Cosmos DB global distribution, but runs proprietary engine with known gaps (no ALTER ROLE, no CREATE FUNCTION, GRANT/REVOKE, LWT unsupported with multi-region writes). (2) Azure Managed Instance for Apache Cassandra — runs pure open-source Cassandra (up to 5.0) on managed VMs; 100% compatible. Use Managed Instance for full compatibility.", src:"https://learn.microsoft.com/en-us/azure/managed-instance-apache-cassandra/introduction"}, gcp: {level:"part", value:"Bigtable (wide-column, CQL via community proxy)", note:"Cloud Bigtable is a managed wide-column store (HBase lineage, not Cassandra-native). Google provides a community-supported Cassandra-to-Bigtable proxy adapter (open-source, hosted on GoogleCloudPlatform GitHub) that translates CQL to Bigtable APIs — this is NOT an official GA product. For native Cassandra, Google recommends self-managing Cassandra on GKE or using a partner (DataStax, ScyllaDB). No native CQL support.", src:"https://cloud.google.com/bigtable/docs/cloud-bigtable-for-cassandra-users"}, oci: {level:"no", value:"No managed Cassandra service", note:"Oracle Cloud Infrastructure does not offer a managed Cassandra-compatible service as a first-party product. Self-hosting Apache Cassandra on OCI Compute instances is documented and supported with reference architectures. Oracle NoSQL Database Cloud Service uses its own key-value / table model (not CQL-compatible). No equivalent to Amazon Keyspaces or Azure Cosmos DB Cassandra API.", src:"https://docs.oracle.com/en/solutions/ha-cassandra-cluster/index.html"} } },
+  { id:"nosql-global-table", category:"nosql", name:"Multi-region active-active replication", desc:"Write to any region, data automatically replicated globally with conflict resolution. Highest-tier of availability.",
+    support: { aws: {level:"yes", value:"DynamoDB Global Tables", note:"DynamoDB Global Tables (v2, 2019.11.21) is a fully managed multi-active architecture: every replica in every region accepts reads and writes simultaneously. Conflict resolution uses last-writer-wins (per-item timestamp) for eventual consistency (MREC), or synchronous multi-region strong consistency (MRSC, same-account only). Cross-account support added February 2026. 99.999% availability SLA.", src:"https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/GlobalTables.html"}, azure: {level:"yes", value:"Cosmos DB multi-region writes", note:"Azure Cosmos DB supports true active-active (multi-region writes) across all its APIs (NoSQL, MongoDB, Cassandra, Gremlin, Table). Every write region accepts writes simultaneously; conflict resolution is configurable (last-writer-wins or custom merge procedures). 99.999% read/write availability SLA. Can be enabled on existing accounts without downtime.", src:"https://learn.microsoft.com/en-us/azure/cosmos-db/multi-region-writes"}, gcp: {level:"part", value:"Spanner multi-region (leader-based, not active-active)", note:"Cloud Spanner multi-region configurations replicate data across regions with 99.999% SLA, but writes are always processed at the leader replica first — it is NOT a true active-active architecture. Client writes must travel to the leader region, which adds latency for non-leader regions. Firestore multi-region provides strongly consistent replication but similarly routes through a leader. No GCP-native NoSQL service matches DynamoDB Global Tables or Cosmos DB multi-region writes for true any-region writes.", src:"https://docs.cloud.google.com/spanner/docs/replication"}, oci: {level:"yes", value:"OCI NoSQL Global Active Tables", note:"Oracle NoSQL Database Cloud Service Global Active Tables enables true active-active multi-region replication: read and write the same record from any region at any time. Changes propagate asynchronously with last-writer-wins conflict resolution and CRDT support for counters. Fully managed — no custom replication code required. Available via API, Terraform, or console.", src:"https://docs.oracle.com/en/cloud/paas/nosql-cloud/gasnd/"} } },
+  { id:"nosql-serverless-nosql", category:"nosql", name:"Serverless NoSQL (auto-scale to zero)", desc:"NoSQL that scales to zero on idle — no provisioned capacity floor.",
+    support: { aws: {level:"yes", value:"DynamoDB on-demand mode", note:"DynamoDB on-demand mode is pay-per-request with no provisioned throughput floor. When traffic is zero, throughput charges are zero. Storage is charged separately per GB-month regardless of traffic, but there is no minimum RCU/WCU charge. AWS explicitly markets DynamoDB as \'scale-to-zero serverless\'. DocumentDB Serverless and Keyspaces on-demand also offer similar models.", src:"https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/on-demand-capacity-mode.html"}, azure: {level:"yes", value:"Cosmos DB serverless", note:"Azure Cosmos DB serverless mode (available for NoSQL, MongoDB, Cassandra, Gremlin, and Table APIs) has no minimum throughput charge — you pay only for RUs consumed and storage. At zero traffic, throughput cost is zero. Container maximum is 5,000 RU/s; not suitable for high-scale sustained workloads (use autoscale provisioned instead). True scale-to-zero for throughput costs.", src:"https://learn.microsoft.com/en-us/azure/cosmos-db/serverless"}, gcp: {level:"yes", value:"Firestore (serverless, no provisioned floor)", note:"Cloud Firestore is inherently serverless with no provisioned capacity to configure. Billing is purely on reads, writes, deletes, and storage consumed. At zero operations, cost is zero (excluding stored data). Scales from zero to millions of concurrent clients without configuration. Firestore in Native and Datastore mode are both included.", src:"https://cloud.google.com/products/firestore"}, oci: {level:"part", value:"OCI NoSQL on-demand (pay-per-use, storage not zero)", note:"Oracle NoSQL Database Cloud Service on-demand pricing has no minimum read/write capacity to provision and charges only for actual read/write units consumed. However, stored data incurs a per-GB-month storage charge that persists even at zero traffic. Oracle states \'no minimum commitments\' for throughput, but storage is always billed. Effectively scales to zero for compute/throughput costs but not total cost.", src:"https://docs.oracle.com/en-us/iaas/releasenotes/changes/6d343eb6-5a43-419c-b1fd-1c93304030df/index.htm"} } },
+  { id:"cache-managed", category:"nosql", name:"Managed in-memory cache (Memcached-compatible)", desc:"Managed Memcached-compatible cache. Simpler than Redis — no persistence, no replication.",
+    support: { aws: {level:"yes", value:"ElastiCache for Memcached (incl. serverless)", note:"Amazon ElastiCache for Memcached is a fully managed Memcached-compatible service supporting Memcached 1.6.22+. Both self-designed node clusters and ElastiCache Serverless (instant scale, no infrastructure management) are available. ElastiCache Serverless for Memcached also adds high availability features not native to Memcached. TLS in transit supported.", src:"https://docs.aws.amazon.com/AmazonElastiCache/latest/dg/WhatIs.html"}, azure: {level:"no", value:"No managed Memcached service", note:"Azure has no first-party managed Memcached offering. Azure Managed Redis (the current recommended product) is Redis-only (Redis Enterprise). The legacy Azure Managed Cache Service and In-Role Cache (which supported the Memcache protocol) were retired years ago. Azure Cache for Redis (OSS) is Redis-only and retiring in 2028. No Memcached-compatible managed service exists on Azure today.", src:"https://azure.microsoft.com/en-us/blog/azure-managed-cache-and-in-role-cache-service-shutdown-reminder/"}, gcp: {level:"part", value:"Memorystore for Memcached (deprecated, shutdown Jan 2029)", note:"Memorystore for Memcached exists but is deprecated: no longer recommended as of January 20 2026; new instance creation restricted in new projects after February 1 2027; full shutdown January 31 2029. Google recommends migrating to Memorystore for Valkey. Existing instances continue until shutdown date. New workloads should not rely on this service.", src:"https://docs.cloud.google.com/memorystore/docs/memcached/deprecation/memcached"}, oci: {level:"no", value:"No managed Memcached service", note:"OCI Cache (the managed caching service) supports only Valkey (8.1, 7.2) and Redis 7.0 — no Memcached. Oracle documentation covers self-deploying Memcached on OCI Compute instances but there is no managed Memcached-compatible PaaS offering. Oracle Coherence supports the Memcached wire protocol but is a separate enterprise in-memory grid product, not a managed cloud cache.", src:"https://docs.oracle.com/en-us/iaas/Content/ocicache/overview.htm"} } },
+
+  // ══ Object storage ══
+  { id:"obj-s3-api", category:"object", name:"S3-compatible API", desc:"The service speaks the Amazon S3 REST API — third-party tools that target S3 work without modification.",
+    support: { aws: {level:"yes", value:"Native S3 API", note:"S3 is the origin of the API. All S3 REST operations are natively supported — the API version dates to 2006-03-01 and is continuously extended.", src:"https://docs.aws.amazon.com/AmazonS3/latest/API/Welcome.html"}, azure: {level:"no", value:"No S3 API", note:"Azure Blob Storage exposes only its own REST API (latest version 2026-04-06). No native S3 compatibility layer exists. Third-party gateways (e.g. Flexify.IO) are required for S3 tooling.", src:"https://learn.microsoft.com/en-us/answers/questions/1183760/s3-api-support-over-azure-blob-storage"}, gcp: {level:"part", value:"XML API interop", note:"GCS XML API is interoperable with many S3 tools via endpoint swap (storage.googleapis.com) and HMAC keys. Core object and bucket operations work, but not all S3 features (e.g. no S3 ACL parity, no request-level x-amz-* header parity for every operation).", src:"https://docs.cloud.google.com/storage/docs/interoperability"}, oci: {level:"part", value:"S3 Compat API", note:"Supported operations cover bucket CRUD, object CRUD, multipart uploads, and tagging via SigV4. Gaps include no chunked-encoding uploads (aws-chunked), no server-side file copies (s3fs), and random/partial writes are unsupported. Virtual-hosted style access is now supported.", src:"https://docs.oracle.com/en-us/iaas/Content/Object/Tasks/s3compatibleapi_topic-Amazon_S3_Compatibility_API_Support.htm"} } },
+  { id:"obj-versioning", category:"object", name:"Object versioning", desc:"Keep previous versions of an object on every overwrite or delete. Enables recovery from accidental overwrites.",
+    support: { aws: {level:"yes", value:"S3 Versioning", note:"Versioning must be explicitly enabled per bucket. Once enabled it can only be suspended, not disabled. Each version is stored as a full copy (not a diff), which affects storage costs. Delete markers are used instead of hard deletes.", src:"https://docs.aws.amazon.com/AmazonS3/latest/userguide/Versioning.html"}, azure: {level:"yes", value:"Blob versioning", note:"Available for general-purpose v2, premium block blob, and legacy Blob Storage accounts. Versions are immutable. Microsoft recommends keeping fewer than 1,000 versions per blob. Required as a prerequisite for object replication.", src:"https://learn.microsoft.com/en-us/azure/storage/blobs/versioning-overview"}, gcp: {level:"yes", value:"Object Versioning", note:"Enabled per bucket; retains noncurrent versions on each overwrite or delete of a live object. Combine with Object Lifecycle Management to delete noncurrent versions automatically. GCS also offers soft delete as an alternative for bucket-level protection.", src:"https://docs.cloud.google.com/storage/docs/object-versioning"}, oci: {level:"yes", value:"Object Versioning", note:"Three states: disabled (default), enabled, suspended. Once enabled it cannot be fully disabled, only suspended. Versioning is mutually exclusive with bucket-level retention rules. Previous versions cannot be replicated via the replication feature.", src:"https://docs.oracle.com/en-us/iaas/Content/Object/Tasks/usingversioning.htm"} } },
+  { id:"obj-lifecycle", category:"object", name:"Lifecycle rules (auto-tier / expiry)", desc:"Automatically transition objects to cheaper storage tiers or expire them after N days.",
+    support: { aws: {level:"yes", value:"S3 Lifecycle", note:"Supports transition actions (Standard → Standard-IA → Intelligent-Tiering → Glacier Instant → Glacier Flexible → Deep Archive) and expiration actions. Minimum storage duration charges apply when expiring objects from IA tiers before the minimum age.", src:"https://docs.aws.amazon.com/AmazonS3/latest/userguide/object-lifecycle-mgmt.html"}, azure: {level:"yes", value:"Lifecycle management", note:"Rule-based policies move block blobs between hot, cool, cold, and archive tiers or delete them. Policies apply within 24 hours of going into effect. Cannot rehydrate archived blobs via lifecycle rules. Page blobs and append blobs are not supported.", src:"https://learn.microsoft.com/en-us/azure/storage/blobs/lifecycle-management-overview"}, gcp: {level:"yes", value:"Object Lifecycle", note:"Rule-based conditions (age, number of newer versions, storage class, etc.) trigger actions (SetStorageClass, Delete). Autoclass is a complementary access-pattern-driven feature and cannot be combined with SetStorageClass lifecycle rules on the same bucket.", src:"https://docs.cloud.google.com/storage/docs/lifecycle"}, oci: {level:"yes", value:"Lifecycle policies", note:"Rules can abort uncommitted multipart uploads, move objects to Infrequent Access or Archive, or delete objects. Auto-Tiering and lifecycle rules that transition to Infrequent Access are mutually exclusive on the same bucket.", src:"https://docs.oracle.com/en-us/iaas/Content/Object/Tasks/usinglifecyclepolicies.htm"} } },
+  { id:"obj-replication", category:"object", name:"Cross-region replication", desc:"Automatically replicate objects to a bucket in another region for DR or latency.",
+    support: { aws: {level:"yes", value:"S3 CRR / SRR", note:"Cross-Region Replication (CRR) and Same-Region Replication (SRR) are both supported. Requires versioning enabled on source and destination. S3 Replication Time Control (RTC) offers a 15-minute SLA for 99.99% of objects.", src:"https://docs.aws.amazon.com/AmazonS3/latest/userguide/replication.html"}, azure: {level:"yes", value:"Object replication", note:"Asynchronous block-blob replication between any Azure regions, including non-paired regions. Requires versioning and change feed enabled on source; versioning on destination. Max 2 destination accounts per source. Snapshots and ADLS Gen2 hierarchical namespaces are not supported.", src:"https://learn.microsoft.com/en-us/azure/storage/blobs/object-replication-overview"}, gcp: {level:"part", value:"Dual-region / cross-bucket", note:"GCS does not support arbitrary cross-bucket replication with a per-object RPO SLA in single-region buckets. Turbo replication (15-min RPO SLA) is available for dual-region buckets only. Cross-bucket replication via Storage Transfer Service is available but offers no RPO guarantee.", src:"https://docs.cloud.google.com/storage/docs/managing-turbo-replication"}, oci: {level:"yes", value:"Replication policy", note:"Objects written after policy creation are asynchronously replicated. Pre-existing objects are not replicated. Destination bucket is read-only once a policy is active. SSE-C encrypted objects cannot be replicated.", src:"https://docs.oracle.com/en-us/iaas/Content/Object/Tasks/usingreplication.htm"} } },
+  { id:"obj-event", category:"object", name:"Event notifications on put/delete", desc:"Trigger a function or queue message on object create/delete — core serverless pattern.",
+    support: { aws: {level:"yes", value:"S3 Event Notifications", note:"Supports SNS, SQS (standard queues only — not FIFO), Lambda, and EventBridge as destinations. EventBridge enables fan-out to additional targets. Each notification configuration specifies a single destination type.", src:"https://docs.aws.amazon.com/AmazonS3/latest/userguide/EventNotifications.html"}, azure: {level:"yes", value:"Event Grid integration", note:"Blob Storage emits events to Azure Event Grid on blob create, replace, and delete. Recommended trigger for Azure Functions is the event-based (Event Grid) blob trigger with sub-second latency. Only StorageV2, BlockBlobStorage, and BlobStorage account kinds are supported.", src:"https://learn.microsoft.com/en-us/azure/storage/blobs/storage-blob-event-overview"}, gcp: {level:"yes", value:"Pub/Sub notifications", note:"Up to 100 notification configurations per bucket (max 10 per event type). Supports object create, delete, archive, and metadata update events. Eventarc and Cloud Run functions consume Pub/Sub messages. Notifications may fail if the originating region is excluded by a Pub/Sub message storage policy.", src:"https://docs.cloud.google.com/storage/docs/pubsub-notifications"}, oci: {level:"part", value:"OCI Events rules", note:"Object Storage events (create, update, delete) are supported but must be explicitly enabled per bucket — they are off by default. Event rules can route to OCI Functions, Streaming, or Notifications. Requires an additional setup step compared to AWS/GCP where events are always available.", src:"https://docs.oracle.com/en-us/iaas/Content/Events/Concepts/eventsoverview.htm"} } },
+  { id:"obj-encryption-cmk", category:"object", name:"Customer-managed encryption keys (CMK)", desc:"Encrypt objects with keys the customer manages in a KMS — not just the provider's default managed keys.",
+    support: { aws: {level:"yes", value:"SSE-KMS", note:"SSE-KMS uses AWS KMS customer-managed keys for envelope encryption. KMS key must be in the same region as the bucket. S3 Bucket Keys reduce per-request KMS API costs. SSE-C (customer-provided keys per request) is also available as an alternative.", src:"https://docs.aws.amazon.com/AmazonS3/latest/userguide/UsingKMSEncryption.html"}, azure: {level:"yes", value:"CMK via Key Vault", note:"Customer-managed keys stored in Azure Key Vault or Managed HSM wrap the account\'s data encryption key. Supports RSA and RSA-HSM keys of 2048, 3072, or 4096 bits. Key Vault must have soft delete and purge protection enabled. Revoking the key immediately blocks all read/write operations.", src:"https://learn.microsoft.com/en-us/azure/storage/common/customer-managed-keys-overview"}, gcp: {level:"yes", value:"CMEK via Cloud KMS", note:"CMEK keys must be in the same location as the bucket. Supports Cloud KMS Autokey for on-demand key provisioning. All keys are 256-bit AES-GCM symmetric. Customer-supplied encryption keys (CSEK) are also available per request.", src:"https://docs.cloud.google.com/storage/docs/encryption/customer-managed-keys"}, oci: {level:"yes", value:"CMK via OCI Vault", note:"Bucket encryption can use a master encryption key from OCI Vault (KMS) instead of Oracle-managed keys. External KMS (EKMS) integration is available for keys managed outside OCI in a third-party HSM. FIPS 140-2 Level 3 HSMs are supported.", src:"https://docs.oracle.com/en-us/iaas/Content/KeyManagement/Concepts/keyoverview.htm"} } },
+  { id:"obj-lock", category:"object", name:"Object Lock / WORM", desc:"Write-once-read-many compliance mode — objects cannot be deleted or overwritten for a retention period.",
+    support: { aws: {level:"yes", value:"S3 Object Lock", note:"Two retention modes: Compliance (no user, including root, can delete or shorten retention) and Governance (privileged users can override). Legal hold is also supported independently of retention periods. Assessed by Cohasset Associates for SEC 17a-4, CFTC, and FINRA compliance.", src:"https://docs.aws.amazon.com/AmazonS3/latest/userguide/object-lock.html"}, azure: {level:"yes", value:"Immutable storage", note:"Supports time-based retention policies and legal holds at container or version scope. Cohasset-validated for SEC 17a-4(f), CFTC 1.31(d), and FINRA. Container-level WORM or the more granular version-level WORM are both available for different compliance needs.", src:"https://learn.microsoft.com/en-us/azure/storage/blobs/immutable-storage-overview"}, gcp: {level:"yes", value:"Object Retention Lock", note:"Per-object retain-until timestamp with two modes: unlocked (governance, can be shortened) and locked (compliance, retention can only be extended, not reduced or removed — irreversible). Bucket Lock provides a bucket-wide alternative. Maximum retention is 100 years.", src:"https://docs.cloud.google.com/storage/docs/object-lock"}, oci: {level:"yes", value:"Retention rules", note:"Time-bound and indefinite (legal hold) retention rules. Rules apply to all objects in a bucket. Locking a rule is irreversible — even Oracle Support cannot delete it. A mandatory 14-day delay before a rule can be locked provides a grace period. Cohasset-validated for SEC 17a-4(f), FINRA 4511(c), CFTC 1.31(c)-(d), and MiFID II.", src:"https://docs.oracle.com/en-us/iaas/Content/Object/Tasks/usingretentionrules.htm"} } },
+  { id:"obj-intelligent-tier", category:"object", name:"Intelligent tiering (auto cost optimisation)", desc:"Automatically moves infrequently accessed objects to cheaper storage classes without manual lifecycle rules.",
+    support: { aws: {level:"yes", value:"S3 Intelligent-Tiering", note:"Objects not accessed for 30 days move to Infrequent Access; after 90 days to Archive Instant Access. Optional Deep Archive tiers available. No retrieval charges. Objects under 128 KB are ineligible for auto-tiering and remain in Frequent Access. Small per-object monitoring charge applies.", src:"https://docs.aws.amazon.com/AmazonS3/latest/userguide/intelligent-tiering.html"}, azure: {level:"yes", value:"Smart tier (GA*)", note:"GA in most public regions with zone redundancy. Still in Public Preview in Israel Central, Qatar Central, UAE North, Azure Government, and Azure operated by 21Vianet. Moves to cool after 30 days of inactivity, cold after 90 days. Objects under 128 KiB stay in hot. Monthly monitoring fee per 10,000 objects over 128 KiB. Block blobs only; archive tier is not included.", src:"https://learn.microsoft.com/en-us/azure/storage/blobs/access-tiers-smart"}, gcp: {level:"yes", value:"Autoclass", note:"Bucket-level setting. Default terminal class is Nearline; can be configured to extend to Archive. Objects under 128 KiB remain in Standard and are not tiered. No retrieval charges, no early deletion fees, no transition fees within Autoclass. One-time enablement charge when applied to existing buckets.", src:"https://cloud.google.com/storage/docs/autoclass"}, oci: {level:"part", value:"Auto-Tiering (2 tiers)", note:"Auto-Tiering moves objects larger than 1 MiB between Standard and Infrequent Access tiers only — the Archive tier is not included. Objects not accessed for 31 days are demoted; accessed objects are promoted back without retrieval fees. Cannot be combined with lifecycle rules that also target the Infrequent Access tier.", src:"https://docs.oracle.com/en-us/iaas/Content/Object/Tasks/managingbuckets_topic-To_enable_or_disable_auto_tiering.htm"} } },
+
+];
+
+// ───────────────────────────────────────────────────────────────────
+// STATE
+// ───────────────────────────────────────────────────────────────────
+var state = {
+  category: "all",
+  query: "",
+  vendors: new Set(VENDORS.map(v => v.key))
+};
+
+function writeHash() {
+  var p = new URLSearchParams();
+  if (state.category !== "all") p.set("cat", state.category);
+  if (state.query) p.set("q", state.query);
+  var str = p.toString();
+  history.replaceState(null, "", str ? "?" + str : location.pathname);
+}
+
+function applyHash() {
+  var p = new URLSearchParams(location.search);
+  if (p.get("cat")) state.category = p.get("cat");
+  state.query = p.get("q") || "";
+  var allV = state.vendors.size === VENDORS.length;
+  $$('.chip[data-v]').forEach(function(b) {
+    if (b.dataset.v === "all") b.classList.toggle("is-active", allV);
+    else b.classList.toggle("is-active", !allV && state.vendors.has(b.dataset.v));
+  });
+  $$('.chip[data-cat]').forEach(function(b) { b.classList.toggle("is-active", b.dataset.cat === state.category); });
+  var sb = $("#search"); if (sb) sb.value = state.query;
+}
+
+function init() {
+  $("#count-features").textContent = FEATURES.length;
+  var stars = FEATURES.reduce(function(acc, f) {
+    return acc + Object.values(f.support).filter(function(s) { return s.note && s.note.length > 0; }).length;
+  }, 0);
+  $("#count-stars").textContent = stars;
+
+  var catChips = $("#cat-chips");
+  catChips.innerHTML = '<span class="filter-chips__label">Category</span>' +
+    '<button class="chip is-active" data-cat="all" aria-pressed="true">All</button>' +
+    CATEGORIES.map(function(c) { return '<button class="chip" data-cat="' + c.key + '" aria-pressed="false">' + escapeHtml(c.label) + '</button>'; }).join("");
+
+  var vChips = $("#vendor-chips");
+  vChips.innerHTML = '<span class="filter-chips__label">Clouds</span>' +
+    '<button class="chip is-active" data-v="all" aria-pressed="true">All</button>' +
+    VENDORS.map(function(v) { return '<button class="chip" data-v="' + v.key + '" aria-pressed="false"><span class="swatch" style="background:' + v.swatch + '" aria-hidden="true"></span>' + escapeHtml(v.short) + '</button>'; }).join("");
+
+  applyHash();
+  renderMatrix();
+  wireEvents();
+  IA.matrix.syncChipsAria('.chip[data-cat]');
+  IA.matrix.syncChipsAria('.chip[data-v]');
+  window.addEventListener("hashchange", function() { applyHash(); applyFilter(); });
+}
+
+function renderMatrix() {
+  IA.matrix.renderTable({
+    tableEl: $("#matrix"),
+    vendors: VENDORS, categories: CATEGORIES, features: FEATURES,
+    dimensionLabel: "Feature"
+  });
+  applyFilter();
+}
+
+function applyFilter() {
+  var q = state.query.trim().toLowerCase();
+  var table = $("#matrix");
+  VENDORS.forEach(function(v) {
+    table.classList.toggle("hide-" + v.key, !state.vendors.has(v.key));
+  });
+  var anyFilter = !!q || state.category !== "all" || state.vendors.size < VENDORS.length;
+  IA.matrix.applyVisibility({
+    table: table, features: FEATURES, categories: CATEGORIES,
+    isVisibleFn: function(f) {
+      if (state.category !== "all" && f.category !== state.category) return false;
+      if (!q) return true;
+      var cat = (CATEGORIES.find(function(c) { return c.key === f.category; }) || {}).label || "";
+      var vendorHay = VENDORS
+        .filter(function(v) { return state.vendors.has(v.key); })
+        .map(function(v) { var s = f.support[v.key] || {}; return v.name + " " + v.short + " " + v.cloud + " " + (s.value || "") + " " + (s.note || ""); })
+        .join(" ");
+      return (f.name + " " + f.desc + " " + cat + " " + vendorHay).toLowerCase().includes(q);
+    },
+    emptyEl: $("#matrix-empty"),
+    statusEl: $("#filter-status"),
+    statusNoun: "feature",
+    anyFilterActive: anyFilter
+  });
+  writeHash();
+}
+
+function openFeatureDrawer(feature, focusVendor) {
+  var cat = (CATEGORIES.find(function(c) { return c.key === feature.category; }) || {}).label || "";
+  var head = '<button class="drawer__close" type="button" data-action="close-drawer" aria-label="Close (Esc)">✕</button>' +
+    '<div class="drawer__eyebrow">' + escapeHtml(cat) + '</div>' +
+    '<h2 class="drawer__title" id="drawer-title">' + escapeHtml(feature.name) + '</h2>' +
+    '<p class="drawer__desc">' + escapeHtml(feature.desc) + '</p>';
+  var body = '<div class="drawer__section"><h4>Per-cloud detail &amp; sources</h4>' +
+    VENDORS.map(function(v) {
+      var s = feature.support[v.key] || { level: "no", value: "—", note: "" };
+      var sym = s.level === "yes" ? "✓" : s.level === "part" ? "◐" : "✗";
+      var markLabel = s.level === "yes" ? "Supported" : s.level === "part" ? "Partial" : "Not available";
+      var isFocus = focusVendor === v.key;
+      var srcHtml = s.src ? '<div class="vendor-row__src">Source · <a href="' + escapeHtml(s.src) + '" target="_blank" rel="noopener">' + escapeHtml(s.src) + '</a></div>' : "";
+      return '<div class="vendor-row"' + (isFocus ? ' style="border-color:var(--accent);background:rgba(255,120,73,0.05);"' : '') + '>' +
+        '<span class="vendor-row__mark vendor-row__mark--' + s.level + '" role="img" aria-label="' + markLabel + '">' + sym + '</span>' +
+        '<div>' +
+        '<div class="vendor-row__name"><span class="swatch" style="background:' + v.swatch + '" aria-hidden="true"></span>' + escapeHtml(v.name) + '</div>' +
+        '<div class="vendor-row__value vendor-row__value--' + s.level + '">' + escapeHtml(s.value || sym) + '</div>' +
+        '<div class="vendor-row__note">' + escapeHtml(s.note || (s.level === "no" ? "No managed equivalent." : "—")) + '</div>' +
+        srcHtml + '</div></div>';
+    }).join("") + '</div>';
+  IA.matrix.drawer.open(head, body);
+}
+
+function wireEvents() {
+  document.addEventListener("click", function(e) {
+    var c = e.target.closest(".chip[data-cat]");
+    if (c) {
+      state.category = c.dataset.cat;
+      $$('.chip[data-cat]').forEach(function(b) { b.classList.toggle("is-active", b.dataset.cat === state.category); });
+      IA.matrix.syncChipsAria('.chip[data-cat]');
+      applyFilter(); return;
+    }
+    var v = e.target.closest(".chip[data-v]");
+    if (v) {
+      var key = v.dataset.v;
+      if (key === "all") {
+        state.vendors = new Set(VENDORS.map(function(x) { return x.key; }));
+        $$('.chip[data-v]').forEach(function(b) { b.classList.toggle("is-active", b.dataset.v === "all"); });
+      } else {
+        if ($('.chip[data-v="all"]').classList.contains("is-active")) {
+          state.vendors = new Set([key]);
+          $$('.chip[data-v]').forEach(function(b) { b.classList.toggle("is-active", b.dataset.v === key); });
+        } else {
+          if (state.vendors.has(key) && state.vendors.size === 1) {
+            state.vendors = new Set(VENDORS.map(function(x) { return x.key; }));
+            $$('.chip[data-v]').forEach(function(b) { b.classList.toggle("is-active", b.dataset.v === "all"); });
+          } else {
+            state.vendors.has(key) ? state.vendors.delete(key) : state.vendors.add(key);
+            v.classList.toggle("is-active");
+            $('.chip[data-v="all"]').classList.remove("is-active");
+          }
+        }
+      }
+      IA.matrix.syncChipsAria('.chip[data-v]');
+      applyFilter(); return;
+    }
+  });
+  $("#search").addEventListener("input", function(e) { state.query = e.target.value; applyFilter(); });
+  document.addEventListener("keydown", function(e) {
+    if (e.key === "/" && e.target.tagName !== "INPUT") { e.preventDefault(); $("#search").focus(); }
+  });
+  IA.matrix.drawer.init();
+  IA.matrix.wireDelegation(function(featureId, vendorKey) {
+    var f = FEATURES.find(function(x) { return x.id === featureId; });
+    if (f) openFeatureDrawer(f, vendorKey);
+  });
+}
+
+function bootstrap() {
+  if (!window.IA || !window.IA.matrix) { setTimeout(bootstrap, 20); return; }
+  init();
+}
+bootstrap();
+</script>
+<script src="/assets/matrix.js?v=3" defer></script>
+<script src="/nav.js" defer></script>
+</body>
+</html>
