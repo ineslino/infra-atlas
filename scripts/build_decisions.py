@@ -397,6 +397,14 @@ def plain_title(d):
     return d["title"].replace("<em>", "").replace("</em>", "")
 
 
+def seo_title(d):
+    """SEO-friendly title for <title>/og/twitter: replaces ' or ' with ' vs '
+    to match the search intent ("fargate vs ec2", "aurora vs rds") while the
+    H1 keeps the editorial 'or' phrasing.  Applied to generated pages only;
+    hand-authored pages control their own <title>."""
+    return plain_title(d).replace(" or ", " vs ")
+
+
 def render_page(d):
     q = plain_title(d)
     rev = d.get("reviewed", REVIEWED)
@@ -418,18 +426,18 @@ def render_page(d):
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <meta name="color-scheme" content="dark">
-<title>{esc(q)} · Decisions · Infra Atlas</title>
+<title>{esc(seo_title(d))} · Decisions · Infra Atlas</title>
 <link rel="icon" href="/favicon.svg?v=2" type="image/svg+xml">
 <meta name="description" content="{esc(d['sub'])}">
 <link rel="canonical" href="https://infraatlas.dev/decisions/{d['slug']}/">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Infra Atlas">
-<meta property="og:title" content="{esc(q)} · Infra Atlas Decisions">
+<meta property="og:title" content="{esc(seo_title(d))} · Infra Atlas Decisions">
 <meta property="og:description" content="{esc(d['sub'])}">
 <meta property="og:url" content="https://infraatlas.dev/decisions/{d['slug']}/">
 <meta property="og:image" content="{OG_IMAGE}">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="{esc(q)} · Infra Atlas Decisions">
+<meta name="twitter:title" content="{esc(seo_title(d))} · Infra Atlas Decisions">
 <meta name="twitter:description" content="{esc(d['sub'])}">
 <meta name="twitter:image" content="{OG_IMAGE}">
 <script type="application/ld+json">

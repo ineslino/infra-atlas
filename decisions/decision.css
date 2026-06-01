@@ -175,7 +175,7 @@ table.compare td.val { color: var(--paper-2); }
 .dcard__teaser { font-size: 13px; color: var(--paper-2); line-height: 1.5; flex: 1; }
 .dcard__foot {
   font-family: var(--mono); font-size: 10px; letter-spacing: 0.1em;
-  text-transform: uppercase; color: var(--paper-4);
+  text-transform: uppercase; color: var(--paper-3); /* --paper-4 (.20)=1.68:1 failed AA; --paper-3 (.55)=5.6:1 */
 }
 
 @media (max-width: 720px) {

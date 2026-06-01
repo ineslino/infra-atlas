@@ -379,7 +379,7 @@ const FEATURES = [
       aws:     { level:"part", note:"Not native — implement via Cognito User Pool or Lambda authorizer. JWT validation built in." },
       azure:   { level:"yes",  note:"Native OAuth2 with Entra ID, Auth0, Okta, etc. via inbound policies." },
       mulesoft:{ level:"yes",  note:"Built into Anypoint Identity Manager and Anypoint API Manager OAuth provider." },
-      kong:    { level:"yes",  note:"oauth2 plugin (OSS + Enterprise). Konnect adds managed cluster." },
+      kong:    { level:"part", note:"The bundled `oauth2` plugin (OSS) lets Kong act as the auth server issuing tokens. To validate tokens from an external IdP, the `openid-connect` plugin is required — Enterprise-only on Kong Gateway." },
       gravitee:{ level:"yes",  note:"Native — Gravitee AM included as identity manager, or plug external IdP." },
       ibm:     { level:"yes",  note:"Built-in OAuth provider, plus integration with IBM Security Verify." }
     }
@@ -391,7 +391,7 @@ const FEATURES = [
       aws:     { level:"part", note:"Via Cognito Hosted UI; not directly handled by API Gateway itself." },
       azure:   { level:"yes",  note:"Full PKCE support with Entra ID and 3rd-party IdPs." },
       mulesoft:{ level:"yes",  note:"Anypoint OAuth provider supports authorization_code + PKCE." },
-      kong:    { level:"yes",  note:"oauth2 plugin (OSS + Enterprise) or via Konnect Auth." },
+      kong:    { level:"part", note:"Via the `openid-connect` plugin (Enterprise-only) for external IdP + PKCE validation. The bundled `oauth2` plugin (OSS) can issue auth-code tokens with Kong as auth server, but that path is semi-legacy in 2026." },
       gravitee:{ level:"yes",  note:"Gravitee AM native support." },
       ibm:     { level:"yes",  note:"OAuth provider supports authorization_code, refresh, PKCE." }
     }
