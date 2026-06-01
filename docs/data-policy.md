@@ -29,7 +29,7 @@ footprint, not just the slice their own account happens to reach.
 | AWS   | **39** | 34 commercial + 2 GovCloud + 2 China + 1 European Sovereign Cloud |
 | Azure | **67** | 56 commercial + 5 Government + 6 China |
 | GCP   | **43** | 43 commercial — GCP has no separate partitions |
-| OCI   | **55** | 45 commercial + 8 Government + 2 EU Sovereign |
+| OCI   | **55** | 47 commercial + 7 Government + 1 EU Sovereign |
 | OVH   | **15** | 15 Public Cloud regions (OVH's 46 *datacenters* are a separate physical count) |
 
 > Decision (2026-05-16): show all partitions. AWS's public "39 Geographic

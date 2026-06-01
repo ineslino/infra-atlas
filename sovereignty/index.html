@@ -149,7 +149,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, [tabindex]:focus-vis
     </div>
     <aside class="masthead__status">
       <div class="status-line"><span class="status-dot"></span><span class="status-text">Curated · v1</span></div>
-      <div class="status-time">Verified · <time datetime="2026-05-31">2026-05-31</time></div>
+      <div class="status-time">Verified · <time datetime="2026-06-01">2026-06-01</time></div>
       <div class="status-counts">
         <div>Providers<strong id="count-vendors">—</strong></div>
         <div>Dimensions<strong id="count-features">—</strong></div>
@@ -217,7 +217,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, [tabindex]:focus-vis
     </div>
     <div>
       <h5>Sources &amp; method</h5>
-      <p>Every cell cites a primary source — EUR-Lex, ENISA, the CJEU, the US DOJ, and each provider's own pages (ownership/HQ = legal jurisdiction). Sovereignty law and offerings move fast; this is a dated snapshot, <em>verified 2026-05-31</em>, not a live feed. <em>Spot a stale fact? <a href="https://github.com/ineslino/infra-atlas/issues/new" target="_blank" rel="noopener">Open an issue</a>.</em></p>
+      <p>Every cell cites a primary source — EUR-Lex, ENISA, the CJEU, the US DOJ, and each provider's own pages (ownership/HQ = legal jurisdiction). Sovereignty law and offerings move fast; this is a dated snapshot, <em>verified 2026-06-01</em>, not a live feed. <em>Spot a stale fact? <a href="https://github.com/ineslino/infra-atlas/issues/new" target="_blank" rel="noopener">Open an issue</a>.</em></p>
     </div>
     <div>
       <h5>Shortcuts</h5>
@@ -236,9 +236,9 @@ a:focus-visible, button:focus-visible, input:focus-visible, [tabindex]:focus-vis
 <script>
 // ═══════════════════════════════════════════════════════════════════
 // INFRA ATLAS · EUROPEAN SOVEREIGNTY (cloud layer, v1)
-// Curated, dated (2026-05-31). Every cell carries a primary `src`.
+// Curated, dated (2026-06-01). Every cell carries a primary `src`.
 // The headline is the "legal" row: US-parent providers cannot grant legal
-// sovereignty (US CLOUD Act, 18 USC §2703) even from EU "sovereign" regions.
+// sovereignty (US CLOUD Act, 18 USC §2713) even from EU "sovereign" regions.
 // ═══════════════════════════════════════════════════════════════════
 
 const VENDORS = [
@@ -286,12 +286,12 @@ const FEATURES = [
     }
   },
   { id: "legal", category: "juris", name: "Legal sovereignty — immune to non-EU compulsion?",
-    desc: "Can a non-EU government (esp. the US, via the CLOUD Act) compel disclosure? This is the row the marketing pages avoid. Determined by parent-company jurisdiction, not data residency.",
+    desc: "Can a non-EU government (esp. the US, via the CLOUD Act) compel disclosure? This is the row the marketing pages avoid. Determined by who can be compelled to disclose — the parent's jurisdiction and who controls the data (the 'control test') — not data residency alone.",
     support: {
-      awsesc:    { level:"no",   value:"✗ CLOUD Act applies", note:"The US CLOUD Act (18 USC §2703) reaches a US parent and its subsidiaries regardless of where data sits. AWS guarantees EU residency + EU-only access, but makes no claim of immunity from US legal process.", src:S_CLOUDACT },
+      awsesc:    { level:"no",   value:"✗ CLOUD Act applies", note:"The US CLOUD Act (18 USC §2713, added 2018) reaches a US parent and its subsidiaries regardless of where data sits. AWS guarantees EU residency + EU-only access, but makes no claim of immunity from US legal process.", src:S_CLOUDACT },
       azurebleu: { level:"part", value:"◐ structure-dependent", note:"Bleu's French operating structure narrows reach for that offering; Microsoft (US) as technology parent still carries US-law obligations. Stronger than the plain EU Data Boundary, short of EU-parent immunity.", src:S_CLOUDACT },
       s3ns:      { level:"part", value:"◐ Thales-controlled", note:"Thales majority control of S3NS reduces US reach for the French offering; Google (US) remains the technology parent. Short of full EU-parent immunity.", src:S_CLOUDACT },
-      ovh:       { level:"yes",  value:"✓ EU parent", note:"No US jurisdiction over a French parent; disclosure to a non-EU authority requires MLAT / EU legal channels, with EU courts in the loop.", src:S_CLOUDACT },
+      ovh:       { level:"yes",  value:"✓ EU parent", note:"No US jurisdiction over the French parent; disclosure runs through MLAT / EU legal channels. Asterisk (the control test): a provider's US subsidiary — e.g. OVHcloud US — is itself CLOUD-Act-bound for data it controls, so the immunity holds because the EU entity controls EU customer data, not from the parent's nationality alone.", src:S_CLOUDACT },
       scaleway:  { level:"yes",  value:"✓ EU parent", note:"French parent — outside US CLOUD Act jurisdiction; compulsion runs through EU legal channels.", src:S_CLOUDACT },
       ionos:     { level:"yes",  value:"✓ EU parent", note:"German parent — outside US CLOUD Act jurisdiction.", src:S_CLOUDACT },
       stackit:   { level:"yes",  value:"✓ EU parent", note:"German parent (Schwarz Group) — outside US CLOUD Act jurisdiction.", src:S_CLOUDACT },
@@ -303,7 +303,7 @@ const FEATURES = [
     support: {
       awsesc:    { level:"yes",  value:"✓ EU-resident only", note:"GA January 2026. AWS commits to operation exclusively by EU residents in the EU, with technical controls blocking access from outside the EU.", src:S_AWSESC },
       azurebleu: { level:"yes",  value:"✓ FR-operated", note:"Bleu is operated by an EU JV with EU staff; the EU Data Boundary confines processing/support to the EU for the in-scope services.", src:S_EUDB },
-      s3ns:      { level:"yes",  value:"✓ FR-operated", note:"S3NS is operated by the French Thales-controlled entity; the offering targets ANSSI SecNumCloud operational requirements.", src:S_S3NS },
+      s3ns:      { level:"yes",  value:"✓ FR-operated", note:"S3NS is operated by the French Thales-controlled entity; PREMI3NS is SecNumCloud 3.2 qualified (Dec 2025).", src:S_S3NS },
       ovh:       { level:"yes",  value:"✓ EU ops", note:"EU-headquartered with EU operations.", src:S_OVH },
       scaleway:  { level:"yes",  value:"✓ EU ops", note:"EU-headquartered with EU operations.", src:S_SCW },
       ionos:     { level:"yes",  value:"✓ EU ops", note:"German operations.", src:S_IONOS },
@@ -331,10 +331,10 @@ const FEATURES = [
     support: {
       awsesc:    { level:"no",   value:"✗", note:"AWS is not a Gaia-X member in the EU-native sense; the AWS ESC offering is positioned on its own sovereignty controls.", src:S_GAIAX },
       azurebleu: { level:"no",   value:"✗", note:"Not an EU-native Gaia-X member; positioned via Bleu/EU Data Boundary.", src:S_GAIAX },
-      s3ns:      { level:"part", value:"◐", note:"Positioned around French SecNumCloud rather than Gaia-X membership; verify current status.", src:S_GAIAX },
+      s3ns:      { level:"part", value:"◐", note:"Positioned around French SecNumCloud (PREMI3NS) rather than Gaia-X membership.", src:S_GAIAX },
       ovh:       { level:"yes",  value:"✓ founding member", note:"OVHcloud is a founding/active Gaia-X member.", src:S_GAIAX },
-      scaleway:  { level:"part", value:"◐", note:"Engaged with EU sovereignty initiatives; confirm current Gaia-X membership.", src:S_GAIAX },
-      ionos:     { level:"part", value:"◐", note:"Confirm current Gaia-X membership status.", src:S_GAIAX },
+      scaleway:  { level:"no",   value:"✗ left 2021", note:"A founding member, but Scaleway withdrew from the Gaia-X association in Nov 2021, citing dilution by non-EU members.", src:S_GAIAX },
+      ionos:     { level:"yes",  value:"✓ Day-1 member", note:"IONOS is a Gaia-X Day-1 member and consortium lead on flagship projects (e.g. Marispace-X).", src:S_GAIAX },
       stackit:   { level:"yes",  value:"✓ member", note:"STACKIT participates in Gaia-X.", src:S_GAIAX },
       tsystems:  { level:"yes",  value:"✓ member", note:"Deutsche Telekom / T-Systems is an active Gaia-X member.", src:S_GAIAX }
     }
@@ -344,7 +344,7 @@ const FEATURES = [
     support: {
       awsesc:    { level:"part", value:"◐ see Compliance", note:"AWS holds C5; the ESC offering's SecNumCloud posture is evolving. Per-program detail + region scope in the Compliance Footprint.", src:"/compliance/" },
       azurebleu: { level:"part", value:"◐ SecNumCloud (Bleu)", note:"Bleu is positioned for SecNumCloud qualification for the French 'cloud de confiance'. See Compliance Footprint for Azure's broader cert set.", src:"/compliance/" },
-      s3ns:      { level:"yes",  value:"✓ SecNumCloud (target)", note:"S3NS targets ANSSI SecNumCloud — the strictest French scheme. Confirm current qualification status.", src:S_S3NS },
+      s3ns:      { level:"yes",  value:"✓ SecNumCloud 3.2", note:"S3NS's PREMI3NS offering was qualified SecNumCloud 3.2 by ANSSI in Dec 2025 — the strictest French scheme, with explicit immunity-to-non-EU-law criteria.", src:S_S3NS },
       ovh:       { level:"yes",  value:"✓ SecNumCloud (Hosted Private)", note:"OVHcloud holds SecNumCloud for specific offerings (e.g. Hosted Private Cloud); scope varies by service.", src:S_OVH },
       scaleway:  { level:"part", value:"◐ see Compliance", note:"ISO 27001 etc.; check SecNumCloud scope per service in the Compliance Footprint.", src:"/compliance/" },
       ionos:     { level:"part", value:"◐ see Compliance", note:"German BSI-aligned; see Compliance Footprint for current attestations.", src:"/compliance/" },
