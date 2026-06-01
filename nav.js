@@ -137,6 +137,9 @@
   }, {
     href: "/changelog/", name: "The Changelog", vendor: "What Changed",
     group: "", keywords: "changelog what changed feed rss dispatches updates new regions families price changes withdrawn subscribe periodical this week in cloud"
+  }, {
+    href: "/about/", name: "About the Methodology", vendor: "About",
+    group: "", keywords: "about methodology sourcing how data enters verified reviewed tiers tier 1 2 3 trust credibility open source guards ci freshness policy"
   }];
   function pushGroup(arr, label) {
     arr.forEach(function (it) {

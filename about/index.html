@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="color-scheme" content="dark">
+<title>About the Methodology · Infra Atlas</title>
+<link rel="icon" href="/favicon.svg?v=2" type="image/svg+xml">
+<meta name="description" content="How a claim enters Infra Atlas: the sourcing rules, data tiers, freshness policy, and what 'reviewed' actually means. The methodology is the trust signal.">
+<link rel="canonical" href="https://infraatlas.dev/about/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Infra Atlas">
+<meta property="og:title" content="About the Methodology · Infra Atlas">
+<meta property="og:description" content="How a claim enters Infra Atlas — sourcing rules, data tiers, freshness policy. The methodology is the trust signal.">
+<meta property="og:url" content="https://infraatlas.dev/about/">
+<meta property="og:image" content="https://infraatlas.dev/og.png?v=3">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="About the Methodology · Infra Atlas">
+<meta name="twitter:description" content="How a claim enters Infra Atlas — sourcing rules, data tiers, freshness policy.">
+<meta name="twitter:image" content="https://infraatlas.dev/og.png?v=3">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "AboutPage",
+  "name": "About the Methodology",
+  "url": "https://infraatlas.dev/about/",
+  "description": "How claims enter Infra Atlas — sourcing rules, data tiers, freshness policy and what reviewed actually means.",
+  "isPartOf": { "@type": "WebSite", "name": "Infra Atlas", "url": "https://infraatlas.dev/" }
+}
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@300;400;500;600&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+:root {
+  --ink: #0A0907; --ink-2: #100E0C; --surface: #161310; --surface-2: #1E1A15;
+  --line: rgba(244,239,230,0.06); --line-2: rgba(244,239,230,0.14);
+  --paper: #F4EFE6; --paper-2: rgba(244,239,230,0.66); --paper-3: rgba(244,239,230,0.55);
+  --accent: #FF7849; --accent-2: #FFA66E; --mint: #6FE7B5; --gold: #F4C660;
+  --serif: 'Instrument Serif','Times New Roman',serif;
+  --mono: 'JetBrains Mono',ui-monospace,monospace;
+  --sans: 'Manrope',-apple-system,system-ui,sans-serif;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { background: var(--ink); color: var(--paper); font-family: var(--sans);
+  font-size: 15px; line-height: 1.6; -webkit-font-smoothing: antialiased; min-height: 100vh; }
+body {
+  background: radial-gradient(ellipse at 100% -10%, rgba(255,120,73,0.07), transparent 55%),
+    radial-gradient(ellipse at -10% 110%, rgba(124,215,241,0.05), transparent 65%), var(--ink);
+  background-attachment: fixed; overflow-x: hidden;
+}
+.grain { pointer-events: none; position: fixed; inset: 0; z-index: 100; opacity: 0.08;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml;utf8,<svg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.6 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>"); }
+.scanlines { pointer-events: none; position: fixed; inset: 0; z-index: 99;
+  background: repeating-linear-gradient(180deg,transparent,transparent 2px,rgba(244,239,230,0.012) 2px,rgba(244,239,230,0.012) 3px); }
+::selection { background: var(--accent); color: var(--ink); }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 2px; }
+a { color: inherit; }
+
+.page { max-width: 860px; margin: 0 auto; padding: 56px 40px 96px; position: relative; }
+
+.masthead { padding-bottom: 28px; border-bottom: 1px solid var(--line); margin-bottom: 40px; }
+.eyebrow { font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.22em;
+  text-transform: uppercase; color: var(--paper-3); text-decoration: none;
+  display: inline-flex; align-items: center; gap: 10px; transition: color .2s; }
+.eyebrow:hover { color: var(--paper); }
+.eyebrow .arrow { color: var(--accent); transition: transform .2s; }
+.eyebrow:hover .arrow { transform: translateX(-4px); }
+.title { font-family: var(--serif); font-weight: 400; font-size: clamp(40px,7vw,76px);
+  line-height: 1.0; letter-spacing: -0.02em; margin-top: 18px; }
+.title em { font-style: italic; color: var(--accent); }
+.subtitle { margin-top: 14px; font-size: 16px; color: var(--paper-2); max-width: 640px; line-height: 1.65; }
+
+.sec { margin-bottom: 48px; }
+.sec-label { font-family: var(--mono); font-size: 10.5px; font-weight: 500; letter-spacing: 0.2em;
+  text-transform: uppercase; color: var(--paper-3); margin-bottom: 18px;
+  display: flex; align-items: center; gap: 12px; }
+.sec-label::after { content: ''; flex: 1; height: 1px; background: var(--line); }
+
+.prose { color: var(--paper-2); line-height: 1.75; }
+.prose + .prose { margin-top: 14px; }
+.prose strong { color: var(--paper); font-weight: 600; }
+.prose em { font-family: var(--serif); font-style: italic; color: var(--paper); }
+.prose a { color: var(--accent-2); text-decoration: underline; text-decoration-color: rgba(255,166,110,0.35);
+  text-underline-offset: 3px; }
+.prose a:hover { color: var(--accent); }
+.prose code { font-family: var(--mono); font-size: 12.5px; color: var(--accent-2);
+  background: var(--surface); padding: 1px 6px; border-radius: 3px; }
+
+.rule-grid { display: grid; gap: 1px; background: var(--line); border: 1px solid var(--line);
+  border-radius: 6px; overflow: hidden; margin-top: 4px; }
+.rule-row { display: grid; grid-template-columns: 220px 1fr; background: var(--ink-2); }
+.rule-row:first-child .rule-key { border-top: none; }
+.rule-key { font-family: var(--mono); font-size: 11.5px; color: var(--paper); font-weight: 500;
+  padding: 14px 16px; border-right: 1px solid var(--line); line-height: 1.5; background: var(--surface); }
+.rule-val { padding: 14px 18px; font-size: 13.5px; color: var(--paper-2); line-height: 1.6; }
+.rule-val code { font-family: var(--mono); font-size: 12px; color: var(--accent-2); }
+
+.tier-table { width: 100%; border-collapse: collapse; font-size: 13.5px; margin-top: 4px; }
+.tier-table th { font-family: var(--mono); font-size: 10px; letter-spacing: 0.15em;
+  text-transform: uppercase; color: var(--paper-3); text-align: left; padding: 10px 14px 8px;
+  border-bottom: 1px solid var(--line-2); }
+.tier-table td { padding: 11px 14px; border-bottom: 1px solid var(--line); color: var(--paper-2);
+  line-height: 1.5; vertical-align: top; }
+.tier-table tr:last-child td { border-bottom: none; }
+.tier-table td:first-child { color: var(--paper); font-weight: 500; white-space: nowrap; }
+.tier-table tr:hover td { background: rgba(255,120,73,0.03); }
+
+.badge { display: inline-block; font-family: var(--mono); font-size: 9.5px; letter-spacing: 0.1em;
+  text-transform: uppercase; padding: 2px 8px; border-radius: 99px; white-space: nowrap; }
+.badge--live { color: var(--mint); background: rgba(111,231,181,0.12); }
+.badge--curated { color: var(--gold); background: rgba(244,198,96,0.12); }
+.badge--snapshot { color: var(--paper-3); background: var(--surface); }
+
+.guard-list { list-style: none; display: flex; flex-direction: column; gap: 10px; margin-top: 4px; }
+.guard-item { display: flex; gap: 14px; align-items: flex-start;
+  background: var(--surface); border: 1px solid var(--line); border-radius: 5px; padding: 14px 16px; }
+.guard-icon { font-family: var(--mono); font-size: 12px; color: var(--mint); flex: none; margin-top: 1px; }
+.guard-desc { font-size: 13.5px; color: var(--paper-2); line-height: 1.6; }
+.guard-desc strong { color: var(--paper); }
+
+.colophon { margin-top: 56px; padding-top: 24px; border-top: 1px solid var(--line);
+  font-size: 12.5px; color: var(--paper-3); line-height: 1.7; }
+.colophon a { color: var(--paper-2); text-decoration: underline; text-decoration-color: var(--line-2);
+  text-underline-offset: 3px; }
+.colophon a:hover { color: var(--accent); }
+
+@media (max-width: 720px) {
+  .page { padding: 32px 20px 72px; }
+  .rule-row { grid-template-columns: 1fr; }
+  .rule-key { border-right: none; border-bottom: 1px solid var(--line); }
+}
+</style>
+</head>
+<body>
+<div class="grain"></div>
+<div class="scanlines"></div>
+<div class="page">
+
+  <header class="masthead">
+    <a class="eyebrow" href="/"><span class="arrow">←</span> Infra Atlas</a>
+    <h1 class="title">The <em>Methodology.</em></h1>
+    <p class="subtitle">How a claim enters the Atlas — the sourcing rules, data tiers, freshness policy, and what <em>Reviewed</em> on a page actually means. Methodology is the trust signal, not star counts.</p>
+  </header>
+
+  <section class="sec">
+    <div class="sec-label">The sourcing rules</div>
+    <p class="prose">Every factual claim in the Atlas must satisfy four rules before it is published. No exceptions.</p>
+    <br>
+    <div class="rule-grid">
+      <div class="rule-row">
+        <div class="rule-key">Primary source only</div>
+        <div class="rule-val">Data comes from the vendor's authoritative documentation, pricing page, or a public API — not a blog post, a press release, or a third-party article. When a source is secondary (e.g. a community dataset built from vendor APIs), it is named explicitly on the instrument card and in the raw <code>data.json</code> field <code>"source"</code>.</div>
+      </div>
+      <div class="rule-row">
+        <div class="rule-key">Source is named and linked</div>
+        <div class="rule-val">Every instrument lists its sources. Matrix cells carry a per-cell source URL: click any cell to open the detail drawer and see the exact page the claim is sourced to. Decision pages have a numbered source list; comparison rows carry inline <code>src</code> comments in the generated HTML.</div>
+      </div>
+      <div class="rule-row">
+        <div class="rule-key">GA only</div>
+        <div class="rule-val">A region, feature, or SKU is included only when listed as <strong>generally available</strong> in the vendor's authoritative documentation — not when announced, in preview, or "coming soon". The exact definition of GA per provider is documented in <a href="/api/">docs/data-policy.md</a>.</div>
+      </div>
+      <div class="rule-row">
+        <div class="rule-key">Stale data is a bug</div>
+        <div class="rule-val">Wrong data is not a style issue — it is a defect. If you spot something off, open an issue with the upstream source that contradicts the site. The Atlas will be corrected and the verified date re-stamped. <a href="https://github.com/ineslino/infra-atlas/issues/new" target="_blank" rel="noopener">Open an issue →</a></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec">
+    <div class="sec-label">Data tiers</div>
+    <p class="prose">Not all data refreshes the same way. The Atlas uses three tiers, visible on every instrument card and the <a href="/api/">data API page</a>.</p>
+    <br>
+    <table class="tier-table">
+      <thead>
+        <tr>
+          <th>Tier</th>
+          <th>How it works</th>
+          <th>Instruments</th>
+          <th>Cadence</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><span class="badge badge--live">Tier 1 — Live</span></td>
+          <td>A <code>refresh.sh</code> script pulls data from a public API or dataset at 06:00 UTC daily. No credentials. The generated timestamp in <code>data.json</code> is the actual pull time.</td>
+          <td>EC2 Observatory, Azure VM Atlas, OCI Compute Observatory, OVH Instance Catalogue</td>
+          <td>Daily</td>
+        </tr>
+        <tr>
+          <td><span class="badge badge--curated">Tier 2 — Curated</span></td>
+          <td>Hand-maintained data that is re-serialized to <code>data.json</code> by <code>refresh.sh</code>, but the underlying data only changes when a human edits the source HTML and re-stamps the verified date. The script proves the JSON faithfully mirrors the HTML; a CI region-drift guard pins the set to a vendor-verified reference.</td>
+          <td>Region Map, GCP Compute Index</td>
+          <td>On change (human-triggered)</td>
+        </tr>
+        <tr>
+          <td><span class="badge badge--snapshot">Tier 3 — Dated snapshot</span></td>
+          <td>Fully hand-curated reference content. Each page carries a <em>Verified · YYYY-MM-DD</em> stamp. CI freshness guards alert when a snapshot is older than its threshold (45 days for the fast-moving Generative AI Atlas; 180 days for the compliance and cross-cloud matrices; 365 days for Decisions).</td>
+          <td>All APIM instruments, Kubernetes, IAM, Networking, Compliance, Confidential Computing, Observability, Sovereignty, AI Atlas, Egress, Equivalent-SKU, Decisions</td>
+          <td>On re-verification</td>
+        </tr>
+      </tbody>
+    </table>
+    <br>
+    <p class="prose"><strong>The hero "Updated daily · 06:00 UTC"</strong> refers specifically to the Tier 1 instruments. The manifesto and colophon on the homepage state this correctly. Do not generalise it to the rest of the Atlas.</p>
+  </section>
+
+  <section class="sec">
+    <div class="sec-label">What "Reviewed · date" means</div>
+    <p class="prose">On a Tier 3 instrument, the <em>Verified · YYYY-MM-DD</em> stamp is an assertion that, on that date, a maintainer:</p>
+    <br>
+    <div class="rule-grid">
+      <div class="rule-row">
+        <div class="rule-key">Checked each cell</div>
+        <div class="rule-val">Every claim in the matrix or table was re-verified against its cited primary source. Cells where the source had changed or was ambiguous were updated, marked <code>◐</code> (partial), or annotated with a caveat note.</div>
+      </div>
+      <div class="rule-row">
+        <div class="rule-key">Updated stale claims</div>
+        <div class="rule-val">Anything found to be incorrect was corrected before the stamp was bumped. The stamp is not bumped on a schedule — it is bumped only after verification has actually happened.</div>
+      </div>
+      <div class="rule-row">
+        <div class="rule-key">Linked the sources</div>
+        <div class="rule-val">Every cell in a matrix carries a <code>src</code> field (visible in the detail drawer). A verified page has no unsourced claim. If a source cannot be found for a claim, the claim is removed or downgraded to <code>◐</code> with a note.</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec">
+    <div class="sec-label">Automated freshness guards (CI)</div>
+    <p class="prose">The following checks run on every push and fail loudly if data drifts. They are the mechanical layer of the sourcing commitment.</p>
+    <br>
+    <ul class="guard-list">
+      <li class="guard-item">
+        <div class="guard-icon">✓</div>
+        <div class="guard-desc"><strong>Region drift guard</strong> — <code>check_region_drift.py</code> pins the Region Map's provider sets to a dated, vendor-verified <code>region-reference.json</code>. Any region added or removed without updating the reference fails CI.</div>
+      </li>
+      <li class="guard-item">
+        <div class="guard-icon">✓</div>
+        <div class="guard-desc"><strong>Data-JSON sync guard</strong> — <code>verify-data.yml</code> re-extracts <code>data.json</code> from the curated <code>index.html</code> for Tier 2 instruments and diffs it against the committed file. Proves the JSON faithfully mirrors the HTML source.</div>
+      </li>
+      <li class="guard-item">
+        <div class="guard-icon">✓</div>
+        <div class="guard-desc"><strong>Landing-page stat guard</strong> — <code>check_landing_stats.py</code> derives instrument counts from <code>data.json</code> and fails if a homepage chip shows a stale number. <code>sync_landing_stats.py</code> self-heals the chips after each daily refresh.</div>
+      </li>
+      <li class="guard-item">
+        <div class="guard-icon">✓</div>
+        <div class="guard-desc"><strong>Instrument count guard</strong> — <code>check_instrument_count.py</code> counts the live instrument cards in the HTML and fails if any static count literal (hero stat, section header, filter chip) diverges. Prevents the "21 vs 22 instruments" self-report drift.</div>
+      </li>
+      <li class="guard-item">
+        <div class="guard-icon">✓</div>
+        <div class="guard-desc"><strong>OG card guard</strong> — <code>check_og_card.py</code> fails if the social share card's instrument count diverges from the live cards. <code>build_og.py</code> self-heals it.</div>
+      </li>
+      <li class="guard-item">
+        <div class="guard-icon">✓</div>
+        <div class="guard-desc"><strong>Freshness guard</strong> — <code>verify-freshness.yml</code> fails when a Tier 3 instrument's <em>Verified</em> stamp is older than its threshold, forcing a re-verification pass. Thresholds: AI Atlas 45 days; most matrices 180 days; Decisions 365 days; European Sovereignty 183 days.</div>
+      </li>
+    </ul>
+  </section>
+
+  <section class="sec">
+    <div class="sec-label">Honesty about what we don't know</div>
+    <p class="prose">The Atlas deliberately uses three levels in its comparison matrices:</p>
+    <br>
+    <div class="rule-grid">
+      <div class="rule-row">
+        <div class="rule-key">✓ Yes / Supported</div>
+        <div class="rule-val">The claim is verified against a primary source. The source is linked in the detail drawer.</div>
+      </div>
+      <div class="rule-row">
+        <div class="rule-key">◐ Partial / Caveated</div>
+        <div class="rule-val">The feature exists but with significant limitations, or the evidence is mixed. The drawer note explains what the asterisk means. This level is used intentionally — it is not a placeholder for "we didn't check".</div>
+      </div>
+      <div class="rule-row">
+        <div class="rule-key">✗ No / Not available</div>
+        <div class="rule-val">The claim is verified as absent or unsupported. Not a default — requires explicit evidence of absence.</div>
+      </div>
+    </div>
+    <br>
+    <p class="prose">Per-region family membership in the EC2, Azure and OCI compute instruments is sourced from public datasets and is <strong>best-effort, not independently credential-verified</strong>. The exact wording is in <a href="https://github.com/ineslino/infra-atlas/blob/main/docs/data-policy.md" target="_blank" rel="noopener">docs/data-policy.md §3</a>. GCP compute has no credential-free price source; the instrument carries no pricing column rather than invent one.</p>
+  </section>
+
+  <section class="sec">
+    <div class="sec-label">Who runs it</div>
+    <p class="prose">One engineer, working in public. The Atlas is open-source on <a href="https://github.com/ineslino/infra-atlas" target="_blank" rel="noopener">GitHub</a>. All data sources are public, credential-free, and documented. Corrections are welcome — the fastest path is <a href="https://github.com/ineslino/infra-atlas/issues/new" target="_blank" rel="noopener">an issue with the contradicting upstream source</a>.</p>
+    <p class="prose" style="margin-top:14px;">There is no company, no investor, no ad network, no vendor relationship. The Atlas makes no money from the data it shows. The funding model is <a href="/support/">reader-supported donations</a>; the independence model is "the methodology is public and auditable".</p>
+  </section>
+
+  <footer class="colophon">
+    Part of <a href="/">Infra Atlas</a>. Questions about methodology? <a href="https://github.com/ineslino/infra-atlas/issues/new" target="_blank" rel="noopener">Open an issue</a>. Full data policy: <a href="https://github.com/ineslino/infra-atlas/blob/main/docs/data-policy.md" target="_blank" rel="noopener">docs/data-policy.md</a>.
+  </footer>
+
+</div>
+<script src="/nav.js" defer></script>
+</body>
+</html>
