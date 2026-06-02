@@ -31,3 +31,6 @@ node_modules/
 # Python (refresh / feed scripts)
 __pycache__/
 *.pyc
+
+.dev.vars*
+!.dev.vars.example
