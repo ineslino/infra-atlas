@@ -6,7 +6,71 @@
     <atom:link href="https://infraatlas.dev/feed.xml" rel="self" type="application/rss+xml"/>
     <description>A neutral, sourced changelog of cloud infrastructure — new instance families, regions, withdrawals and price moves across AWS, Azure, GCP, OCI and OVHcloud.</description>
     <language>en</language>
-    <lastBuildDate>Fri, 29 May 2026 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Tue, 02 Jun 2026 00:00:00 +0000</lastBuildDate>
+    <item>
+      <title>Regions · new region BHS</title>
+      <link>https://infraatlas.dev/regions/</link>
+      <guid isPermaLink="false">1c43e2109d864fb136ce13b1b69f5228</guid>
+      <category>region-added</category>
+      <pubDate>Tue, 02 Jun 2026 00:00:00 +0000</pubDate>
+      <description>Regions · new region BHS</description>
+    </item>
+    <item>
+      <title>Regions · new region ERI</title>
+      <link>https://infraatlas.dev/regions/</link>
+      <guid isPermaLink="false">7326cf996a8477a4a201ebf030daa969</guid>
+      <category>region-added</category>
+      <pubDate>Tue, 02 Jun 2026 00:00:00 +0000</pubDate>
+      <description>Regions · new region ERI</description>
+    </item>
+    <item>
+      <title>Regions · new region LIM</title>
+      <link>https://infraatlas.dev/regions/</link>
+      <guid isPermaLink="false">3ad727ecfd7c19ca61c6e64cad46b3e9</guid>
+      <category>region-added</category>
+      <pubDate>Tue, 02 Jun 2026 00:00:00 +0000</pubDate>
+      <description>Regions · new region LIM</description>
+    </item>
+    <item>
+      <title>Regions · new region TOR</title>
+      <link>https://infraatlas.dev/regions/</link>
+      <guid isPermaLink="false">55d7db2a8a57d631344ad5850e0a8d55</guid>
+      <category>region-added</category>
+      <pubDate>Tue, 02 Jun 2026 00:00:00 +0000</pubDate>
+      <description>Regions · new region TOR</description>
+    </item>
+    <item>
+      <title>Regions · region BHS5 withdrawn</title>
+      <link>https://infraatlas.dev/regions/</link>
+      <guid isPermaLink="false">54f3ad21552649ddc53e24e3d46b0829</guid>
+      <category>region-removed</category>
+      <pubDate>Tue, 02 Jun 2026 00:00:00 +0000</pubDate>
+      <description>Regions · region BHS5 withdrawn</description>
+    </item>
+    <item>
+      <title>Regions · region DE withdrawn</title>
+      <link>https://infraatlas.dev/regions/</link>
+      <guid isPermaLink="false">06d60e7e5d674515bb61bb3b2427a477</guid>
+      <category>region-removed</category>
+      <pubDate>Tue, 02 Jun 2026 00:00:00 +0000</pubDate>
+      <description>Regions · region DE withdrawn</description>
+    </item>
+    <item>
+      <title>Regions · region MAD withdrawn</title>
+      <link>https://infraatlas.dev/regions/</link>
+      <guid isPermaLink="false">c829094691b6e0e564b08cc47ad3e50d</guid>
+      <category>region-removed</category>
+      <pubDate>Tue, 02 Jun 2026 00:00:00 +0000</pubDate>
+      <description>Regions · region MAD withdrawn</description>
+    </item>
+    <item>
+      <title>Regions · region UK1 withdrawn</title>
+      <link>https://infraatlas.dev/regions/</link>
+      <guid isPermaLink="false">ddb7876a01fae9ace559d82a3cf45326</guid>
+      <category>region-removed</category>
+      <pubDate>Tue, 02 Jun 2026 00:00:00 +0000</pubDate>
+      <description>Regions · region UK1 withdrawn</description>
+    </item>
     <item>
       <title>Infra Atlas · New: a public changelog + RSS feed — every cloud change we detect, dated and sourced. Subscribe at /feed.xml.</title>
       <link>https://infraatlas.dev/atlas/</link>
@@ -16,12 +80,12 @@
       <description>Infra Atlas · New: a public changelog + RSS feed — every cloud change we detect, dated and sourced. Subscribe at /feed.xml.</description>
     </item>
     <item>
-      <title>Infra Atlas · New instrument: the Constellation — a visual, navigable map of all 21 instruments at /atlas/.</title>
+      <title>Infra Atlas · New instrument: the Constellation — a visual, navigable map of every instrument at /atlas/.</title>
       <link>https://infraatlas.dev/atlas/</link>
-      <guid isPermaLink="false">bd1df0d9a2f40ac4e74584cf4485e0f2</guid>
+      <guid isPermaLink="false">5da85b3490a0233753ee961a71e97922</guid>
       <category>dispatch</category>
       <pubDate>Fri, 29 May 2026 00:00:00 +0000</pubDate>
-      <description>Infra Atlas · New instrument: the Constellation — a visual, navigable map of all 21 instruments at /atlas/.</description>
+      <description>Infra Atlas · New instrument: the Constellation — a visual, navigable map of every instrument at /atlas/.</description>
     </item>
     <item>
       <title>Infra Atlas · Two new instruments: the Observability Matrix (cloud-native + managed) and Observability Stacks (self-hosted OSS).</title>
