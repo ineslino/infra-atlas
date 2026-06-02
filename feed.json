@@ -1,6 +1,54 @@
 {
-  "generated": "2026-05-16",
+  "generated": "2026-06-02T10:49:09Z",
   "entries": [
+    {
+      "ts": "2026-06-02",
+      "instrument": "regions",
+      "kind": "region-added",
+      "text": "new region BHS"
+    },
+    {
+      "ts": "2026-06-02",
+      "instrument": "regions",
+      "kind": "region-added",
+      "text": "new region ERI"
+    },
+    {
+      "ts": "2026-06-02",
+      "instrument": "regions",
+      "kind": "region-added",
+      "text": "new region LIM"
+    },
+    {
+      "ts": "2026-06-02",
+      "instrument": "regions",
+      "kind": "region-added",
+      "text": "new region TOR"
+    },
+    {
+      "ts": "2026-06-02",
+      "instrument": "regions",
+      "kind": "region-removed",
+      "text": "region BHS5 withdrawn"
+    },
+    {
+      "ts": "2026-06-02",
+      "instrument": "regions",
+      "kind": "region-removed",
+      "text": "region DE withdrawn"
+    },
+    {
+      "ts": "2026-06-02",
+      "instrument": "regions",
+      "kind": "region-removed",
+      "text": "region MAD withdrawn"
+    },
+    {
+      "ts": "2026-06-02",
+      "instrument": "regions",
+      "kind": "region-removed",
+      "text": "region UK1 withdrawn"
+    },
     {
       "ts": "2026-05-16",
       "instrument": "azure-vm",
