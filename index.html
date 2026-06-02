@@ -214,13 +214,14 @@ body {
   display: grid;
   grid-template-columns: 1.4fr 1fr;
   gap: 80px;
-  padding: 36px 0 52px;
+  padding: 36px 0 20px;
   border-bottom: 1px solid var(--line);
   align-items: end;
   /* fill the viewport so the globe reads as the hero — but subtract the chrome
      above (sticky nav + issue strip ≈150px) AND the live wire below it (≈48px)
-     so the hero + wire both sit above the fold on load */
-  min-height: calc(100svh - 210px);
+     so the hero + wire both sit above the fold on load.
+     250px = ~150 top chrome + 48 wire + 20 bottom padding + 32 safety */
+  min-height: calc(100svh - 250px);
 }
 
 /* A2 — the hero text sits over the globe canvas; a near-invisible dark
