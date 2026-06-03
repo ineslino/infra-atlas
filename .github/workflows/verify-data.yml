@@ -87,6 +87,13 @@ jobs:
       - name: Check homepage instrument count is in sync
         run: python3 scripts/check_instrument_count.py
 
+      # A smart quote in an attribute (class=”x”) silently breaks the class with
+      # no error in the browser — the European Sovereignty card shipped exactly
+      # that (metadata run together, CTA floating loose). This fails if any HTML
+      # tag contains a typographic quote.
+      - name: Check no typographic quotes in HTML attributes
+        run: python3 scripts/check_html_attrs.py
+
       # The social-share card (og.png) hard-codes "N instruments" and silently
       # drifted (shipped "16" while the site had 21). This fails if the OG card
       # no longer matches the live instrument count; fix with build_og.py.
