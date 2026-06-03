@@ -651,9 +651,9 @@ body {
 /* ─────────────── INSTRUMENT TYPE FILTER ───────────────
    Browse axis (Tools / Matrices / Guides) — complements the ⌘K search
    (find a known instrument) and the jump-nav (go to a department). */
+.ia-filters { max-width: 1280px; margin: 0 auto 36px; display: flex; flex-direction: column; gap: 11px; }
 .ia-filter {
   display: flex; align-items: center; flex-wrap: wrap; gap: 8px;
-  margin: 0 auto 36px; max-width: 1280px;
 }
 .ia-filter__label {
   font-family: var(--mono); font-size: 10px; letter-spacing: 0.18em;
@@ -675,6 +675,13 @@ body {
   border-left: 1px solid var(--line-2); padding-left: 7px;
 }
 .ia-filter__chip.is-active .ia-filter__count { color: var(--ink); border-color: rgba(10, 9, 7, 0.2); }
+/* cloud filter chips carry the same vendor accent dot as the heat-strip */
+.ia-filter__chip .ia-chipdot { width: 7px; height: 7px; border-radius: 50%; flex: none; }
+.ia-filter__chip[data-cloud="aws"]   .ia-chipdot { background: #FF9F66; }
+.ia-filter__chip[data-cloud="azure"] .ia-chipdot { background: var(--sky); }
+.ia-filter__chip[data-cloud="gcp"]   .ia-chipdot { background: var(--rose); }
+.ia-filter__chip[data-cloud="oci"]   .ia-chipdot { background: #E26464; }
+.ia-filter__chip[data-cloud="ovh"]   .ia-chipdot { background: var(--plum); }
 
 .instrument.is-filtered { display: none; }
 .department.is-empty { display: none; }
@@ -797,7 +804,7 @@ body {
 
 .instrument__vendor {
   font-family: var(--mono);
-  font-size: 9.5px;
+  font-size: 10.5px;
   letter-spacing: 0.18em;
   text-transform: uppercase;
   color: var(--paper-3);
@@ -859,7 +866,7 @@ body {
 /* Type badge — signals what kind of instrument this is before the click */
 .instrument__type {
   font-family: var(--mono);
-  font-size: 9.5px;
+  font-size: 10.5px;
   letter-spacing: 0.22em;
   text-transform: uppercase;
   padding: 4px 10px;
@@ -890,7 +897,7 @@ body {
   gap: 12px;
   flex-wrap: wrap;
   font-family: var(--mono);
-  font-size: 10px;
+  font-size: 11px;
   letter-spacing: 0.14em;
   text-transform: uppercase;
   color: var(--paper-3);
@@ -934,6 +941,43 @@ body {
 .instrument__cta.is-disabled .instrument__cta-arrow {
   color: var(--paper-4);
 }
+
+/* Cloud-coverage heat-strip — which of the tracked clouds an instrument spans.
+   Rendered by JS from data-clouds (only when it covers ≥2). Vendor colours match
+   the .instrument__vendor accents above, so the legend is learned once. */
+.instrument__clouds {
+  display: flex;
+  gap: 11px;
+  flex-wrap: wrap;
+  align-items: center;
+  margin-top: 4px;
+  font-family: var(--mono);
+  font-size: 9.5px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+.instrument__clouds .ia-cloudlabel { color: var(--paper-4); letter-spacing: 0.18em; }
+.instrument__clouds .cloud {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  color: var(--paper-3);
+  opacity: 0.38;
+  transition: opacity 0.2s ease, color 0.2s ease;
+}
+.instrument__clouds .cloud::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: currentColor;
+}
+.instrument__clouds .cloud.on { opacity: 1; }
+.instrument__clouds .cloud[data-c="aws"].on   { color: #FF9F66; }
+.instrument__clouds .cloud[data-c="azure"].on { color: var(--sky); }
+.instrument__clouds .cloud[data-c="gcp"].on   { color: var(--rose); }
+.instrument__clouds .cloud[data-c="oci"].on   { color: #E26464; }
+.instrument__clouds .cloud[data-c="ovh"].on   { color: var(--plum); }
 
 .instrument.is-planned { opacity: 0.55; }
 .instrument.is-planned .instrument__title { color: var(--paper-2); }
@@ -1129,16 +1173,27 @@ body {
       <a href="#dept-xcloud" class="ia-pageindex__item" aria-label="Jump to Department III, Cross-Cloud, 12 instruments">
         <span class="dot" style="background:var(--plum)" aria-hidden="true"></span>
         <span>Dept III — Cross-Cloud</span>
-        <span class="ia-pageindex__count" aria-hidden="true">11</span>
+        <span class="ia-pageindex__count" aria-hidden="true">12</span>
       </a>
     </nav>
 
+    <div class="ia-filters">
     <div class="ia-filter" id="ia-filter" role="group" aria-label="Filter instruments by type">
       <span class="ia-filter__label" aria-hidden="true">Show</span>
       <button type="button" class="ia-filter__chip is-active" data-type="all" aria-pressed="true">All <span class="ia-filter__count">23</span></button>
       <button type="button" class="ia-filter__chip" data-type="tool" aria-pressed="false">Tools <span class="ia-filter__count">7</span></button>
       <button type="button" class="ia-filter__chip" data-type="matrix" aria-pressed="false">Matrices <span class="ia-filter__count">12</span></button>
       <button type="button" class="ia-filter__chip" data-type="guide" aria-pressed="false">Guides <span class="ia-filter__count">4</span></button>
+    </div>
+    <div class="ia-filter" id="ia-filter-cloud" role="group" aria-label="Filter instruments by cloud">
+      <span class="ia-filter__label" aria-hidden="true">Cloud</span>
+      <button type="button" class="ia-filter__chip is-active" data-cloud="all" aria-pressed="true">All <span class="ia-filter__count">23</span></button>
+      <button type="button" class="ia-filter__chip" data-cloud="aws" aria-pressed="false"><span class="ia-chipdot"></span>AWS <span class="ia-filter__count">15</span></button>
+      <button type="button" class="ia-filter__chip" data-cloud="azure" aria-pressed="false"><span class="ia-chipdot"></span>Azure <span class="ia-filter__count">14</span></button>
+      <button type="button" class="ia-filter__chip" data-cloud="gcp" aria-pressed="false"><span class="ia-chipdot"></span>GCP <span class="ia-filter__count">15</span></button>
+      <button type="button" class="ia-filter__chip" data-cloud="oci" aria-pressed="false"><span class="ia-chipdot"></span>OCI <span class="ia-filter__count">11</span></button>
+      <button type="button" class="ia-filter__chip" data-cloud="ovh" aria-pressed="false"><span class="ia-chipdot"></span>OVH <span class="ia-filter__count">8</span></button>
+    </div>
     </div>
     <div class="ia-sr" id="ia-filter-status" role="status" aria-live="polite"></div>
 
@@ -1151,7 +1206,7 @@ body {
       </div>
       <div class="department__items">
 
-        <a class="instrument is-live" href="./ec2/">
+        <a class="instrument is-live" href="./ec2/" data-clouds="aws">
           <div class="instrument__num">01</div>
           <div class="instrument__main">
             <div class="instrument__head">
@@ -1163,7 +1218,7 @@ body {
               <em>The instrument that started it all.</em> Cross-reference Amazon EC2 instance types against AWS regions. Filter by family, architecture, vendor. See which regions offer your instance type — and which instance types live in your region.
             </p>
             <div class="instrument__tags">
-              <span>34 regions</span><span>196 families</span><span>x86 + arm64</span><span>Daily refresh</span>
+              <span>34 regions</span><span>196 families</span><span>x86 + arm64</span><span>Sourced</span>
             </div>
           </div>
           <div class="instrument__side">
@@ -1171,7 +1226,7 @@ body {
           </div>
         </a>
 
-        <a class="instrument is-live" href="./regions/">
+        <a class="instrument is-live" href="./regions/" data-clouds="aws azure gcp oci ovh">
           <div class="instrument__num">02</div>
           <div class="instrument__main">
             <div class="instrument__head">
@@ -1183,7 +1238,7 @@ body {
               Every region from every provider on a single chart. <em>Where is closest to your users — really?</em> Surface clusters, compare hyperscaler geographies, and see the actual market overlap at a glance.
             </p>
             <div class="instrument__tags">
-              <span>5 providers</span><span>107 cities</span><span>219 regions</span><span>Equirectangular chart</span>
+              <span>5 providers</span><span>107 cities</span><span>219 regions</span><span>Sourced</span>
             </div>
           </div>
           <div class="instrument__side">
@@ -1191,7 +1246,7 @@ body {
           </div>
         </a>
 
-        <a class="instrument is-live" href="./azure-vm/">
+        <a class="instrument is-live" href="./azure-vm/" data-clouds="azure">
           <div class="instrument__num">03</div>
           <div class="instrument__main">
             <div class="instrument__head">
@@ -1203,7 +1258,7 @@ body {
               Azure VM sizes by region — the EC2 Observatory equivalent for the Microsoft cloud. Filter by series (Dsv5, Easv5, Lasv3), arch (Intel · AMD · Ampere · Cobalt), GPU class (T4 · A10 · A100 · H100 · H200), and confidential-compute capability.
             </p>
             <div class="instrument__tags">
-              <span>52 regions</span><span>52 series</span><span>334 VM sizes</span><span>SGX + SEV-SNP</span>
+              <span>52 regions</span><span>52 series</span><span>334 VM sizes</span><span>Sourced</span>
             </div>
           </div>
           <div class="instrument__side">
@@ -1211,7 +1266,7 @@ body {
           </div>
         </a>
 
-        <a class="instrument is-live" href="./gcp-compute/">
+        <a class="instrument is-live" href="./gcp-compute/" data-clouds="gcp">
           <div class="instrument__num">04</div>
           <div class="instrument__main">
             <div class="instrument__head">
@@ -1223,7 +1278,7 @@ body {
               Google Cloud machine types by region — E2 (cost) · N2/N4 (Intel) · N2D/T2D (AMD) · T2A/C4A (ARM) · C2/C3/C3D/C4 (compute) · H3 (HPC) · M1–M3/X4 (memory) · A2/A3/A4/G2 (NVIDIA T4 → L4 → A100 → H100 → B200).
             </p>
             <div class="instrument__tags">
-              <span>43 regions</span><span>26 families</span><span>379 machine types</span><span>Intel · AMD · Ampere · Axion</span>
+              <span>43 regions</span><span>26 families</span><span>379 machine types</span><span>Sourced</span>
             </div>
           </div>
           <div class="instrument__side">
@@ -1231,7 +1286,7 @@ body {
           </div>
         </a>
 
-        <a class="instrument is-live" href="./oci-compute/">
+        <a class="instrument is-live" href="./oci-compute/" data-clouds="oci">
           <div class="instrument__num">05</div>
           <div class="instrument__main">
             <div class="instrument__head">
@@ -1243,7 +1298,7 @@ body {
               Oracle Cloud's shape catalogue — E5/E4 Flex (AMD) · A1/A2 Flex (ARM Ampere) · Standard3 (Intel) · DenseIO (NVMe) · BM bare metal across all vendors · HPC2 + HPC.E5 with RDMA · GPU progression V100 → A10 → A100 → H100 → B200.
             </p>
             <div class="instrument__tags">
-              <span>38 regions</span><span>23 shape families</span><span>VM + Bare Metal</span><span>Intel · AMD · Ampere</span>
+              <span>38 regions</span><span>23 shape families</span><span>VM + Bare Metal</span><span>Sourced</span>
             </div>
           </div>
           <div class="instrument__side">
@@ -1251,7 +1306,7 @@ body {
           </div>
         </a>
 
-        <a class="instrument is-live" href="./ovh-instances/">
+        <a class="instrument is-live" href="./ovh-instances/" data-clouds="ovh">
           <div class="instrument__num">06</div>
           <div class="instrument__main">
             <div class="instrument__head">
@@ -1263,7 +1318,7 @@ body {
               The European alternative. Public Cloud (b3/c3/r3/i1/t-series), Bare Metal (HGR/Advance/Rise/Scale), HPC, and GPU H100 — mapped across 15 regions from Gravelines to Sydney. EU-sovereign by default.
             </p>
             <div class="instrument__tags">
-              <span>15 regions</span><span>15 families</span><span>79 instance types</span><span>VM + Bare Metal</span>
+              <span>15 regions</span><span>15 families</span><span>79 instance types</span><span>Sourced</span>
             </div>
           </div>
           <div class="instrument__side">
@@ -1283,7 +1338,7 @@ body {
       </div>
       <div class="department__items">
 
-        <a class="instrument is-live" href="./apim-matrix/">
+        <a class="instrument is-live" href="./apim-matrix/" data-clouds="aws azure gcp">
           <div class="instrument__num">07</div>
           <div class="instrument__main">
             <div class="instrument__head">
@@ -1295,7 +1350,7 @@ body {
               <em>The cross-vendor comparator.</em> Apigee · AWS API Gateway · Azure APIM · Mulesoft · Kong · Gravitee · IBM API Connect, all on one grid. OAuth flavours, mTLS, GraphQL, rate-limiting, self-hosted, FedRAMP — with the asterisks intact and a footnote on every nuance.
             </p>
             <div class="instrument__tags">
-              <span>7 vendors</span><span>28 capabilities</span><span>~190 annotated cells</span><span>8 categories</span>
+              <span>7 vendors</span><span>28 capabilities</span><span>~190 annotated cells</span><span>Sourced</span>
             </div>
           </div>
           <div class="instrument__side">
@@ -1303,7 +1358,7 @@ body {
           </div>
         </a>
 
-        <a class="instrument is-live" href="./aws-api-gateway/">
+        <a class="instrument is-live" href="./aws-api-gateway/" data-clouds="aws">
           <div class="instrument__num">08</div>
           <div class="instrument__main">
             <div class="instrument__head">
@@ -1315,7 +1370,7 @@ body {
               AWS API Gateway, demystified. REST vs HTTP vs WebSocket, the authorizer zoo, deployment modes, pricing — and the gotchas nobody explains until you hit them in production (29-second timeout, anyone?).
             </p>
             <div class="instrument__tags">
-              <span>REST · HTTP · WS</span><span>7 sections</span><span>Pricing breakdown</span><span>Migration paths</span>
+              <span>REST + HTTP + WS</span><span>7 sections</span><span>Pricing breakdown</span><span>Sourced</span>
             </div>
           </div>
           <div class="instrument__side">
@@ -1323,7 +1378,7 @@ body {
           </div>
         </a>
 
-        <a class="instrument is-live" href="./apigee/">
+        <a class="instrument is-live" href="./apigee/" data-clouds="gcp">
           <div class="instrument__num">09</div>
           <div class="instrument__main">
             <div class="instrument__head">
@@ -1335,7 +1390,7 @@ body {
               Apigee X, Hybrid, and Edge demystified. Policy library, Shared Flows + KVMs, environment topology, pricing tiers, migration paths — and a 12–24 month plan for getting off Edge before it sunsets.
             </p>
             <div class="instrument__tags">
-              <span>X · Hybrid · Edge</span><span>17 policies</span><span>Pricing tiers</span><span>5 migration paths</span>
+              <span>X + Hybrid + Edge</span><span>17 policies</span><span>Pricing tiers</span><span>Sourced</span>
             </div>
           </div>
           <div class="instrument__side">
@@ -1355,7 +1410,7 @@ body {
               Mulesoft Anypoint demystified. CloudHub 2.0 vs RTF vs Flex Gateway, the connector ecosystem, DataWeave (the secret weapon), pricing in vCore vs Flex Replica — and the integration platform DNA that sets it apart.
             </p>
             <div class="instrument__tags">
-              <span>4 deployment targets</span><span>DataWeave</span><span>~300 connectors</span><span>5 migration paths</span>
+              <span>4 deployment targets</span><span>DataWeave</span><span>~300 connectors</span><span>Sourced</span>
             </div>
           </div>
           <div class="instrument__side">
@@ -1375,7 +1430,7 @@ body {
               The three self-hostable contenders compared head-to-head. OSS scope, Kubernetes nativity, plugin ecosystems, total cost (license + ops + people) — and a decision tree for when to pick which (or none).
             </p>
             <div class="instrument__tags">
-              <span>3 vendors</span><span>OSS vs Enterprise</span><span>K8s nativity</span><span>Decision tree</span>
+              <span>3 vendors</span><span>OSS vs Enterprise</span><span>K8s nativity</span><span>Sourced</span>
             </div>
           </div>
           <div class="instrument__side">
@@ -1395,7 +1450,7 @@ body {
       </div>
       <div class="department__items">
 
-        <a class="instrument is-live" href="./equivalent-sku/">
+        <a class="instrument is-live" href="./equivalent-sku/" data-clouds="aws azure gcp oci ovh">
           <div class="instrument__num">12</div>
           <div class="instrument__main">
             <div class="instrument__head">
@@ -1407,7 +1462,7 @@ body {
               <em>The cross-cloud translator.</em> Pick any instance type — EC2, Azure VM, GCP, OCI or OVH — and see the closest match on every other cloud, scored on vCPU, memory and category. Built for migration planning and honest price comparison.
             </p>
             <div class="instrument__tags">
-              <span>5 clouds</span><span>vCPU + memory scored</span><span>Confidence ranked</span><span>Reuses live data</span>
+              <span>5 clouds</span><span>vCPU + memory scored</span><span>Confidence ranked</span><span>Sourced</span>
             </div>
           </div>
           <div class="instrument__side">
@@ -1415,7 +1470,7 @@ body {
           </div>
         </a>
 
-        <a class="instrument is-live" href="./kubernetes/">
+        <a class="instrument is-live" href="./kubernetes/" data-clouds="aws azure gcp oci ovh">
           <div class="instrument__num">13</div>
           <div class="instrument__main">
             <div class="instrument__head">
@@ -1427,7 +1482,7 @@ body {
               Managed Kubernetes, vendor by vendor — EKS · AKS · GKE · OKE · OVH. Control-plane SLA and cost, version cadence, node-pool limits, networking, autoscaling — <em>fourteen capabilities with the footnotes that decide a platform choice.</em>
             </p>
             <div class="instrument__tags">
-              <span>5 services</span><span>14 capabilities</span><span>Control-plane SLA</span><span>Version cadence</span>
+              <span>5 services</span><span>14 capabilities</span><span>Control-plane SLA</span><span>Sourced</span>
             </div>
           </div>
           <div class="instrument__side">
@@ -1435,7 +1490,7 @@ body {
           </div>
         </a>
 
-        <a class="instrument is-live" href="./compliance/">
+        <a class="instrument is-live" href="./compliance/" data-clouds="aws azure gcp oci ovh">
           <div class="instrument__num">14</div>
           <div class="instrument__main">
             <div class="instrument__head">
@@ -1447,7 +1502,7 @@ body {
               Which compliance programs each hyperscaler <em>actually</em> holds — FedRAMP, IRAP, C5, ENS, ISO 27001, SOC 2, PCI DSS and more — across AWS, Azure, GCP, OCI and OVHcloud. Scoped to region and service, never blanket-claimed.
             </p>
             <div class="instrument__tags">
-              <span>5 clouds</span><span>11 programs</span><span>Region-scoped</span><span>55 footnotes</span>
+              <span>5 clouds</span><span>11 programs</span><span>Region-scoped</span><span>Sourced</span>
             </div>
           </div>
           <div class="instrument__side">
@@ -1455,7 +1510,7 @@ body {
           </div>
         </a>
 
-        <a class="instrument is-live" href="./confidential-computing/">
+        <a class="instrument is-live" href="./confidential-computing/" data-clouds="aws azure gcp oci ovh">
           <div class="instrument__num">15</div>
           <div class="instrument__main">
             <div class="instrument__head">
@@ -1467,7 +1522,7 @@ body {
               <em>Hardware-backed trusted execution,</em> mapped across the major clouds — Intel SGX, AMD SEV-SNP, Intel TDX, AWS Nitro Enclaves and confidential GPU. Which cloud, which technology, which families, which regions.
             </p>
             <div class="instrument__tags">
-              <span>5 clouds</span><span>5 technologies</span><span>SGX · SEV-SNP · TDX</span><span>25 footnotes</span>
+              <span>5 clouds</span><span>5 technologies</span><span>SGX + SEV-SNP + TDX</span><span>Sourced</span>
             </div>
           </div>
           <div class="instrument__side">
@@ -1475,7 +1530,7 @@ body {
           </div>
         </a>
 
-        <a class="instrument is-live" href="./iam-matrix/">
+        <a class="instrument is-live" href="./iam-matrix/" data-clouds="aws azure gcp oci">
           <div class="instrument__num">16</div>
           <div class="instrument__main">
             <div class="instrument__head">
@@ -1487,7 +1542,7 @@ body {
               Four hyperscaler IAM systems on one grid — AWS IAM, Azure (Entra ID + RBAC), GCP IAM and OCI IAM. <em>Policy model, evaluation logic,</em> workload-identity federation, short-lived credentials, the account hierarchy and ABAC — with the model spelled out per cell.
             </p>
             <div class="instrument__tags">
-              <span>4 providers</span><span>21 capabilities</span><span>Policy · RBAC · ABAC</span><span>84 footnotes</span>
+              <span>4 providers</span><span>21 capabilities</span><span>Policy + RBAC + ABAC</span><span>Sourced</span>
             </div>
           </div>
           <div class="instrument__side">
@@ -1495,7 +1550,7 @@ body {
           </div>
         </a>
 
-        <a class="instrument is-live" href="./ai-atlas/">
+        <a class="instrument is-live" href="./ai-atlas/" data-clouds="aws azure gcp oci ovh">
           <div class="instrument__num">17</div>
           <div class="instrument__main">
             <div class="instrument__head">
@@ -1507,7 +1562,7 @@ body {
               The major cloud generative-AI platforms on one grid — Amazon Bedrock, Azure AI Foundry, Vertex AI, OCI Generative AI and OVHcloud AI Endpoints. <em>Which model families each hosts</em> — Claude, GPT, Gemini, Llama, Mistral — and how they compare on fine-tuning, RAG, agents and guardrails.
             </p>
             <div class="instrument__tags">
-              <span>5 platforms</span><span>9 model families</span><span>Fine-tuning · RAG · Agents</span><span>90 footnotes</span>
+              <span>5 platforms</span><span>9 model families</span><span>Fine-tuning + RAG + Agents</span><span>Sourced</span>
             </div>
           </div>
           <div class="instrument__side">
@@ -1515,7 +1570,7 @@ body {
           </div>
         </a>
 
-        <a class="instrument is-live" href="./egress/">
+        <a class="instrument is-live" href="./egress/" data-clouds="aws azure gcp">
           <div class="instrument__num">18</div>
           <div class="instrument__main">
             <div class="instrument__head">
@@ -1527,7 +1582,7 @@ body {
               What AWS, Azure and Google Cloud charge to move a gigabyte, on one grid. <em>Internet egress, cross-AZ, cross-region,</em> NAT gateway processing and private interconnect — every rate sourced, dated, and read with the footnotes the pricing calculators bury.
             </p>
             <div class="instrument__tags">
-              <span>3 clouds</span><span>5 transfer types</span><span>Egress · NAT · Interconnect</span><span>15 footnotes</span>
+              <span>3 clouds</span><span>5 transfer types</span><span>Egress + NAT + Interconnect</span><span>Sourced</span>
             </div>
           </div>
           <div class="instrument__side">
@@ -1535,7 +1590,7 @@ body {
           </div>
         </a>
 
-        <a class="instrument is-live" href="./networking-matrix/">
+        <a class="instrument is-live" href="./networking-matrix/" data-clouds="aws azure gcp oci">
           <div class="instrument__num">19</div>
           <div class="instrument__main">
             <div class="instrument__head">
@@ -1547,7 +1602,7 @@ body {
               A Rosetta stone for cloud networking — every core primitive mapped across AWS, Azure, Google Cloud and OCI. <em>VPCs, subnets, peering, firewalls,</em> load balancers and private links — with the semantic caveats spelled out per cell.
             </p>
             <div class="instrument__tags">
-              <span>4 clouds</span><span>17 primitives</span><span>VPC · Firewall · Peering</span><span>68 footnotes</span>
+              <span>4 clouds</span><span>17 primitives</span><span>VPC + Firewall + Peering</span><span>Sourced</span>
             </div>
           </div>
           <div class="instrument__side">
@@ -1555,7 +1610,7 @@ body {
           </div>
         </a>
 
-        <a class="instrument is-live" href="./observability/">
+        <a class="instrument is-live" href="./observability/" data-clouds="aws azure gcp oci">
           <div class="instrument__num">20</div>
           <div class="instrument__main">
             <div class="instrument__head">
@@ -1567,7 +1622,7 @@ body {
               Cloud-native stacks and managed platforms compared across metrics, logs, traces, OTEL support, Kubernetes integration and pricing tiers. <em>CloudWatch, Azure Monitor, GCP, OCI</em> alongside Datadog, Grafana Cloud, New Relic, Honeycomb and Dynatrace.
             </p>
             <div class="instrument__tags">
-              <span>4 cloud-native</span><span>5 platforms</span><span>Metrics · Logs · Traces</span><span>OTEL coverage</span>
+              <span>4 cloud-native</span><span>5 platforms</span><span>Metrics + Logs + Traces</span><span>Sourced</span>
             </div>
           </div>
           <div class="instrument__side">
@@ -1587,7 +1642,7 @@ body {
               Self-hosted open-source observability stacks compared across signal coverage, OpenTelemetry, Kubernetes, multi-tenancy and licensing. <em>Prometheus, Grafana stack, Elastic Stack, OpenSearch, Jaeger</em> and VictoriaMetrics — the third buying decision.
             </p>
             <div class="instrument__tags">
-              <span>6 OSS stacks</span><span>14 dimensions</span><span>License-aware</span><span>K8s operators</span>
+              <span>6 OSS stacks</span><span>14 dimensions</span><span>License-aware</span><span>Sourced</span>
             </div>
           </div>
           <div class="instrument__side">
@@ -1595,7 +1650,7 @@ body {
           </div>
         </a>
 
-        <a class="instrument is-live" href="./sovereignty/">
+        <a class="instrument is-live" href="./sovereignty/" data-clouds="aws azure gcp ovh">
           <div class="instrument__num">22</div>
           <div class="instrument__main">
             <div class="instrument__head">
@@ -1606,15 +1661,15 @@ body {
             <p class="instrument__desc">
               Which providers are <em>actually</em> sovereign — and at which layer. Operational vs legal sovereignty, the US CLOUD Act reaching US-parent “sovereign” regions, EU-native providers, and the regulatory frame — Data Act, EUCS, Schrems II / DPF — with the asterisks intact.
             </p>
-            <div class=”instrument__tags”>
+            <div class="instrument__tags">
               <span>8 providers</span><span>Legal vs operational</span><span>CLOUD Act</span><span>Sourced</span>
             </div>
           </div>
-          <div class=”instrument__side”>
-            <div class=”instrument__cta”><span>Open</span><span class=”instrument__cta-arrow”>→</span></div>
+          <div class="instrument__side">
+            <div class="instrument__cta"><span>Open</span><span class="instrument__cta-arrow">→</span></div>
           </div>
         </a>
-        <a class="instrument is-live" href="./data-layer/">
+        <a class="instrument is-live" href="./data-layer/" data-clouds="aws azure gcp oci">
           <div class="instrument__num">23</div>
           <div class="instrument__main">
             <div class="instrument__head">
@@ -1626,7 +1681,7 @@ body {
               Managed relational, NoSQL, and object storage compared across AWS, Azure, GCP and OCI — which service in Cloud B is the closest structural match to the one in Cloud A, and where the match breaks down.
             </p>
             <div class="instrument__tags">
-              <span>22 features</span><span>Relational · NoSQL · Object</span><span>4 clouds</span><span>Sourced</span>
+              <span>22 features</span><span>Relational + NoSQL + Object</span><span>4 clouds</span><span>Sourced</span>
             </div>
           </div>
           <div class="instrument__side">
@@ -1889,24 +1944,62 @@ body {
   deps.forEach(function (d) { io.observe(d); });
 })();
 
-/* Instrument type filter — a browse axis (Tools / Matrices / Guides) that the
-   ⌘K search (known-item find) and the dept jump-nav don't cover. Hides
-   non-matching cards, collapses emptied departments, and keeps the page-index
-   jump chips in sync so they never point at a hidden section. Initial HTML is
-   already in the "All" state, so no render-on-load flash. */
+/* Instrument browse filters — two independent axes the ⌘K search (known-item
+   find) and the dept jump-nav don't cover: TYPE (Tools / Matrices / Guides) and
+   CLOUD (which provider an instrument spans, from data-clouds). They combine with
+   AND. Hides non-matching cards, collapses emptied departments, and keeps the
+   page-index jump chips in sync. This block also renders the cloud heat-strip
+   onto each card from the same data-clouds, so coverage has one source of truth.
+   Initial HTML is in the "All / All" state, so there's no render-on-load flash. */
 (function () {
-  var bar = document.getElementById("ia-filter");
+  var typeBar = document.getElementById("ia-filter");
+  var cloudBar = document.getElementById("ia-filter-cloud");
   var scope = document.querySelector(".instruments");
-  if (!bar || !scope) return;
+  if (!typeBar || !scope) return;
   var depts = [].slice.call(scope.querySelectorAll(".department"));
   var allCards = [].slice.call(scope.querySelectorAll(".instrument"));
   var statusEl = document.getElementById("ia-filter-status");
-  var LABEL = { tool: "Tools", matrix: "Matrices", guide: "Guides" };
+  var TLABEL = { tool: "Tools", matrix: "Matrices", guide: "Guides" };
+  var CLABEL = { aws: "AWS", azure: "Azure", gcp: "GCP", oci: "OCI", ovh: "OVH" };
+  var CLOUD_ORDER = ["aws", "azure", "gcp", "oci", "ovh"];
+  var state = { type: "all", cloud: "all" };
 
   function typeOf(card) {
     var t = card.querySelector(".instrument__type");
     return t ? (t.getAttribute("data-type") || "").toLowerCase() : "";
   }
+  function cloudsOf(card) {
+    var c = card.getAttribute("data-clouds");
+    return c ? c.trim().split(/\s+/) : [];
+  }
+
+  // ── Heat-strip: one row of the tracked clouds per card that spans ≥2 of them.
+  //    Covered ones light up in the vendor accent; the rest stay dim. Marked as a
+  //    single img with a text label so screen readers get the coverage, not 5 dots.
+  allCards.forEach(function (card) {
+    var on = cloudsOf(card);
+    if (on.length < 2) return;
+    var main = card.querySelector(".instrument__main");
+    if (!main || main.querySelector(".instrument__clouds")) return;
+    var strip = document.createElement("div");
+    strip.className = "instrument__clouds";
+    strip.setAttribute("role", "img");
+    strip.setAttribute("aria-label", "Cloud coverage: " +
+      CLOUD_ORDER.filter(function (cl) { return on.indexOf(cl) !== -1; })
+                 .map(function (cl) { return CLABEL[cl]; }).join(", "));
+    var lab = document.createElement("span");
+    lab.className = "ia-cloudlabel"; lab.textContent = "Clouds";
+    strip.appendChild(lab);
+    CLOUD_ORDER.forEach(function (cl) {
+      var s = document.createElement("span");
+      s.className = "cloud" + (on.indexOf(cl) !== -1 ? " on" : "");
+      s.setAttribute("data-c", cl);
+      s.textContent = CLABEL[cl];
+      strip.appendChild(s);
+    });
+    main.appendChild(strip);
+  });
+
   var jumpByDept = {};
   [].slice.call(document.querySelectorAll(".ia-pageindex__item")).forEach(function (a) {
     jumpByDept[a.getAttribute("href").replace(/^#/, "")] = a;
@@ -1915,21 +2008,45 @@ body {
   depts.forEach(function (d) { baseCount[d.id] = d.querySelectorAll(".instrument").length; });
 
   // chip counts derived from the DOM so they can't drift from the cards
-  var counts = { all: allCards.length, tool: 0, matrix: 0, guide: 0 };
-  allCards.forEach(function (c) { var t = typeOf(c); if (counts[t] != null) counts[t]++; });
-  [].slice.call(bar.querySelectorAll(".ia-filter__chip")).forEach(function (chip) {
-    var el = chip.querySelector(".ia-filter__count");
-    if (el) el.textContent = counts[chip.getAttribute("data-type")] || 0;
+  var tCounts = { all: allCards.length, tool: 0, matrix: 0, guide: 0 };
+  var cCounts = { all: allCards.length, aws: 0, azure: 0, gcp: 0, oci: 0, ovh: 0 };
+  allCards.forEach(function (c) {
+    var t = typeOf(c); if (tCounts[t] != null) tCounts[t]++;
+    cloudsOf(c).forEach(function (cl) { if (cCounts[cl] != null) cCounts[cl]++; });
   });
+  function seedCounts(bar, attr, map) {
+    if (!bar) return;
+    [].slice.call(bar.querySelectorAll(".ia-filter__chip")).forEach(function (chip) {
+      var el = chip.querySelector(".ia-filter__count");
+      if (el) el.textContent = map[chip.getAttribute(attr)] || 0;
+    });
+  }
+  seedCounts(typeBar, "data-type", tCounts);
+  seedCounts(cloudBar, "data-cloud", cCounts);
 
-  function apply(type) {
+  function isAll() { return state.type === "all" && state.cloud === "all"; }
+  function matches(card) {
+    var okType = state.type === "all" || typeOf(card) === state.type;
+    var okCloud = state.cloud === "all" || cloudsOf(card).indexOf(state.cloud) !== -1;
+    return okType && okCloud;
+  }
+  function syncBar(bar, attr, val) {
+    if (!bar) return;
+    [].slice.call(bar.querySelectorAll(".ia-filter__chip")).forEach(function (chip) {
+      var on = chip.getAttribute(attr) === val;
+      chip.classList.toggle("is-active", on);
+      chip.setAttribute("aria-pressed", on ? "true" : "false");
+    });
+  }
+
+  function apply() {
     var shown = 0;
     depts.forEach(function (dept) {
       var vis = 0;
       [].slice.call(dept.querySelectorAll(".instrument")).forEach(function (card) {
-        var match = type === "all" || typeOf(card) === type;
-        card.classList.toggle("is-filtered", !match);
-        if (match) vis++;
+        var ok = matches(card);
+        card.classList.toggle("is-filtered", !ok);
+        if (ok) vis++;
       });
       dept.classList.toggle("is-empty", vis === 0);
       shown += vis;
@@ -1937,22 +2054,30 @@ body {
       if (chip) {
         chip.classList.toggle("is-hidden", vis === 0);
         var cnt = chip.querySelector(".ia-pageindex__count");
-        if (cnt) cnt.textContent = (type === "all") ? baseCount[dept.id] : vis;
+        if (cnt) cnt.textContent = isAll() ? baseCount[dept.id] : vis;
       }
     });
-    [].slice.call(bar.querySelectorAll(".ia-filter__chip")).forEach(function (chip) {
-      var on = chip.getAttribute("data-type") === type;
-      chip.classList.toggle("is-active", on);
-      chip.setAttribute("aria-pressed", on ? "true" : "false");
-    });
-    if (statusEl) statusEl.textContent = type === "all"
-      ? "Showing all " + counts.all + " instruments."
-      : "Showing " + shown + " " + (LABEL[type] || type) + ".";
+    syncBar(typeBar, "data-type", state.type);
+    syncBar(cloudBar, "data-cloud", state.cloud);
+    if (statusEl) {
+      if (isAll()) {
+        statusEl.textContent = "Showing all " + tCounts.all + " instruments.";
+      } else {
+        var bits = [];
+        if (state.type !== "all") bits.push(TLABEL[state.type] || state.type);
+        if (state.cloud !== "all") bits.push("on " + (CLABEL[state.cloud] || state.cloud));
+        statusEl.textContent = "Showing " + shown + " " + bits.join(" ") + ".";
+      }
+    }
   }
 
-  bar.addEventListener("click", function (e) {
+  typeBar.addEventListener("click", function (e) {
     var chip = e.target.closest(".ia-filter__chip");
-    if (chip) apply(chip.getAttribute("data-type"));
+    if (chip) { state.type = chip.getAttribute("data-type"); apply(); }
+  });
+  if (cloudBar) cloudBar.addEventListener("click", function (e) {
+    var chip = e.target.closest(".ia-filter__chip");
+    if (chip) { state.cloud = chip.getAttribute("data-cloud"); apply(); }
   });
 })();
 

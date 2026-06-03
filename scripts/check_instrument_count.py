@@ -44,6 +44,22 @@ def main():
     grab("filter chip Matrices", r'data-type="matrix"[^>]*>Matrices <span class="ia-filter__count">(\d+)</span>', badges["matrix"])
     grab("filter chip Guides", r'data-type="guide"[^>]*>Guides <span class="ia-filter__count">(\d+)</span>', badges["guide"])
 
+    # Page-index department counts — both the visible chip and the aria-label must
+    # match the real cards in each department. The Cross-Cloud chip shipped "11"
+    # while 12 cards lived under it (aria said 12, the chip said 11); the chip is
+    # the STATIC value crawlers / no-JS clients see before any filter click.
+    order = ["dept-cloud", "dept-apim", "dept-xcloud"]
+    starts = [html.index('class="department" id="%s"' % d) for d in order]
+    ends = starts[1:] + [html.index("</section>", starts[-1])]
+    for d, a, b in zip(order, starts, ends):
+        real = html[a:b].count('class="instrument is-live"')
+        item = re.search(r'href="#%s".*?</a>' % re.escape(d), html, re.S)
+        block = item.group(0) if item else ""
+        m_chip = re.search(r'ia-pageindex__count[^>]*>(\d+)<', block)
+        m_aria = re.search(r'aria-label="[^"]*?(\d+)\s+instruments?"', block)
+        checks.append((f'page-index chip [{d}]', int(m_chip.group(1)) if m_chip else None, real))
+        checks.append((f'page-index aria [{d}]', int(m_aria.group(1)) if m_aria else None, real))
+
     fails = 0
     print(f"is-live cards: {n}  (tool={badges['tool']}, matrix={badges['matrix']}, "
           f"guide={badges['guide']}; sum={sum(badges.values())})")
