@@ -1,5 +1,5 @@
 {
-  "generated": "2026-06-02T10:49:28Z",
+  "generated": "2026-06-03T11:17:40Z",
   "provider": "azure",
   "source": "Azure Retail Prices API — public, no credentials",
   "currency": "USD",
@@ -2157,7 +2157,7 @@
         "F32s_v2": {
           "vcpu": 32,
           "mem": 64,
-          "price": null
+          "price": 1.552
         },
         "F48s_v2": {
           "vcpu": 48,
@@ -2270,7 +2270,7 @@
         "L48s_v2": {
           "vcpu": 48,
           "mem": 384,
-          "price": null
+          "price": 4.464
         },
         "L64s_v2": {
           "vcpu": 64,
@@ -2621,7 +2621,7 @@
         "NC24rs_v3": {
           "vcpu": 24,
           "mem": null,
-          "price": null
+          "price": 16.821
         }
       },
       "in": [
