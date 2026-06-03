@@ -511,7 +511,9 @@ body {
 
 /* ─────────────── INSTRUMENTS ─────────────── */
 .instruments {
-  padding: 96px 0 64px;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 96px clamp(20px, 4vw, 48px) 64px;
 }
 
 .section-head {
@@ -553,9 +555,8 @@ body {
 .section-head__meta strong { color: var(--paper); font-weight: 500; }
 
 .instruments__intro {
-  max-width: 1280px;
-  margin: 0 auto 28px;
-  padding: 0 clamp(20px, 4vw, 48px);
+  margin: 0 0 28px;
+  padding: 0;
   font-family: var(--sans);
   font-size: 14.5px;
   line-height: 1.6;
