@@ -94,6 +94,13 @@ jobs:
       - name: Check no typographic quotes in HTML attributes
         run: python3 scripts/check_html_attrs.py
 
+      # matrix.css ships only the table; each matrix instrument carries its page
+      # chrome in an inline <style>. Data Layer Equivalence shipped with none, so
+      # its whole header/filters rendered unstyled. This fails if a matrix page
+      # uses class="masthead" but defines no .masthead in an inline <style>.
+      - name: Check matrix instrument pages ship their chrome
+        run: python3 scripts/check_matrix_chrome.py
+
       # The social-share card (og.png) hard-codes "N instruments" and silently
       # drifted (shipped "16" while the site had 21). This fails if the OG card
       # no longer matches the live instrument count; fix with build_og.py.

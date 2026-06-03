@@ -35,6 +35,119 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@300;400;500;600&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/assets/matrix.css?v=3">
+<style>
+/* ─── Page chrome (tokens + masthead + intro + filters + crosslinks + colophon).
+   matrix.css supplies only the table; every matrix instrument carries its own
+   chrome block — this one was missing on data-layer, so it shipped unstyled. ─── */
+:root {
+  --ink: #0A0907; --ink-2: #100E0C; --surface: #161310; --surface-2: #1E1A15; --surface-3: #2A241C;
+  --line: rgba(244, 239, 230, 0.06); --line-2: rgba(244, 239, 230, 0.14); --line-3: rgba(244, 239, 230, 0.28);
+  --paper: #F4EFE6; --paper-2: rgba(244, 239, 230, 0.66); --paper-3: rgba(244, 239, 230, 0.55); --paper-4: rgba(244, 239, 230, 0.20);
+  --accent: #FF7849; --accent-2: #FFA66E;
+  --mint: #6FE7B5; --gold: #F4C660; --plum: #C586E8; --sky: #7CD7F1; --rose: #F47B7B; --teal: #5BCCC9;
+  --aws: #FF9F66; --azure: #7CD7F1; --gcp: #F47B7B; --oci: #E26464; --ovh: #C586E8;
+  --yes: #6FE7B5; --no: #F47B7B; --part: #F4C660;
+  --serif: 'Instrument Serif', 'Times New Roman', serif;
+  --mono: 'JetBrains Mono', ui-monospace, monospace;
+  --sans: 'Manrope', -apple-system, system-ui, sans-serif;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { background: var(--ink); color: var(--paper); font-family: var(--sans); font-size: 15px; line-height: 1.5; -webkit-font-smoothing: antialiased; min-height: 100vh; }
+body {
+  background:
+    radial-gradient(ellipse at 100% -10%, rgba(255,120,73,0.07), transparent 55%),
+    radial-gradient(ellipse at -10% 110%, rgba(244,198,96,0.05), transparent 65%),
+    var(--ink);
+  background-attachment: fixed; overflow-x: hidden;
+}
+.grain { pointer-events: none; position: fixed; inset: 0; z-index: 100; opacity: 0.08; mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml;utf8,<svg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.6 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>"); }
+.scanlines { pointer-events: none; position: fixed; inset: 0; z-index: 99;
+  background: repeating-linear-gradient(180deg, transparent, transparent 2px, rgba(244,239,230,0.012) 2px, rgba(244,239,230,0.012) 3px); }
+::selection { background: var(--accent); color: var(--ink); }
+
+.page { max-width: 1640px; margin: 0 auto; padding: 56px 48px 96px; position: relative; }
+
+/* ─── Masthead ─── */
+.masthead { display: grid; grid-template-columns: 1fr auto; gap: 48px; align-items: end; padding-bottom: 36px; border-bottom: 1px solid var(--line); margin-bottom: 28px; }
+.masthead__main { min-width: 0; }
+.eyebrow { font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.22em; color: var(--paper-3); text-transform: uppercase; display: inline-flex; align-items: center; gap: 12px; text-decoration: none; transition: color 0.2s ease; }
+.eyebrow:hover { color: var(--paper); }
+.eyebrow .arrow { color: var(--accent); transition: transform 0.2s ease; }
+.eyebrow:hover .arrow { transform: translateX(-4px); }
+.masthead__tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 18px; }
+.tag { font-family: var(--mono); font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--paper-3); border: 1px solid var(--line-2); border-radius: 99px; padding: 4px 11px; }
+.masthead__title { font-family: var(--serif); font-weight: 400; font-size: clamp(44px, 6.5vw, 100px); line-height: 0.95; letter-spacing: -0.02em; margin-top: 16px; color: var(--paper); }
+.masthead__title em { font-style: italic; color: var(--accent); }
+.masthead__sub { margin-top: 18px; font-size: 16px; color: var(--paper-2); max-width: 640px; line-height: 1.55; }
+.masthead__sub em { font-family: var(--serif); font-style: italic; color: var(--paper); }
+.masthead__meta { text-align: right; display: flex; flex-direction: column; align-items: flex-end; gap: 14px; padding-bottom: 6px; }
+.status-time { font-family: var(--mono); font-size: 12px; color: var(--paper-3); }
+.masthead__counts { display: flex; gap: 24px; }
+.masthead__counts > div { text-align: right; font-family: var(--mono); font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--paper-3); display: flex; flex-direction: column; gap: 3px; }
+.masthead__counts strong { font-family: var(--serif); font-style: italic; font-weight: 400; font-size: 28px; color: var(--paper); letter-spacing: -0.01em; text-transform: none; }
+
+/* ─── Sources note + read-this callout ─── */
+.sources-note { font-family: var(--mono); font-size: 11.5px; letter-spacing: 0.03em; color: var(--paper-3); margin-bottom: 18px; }
+.readnote { display: flex; gap: 13px; margin-bottom: 28px; padding: 18px 22px; background: linear-gradient(180deg, var(--surface) 0%, var(--ink-2) 100%); border: 1px solid var(--line); border-left: 2px solid var(--accent); border-radius: 4px; }
+.readnote__mark { font-family: var(--serif); font-size: 22px; line-height: 1; color: var(--accent); flex: none; }
+.readnote__text { font-size: 13.5px; color: var(--paper-2); line-height: 1.62; }
+.readnote__text strong { font-family: var(--serif); font-style: italic; font-weight: 400; font-size: 16px; color: var(--paper); letter-spacing: -0.01em; }
+.readnote__text em { font-family: var(--serif); font-style: italic; color: var(--paper); }
+.readnote__text a { color: var(--paper-2); text-decoration: underline; text-decoration-color: var(--line-2); text-underline-offset: 3px; }
+.readnote__text a:hover { color: var(--accent); }
+
+/* ─── Filters ─── */
+.related-bar:empty { display: none; }
+.filter-controls { display: flex; flex-direction: column; gap: 13px; padding: 18px 22px; background: linear-gradient(180deg, var(--surface) 0%, var(--ink-2) 100%); border: 1px solid var(--line); border-radius: 4px; position: sticky; top: 16px; z-index: 50; backdrop-filter: blur(12px); margin-bottom: 28px; }
+.filter-search { position: relative; }
+.filter-search input { width: 100%; background: var(--ink); border: 1px solid var(--line); color: var(--paper); font-family: var(--mono); font-size: 13px; padding: 12px 16px 12px 42px; border-radius: 3px; outline: none; transition: border-color 0.2s ease; }
+.filter-search input::placeholder { color: var(--paper-3); }
+.filter-search input:focus { border-color: var(--accent); }
+.filter-search::before { content: '⌕'; position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: var(--paper-3); font-size: 18px; pointer-events: none; }
+.filter-chips { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+.filter-chips__label { font-family: var(--mono); font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--paper-3); margin-right: 4px; }
+.chip { background: transparent; border: 1px solid var(--line-2); color: var(--paper-2); font-family: var(--mono); font-size: 11px; letter-spacing: 0.06em; padding: 6px 12px; border-radius: 99px; cursor: pointer; transition: all 0.15s ease; display: inline-flex; align-items: center; gap: 8px; white-space: nowrap; }
+.chip:hover { border-color: var(--paper-3); color: var(--paper); }
+.chip.is-active { background: var(--paper); border-color: var(--paper); color: var(--ink); }
+.chip .swatch { width: 8px; height: 8px; border-radius: 2px; }
+
+/* ─── Matrix shell (table itself is in matrix.css) ─── */
+.matrix-wrap { margin-bottom: 48px; border: 1px solid var(--line); border-radius: 6px; background: linear-gradient(180deg, var(--ink-2) 0%, var(--ink) 100%); }
+/* Cloud filter hides a vendor's whole column — JS toggles .hide-{vendor} on the table */
+.matrix.hide-aws   .col-aws,
+.matrix.hide-azure .col-azure,
+.matrix.hide-gcp   .col-gcp,
+.matrix.hide-oci   .col-oci { display: none; }
+/* The page's thesis — tint the cells where a provider has no equivalent, so the
+   gaps are scannable down a column at a glance (kept subtle; hover stays legible) */
+.matrix td.cell:has(.cell-value--no) { background: rgba(244, 123, 123, 0.07); }
+.matrix td.cell:has(.cell-value--no):hover { background: rgba(244, 123, 123, 0.13); }
+
+/* Reading key (yes / partial / no) — matrix.css colours the value text per level */
+.legend { display: flex; flex-wrap: wrap; gap: 14px 20px; align-items: center; margin-bottom: 20px; padding: 13px 20px; background: var(--surface); border: 1px solid var(--line); border-radius: 4px; font-family: var(--mono); font-size: 11px; color: var(--paper-2); }
+.legend__label { font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--paper-3); }
+.legend__item { display: inline-flex; align-items: center; gap: 8px; }
+.legend__swatch { width: 9px; height: 9px; border-radius: 2px; flex: none; border: 1px solid var(--line-2); }
+.legend__star { color: var(--paper-3); }
+
+/* ─── Related instruments + colophon ─── */
+.crosslinks-section { margin-top: 56px; padding-top: 32px; border-top: 1px solid var(--line); }
+.sec-label { font-family: var(--mono); font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--paper-3); margin-bottom: 16px; }
+.crosslinks { display: flex; flex-wrap: wrap; gap: 10px; }
+.crosslinks a { font-family: var(--mono); font-size: 12.5px; color: var(--paper-2); text-decoration: none; border: 1px solid var(--line-2); border-radius: 5px; padding: 10px 14px; transition: border-color 0.15s ease, color 0.15s ease; }
+.crosslinks a:hover { border-color: var(--accent); color: var(--accent); }
+.colophon { margin-top: 56px; padding-top: 32px; border-top: 1px solid var(--line); font-size: 13px; color: var(--paper-3); line-height: 1.6; }
+.colophon a { color: var(--paper-2); text-decoration: underline; text-decoration-color: var(--line-2); text-underline-offset: 3px; }
+.colophon a:hover { color: var(--accent); }
+
+@media (max-width: 900px) {
+  .page { padding: 32px 22px 72px; }
+  .masthead { grid-template-columns: 1fr; gap: 22px; }
+  .masthead__meta { text-align: left; align-items: flex-start; }
+  .filter-controls { position: static; }
+}
+</style>
 </head>
 <body>
 <div class="grain"></div>
@@ -42,13 +155,15 @@
 <div class="page">
 
   <header class="masthead">
-    <a class="eyebrow" href="/"><span class="arrow">←</span> Infra Atlas</a>
-    <div class="masthead__tags">
-      <span class="tag">Cross-cloud</span>
-      <span class="tag">Data &amp; storage</span>
+    <div class="masthead__main">
+      <a class="eyebrow" href="/"><span class="arrow">←</span> Infra Atlas</a>
+      <div class="masthead__tags">
+        <span class="tag">Cross-cloud</span>
+        <span class="tag">Data &amp; storage</span>
+      </div>
+      <h1 class="masthead__title">Data Layer <em>Equivalence</em></h1>
+      <p class="masthead__sub">Managed relational, NoSQL, and object storage compared across the four major clouds — where they match, where they diverge, and where one provider genuinely has no equivalent.</p>
     </div>
-    <h1 class="masthead__title">Data Layer <em>Equivalence</em></h1>
-    <p class="masthead__sub">Managed relational, NoSQL, and object storage compared across the four major clouds — where they match, where they diverge, and where one provider genuinely has no equivalent.</p>
     <div class="masthead__meta">
       <div class="status-time">Verified · <time datetime="2026-06-02">2026-06-02</time></div>
       <div class="masthead__counts">
@@ -80,6 +195,14 @@
 
   <div class="sr-only" id="filter-status" role="status" aria-live="polite"></div>
 
+  <div class="legend">
+    <span class="legend__label">Key</span>
+    <span class="legend__item"><span class="legend__swatch" style="background:var(--paper)" aria-hidden="true"></span>Managed equivalent</span>
+    <span class="legend__item"><span class="legend__swatch" style="background:var(--part)" aria-hidden="true"></span>Partial / caveats</span>
+    <span class="legend__item"><span class="legend__swatch" style="background:var(--no)" aria-hidden="true"></span>No equivalent</span>
+    <span class="legend__item legend__star">* cites a primary source — click any cell</span>
+  </div>
+
   <div class="matrix-wrap" id="matrix-wrap">
     <table class="matrix" id="matrix" aria-label="Cloud data layer equivalence matrix"></table>
   </div>
@@ -107,8 +230,9 @@
 
 <!-- DRAWER -->
 <div class="drawer-backdrop" id="drawer-backdrop"></div>
-<aside class="drawer" id="drawer" role="dialog" aria-modal="true" aria-labelledby="drawer-title" aria-hidden="true">
-  <div class="drawer__inner" id="drawer-inner"></div>
+<aside class="drawer" id="drawer" role="dialog" aria-modal="true" aria-labelledby="drawer-title" aria-hidden="true" hidden>
+  <div class="drawer__head" id="drawer-head"></div>
+  <div class="drawer__body" id="drawer-body"></div>
 </aside>
 
 <script>
