@@ -841,29 +841,6 @@ body {
   transition: color 0.2s ease;
 }
 
-.instrument__status {
-  font-family: var(--mono);
-  font-size: 9.5px;
-  letter-spacing: 0.22em;
-  text-transform: uppercase;
-  padding: 4px 10px;
-  border-radius: 99px;
-  border: 1px solid var(--line-2);
-  margin-left: auto;
-}
-
-.instrument__status.is-live {
-  color: var(--mint);
-  border-color: rgba(111,231,181,0.4);
-  background: rgba(111,231,181,0.05);
-}
-.instrument__status.is-dev {
-  color: var(--gold);
-  border-color: rgba(244,198,96,0.3);
-  background: rgba(244,198,96,0.04);
-}
-.instrument__status.is-planned { color: var(--paper-3); }
-
 /* Type badge — signals what kind of instrument this is before the click */
 .instrument__type {
   font-family: var(--mono);
@@ -931,16 +908,9 @@ body {
   gap: 10px;
   transition: gap 0.2s ease, color 0.2s ease;
 }
-.instrument__cta.is-disabled {
-  color: var(--paper-4);
-  cursor: not-allowed;
-}
 .instrument__cta-arrow {
   font-family: var(--mono);
   color: var(--accent);
-}
-.instrument__cta.is-disabled .instrument__cta-arrow {
-  color: var(--paper-4);
 }
 
 /* Cloud-coverage heat-strip — which of the tracked clouds an instrument spans.
