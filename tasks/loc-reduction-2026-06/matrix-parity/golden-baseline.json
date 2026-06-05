@@ -1,0 +1,1078 @@
+{
+  "apim-matrix": {
+    "page": "apim-matrix",
+    "tableFound": true,
+    "featureRows": 33,
+    "categoryRows": 9,
+    "headerCols": 8,
+    "cellButtons": 231,
+    "tableHash": "625e346d",
+    "visibleInitial": "oauth-cc,oauth-ac,jwt,mtls,api-keys,opa,rate-limit-api,rate-limit-consumer,circuit-breaker,retry,lim-timeout,lim-payload,lim-rate,lim-quota,req-resp-transform,graphql-passthru,graphql-resolve,grpc,otel,analytics,audit-logs,self-hosted,k8s-op,multi-region,canary,dev-portal,openapi,free-tier,oss,per-call,fedramp,hipaa,soc2",
+    "chipCount": 18,
+    "chipSeq": [
+      {
+        "i": 0,
+        "txt": "All",
+        "vis": "cff67b18",
+        "hash": ""
+      },
+      {
+        "i": 1,
+        "txt": "Authentication / Authori",
+        "vis": "613d8f1f",
+        "hash": "#cat=auth"
+      },
+      {
+        "i": 2,
+        "txt": "Traffic Management",
+        "vis": "3d10d04b",
+        "hash": "#cat=traffic"
+      },
+      {
+        "i": 3,
+        "txt": "Limits & Quotas",
+        "vis": "ecd350cc",
+        "hash": "#cat=limits"
+      },
+      {
+        "i": 4,
+        "txt": "Transformation / Mediati",
+        "vis": "3a6ae33f",
+        "hash": "#cat=transform"
+      },
+      {
+        "i": 5,
+        "txt": "Observability",
+        "vis": "50d99ed2",
+        "hash": "#cat=observability"
+      },
+      {
+        "i": 6,
+        "txt": "Deployment / Operations",
+        "vis": "aa989903",
+        "hash": "#cat=deploy"
+      },
+      {
+        "i": 7,
+        "txt": "Developer Experience",
+        "vis": "e8f5a6fb",
+        "hash": "#cat=devex"
+      },
+      {
+        "i": 8,
+        "txt": "Pricing / Tiers",
+        "vis": "2ce6385",
+        "hash": "#cat=pricing"
+      },
+      {
+        "i": 9,
+        "txt": "Standards / Compliance",
+        "vis": "13caad76",
+        "hash": "#cat=compliance"
+      },
+      {
+        "i": 10,
+        "txt": "All",
+        "vis": "13caad76",
+        "hash": "#cat=compliance"
+      },
+      {
+        "i": 11,
+        "txt": "Apigee",
+        "vis": "13caad76",
+        "hash": "#vendors=apigee&cat=compliance"
+      },
+      {
+        "i": 12,
+        "txt": "AWS",
+        "vis": "13caad76",
+        "hash": "#vendors=apigee%2Caws&cat=compliance"
+      },
+      {
+        "i": 13,
+        "txt": "Azure",
+        "vis": "13caad76",
+        "hash": "#vendors=apigee%2Caws%2Cazure&cat=compliance"
+      },
+      {
+        "i": 14,
+        "txt": "Mulesoft",
+        "vis": "13caad76",
+        "hash": "#vendors=apigee%2Caws%2Cazure%2Cmulesoft&cat=compliance"
+      },
+      {
+        "i": 15,
+        "txt": "Kong",
+        "vis": "13caad76",
+        "hash": "#vendors=apigee%2Caws%2Cazure%2Cmulesoft%2Ckong&cat=compliance"
+      },
+      {
+        "i": 16,
+        "txt": "Gravitee",
+        "vis": "13caad76",
+        "hash": "#vendors=apigee%2Caws%2Cazure%2Cmulesoft%2Ckong%2Cgravitee&cat=compliance"
+      },
+      {
+        "i": 17,
+        "txt": "IBM",
+        "vis": "13caad76",
+        "hash": "#cat=compliance"
+      }
+    ],
+    "hasSearch": true,
+    "searchSeq": [
+      {
+        "term": "a",
+        "vis": "13caad76"
+      },
+      {
+        "term": "az",
+        "vis": "13caad76"
+      },
+      {
+        "term": "",
+        "vis": "13caad76"
+      }
+    ],
+    "drawerSeq": [
+      {
+        "k": 0,
+        "head": "5c4f22f2",
+        "body": "5f86ac9",
+        "bodyLen": 3416
+      },
+      {
+        "k": 1,
+        "head": "b660f687",
+        "body": "2133d94",
+        "bodyLen": 3129
+      },
+      {
+        "k": 2,
+        "head": "b195fe30",
+        "body": "55eeb2f6",
+        "bodyLen": 2862
+      }
+    ],
+    "featureDrawer": "5eaab094"
+  },
+  "networking-matrix": {
+    "page": "networking-matrix",
+    "tableFound": true,
+    "featureRows": 17,
+    "categoryRows": 4,
+    "headerCols": 5,
+    "cellButtons": 68,
+    "tableHash": "285ca0b8",
+    "visibleInitial": "virtual-network,subnet,route-table,ipv6,peering,transit-hub,vpn,interconnect,instance-firewall,subnet-acl,managed-firewall,ddos,flow-logs,load-balancing,nat,private-service,private-dns",
+    "chipCount": 10,
+    "chipSeq": [
+      {
+        "i": 0,
+        "txt": "All",
+        "vis": "f02a887",
+        "hash": ""
+      },
+      {
+        "i": 1,
+        "txt": "The Virtual Network",
+        "vis": "2c7d95e1",
+        "hash": "#cat=foundations"
+      },
+      {
+        "i": 2,
+        "txt": "Peering & Hybrid Connect",
+        "vis": "362a2b04",
+        "hash": "#cat=connectivity"
+      },
+      {
+        "i": 3,
+        "txt": "Security & Filtering",
+        "vis": "da57a18f",
+        "hash": "#cat=security"
+      },
+      {
+        "i": 4,
+        "txt": "Edge, Egress & Access",
+        "vis": "c0adc7e",
+        "hash": "#cat=edge"
+      },
+      {
+        "i": 5,
+        "txt": "All",
+        "vis": "c0adc7e",
+        "hash": "#cat=edge"
+      },
+      {
+        "i": 6,
+        "txt": "AWS",
+        "vis": "c0adc7e",
+        "hash": "#vendors=aws&cat=edge"
+      },
+      {
+        "i": 7,
+        "txt": "Azure",
+        "vis": "c0adc7e",
+        "hash": "#vendors=aws%2Cazure&cat=edge"
+      },
+      {
+        "i": 8,
+        "txt": "GCP",
+        "vis": "c0adc7e",
+        "hash": "#vendors=aws%2Cazure%2Cgcp&cat=edge"
+      },
+      {
+        "i": 9,
+        "txt": "OCI",
+        "vis": "c0adc7e",
+        "hash": "#cat=edge"
+      }
+    ],
+    "hasSearch": true,
+    "searchSeq": [
+      {
+        "term": "a",
+        "vis": "c0adc7e"
+      },
+      {
+        "term": "az",
+        "vis": "c0adc7e"
+      },
+      {
+        "term": "",
+        "vis": "c0adc7e"
+      }
+    ],
+    "drawerSeq": [
+      {
+        "k": 0,
+        "head": "129ba50a",
+        "body": "a8a1624d",
+        "bodyLen": 3342
+      },
+      {
+        "k": 1,
+        "head": "42fc5140",
+        "body": "154a4bc5",
+        "bodyLen": 3504
+      },
+      {
+        "k": 2,
+        "head": "c8b11774",
+        "body": "587a7162",
+        "bodyLen": 3289
+      }
+    ],
+    "featureDrawer": "a8c96bd8"
+  },
+  "iam-matrix": {
+    "page": "iam-matrix",
+    "tableFound": true,
+    "featureRows": 21,
+    "categoryRows": 6,
+    "headerCols": 5,
+    "cellButtons": 84,
+    "tableHash": "7bc1ffc2",
+    "visibleInitial": "identity-policy,resource-policy,policy-language,managed-roles,default-deny,explicit-deny,deny-precedence,permission-boundaries,org-hierarchy,policy-inheritance,directory,oidc-federation,managed-identity,k8s-identity,saml-federation,temp-credentials,static-keys,service-to-service,conditions,abac-tags,abac-dynamic-groups",
+    "chipCount": 12,
+    "chipSeq": [
+      {
+        "i": 0,
+        "txt": "All",
+        "vis": "b9e5f29c",
+        "hash": ""
+      },
+      {
+        "i": 1,
+        "txt": "Policy Model & Language",
+        "vis": "425cec15",
+        "hash": "#cat=model"
+      },
+      {
+        "i": 2,
+        "txt": "Permission Evaluation",
+        "vis": "469974d7",
+        "hash": "#cat=evaluation"
+      },
+      {
+        "i": 3,
+        "txt": "Organisation Hierarchy",
+        "vis": "2a658ded",
+        "hash": "#cat=hierarchy"
+      },
+      {
+        "i": 4,
+        "txt": "Workload & Federated Ide",
+        "vis": "c768eec2",
+        "hash": "#cat=workload"
+      },
+      {
+        "i": 5,
+        "txt": "Credentials & Service-to",
+        "vis": "cc1d7bbe",
+        "hash": "#cat=credentials"
+      },
+      {
+        "i": 6,
+        "txt": "Attribute / Condition-Ba",
+        "vis": "f3eea8a0",
+        "hash": "#cat=abac"
+      },
+      {
+        "i": 7,
+        "txt": "All",
+        "vis": "f3eea8a0",
+        "hash": "#cat=abac"
+      },
+      {
+        "i": 8,
+        "txt": "AWS IAM",
+        "vis": "f3eea8a0",
+        "hash": "#providers=aws&cat=abac"
+      },
+      {
+        "i": 9,
+        "txt": "Azure",
+        "vis": "f3eea8a0",
+        "hash": "#providers=aws%2Cazure&cat=abac"
+      },
+      {
+        "i": 10,
+        "txt": "GCP IAM",
+        "vis": "f3eea8a0",
+        "hash": "#providers=aws%2Cazure%2Cgcp&cat=abac"
+      },
+      {
+        "i": 11,
+        "txt": "OCI IAM",
+        "vis": "f3eea8a0",
+        "hash": "#cat=abac"
+      }
+    ],
+    "hasSearch": true,
+    "searchSeq": [
+      {
+        "term": "a",
+        "vis": "f3eea8a0"
+      },
+      {
+        "term": "az",
+        "vis": "f48ed5ee"
+      },
+      {
+        "term": "",
+        "vis": "f3eea8a0"
+      }
+    ],
+    "drawerSeq": [
+      {
+        "k": 0,
+        "head": "ee3abeaf",
+        "body": "ca1a5601",
+        "bodyLen": 3052
+      },
+      {
+        "k": 1,
+        "head": "15fa5c2c",
+        "body": "6de72ace",
+        "bodyLen": 3269
+      },
+      {
+        "k": 2,
+        "head": "1ac2ced6",
+        "body": "610955e7",
+        "bodyLen": 3235
+      }
+    ],
+    "featureDrawer": "d9096ec"
+  },
+  "compliance": {
+    "page": "compliance",
+    "tableFound": true,
+    "featureRows": 11,
+    "categoryRows": 5,
+    "headerCols": 6,
+    "cellButtons": 55,
+    "tableHash": "ea8929a7",
+    "visibleInitial": "fedramp,dod-il,irap,c5,ens,iso27001,soc2,pci,hipaa,hds,eu-boundary",
+    "chipCount": 12,
+    "chipSeq": [
+      {
+        "i": 0,
+        "txt": "All",
+        "vis": "1a40cf44",
+        "hash": ""
+      },
+      {
+        "i": 1,
+        "txt": "US Government",
+        "vis": "24f5b149",
+        "hash": "#cat=us-gov"
+      },
+      {
+        "i": 2,
+        "txt": "Regional / National Sche",
+        "vis": "10e2cb27",
+        "hash": "#cat=regional"
+      },
+      {
+        "i": 3,
+        "txt": "Global Baselines",
+        "vis": "1792d55",
+        "hash": "#cat=global"
+      },
+      {
+        "i": 4,
+        "txt": "Sector-Specific",
+        "vis": "c25eee13",
+        "hash": "#cat=sector"
+      },
+      {
+        "i": 5,
+        "txt": "EU Data Boundary / Sover",
+        "vis": "c64fec50",
+        "hash": "#cat=sovereign"
+      },
+      {
+        "i": 6,
+        "txt": "All",
+        "vis": "c64fec50",
+        "hash": "#cat=sovereign"
+      },
+      {
+        "i": 7,
+        "txt": "AWS",
+        "vis": "c64fec50",
+        "hash": "#clouds=aws&cat=sovereign"
+      },
+      {
+        "i": 8,
+        "txt": "Azure",
+        "vis": "c64fec50",
+        "hash": "#clouds=aws%2Cazure&cat=sovereign"
+      },
+      {
+        "i": 9,
+        "txt": "GCP",
+        "vis": "c64fec50",
+        "hash": "#clouds=aws%2Cazure%2Cgcp&cat=sovereign"
+      },
+      {
+        "i": 10,
+        "txt": "OCI",
+        "vis": "c64fec50",
+        "hash": "#clouds=aws%2Cazure%2Cgcp%2Coci&cat=sovereign"
+      },
+      {
+        "i": 11,
+        "txt": "OVH",
+        "vis": "c64fec50",
+        "hash": "#cat=sovereign"
+      }
+    ],
+    "hasSearch": true,
+    "searchSeq": [
+      {
+        "term": "a",
+        "vis": "c64fec50"
+      },
+      {
+        "term": "az",
+        "vis": "c64fec50"
+      },
+      {
+        "term": "",
+        "vis": "c64fec50"
+      }
+    ],
+    "drawerSeq": [
+      {
+        "k": 0,
+        "head": "a90997bb",
+        "body": "92526781",
+        "bodyLen": 4222
+      },
+      {
+        "k": 1,
+        "head": "75b8000b",
+        "body": "8e192684",
+        "bodyLen": 3812
+      },
+      {
+        "k": 2,
+        "head": "6b931582",
+        "body": "61b98ab3",
+        "bodyLen": 4710
+      }
+    ],
+    "featureDrawer": "838fa72c"
+  },
+  "kubernetes": {
+    "page": "kubernetes",
+    "tableFound": true,
+    "featureRows": 18,
+    "categoryRows": 7,
+    "headerCols": 6,
+    "cellButtons": 90,
+    "tableHash": "be4c9fb8",
+    "visibleInitial": "k8s-newest,k8s-window,k8s-extended,cp-sla,cp-cost,np-spot,np-gpu,np-arm,np-autoscaler,as-groupless,as-spot,as-zero,as-consolidation,max-nodes,cni-default,cni-choice,release-channels,auto-upgrade",
+    "chipCount": 14,
+    "chipSeq": [
+      {
+        "i": 0,
+        "txt": "All",
+        "vis": "7d294e99",
+        "hash": ""
+      },
+      {
+        "i": 1,
+        "txt": "Kubernetes Versions",
+        "vis": "51d6b605",
+        "hash": "#cat=versions"
+      },
+      {
+        "i": 2,
+        "txt": "Control Plane — SLA & Co",
+        "vis": "7397a86a",
+        "hash": "#cat=control"
+      },
+      {
+        "i": 3,
+        "txt": "Node Pool Capabilities",
+        "vis": "f51b9d0",
+        "hash": "#cat=nodepool"
+      },
+      {
+        "i": 4,
+        "txt": "Node Autoscaling",
+        "vis": "de04d377",
+        "hash": "#cat=autoscale"
+      },
+      {
+        "i": 5,
+        "txt": "Scale",
+        "vis": "96540c71",
+        "hash": "#cat=scale"
+      },
+      {
+        "i": 6,
+        "txt": "CNI / Networking",
+        "vis": "9f506bcf",
+        "hash": "#cat=network"
+      },
+      {
+        "i": 7,
+        "txt": "Release Channels & Auto-",
+        "vis": "d1f6b179",
+        "hash": "#cat=upgrades"
+      },
+      {
+        "i": 8,
+        "txt": "All",
+        "vis": "d1f6b179",
+        "hash": "#cat=upgrades"
+      },
+      {
+        "i": 9,
+        "txt": "EKS",
+        "vis": "d1f6b179",
+        "hash": "#vendors=eks&cat=upgrades"
+      },
+      {
+        "i": 10,
+        "txt": "AKS",
+        "vis": "d1f6b179",
+        "hash": "#vendors=eks%2Caks&cat=upgrades"
+      },
+      {
+        "i": 11,
+        "txt": "GKE",
+        "vis": "d1f6b179",
+        "hash": "#vendors=eks%2Caks%2Cgke&cat=upgrades"
+      },
+      {
+        "i": 12,
+        "txt": "OKE",
+        "vis": "d1f6b179",
+        "hash": "#vendors=eks%2Caks%2Cgke%2Coke&cat=upgrades"
+      },
+      {
+        "i": 13,
+        "txt": "OVH",
+        "vis": "d1f6b179",
+        "hash": "#cat=upgrades"
+      }
+    ],
+    "hasSearch": true,
+    "searchSeq": [
+      {
+        "term": "a",
+        "vis": "d1f6b179"
+      },
+      {
+        "term": "az",
+        "vis": "d1f6b179"
+      },
+      {
+        "term": "",
+        "vis": "d1f6b179"
+      }
+    ],
+    "drawerSeq": [
+      {
+        "k": 0,
+        "head": "b60a9574",
+        "body": "30ae83c7",
+        "bodyLen": 4169
+      },
+      {
+        "k": 1,
+        "head": "f5120a4d",
+        "body": "1c12252e",
+        "bodyLen": 4480
+      },
+      {
+        "k": 2,
+        "head": "908fddee",
+        "body": "67950ce7",
+        "bodyLen": 4533
+      }
+    ],
+    "featureDrawer": "9fae11b2"
+  },
+  "data-layer": {
+    "page": "data-layer",
+    "tableFound": true,
+    "featureRows": 22,
+    "categoryRows": 3,
+    "headerCols": 5,
+    "cellButtons": 88,
+    "tableHash": "b4b24241",
+    "visibleInitial": "db-postgres,db-mysql,db-sqlserver,db-compat-postgres,db-ha-standby,db-read-replicas,db-serverless,db-pitr,nosql-kv,nosql-document,nosql-wide-column,nosql-global-table,nosql-serverless-nosql,cache-managed,obj-s3-api,obj-versioning,obj-lifecycle,obj-replication,obj-event,obj-encryption-cmk,obj-lock,obj-intelligent-tier",
+    "chipCount": 9,
+    "chipSeq": [
+      {
+        "i": 0,
+        "txt": "All",
+        "vis": "c0a4b2e4",
+        "hash": ""
+      },
+      {
+        "i": 1,
+        "txt": "Managed relational",
+        "vis": "dd36bb21",
+        "hash": ""
+      },
+      {
+        "i": 2,
+        "txt": "Managed NoSQL & cache",
+        "vis": "6ff066c3",
+        "hash": ""
+      },
+      {
+        "i": 3,
+        "txt": "Object storage",
+        "vis": "a322f3b2",
+        "hash": ""
+      },
+      {
+        "i": 4,
+        "txt": "All",
+        "vis": "a322f3b2",
+        "hash": ""
+      },
+      {
+        "i": 5,
+        "txt": "AWS",
+        "vis": "a322f3b2",
+        "hash": ""
+      },
+      {
+        "i": 6,
+        "txt": "Azure",
+        "vis": "a322f3b2",
+        "hash": ""
+      },
+      {
+        "i": 7,
+        "txt": "GCP",
+        "vis": "a322f3b2",
+        "hash": ""
+      },
+      {
+        "i": 8,
+        "txt": "OCI",
+        "vis": "a322f3b2",
+        "hash": ""
+      }
+    ],
+    "hasSearch": true,
+    "searchSeq": [
+      {
+        "term": "a",
+        "vis": "a322f3b2"
+      },
+      {
+        "term": "az",
+        "vis": "a322f3b2"
+      },
+      {
+        "term": "",
+        "vis": "a322f3b2"
+      }
+    ],
+    "drawerSeq": [
+      {
+        "k": 0,
+        "head": "11674f07",
+        "body": "edda4992",
+        "bodyLen": 3203
+      },
+      {
+        "k": 1,
+        "head": "6b7a0a5f",
+        "body": "7330acaa",
+        "bodyLen": 4215
+      },
+      {
+        "k": 2,
+        "head": "2f694577",
+        "body": "9f0f5748",
+        "bodyLen": 3901
+      }
+    ],
+    "featureDrawer": "b35fe6bd"
+  },
+  "ai-atlas": {
+    "page": "ai-atlas",
+    "tableFound": true,
+    "featureRows": 18,
+    "categoryRows": 5,
+    "headerCols": 12,
+    "cellButtons": 90,
+    "tableHash": "d32c73b3",
+    "visibleInitial": "fam-anthropic,fam-openai,fam-google,fam-meta,fam-mistral,fam-cohere,fam-amazon,fam-xai,fam-deepseek,cust-finetune,cust-import,rag-kb,rag-agents,safe-guardrails,safe-eval,acc-serverless,acc-provisioned,acc-openai",
+    "chipCount": 6,
+    "chipSeq": [
+      {
+        "i": 0,
+        "txt": "All",
+        "vis": "6004d236",
+        "hash": ""
+      },
+      {
+        "i": 1,
+        "txt": "Bedrock",
+        "vis": "6004d236",
+        "hash": "#vendors=bedrock"
+      },
+      {
+        "i": 2,
+        "txt": "AI Foundry",
+        "vis": "6004d236",
+        "hash": "#vendors=bedrock%2Cazure"
+      },
+      {
+        "i": 3,
+        "txt": "Vertex AI",
+        "vis": "6004d236",
+        "hash": "#vendors=bedrock%2Cazure%2Cvertex"
+      },
+      {
+        "i": 4,
+        "txt": "OCI Gen AI",
+        "vis": "6004d236",
+        "hash": "#vendors=bedrock%2Cazure%2Cvertex%2Coci"
+      },
+      {
+        "i": 5,
+        "txt": "AI Endpoints",
+        "vis": "6004d236",
+        "hash": ""
+      }
+    ],
+    "hasSearch": true,
+    "searchSeq": [
+      {
+        "term": "a",
+        "vis": "6004d236"
+      },
+      {
+        "term": "az",
+        "vis": "6004d236"
+      },
+      {
+        "term": "",
+        "vis": "6004d236"
+      }
+    ],
+    "drawerSeq": [
+      {
+        "k": 0,
+        "head": "df55b49a",
+        "body": "e3b1b4ba",
+        "bodyLen": 4116
+      },
+      {
+        "k": 1,
+        "head": "ecbfbb6f",
+        "body": "e10e1418",
+        "bodyLen": 4185
+      },
+      {
+        "k": 2,
+        "head": "f5678598",
+        "body": "406442aa",
+        "bodyLen": 4330
+      }
+    ],
+    "featureDrawer": "d5c301c5"
+  },
+  "egress": {
+    "page": "egress",
+    "tableFound": false
+  },
+  "observability": {
+    "page": "observability",
+    "tableFound": true,
+    "featureRows": 23,
+    "categoryRows": 10,
+    "headerCols": 11,
+    "cellButtons": 103,
+    "tableHash": "8cd3228",
+    "visibleInitial": "a-metrics,a-logs,a-traces,a-profiling,a-ret-metrics,a-ret-logs,a-otlp,a-otel-sdk,a-k8s-metrics,a-k8s-cp,a-alert-threshold,a-alert-anomaly,b-metrics,b-logs,b-traces,b-profiling,b-rum,b-otlp,b-k8s-agent,b-alert-threshold,b-alert-anomaly,b-free,b-free-retention",
+    "chipCount": 6,
+    "chipSeq": [
+      {
+        "i": 0,
+        "txt": "All",
+        "vis": "72cb8c56",
+        "hash": ""
+      },
+      {
+        "i": 1,
+        "txt": "Signals & Data Types",
+        "vis": "b2e8e32c",
+        "hash": "#cat=signals"
+      },
+      {
+        "i": 2,
+        "txt": "Data Retention",
+        "vis": "b3b750a9",
+        "hash": "#cat=retention"
+      },
+      {
+        "i": 3,
+        "txt": "OpenTelemetry",
+        "vis": "dcfb27e9",
+        "hash": "#cat=otel"
+      },
+      {
+        "i": 4,
+        "txt": "Kubernetes",
+        "vis": "20cc625d",
+        "hash": "#cat=kubernetes"
+      },
+      {
+        "i": 5,
+        "txt": "Alerting",
+        "vis": "824d22f3",
+        "hash": "#cat=alerting"
+      }
+    ],
+    "hasSearch": true,
+    "searchSeq": [
+      {
+        "term": "a",
+        "vis": "824d22f3"
+      },
+      {
+        "term": "az",
+        "vis": "d68f6ff5"
+      },
+      {
+        "term": "",
+        "vis": "824d22f3"
+      }
+    ],
+    "drawerSeq": [
+      {
+        "k": 0,
+        "head": "25526809",
+        "body": "91625b08",
+        "bodyLen": 3006
+      },
+      {
+        "k": 1,
+        "head": "79832771",
+        "body": "9f746227",
+        "bodyLen": 3688
+      },
+      {
+        "k": 2,
+        "head": "57f64f06",
+        "body": "2fdfe358",
+        "bodyLen": 3211
+      }
+    ],
+    "featureDrawer": "39755e5f"
+  },
+  "observability-stacks": {
+    "page": "observability-stacks",
+    "tableFound": true,
+    "featureRows": 14,
+    "categoryRows": 5,
+    "headerCols": 7,
+    "cellButtons": 84,
+    "tableHash": "6dcdebd3",
+    "visibleInitial": "metrics,logs,traces,profiling,rum,otlp,otelsdk,operator,k8smetrics,multitenancy,ha,longterm,license,storage",
+    "chipCount": 6,
+    "chipSeq": [
+      {
+        "i": 0,
+        "txt": "All",
+        "vis": "671172c1",
+        "hash": ""
+      },
+      {
+        "i": 1,
+        "txt": "Signal Coverage",
+        "vis": "ae819001",
+        "hash": "#cat=signals"
+      },
+      {
+        "i": 2,
+        "txt": "OpenTelemetry",
+        "vis": "bcd93f06",
+        "hash": "#cat=otel"
+      },
+      {
+        "i": 3,
+        "txt": "Kubernetes",
+        "vis": "4d1109ca",
+        "hash": "#cat=kubernetes"
+      },
+      {
+        "i": 4,
+        "txt": "Operations",
+        "vis": "670500ab",
+        "hash": "#cat=operations"
+      },
+      {
+        "i": 5,
+        "txt": "Distribution",
+        "vis": "247a67e9",
+        "hash": "#cat=distribution"
+      }
+    ],
+    "hasSearch": true,
+    "searchSeq": [
+      {
+        "term": "a",
+        "vis": "247a67e9"
+      },
+      {
+        "term": "az",
+        "vis": "aed81e7a"
+      },
+      {
+        "term": "",
+        "vis": "247a67e9"
+      }
+    ],
+    "drawerSeq": [
+      {
+        "k": 0,
+        "head": "66ee5ae1",
+        "body": "b7b00d0d",
+        "bodyLen": 4191
+      },
+      {
+        "k": 1,
+        "head": "606097e3",
+        "body": "fdbffb72",
+        "bodyLen": 4199
+      },
+      {
+        "k": 2,
+        "head": "3955426e",
+        "body": "71898b6e",
+        "bodyLen": 4107
+      }
+    ],
+    "featureDrawer": "6e81e71"
+  },
+  "sovereignty": {
+    "page": "sovereignty",
+    "tableFound": true,
+    "featureRows": 12,
+    "categoryRows": 5,
+    "headerCols": 17,
+    "cellButtons": 90,
+    "tableHash": "756a050f",
+    "visibleInitial": "parent,legal,operational,residency,gaiax,certs,llm-openweights,llm-licence,llm-transparency,llm-inference-eu,llm-notrain,llm-jurisdiction",
+    "chipCount": 4,
+    "chipSeq": [
+      {
+        "i": 0,
+        "txt": "All",
+        "vis": "9b6ab235",
+        "hash": ""
+      },
+      {
+        "i": 1,
+        "txt": "Jurisdiction & control",
+        "vis": "9fe0ecc0",
+        "hash": "#cat=juris"
+      },
+      {
+        "i": 2,
+        "txt": "Data residency",
+        "vis": "bfe44481",
+        "hash": "#cat=residency"
+      },
+      {
+        "i": 3,
+        "txt": "Ecosystem & assurance",
+        "vis": "86a1fd52",
+        "hash": "#cat=ecosystem"
+      }
+    ],
+    "hasSearch": true,
+    "searchSeq": [
+      {
+        "term": "a",
+        "vis": "86a1fd52"
+      },
+      {
+        "term": "az",
+        "vis": "86a1fd52"
+      },
+      {
+        "term": "",
+        "vis": "86a1fd52"
+      }
+    ],
+    "drawerSeq": [
+      {
+        "k": 0,
+        "head": "80c6b622",
+        "body": "b8767d8c",
+        "bodyLen": 5809
+      },
+      {
+        "k": 1,
+        "head": "fb95522c",
+        "body": "15d81403",
+        "bodyLen": 5545
+      },
+      {
+        "k": 2,
+        "head": "1e1fbbf2",
+        "body": "d1f302f7",
+        "bodyLen": 4867
+      }
+    ],
+    "featureDrawer": "abe3af17"
+  }
+}

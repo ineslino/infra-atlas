@@ -232,4 +232,116 @@
     }
   };
 
+  // ─── canonical filter machinery — category + vendor chips ⇄ URL hash ───
+  // The cross-cloud matrix pages all carried this verbatim: build the two chip
+  // rows, the multi-select vendor toggle with an "all" reset, single-select
+  // category, search box + "/" shortcut, and the filter-state ⇄ hash permalink.
+  // The page supplies its data, the chip/search elements, the labels, the vendor
+  // hash-param name, and an onChange callback that re-runs its own visibility
+  // pass. Drawer body, search haystack and counts stay on the page — those are
+  // genuinely page-specific. Returns { buildChips, applyHash, writeHash, wire }.
+  IA.matrix.filters = function (cfg) {
+    var state = cfg.state;
+    var vendors = cfg.vendors, categories = cfg.categories;
+    var vParam = cfg.vendorParam || "vendors";
+    var onChange = cfg.onChange || function () {};
+    var $ = function (s) { return document.querySelector(s); };
+    var $$ = function (s) { return Array.prototype.slice.call(document.querySelectorAll(s)); };
+    // mirrors the per-page escapeHtml (escapes ' too) so chip markup is byte-identical
+    function escHtml(s) {
+      return String(s).replace(/[&<>"']/g, function (c) {
+        return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c];
+      });
+    }
+
+    // some pages historically interpolated chip labels raw (no escape); honour that
+    // with escapeChips:false so the built markup stays byte-identical to the original.
+    var lbl = cfg.escapeChips === false ? function (s) { return String(s); } : escHtml;
+    function buildChips() {
+      cfg.catChipsEl.innerHTML = '<span class="filter-chips__label">' + (cfg.categoryLabel || "Category") + '</span>\n' +
+        '    <button class="chip is-active" data-cat="all" aria-pressed="true">All</button>' +
+        categories.map(function (c) {
+          return '<button class="chip" data-cat="' + c.key + '" aria-pressed="false">' + lbl(c.label) + '</button>';
+        }).join("");
+      cfg.vendorChipsEl.innerHTML = '<span class="filter-chips__label">' + (cfg.vendorLabel || "Vendors") + '</span>\n' +
+        '    <button class="chip is-active" data-v="all" aria-pressed="true">All</button>' +
+        vendors.map(function (v) {
+          return '<button class="chip" data-v="' + v.key + '" aria-pressed="false"><span class="swatch" style="background:' + v.swatch + '" aria-hidden="true"></span>' + lbl(v.short) + '</button>';
+        }).join("");
+    }
+
+    function writeHash() {
+      var keys = vendors.map(function (v) { return v.key; });
+      var p = new URLSearchParams();
+      if (state.vendors.size < keys.length) p.set(vParam, keys.filter(function (k) { return state.vendors.has(k); }).join(","));
+      if (state.category !== "all") p.set("cat", state.category);
+      if (state.query.trim()) p.set("q", state.query.trim());
+      var h = p.toString();
+      history.replaceState(null, "", h ? "#" + h : location.pathname + location.search);
+    }
+
+    function applyHash() {
+      var keys = vendors.map(function (v) { return v.key; });
+      var p = new URLSearchParams(location.hash.slice(1));
+      var vd = p.get(vParam);
+      if (vd) {
+        var valid = vd.split(",").filter(function (x) { return keys.indexOf(x) !== -1; });
+        if (valid.length) state.vendors = new Set(valid);
+      }
+      var cat = p.get("cat"); if (cat) state.category = cat;
+      state.query = p.get("q") || "";
+      var allV = state.vendors.size === keys.length;
+      $$('.chip[data-v]').forEach(function (b) {
+        if (b.dataset.v === "all") b.classList.toggle("is-active", allV);
+        else b.classList.toggle("is-active", !allV && state.vendors.has(b.dataset.v));
+      });
+      $$('.chip[data-cat]').forEach(function (b) { b.classList.toggle("is-active", b.dataset.cat === state.category); });
+      if (cfg.searchEl) cfg.searchEl.value = state.query;
+    }
+
+    function wire() {
+      document.addEventListener("click", function (e) {
+        var c = e.target.closest(".chip[data-cat]");
+        if (c) {
+          state.category = c.dataset.cat;
+          $$('.chip[data-cat]').forEach(function (b) { b.classList.toggle("is-active", b.dataset.cat === state.category); });
+          IA.matrix.syncChipsAria('.chip[data-cat]');
+          onChange();
+          return;
+        }
+        var v = e.target.closest(".chip[data-v]");
+        if (v) {
+          var key = v.dataset.v;
+          if (key === "all") {
+            state.vendors = new Set(vendors.map(function (x) { return x.key; }));
+            $$('.chip[data-v]').forEach(function (b) { b.classList.toggle("is-active", b.dataset.v === "all"); });
+          } else {
+            if ($('.chip[data-v="all"]').classList.contains("is-active")) {
+              state.vendors = new Set([key]);
+              $$('.chip[data-v]').forEach(function (b) { b.classList.toggle("is-active", b.dataset.v === key); });
+            } else if (state.vendors.has(key) && state.vendors.size === 1) {
+              state.vendors = new Set(vendors.map(function (x) { return x.key; }));
+              $$('.chip[data-v]').forEach(function (b) { b.classList.toggle("is-active", b.dataset.v === "all"); });
+            } else {
+              state.vendors.has(key) ? state.vendors.delete(key) : state.vendors.add(key);
+              v.classList.toggle("is-active");
+              $('.chip[data-v="all"]').classList.remove("is-active");
+            }
+          }
+          IA.matrix.syncChipsAria('.chip[data-v]');
+          onChange();
+          return;
+        }
+      });
+      if (cfg.searchEl) {
+        cfg.searchEl.addEventListener("input", function (e) { state.query = e.target.value; onChange(); });
+      }
+      document.addEventListener("keydown", function (e) {
+        if (e.key === "/" && e.target.tagName !== "INPUT" && cfg.searchEl) { e.preventDefault(); cfg.searchEl.focus(); }
+      });
+    }
+
+    return { buildChips: buildChips, applyHash: applyHash, writeHash: writeHash, wire: wire };
+  };
+
 })(window);

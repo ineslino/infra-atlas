@@ -784,60 +784,38 @@ const escapeHtml = (s) => String(s).replace(/[&<>"']/g, (c) => ({
   "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
 }[c]));
 
-// ─── Permalinks — filter state ⇄ URL hash ───
-function writeHash() {
-  const keys = VENDORS.map(v => v.key);
-  const p = new URLSearchParams();
-  if (state.vendors.size < keys.length) p.set("vendors", keys.filter(k => state.vendors.has(k)).join(","));
-  if (state.category !== "all") p.set("cat", state.category);
-  if (state.query.trim())       p.set("q", state.query.trim());
-  const h = p.toString();
-  history.replaceState(null, "", h ? "#" + h : location.pathname + location.search);
-}
-function applyHash() {
-  const keys = VENDORS.map(v => v.key);
-  const p = new URLSearchParams(location.hash.slice(1));
-  const vd = p.get("vendors");
-  if (vd) {
-    const valid = vd.split(",").filter(x => keys.includes(x));
-    if (valid.length) state.vendors = new Set(valid);
-  }
-  const cat = p.get("cat"); if (cat) state.category = cat;
-  state.query = p.get("q") || "";
-  const allV = state.vendors.size === keys.length;
-  $$('.chip[data-v]').forEach(b => {
-    if (b.dataset.v === "all") b.classList.toggle("is-active", allV);
-    else b.classList.toggle("is-active", !allV && state.vendors.has(b.dataset.v));
-  });
-  $$('.chip[data-cat]').forEach(b => b.classList.toggle("is-active", b.dataset.cat === state.category));
-  const sb = $("#search"); if (sb) sb.value = state.query;
-}
+// Filter machinery (category + vendor chips, search, permalink ⇄ hash) lives in
+// /assets/matrix.js — IA.matrix.filters(...), built in init() below.
 
+let F;  // shared filter machinery (IA.matrix.filters), built once IA.matrix is ready
 function init() {
   // Counts
   $("#count-features").textContent = FEATURES.length;
   const stars = FEATURES.reduce((acc, f) => acc + Object.values(f.support).filter(s => s.note && s.note.length > 0).length, 0);
   $("#count-stars").textContent = stars;
 
-  // Category chips
-  const catChips = $("#cat-chips");
-  catChips.innerHTML = `<span class="filter-chips__label">Category</span>
-    <button class="chip is-active" data-cat="all" aria-pressed="true">All</button>` +
-    CATEGORIES.map(c => `<button class="chip" data-cat="${c.key}" aria-pressed="false">${escapeHtml(c.label)}</button>`).join("");
+  F = IA.matrix.filters({
+    state, vendors: VENDORS, categories: CATEGORIES,
+    catChipsEl: $("#cat-chips"), vendorChipsEl: $("#vendor-chips"), searchEl: $("#search"),
+    categoryLabel: "Category", vendorLabel: "Services", vendorParam: "vendors",
+    onChange: applyFilter
+  });
 
-  // Vendor chips
-  const vChips = $("#vendor-chips");
-  vChips.innerHTML = `<span class="filter-chips__label">Services</span>
-    <button class="chip is-active" data-v="all" aria-pressed="true">All</button>` +
-    VENDORS.map(v => `<button class="chip" data-v="${v.key}" aria-pressed="false"><span class="swatch" style="background:${v.swatch}" aria-hidden="true"></span>${escapeHtml(v.short)}</button>`).join("");
-
-  applyHash();
+  F.buildChips();
+  F.applyHash();
   renderMatrix();
-  wireEvents();
+  F.wire();
+  // Shared module owns: drawer modal open/close, ESC, backdrop click, focus trap,
+  // scroll lock, and the cell/feature-col click delegation that opens the drawer.
+  IA.matrix.drawer.init();
+  IA.matrix.wireDelegation((featureId, vendorKey) => {
+    const f = FEATURES.find(x => x.id === featureId);
+    if (f) openFeatureDrawer(f, vendorKey);
+  });
   // sync aria-pressed once after applyHash may have flipped is-active states
   IA.matrix.syncChipsAria('.chip[data-cat]');
   IA.matrix.syncChipsAria('.chip[data-v]');
-  window.addEventListener("hashchange", () => { applyHash(); applyFilter(); });
+  window.addEventListener("hashchange", () => { F.applyHash(); applyFilter(); });
 }
 
 function renderMatrix() {
@@ -876,7 +854,7 @@ function applyFilter() {
     statusNoun: "capability", statusNounPlural: "capabilities",
     anyFilterActive: anyFilter
   });
-  writeHash();
+  F.writeHash();
 }
 
 // Drawer infrastructure (focus trap, scroll lock, ESC, backdrop click) lives in
@@ -911,63 +889,6 @@ function openFeatureDrawer(feature, focusVendor) {
       </div>`;
     }).join("") + `</div>`;
   IA.matrix.drawer.open(head, body);
-}
-
-function wireEvents() {
-  document.addEventListener("click", (e) => {
-    // Category chips
-    const c = e.target.closest(".chip[data-cat]");
-    if (c) {
-      state.category = c.dataset.cat;
-      $$('.chip[data-cat]').forEach(b => b.classList.toggle("is-active", b.dataset.cat === state.category));
-      IA.matrix.syncChipsAria('.chip[data-cat]');
-      applyFilter();
-      return;
-    }
-    // Vendor chips — kubernetes-specific 6-button toggle (all + 5 services)
-    const v = e.target.closest(".chip[data-v]");
-    if (v) {
-      const key = v.dataset.v;
-      if (key === "all") {
-        state.vendors = new Set(VENDORS.map(x => x.key));
-        $$('.chip[data-v]').forEach(b => b.classList.toggle("is-active", b.dataset.v === "all"));
-      } else {
-        if ($('.chip[data-v="all"]').classList.contains("is-active")) {
-          state.vendors = new Set([key]);
-          $$('.chip[data-v]').forEach(b => b.classList.toggle("is-active", b.dataset.v === key));
-        } else {
-          if (state.vendors.has(key) && state.vendors.size === 1) {
-            state.vendors = new Set(VENDORS.map(x => x.key));
-            $$('.chip[data-v]').forEach(b => b.classList.toggle("is-active", b.dataset.v === "all"));
-          } else {
-            state.vendors.has(key) ? state.vendors.delete(key) : state.vendors.add(key);
-            v.classList.toggle("is-active");
-            $('.chip[data-v="all"]').classList.remove("is-active");
-          }
-        }
-      }
-      IA.matrix.syncChipsAria('.chip[data-v]');
-      applyFilter();
-      return;
-    }
-  });
-
-  $("#search").addEventListener("input", (e) => {
-    state.query = e.target.value;
-    applyFilter();
-  });
-  // "/" focus shortcut — kubernetes-specific
-  document.addEventListener("keydown", (e) => {
-    if (e.key === "/" && e.target.tagName !== "INPUT") { e.preventDefault(); $("#search").focus(); }
-  });
-
-  // Shared module owns: drawer modal open/close, ESC, backdrop click, focus trap, scroll lock,
-  // and the cell/feature-col click delegation that opens the drawer.
-  IA.matrix.drawer.init();
-  IA.matrix.wireDelegation((featureId, vendorKey) => {
-    const f = FEATURES.find(x => x.id === featureId);
-    if (f) openFeatureDrawer(f, vendorKey);
-  });
 }
 
 // Wait for the deferred /assets/matrix.js to populate window.IA before init runs.
