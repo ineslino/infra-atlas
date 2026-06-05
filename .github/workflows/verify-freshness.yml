@@ -40,6 +40,7 @@ jobs:
             "networking-matrix:180"
             "ai-atlas:45"
             "egress:180"
+            "idp-matrix:180"
             "decisions:365"
           )
           now=$(date -u +%s)

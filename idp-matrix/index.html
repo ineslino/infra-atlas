@@ -1,0 +1,682 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="color-scheme" content="dark">
+<title>Cross-Cloud · Internal Developer Portal Matrix · Infra Atlas</title>
+<link rel="icon" href="/favicon.svg?v=2" type="image/svg+xml">
+<meta name="description" content="Internal Developer Portals compared on what they actually ship — catalog, scaffolder, TechDocs, scorecards, plugins, integrations, RBAC — across Backstage, Spotify Portal, Roadie, Port, Cortex, OpsLevel and Atlassian Compass. Every cell sourced from official docs.">
+<link rel="canonical" href="https://infraatlas.dev/idp-matrix/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Infra Atlas">
+<meta property="og:title" content="Cross-Cloud · Internal Developer Portal Matrix · Infra Atlas">
+<meta property="og:description" content="Internal Developer Portals compared on capability, not marketing — Backstage, Spotify Portal, Roadie, Port, Cortex, OpsLevel, Atlassian Compass. Catalog, scaffolder, scorecards, plugins, RBAC, deployment and licensing, each cell sourced.">
+<meta property="og:url" content="https://infraatlas.dev/idp-matrix/">
+<meta property="og:image" content="https://infraatlas.dev/og.png?v=3">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Infra Atlas — a reference for the infrastructure stack">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Cross-Cloud · Internal Developer Portal Matrix · Infra Atlas">
+<meta name="twitter:description" content="Internal Developer Portals compared on capability, not marketing. Backstage, Spotify Portal, Roadie, Port, Cortex, OpsLevel, Compass — each cell sourced from official docs.">
+<meta name="twitter:image" content="https://infraatlas.dev/og.png?v=3">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@300;400;500;600&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/matrix.css?v=3">
+
+<style>
+:root {
+  --ink: #0A0907; --ink-2: #100E0C; --surface: #161310; --surface-2: #1E1A15; --surface-3: #2A241C;
+  --line: rgba(244, 239, 230, 0.06); --line-2: rgba(244, 239, 230, 0.14); --line-3: rgba(244, 239, 230, 0.28);
+  --paper: #F4EFE6; --paper-2: rgba(244, 239, 230, 0.66); --paper-3: rgba(244, 239, 230, 0.55); --paper-4: rgba(244, 239, 230, 0.20);
+  --accent: #FF7849; --accent-2: #FFA66E; --accent-glow: rgba(255, 120, 73, 0.22);
+  --mint: #6FE7B5; --gold: #F4C660; --plum: #C586E8; --sky: #7CD7F1; --rose: #F47B7B; --teal: #5BCCC9;
+  --yes:   #6FE7B5;
+  --no:    #F47B7B;
+  --part:  #F4C660;
+  --serif: 'Instrument Serif', 'Times New Roman', serif;
+  --mono: 'JetBrains Mono', ui-monospace, monospace;
+  --sans: 'Manrope', -apple-system, system-ui, sans-serif;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body {
+  background: var(--ink);
+  color: var(--paper);
+  font-family: var(--sans);
+  font-size: 15px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  min-height: 100vh;
+}
+
+body {
+  background:
+    radial-gradient(ellipse at 100% -10%, rgba(255, 120, 73, 0.07), transparent 55%),
+    radial-gradient(ellipse at -10% 110%, rgba(244, 198, 96, 0.05), transparent 65%),
+    var(--ink);
+  background-attachment: fixed;
+  overflow-x: hidden;
+}
+
+.grain {
+  pointer-events: none; position: fixed; inset: 0; z-index: 100; opacity: 0.08; mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml;utf8,<svg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.6 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+}
+.scanlines {
+  pointer-events: none; position: fixed; inset: 0; z-index: 99;
+  background: repeating-linear-gradient(180deg, transparent, transparent 2px, rgba(244,239,230,0.012) 2px, rgba(244,239,230,0.012) 3px);
+}
+::selection { background: var(--accent); color: var(--ink); }
+
+/* ─────────── FOCUS ─────────── */
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+a:focus-visible, button:focus-visible, input:focus-visible, [tabindex]:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+.matrix tbody tr.feature-row td.cell:focus-visible,
+.matrix tbody tr.feature-row td.feature-col:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: -2px;
+}
+
+.page { max-width: 1640px; margin: 0 auto; padding: 56px 48px 96px; position: relative; }
+
+/* ─────────── MASTHEAD ─────────── */
+.masthead {
+  display: grid; grid-template-columns: 1fr auto; gap: 48px; align-items: end;
+  padding-bottom: 36px; border-bottom: 1px solid var(--line); margin-bottom: 32px;
+}
+.masthead__eyebrow {
+  font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.22em; color: var(--paper-3);
+  text-transform: uppercase; display: inline-flex; align-items: center; gap: 12px;
+  text-decoration: none; transition: color 0.2s ease;
+}
+.masthead__eyebrow:hover { color: var(--paper); }
+.masthead__eyebrow-arrow { color: var(--accent); transition: transform 0.2s ease; }
+.masthead__eyebrow:hover .masthead__eyebrow-arrow { transform: translateX(-4px); }
+.masthead__title {
+  font-family: var(--serif); font-weight: 400;
+  font-size: clamp(48px, 7vw, 108px); line-height: 0.95; letter-spacing: -0.02em;
+  margin-top: 16px; color: var(--paper);
+}
+.masthead__title em { font-style: italic; color: var(--accent); }
+.masthead__subtitle {
+  margin-top: 18px; font-size: 16px; color: var(--paper-2); max-width: 660px; line-height: 1.55;
+}
+.masthead__subtitle span {
+  font-family: var(--serif); font-style: italic; color: var(--paper);
+}
+
+.masthead__status {
+  text-align: right; display: flex; flex-direction: column; align-items: flex-end; gap: 14px; padding-bottom: 6px;
+}
+.status-line {
+  display: inline-flex; align-items: center; gap: 10px;
+  font-family: var(--mono); font-size: 11px; letter-spacing: 0.18em;
+  text-transform: uppercase; color: var(--gold);
+}
+.status-dot {
+  width: 8px; height: 8px; border-radius: 50%; background: var(--gold);
+}
+@media (prefers-reduced-motion: no-preference) {
+  .status-dot { animation: pulse 2.4s infinite; }
+  @keyframes pulse {
+    0% { box-shadow: 0 0 0 0 rgba(244,198,96,0.5); }
+    70% { box-shadow: 0 0 0 14px rgba(244,198,96,0); }
+    100% { box-shadow: 0 0 0 0 rgba(244,198,96,0); }
+  }
+}
+.status-time { font-family: var(--mono); font-size: 12px; color: var(--paper-3); }
+.status-counts { display: flex; gap: 24px; margin-top: 4px; }
+.status-counts > div {
+  text-align: right; font-family: var(--mono); font-size: 11px; letter-spacing: 0.12em;
+  text-transform: uppercase; color: var(--paper-3); display: flex; flex-direction: column; gap: 2px;
+}
+.status-counts strong {
+  font-family: var(--serif); font-style: italic; font-weight: 400; font-size: 28px;
+  color: var(--paper); letter-spacing: -0.01em; text-transform: none;
+}
+
+/* ─────────── READING NOTE ─────────── */
+.readnote {
+  display: flex; gap: 18px; align-items: flex-start;
+  padding: 20px 24px; margin-bottom: 28px;
+  background: linear-gradient(180deg, rgba(255,120,73,0.075), rgba(255,120,73,0.02));
+  border: 1px solid rgba(255,120,73,0.22); border-radius: 5px;
+}
+.readnote__mark {
+  font-family: var(--serif); font-style: italic; font-size: 40px;
+  color: var(--accent); line-height: 0.7; flex-shrink: 0;
+}
+.readnote__text { font-size: 13.5px; color: var(--paper-2); line-height: 1.62; }
+.readnote__text strong { color: var(--paper); font-weight: 600; }
+.readnote__text em { font-family: var(--serif); font-style: italic; color: var(--paper); font-size: 15px; }
+
+/* ─────────── FILTERS ─────────── */
+.filters {
+  display: grid; grid-template-columns: auto 1fr; gap: 18px 32px; align-items: center;
+  padding: 18px 22px; background: linear-gradient(180deg, var(--surface) 0%, var(--ink-2) 100%);
+  border: 1px solid var(--line); border-radius: 4px;
+  position: sticky; top: 16px; z-index: 50; backdrop-filter: blur(12px); margin-bottom: 28px;
+}
+.filter-search {
+  flex: 1; position: relative; grid-column: 1 / -1;
+}
+.filter-search input {
+  width: 100%; background: var(--ink); border: 1px solid var(--line); color: var(--paper);
+  font-family: var(--mono); font-size: 13px; padding: 12px 16px 12px 42px;
+  border-radius: 3px; outline: none; transition: border-color 0.2s ease;
+}
+.filter-search input::placeholder { color: var(--paper-3); }
+.filter-search input:focus { border-color: var(--accent); }
+.filter-search::before {
+  content: '⌕'; position: absolute; left: 16px; top: 50%; transform: translateY(-50%);
+  color: var(--paper-3); font-size: 18px; pointer-events: none;
+}
+.filter-chips {
+  grid-column: 1 / -1; display: flex; flex-wrap: wrap; gap: 6px; align-items: center;
+}
+.filter-chips__label {
+  font-family: var(--mono); font-size: 10px; letter-spacing: 0.16em;
+  text-transform: uppercase; color: var(--paper-3); margin-right: 4px;
+}
+.chip {
+  background: transparent; border: 1px solid var(--line-2); color: var(--paper-2);
+  font-family: var(--mono); font-size: 11px; letter-spacing: 0.06em;
+  padding: 6px 12px; border-radius: 99px; cursor: pointer; transition: all 0.15s ease;
+  display: inline-flex; align-items: center; gap: 8px; white-space: nowrap;
+}
+.chip:hover { border-color: var(--paper-3); color: var(--paper); }
+.chip.is-active { background: var(--paper); border-color: var(--paper); color: var(--ink); }
+.chip .swatch {
+  width: 8px; height: 8px; border-radius: 2px;
+}
+
+/* ─────────── MATRIX (idp-specific overrides) ─────────── */
+/* base matrix table + button-wrappers + drawer + vendor-row + empty state in /assets/matrix.css */
+.matrix-wrap {
+  margin-bottom: 48px;
+  border: 1px solid var(--line); border-radius: 6px;
+  background: linear-gradient(180deg, var(--ink-2) 0%, var(--ink) 100%);
+}
+.scroll-hint { position: relative; }
+.scroll-hint::after {
+  content: ''; position: absolute; top: 0; right: 0; bottom: 0;
+  width: 48px; background: linear-gradient(to left, var(--ink), transparent);
+  pointer-events: none; border-radius: 0 5px 5px 0;
+}
+@media (min-width: 1381px) { .scroll-hint::after { display: none; } }
+.matrix { min-width: 1380px; /* 7 tool columns + label — wider than the shared default */ }
+.matrix thead th.feature-col { min-width: 240px; /* wider label column; padding/serif from matrix.css */ }
+
+/* Hide columns when a tool is filtered out */
+.matrix.hide-backstage .col-backstage,
+.matrix.hide-spotify   .col-spotify,
+.matrix.hide-roadie    .col-roadie,
+.matrix.hide-port      .col-port,
+.matrix.hide-cortex    .col-cortex,
+.matrix.hide-opslevel  .col-opslevel,
+.matrix.hide-compass   .col-compass { display: none; }
+
+/* ─────────── LEGEND ─────────── */
+.legend {
+  display: flex; flex-wrap: wrap; gap: 18px; align-items: center;
+  margin-bottom: 28px; padding: 16px 22px;
+  background: var(--surface); border: 1px solid var(--line); border-radius: 4px;
+  font-family: var(--mono); font-size: 11px; color: var(--paper-2);
+}
+.legend__label {
+  font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--paper-3);
+}
+.legend__item { display: inline-flex; align-items: center; gap: 8px; }
+
+/* drawer + vendor-row in /assets/matrix.css */
+
+/* ─────────── COLOPHON ─────────── */
+.colophon {
+  margin-top: 64px; padding-top: 32px; border-top: 1px solid var(--line);
+  display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 32px;
+  font-size: 13px; color: var(--paper-3);
+}
+.colophon h5 {
+  font-family: var(--mono); font-size: 10px; letter-spacing: 0.18em;
+  text-transform: uppercase; color: var(--paper-2); margin-bottom: 10px; font-weight: 500;
+}
+.colophon p { font-size: 13px; line-height: 1.6; }
+.colophon p a {
+  color: var(--paper-2); text-decoration: underline;
+  text-decoration-color: var(--line-2); text-underline-offset: 3px;
+}
+.colophon p a:hover { color: var(--accent); }
+.colophon code {
+  font-family: var(--mono); font-size: 11.5px; background: var(--surface);
+  padding: 1px 6px; border-radius: 2px; border: 1px solid var(--line); color: var(--accent-2);
+}
+
+@media (max-width: 900px) {
+  .page { padding: 32px 22px 72px; }
+  .masthead { grid-template-columns: 1fr; gap: 24px; }
+  .masthead__status { text-align: left; align-items: flex-start; }
+  .filters { position: static; padding: 14px; }
+  .colophon { grid-template-columns: 1fr; gap: 24px; }
+}
+</style>
+</head>
+<body>
+
+<div class="grain"></div>
+<div class="scanlines"></div>
+
+<div class="page">
+
+  <header class="masthead">
+    <div class="masthead__brand">
+      <a class="masthead__eyebrow" href="../">
+        <span class="masthead__eyebrow-arrow">←</span>
+        Infra Atlas · Cross-Cloud · Developer Portals
+      </a>
+      <h1 class="masthead__title">IDP <em>Matrix.</em></h1>
+      <p class="masthead__subtitle">
+        The Internal Developer Portals, compared on <span>what they ship, not what they pitch</span> — catalog, scaffolder, TechDocs, scorecards, plugins, integrations, RBAC. Every cell is read off the <span>official docs</span> and links back to its source.
+      </p>
+    </div>
+    <aside class="masthead__status">
+      <div class="status-line">
+        <span class="status-dot"></span>
+        <span class="status-text">Curated · v1</span>
+      </div>
+      <div class="status-time">Verified · <time datetime="2026-06-06">2026-06-06</time></div>
+      <div class="status-counts">
+        <div>Tools<strong id="count-vendors">7</strong></div>
+        <div>Capabilities<strong id="count-features">—</strong></div>
+        <div>Sources<strong id="count-stars">—</strong></div>
+      </div>
+    </aside>
+  </header>
+
+  <main id="ia-main">
+
+  <div class="readnote">
+    <span class="readnote__mark">*</span>
+    <p class="readnote__text">
+      <strong>This is an Internal Developer Portal matrix — nothing else.</strong> Platform orchestrators (Humanitec), backend frameworks (Encore), standalone CI/CD, IaC and observability tools are out of scope by design. The capability rows (catalog, scaffolder, scorecards…) are scored ✓ / ◐ / ✗; the last three rows — <em>deployment, license, pricing</em> — are descriptive facts marked ≈, never scored, because "open-source" and "proprietary" are properties, not virtues. Read the per-tool note and source before you decide.
+    </p>
+  </div>
+
+  <section class="filters">
+    <div class="filter-search">
+      <label for="search" class="sr-only">Search capabilities, tool names, or terms</label>
+      <input id="search" type="search" autocomplete="off" spellcheck="false" placeholder="Filter — search by capability, tool, or term…" aria-label="Search capabilities, tool names, or terms">
+    </div>
+    <div class="filter-chips" id="cat-chips"></div>
+    <div class="filter-chips" id="vendor-chips"></div>
+  </section>
+
+  <div class="sr-only" id="filter-status" role="status" aria-live="polite"></div>
+
+  <div class="legend">
+    <span class="legend__label">Legend</span>
+    <span class="legend__item"><span class="cell-mark cell-mark--yes">✓</span> First-class / built-in</span>
+    <span class="legend__item"><span class="cell-mark cell-mark--part">◐</span> Partial — read the note</span>
+    <span class="legend__item"><span class="cell-mark cell-mark--no">✗</span> Not available</span>
+    <span class="legend__item"><span class="cell-mark cell-mark--info">≈</span> Descriptive (not scored)</span>
+    <span class="legend__item">Click any cell for the note &amp; source</span>
+  </div>
+
+  <div class="scroll-hint">
+  <div class="matrix-wrap" id="matrix-wrap">
+    <table class="matrix" id="matrix" aria-label="Internal Developer Portal capability comparison"></table>
+  </div>
+  </div>
+
+  <div class="matrix-empty" id="matrix-empty" role="status" aria-live="polite">
+    <strong>No capabilities match your filters.</strong><br>
+    Try a broader search term, or switch the category to “All”.
+  </div>
+
+  </main>
+
+  <footer class="colophon">
+    <div>
+      <h5>About</h5>
+      <p>The Internal Developer Portal layer of <a href="../">Infra Atlas</a> — Backstage, Spotify Portal, Roadie, Port, Cortex, OpsLevel and Atlassian Compass, mapped across the capabilities that actually distinguish them. Click any cell for the note and the source URL. Scope is deliberately narrow: developer portals only.</p>
+    </div>
+    <div>
+      <h5>Sources</h5>
+      <p>Every cell is read off each tool&rsquo;s official documentation, and the source URL is cited in the cell&rsquo;s drawer. The space moves fast and the only canonical source is each vendor&rsquo;s own docs, so this is a curated snapshot — verified 2026-06-06 and reviewed roughly twice a year. <em>If you spot a stale fact, <a href="https://github.com/ineslino/infra-atlas/issues/new" target="_blank" rel="noopener">open an issue</a>.</em></p>
+    </div>
+    <div>
+      <h5>Shortcuts</h5>
+      <p><code>/</code> search · <code>Esc</code> close drawer · click a cell for the note, click a row name for the full per-tool breakdown.</p>
+    </div>
+  </footer>
+
+</div>
+
+<!-- DRAWER -->
+<div class="drawer-backdrop" id="drawer-backdrop"></div>
+<aside class="drawer" id="drawer" role="dialog" aria-modal="true" aria-labelledby="drawer-title" aria-hidden="true" hidden>
+  <div class="drawer__head" id="drawer-head"></div>
+  <div class="drawer__body" id="drawer-body"></div>
+</aside>
+
+<script>
+// ═══════════════════════════════════════════════════════════════════
+// INFRA ATLAS · INTERNAL DEVELOPER PORTAL MATRIX
+// Every cell is read off the tool's official documentation (2026-06-06).
+// The source URL for each datum is in the cell's `src` field, surfaced
+// in the drawer. Capability rows are scored yes/part/no; the descriptive
+// rows (deployment, license, pricing) are level:"info" — facts, not scores.
+// ═══════════════════════════════════════════════════════════════════
+
+// ───────────────────────────────────────────────────────────────────
+// VENDORS (the developer portals) — `kind` is descriptive, not a ranking
+// ───────────────────────────────────────────────────────────────────
+const VENDORS = [
+  { key: "backstage", name: "Backstage",        short: "Backstage", kind: "Open-source",       swatch: "#6FE7B5" },
+  { key: "spotify",   name: "Spotify Portal",   short: "Spotify",   kind: "Managed Backstage", swatch: "#F4C660" },
+  { key: "roadie",    name: "Roadie",           short: "Roadie",    kind: "Managed Backstage", swatch: "#7CD7F1" },
+  { key: "port",      name: "Port",             short: "Port",      kind: "Commercial SaaS",   swatch: "#FF7849" },
+  { key: "cortex",    name: "Cortex",           short: "Cortex",    kind: "Commercial SaaS",   swatch: "#C586E8" },
+  { key: "opslevel",  name: "OpsLevel",         short: "OpsLevel",  kind: "Commercial SaaS",   swatch: "#F47B7B" },
+  { key: "compass",   name: "Atlassian Compass",short: "Compass",   kind: "Commercial SaaS",   swatch: "#5BCCC9" }
+];
+
+// ───────────────────────────────────────────────────────────────────
+// CATEGORIES
+// ───────────────────────────────────────────────────────────────────
+const CATEGORIES = [
+  { key: "catalog-docs", label: "Catalog & Docs" },
+  { key: "standards",    label: "Standards & Extensibility" },
+  { key: "model",        label: "Deployment & Licensing" }
+];
+
+// ───────────────────────────────────────────────────────────────────
+// FEATURES — one row per capability
+//   level : yes | part | no | info
+//           (yes = first-class/built-in, part = partial/needs plugin or
+//            config, no = absent, info = descriptive fact, not scored)
+//   value : short label shown in the cell
+//   note  : the factual detail — surfaced in the drawer
+//   src   : official documentation URL backing the cell
+// ───────────────────────────────────────────────────────────────────
+const FEATURES = [
+
+  // ══ Catalog & Docs ══
+  { id:"catalog", category:"catalog-docs", name:"Software catalog",
+    desc:"A central inventory of services, components and their ownership/metadata.",
+    support: {
+      backstage: { level:"yes", value:"Core", note:"Core Software Catalog tracks components, systems, APIs, resources and groups via YAML entity files.", src:"https://backstage.io/docs/features/software-catalog/" },
+      spotify:   { level:"yes", value:"Pre-installed", note:"Ships the Backstage Software Catalog pre-installed with an onboarding/import wizard.", src:"https://info.backstage.byspotify.com/portal-vs-backstage" },
+      roadie:    { level:"yes", value:"Backstage catalog", note:"Standard Backstage catalog populated via catalog-info.yaml, with URL import, location management and autodiscovery.", src:"https://roadie.io/docs/getting-started/overview/" },
+      port:      { level:"yes", value:"Blueprint-based", note:"Catalog data model is defined by fully customizable blueprints (JSON-schema properties) connected by relations.", src:"https://docs.port.io/build-your-software-catalog/customize-integrations/configure-data-model/setup-blueprint/" },
+      cortex:    { level:"yes", value:"Built-in catalogs", note:"Default Services, Infrastructure, Domains and Teams catalogs of YAML-defined entities, plus custom catalogs.", src:"https://docs.cortex.io/ingesting-data-into-cortex/catalogs" },
+      opslevel:  { level:"yes", value:"Auto catalog", note:"Software catalog with automated service detection, alias grouping and recommended owners (Catalog Engine).", src:"https://www.opslevel.com/product/catalog" },
+      compass:   { level:"yes", value:"Native catalog", note:"Built-in catalog of components (services, libraries, applications) with ownership and dependency tracking.", src:"https://support.atlassian.com/compass/docs/search-the-component-catalog/" }
+    }
+  },
+
+  { id:"scaffolder", category:"catalog-docs", name:"Scaffolder / golden paths",
+    desc:"Software templates that create new components, repos or resources on a paved road.",
+    support: {
+      backstage: { level:"yes", value:"Software Templates", note:"Built-in Scaffolder runs YAML templates with parameterized actions to create components and publish repos.", src:"https://backstage.io/docs/features/software-templates/" },
+      spotify:   { level:"yes", value:"Pre-installed", note:"Scaffolder and Software Templates come pre-installed with setup guides for new projects.", src:"https://backstage.spotify.com/products/portal" },
+      roadie:    { level:"yes", value:"Templates", note:"Backstage Scaffolder with custom parameters/actions and certified golden-path templates.", src:"https://roadie.io/docs/getting-started/scaffolding-components/" },
+      port:      { level:"yes", value:"Self-service actions", note:"Self-service actions scaffold services or provision resources via UI/API/Terraform, with inputs and approval workflows.", src:"https://docs.port.io/actions-and-automations/create-self-service-experiences/" },
+      cortex:    { level:"yes", value:"Scaffolder", note:"Workflows Scaffolder creates repos/code from Cookiecutter templates and registers the new service in the catalog.", src:"https://docs.cortex.io/streamline/workflows/scaffolder" },
+      opslevel:  { level:"yes", value:"Actions + creation", note:"Self-service Actions plus Cookiecutter-based Service Creation templates that scaffold new services.", src:"https://docs.opslevel.com/docs/action-templates" },
+      compass:   { level:"no", value:"Removed 2025", note:"Compass's component Templates (pre-configured starting points, never code-generating scaffolders) were removed effective 2025-12-01.", src:"https://community.atlassian.com/forums/Compass-articles/Announcement-Templates-feature-to-be-removed-from-Compass-on/ba-p/3096927" }
+    }
+  },
+
+  { id:"techdocs", category:"catalog-docs", name:"TechDocs (docs-as-code)",
+    desc:"Markdown docs kept beside the code and rendered inside the portal.",
+    support: {
+      backstage: { level:"yes", value:"Built-in", note:"TechDocs renders Markdown kept alongside code via MkDocs, inside the portal.", src:"https://backstage.io/docs/features/techdocs/" },
+      spotify:   { level:"yes", value:"Pre-installed", note:"TechDocs docs-as-code is included out of the box with configuration assistance.", src:"https://info.backstage.byspotify.com/portal-vs-backstage" },
+      roadie:    { level:"yes", value:"Included", note:"Managed TechDocs converts Markdown into browsable documentation.", src:"https://roadie.io/docs/getting-started/technical-documentation/" },
+      port:      { level:"part", value:"Markdown from Git", note:"A Markdown property syncs docs from Git as an entity tab (OpenAPI/Swagger too); no full MkDocs documentation tree.", src:"https://docs.port.io/build-your-software-catalog/customize-integrations/configure-data-model/setup-blueprint/properties/markdown/" },
+      cortex:    { level:"part", value:"Embedded repo docs", note:"Auto-embeds Markdown from a repo docs folder and OpenAPI/AsyncAPI specs in the entity sidebar; not a full static-site builder.", src:"https://docs.cortex.io/ingesting-data-into-cortex/entities-overview/entities/external-docs" },
+      opslevel:  { level:"yes", value:"Docs-as-code", note:"Tech Docs pulls Markdown from component repos and renders it with search; a Docs Hub pins shared docs.", src:"https://docs.opslevel.com/docs/tech-docs" },
+      compass:   { level:"part", value:"Doc links only", note:"Centralizes docs by linking external URLs (commonly Confluence) per component; no docs-as-code rendering in the portal.", src:"https://support.atlassian.com/compass/docs/centralize-developer-documentation/" }
+    }
+  },
+
+  // ══ Standards & Extensibility ══
+  { id:"scorecards", category:"standards", name:"Scorecards / maturity",
+    desc:"Automated standards and maturity checks scored against catalog entities.",
+    support: {
+      backstage: { level:"part", value:"Tech Insights plugin", note:"Not in core; the community Tech Insights plugin provides FactCheckers and Scorecards.", src:"https://github.com/backstage/community-plugins/blob/main/workspaces/tech-insights/plugins/tech-insights/README.md" },
+      spotify:   { level:"yes", value:"Soundcheck", note:"Soundcheck (Spotify premium plugin, bundled in Portal) provides scorecards, maturity tracks and codified checks.", src:"https://backstage.spotify.com/partners/spotify/plugin/soundcheck/" },
+      roadie:    { level:"yes", value:"Tech Insights", note:"Tech Insights provides Checks and Scorecards built from Fact data sources, with a Tech Insights API.", src:"https://roadie.io/docs/tech-insights/scorecards/" },
+      port:      { level:"yes", value:"Built-in", note:"Scorecards define rules and customizable levels to track standards on catalog entities.", src:"https://docs.port.io/scorecards/overview/" },
+      cortex:    { level:"yes", value:"Flagship", note:"Entities are scored against rules with levels/points, configurable in UI or as code (GitOps).", src:"https://docs.cortex.io/standardize/scorecards" },
+      opslevel:  { level:"yes", value:"Rubric + Scorecards", note:"Global Rubric (bronze/silver/gold), team-scoped Scorecards and Checks, with a Maturity Report.", src:"https://docs.opslevel.com/docs/scorecards" },
+      compass:   { level:"yes", value:"Native", note:"Built-in scorecards define company- and team-level standards scored via metrics and custom fields.", src:"https://support.atlassian.com/compass/docs/understand-how-scorecards-work/" }
+    }
+  },
+
+  { id:"plugins", category:"standards", name:"Plugins / extensibility",
+    desc:"How the portal is extended — a plugin runtime, an integration framework, or apps.",
+    support: {
+      backstage: { level:"yes", value:"First-class plugins", note:"Backstage is assembled from plugins; an open plugin directory lists community and core plugins.", src:"https://backstage.io/plugins/" },
+      spotify:   { level:"yes", value:"No-code installer", note:"No-code installer for OSS/third-party plugins plus bundled Spotify premium plugins.", src:"https://backstage.spotify.com/docs/plugins" },
+      roadie:    { level:"yes", value:"OSS + custom", note:"Supports many open-source Backstage plugins out of the box; custom plugin authoring is a Growth-plan feature.", src:"https://roadie.io/docs/custom-plugins/overview/" },
+      port:      { level:"info", value:"Ocean, not plugins", note:"No Backstage-style plugin runtime; extensibility is via the Ocean integration framework, webhooks, REST API and Terraform.", src:"https://docs.port.io/build-your-software-catalog/custom-integration/" },
+      cortex:    { level:"yes", value:"Iframe plugins", note:"Plugins are single HTML files rendered in a sandboxed iframe to add custom UI/data, with a proxy for CORS/credentials.", src:"https://docs.cortex.io/streamline/plugins" },
+      opslevel:  { level:"part", value:"API/custom only", note:"Extensibility via GraphQL API, CLI, Terraform and YAML Custom Integrations; no installable plugin framework.", src:"https://docs.opslevel.com/docs/custom-integration" },
+      compass:   { level:"yes", value:"Forge apps", note:"Extensible via Atlassian Forge apps and Marketplace, with Compass UI modules and a GraphQL API.", src:"https://developer.atlassian.com/cloud/compass/integrations/get-started-integrating-with-Compass/" }
+    }
+  },
+
+  { id:"integrations", category:"standards", name:"Integrations",
+    desc:"Prebuilt connectors to cloud, CI/CD, SCM, observability and incident tools.",
+    support: {
+      backstage: { level:"yes", value:"SCM/cloud/CI", note:"Integrations read/publish via providers including GitHub, GitLab, Bitbucket, LDAP and cloud storage.", src:"https://backstage.io/docs/integrations/" },
+      spotify:   { level:"yes", value:"Guided wizards", note:"Guided wizards connect GitHub, GitLab and Azure DevOps plus CI/CD; more via plugins.", src:"https://backstage.spotify.com/docs/portal/getting-started" },
+      roadie:    { level:"yes", value:"50+ connectors", note:"50+ integrations spanning AWS/Azure/GCP, GitHub/GitLab/Bitbucket, Jenkins/ArgoCD, Datadog/Grafana and PagerDuty/incident.io.", src:"https://roadie.io/docs/integrations/" },
+      port:      { level:"yes", value:"Broad (Ocean)", note:"Prebuilt integrations span cloud, CI/CD, SCM, Kubernetes, observability, incident and security, mostly on the Ocean framework.", src:"https://docs.port.io/build-your-software-catalog/sync-data-to-catalog/" },
+      cortex:    { level:"yes", value:"Native + webhook", note:"Native integrations across cloud, CI/CD, SCM, observability, incident/on-call and security, plus custom webhooks.", src:"https://docs.cortex.io/ingesting-data-into-cortex/integrations" },
+      opslevel:  { level:"yes", value:"70+ native", note:"70+ native integrations across cloud, SCM, CI/CD, observability and incident/on-call tools.", src:"https://www.opslevel.com/product/integrations" },
+      compass:   { level:"yes", value:"Atlassian + SCM", note:"Native integrations span SCM, incident (PagerDuty/Opsgenie), observability (New Relic/Sentry/Snyk) plus the Atlassian suite.", src:"https://support.atlassian.com/compass/docs/what-is-compass/" }
+    }
+  },
+
+  { id:"auth-rbac", category:"standards", name:"Auth & RBAC",
+    desc:"Authentication options and role-based access control / permissions.",
+    support: {
+      backstage: { level:"part", value:"Policy-as-code", note:"Many auth providers (Google, GitHub, Okta, Entra, OIDC…); the permission framework supports RBAC/ABAC but policies are authored in code, not preconfigured.", src:"https://backstage.io/docs/permissions/overview/" },
+      spotify:   { level:"yes", value:"SSO + RBAC plugin", note:"SSO via GitHub, Okta and Microsoft Entra ID; granular RBAC via Portal config and the Spotify RBAC plugin.", src:"https://backstage.spotify.com/docs/portal/getting-started" },
+      roadie:    { level:"yes", value:"RBAC + IdP SSO", note:"Fine-grained RBAC (roles/policies, 5 default roles) manageable via UI or imported from IdPs; SSO via GitHub, Google, Okta, Entra.", src:"https://roadie.io/docs/details/managing-roles/" },
+      port:      { level:"yes", value:"RBAC + SSO", note:"Built-in role hierarchy (Admin/Moderator/Member), team ownership, and granular catalog and action permissions.", src:"https://docs.port.io/sso-rbac/rbac-overview/" },
+      cortex:    { level:"yes", value:"RBAC + SSO/SCIM", note:"Default and custom roles plus team roles; SSO via SAML/OIDC and SCIM provisioning.", src:"https://docs.cortex.io/configure/settings/managing-users/permissioning" },
+      opslevel:  { level:"yes", value:"SSO/SCIM + RBAC", note:"SAML SSO, SCIM provisioning, and four built-in roles (Admin, Standards Admin, User, Team Member).", src:"https://docs.opslevel.com/docs/roles" },
+      compass:   { level:"yes", value:"Roles + policies", note:"Basic/full/product-admin roles plus custom roles and permission policies via Atlassian Cloud identity.", src:"https://support.atlassian.com/compass/docs/understand-user-roles-and-permission-policies/" }
+    }
+  },
+
+  // ══ Deployment & Licensing (descriptive — not scored) ══
+  { id:"deployment", category:"model", name:"Deployment model",
+    desc:"How the portal runs — self-hosted, managed SaaS, or both. Descriptive, not scored.",
+    support: {
+      backstage: { level:"info", value:"Self-host", note:"A self-hosted open framework you build and run yourself; no official hosted SaaS (vendors offer managed distributions).", src:"https://backstage.io/docs/overview/what-is-backstage/" },
+      spotify:   { level:"info", value:"SaaS (hosted)", note:"Cloud-hosted and managed by Spotify (e.g. <company>.spotifyportal.com).", src:"https://info.backstage.byspotify.com/portal-vs-backstage" },
+      roadie:    { level:"info", value:"SaaS (hosted)", note:"Fully managed hosted Backstage; a separate self-hosted offering, Roadie Local, also exists.", src:"https://roadie.io/blog/roadie-local-self-hosted-backstage-ready-in-minutes/" },
+      port:      { level:"info", value:"SaaS", note:"Multi-tenant SaaS with no full self-host; integrations can run on-prem and single-tenant enterprise is available on request.", src:"https://docs.port.io/build-your-software-catalog/custom-integration/ocean-custom-integration/installation-types/hosted-by-port/" },
+      cortex:    { level:"info", value:"SaaS / self-host", note:"Cloud SaaS plus a self-managed deployment into your own Kubernetes cluster via Helm (requires PostgreSQL).", src:"https://docs.cortex.io/self-managed" },
+      opslevel:  { level:"info", value:"SaaS / self-host", note:"Default SaaS; a self-hosted Kubernetes/Helm deployment is also offered (account-manager provisioned).", src:"https://docs.opslevel.com/docs/getting-started-with-self-hosted-opslevel" },
+      compass:   { level:"info", value:"SaaS only", note:"Offered solely as Atlassian Cloud; no self-hosted or Data Center option.", src:"https://support.atlassian.com/compass/docs/what-is-compass/" }
+    }
+  },
+
+  { id:"license", category:"model", name:"License",
+    desc:"Open-source or proprietary. Descriptive, not scored.",
+    support: {
+      backstage: { level:"info", value:"Apache-2.0", note:"Released under the Apache License 2.0; a CNCF project.", src:"https://github.com/backstage/backstage/blob/master/LICENSE" },
+      spotify:   { level:"info", value:"Proprietary", note:"Portal and Spotify plugins are closed source (license owned by Spotify), built on Apache-2.0 Backstage.", src:"https://backstage.spotify.com/faqs/" },
+      roadie:    { level:"info", value:"Proprietary", note:"A proprietary managed product built on the open-source (Apache-2.0) Backstage project.", src:"https://roadie.io/backstage-comparison/" },
+      port:      { level:"info", value:"Proprietary", note:"Proprietary commercial SaaS; the Ocean integration framework is open source under Apache 2.0.", src:"https://github.com/port-labs/ocean" },
+      cortex:    { level:"info", value:"Proprietary", note:"Commercial closed-source product; no open-source license offered.", src:"https://www.cortex.io/pricing" },
+      opslevel:  { level:"info", value:"Proprietary", note:"Commercial closed-source SaaS (companion CLI/Terraform tooling is open source, but is not the product).", src:"https://www.opslevel.com/pricing" },
+      compass:   { level:"info", value:"Proprietary", note:"Closed-source commercial Atlassian product.", src:"https://www.atlassian.com/software/compass/pricing" }
+    }
+  },
+
+  { id:"pricing", category:"model", name:"Pricing model",
+    desc:"The shape of pricing, not the figures. Descriptive, not scored.",
+    support: {
+      backstage: { level:"info", value:"Free (OSS)", note:"Open-source core has no license fee; self-hosting infrastructure and operational cost are borne by the adopter.", src:"https://github.com/backstage/backstage/blob/master/LICENSE" },
+      spotify:   { level:"info", value:"Custom", note:"Annual subscription priced on usage/capacity; no published rates, free trial to evaluate.", src:"https://backstage.spotify.com/faqs/" },
+      roadie:    { level:"info", value:"Per-developer", note:"Per contributing-developer monthly pricing; only SCM contributors are billed; 30-day free trial.", src:"https://roadie.io/pricing/" },
+      port:      { level:"info", value:"Free tier + seat", note:"Free plan up to 15 seats; paid plans use a platform fee plus per-seat pricing, custom for enterprise.", src:"https://www.port.io/pricing" },
+      cortex:    { level:"info", value:"Custom", note:"Customized proposal via sales; no public per-user pricing and no free tier listed.", src:"https://www.cortex.io/pricing" },
+      opslevel:  { level:"info", value:"Per-developer", note:"Priced per developer; Standard and Enterprise plans are quote-only (contact sales).", src:"https://www.opslevel.com/pricing" },
+      compass:   { level:"info", value:"Free tier + seat", note:"Free plan (up to 3 full users) plus per-full-user Standard and Premium tiers.", src:"https://www.atlassian.com/software/compass/pricing" }
+    }
+  }
+
+];
+
+// ───────────────────────────────────────────────────────────────────
+// STATE + RENDER
+// ───────────────────────────────────────────────────────────────────
+const state = {
+  vendors: new Set(VENDORS.map(v => v.key)),
+  category: "all",
+  query: ""
+};
+
+const $ = (s) => document.querySelector(s);
+const $$ = (s) => Array.from(document.querySelectorAll(s));
+
+const escapeHtml = (s) => String(s).replace(/[&<>"']/g, (c) => ({
+  "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
+}[c]));
+
+// Filter machinery (category + tool chips, search, permalink ⇄ hash) lives in
+// /assets/matrix.js — IA.matrix.filters(...), built in init() below.
+
+let F;  // shared filter machinery (IA.matrix.filters), built once IA.matrix is ready
+function init() {
+  // Counts
+  $("#count-features").textContent = FEATURES.length;
+  const stars = FEATURES.reduce((acc, f) => acc + Object.values(f.support).filter(s => s.src && s.src.length > 0).length, 0);
+  $("#count-stars").textContent = stars;
+
+  F = IA.matrix.filters({
+    state, vendors: VENDORS, categories: CATEGORIES,
+    catChipsEl: $("#cat-chips"), vendorChipsEl: $("#vendor-chips"), searchEl: $("#search"),
+    categoryLabel: "Category", vendorLabel: "Tools", vendorParam: "tools",
+    onChange: applyFilter
+  });
+
+  F.buildChips();
+  F.applyHash();
+  renderMatrix();
+  F.wire();
+  // Shared module owns: drawer modal open/close, ESC, backdrop click, focus trap,
+  // scroll lock, and the cell/feature-col click delegation that opens the drawer.
+  IA.matrix.drawer.init();
+  IA.matrix.wireDelegation((featureId, vendorKey) => {
+    const f = FEATURES.find(x => x.id === featureId);
+    if (f) openFeatureDrawer(f, vendorKey);
+  });
+  // sync aria-pressed once after applyHash may have flipped is-active states
+  IA.matrix.syncChipsAria('.chip[data-cat]');
+  IA.matrix.syncChipsAria('.chip[data-v]');
+  window.addEventListener("hashchange", () => { F.applyHash(); applyFilter(); });
+}
+
+function renderMatrix() {
+  IA.matrix.renderTable({
+    tableEl: $("#matrix"),
+    vendors: VENDORS, categories: CATEGORIES, features: FEATURES,
+    dimensionLabel: "Capability"
+  });
+  applyFilter();
+}
+
+function applyFilter() {
+  const q = state.query.trim().toLowerCase();
+  const table = $("#matrix");
+
+  // Tool visibility (via class on table)
+  VENDORS.forEach(v => {
+    table.classList.toggle(`hide-${v.key}`, !state.vendors.has(v.key));
+  });
+
+  const anyFilter = !!q || state.category !== "all" || state.vendors.size < VENDORS.length;
+  IA.matrix.applyVisibility({
+    table, features: FEATURES, categories: CATEGORIES,
+    isVisibleFn: (f) => {
+      if (state.category !== "all" && f.category !== state.category) return false;
+      if (!q) return true;
+      const cat = (CATEGORIES.find(c => c.key === f.category) || {}).label || "";
+      const vendorHay = VENDORS
+        .filter(v => state.vendors.has(v.key))
+        .map(v => { const s = f.support[v.key] || {}; return `${v.name} ${v.short} ${v.kind} ${s.value || ""} ${s.note || ""}`; })
+        .join(" ");
+      return `${f.name} ${f.desc} ${cat} ${vendorHay}`.toLowerCase().includes(q);
+    },
+    emptyEl: $("#matrix-empty"),
+    statusEl: $("#filter-status"),
+    statusNoun: "capability", statusNounPlural: "capabilities",
+    anyFilterActive: anyFilter
+  });
+  F.writeHash();
+}
+
+// Drawer infrastructure (focus trap, scroll lock, ESC, backdrop click) lives in
+// /assets/matrix.js (IA.matrix.drawer). This page only builds the head + body.
+
+function openFeatureDrawer(feature, focusVendor) {
+  const cat = (CATEGORIES.find(c => c.key === feature.category) || {}).label || "";
+  const head = `
+    <button class="drawer__close" type="button" data-action="close-drawer" aria-label="Close (Esc)">✕</button>
+    <div class="drawer__eyebrow">${escapeHtml(cat)}</div>
+    <h2 class="drawer__title" id="drawer-title">${escapeHtml(feature.name)}</h2>
+    <p class="drawer__desc">${escapeHtml(feature.desc)}</p>
+  `;
+  const body = `<div class="drawer__section"><h4>Per-tool detail &amp; sources</h4>` +
+    VENDORS.map(v => {
+      const s = feature.support[v.key] || { level: "no", value: "—", note: "" };
+      const sym = s.level === "yes" ? "✓" : s.level === "part" ? "◐" : s.level === "info" ? "≈" : "✗";
+      const markLabel = s.level === "yes" ? "First-class" : s.level === "part" ? "Partial" : s.level === "info" ? "Descriptive" : "Not available";
+      const isFocus = focusVendor === v.key;
+      const valText = s.value || sym;
+      const srcHtml = s.src
+        ? `<div class="vendor-row__src">Source · <a href="${escapeHtml(s.src)}" target="_blank" rel="noopener">${escapeHtml(s.src)}</a></div>`
+        : "";
+      return `<div class="vendor-row" ${isFocus ? 'style="border-color: var(--accent); background: rgba(255,120,73,0.05);"' : ''}>
+        <span class="vendor-row__mark vendor-row__mark--${s.level}" role="img" aria-label="${markLabel}">${sym}</span>
+        <div>
+          <div class="vendor-row__name"><span class="swatch" style="background:${v.swatch}" aria-hidden="true"></span>${escapeHtml(v.name)} <span style="color:var(--paper-3); font-weight:400">· ${escapeHtml(v.kind)}</span></div>
+          <div class="vendor-row__value vendor-row__value--${s.level}">${escapeHtml(valText)}</div>
+          <div class="vendor-row__note">${escapeHtml(s.note || (s.level === "no" ? "Not available." : "—"))}</div>
+          ${srcHtml}
+        </div>
+      </div>`;
+    }).join("") + `</div>`;
+  IA.matrix.drawer.open(head, body);
+}
+
+// Wait for the deferred /assets/matrix.js to populate window.IA before init runs.
+function bootstrap() {
+  if (!window.IA || !window.IA.matrix) { setTimeout(bootstrap, 20); return; }
+  init();
+}
+bootstrap();
+</script>
+<script src="/assets/matrix.js?v=3" defer></script>
+<script src="/nav.js" defer></script>
+</body>
+</html>

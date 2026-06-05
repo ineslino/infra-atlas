@@ -33,7 +33,8 @@
     ["/egress/",                 "Egress & Transfer Cost Map","Cross-cloud", "egress data transfer cost networking bandwidth nat gateway interconnect direct connect expressroute cross-region cross-az internet bill price gigabyte"],
     ["/networking-matrix/",      "Networking Matrix",      "Cross-cloud", "networking primitives vpc vnet vcn subnet route table peering transit gateway virtual wan ncc drg firewall security group nsg network acl nat load balancer privatelink private link rosetta aws azure gcp oci"],
     ["/observability/",          "Observability Matrix",   "Cross-cloud", "observability monitoring metrics logs traces profiling cloudwatch azure monitor gcp cloud monitoring oci datadog grafana new relic honeycomb dynatrace opentelemetry otel otlp kubernetes"],
-    ["/observability-stacks/",   "Observability Stacks",   "Cross-cloud", "observability open source self-hosted prometheus grafana mimir loki tempo pyroscope elk elastic stack elasticsearch kibana logstash opensearch jaeger victoriametrics signoz oss self host"]
+    ["/observability-stacks/",   "Observability Stacks",   "Cross-cloud", "observability open source self-hosted prometheus grafana mimir loki tempo pyroscope elk elastic stack elasticsearch kibana logstash opensearch jaeger victoriametrics signoz oss self host"],
+    ["/idp-matrix/",             "IDP Matrix",             "Cross-cloud", "internal developer portal idp platform engineering devex developer experience backstage spotify portal roadie port cortex opslevel atlassian compass software catalog scaffolder golden paths scorecards maturity techdocs plugins rbac"]
   ];
   var TOOLS = [
     ["/tools/egress-cost/",  "Egress Cost Calculator",     "Tool", "egress cost calculator bandwidth bill data transfer aws azure gcp price tier compare"],
