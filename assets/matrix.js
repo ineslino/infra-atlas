@@ -129,12 +129,18 @@
                          : s.level === "part" ? "partial"
                          : s.level === "info" ? "informational"
                          : "not available";
+          // a bare level symbol (✓/◐/✗) renders as the legend's round mark
+          // (.cell-mark), a textual value stays text (.cell-value). Keeps in-cell
+          // symbols the same size and colour as the legend, not small grey text.
+          var isGlyph = val === "✓" || val === "◐" || val === "✗";
+          var markCls = isGlyph ? "cell-mark cell-mark--" : "cell-value cell-value--";
+          var starCls = isGlyph ? "cell-mark__star" : "cell-value__star";
           // data-vlabel drives the per-cell vendor label in the mobile card view
           html += "<td class='cell col-" + esc(v.key) + "' data-feature='" + esc(f.id) + "' data-vendor='" + esc(v.key) + "' data-vlabel='" + esc(v.short) + "'>"
                +    "<button type='button' class='cell__btn" + (hasNote ? " has-note" : "") + "' data-feature='" + esc(f.id) + "' data-vendor='" + esc(v.key)
                +      "' aria-haspopup='dialog' aria-label='" + esc(f.name) + " — " + esc(v.name) + ": " + esc(val) + " (" + levelLabel + "). Open detail.'>"
-               +      "<span class='cell-value cell-value--" + esc(s.level) + "'>" + esc(val)
-               +        (hasNote ? "<span class='cell-value__star' aria-hidden='true'>*</span>" : "")
+               +      "<span class='" + markCls + esc(s.level) + "'>" + esc(val)
+               +        (hasNote ? "<span class='" + starCls + "' aria-hidden='true'>*</span>" : "")
                +      "</span>"
                +    "</button>"
                +  "</td>";
