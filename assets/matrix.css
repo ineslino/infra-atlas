@@ -73,6 +73,14 @@
 .cell-mark--yes  { background: rgba(111, 231, 181, 0.15); color: var(--yes); }
 .cell-mark--no   { background: rgba(244, 123, 123, 0.12); color: var(--no); }
 .cell-mark--part { background: rgba(244, 198, 96, 0.15);  color: var(--part); }
+/* the "*" on a footnoted round mark — sits at the corner of the circle (the
+   matrix engine now renders bare level symbols as .cell-mark, like the legend) */
+.cell-mark__star {
+  position: absolute; top: -3px; right: -6px;
+  font-size: 9px; color: var(--matrix-accent);
+  background: var(--ink-2); border-radius: 50%; width: 12px; height: 12px;
+  display: inline-flex; align-items: center; justify-content: center;
+}
 
 .cell-value {
   display: inline-flex; align-items: baseline; justify-content: center;
