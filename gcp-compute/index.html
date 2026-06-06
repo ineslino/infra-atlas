@@ -595,7 +595,7 @@ function renderInstanceView() {
   const entries = [];
   visible.forEach(fam => {
     fam.sizes.forEach(size => {
-      const full = `${fam.key}.${size}`;
+      const full = size.indexOf(fam.key) === 0 ? size : `${fam.key}.${size}`;
       if (instanceTypeMatches(fam, size, q)) {
         const availCount = state.data.familyRegions.get(fam.key).size;
         entries.push({ fam, size, full, availCount });

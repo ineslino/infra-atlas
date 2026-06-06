@@ -119,10 +119,9 @@ body {
 .matrix.hide-azure .col-azure,
 .matrix.hide-gcp   .col-gcp,
 .matrix.hide-oci   .col-oci { display: none; }
-/* The page's thesis — tint the cells where a provider has no equivalent, so the
-   gaps are scannable down a column at a glance (kept subtle; hover stays legible) */
-.matrix td.cell:has(.cell-value--no) { background: rgba(244, 123, 123, 0.07); }
-.matrix td.cell:has(.cell-value--no):hover { background: rgba(244, 123, 123, 0.13); }
+/* The gap-tint that was this page's thesis (wash the cells where a provider has
+   no equivalent, so gaps are scannable down a column) now lives in
+   assets/matrix.css and applies to every matrix. */
 
 /* Reading key (yes / partial / no) — matrix.css colours the value text per level */
 .legend { display: flex; flex-wrap: wrap; gap: 14px 20px; align-items: center; margin-bottom: 20px; padding: 13px 20px; background: var(--surface); border: 1px solid var(--line); border-radius: 4px; font-family: var(--mono); font-size: 11px; color: var(--paper-2); }

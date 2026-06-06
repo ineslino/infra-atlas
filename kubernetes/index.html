@@ -447,10 +447,10 @@ const FEATURES = [
       gke: { level:"yes", value:"Extended channel", note:"GKE's Extended release channel lets a cluster stay on a Kubernetes minor version for roughly 24 months — about twice the standard window.",
              src:"https://cloud.google.com/kubernetes-engine/docs/concepts/release-channels" },
       // SRC: https://docs.oracle.com/en-us/iaas/Content/ContEng/Concepts/contengaboutk8sversions.htm — no extended/LTS programme documented
-      oke: { level:"no", value:"✗", note:"OKE does not document an extended-support or LTS programme. A version ceases to be supported ~30 days after it becomes the fourth-oldest.",
+      oke: { level:"no", value:"", note:"OKE does not document an extended-support or LTS programme. A version ceases to be supported ~30 days after it becomes the fourth-oldest.",
              src:"https://docs.oracle.com/en-us/iaas/Content/ContEng/Concepts/contengaboutk8sversions.htm" },
       // SRC: https://github.com/ovh/docs/blob/develop/pages/public_cloud/containers_orchestration/managed_kubernetes/eos-eol-policies/guide.en-gb.md — follows upstream, no LTS
-      ovh: { level:"no", value:"✗", note:"OVHcloud Managed Kubernetes follows the upstream support lifecycle and does not offer extended or long-term support beyond it.",
+      ovh: { level:"no", value:"", note:"OVHcloud Managed Kubernetes follows the upstream support lifecycle and does not offer extended or long-term support beyond it.",
              src:"https://github.com/ovh/docs/blob/develop/pages/public_cloud/containers_orchestration/managed_kubernetes/eos-eol-policies/guide.en-gb.md" }
     }
   },
@@ -502,19 +502,19 @@ const FEATURES = [
     desc:"Run worker nodes on discounted, interruptible capacity for fault-tolerant or batch workloads.",
     support: {
       // SRC: https://docs.aws.amazon.com/eks/latest/userguide/managed-node-groups.html — managed node groups support a SPOT capacity type
-      eks: { level:"yes", value:"✓ Spot capacity type", note:"EKS managed node groups accept a SPOT capacity type, provisioning EC2 Spot Instances; Karpenter can also mix Spot and On-Demand.",
+      eks: { level:"yes", value:"Spot capacity type", note:"EKS managed node groups accept a SPOT capacity type, provisioning EC2 Spot Instances; Karpenter can also mix Spot and On-Demand.",
              src:"https://docs.aws.amazon.com/eks/latest/userguide/managed-node-groups.html" },
       // SRC: https://learn.microsoft.com/en-us/azure/aks/spot-node-pool — dedicated spot node pool type
-      aks: { level:"yes", value:"✓ Spot node pools", note:"AKS supports dedicated spot node pools backed by Azure Spot Virtual Machines (user node pools only).",
+      aks: { level:"yes", value:"Spot node pools", note:"AKS supports dedicated spot node pools backed by Azure Spot Virtual Machines (user node pools only).",
              src:"https://learn.microsoft.com/en-us/azure/aks/spot-node-pool" },
       // SRC: https://cloud.google.com/kubernetes-engine/docs/concepts/spot-vms — Spot VMs node pools
-      gke: { level:"yes", value:"✓ Spot VMs", note:"GKE node pools can run on Spot VMs (the successor to preemptible VMs) for stateless, batch and fault-tolerant workloads.",
+      gke: { level:"yes", value:"Spot VMs", note:"GKE node pools can run on Spot VMs (the successor to preemptible VMs) for stateless, batch and fault-tolerant workloads.",
              src:"https://cloud.google.com/kubernetes-engine/docs/concepts/spot-vms" },
       // SRC: https://docs.oracle.com/en-us/iaas/Content/ContEng/Tasks/contengcreatingpreemptiblenodepool.htm — preemptible node pools supported
-      oke: { level:"yes", value:"✓ Preemptible nodes", note:"OKE supports preemptible node pools backed by OCI preemptible compute instances for cost-optimised, interruption-tolerant workloads.",
+      oke: { level:"yes", value:"Preemptible nodes", note:"OKE supports preemptible node pools backed by OCI preemptible compute instances for cost-optimised, interruption-tolerant workloads.",
              src:"https://docs.oracle.com/en-us/iaas/Content/ContEng/Tasks/contengcreatingpreemptiblenodepool.htm" },
       // SRC: https://github.com/ovh/docs/blob/develop/pages/public_cloud/containers_orchestration/managed_kubernetes/managing-nodes/guide.en-gb.md — node pools use standard Public Cloud instances; no spot/preemptible tier documented for MKS
-      ovh: { level:"no", value:"✗", note:"OVHcloud Managed Kubernetes node pools use standard Public Cloud instances (monthly or hourly billing). No spot or preemptible node-pool tier is documented for the service.",
+      ovh: { level:"no", value:"", note:"OVHcloud Managed Kubernetes node pools use standard Public Cloud instances (monthly or hourly billing). No spot or preemptible node-pool tier is documented for the service.",
              src:"https://github.com/ovh/docs/blob/develop/pages/public_cloud/containers_orchestration/managed_kubernetes/managing-nodes/guide.en-gb.md" }
     }
   },
@@ -522,19 +522,19 @@ const FEATURES = [
     desc:"Provision worker nodes with attached GPUs for ML training, inference and other accelerated workloads.",
     support: {
       // SRC: https://docs.aws.amazon.com/eks/latest/userguide/eks-optimized-ami.html — GPU-accelerated EKS-optimized AMIs for P/G instance families
-      eks: { level:"yes", value:"✓ GPU instances", note:"EKS publishes GPU-accelerated EKS-optimized AMIs; node groups can use NVIDIA GPU instance families such as P and G.",
+      eks: { level:"yes", value:"GPU instances", note:"EKS publishes GPU-accelerated EKS-optimized AMIs; node groups can use NVIDIA GPU instance families such as P and G.",
              src:"https://docs.aws.amazon.com/eks/latest/userguide/eks-optimized-ami.html" },
       // SRC: https://learn.microsoft.com/en-us/azure/aks/gpu-cluster — GPU-enabled node pools
-      aks: { level:"yes", value:"✓ GPU node pools", note:"AKS supports GPU-enabled node pools on GPU-optimised VM sizes (N-series), with optional managed GPU driver / device-plugin installation.",
+      aks: { level:"yes", value:"GPU node pools", note:"AKS supports GPU-enabled node pools on GPU-optimised VM sizes (N-series), with optional managed GPU driver / device-plugin installation.",
              src:"https://learn.microsoft.com/en-us/azure/aks/gpu-cluster" },
       // SRC: https://cloud.google.com/kubernetes-engine/docs/how-to/gpus — GPU node pools
-      gke: { level:"yes", value:"✓ GPU node pools", note:"GKE supports attaching NVIDIA GPUs to node pools, with GKE managing driver installation; Autopilot also supports GPU workloads.",
+      gke: { level:"yes", value:"GPU node pools", note:"GKE supports attaching NVIDIA GPUs to node pools, with GKE managing driver installation; Autopilot also supports GPU workloads.",
              src:"https://cloud.google.com/kubernetes-engine/docs/how-to/gpus" },
       // SRC: https://docs.oracle.com/en-us/iaas/Content/ContEng/Tasks/contengrunningadeploymentaccessgpu.htm — GPU shapes for node pools
-      oke: { level:"yes", value:"✓ GPU shapes", note:"OKE node pools can use OCI GPU compute shapes; the OKE GPU images bundle the NVIDIA drivers.",
+      oke: { level:"yes", value:"GPU shapes", note:"OKE node pools can use OCI GPU compute shapes; the OKE GPU images bundle the NVIDIA drivers.",
              src:"https://docs.oracle.com/en-us/iaas/Content/ContEng/Tasks/contengrunningadeploymentaccessgpu.htm" },
       // SRC: https://github.com/ovh/docs/blob/develop/pages/public_cloud/containers_orchestration/managed_kubernetes/deploying-gpu-application/guide.en-gb.md — GPU node pools via t1/t2 flavors
-      ovh: { level:"yes", value:"✓ GPU flavors (t1/t2)", note:"OVHcloud Managed Kubernetes supports GPU node pools using the t1 and t2 instance flavors; GPU nodes can take over an hour to become Ready.",
+      ovh: { level:"yes", value:"GPU flavors (t1/t2)", note:"OVHcloud Managed Kubernetes supports GPU node pools using the t1 and t2 instance flavors; GPU nodes can take over an hour to become Ready.",
              src:"https://github.com/ovh/docs/blob/develop/pages/public_cloud/containers_orchestration/managed_kubernetes/deploying-gpu-application/guide.en-gb.md" }
     }
   },
@@ -542,19 +542,19 @@ const FEATURES = [
     desc:"Run worker nodes on ARM-architecture CPUs, typically for better price-performance.",
     support: {
       // SRC: https://docs.aws.amazon.com/eks/latest/userguide/eks-optimized-ami.html — arm64 EKS-optimized AMIs for AWS Graviton
-      eks: { level:"yes", value:"✓ Graviton (arm64)", note:"EKS publishes arm64 EKS-optimized AMIs; node groups can run on AWS Graviton instances, and a cluster can mix arm64 and x86_64 nodes.",
+      eks: { level:"yes", value:"Graviton (arm64)", note:"EKS publishes arm64 EKS-optimized AMIs; node groups can run on AWS Graviton instances, and a cluster can mix arm64 and x86_64 nodes.",
              src:"https://docs.aws.amazon.com/eks/latest/userguide/eks-optimized-ami.html" },
       // SRC: https://learn.microsoft.com/en-us/azure/aks/use-arm64-vms — Arm64 VM node pools (Ampere Altra)
-      aks: { level:"yes", value:"✓ Arm64 VMs", note:"AKS supports Arm64 node pools on Ampere Altra Arm-based VM sizes; Node Auto-Provisioning can also provision arm64 nodes.",
+      aks: { level:"yes", value:"Arm64 VMs", note:"AKS supports Arm64 node pools on Ampere Altra Arm-based VM sizes; Node Auto-Provisioning can also provision arm64 nodes.",
              src:"https://learn.microsoft.com/en-us/azure/aks/use-arm64-vms" },
       // SRC: https://cloud.google.com/kubernetes-engine/docs/how-to/prepare-arm-workloads-for-deployment — Arm node pools (Axion / Tau T2A)
-      gke: { level:"yes", value:"✓ Arm node pools", note:"GKE supports Arm node pools on Google's Arm-based machine series (Axion C4A, Tau T2A).",
+      gke: { level:"yes", value:"Arm node pools", note:"GKE supports Arm node pools on Google's Arm-based machine series (Axion C4A, Tau T2A).",
              src:"https://cloud.google.com/kubernetes-engine/docs/how-to/prepare-arm-workloads-for-deployment" },
       // SRC: https://docs.oracle.com/en-us/iaas/Content/ContEng/Concepts/contengaboutnodepools.htm — node pools support Ampere A1 (Arm) shapes
-      oke: { level:"yes", value:"✓ Ampere A1 (Arm)", note:"OKE node pools can use OCI Ampere A1 Arm-based compute shapes.",
+      oke: { level:"yes", value:"Ampere A1 (Arm)", note:"OKE node pools can use OCI Ampere A1 Arm-based compute shapes.",
              src:"https://docs.oracle.com/en-us/iaas/Content/ContEng/Concepts/contengaboutnodepools.htm" },
       // SRC: https://github.com/ovh/docs/blob/develop/pages/public_cloud/containers_orchestration/managed_kubernetes/software-versions-reserved-resources/guide.en-gb.md — reserved-resource table lists only x86 b2/b3 flavors; no Arm flavor documented for MKS
-      ovh: { level:"no", value:"✗", note:"OVHcloud Managed Kubernetes documents only x86 instance flavors (b2/b3 general-purpose, t1/t2 GPU). No ARM-based node-pool flavor is listed for the service.",
+      ovh: { level:"no", value:"", note:"OVHcloud Managed Kubernetes documents only x86 instance flavors (b2/b3 general-purpose, t1/t2 GPU). No ARM-based node-pool flavor is listed for the service.",
              src:"https://github.com/ovh/docs/blob/develop/pages/public_cloud/containers_orchestration/managed_kubernetes/software-versions-reserved-resources/guide.en-gb.md" }
     }
   },
@@ -564,19 +564,19 @@ const FEATURES = [
     desc:"Automatically grow and shrink node pools to fit pending pod demand, using the Kubernetes Cluster Autoscaler or an equivalent.",
     support: {
       // SRC: https://docs.aws.amazon.com/eks/latest/userguide/autoscaling.html — Cluster Autoscaler supported; Karpenter also supported
-      eks: { level:"yes", value:"✓ CA + Karpenter", note:"EKS supports the Kubernetes Cluster Autoscaler on managed node groups, and Karpenter for just-in-time, group-less node provisioning.",
+      eks: { level:"yes", value:"CA + Karpenter", note:"EKS supports the Kubernetes Cluster Autoscaler on managed node groups, and Karpenter for just-in-time, group-less node provisioning.",
              src:"https://docs.aws.amazon.com/eks/latest/userguide/autoscaling.html" },
       // SRC: https://learn.microsoft.com/en-us/azure/aks/cluster-autoscaler — CA built in; NAP (Karpenter-based) GA
-      aks: { level:"yes", value:"✓ CA + NAP", note:"AKS has a built-in cluster autoscaler per node pool, plus Node Auto-Provisioning (NAP) — a GA Karpenter-based provisioner.",
+      aks: { level:"yes", value:"CA + NAP", note:"AKS has a built-in cluster autoscaler per node pool, plus Node Auto-Provisioning (NAP) — a GA Karpenter-based provisioner.",
              src:"https://learn.microsoft.com/en-us/azure/aks/cluster-autoscaler" },
       // SRC: https://cloud.google.com/kubernetes-engine/docs/concepts/cluster-autoscaler — cluster autoscaler + node auto-provisioning
-      gke: { level:"yes", value:"✓ CA + NAP", note:"GKE includes the cluster autoscaler and node auto-provisioning, which creates and deletes node pools automatically; Autopilot autoscales by design.",
+      gke: { level:"yes", value:"CA + NAP", note:"GKE includes the cluster autoscaler and node auto-provisioning, which creates and deletes node pools automatically; Autopilot autoscales by design.",
              src:"https://cloud.google.com/kubernetes-engine/docs/concepts/cluster-autoscaler" },
       // SRC: https://docs.oracle.com/en-us/iaas/Content/ContEng/Tasks/contengusingclusterautoscaler.htm — Cluster Autoscaler supported on managed node pools
-      oke: { level:"yes", value:"✓ Cluster Autoscaler", note:"OKE supports the Kubernetes Cluster Autoscaler to scale managed node pools based on pod demand.",
+      oke: { level:"yes", value:"Cluster Autoscaler", note:"OKE supports the Kubernetes Cluster Autoscaler to scale managed node pools based on pod demand.",
              src:"https://docs.oracle.com/en-us/iaas/Content/ContEng/Tasks/contengusingclusterautoscaler.htm" },
       // SRC: https://github.com/ovh/docs/blob/develop/pages/public_cloud/containers_orchestration/managed_kubernetes/using-cluster-autoscaler/guide.en-gb.md — autoscaler supported per node pool
-      ovh: { level:"yes", value:"✓ Cluster Autoscaler", note:"OVHcloud Managed Kubernetes supports the cluster autoscaler — enable autoscaling on a node pool and desired node count adjusts between min and max.",
+      ovh: { level:"yes", value:"Cluster Autoscaler", note:"OVHcloud Managed Kubernetes supports the cluster autoscaler — enable autoscaling on a node pool and desired node count adjusts between min and max.",
              src:"https://github.com/ovh/docs/blob/develop/pages/public_cloud/containers_orchestration/managed_kubernetes/using-cluster-autoscaler/guide.en-gb.md" }
     }
   },
@@ -584,19 +584,19 @@ const FEATURES = [
     desc:"A Karpenter-class provisioner that launches right-sized nodes per pending pod, instead of scaling pre-defined, fixed-instance-type node pools.",
     support: {
       // SRC: https://docs.aws.amazon.com/eks/latest/userguide/autoscaling.html — Karpenter provisions just-in-time, group-less compute
-      eks: { level:"yes", value:"✓ Karpenter", note:"Karpenter provisions right-sized EC2 capacity in response to pending pods in under a minute, with no pre-defined node groups.",
+      eks: { level:"yes", value:"Karpenter", note:"Karpenter provisions right-sized EC2 capacity in response to pending pods in under a minute, with no pre-defined node groups.",
              src:"https://docs.aws.amazon.com/eks/latest/userguide/autoscaling.html" },
       // SRC: https://learn.microsoft.com/en-us/azure/aks/node-auto-provisioning — NAP picks the optimal VM SKU from pending pods
-      aks: { level:"yes", value:"✓ NAP", note:"Node Auto-Provisioning — a managed, generally-available Karpenter implementation — picks and launches the optimal VM SKU from pending-pod requirements.",
+      aks: { level:"yes", value:"NAP", note:"Node Auto-Provisioning — a managed, generally-available Karpenter implementation — picks and launches the optimal VM SKU from pending-pod requirements.",
              src:"https://learn.microsoft.com/en-us/azure/aks/node-auto-provisioning" },
       // SRC: https://cloud.google.com/kubernetes-engine/docs/concepts/node-auto-provisioning — NAP creates and deletes node pools automatically
-      gke: { level:"yes", value:"✓ Node auto-prov.", note:"GKE node auto-provisioning creates and deletes node pools automatically to satisfy pending workloads, with no operator-defined pools; Autopilot autoscales nodes by design.",
+      gke: { level:"yes", value:"Node auto-prov.", note:"GKE node auto-provisioning creates and deletes node pools automatically to satisfy pending workloads, with no operator-defined pools; Autopilot autoscales nodes by design.",
              src:"https://cloud.google.com/kubernetes-engine/docs/concepts/node-auto-provisioning" },
       // SRC: https://docs.oracle.com/en-us/iaas/Content/ContEng/Tasks/conteng-kpo.htm — Karpenter Provider for OCI (KPO)
-      oke: { level:"yes", value:"✓ Karpenter (KPO)", note:"Karpenter Provider for OCI (KPO) integrates Karpenter with OKE — when pods cannot be scheduled, it provisions worker nodes that meet their requirements, with no pre-defined node pools.",
+      oke: { level:"yes", value:"Karpenter (KPO)", note:"Karpenter Provider for OCI (KPO) integrates Karpenter with OKE — when pods cannot be scheduled, it provisions worker nodes that meet their requirements, with no pre-defined node pools.",
              src:"https://docs.oracle.com/en-us/iaas/Content/ContEng/Tasks/conteng-kpo.htm" },
       // SRC: https://github.com/ovh/docs/blob/develop/pages/public_cloud/containers_orchestration/managed_kubernetes/using-cluster-autoscaler/guide.en-gb.md — only the standard CA, configured per node pool
-      ovh: { level:"no", value:"✗", note:"OVHcloud Managed Kubernetes has no Karpenter-class provisioner. Autoscaling is the standard Cluster Autoscaler, configured per node pool, and each pool has a fixed flavor set at creation.",
+      ovh: { level:"no", value:"", note:"OVHcloud Managed Kubernetes has no Karpenter-class provisioner. Autoscaling is the standard Cluster Autoscaler, configured per node pool, and each pool has a fixed flavor set at creation.",
              src:"https://github.com/ovh/docs/blob/develop/pages/public_cloud/containers_orchestration/managed_kubernetes/using-cluster-autoscaler/guide.en-gb.md" }
     }
   },
@@ -604,19 +604,19 @@ const FEATURES = [
     desc:"Whether the autoscaling layer itself provisions interruptible Spot capacity and handles interruptions — beyond a hand-created static Spot node pool.",
     support: {
       // SRC: https://docs.aws.amazon.com/eks/latest/best-practices/karpenter.html — Karpenter native Spot interruption handling
-      eks: { level:"yes", value:"✓ Karpenter Spot", note:"Karpenter can provision EC2 Spot capacity directly, mix Spot and On-Demand in a NodePool, and natively handle Spot interruption notices.",
+      eks: { level:"yes", value:"Karpenter Spot", note:"Karpenter can provision EC2 Spot capacity directly, mix Spot and On-Demand in a NodePool, and natively handle Spot interruption notices.",
              src:"https://docs.aws.amazon.com/eks/latest/best-practices/karpenter.html" },
       // SRC: https://learn.microsoft.com/en-us/azure/aks/node-auto-provisioning-node-pools — NAP capacity-type spot
-      aks: { level:"yes", value:"✓ NAP Spot", note:"A NAP node pool can set the karpenter.sh/capacity-type selector to spot, so Node Auto-Provisioning provisions Azure Spot VMs; the cluster autoscaler can also scale a Spot node pool.",
+      aks: { level:"yes", value:"NAP Spot", note:"A NAP node pool can set the karpenter.sh/capacity-type selector to spot, so Node Auto-Provisioning provisions Azure Spot VMs; the cluster autoscaler can also scale a Spot node pool.",
              src:"https://learn.microsoft.com/en-us/azure/aks/node-auto-provisioning-node-pools" },
       // SRC: https://cloud.google.com/kubernetes-engine/docs/concepts/spot-vms — CA and node auto-provisioning both support Spot VMs
-      gke: { level:"yes", value:"✓ Spot VMs", note:"Both the cluster autoscaler and node auto-provisioning support Spot VMs — node auto-provisioning creates new node pools to satisfy Spot-requesting workloads.",
+      gke: { level:"yes", value:"Spot VMs", note:"Both the cluster autoscaler and node auto-provisioning support Spot VMs — node auto-provisioning creates new node pools to satisfy Spot-requesting workloads.",
              src:"https://cloud.google.com/kubernetes-engine/docs/concepts/spot-vms" },
       // SRC: https://docs.oracle.com/en-us/iaas/Content/ContEng/Tasks/conteng-kpo.htm — KPO maps the spot capacity type to OCI preemptible instances
-      oke: { level:"yes", value:"✓ Spot (KPO)", note:"KPO maps the Karpenter spot capacity type to OCI preemptible instances, so the provisioner can launch interruptible capacity directly.",
+      oke: { level:"yes", value:"Spot (KPO)", note:"KPO maps the Karpenter spot capacity type to OCI preemptible instances, so the provisioner can launch interruptible capacity directly.",
              src:"https://docs.oracle.com/en-us/iaas/Content/ContEng/Tasks/conteng-kpo.htm" },
       // SRC: https://github.com/ovh/docs/blob/develop/pages/public_cloud/containers_orchestration/managed_kubernetes/managing-nodes/guide.en-gb.md — node pools use standard instances; no spot tier
-      ovh: { level:"no", value:"✗", note:"OVHcloud Managed Kubernetes node pools use standard Public Cloud instances; there is no Spot or preemptible tier for the autoscaler to provision.",
+      ovh: { level:"no", value:"", note:"OVHcloud Managed Kubernetes node pools use standard Public Cloud instances; there is no Spot or preemptible tier for the autoscaler to provision.",
              src:"https://github.com/ovh/docs/blob/develop/pages/public_cloud/containers_orchestration/managed_kubernetes/managing-nodes/guide.en-gb.md" }
     }
   },
@@ -624,19 +624,19 @@ const FEATURES = [
     desc:"Whether an autoscaling node pool can scale all the way down to zero nodes when there is no demand.",
     support: {
       // SRC: https://docs.aws.amazon.com/eks/latest/best-practices/karpenter.html — Karpenter removes nodes when no longer needed; no minimum
-      eks: { level:"yes", value:"✓ Karpenter", note:"Karpenter sets no minimum node count and removes nodes once they are no longer needed, so an idle NodePool drops to zero; a Cluster-Autoscaler node group can likewise use a minimum of 0.",
+      eks: { level:"yes", value:"Karpenter", note:"Karpenter sets no minimum node count and removes nodes once they are no longer needed, so an idle NodePool drops to zero; a Cluster-Autoscaler node group can likewise use a minimum of 0.",
              src:"https://docs.aws.amazon.com/eks/latest/best-practices/karpenter.html" },
       // SRC: https://learn.microsoft.com/en-us/azure/aks/use-system-pools — user node pools can contain zero nodes
-      aks: { level:"yes", value:"✓ User pools", note:"An autoscaled user node pool can scale to 0 nodes (cluster-autoscaler minimum count of 0). System node pools must keep at least one node for system pods such as CoreDNS.",
+      aks: { level:"yes", value:"User pools", note:"An autoscaled user node pool can scale to 0 nodes (cluster-autoscaler minimum count of 0). System node pools must keep at least one node for system pods such as CoreDNS.",
              src:"https://learn.microsoft.com/en-us/azure/aks/use-system-pools" },
       // SRC: https://cloud.google.com/kubernetes-engine/docs/concepts/cluster-autoscaler — autoscaler scales a node pool to its minimum size
-      gke: { level:"yes", value:"✓ Per node pool", note:"The cluster autoscaler scales an individual node pool down to its minimum size, which can be 0; the cluster as a whole keeps at least one node for system Pods.",
+      gke: { level:"yes", value:"Per node pool", note:"The cluster autoscaler scales an individual node pool down to its minimum size, which can be 0; the cluster as a whole keeps at least one node for system Pods.",
              src:"https://cloud.google.com/kubernetes-engine/docs/concepts/cluster-autoscaler" },
       // SRC: https://docs.oracle.com/en-us/iaas/Content/ContEng/Tasks/contengusingclusterautoscaler.htm — use the Cluster Autoscaler to scale a node pool to zero
-      oke: { level:"yes", value:"✓ CA to zero", note:"Oracle documents using the Kubernetes Cluster Autoscaler to scale a managed node pool to zero — its supported way to remove all of a pool's nodes.",
+      oke: { level:"yes", value:"CA to zero", note:"Oracle documents using the Kubernetes Cluster Autoscaler to scale a managed node pool to zero — its supported way to remove all of a pool's nodes.",
              src:"https://docs.oracle.com/en-us/iaas/Content/ContEng/Tasks/contengusingclusterautoscaler.htm" },
       // SRC: https://github.com/ovh/docs/blob/develop/pages/public_cloud/containers_orchestration/managed_kubernetes/managing-nodes/guide.en-gb.md — NodePools API: minNodes minimum is 0
-      ovh: { level:"yes", value:"✓ minNodes 0", note:"A node pool's minNodes can be set to 0 — the NodePools API schema permits a minimum of 0 — so an idle autoscaled pool scales fully to zero.",
+      ovh: { level:"yes", value:"minNodes 0", note:"A node pool's minNodes can be set to 0 — the NodePools API schema permits a minimum of 0 — so an idle autoscaled pool scales fully to zero.",
              src:"https://github.com/ovh/docs/blob/develop/pages/public_cloud/containers_orchestration/managed_kubernetes/managing-nodes/guide.en-gb.md" }
     }
   },
@@ -644,19 +644,19 @@ const FEATURES = [
     desc:"Whether the platform actively repacks workloads onto fewer or cheaper nodes and removes under-utilised — not just empty — nodes.",
     support: {
       // SRC: https://docs.aws.amazon.com/eks/latest/best-practices/karpenter.html — Karpenter consolidation packs pods onto fewer nodes
-      eks: { level:"yes", value:"✓ Karpenter", note:"Karpenter's consolidation repacks pods onto fewer nodes and removes under-utilised capacity — more active than the Cluster Autoscaler's empty-node scale-down.",
+      eks: { level:"yes", value:"Karpenter", note:"Karpenter's consolidation repacks pods onto fewer nodes and removes under-utilised capacity — more active than the Cluster Autoscaler's empty-node scale-down.",
              src:"https://docs.aws.amazon.com/eks/latest/best-practices/karpenter.html" },
       // SRC: https://learn.microsoft.com/en-us/azure/aks/node-auto-provisioning-disruption — NAP consolidation removes empty/underutilised nodes
-      aks: { level:"yes", value:"✓ NAP", note:"Node Auto-Provisioning's Karpenter-based consolidation removes empty and under-utilised nodes and can replace nodes with lower-priced SKUs.",
+      aks: { level:"yes", value:"NAP", note:"Node Auto-Provisioning's Karpenter-based consolidation removes empty and under-utilised nodes and can replace nodes with lower-priced SKUs.",
              src:"https://learn.microsoft.com/en-us/azure/aks/node-auto-provisioning-disruption" },
       // SRC: https://cloud.google.com/kubernetes-engine/docs/concepts/cluster-autoscaler — optimize-utilization autoscaling profile
-      gke: { level:"yes", value:"✓ optimize profile", note:"The cluster autoscaler removes under-utilised nodes down to the pool minimum; the optimize-utilization autoscaling profile scales the cluster down more aggressively.",
+      gke: { level:"yes", value:"optimize profile", note:"The cluster autoscaler removes under-utilised nodes down to the pool minimum; the optimize-utilization autoscaling profile scales the cluster down more aggressively.",
              src:"https://cloud.google.com/kubernetes-engine/docs/concepts/cluster-autoscaler" },
       // SRC: https://docs.oracle.com/en-us/iaas/Content/ContEng/Tasks/conteng-kpo.htm — KPO consolidates capacity and replaces worker nodes
-      oke: { level:"yes", value:"✓ KPO consolidation", note:"With KPO, Karpenter consolidates capacity and replaces worker nodes under configurable disruption settings — beyond the basic Cluster-Autoscaler scale-down.",
+      oke: { level:"yes", value:"KPO consolidation", note:"With KPO, Karpenter consolidates capacity and replaces worker nodes under configurable disruption settings — beyond the basic Cluster-Autoscaler scale-down.",
              src:"https://docs.oracle.com/en-us/iaas/Content/ContEng/Tasks/conteng-kpo.htm" },
       // SRC: https://github.com/ovh/docs/blob/develop/pages/public_cloud/containers_orchestration/managed_kubernetes/configuring-cluster-autoscaler/guide.en-gb.md — scale-down-utilization-threshold default 0.5
-      ovh: { level:"part", value:"◐ CA scale-down", note:"Only the standard Cluster Autoscaler scale-down: a node is removed once its utilisation stays below the scale-down threshold (default 0.5). No Karpenter-style repacking.",
+      ovh: { level:"part", value:"CA scale-down", note:"Only the standard Cluster Autoscaler scale-down: a node is removed once its utilisation stays below the scale-down threshold (default 0.5). No Karpenter-style repacking.",
              src:"https://github.com/ovh/docs/blob/develop/pages/public_cloud/containers_orchestration/managed_kubernetes/configuring-cluster-autoscaler/guide.en-gb.md" }
     }
   },
@@ -708,19 +708,19 @@ const FEATURES = [
     desc:"Whether the service lets you swap in a different CNI (e.g. Cilium) or run it bring-your-own.",
     support: {
       // SRC: https://docs.aws.amazon.com/eks/latest/userguide/alternate-cni-plugins.html — EKS runs upstream K8s; alternate CNIs supported on EC2 nodes
-      eks: { level:"yes", value:"✓ Alternate CNIs", note:"EKS runs upstream Kubernetes, so alternate compatible CNI plugins (Cilium, Calico, and others) can be installed on EC2 nodes.",
+      eks: { level:"yes", value:"Alternate CNIs", note:"EKS runs upstream Kubernetes, so alternate compatible CNI plugins (Cilium, Calico, and others) can be installed on EC2 nodes.",
              src:"https://docs.aws.amazon.com/eks/latest/userguide/alternate-cni-plugins.html" },
       // SRC: https://learn.microsoft.com/en-us/azure/aks/azure-cni-powered-by-cilium — Azure CNI Powered by Cilium, plus BYO CNI mode
-      aks: { level:"yes", value:"✓ Cilium + BYO CNI", note:"AKS offers Azure CNI Powered by Cilium as a managed option, and a BYO CNI mode for installing your own plugin.",
+      aks: { level:"yes", value:"Cilium + BYO CNI", note:"AKS offers Azure CNI Powered by Cilium as a managed option, and a BYO CNI mode for installing your own plugin.",
              src:"https://learn.microsoft.com/en-us/azure/aks/azure-cni-powered-by-cilium" },
       // SRC: https://cloud.google.com/kubernetes-engine/docs/concepts/dataplane-v2 — GKE manages the dataplane; no arbitrary CNI swap on standard clusters
-      gke: { level:"part", value:"◐ Managed only", note:"GKE manages the CNI/dataplane (Dataplane V2 or the legacy Calico-based dataplane). Arbitrary third-party CNI replacement is not a supported configuration on managed GKE.",
+      gke: { level:"part", value:"Managed only", note:"GKE manages the CNI/dataplane (Dataplane V2 or the legacy Calico-based dataplane). Arbitrary third-party CNI replacement is not a supported configuration on managed GKE.",
              src:"https://cloud.google.com/kubernetes-engine/docs/concepts/dataplane-v2" },
       // SRC: https://docs.oracle.com/en-us/iaas/Content/ContEng/Concepts/contengpodnetworking.htm — choice between two OKE CNIs, fixed at cluster creation
-      oke: { level:"part", value:"◐ Two built-in CNIs", note:"OKE lets you choose between its two built-in CNIs (VCN-Native or flannel) at cluster creation, but does not support arbitrary third-party CNI plugins.",
+      oke: { level:"part", value:"Two built-in CNIs", note:"OKE lets you choose between its two built-in CNIs (VCN-Native or flannel) at cluster creation, but does not support arbitrary third-party CNI plugins.",
              src:"https://docs.oracle.com/en-us/iaas/Content/ContEng/Concepts/contengpodnetworking.htm" },
       // SRC: https://github.com/ovh/docs/blob/develop/pages/public_cloud/containers_orchestration/managed_kubernetes/software-versions-reserved-resources/guide.en-gb.md — single CNI (Canal); not pluggable
-      ovh: { level:"no", value:"✗", note:"OVHcloud Managed Kubernetes installs a single CNI (Canal) and does not document support for replacing it with an alternative plugin.",
+      ovh: { level:"no", value:"", note:"OVHcloud Managed Kubernetes installs a single CNI (Canal) and does not document support for replacing it with an alternative plugin.",
              src:"https://github.com/ovh/docs/blob/develop/pages/public_cloud/containers_orchestration/managed_kubernetes/software-versions-reserved-resources/guide.en-gb.md" }
     }
   },
@@ -730,19 +730,19 @@ const FEATURES = [
     desc:"Named tracks (rapid / regular / stable) that govern which Kubernetes versions a cluster is offered and how quickly.",
     support: {
       // SRC: https://docs.aws.amazon.com/eks/latest/userguide/kubernetes-versions.html — EKS has no named release channels
-      eks: { level:"no", value:"✗", note:"EKS has no named release-channel concept — you select an explicit Kubernetes version, governed by the standard/extended support windows.",
+      eks: { level:"no", value:"", note:"EKS has no named release-channel concept — you select an explicit Kubernetes version, governed by the standard/extended support windows.",
              src:"https://docs.aws.amazon.com/eks/latest/userguide/kubernetes-versions.html" },
       // SRC: https://learn.microsoft.com/en-us/azure/aks/auto-upgrade-cluster — AKS uses auto-upgrade channels, not version 'release channels'
-      aks: { level:"part", value:"◐ Upgrade channels", note:"AKS has no Rapid/Regular/Stable-style release channels, but offers auto-upgrade channels (patch, stable, rapid, node-image) that control how upgrades are applied.",
+      aks: { level:"part", value:"Upgrade channels", note:"AKS has no Rapid/Regular/Stable-style release channels, but offers auto-upgrade channels (patch, stable, rapid, node-image) that control how upgrades are applied.",
              src:"https://learn.microsoft.com/en-us/azure/aks/auto-upgrade-cluster" },
       // SRC: https://cloud.google.com/kubernetes-engine/docs/concepts/release-channels — Rapid / Regular / Stable / Extended channels
-      gke: { level:"yes", value:"✓ Rapid/Regular/Stable/Extended", note:"GKE offers four release channels — Rapid, Regular, Stable and Extended — each trading update speed against stability and support length.",
+      gke: { level:"yes", value:"Rapid/Regular/Stable/Extended", note:"GKE offers four release channels — Rapid, Regular, Stable and Extended — each trading update speed against stability and support length.",
              src:"https://cloud.google.com/kubernetes-engine/docs/concepts/release-channels" },
       // SRC: https://docs.oracle.com/en-us/iaas/Content/ContEng/Concepts/contengaboutk8sversions.htm — OKE has no release channels
-      oke: { level:"no", value:"✗", note:"OKE has no release-channel mechanism — you pick a specific supported Kubernetes version when creating or upgrading a cluster.",
+      oke: { level:"no", value:"", note:"OKE has no release-channel mechanism — you pick a specific supported Kubernetes version when creating or upgrading a cluster.",
              src:"https://docs.oracle.com/en-us/iaas/Content/ContEng/Concepts/contengaboutk8sversions.htm" },
       // SRC: https://github.com/ovh/docs/blob/develop/pages/public_cloud/containers_orchestration/managed_kubernetes/change-security-update/guide.en-gb.md — security-update policies, not release channels
-      ovh: { level:"no", value:"✗", note:"OVHcloud Managed Kubernetes has no release channels. It exposes per-cluster security-update policies that govern patch application instead.",
+      ovh: { level:"no", value:"", note:"OVHcloud Managed Kubernetes has no release channels. It exposes per-cluster security-update policies that govern patch application instead.",
              src:"https://github.com/ovh/docs/blob/develop/pages/public_cloud/containers_orchestration/managed_kubernetes/change-security-update/guide.en-gb.md" }
     }
   },
@@ -750,19 +750,19 @@ const FEATURES = [
     desc:"Whether the provider can automatically upgrade the control plane and worker nodes to newer Kubernetes versions.",
     support: {
       // SRC: https://docs.aws.amazon.com/eks/latest/userguide/kubernetes-versions.html — control plane auto-upgraded only at end-of-support; node groups never auto
-      eks: { level:"part", value:"◐ End-of-support only", note:"EKS auto-upgrades a control plane only once its version reaches end of extended support. Managed node groups are never auto-upgraded — you trigger node updates yourself.",
+      eks: { level:"part", value:"End-of-support only", note:"EKS auto-upgrades a control plane only once its version reaches end of extended support. Managed node groups are never auto-upgraded — you trigger node updates yourself.",
              src:"https://docs.aws.amazon.com/eks/latest/userguide/kubernetes-versions.html" },
       // SRC: https://learn.microsoft.com/en-us/azure/aks/auto-upgrade-cluster — opt-in auto-upgrade channels for cluster + node image
-      aks: { level:"yes", value:"✓ Opt-in channels", note:"AKS supports opt-in auto-upgrade channels for both the cluster Kubernetes version and the node OS image, with configurable maintenance windows.",
+      aks: { level:"yes", value:"Opt-in channels", note:"AKS supports opt-in auto-upgrade channels for both the cluster Kubernetes version and the node OS image, with configurable maintenance windows.",
              src:"https://learn.microsoft.com/en-us/azure/aks/auto-upgrade-cluster" },
       // SRC: https://cloud.google.com/kubernetes-engine/docs/concepts/release-channels — channel clusters auto-upgrade control plane AND nodes (cannot disable)
-      gke: { level:"yes", value:"✓ Automatic", note:"GKE clusters on a release channel have node auto-upgrade always on; the control plane is auto-upgraded for all clusters regardless of channel.",
+      gke: { level:"yes", value:"Automatic", note:"GKE clusters on a release channel have node auto-upgrade always on; the control plane is auto-upgraded for all clusters regardless of channel.",
              src:"https://cloud.google.com/kubernetes-engine/docs/concepts/release-channels" },
       // SRC: https://docs.oracle.com/en-us/iaas/Content/ContEng/Concepts/contengaboutupgradingclusters.htm — control-plane & node-pool upgrades are user-initiated
-      oke: { level:"no", value:"✗ Manual", note:"OKE control-plane and node-pool Kubernetes upgrades are user-initiated; OKE does not auto-upgrade clusters to new minor versions.",
+      oke: { level:"no", value:"Manual", note:"OKE control-plane and node-pool Kubernetes upgrades are user-initiated; OKE does not auto-upgrade clusters to new minor versions.",
              src:"https://docs.oracle.com/en-us/iaas/Content/ContEng/Concepts/contengaboutupgradingclusters.htm" },
       // SRC: https://github.com/ovh/docs/blob/develop/pages/public_cloud/containers_orchestration/managed_kubernetes/upgrading-kubernetes-version/guide.en-gb.md + change-security-update — patches auto per policy; minor upgrades manual
-      ovh: { level:"part", value:"◐ Patches auto, minors manual", note:"OVHcloud auto-applies patch versions per the chosen security-update policy, but minor-version upgrades are a manual 'Upgrade to the next minor version' action. End-of-life versions may be force-upgraded.",
+      ovh: { level:"part", value:"Patches auto, minors manual", note:"OVHcloud auto-applies patch versions per the chosen security-update policy, but minor-version upgrades are a manual 'Upgrade to the next minor version' action. End-of-life versions may be force-upgraded.",
              src:"https://github.com/ovh/docs/blob/develop/pages/public_cloud/containers_orchestration/managed_kubernetes/upgrading-kubernetes-version/guide.en-gb.md" }
     }
   }

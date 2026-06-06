@@ -1044,9 +1044,11 @@ function renderInstanceView() {
       const spec = specOf(fam, size) || {};
       const price = typeof spec.price === "number" ? spec.price : null;
       if (!priceInTier(price, state.priceTier)) return;
+      // match oci/ovh: when the size already starts with the family key, don't double the prefix
+      const full = size.indexOf(fam.key) === 0 ? size : `${fam.key}.${size}`;
       entries.push({
-        id: `${fam.key}.${size}`,
-        name: `${fam.key}.${size}`,
+        id: full,
+        name: full,
         cat: fam.cat,
         catLabel: CAT_LABEL[fam.cat],
         catColor: CAT_COLOR[fam.cat],
