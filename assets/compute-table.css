@@ -49,6 +49,10 @@
 .ctbl tbody td.ctbl__class { text-align: left; font-family: var(--sans); color: var(--paper-2); font-size: 12px; }
 .ctbl__price { color: var(--paper) !important; }
 .ctbl__na { color: var(--paper-3); } /* --paper-3 (.55) = 5.6:1 passes WCAG AA; --paper-4 (.20) = 1.68:1 fails */
+/* $/vCPU is derived from vCPU + $/hr; keep it (and its column sort) but let it
+   recede so the primary metrics lead the scan. */
+.ctbl td.ctbl__derived { color: var(--paper-3); }
+.ctbl th.ctbl__derived .ctbl__sort:not(.is-active) { opacity: 0.62; }
 .ctbl__dot { display: inline-block; width: 7px; height: 7px; border-radius: 2px; margin-right: 8px; vertical-align: middle; }
 .ctbl__check { width: 44px; text-align: center !important; }
 .ctbl__check input { width: 15px; height: 15px; accent-color: var(--accent); cursor: pointer; vertical-align: middle; }

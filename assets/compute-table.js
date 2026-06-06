@@ -30,7 +30,7 @@
     { key: "vcpu",    label: "vCPU" },
     { key: "mem",     label: "Memory",  unit: "GiB" },
     { key: "price",   label: "$/hr" },
-    { key: "pervcpu", label: "$/vCPU" },
+    { key: "pervcpu", label: "$/vCPU", cls: "ctbl__derived" },
     { key: "regions", label: "Regions" }
   ];
 
@@ -117,7 +117,7 @@
           + "<td>" + (e.vcpu != null ? e.vcpu : na) + "</td>"
           + "<td>" + (e.mem != null ? e.mem : na) + "</td>"
           + "<td class='ctbl__price'>" + (price ? price : na) + "</td>"
-          + "<td>" + (per ? per : na) + "</td>"
+          + "<td class='ctbl__derived'>" + (per ? per : na) + "</td>"
           + "<td>" + (e.regions != null ? e.regions : na) + "</td>"
           + "</tr>";
       }).join("");

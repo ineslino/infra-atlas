@@ -79,15 +79,26 @@
   gap: 2px; font-family: var(--mono); font-size: 11.5px; line-height: 1.35;
   padding: 4px 8px; border-radius: 3px; max-width: 200px;
 }
-.cell-value--yes  { color: var(--paper); }
+.cell-value--yes  { color: var(--paper-2); } /* the expected "yes" recedes; no/part carry the weight (tint below) */
 .cell-value--part { color: var(--part); }
 .cell-value--no   { color: var(--no); }
 .cell-value__star { font-size: 11px; color: var(--matrix-accent); align-self: flex-start; margin-left: 1px; }
-/* footnoted cells get a dotted underline — a consistent "click for the sourced
-   note" affordance (most cells are sourced, so this also signals the table is
-   interactive, which the audit found wasn't discoverable) */
-.cell__btn.has-note .cell-value { text-decoration: underline dotted; text-decoration-color: var(--line-3); text-underline-offset: 4px; }
-.cell__btn.has-note:hover .cell-value { text-decoration-color: var(--matrix-accent); }
+/* footnoted cells: the orange "*" (cell-value__star) already marks "has a sourced
+   note", so a dotted underline on every cell was redundant texture (readability
+   pass, 2026-06). Show the underline on hover/focus instead of permanently;
+   discovery still holds via the persistent "*" plus the cell's cursor:pointer. */
+.cell__btn.has-note:hover .cell-value,
+.cell__btn.has-note:focus-visible .cell-value {
+  text-decoration: underline dotted; text-decoration-color: var(--matrix-accent); text-underline-offset: 4px;
+}
+
+/* let the diverging cells carry the colour weight: the expected "yes" recedes
+   (--paper-2 above), no/partial get a faint wash so the eye lands on the
+   differences. Generalises the gap-tint that data-layer shipped inline. */
+.matrix td.cell:has(.cell-value--no)         { background: rgba(244, 123, 123, 0.07); }
+.matrix td.cell:has(.cell-value--no):hover   { background: rgba(244, 123, 123, 0.13); }
+.matrix td.cell:has(.cell-value--part)       { background: rgba(244, 198, 96, 0.06); }
+.matrix td.cell:has(.cell-value--part):hover { background: rgba(244, 198, 96, 0.11); }
 
 /* ─── Button wrappers — preserve <th>/<td> semantics while keeping cells clickable ─── */
 .cell__btn, .feature-col__btn {
