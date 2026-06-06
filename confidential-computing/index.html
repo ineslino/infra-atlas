@@ -438,6 +438,46 @@ body {
   .filters { position: static; padding: 14px; }
   .colophon { grid-template-columns: 1fr; gap: 24px; }
 }
+
+/* Below 680px the 940px-wide table can't survive a phone (it forces a pinch-zoom
+   horizontal scroll). Collapse each tech row into a card: the technology name is
+   the title, and every cloud stacks as a labelled row (label from data-cloud,
+   uppercased). Mirrors the shared matrix.css behaviour, which this page predates. */
+@media (max-width: 680px) {
+  .matrix-wrap { overflow-x: visible; }
+  .matrix { display: block; min-width: 0; }
+  .matrix thead { display: none; }
+  .matrix tbody { display: block; }
+
+  .matrix tbody tr.category-row { display: block; }
+  .matrix tbody tr.category-row td { display: block; padding: 20px 2px 8px; border-top: 0; background: none; }
+
+  .matrix tbody tr.tech-row {
+    display: block; margin: 0 0 12px; padding: 14px 16px;
+    border: 1px solid var(--line); border-radius: 6px;
+    background: var(--surface, rgba(255, 255, 255, 0.02));
+  }
+  .matrix tbody tr.tech-row:hover { background: var(--surface, rgba(255, 255, 255, 0.02)); }
+  .matrix tbody tr.tech-row td { padding: 0; border-bottom: 0; }
+
+  .matrix tbody tr.tech-row td.tech-col {
+    display: block; width: auto; padding: 0 0 10px; margin-bottom: 8px;
+    border-right: 0; border-bottom: 1px solid var(--line-2);
+  }
+
+  .matrix tbody tr.tech-row td.cell {
+    display: flex; align-items: center; gap: 10px;
+    min-width: 0; padding: 8px 0; border-bottom: 1px dashed var(--line); text-align: left;
+  }
+  .matrix tbody tr.tech-row td.cell:last-child { border-bottom: 0; padding-bottom: 0; }
+  .matrix tbody tr.tech-row td.cell:hover { background: none; }
+  .matrix tbody tr.tech-row td.cell::before {
+    content: attr(data-cloud); margin-right: auto; flex-shrink: 0;
+    font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.1em;
+    text-transform: uppercase; color: var(--paper-3);
+  }
+  .matrix tbody tr.tech-row td.cell .cell-fam { text-align: right; }
+}
 </style>
 </head>
 <body>
