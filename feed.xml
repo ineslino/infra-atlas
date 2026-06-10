@@ -6,7 +6,87 @@
     <atom:link href="https://infraatlas.dev/feed.xml" rel="self" type="application/rss+xml"/>
     <description>A neutral, sourced changelog of cloud infrastructure — new instance families, regions, withdrawals and price moves across AWS, Azure, GCP, OCI and OVHcloud.</description>
     <language>en</language>
-    <lastBuildDate>Tue, 02 Jun 2026 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Wed, 10 Jun 2026 00:00:00 +0000</lastBuildDate>
+    <item>
+      <title>AWS EC2 · new family m9g</title>
+      <link>https://infraatlas.dev/ec2/</link>
+      <guid isPermaLink="false">ba045552313f4616e3baf412ffc76257</guid>
+      <category>family-added</category>
+      <pubDate>Wed, 10 Jun 2026 00:00:00 +0000</pubDate>
+      <description>AWS EC2 · new family m9g</description>
+    </item>
+    <item>
+      <title>AWS EC2 · new family m9gd</title>
+      <link>https://infraatlas.dev/ec2/</link>
+      <guid isPermaLink="false">f67937647530d1e11ea5c5ebba7549c6</guid>
+      <category>family-added</category>
+      <pubDate>Wed, 10 Jun 2026 00:00:00 +0000</pubDate>
+      <description>AWS EC2 · new family m9gd</description>
+    </item>
+    <item>
+      <title>AWS EC2 · m8ib: 2 new sizes (metal-48xl, metal-96xl)</title>
+      <link>https://infraatlas.dev/ec2/</link>
+      <guid isPermaLink="false">480110785074e17f88b35d56d1f44cf6</guid>
+      <category>instance-added</category>
+      <pubDate>Wed, 10 Jun 2026 00:00:00 +0000</pubDate>
+      <description>AWS EC2 · m8ib: 2 new sizes (metal-48xl, metal-96xl)</description>
+    </item>
+    <item>
+      <title>AWS EC2 · m8idb: 2 new sizes (metal-48xl, metal-96xl)</title>
+      <link>https://infraatlas.dev/ec2/</link>
+      <guid isPermaLink="false">895cac3916cd73fca431e3af56710631</guid>
+      <category>instance-added</category>
+      <pubDate>Wed, 10 Jun 2026 00:00:00 +0000</pubDate>
+      <description>AWS EC2 · m8idb: 2 new sizes (metal-48xl, metal-96xl)</description>
+    </item>
+    <item>
+      <title>AWS EC2 · m8idn: 2 new sizes (metal-48xl, metal-96xl)</title>
+      <link>https://infraatlas.dev/ec2/</link>
+      <guid isPermaLink="false">93127ffaa6a998314bc3ff160b029ee7</guid>
+      <category>instance-added</category>
+      <pubDate>Wed, 10 Jun 2026 00:00:00 +0000</pubDate>
+      <description>AWS EC2 · m8idn: 2 new sizes (metal-48xl, metal-96xl)</description>
+    </item>
+    <item>
+      <title>AWS EC2 · m8in: 2 new sizes (metal-48xl, metal-96xl)</title>
+      <link>https://infraatlas.dev/ec2/</link>
+      <guid isPermaLink="false">2a745f7dc5ccb9396d5ebde61264b86c</guid>
+      <category>instance-added</category>
+      <pubDate>Wed, 10 Jun 2026 00:00:00 +0000</pubDate>
+      <description>AWS EC2 · m8in: 2 new sizes (metal-48xl, metal-96xl)</description>
+    </item>
+    <item>
+      <title>AWS EC2 · r8ib: 2 new sizes (metal-48xl, metal-96xl)</title>
+      <link>https://infraatlas.dev/ec2/</link>
+      <guid isPermaLink="false">778b6dc23b992f414a3c4a9dccc26252</guid>
+      <category>instance-added</category>
+      <pubDate>Wed, 10 Jun 2026 00:00:00 +0000</pubDate>
+      <description>AWS EC2 · r8ib: 2 new sizes (metal-48xl, metal-96xl)</description>
+    </item>
+    <item>
+      <title>AWS EC2 · r8idb: 2 new sizes (metal-48xl, metal-96xl)</title>
+      <link>https://infraatlas.dev/ec2/</link>
+      <guid isPermaLink="false">81c075a11ec57b95894c98d2922a89b9</guid>
+      <category>instance-added</category>
+      <pubDate>Wed, 10 Jun 2026 00:00:00 +0000</pubDate>
+      <description>AWS EC2 · r8idb: 2 new sizes (metal-48xl, metal-96xl)</description>
+    </item>
+    <item>
+      <title>AWS EC2 · r8idn: 2 new sizes (metal-48xl, metal-96xl)</title>
+      <link>https://infraatlas.dev/ec2/</link>
+      <guid isPermaLink="false">b367de5e4052d63fc02a1177a455f296</guid>
+      <category>instance-added</category>
+      <pubDate>Wed, 10 Jun 2026 00:00:00 +0000</pubDate>
+      <description>AWS EC2 · r8idn: 2 new sizes (metal-48xl, metal-96xl)</description>
+    </item>
+    <item>
+      <title>AWS EC2 · r8in: 2 new sizes (metal-48xl, metal-96xl)</title>
+      <link>https://infraatlas.dev/ec2/</link>
+      <guid isPermaLink="false">8b42c1c9a07923ecf7ca5f485792ed25</guid>
+      <category>instance-added</category>
+      <pubDate>Wed, 10 Jun 2026 00:00:00 +0000</pubDate>
+      <description>AWS EC2 · r8in: 2 new sizes (metal-48xl, metal-96xl)</description>
+    </item>
     <item>
       <title>Regions · new region BHS</title>
       <link>https://infraatlas.dev/regions/</link>
