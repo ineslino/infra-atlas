@@ -1,6 +1,66 @@
 {
-  "generated": "2026-06-02T10:49:09Z",
+  "generated": "2026-06-10T10:15:50Z",
   "entries": [
+    {
+      "ts": "2026-06-10",
+      "instrument": "ec2",
+      "kind": "family-added",
+      "text": "new family m9g"
+    },
+    {
+      "ts": "2026-06-10",
+      "instrument": "ec2",
+      "kind": "family-added",
+      "text": "new family m9gd"
+    },
+    {
+      "ts": "2026-06-10",
+      "instrument": "ec2",
+      "kind": "instance-added",
+      "text": "m8ib: 2 new sizes (metal-48xl, metal-96xl)"
+    },
+    {
+      "ts": "2026-06-10",
+      "instrument": "ec2",
+      "kind": "instance-added",
+      "text": "m8idb: 2 new sizes (metal-48xl, metal-96xl)"
+    },
+    {
+      "ts": "2026-06-10",
+      "instrument": "ec2",
+      "kind": "instance-added",
+      "text": "m8idn: 2 new sizes (metal-48xl, metal-96xl)"
+    },
+    {
+      "ts": "2026-06-10",
+      "instrument": "ec2",
+      "kind": "instance-added",
+      "text": "m8in: 2 new sizes (metal-48xl, metal-96xl)"
+    },
+    {
+      "ts": "2026-06-10",
+      "instrument": "ec2",
+      "kind": "instance-added",
+      "text": "r8ib: 2 new sizes (metal-48xl, metal-96xl)"
+    },
+    {
+      "ts": "2026-06-10",
+      "instrument": "ec2",
+      "kind": "instance-added",
+      "text": "r8idb: 2 new sizes (metal-48xl, metal-96xl)"
+    },
+    {
+      "ts": "2026-06-10",
+      "instrument": "ec2",
+      "kind": "instance-added",
+      "text": "r8idn: 2 new sizes (metal-48xl, metal-96xl)"
+    },
+    {
+      "ts": "2026-06-10",
+      "instrument": "ec2",
+      "kind": "instance-added",
+      "text": "r8in: 2 new sizes (metal-48xl, metal-96xl)"
+    },
     {
       "ts": "2026-06-02",
       "instrument": "regions",
