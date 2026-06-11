@@ -594,7 +594,11 @@
 
     function state(r) {
       var thead = r.table.tHead;
-      if (!thead || !thead.offsetHeight) { hide(r); return; } // card-collapse hides theads <680px
+      // empty (pre-bootstrap) or card-collapsed (<680px) theads can't pin
+      if (!thead || !thead.offsetHeight) {
+        if (r.on) { r.on = false; r.strip.classList.remove("is-on"); }
+        return;
+      }
       var tb = r.table.getBoundingClientRect();
       var hb = thead.getBoundingClientRect();
       var should = hb.top < NAVH && tb.bottom > NAVH + hb.height + 36;
@@ -611,6 +615,7 @@
 
     function enhance(table) {
       if (table.__iaSthead) return;
+      if (table.closest(".ia-sthead")) return; // never enhance our own clones
       table.__iaSthead = true;
       var wrap = table.closest(".matrix-wrap, .ctbl-wrap") || table.parentElement;
       if (!wrap) return;
