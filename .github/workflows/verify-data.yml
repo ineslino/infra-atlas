@@ -112,3 +112,10 @@ jobs:
       # forcing a re-verification pass against the primary sources.
       - name: Check European Sovereignty freshness
         run: python3 scripts/check_sovereignty_freshness.py
+
+      # Each landing card carries a freshness chip ("Refreshed daily" /
+      # "Verified <date>"). The chip is hand-typed; the truth lives in each
+      # instrument page's <time datetime> stamp. This fails when a snapshot is
+      # re-verified (its <time> bumped) but the landing chip wasn't updated.
+      - name: Check landing-page freshness chips match instruments
+        run: python3 scripts/check_freshness_chips.py
