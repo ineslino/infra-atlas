@@ -56,8 +56,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@300;400;500;600&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/assets/compute-table.css?v=2">
-<script src="/assets/compute-table.js?v=2"></script>
+<link rel="stylesheet" href="/assets/compute-table.css?v=3">
+<script src="/assets/compute-table.js?v=3"></script>
 <link rel="stylesheet" href="/assets/compute-page.css?v=1">
 <style>
 :root {
@@ -235,7 +235,7 @@ button:focus-visible,
     </div>
     <div>
       <h5>Data source</h5>
-      <p>EC2 instance specs and on-demand prices come from the public <a href="https://instances.vantage.sh/" target="_blank" rel="noopener" style="color: var(--paper-2); text-decoration: underline; text-decoration-color: var(--line-2); text-underline-offset: 3px;">ec2instances.info</a> dataset (Vantage); per-region availability is cross-referenced against AWS's regional documentation. The status line above carries the current data date.</p>
+      <p>EC2 instance specs and on-demand prices come from the public <a href="https://instances.vantage.sh/" target="_blank" rel="noopener" style="color: var(--paper-2); text-decoration: underline; text-decoration-color: var(--line-2); text-underline-offset: 3px;">ec2instances.info</a> dataset (Vantage); per-region availability is cross-referenced against AWS's regional documentation. The status line above carries the current data date. Prices are hourly on-demand <em>list</em> prices (Linux, USD) — spot, reserved and savings-plan rates are out of scope.</p>
     </div>
     <div>
       <h5>Shortcuts</h5>

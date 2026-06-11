@@ -336,6 +336,43 @@
     + '.ia-reveal{opacity:0;transform:translateY(14px);'
     +   'transition:opacity .5s ease-out,transform .5s ease-out;}'
     + '.ia-reveal.ia-revealed{opacity:1;transform:none;}'
+    /* print: reveal everything, drop floating chrome — a saved PDF must carry
+       the whole page, not just the sections the reader had scrolled past */
+    + '@media print{.ia-reveal{opacity:1 !important;transform:none !important;}'
+    + '.ia-sthead,.ia-totop,.ia-fresh,.ia-ttools,.ia-nav__right{display:none !important;}}'
+    /* sticky-header clone — .matrix/.ctbl theads are position:sticky in CSS but
+       their overflow-x wrapper traps them (the wrapper becomes the containing
+       scroller), so they never pin to the viewport. A fixed clone strip under
+       the nav takes over while the table is in view. */
+    + '.ia-sthead{position:fixed;top:46px;z-index:55;display:none;overflow:hidden;'
+    + 'background:var(--ink-2,#100E0C);border-bottom:1px solid var(--line-2,rgba(244,239,230,0.14));'
+    + 'box-shadow:0 10px 26px rgba(0,0,0,0.45);}'
+    + '.ia-sthead.is-on{display:block;}'
+    + '.ia-sthead table{border-collapse:collapse;margin:0;}'
+    /* copy-this-view tools — shared by the matrix engine (injected here) and
+       the compute tables (emitted by compute-table.js with the same classes) */
+    + '.ia-ttools{display:flex;align-items:center;gap:7px;flex-wrap:wrap;margin:0 0 12px;}'
+    + '.ia-ttools__label{font-family:var(--mono,monospace);font-size:9.5px;letter-spacing:0.2em;'
+    + 'text-transform:uppercase;color:var(--paper-3,rgba(244,239,230,0.55));margin-right:3px;}'
+    + '.ia-ttools button{background:transparent;border:1px solid var(--line-2,rgba(244,239,230,0.14));'
+    + 'color:var(--paper-2,rgba(244,239,230,0.66));font-family:var(--mono,monospace);font-size:10px;'
+    + 'letter-spacing:0.08em;text-transform:uppercase;padding:5px 11px;border-radius:99px;cursor:pointer;'
+    + 'transition:color .15s,border-color .15s;}'
+    + '.ia-ttools button:hover{color:var(--paper,#F4EFE6);border-color:var(--paper-3,rgba(244,239,230,0.55));}'
+    + '.ia-ttools button.is-done{color:var(--mint,#6FE7B5);border-color:var(--mint,#6FE7B5);}'
+    /* what-changed strip — appears under the nav when feed.json has entries
+       newer than the visitor\'s last acknowledged change */
+    + '.ia-fresh{display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap;'
+    + 'padding:8px clamp(20px,4vw,48px);background:rgba(255,120,73,0.07);'
+    + 'border-bottom:1px solid var(--line,rgba(244,239,230,0.08));'
+    + 'font-family:var(--mono,monospace);font-size:11px;letter-spacing:0.05em;'
+    + 'color:var(--paper-2,rgba(244,239,230,0.66));}'
+    + '.ia-fresh__dot{width:6px;height:6px;border-radius:50%;background:var(--accent,#FF7849);flex:none;}'
+    + '.ia-fresh a{color:var(--accent,#FF7849);text-decoration:none;}'
+    + '.ia-fresh a:hover{color:var(--accent-2,#FFA66E);}'
+    + '.ia-fresh__x{background:none;border:0;color:var(--paper-3,rgba(244,239,230,0.55));'
+    + 'cursor:pointer;font-size:13px;line-height:1;padding:2px 6px;}'
+    + '.ia-fresh__x:hover{color:var(--paper,#F4EFE6);}'
     /* back-to-top — floating button, every page, appears after scrolling down */
     + '.ia-totop{position:fixed;bottom:24px;right:24px;z-index:80;'
     + 'width:44px;height:44px;border-radius:50%;cursor:pointer;'
@@ -513,6 +550,296 @@
     });
     window.addEventListener("scroll", sync, { passive: true });
     sync();
+  })();
+
+  // ── Sticky column headers — fixed clone of .matrix/.ctbl theads ──
+  // The real theads carry position:sticky, but their overflow-x:auto wrapper
+  // becomes the containing scroller and traps them, so they scroll away with
+  // the page (deferred bug, 2026-06-03). While a data table is in view past
+  // the nav, this pins an aria-hidden clone of its header row at top:46px,
+  // syncing column widths, horizontal scroll and (for .ctbl) sort clicks.
+  (function () {
+    var NAVH = 46, REG = [], raf = 0, scanRaf = 0;
+
+    function rebuild(r) {
+      var thead = r.table.tHead;
+      r.inner.innerHTML = "";
+      if (!thead || !thead.rows.length || !thead.offsetHeight) return;
+      var clone = document.createElement("table");
+      clone.className = r.table.className;
+      clone.style.tableLayout = "fixed";
+      clone.style.width = r.table.offsetWidth + "px";
+      clone.style.minWidth = "0";
+      var tr = document.createElement("tr");
+      var src = thead.rows[0].cells;
+      for (var i = 0; i < src.length; i++) {
+        var th = src[i].cloneNode(true);
+        th.style.width = src[i].offsetWidth + "px";
+        th.style.position = "static"; // defuse the (inert) sticky rules on the copy
+        tr.appendChild(th);
+      }
+      var h = document.createElement("thead");
+      h.appendChild(tr);
+      clone.appendChild(h);
+      clone.querySelectorAll("button,a,input").forEach(function (el) { el.tabIndex = -1; });
+      r.inner.appendChild(clone);
+    }
+
+    function place(r) {
+      var b = r.wrap.getBoundingClientRect();
+      r.strip.style.left = b.left + "px";
+      r.strip.style.width = b.width + "px";
+      r.inner.style.transform = "translateX(" + (-r.wrap.scrollLeft) + "px)";
+    }
+
+    function state(r) {
+      var thead = r.table.tHead;
+      // empty (pre-bootstrap) or card-collapsed (<680px) theads can't pin
+      if (!thead || !thead.offsetHeight) {
+        if (r.on) { r.on = false; r.strip.classList.remove("is-on"); }
+        return;
+      }
+      var tb = r.table.getBoundingClientRect();
+      var hb = thead.getBoundingClientRect();
+      var should = hb.top < NAVH && tb.bottom > NAVH + hb.height + 36;
+      if (should && !r.on) { r.on = true; rebuild(r); place(r); r.strip.classList.add("is-on"); }
+      else if (!should && r.on) { r.on = false; r.strip.classList.remove("is-on"); }
+      else if (r.on) place(r);
+    }
+
+    function tick() {
+      raf = 0;
+      for (var i = 0; i < REG.length; i++) state(REG[i]);
+    }
+    function onScroll() { if (!raf) raf = requestAnimationFrame(tick); }
+
+    function enhance(table) {
+      if (table.__iaSthead) return;
+      if (table.closest(".ia-sthead")) return; // never enhance our own clones
+      table.__iaSthead = true;
+      var wrap = table.closest(".matrix-wrap, .ctbl-wrap") || table.parentElement;
+      if (!wrap) return;
+      var strip = document.createElement("div");
+      strip.className = "ia-sthead";
+      strip.setAttribute("aria-hidden", "true");
+      var inner = document.createElement("div");
+      strip.appendChild(inner);
+      document.body.appendChild(strip);
+      var r = { table: table, wrap: wrap, strip: strip, inner: inner, on: false };
+      REG.push(r);
+      wrap.addEventListener("scroll", function () { if (r.on) place(r); }, { passive: true });
+      // sort/filter re-renders swap the thead in place — rebuild while pinned
+      new MutationObserver(function () { if (r.on) { rebuild(r); place(r); } })
+        .observe(table, { childList: true });
+      // clicks on the clone drive the real header controls (column sort)
+      strip.addEventListener("click", function (e) {
+        var btn = e.target.closest("button[data-sort]");
+        if (!btn || !r.table.tHead) return;
+        var real = r.table.tHead.querySelector('button[data-sort="' + btn.dataset.sort + '"]');
+        if (real) real.click();
+      });
+      state(r);
+    }
+
+    function scan() {
+      scanRaf = 0;
+      for (var i = REG.length - 1; i >= 0; i--) {
+        if (!REG[i].table.isConnected) { REG[i].strip.remove(); REG.splice(i, 1); }
+      }
+      document.querySelectorAll("table.matrix, table.ctbl").forEach(enhance);
+    }
+
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll, { passive: true });
+    scan();
+    // data tables render from inline bootstraps after this script — keep watching
+    new MutationObserver(function () { if (!scanRaf) scanRaf = requestAnimationFrame(scan); })
+      .observe(document.body, { childList: true, subtree: true });
+  })();
+
+  // ── Copy this view — CSV / Markdown / JSON / link export on matrices ──
+  // Reads the rendered table (visible rows only, so the chip filters apply)
+  // and copies a clean version for ADRs, wikis and slides. compute-table.js
+  // ships its own bar with the same classes — it exports from its full
+  // dataset instead of the row-capped DOM.
+  (function () {
+    function copyText(text, btn) {
+      function done() {
+        var old = btn.textContent;
+        btn.classList.add("is-done");
+        btn.textContent = "Copied ✓";
+        setTimeout(function () { btn.classList.remove("is-done"); btn.textContent = old; }, 1300);
+      }
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(done, function () { fallback(); });
+      } else fallback();
+      function fallback() {
+        var ta = document.createElement("textarea");
+        ta.value = text;
+        ta.style.position = "fixed";
+        ta.style.opacity = "0";
+        document.body.appendChild(ta);
+        ta.select();
+        try { document.execCommand("copy"); done(); } catch (e) { /* noop */ }
+        ta.remove();
+      }
+    }
+    window.IA = window.IA || {};
+    window.IA.copyText = copyText;
+
+    var GLYPH = { "✓": "yes", "◐": "partial", "✗": "no", "≈": "info" };
+
+    function cellInfo(td) {
+      var el = td.querySelector(".cell-value, .cell-mark") || td;
+      var text = "";
+      for (var n = el.firstChild; n; n = n.nextSibling) {
+        if (n.nodeType === 3) text += n.nodeValue;
+        else if (n.nodeType === 1 && !/star/.test(n.className || "")) text += n.textContent;
+      }
+      text = text.replace(/\s+/g, " ").trim();
+      var m = (el.className || "").match(/--(yes|part|no|info)/);
+      return {
+        value: text,
+        level: m ? ({ yes: "yes", part: "partial", no: "no", info: "info" })[m[1]] : "",
+        noted: !!td.querySelector(".has-note")
+      };
+    }
+
+    function harvest(table) {
+      var dims = [], vendors = [];
+      var ths = table.tHead ? table.tHead.rows[0].cells : [];
+      for (var i = 1; i < ths.length; i++) vendors.push(ths[i].textContent.replace(/\s+/g, " ").trim());
+      var cat = "";
+      table.querySelectorAll("tbody tr").forEach(function (tr) {
+        if (tr.classList.contains("is-hidden")) return;
+        if (tr.classList.contains("category-row")) {
+          cat = tr.textContent.replace(/^[\s▸]+/, "").replace(/\s+/g, " ").trim();
+          return;
+        }
+        if (!tr.classList.contains("feature-row")) return;
+        var name = (tr.querySelector(".feature-col") || tr.cells[0]).textContent.replace(/\s+/g, " ").trim();
+        var cells = [];
+        tr.querySelectorAll("td.cell").forEach(function (td) { cells.push(cellInfo(td)); });
+        dims.push({ category: cat, feature: name, cells: cells });
+      });
+      return { vendors: vendors, rows: dims };
+    }
+
+    function csvEsc(s) { return /[",\n]/.test(s) ? '"' + s.replace(/"/g, '""') + '"' : s; }
+    function plain(c) { return (GLYPH[c.value] || c.value) + (c.noted ? " *" : ""); }
+
+    function toCSV(h) {
+      var out = ["Category,Feature," + h.vendors.map(csvEsc).join(",")];
+      h.rows.forEach(function (r) {
+        out.push([csvEsc(r.category), csvEsc(r.feature)]
+          .concat(r.cells.map(function (c) { return csvEsc(plain(c)); })).join(","));
+      });
+      return out.join("\n");
+    }
+    function toMD(h) {
+      var out = ["| Feature | " + h.vendors.join(" | ") + " |",
+                 "| --- | " + h.vendors.map(function () { return "---"; }).join(" | ") + " |"];
+      var cat = "";
+      h.rows.forEach(function (r) {
+        if (r.category !== cat) {
+          cat = r.category;
+          out.push("| **" + cat + "** | " + h.vendors.map(function () { return " "; }).join(" | ") + " |");
+        }
+        out.push("| " + r.feature + " | " + r.cells.map(function (c) {
+          return c.value + (c.noted ? " \\*" : "");
+        }).join(" | ") + " |");
+      });
+      out.push("");
+      out.push("Source: Infra Atlas · " + location.href + " · " + document.title);
+      return out.join("\n");
+    }
+    function toJSON(h) {
+      return JSON.stringify({
+        source: location.href,
+        title: document.title,
+        vendors: h.vendors,
+        rows: h.rows.map(function (r) {
+          var cells = {};
+          r.cells.forEach(function (c, i) { cells[h.vendors[i] || ("v" + i)] = c; });
+          return { category: r.category, feature: r.feature, cells: cells };
+        })
+      }, null, 2);
+    }
+
+    function bar(table) {
+      var div = document.createElement("div");
+      div.className = "ia-ttools";
+      div.setAttribute("role", "group");
+      div.setAttribute("aria-label", "Copy this view");
+      div.innerHTML = '<span class="ia-ttools__label">Copy view</span>'
+        + '<button type="button" data-fmt="md">Markdown</button>'
+        + '<button type="button" data-fmt="csv">CSV</button>'
+        + '<button type="button" data-fmt="json">JSON</button>'
+        + '<button type="button" data-fmt="link">Link</button>';
+      div.addEventListener("click", function (e) {
+        var btn = e.target.closest("button[data-fmt]");
+        if (!btn) return;
+        if (btn.dataset.fmt === "link") { copyText(location.href, btn); return; }
+        var h = harvest(table);
+        copyText(btn.dataset.fmt === "csv" ? toCSV(h) : btn.dataset.fmt === "md" ? toMD(h) : toJSON(h), btn);
+      });
+      return div;
+    }
+
+    function mount() {
+      document.querySelectorAll("table.matrix").forEach(function (table) {
+        if (table.__iaTtools) return;
+        var wrap = table.closest(".matrix-wrap");
+        if (!wrap || !wrap.parentNode) return;
+        table.__iaTtools = true;
+        wrap.parentNode.insertBefore(bar(table), wrap);
+      });
+    }
+    mount();
+    new MutationObserver(mount).observe(document.body, { childList: true, subtree: true });
+  })();
+
+  // ── What changed since your last visit — feed.json vs localStorage ──
+  // Homepage: all instruments; live-instrument pages: that instrument only.
+  // First visit just records a baseline; the strip shows until the reader
+  // opens the changelog or dismisses it.
+  (function () {
+    var FEED_PAGES = { "/ec2/": 1, "/regions/": 1, "/azure-vm/": 1, "/gcp-compute/": 1, "/oci-compute/": 1, "/ovh-instances/": 1 };
+    var isHome = here === "/";
+    if (!isHome && !FEED_PAGES[here]) return;
+    var KEY = "ia:changes-seen";
+    var seen;
+    try { seen = localStorage.getItem(KEY); } catch (e) { return; } // storage blocked → skip quietly
+    function mark(ts) { try { localStorage.setItem(KEY, ts); } catch (e) { /* noop */ } }
+
+    function run() {
+      fetch("/feed.json")
+        .then(function (r) { return r.ok ? r.json() : null; })
+        .then(function (feed) {
+          if (!feed || !Array.isArray(feed.entries) || !feed.entries.length) return;
+          var newest = feed.entries.reduce(function (a, e) { return e.ts > a ? e.ts : a; }, "");
+          if (!seen) { mark(newest); return; }
+          var slug = here.replace(/\//g, "");
+          var fresh = feed.entries.filter(function (e) {
+            return e.ts > seen && (isHome || e.instrument === slug);
+          });
+          if (!fresh.length) return;
+          var n = fresh.length;
+          var what = isHome ? "data change" + (n === 1 ? "" : "s")
+                            : "change" + (n === 1 ? "" : "s") + " to this instrument";
+          var strip = document.createElement("div");
+          strip.className = "ia-fresh";
+          strip.innerHTML = '<span class="ia-fresh__dot" aria-hidden="true"></span>'
+            + '<span>' + n + ' ' + what + ' since your last visit</span>'
+            + '<a href="/changelog/" data-ia-fresh-go>What changed →</a>'
+            + '<button type="button" class="ia-fresh__x" aria-label="Dismiss">✕</button>';
+          strip.querySelector("[data-ia-fresh-go]").addEventListener("click", function () { mark(newest); });
+          strip.querySelector(".ia-fresh__x").addEventListener("click", function () { mark(newest); strip.remove(); });
+          nav.parentNode.insertBefore(strip, nav.nextSibling);
+        })
+        .catch(function () { /* offline → no strip */ });
+    }
+    ("requestIdleCallback" in window) ? requestIdleCallback(run) : setTimeout(run, 600);
   })();
 
   // ── Related instruments — small pill strip after the masthead ─────
@@ -707,14 +1034,20 @@
     if (here !== '/') return;
     if (!('IntersectionObserver' in window)) return;
     var SELS = '.instruments,.dx,.dispatches,.providers,.manifesto,.colophon,.signature';
+    // rootMargin pre-reveals a section ~40vh before it enters, so fast scrolls
+    // and tall-viewport captures don't land on still-hidden content
     var io = new IntersectionObserver(function (entries) {
       entries.forEach(function (e) {
         if (e.isIntersecting) { e.target.classList.add('ia-revealed'); io.unobserve(e.target); }
       });
-    }, { threshold: 0.06 });
+    }, { threshold: 0, rootMargin: '0px 0px 40% 0px' });
     document.querySelectorAll(SELS).forEach(function (el) {
       el.classList.add('ia-reveal');
       io.observe(el);
+    });
+    // print path can't wait for the observer — reveal everything first
+    window.addEventListener('beforeprint', function () {
+      document.querySelectorAll('.ia-reveal').forEach(function (el) { el.classList.add('ia-revealed'); });
     });
   })();
 

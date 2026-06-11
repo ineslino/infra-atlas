@@ -583,7 +583,14 @@ body {
   background: var(--surface);
   margin: 0 auto 16px;
   max-width: 1280px;
+  /* stays pinned under the nav while the reader is inside the (10k px tall)
+     instruments section — at card #14 the jump links are still one click away.
+     position:sticky unpins it naturally when the section ends. */
+  position: sticky;
+  top: 54px;
+  z-index: 45;
 }
+@media (max-width: 700px) { .ia-pageindex { position: static; } }
 .ia-pageindex__label {
   display: inline-flex;
   align-items: center;
@@ -633,7 +640,11 @@ body {
 }
 .ia-pageindex__item .dot { width: 7px; height: 7px; border-radius: 50%; flex: none; }
 /* anchor jumps shouldn't land under the sticky 46px nav bar */
-.department { scroll-margin-top: 64px; }
+/* the sticky page index (54px + own height) now sits over jump targets
+   inside .instruments — leave room for it; the .dx sections live after
+   the index unpins, so the nav-only offset is enough there */
+.department { scroll-margin-top: 132px; }
+.dx { scroll-margin-top: 64px; }
 .ia-pageindex__count {
   background: var(--surface-2);
   border: 1px solid var(--line-2);
@@ -886,6 +897,12 @@ body {
   margin-left: 12px;
   color: var(--line-3);
 }
+/* freshness chip — the data-hygiene guarantee, surfaced per card. Guarded by
+   scripts/check_freshness_chips.py: live instruments must say "Refreshed
+   daily", snapshots must carry the page's own <time datetime> date. */
+.instrument__fresh { color: var(--paper-3); }
+.instrument__fresh[data-fresh="daily"],
+.instrument__fresh[data-fresh="live"] { color: var(--mint); }
 
 .instrument__side {
   display: flex;
@@ -927,7 +944,7 @@ body {
   letter-spacing: 0.1em;
   text-transform: uppercase;
 }
-.instrument__clouds .ia-cloudlabel { color: var(--paper-4); letter-spacing: 0.18em; }
+.instrument__clouds .ia-cloudlabel { color: var(--paper-3); letter-spacing: 0.18em; }
 .instrument__clouds .cloud {
   display: inline-flex;
   align-items: center;
@@ -1075,7 +1092,7 @@ body {
       <div class="hero__eyebrow">A New Periodical of Infrastructure</div>
       <h1 class="hero__title">Infra<em>Atlas.</em></h1>
       <p class="hero__lead">
-        Reference data for the infrastructure stack — <em>cloud regions, instance types, API gateways, service quotas</em> — cross-referenced across every major vendor and laid out the way the documentation always should have been. Free, open, and footnoted — cloud-compute refreshed daily, the rest as dated snapshots.
+        Reference data for the infrastructure stack — <em>cloud regions, instance types, API gateways, managed Kubernetes</em> — cross-referenced across every major vendor and laid out the way the documentation always should have been. Free, open, and footnoted — cloud-compute refreshed daily, the rest as dated snapshots.
       </p>
       <div class="hero__find">
         <button type="button" class="hero__search" id="hero-search" aria-haspopup="dialog" aria-label="Search all instruments">
@@ -1146,6 +1163,18 @@ body {
         <span>Dept III — Cross-Cloud</span>
         <span class="ia-pageindex__count" aria-hidden="true">13</span>
       </a>
+      <a href="#sec-decisions" class="ia-pageindex__item" aria-label="Jump to the Decisions section">
+        <span class="dot" style="background:var(--mint)" aria-hidden="true"></span>
+        <span>Decisions</span>
+      </a>
+      <a href="#sec-calculators" class="ia-pageindex__item" aria-label="Jump to the Calculators section">
+        <span class="dot" style="background:var(--rose)" aria-hidden="true"></span>
+        <span>Calculators</span>
+      </a>
+      <a href="#sec-toolbox" class="ia-pageindex__item" aria-label="Jump to the Toolbox section">
+        <span class="dot" style="background:var(--gold)" aria-hidden="true"></span>
+        <span>Toolbox</span>
+      </a>
     </nav>
 
     <div class="ia-filters">
@@ -1190,7 +1219,7 @@ body {
             </p>
             <div class="instrument__tags">
               <span>34 regions</span><span>198 families</span><span>x86 + arm64</span><span>Sourced</span>
-            </div>
+            <span class="instrument__fresh" data-fresh="daily">Refreshed daily</span></div>
           </div>
           <div class="instrument__side">
             <div class="instrument__cta"><span>Open</span><span class="instrument__cta-arrow">→</span></div>
@@ -1210,7 +1239,7 @@ body {
             </p>
             <div class="instrument__tags">
               <span>5 providers</span><span>107 cities</span><span>219 regions</span><span>Sourced</span>
-            </div>
+            <span class="instrument__fresh" data-fresh="curated">Curated</span></div>
           </div>
           <div class="instrument__side">
             <div class="instrument__cta"><span>Open</span><span class="instrument__cta-arrow">→</span></div>
@@ -1230,7 +1259,7 @@ body {
             </p>
             <div class="instrument__tags">
               <span>52 regions</span><span>52 series</span><span>334 VM sizes</span><span>Sourced</span>
-            </div>
+            <span class="instrument__fresh" data-fresh="daily">Refreshed daily</span></div>
           </div>
           <div class="instrument__side">
             <div class="instrument__cta"><span>Open</span><span class="instrument__cta-arrow">→</span></div>
@@ -1250,7 +1279,7 @@ body {
             </p>
             <div class="instrument__tags">
               <span>43 regions</span><span>26 families</span><span>379 machine types</span><span>Sourced</span>
-            </div>
+            <span class="instrument__fresh" data-fresh="curated">Curated</span></div>
           </div>
           <div class="instrument__side">
             <div class="instrument__cta"><span>Open</span><span class="instrument__cta-arrow">→</span></div>
@@ -1270,7 +1299,7 @@ body {
             </p>
             <div class="instrument__tags">
               <span>38 regions</span><span>23 shape families</span><span>VM + Bare Metal</span><span>Sourced</span>
-            </div>
+            <span class="instrument__fresh" data-fresh="daily">Refreshed daily</span></div>
           </div>
           <div class="instrument__side">
             <div class="instrument__cta"><span>Open</span><span class="instrument__cta-arrow">→</span></div>
@@ -1290,7 +1319,7 @@ body {
             </p>
             <div class="instrument__tags">
               <span>15 regions</span><span>15 families</span><span>79 instance types</span><span>Sourced</span>
-            </div>
+            <span class="instrument__fresh" data-fresh="daily">Refreshed daily</span></div>
           </div>
           <div class="instrument__side">
             <div class="instrument__cta"><span>Open</span><span class="instrument__cta-arrow">→</span></div>
@@ -1322,7 +1351,7 @@ body {
             </p>
             <div class="instrument__tags">
               <span>7 vendors</span><span>28 capabilities</span><span>~190 annotated cells</span><span>Sourced</span>
-            </div>
+            <span class="instrument__fresh" data-fresh="2026-05-18">Verified 2026-05-18</span></div>
           </div>
           <div class="instrument__side">
             <div class="instrument__cta"><span>Open</span><span class="instrument__cta-arrow">→</span></div>
@@ -1342,7 +1371,7 @@ body {
             </p>
             <div class="instrument__tags">
               <span>REST + HTTP + WS</span><span>7 sections</span><span>Pricing breakdown</span><span>Sourced</span>
-            </div>
+            <span class="instrument__fresh" data-fresh="2026-05">Verified 2026-05</span></div>
           </div>
           <div class="instrument__side">
             <div class="instrument__cta"><span>Open</span><span class="instrument__cta-arrow">→</span></div>
@@ -1362,7 +1391,7 @@ body {
             </p>
             <div class="instrument__tags">
               <span>X + Hybrid + Edge</span><span>17 policies</span><span>Pricing tiers</span><span>Sourced</span>
-            </div>
+            <span class="instrument__fresh" data-fresh="2026-05">Verified 2026-05</span></div>
           </div>
           <div class="instrument__side">
             <div class="instrument__cta"><span>Open</span><span class="instrument__cta-arrow">→</span></div>
@@ -1382,7 +1411,7 @@ body {
             </p>
             <div class="instrument__tags">
               <span>4 deployment targets</span><span>DataWeave</span><span>~300 connectors</span><span>Sourced</span>
-            </div>
+            <span class="instrument__fresh" data-fresh="2026-05">Verified 2026-05</span></div>
           </div>
           <div class="instrument__side">
             <div class="instrument__cta"><span>Open</span><span class="instrument__cta-arrow">→</span></div>
@@ -1402,7 +1431,7 @@ body {
             </p>
             <div class="instrument__tags">
               <span>3 vendors</span><span>OSS vs Enterprise</span><span>K8s nativity</span><span>Sourced</span>
-            </div>
+            <span class="instrument__fresh" data-fresh="2026-05">Verified 2026-05</span></div>
           </div>
           <div class="instrument__side">
             <div class="instrument__cta"><span>Open</span><span class="instrument__cta-arrow">→</span></div>
@@ -1434,7 +1463,7 @@ body {
             </p>
             <div class="instrument__tags">
               <span>5 clouds</span><span>vCPU + memory scored</span><span>Confidence ranked</span><span>Sourced</span>
-            </div>
+            <span class="instrument__fresh" data-fresh="live">Live data</span></div>
           </div>
           <div class="instrument__side">
             <div class="instrument__cta"><span>Open</span><span class="instrument__cta-arrow">→</span></div>
@@ -1454,7 +1483,7 @@ body {
             </p>
             <div class="instrument__tags">
               <span>5 services</span><span>14 capabilities</span><span>Control-plane SLA</span><span>Sourced</span>
-            </div>
+            <span class="instrument__fresh" data-fresh="2026-05-18">Verified 2026-05-18</span></div>
           </div>
           <div class="instrument__side">
             <div class="instrument__cta"><span>Open</span><span class="instrument__cta-arrow">→</span></div>
@@ -1474,7 +1503,7 @@ body {
             </p>
             <div class="instrument__tags">
               <span>5 clouds</span><span>11 programs</span><span>Region-scoped</span><span>Sourced</span>
-            </div>
+            <span class="instrument__fresh" data-fresh="2026-05-16">Verified 2026-05-16</span></div>
           </div>
           <div class="instrument__side">
             <div class="instrument__cta"><span>Open</span><span class="instrument__cta-arrow">→</span></div>
@@ -1494,7 +1523,7 @@ body {
             </p>
             <div class="instrument__tags">
               <span>5 clouds</span><span>5 technologies</span><span>SGX + SEV-SNP + TDX</span><span>Sourced</span>
-            </div>
+            <span class="instrument__fresh" data-fresh="2026-05-16">Verified 2026-05-16</span></div>
           </div>
           <div class="instrument__side">
             <div class="instrument__cta"><span>Open</span><span class="instrument__cta-arrow">→</span></div>
@@ -1514,7 +1543,7 @@ body {
             </p>
             <div class="instrument__tags">
               <span>4 providers</span><span>21 capabilities</span><span>Policy + RBAC + ABAC</span><span>Sourced</span>
-            </div>
+            <span class="instrument__fresh" data-fresh="2026-05-16">Verified 2026-05-16</span></div>
           </div>
           <div class="instrument__side">
             <div class="instrument__cta"><span>Open</span><span class="instrument__cta-arrow">→</span></div>
@@ -1534,7 +1563,7 @@ body {
             </p>
             <div class="instrument__tags">
               <span>5 platforms</span><span>9 model families</span><span>Fine-tuning + RAG + Agents</span><span>Sourced</span>
-            </div>
+            <span class="instrument__fresh" data-fresh="2026-05-19">Verified 2026-05-19</span></div>
           </div>
           <div class="instrument__side">
             <div class="instrument__cta"><span>Open</span><span class="instrument__cta-arrow">→</span></div>
@@ -1554,7 +1583,7 @@ body {
             </p>
             <div class="instrument__tags">
               <span>3 clouds</span><span>5 transfer types</span><span>Egress + NAT + Interconnect</span><span>Sourced</span>
-            </div>
+            <span class="instrument__fresh" data-fresh="2026-05-19">Verified 2026-05-19</span></div>
           </div>
           <div class="instrument__side">
             <div class="instrument__cta"><span>Open</span><span class="instrument__cta-arrow">→</span></div>
@@ -1574,7 +1603,7 @@ body {
             </p>
             <div class="instrument__tags">
               <span>4 clouds</span><span>17 primitives</span><span>VPC + Firewall + Peering</span><span>Sourced</span>
-            </div>
+            <span class="instrument__fresh" data-fresh="2026-05-19">Verified 2026-05-19</span></div>
           </div>
           <div class="instrument__side">
             <div class="instrument__cta"><span>Open</span><span class="instrument__cta-arrow">→</span></div>
@@ -1594,7 +1623,7 @@ body {
             </p>
             <div class="instrument__tags">
               <span>4 cloud-native</span><span>5 platforms</span><span>Metrics + Logs + Traces</span><span>Sourced</span>
-            </div>
+            <span class="instrument__fresh" data-fresh="2026-05-28">Verified 2026-05-28</span></div>
           </div>
           <div class="instrument__side">
             <div class="instrument__cta"><span>Open</span><span class="instrument__cta-arrow">→</span></div>
@@ -1614,7 +1643,7 @@ body {
             </p>
             <div class="instrument__tags">
               <span>6 OSS stacks</span><span>14 dimensions</span><span>License-aware</span><span>Sourced</span>
-            </div>
+            <span class="instrument__fresh" data-fresh="2026-05-28">Verified 2026-05-28</span></div>
           </div>
           <div class="instrument__side">
             <div class="instrument__cta"><span>Open</span><span class="instrument__cta-arrow">→</span></div>
@@ -1634,7 +1663,7 @@ body {
             </p>
             <div class="instrument__tags">
               <span>8 providers</span><span>Legal vs operational</span><span>CLOUD Act</span><span>Sourced</span>
-            </div>
+            <span class="instrument__fresh" data-fresh="2026-06-01">Verified 2026-06-01</span></div>
           </div>
           <div class="instrument__side">
             <div class="instrument__cta"><span>Open</span><span class="instrument__cta-arrow">→</span></div>
@@ -1653,7 +1682,7 @@ body {
             </p>
             <div class="instrument__tags">
               <span>22 features</span><span>Relational + NoSQL + Object</span><span>4 clouds</span><span>Sourced</span>
-            </div>
+            <span class="instrument__fresh" data-fresh="2026-06-02">Verified 2026-06-02</span></div>
           </div>
           <div class="instrument__side">
             <div class="instrument__cta"><span>Open</span><span class="instrument__cta-arrow">→</span></div>
@@ -1672,7 +1701,7 @@ body {
             </p>
             <div class="instrument__tags">
               <span>7 tools</span><span>10 capabilities</span><span>Developer portals</span><span>Sourced</span>
-            </div>
+            <span class="instrument__fresh" data-fresh="2026-06-06">Verified 2026-06-06</span></div>
           </div>
           <div class="instrument__side">
             <div class="instrument__cta"><span>Open</span><span class="instrument__cta-arrow">→</span></div>
@@ -1698,7 +1727,7 @@ body {
     .dx__card:hover { border-color: var(--accent); color: var(--accent); }
     .dx__card .arr { margin-left: auto; color: var(--accent); }
   </style>
-  <section class="dx" aria-label="Decisions">
+  <section class="dx" id="sec-decisions" aria-label="Decisions">
     <header class="section-head">
       <div class="section-head__num">02</div>
       <h2 class="section-head__title">The <em>Decisions</em></h2>
@@ -1719,7 +1748,7 @@ body {
   </section>
 
   <!-- ───────── TOOLS ───────── -->
-  <section class="dx" aria-label="Calculators">
+  <section class="dx" id="sec-calculators" aria-label="Calculators">
     <header class="section-head">
       <div class="section-head__num">03</div>
       <h2 class="section-head__title">The <em>Calculators</em></h2>
@@ -1734,7 +1763,7 @@ body {
   </section>
 
   <!-- ───────── TOOLBOX ───────── -->
-  <section class="dx" aria-label="Toolbox">
+  <section class="dx" id="sec-toolbox" aria-label="Toolbox">
     <header class="section-head">
       <div class="section-head__num">04</div>
       <h2 class="section-head__title">The <em>Toolbox</em></h2>

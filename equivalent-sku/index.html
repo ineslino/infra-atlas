@@ -471,7 +471,7 @@ a.masthead__back::before { display: none; }
   letter-spacing: -0.01em;
 }
 
-.spec--na strong { color: var(--paper-4); font-size: 14px; }
+.spec--na strong { color: var(--paper-3); font-size: 14px; }
 
 /* ─────────────── RESULT META ─────────────── */
 .result-meta {
@@ -617,7 +617,7 @@ a.masthead__back::before { display: none; }
 .match__rank {
   font-family: var(--mono);
   font-size: 11px;
-  color: var(--paper-4);
+  color: var(--paper-3);
 }
 
 .match.is-top .match__rank { color: var(--accent); }
@@ -662,7 +662,7 @@ a.masthead__back::before { display: none; }
   font-size: 8px;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: var(--paper-4);
+  color: var(--paper-3);
   margin-top: 2px;
 }
 
@@ -697,6 +697,16 @@ a.masthead__back::before { display: none; }
   gap: 5px;
 }
 
+/* live price + regional footprint, from the instrument's data.json */
+.match__meta {
+  margin-top: 8px;
+  font-family: var(--mono);
+  font-size: 10.5px;
+  letter-spacing: 0.05em;
+  color: var(--paper-2);
+}
+.match.is-top .match__meta { color: var(--paper); }
+
 .why {
   font-family: var(--mono);
   font-size: 9.5px;
@@ -719,13 +729,13 @@ a.masthead__back::before { display: none; }
 .why--warn b { color: var(--gold); }
 .why--bad    { border-color: rgba(244,123,123,0.34); color: var(--rose); }
 .why--bad b  { color: var(--rose); }
-.why--muted  { border-color: var(--line); color: var(--paper-4); }
+.why--muted  { border-color: var(--line); color: var(--paper-3); }
 
 .cloud-block__none {
   font-family: var(--mono);
   font-size: 10.5px;
   letter-spacing: 0.04em;
-  color: var(--paper-4);
+  color: var(--paper-3);
   padding: 16px 4px;
   text-align: center;
 }
@@ -735,7 +745,7 @@ a.masthead__back::before { display: none; }
   font-size: 9px;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: var(--paper-4);
+  color: var(--paper-3);
   padding: 9px 4px 2px;
   text-align: center;
 }
@@ -830,7 +840,7 @@ a.masthead__back::before { display: none; }
   font-size: 9px;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: var(--paper-4);
+  color: var(--paper-3);
 }
 
 .axis__desc {
@@ -1076,7 +1086,10 @@ a.masthead__back::before { display: none; }
       &ldquo;equivalent&rdquo; is capped at <strong>55</strong> however well its sizes line up. Sizing
       axes use a <code>log&#8322;</code> ratio penalty, so a doubling matters the same whether you go
       from 2&nbsp;→&nbsp;4 vCPU or 64&nbsp;→&nbsp;128. Nothing here is a black box: the chips under
-      every result spell out the exact deltas that produced its score.
+      every result spell out the exact deltas that produced its score. Price and region counts
+      shown on results come straight from each instrument&rsquo;s live <code>data.json</code> and
+      never affect the score — they are on-demand <em>list</em> prices (hourly, per the source
+      cloud&rsquo;s billing currency), not what a committed or spot workload would pay.
     </p>
 
     <div class="rubric__grid">
@@ -1516,6 +1529,7 @@ const CAT_ADJ = {
 // ─── State ───
 const state = {
   data: null,        // { cloudId: [instance, ...] }
+  cur: {},           // { cloudId: "USD" | "EUR" } — from each data.json
   cloud: "aws",
   typeKey: "",       // unique key "cloud::name"
   loaded: false,
@@ -1537,6 +1551,14 @@ function fmtMem(m) {
 }
 
 function archLabel(a) { return a === "arm" ? "Arm64" : "x86_64"; }
+
+// on-demand list price, formatted like the compute observatories do it
+function fmtPrice(p, cloudId) {
+  if (p == null) return null;
+  let s = p.toFixed(4).replace(/0+$/, "").replace(/\.$/, "");
+  if (s.indexOf(".") === -1) s += ".00";
+  return ((state.cur[cloudId] === "EUR") ? "€" : "$") + s;
+}
 
 // instance key, unique across clouds
 function keyOf(cloudId, inst) { return cloudId + "::" + inst.n; }
@@ -1729,6 +1751,9 @@ function renderSourceCard(src, cloudId) {
   specs.push(`<span class="spec">Arch<strong>${archLabel(src.arch)}</strong></span>`);
   specs.push(`<span class="spec">Class<strong>${esc(CAT_LABEL[src.cat] || src.cat)}</strong></span>`);
   if (src.vd) specs.push(`<span class="spec">CPU<strong>${esc(src.vd)}</strong></span>`);
+  const srcPrice = fmtPrice(src.p, cloudId);
+  if (srcPrice) specs.push(`<span class="spec">List price<strong>${srcPrice}/hr</strong></span>`);
+  if (src.r != null) specs.push(`<span class="spec">Regions<strong>${src.r}</strong></span>`);
 
   return `
     <div class="source-card fade-in">
@@ -1747,11 +1772,18 @@ function renderWhy(why) {
   ).join("");
 }
 
-function renderMatch(entry, rank) {
+function renderMatch(entry, rank, cloudId) {
   const inst = entry.inst;
   const score = Math.round(entry.score);
   const tier = tierOf(entry.score);
   const isTop = rank === 0;
+  // price + footprint come straight from the instrument's live data.json;
+  // list price only — what you'd actually pay needs region + commitment
+  const bits = [];
+  const price = fmtPrice(inst.p, cloudId);
+  if (price) bits.push(`${price}/hr list`);
+  if (inst.r != null) bits.push(`${inst.r} region${inst.r === 1 ? "" : "s"}`);
+  const meta = bits.length ? `<div class="match__meta">${bits.join(" · ")}</div>` : "";
   return `
     <div class="match${isTop ? " is-top" : ""}">
       <div class="match__head">
@@ -1761,6 +1793,7 @@ function renderMatch(entry, rank) {
       </div>
       <div class="match__bar"><span class="tier-${tier}" style="width:${Math.max(3, score)}%"></span></div>
       <div class="match__why">${renderWhy(entry.why)}</div>
+      ${meta}
     </div>`;
 }
 
@@ -1771,7 +1804,7 @@ function renderCloudBlock(cloudId, ranked) {
   if (!top.length) {
     body = `<div class="cloud-block__none">No scorable instance types in this catalogue.</div>`;
   } else {
-    body = top.map((e, i) => renderMatch(e, i)).join("");
+    body = top.map((e, i) => renderMatch(e, i, cloudId)).join("");
     if (ranked.length > TOP_N) {
       body += `<div class="cloud-block__more">+ ${ranked.length - TOP_N} more types scored, lower</div>`;
     }
@@ -1920,6 +1953,7 @@ const CAT_NORM = {
 function flattenCatalogue(cloudId, json) {
   if (!json || !Array.isArray(json.families)) return null;
   const out = [];
+  const totalRegions = Array.isArray(json.regions) ? json.regions.length : null;
   json.families.forEach((fam) => {
     const famKey = fam.key;
     const cat = CAT_NORM[fam.cat] || fam.cat || "general";
@@ -1927,6 +1961,9 @@ function flattenCatalogue(cloudId, json) {
     const vendor = fam.vendor || "";
     const desc = fam.desc || "";
     const specs = fam.specs || {};
+    // per-family region availability: "*" = every region in the catalogue
+    const r = fam.in === "*" ? totalRegions
+            : Array.isArray(fam.in) ? fam.in.length : null;
     (fam.sizes || []).forEach((sz) => {
       const sp = specs[sz] || {};
       let name, v, m;
@@ -1947,7 +1984,8 @@ function flattenCatalogue(cloudId, json) {
         v = sp.vcpu != null ? sp.vcpu : null;
         m = sp.mem != null ? sp.mem : null;
       }
-      out.push({ n: name, fam: famKey, cat, arch, v, m, vd: vendor, d: desc });
+      const p = typeof sp.price === "number" ? sp.price : null;
+      out.push({ n: name, fam: famKey, cat, arch, v, m, vd: vendor, d: desc, p, r });
     });
   });
   return out.length ? out : null;
@@ -1973,6 +2011,7 @@ async function loadData() {
     const flat = flattenCatalogue(r.value.cid, r.value.json);
     if (flat) {
       data[r.value.cid] = flat;
+      state.cur[r.value.cid] = r.value.json.currency || "USD";
       freshCount++;
       const g = r.value.json.generated;
       if (g && g > latest) latest = g;
@@ -2038,6 +2077,18 @@ function onKey(e) {
   state.cloud = $("#fnd-cloud").value || "aws";
   buildTypeSelect();
   applyHash();
+  // no deep link → preselect a familiar workhorse instead of an empty page;
+  // the hash stays clean until the reader picks something themselves
+  if (!state.typeKey) {
+    const aws = state.data.aws || [];
+    const example = aws.find((it) => it.n === "m5.xlarge" && it.v != null)
+      || aws.find((it) => it.cat === "general" && it.v === 4)
+      || aws.find((it) => it.v != null);
+    if (example) {
+      state.cloud = "aws";
+      state.typeKey = keyOf("aws", example);
+    }
+  }
   $("#fnd-cloud").value = state.cloud;
   if (state.typeKey) $("#fnd-type").value = state.typeKey;
   render();
