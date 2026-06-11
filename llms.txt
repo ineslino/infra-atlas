@@ -1,0 +1,56 @@
+# Infra Atlas
+
+> Reference data for the infrastructure stack — cloud regions, instance types, API gateways, managed Kubernetes — cross-referenced across AWS, Azure, GCP, OCI and OVHcloud. Free, no ads, no vendor money. Every cell cites an official vendor documentation page. Cloud-compute data refreshes daily from public sources; cross-cloud matrices are dated, hand-verified snapshots.
+
+Data is CC BY 4.0; the data endpoints below are CORS-enabled JSON, no key needed. For agents: prefer the data endpoints over scraping the HTML — they are the source of truth the pages render from.
+
+## Data endpoints (JSON, refreshed daily unless noted)
+
+- [EC2 instance types](https://infraatlas.dev/ec2/data.json): AWS instance families × regions, vCPU/memory/on-demand USD price per size
+- [Azure VM sizes](https://infraatlas.dev/azure-vm/data.json): VM series × regions, specs and pay-as-you-go USD prices
+- [OCI compute shapes](https://infraatlas.dev/oci-compute/data.json): Oracle Cloud shapes × regions with USD prices
+- [OVHcloud instances](https://infraatlas.dev/ovh-instances/data.json): instance ranges × datacenters with EUR prices
+- [GCP machine types](https://infraatlas.dev/gcp-compute/data.json): machine families × regions (curated; no prices)
+- [Cloud regions](https://infraatlas.dev/regions/data.json): every GA region for the 5 clouds, with city/area/partition (curated)
+- [Egress pricing](https://infraatlas.dev/egress/data.json): data-transfer price tiers for AWS/Azure/GCP (curated)
+- [Change feed](https://infraatlas.dev/feed.json): regions/families/instance types added or removed, per refresh
+- [API documentation](https://infraatlas.dev/api/): how the endpoints fit together
+
+## Instruments (interactive reference pages)
+
+- [EC2 Observatory](https://infraatlas.dev/ec2/): every EC2 instance type by region, filter by family/arch/price
+- [Multi-Cloud Region Map](https://infraatlas.dev/regions/): all regions of the 5 clouds on one chart
+- [Azure VM Atlas](https://infraatlas.dev/azure-vm/): Azure VM sizes by region
+- [GCP Compute Index](https://infraatlas.dev/gcp-compute/): GCP machine types by region
+- [OCI Compute Observatory](https://infraatlas.dev/oci-compute/): Oracle Cloud shapes by region
+- [OVH Instance Catalogue](https://infraatlas.dev/ovh-instances/): OVHcloud instances by datacenter
+- [Equivalent-SKU Finder](https://infraatlas.dev/equivalent-sku/): pick an instance on one cloud, get the closest match on every other, with a transparent score, list price and region count
+- [Kubernetes Atlas](https://infraatlas.dev/kubernetes/): EKS vs AKS vs GKE vs OKE vs OVH managed Kubernetes
+- [APIM Feature Matrix](https://infraatlas.dev/apim-matrix/): AWS API Gateway, Apigee, MuleSoft, Kong, Gravitee, IBM compared
+- [Compliance Footprint](https://infraatlas.dev/compliance/): certifications (FedRAMP, ISO, SOC, HIPAA, PCI, GDPR…) per cloud
+- [European Sovereignty](https://infraatlas.dev/sovereignty/): sovereign-cloud offerings, jurisdiction and EUCS/DPF status
+- [Confidential Computing](https://infraatlas.dev/confidential-computing/): SGX/SEV/SNP/TDX/Nitro TEE per cloud
+- [IAM Matrix](https://infraatlas.dev/iam-matrix/): identity and access models across the 4 hyperscalers
+- [Generative AI Atlas](https://infraatlas.dev/ai-atlas/): Bedrock vs Vertex vs Azure Foundry vs OCI GenAI and model families
+- [Networking Matrix](https://infraatlas.dev/networking-matrix/): VPC/VNet/VCN primitives translated across clouds
+- [Egress & Transfer Cost Map](https://infraatlas.dev/egress/): what data transfer actually costs, with the footnotes
+- [Observability Matrix](https://infraatlas.dev/observability/): CloudWatch vs Azure Monitor vs Cloud Monitoring vs OCI APM + OTel
+- [Observability Stacks](https://infraatlas.dev/observability-stacks/): Prometheus/Grafana/Loki/Tempo/ELK/SigNoz self-hosted options
+- [IDP Matrix](https://infraatlas.dev/idp-matrix/): Backstage, Roadie, Port, Cortex, OpsLevel, Compass compared neutrally
+- [Data Layer Equivalence](https://infraatlas.dev/data-layer/): managed database/storage equivalents across clouds
+
+## Decision guides
+
+- [Decisions hub](https://infraatlas.dev/decisions/): 11 sourced "which one do I use" guides (Fargate vs EC2, Aurora vs RDS, REST vs HTTP API, NAT options, sovereign cloud legal vs operational…)
+
+## Calculators
+
+- [Egress Cost Calculator](https://infraatlas.dev/tools/egress-cost/): estimate a transfer bill across AWS/Azure/GCP
+- [Subnet Calculator](https://infraatlas.dev/tools/subnet/): CIDR planning for VPC/VNet/VCN
+- [APIM Limits Picker](https://infraatlas.dev/tools/apim-limits/): rate/payload/timeout limits per API platform
+
+## Optional
+
+- [About & methodology](https://infraatlas.dev/about/): how data enters the atlas, verification tiers, freshness policy
+- [Changelog](https://infraatlas.dev/changelog/): what changed, refresh by refresh (also as RSS at /feed.xml)
+- [GitHub](https://github.com/ineslino/infra-atlas): source, issues, "report a fix"
