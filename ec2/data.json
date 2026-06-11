@@ -1,5 +1,5 @@
 {
-  "generated": "2026-06-09T09:58:00Z",
+  "generated": "2026-06-10T10:15:50Z",
   "source": "ec2instances.info (Vantage) — public dataset, no credentials",
   "currency": "USD",
   "priceRef": "us-east-1",
@@ -9828,7 +9828,9 @@
         "24xlarge",
         "32xlarge",
         "48xlarge",
-        "96xlarge"
+        "96xlarge",
+        "metal-48xl",
+        "metal-96xl"
       ],
       "specs": {
         "large": {
@@ -9892,6 +9894,18 @@
           "net": "200 Gigabit"
         },
         "96xlarge": {
+          "vcpu": 384,
+          "mem": 1536,
+          "price": 32.0794,
+          "net": "400 Gigabit"
+        },
+        "metal-48xl": {
+          "vcpu": 192,
+          "mem": 768,
+          "price": 16.0397,
+          "net": "200 Gigabit"
+        },
+        "metal-96xl": {
           "vcpu": 384,
           "mem": 1536,
           "price": 32.0794,
@@ -10077,7 +10091,9 @@
         "24xlarge",
         "32xlarge",
         "48xlarge",
-        "96xlarge"
+        "96xlarge",
+        "metal-48xl",
+        "metal-96xl"
       ],
       "specs": {
         "large": {
@@ -10156,6 +10172,20 @@
           "price": 36.6605,
           "storage": "6 × 3800 GB NVMe SSD",
           "net": "400 Gigabit"
+        },
+        "metal-48xl": {
+          "vcpu": 192,
+          "mem": 768,
+          "price": 18.3302,
+          "storage": "3 × 3800 GB NVMe SSD",
+          "net": "200 Gigabit"
+        },
+        "metal-96xl": {
+          "vcpu": 384,
+          "mem": 1536,
+          "price": 36.6605,
+          "storage": "6 × 3800 GB NVMe SSD",
+          "net": "400 Gigabit"
         }
       },
       "in": [
@@ -10199,7 +10229,9 @@
         "24xlarge",
         "32xlarge",
         "48xlarge",
-        "96xlarge"
+        "96xlarge",
+        "metal-48xl",
+        "metal-96xl"
       ],
       "specs": {
         "large": {
@@ -10278,6 +10310,20 @@
           "price": 36.6605,
           "storage": "6 × 3800 GB NVMe SSD",
           "net": "600 Gigabit"
+        },
+        "metal-48xl": {
+          "vcpu": 192,
+          "mem": 768,
+          "price": 18.3302,
+          "storage": "3 × 3800 GB NVMe SSD",
+          "net": "300 Gigabit"
+        },
+        "metal-96xl": {
+          "vcpu": 384,
+          "mem": 1536,
+          "price": 36.6605,
+          "storage": "6 × 3800 GB NVMe SSD",
+          "net": "600 Gigabit"
         }
       },
       "in": [
@@ -10321,7 +10367,9 @@
         "24xlarge",
         "32xlarge",
         "48xlarge",
-        "96xlarge"
+        "96xlarge",
+        "metal-48xl",
+        "metal-96xl"
       ],
       "specs": {
         "large": {
@@ -10385,6 +10433,18 @@
           "net": "300 Gigabit"
         },
         "96xlarge": {
+          "vcpu": 384,
+          "mem": 1536,
+          "price": 32.0794,
+          "net": "600 Gigabit"
+        },
+        "metal-48xl": {
+          "vcpu": 192,
+          "mem": 768,
+          "price": 16.0397,
+          "net": "300 Gigabit"
+        },
+        "metal-96xl": {
           "vcpu": 384,
           "mem": 1536,
           "price": 32.0794,
@@ -10487,6 +10547,207 @@
         "us-east-1",
         "us-east-2",
         "us-west-1",
+        "us-west-2"
+      ]
+    },
+    {
+      "key": "m9g",
+      "cat": "general",
+      "arch": "arm",
+      "vendor": "Graviton5",
+      "desc": "General purpose · AWS Graviton5 Processor",
+      "clock": "3.3 GHz",
+      "sizes": [
+        "medium",
+        "large",
+        "xlarge",
+        "2xlarge",
+        "4xlarge",
+        "8xlarge",
+        "12xlarge",
+        "16xlarge",
+        "24xlarge",
+        "48xlarge",
+        "metal-48xl"
+      ],
+      "specs": {
+        "medium": {
+          "vcpu": 1,
+          "mem": 4,
+          "price": 0.0489,
+          "net": "Up to 15 Gigabit"
+        },
+        "large": {
+          "vcpu": 2,
+          "mem": 8,
+          "price": 0.0978,
+          "net": "Up to 15 Gigabit"
+        },
+        "xlarge": {
+          "vcpu": 4,
+          "mem": 16,
+          "price": 0.1957,
+          "net": "Up to 15 Gigabit"
+        },
+        "2xlarge": {
+          "vcpu": 8,
+          "mem": 32,
+          "price": 0.3914,
+          "net": "Up to 17 Gigabit"
+        },
+        "4xlarge": {
+          "vcpu": 16,
+          "mem": 64,
+          "price": 0.7827,
+          "net": "Up to 17 Gigabit"
+        },
+        "8xlarge": {
+          "vcpu": 32,
+          "mem": 128,
+          "price": 1.5654,
+          "net": "17 Gigabit"
+        },
+        "12xlarge": {
+          "vcpu": 48,
+          "mem": 192,
+          "price": 2.3482,
+          "net": "25 Gigabit"
+        },
+        "16xlarge": {
+          "vcpu": 64,
+          "mem": 256,
+          "price": 3.1309,
+          "net": "34 Gigabit"
+        },
+        "24xlarge": {
+          "vcpu": 96,
+          "mem": 384,
+          "price": 4.6963,
+          "net": "50 Gigabit"
+        },
+        "48xlarge": {
+          "vcpu": 192,
+          "mem": 768,
+          "price": 9.3926,
+          "net": "100 Gigabit"
+        },
+        "metal-48xl": {
+          "vcpu": 192,
+          "mem": 768,
+          "price": 9.3926,
+          "net": "100 Gigabit"
+        }
+      },
+      "in": [
+        "eu-central-1",
+        "us-east-1",
+        "us-east-2",
+        "us-west-2"
+      ]
+    },
+    {
+      "key": "m9gd",
+      "cat": "general",
+      "arch": "arm",
+      "vendor": "Graviton5",
+      "desc": "General purpose · AWS Graviton5 Processor",
+      "clock": "3.3 GHz",
+      "sizes": [
+        "medium",
+        "large",
+        "xlarge",
+        "2xlarge",
+        "4xlarge",
+        "8xlarge",
+        "12xlarge",
+        "16xlarge",
+        "24xlarge",
+        "48xlarge",
+        "metal-48xl"
+      ],
+      "specs": {
+        "medium": {
+          "vcpu": 1,
+          "mem": 4,
+          "price": 0.0629,
+          "storage": "59 GB NVMe SSD",
+          "net": "Up to 15 Gigabit"
+        },
+        "large": {
+          "vcpu": 2,
+          "mem": 8,
+          "price": 0.1257,
+          "storage": "118 GB NVMe SSD",
+          "net": "Up to 15 Gigabit"
+        },
+        "xlarge": {
+          "vcpu": 4,
+          "mem": 16,
+          "price": 0.2514,
+          "storage": "237 GB NVMe SSD",
+          "net": "Up to 15 Gigabit"
+        },
+        "2xlarge": {
+          "vcpu": 8,
+          "mem": 32,
+          "price": 0.5028,
+          "storage": "474 GB NVMe SSD",
+          "net": "Up to 17 Gigabit"
+        },
+        "4xlarge": {
+          "vcpu": 16,
+          "mem": 64,
+          "price": 1.0056,
+          "storage": "950 GB NVMe SSD",
+          "net": "Up to 17 Gigabit"
+        },
+        "8xlarge": {
+          "vcpu": 32,
+          "mem": 128,
+          "price": 2.0112,
+          "storage": "1900 GB NVMe SSD",
+          "net": "17 Gigabit"
+        },
+        "12xlarge": {
+          "vcpu": 48,
+          "mem": 192,
+          "price": 3.0168,
+          "storage": "3 × 950 GB NVMe SSD",
+          "net": "25 Gigabit"
+        },
+        "16xlarge": {
+          "vcpu": 64,
+          "mem": 256,
+          "price": 4.0224,
+          "storage": "3800 GB NVMe SSD",
+          "net": "34 Gigabit"
+        },
+        "24xlarge": {
+          "vcpu": 96,
+          "mem": 384,
+          "price": 6.0336,
+          "storage": "3 × 1900 GB NVMe SSD",
+          "net": "50 Gigabit"
+        },
+        "48xlarge": {
+          "vcpu": 192,
+          "mem": 768,
+          "price": 12.0672,
+          "storage": "3 × 3800 GB NVMe SSD",
+          "net": "100 Gigabit"
+        },
+        "metal-48xl": {
+          "vcpu": 192,
+          "mem": 768,
+          "price": 12.0672,
+          "storage": "3 × 3800 GB NVMe SSD",
+          "net": "100 Gigabit"
+        }
+      },
+      "in": [
+        "eu-central-1",
+        "us-east-1",
+        "us-east-2",
         "us-west-2"
       ]
     },
@@ -14207,7 +14468,9 @@
         "24xlarge",
         "32xlarge",
         "48xlarge",
-        "96xlarge"
+        "96xlarge",
+        "metal-48xl",
+        "metal-96xl"
       ],
       "specs": {
         "large": {
@@ -14271,6 +14534,18 @@
           "net": "200 Gigabit"
         },
         "96xlarge": {
+          "vcpu": 384,
+          "mem": 3072,
+          "price": 40.1664,
+          "net": "400 Gigabit"
+        },
+        "metal-48xl": {
+          "vcpu": 192,
+          "mem": 1536,
+          "price": 20.0832,
+          "net": "200 Gigabit"
+        },
+        "metal-96xl": {
           "vcpu": 384,
           "mem": 3072,
           "price": 40.1664,
@@ -14458,7 +14733,9 @@
         "24xlarge",
         "32xlarge",
         "48xlarge",
-        "96xlarge"
+        "96xlarge",
+        "metal-48xl",
+        "metal-96xl"
       ],
       "specs": {
         "large": {
@@ -14537,6 +14814,20 @@
           "price": 45.0182,
           "storage": "6 × 3800 GB NVMe SSD",
           "net": "400 Gigabit"
+        },
+        "metal-48xl": {
+          "vcpu": 192,
+          "mem": 1536,
+          "price": 22.5091,
+          "storage": "3 × 3800 GB NVMe SSD",
+          "net": "200 Gigabit"
+        },
+        "metal-96xl": {
+          "vcpu": 384,
+          "mem": 3072,
+          "price": 45.0182,
+          "storage": "6 × 3800 GB NVMe SSD",
+          "net": "400 Gigabit"
         }
       },
       "in": [
@@ -14581,7 +14872,9 @@
         "24xlarge",
         "32xlarge",
         "48xlarge",
-        "96xlarge"
+        "96xlarge",
+        "metal-48xl",
+        "metal-96xl"
       ],
       "specs": {
         "large": {
@@ -14660,6 +14953,20 @@
           "price": 45.0182,
           "storage": "6 × 3800 GB NVMe SSD",
           "net": "600 Gigabit"
+        },
+        "metal-48xl": {
+          "vcpu": 192,
+          "mem": 1536,
+          "price": 22.5091,
+          "storage": "3 × 3800 GB NVMe SSD",
+          "net": "300 Gigabit"
+        },
+        "metal-96xl": {
+          "vcpu": 384,
+          "mem": 3072,
+          "price": 45.0182,
+          "storage": "6 × 3800 GB NVMe SSD",
+          "net": "600 Gigabit"
         }
       },
       "in": [
@@ -14704,7 +15011,9 @@
         "24xlarge",
         "32xlarge",
         "48xlarge",
-        "96xlarge"
+        "96xlarge",
+        "metal-48xl",
+        "metal-96xl"
       ],
       "specs": {
         "large": {
@@ -14768,6 +15077,18 @@
           "net": "300 Gigabit"
         },
         "96xlarge": {
+          "vcpu": 384,
+          "mem": 3072,
+          "price": 40.1664,
+          "net": "600 Gigabit"
+        },
+        "metal-48xl": {
+          "vcpu": 192,
+          "mem": 1536,
+          "price": 20.0832,
+          "net": "300 Gigabit"
+        },
+        "metal-96xl": {
           "vcpu": 384,
           "mem": 3072,
           "price": 40.1664,
