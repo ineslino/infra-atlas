@@ -37,6 +37,7 @@
     ["/idp-matrix/",             "IDP Matrix",             "Cross-cloud", "internal developer portal idp platform engineering devex developer experience backstage spotify portal roadie port cortex opslevel atlassian compass software catalog scaffolder golden paths scorecards maturity techdocs plugins rbac"]
   ];
   var TOOLS = [
+    ["/tools/tco/",          "Cross-Cloud TCO Comparator", "Tool", "tco total cost ownership monthly bill compare workload compute hours egress equivalent sku price aws azure gcp oci ovh"],
     ["/tools/egress-cost/",  "Egress Cost Calculator",     "Tool", "egress cost calculator bandwidth bill data transfer aws azure gcp price tier compare"],
     ["/tools/subnet/",       "Subnet Calculator",          "Tool", "subnet cidr calculator vpc vnet vcn reserved ips usable hosts aws azure gcp oci ipv4 ipv6"],
     ["/tools/apim-limits/",  "APIM Limits Picker",         "Tool", "apim api gateway limits timeout payload rate limit websocket pick choose vendor mulesoft apigee"]
@@ -83,7 +84,7 @@
     "/oci-compute/":            ["/equivalent-sku/", "/regions/", "/iam-matrix/"],
     "/ovh-instances/":          ["/equivalent-sku/", "/regions/"],
     "/regions/":                ["/ec2/", "/azure-vm/", "/gcp-compute/"],
-    "/equivalent-sku/":         ["/ec2/", "/azure-vm/", "/gcp-compute/", "/oci-compute/"],
+    "/equivalent-sku/":         ["/tools/tco/", "/ec2/", "/azure-vm/", "/gcp-compute/", "/oci-compute/"],
     "/kubernetes/":             ["/networking-matrix/", "/iam-matrix/", "/equivalent-sku/", "/observability/"],
     "/iam-matrix/":             ["/networking-matrix/", "/kubernetes/", "/confidential-computing/", "/toolbox/auth/"],
     "/aws-api-gateway/":        ["/apim-matrix/", "/apigee/", "/mulesoft/", "/decisions/rest-api-vs-http-api/"],
@@ -101,7 +102,8 @@
     "/decisions/cloud-native-vs-managed-vs-self-hosted-observability/": ["/observability/", "/observability-stacks/", "/toolbox/observability/"],
     "/egress/":                 ["/tools/egress-cost/", "/networking-matrix/", "/sovereignty/", "/decisions/nat-gateway-vs-instance-vs-no-nat/"],
     "/apim-matrix/":            ["/tools/apim-limits/", "/aws-api-gateway/", "/apigee/", "/mulesoft/"],
-    "/tools/egress-cost/":      ["/egress/", "/networking-matrix/", "/decisions/nat-gateway-vs-instance-vs-no-nat/"],
+    "/tools/tco/":              ["/equivalent-sku/", "/tools/egress-cost/", "/ec2/", "/regions/"],
+    "/tools/egress-cost/":      ["/egress/", "/tools/tco/", "/networking-matrix/", "/decisions/nat-gateway-vs-instance-vs-no-nat/"],
     "/tools/subnet/":           ["/networking-matrix/", "/regions/"],
     "/tools/apim-limits/":      ["/apim-matrix/", "/aws-api-gateway/", "/decisions/rest-api-vs-http-api/"],
     "/toolbox/auth/":           ["/iam-matrix/", "/compliance/", "/confidential-computing/"],
