@@ -28,9 +28,10 @@ build/
 # Node (in case we add anything later)
 node_modules/
 
-# Python (refresh / feed scripts)
+# Python (refresh / feed scripts + mcp/)
 __pycache__/
 *.pyc
+.venv/
 
 .dev.vars*
 !.dev.vars.example
