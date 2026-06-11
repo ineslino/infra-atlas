@@ -534,7 +534,7 @@ def render_page(d):
     <a href="https://github.com/ineslino/infra-atlas/issues/new" target="_blank" rel="noopener">Open an issue</a>.
   </footer>
 </div>
-<script src="/nav.js" defer></script>
+<script src="/nav.js?v=2" defer></script>
 </body>
 </html>
 """
@@ -596,7 +596,7 @@ def render_hub():
     <a href="https://github.com/ineslino/infra-atlas/issues/new" target="_blank" rel="noopener">Open an issue</a>.
   </footer>
 </div>
-<script src="/nav.js" defer></script>
+<script src="/nav.js?v=2" defer></script>
 </body>
 </html>
 """
