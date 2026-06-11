@@ -61,8 +61,13 @@
     });
   }
 
+  // Render at most this many rows up front; a "show all" row reveals the rest.
+  // 1,300+ rows of DOM made the mobile page ~61k px tall for no scan value —
+  // sorting/filtering/export always operate on the full entry set regardless.
+  var ROW_LIMIT = 250;
+
   IA.computeTable = {
-    _cfg: null, _entries: [], _sort: { key: "name", dir: 1 }, _sel: new Map(), _built: false, _container: null,
+    _cfg: null, _entries: [], _sort: { key: "name", dir: 1 }, _sel: new Map(), _built: false, _container: null, _showAll: false,
 
     render: function (container, entries, cfg) {
       this._cfg = cfg || {};
@@ -87,6 +92,55 @@
       return (cfg.currency === "EUR" ? "€" : "$") + s;
     },
 
+    // Serialise the current (filtered + sorted) entries — md | csv | json.
+    _export: function (fmt) {
+      var self = this;
+      var cur = (this._cfg && this._cfg.currency) || "USD";
+      var cols = ["Instance", "Class", "Architecture", "vCPU", "Memory GiB",
+                  cur + "/hr", cur + "/vCPU", "Regions"];
+      function per(e) { return (e.price != null && e.vcpu) ? e.price / e.vcpu : null; }
+      if (fmt === "json") {
+        return JSON.stringify({
+          source: location.href,
+          title: document.title,
+          currency: cur,
+          rows: this._entries.map(function (e) {
+            var p = per(e);
+            return {
+              instance: e.name, class: e.catLabel || e.cat || null,
+              arch: e.arch || null, vcpu: e.vcpu, memoryGiB: e.mem,
+              pricePerHour: e.price, pricePerVcpu: p != null ? +p.toFixed(5) : null,
+              regions: e.regions
+            };
+          })
+        }, null, 2);
+      }
+      if (fmt === "csv") {
+        var q = function (v) {
+          var s = v == null ? "" : String(v);
+          return /[",\n]/.test(s) ? '"' + s.replace(/"/g, '""') + '"' : s;
+        };
+        return [cols.map(q).join(",")].concat(this._entries.map(function (e) {
+          var p = per(e);
+          return [e.name, e.catLabel || e.cat || "", e.arch || "", e.vcpu, e.mem,
+                  e.price, p != null ? +p.toFixed(5) : "", e.regions].map(q).join(",");
+        })).join("\n");
+      }
+      // markdown
+      var lines = ["| " + cols.join(" | ") + " |",
+                   "| " + cols.map(function () { return "---"; }).join(" | ") + " |"];
+      this._entries.forEach(function (e) {
+        var p = per(e);
+        lines.push("| " + [e.name, e.catLabel || e.cat || "", e.arch || "",
+          e.vcpu != null ? e.vcpu : "", e.mem != null ? e.mem : "",
+          self._fmt(e.price) || "", p != null ? (self._fmt(p) || "") : "",
+          e.regions != null ? e.regions : ""].join(" | ") + " |");
+      });
+      lines.push("");
+      lines.push("Source: Infra Atlas · " + location.href + " · " + document.title);
+      return lines.join("\n");
+    },
+
     _draw: function () {
       var self = this, container = this._container;
       sortEntries(this._entries, this._sort);
@@ -106,7 +160,9 @@
       head += "</tr></thead>";
 
       var na = "<span class='ctbl__na'>—</span>";
-      var rows = this._entries.map(function (e) {
+      var capped = !this._showAll && this._entries.length > ROW_LIMIT;
+      var shown = capped ? this._entries.slice(0, ROW_LIMIT) : this._entries;
+      var rows = shown.map(function (e) {
         var sel = self._sel.has(e.id);
         var price = self._fmt(e.price);
         var per = (e.price != null && e.vcpu) ? self._fmt(e.price / e.vcpu) : null;
@@ -122,7 +178,35 @@
           + "</tr>";
       }).join("");
 
-      container.innerHTML = "<div class='ctbl-wrap'><table class='ctbl' aria-label='Instance types'>" + head + "<tbody>" + rows + "</tbody></table></div>";
+      if (capped) {
+        rows += "<tr class='ctbl__morerow'><td colspan='" + (COLS.length + 1) + "'>"
+          + "<button type='button' class='ctbl__more' data-showall>Showing " + ROW_LIMIT
+          + " of " + this._entries.length + " — show all ↓</button></td></tr>";
+      }
+
+      // copy-this-view bar — same classes as the matrix bar nav.js injects;
+      // exports come from the full (filtered, sorted) entry set, not the
+      // row-capped DOM
+      var tools = "<div class='ia-ttools' role='group' aria-label='Copy this view'>"
+        + "<span class='ia-ttools__label'>Copy view</span>"
+        + "<button type='button' data-fmt='md'>Markdown</button>"
+        + "<button type='button' data-fmt='csv'>CSV</button>"
+        + "<button type='button' data-fmt='json'>JSON</button>"
+        + "<button type='button' data-fmt='link'>Link</button>"
+        + "</div>";
+
+      container.innerHTML = tools + "<div class='ctbl-wrap'><table class='ctbl' aria-label='Instance types'>" + head + "<tbody>" + rows + "</tbody></table></div>";
+
+      var moreBtn = container.querySelector("[data-showall]");
+      if (moreBtn) {
+        moreBtn.addEventListener("click", function () { self._showAll = true; self._draw(); });
+      }
+      container.querySelector(".ia-ttools").addEventListener("click", function (e) {
+        var btn = e.target.closest("button[data-fmt]");
+        if (!btn) return;
+        var text = btn.dataset.fmt === "link" ? location.href : self._export(btn.dataset.fmt);
+        if (window.IA && IA.copyText) IA.copyText(text, btn);
+      });
 
       container.querySelectorAll(".ctbl__sort").forEach(function (btn) {
         btn.addEventListener("click", function () {
