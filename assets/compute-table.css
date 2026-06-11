@@ -86,6 +86,9 @@
 .ctbl-dock__go[disabled] { opacity: 0.4; cursor: not-allowed; }
 .ctbl-dock__clear { background: none; border: 0; color: var(--paper-3); font-family: var(--mono); font-size: 11px; cursor: pointer; flex-shrink: 0; }
 .ctbl-dock__clear:hover { color: var(--paper); }
+/* save-to-shortlist — persists the selection beyond this page (nav.js tray) */
+.ctbl-dock__save { background: none; border: 1px solid var(--line-2); border-radius: 99px; color: var(--paper-2); font-family: var(--mono); font-size: 11px; padding: 7px 13px; cursor: pointer; flex-shrink: 0; white-space: nowrap; }
+.ctbl-dock__save:hover { border-color: var(--mint); color: var(--mint); }
 
 /* ─── compare overlay (side-by-side spec sheet) ─── */
 .ctbl-cmp {

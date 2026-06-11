@@ -707,6 +707,16 @@ a.masthead__back::before { display: none; }
 }
 .match.is-top .match__meta { color: var(--paper); }
 
+/* save-to-shortlist pin — feeds the cross-instrument tray in the nav */
+.match__pin {
+  background: none; border: 1px solid var(--line-2); border-radius: 99px;
+  color: var(--paper-3); font-size: 12px; line-height: 1;
+  padding: 4px 8px; cursor: pointer; flex: none;
+  transition: color .15s, border-color .15s;
+}
+.match__pin:hover { color: var(--mint); border-color: var(--mint); }
+.match__pin.is-saved { color: var(--mint); border-color: var(--mint); }
+
 .why {
   font-family: var(--mono);
   font-size: 9.5px;
@@ -1759,7 +1769,10 @@ function renderSourceCard(src, cloudId) {
     <div class="source-card fade-in">
       <span class="source-card__badge cloud-${cloudId} bd-${cloudId}">Source · ${esc(meta.short)}</span>
       <div class="source-card__main">
-        <div class="source-card__name">${esc(src.n)}</div>
+        <div class="source-card__name">${esc(src.n)}
+          <button type="button" class="match__pin" data-pin="${esc(keyOf(cloudId, src))}"
+            aria-label="Save ${esc(src.n)} to the shortlist" title="Save to shortlist">☆</button>
+        </div>
         ${src.d ? `<div class="source-card__desc">${esc(src.d)}</div>` : ""}
         <div class="source-card__specs">${specs.join("")}</div>
       </div>
@@ -1789,6 +1802,8 @@ function renderMatch(entry, rank, cloudId) {
       <div class="match__head">
         <span class="match__rank">${String(rank + 1).padStart(2, "0")}</span>
         <div class="match__name">${esc(inst.n)}${isTop ? '<span class="match__badge">Closest</span>' : ""}</div>
+        <button type="button" class="match__pin" data-pin="${esc(keyOf(cloudId, inst))}"
+          aria-label="Save ${esc(inst.n)} to the shortlist" title="Save to shortlist">☆</button>
         <div class="match__score tier-${tier}">${score}<span class="match__score-unit">/ 100</span></div>
       </div>
       <div class="match__bar"><span class="tier-${tier}" style="width:${Math.max(3, score)}%"></span></div>
@@ -2067,6 +2082,29 @@ function onKey(e) {
   $("#fnd-clear").addEventListener("click", clearSelection);
   $("#fnd-swap").addEventListener("click", pivotToTop);
   document.addEventListener("keydown", onKey);
+
+  // ☆ pins → the cross-instrument shortlist tray (nav.js)
+  document.addEventListener("click", (e) => {
+    const pin = e.target.closest(".match__pin");
+    if (!pin || !(window.IA && IA.shortlist)) return;
+    const key = pin.dataset.pin;
+    const inst = instByKey(key);
+    if (!inst) return;
+    const cid = key.split("::")[0];
+    IA.shortlist.add({
+      source: "/equivalent-sku/",
+      cloud: CLOUD_META[cid].short,
+      name: inst.n,
+      vcpu: inst.v ?? null,
+      mem: inst.m ?? null,
+      price: inst.p ?? null,
+      currency: state.cur[cid] || "USD",
+      regions: inst.r ?? null,
+      href: "/" + CLOUD_META[cid].slug + "/",
+    });
+    pin.classList.add("is-saved");
+    pin.textContent = "★";
+  });
   window.addEventListener("hashchange", () => {
     const before = state.typeKey;
     applyHash();
@@ -2095,6 +2133,6 @@ function onKey(e) {
 })();
 </script>
 
-<script src="/nav.js?v=2" defer></script>
+<script src="/nav.js?v=3" defer></script>
 </body>
 </html>

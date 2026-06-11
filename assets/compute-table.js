@@ -247,6 +247,7 @@
       dock.innerHTML = "<span class='ctbl-dock__label'>Compare</span>"
         + "<div class='ctbl-dock__chips' id='ctbl-dock-chips'></div>"
         + "<button type='button' class='ctbl-dock__go' id='ctbl-dock-go'>Compare</button>"
+        + "<button type='button' class='ctbl-dock__save' id='ctbl-dock-save' title='Save the selection to the cross-instrument shortlist'>☆ Shortlist</button>"
         + "<button type='button' class='ctbl-dock__clear' id='ctbl-dock-clear'>Clear</button>";
       document.body.appendChild(dock);
 
@@ -261,6 +262,28 @@
       document.body.appendChild(ov);
 
       dock.querySelector("#ctbl-dock-go").addEventListener("click", function () { self._openCmp(); });
+      dock.querySelector("#ctbl-dock-save").addEventListener("click", function () {
+        if (!(window.IA && IA.shortlist)) return;
+        // which observatory this is — the shortlist is cross-cloud, so each
+        // item carries its cloud label and a way back to the catalogue
+        var CLOUD_OF = { "/ec2/": "AWS", "/azure-vm/": "Azure", "/gcp-compute/": "GCP",
+                         "/oci-compute/": "OCI", "/ovh-instances/": "OVH" };
+        var here = location.pathname.replace(/index\.html$/, "");
+        var cloud = CLOUD_OF[here] || "—";
+        var added = 0;
+        Array.from(self._sel.values()).forEach(function (e) {
+          if (IA.shortlist.add({
+            source: here, cloud: cloud, name: e.name,
+            vcpu: e.vcpu, mem: e.mem, price: e.price,
+            currency: (self._cfg && self._cfg.currency) || "USD",
+            regions: e.regions, href: here
+          })) added++;
+        });
+        var btn = dock.querySelector("#ctbl-dock-save");
+        var old = btn.textContent;
+        btn.textContent = added ? "Saved ✓" : "Already saved";
+        setTimeout(function () { btn.textContent = old; }, 1300);
+      });
       dock.querySelector("#ctbl-dock-clear").addEventListener("click", function () { self.clear(); });
       ov.querySelector("#ctbl-cmp-close").addEventListener("click", function () { self._closeCmp(); });
       ov.addEventListener("click", function (e) { if (e.target === ov) self._closeCmp(); });
