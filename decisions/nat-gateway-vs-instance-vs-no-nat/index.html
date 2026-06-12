@@ -112,6 +112,58 @@
     <div class="sec-label">The verdict</div>
     <p><strong>NAT Gateway</strong> is the default for private-subnet egress — AWS recommends it for availability, bandwidth and zero administration. A <strong>NAT instance</strong> is now a niche, legacy choice: pick it only for a feature the gateway lacks — port forwarding, doubling as a bastion, or very low traffic where its hourly cost wins. You can <strong>skip NAT entirely</strong> when private workloads only talk to AWS services (a free Gateway endpoint, or Interface endpoints), or when a workload is genuinely public. The deciding factor is cost: the NAT Gateway data-processing charge applies to every GB — including AWS-service traffic a cheaper endpoint could carry.</p>
   </section>
+  <section class="wizard" aria-label="Interactive decision helper">
+    <div class="sec-label">Decide interactively</div>
+    <p class="wiz__intro">Answer the questions — the helper scores both the options against the sourced
+    table below and shows its reasoning. A heuristic, not an oracle: the verdict above stays the authority.</p>
+    <form id="wiz-form">
+<fieldset class="wiz__q"><legend>Where does the egress actually go?</legend><div class="wiz__opts"><label class="wiz__opt"><input type="radio" name="q0" value="0"><span>General internet destinations</span></label><label class="wiz__opt"><input type="radio" name="q0" value="1"><span>Only AWS services (S3, DynamoDB, APIs)</span></label><label class="wiz__opt"><input type="radio" name="q0" value="2"><span>Almost nowhere — tiny, rare egress</span></label></div></fieldset>
+<fieldset class="wiz__q"><legend>Port forwarding, or a bastion on the same box?</legend><div class="wiz__opts"><label class="wiz__opt"><input type="radio" name="q1" value="0"><span>Yes</span></label><label class="wiz__opt"><input type="radio" name="q1" value="1"><span>No</span></label></div></fieldset>
+<fieldset class="wiz__q"><legend>Maintenance appetite?</legend><div class="wiz__opts"><label class="wiz__opt"><input type="radio" name="q2" value="0"><span>Zero — managed only</span></label><label class="wiz__opt"><input type="radio" name="q2" value="1"><span>We will patch an AMI to save cost</span></label></div></fieldset>
+<fieldset class="wiz__q"><legend>Traffic volume?</legend><div class="wiz__opts"><label class="wiz__opt"><input type="radio" name="q3" value="0"><span>Moderate to high</span></label><label class="wiz__opt"><input type="radio" name="q3" value="1"><span>Tiny</span></label></div></fieldset>
+    </form>
+    <div class="wiz__result" id="wiz-result" aria-live="polite" hidden></div>
+    <button type="button" class="wiz__reset" id="wiz-reset" hidden>Reset</button>
+  </section>
+  <script>
+  (function () {
+    const WIZ = {"cols": ["NAT Gateway", "NAT instance", "No NAT"], "qs": [{"a": [{"pts": {"0": 3}, "why": "General outbound is the NAT Gateway's job — the AWS-recommended default."}, {"pts": {"2": 3}, "why": "A free Gateway endpoint or Interface endpoints beat paying NAT per GB for AWS-bound traffic."}, {"pts": {"1": 2}, "why": "At trickle volumes a small NAT instance can undercut the gateway's hourly charge."}]}, {"a": [{"pts": {"1": 3}, "why": "A NAT Gateway supports neither — this is the NAT instance's surviving niche."}, {"pts": {"0": 1}, "why": "No special tricks needed — managed NAT stays ahead."}]}, {"a": [{"pts": {"0": 2, "2": 2}, "why": "Gateways and endpoints carry no patching at all."}, {"pts": {"1": 2}, "why": "A NAT instance trades your ops time for its lower hourly rate."}]}, {"a": [{"pts": {"0": 2}, "why": "The gateway auto-scales to 100 Gbps; an instance caps at its type."}, {"pts": {"1": 1, "2": 1}, "why": "Small volumes keep the cheap paths honest."}]}]};
+    const form = document.getElementById("wiz-form");
+    const out = document.getElementById("wiz-result");
+    const reset = document.getElementById("wiz-reset");
+    const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+    function score() {
+      const picked = WIZ.qs.map((q, qi) => {
+        const v = form.querySelector(`input[name="q${qi}"]:checked`);
+        return v ? q.a[+v.value] : null;
+      });
+      if (picked.some(p => p === null)) { out.hidden = true; reset.hidden = true; return; }
+      const pts = WIZ.cols.map(() => 0);
+      picked.forEach(p => Object.entries(p.pts).forEach(([i, w]) => { pts[+i] += w; }));
+      const max = Math.max(...pts);
+      const winners = WIZ.cols.filter((c, i) => pts[i] === max);
+      const head = winners.length > 1
+        ? `<div class="wiz__call">Even split between <strong>${winners.map(esc).join("</strong> and <strong>")}</strong> — this one genuinely hinges on the verdict above.</div>`
+        : `<div class="wiz__call">Leaning <strong>${esc(winners[0])}</strong> — now read its "pick when" list below to confirm.</div>`;
+      const total = pts.reduce((a, b) => a + b, 0) || 1;
+      const bars = WIZ.cols.map((c, i) =>
+        `<div class="wiz__bar"><span class="wiz__bar-name">${esc(c)}</span>` +
+        `<span class="wiz__bar-track"><span class="wiz__bar-fill${pts[i] === max ? " is-top" : ""}" style="width:${Math.max(4, Math.round(pts[i] / total * 100))}%"></span></span>` +
+        `<span class="wiz__bar-n">${pts[i]}</span></div>`).join("");
+      const trail = picked.map(p => `<li>${esc(p.why)}</li>`).join("");
+      out.innerHTML = head + bars +
+        `<div class="wiz__trail-label">Why</div><ul class="wiz__trail">${trail}</ul>`;
+      out.hidden = false;
+      reset.hidden = false;
+    }
+    form.addEventListener("change", score);
+    reset.addEventListener("click", () => {
+      form.reset();
+      out.hidden = true;
+      reset.hidden = true;
+    });
+  })();
+  </script>
   <section>
     <div class="sec-label">Head to head</div>
     <div class="compare-wrap"><table class="compare">

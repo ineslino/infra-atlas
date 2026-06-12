@@ -21,6 +21,12 @@ import os
 
 REVIEWED = "2026-05-19"
 
+# Site-wide nav script. Keep the ?v= in sync with the site-wide cache-bust:
+# the bump touches generated *.html, but this generator is a separate source,
+# so without the version here a regen would silently revert the pages to a
+# stale nav.js (exactly what happened between v=2 and v=4).
+NAV_TAG = '<script src="/nav.js?v=4" defer></script>'
+
 # Social-share image. Keep the ?v= in sync with the site-wide cache-bust:
 # the bump touches generated *.html, but this generator is a separate source,
 # so without the version here a regen would silently revert the cards to a
@@ -62,6 +68,20 @@ DECISIONS = [
    ("Compute Engine VM pricing", "https://cloud.google.com/compute/vm-instance-pricing"),
   ],
   "crosslinks": [("GCP Compute Index", "/gcp-compute/")],
+    "wizard": [
+   {"q": "What are you running?", "a": [
+    {"t": "A stateless web app or HTTP API", "pts": {0: 3}, "why": "Stateless web apps and HTTP APIs are App Engine's ideal workload."},
+    {"t": "A database, daemon, batch/GPU job, or lift-and-shift", "pts": {1: 3}, "why": "Workloads that are not request-scoped belong on Compute Engine."}]},
+   {"q": "Do you need root/SSH, a custom OS, kernel modules or GPUs?", "a": [
+    {"t": "Yes", "pts": {1: 3}, "why": "Host-level control is IaaS territory — App Engine will not host it."},
+    {"t": "No", "pts": {0: 1}, "why": "No host-level needs keeps the PaaS path open."}]},
+   {"q": "How does traffic behave?", "a": [
+    {"t": "Spiky — can idle to zero", "pts": {0: 2}, "why": "App Engine Standard scales to zero between bursts."},
+    {"t": "Steady and predictable", "pts": {1: 1}, "why": "Steady load suits owned VMs with sustained/committed-use discounts."}]},
+   {"q": "How much ops do you want to own?", "a": [
+    {"t": "As little as possible", "pts": {0: 2}, "why": "App Engine trades infrastructure control for near-zero ops burden."},
+    {"t": "Full control is the point", "pts": {1: 2}, "why": "Compute Engine gives full control and the responsibility with it."}]},
+  ],
   "teaser": "PaaS or IaaS on Google Cloud — when to hand Google the servers, and when to keep them.",
  },
  {
@@ -94,6 +114,20 @@ DECISIONS = [
    ("Amazon ECS pricing", "https://aws.amazon.com/ecs/pricing/"),
   ],
   "crosslinks": [("EC2 Observatory", "/ec2/"), ("Equivalent-SKU Finder", "/equivalent-sku/")],
+    "wizard": [
+   {"q": "What does steady-state utilisation look like?", "a": [
+    {"t": "High and predictable", "pts": {1: 3}, "why": "Packed, high-utilisation instances beat per-task pricing at steady load."},
+    {"t": "Variable or spiky", "pts": {0: 3}, "why": "Per-second task billing beats paying for idle instances."}]},
+   {"q": "GPUs, privileged containers, DAEMON tasks or custom AMIs?", "a": [
+    {"t": "Yes — at least one of those", "pts": {1: 3}, "why": "Fargate supports none of those — they force the EC2 launch type."},
+    {"t": "No", "pts": {0: 1}, "why": "Nothing host-shaped blocks Fargate."}]},
+   {"q": "Who should own the hosts?", "a": [
+    {"t": "AWS — zero provisioning and patching", "pts": {0: 2}, "why": "With Fargate, AWS owns the host entirely."},
+    {"t": "Us — we tune instance types and packing", "pts": {1: 2}, "why": "The EC2 launch type exists exactly for owned, tuned capacity."}]},
+   {"q": "Does per-task isolation matter?", "a": [
+    {"t": "Yes — strong boundaries per task", "pts": {0: 2}, "why": "Each Fargate task runs in its own kernel/CPU/memory boundary."},
+    {"t": "Not especially", "pts": {1: 1}, "why": "Shared-kernel instances are acceptable here."}]},
+  ],
   "teaser": "Hand AWS the host, or run your own instances — the ECS container-platform call.",
  },
  {
@@ -128,6 +162,21 @@ DECISIONS = [
    ("nginx — beginner's guide (reverse proxy)", "https://nginx.org/en/docs/beginners_guide.html"),
   ],
   "crosslinks": [("APIM Feature Matrix", "/apim-matrix/"), ("AWS API Gateway Atlas", "/aws-api-gateway/")],
+    "wizard": [
+   {"q": "What is the primary goal?", "a": [
+    {"t": "Publish and govern APIs", "pts": {0: 3}, "why": "API-product governance is what a gateway is for."},
+    {"t": "Full control of routing, rewriting, caching", "pts": {1: 3}, "why": "A reverse proxy is the general-purpose intermediary you fully control."},
+    {"t": "Spread traffic across healthy targets", "pts": {2: 3}, "why": "Availability and distribution is the load balancer's whole job."}]},
+   {"q": "Do you need API keys, usage plans or per-client throttling?", "a": [
+    {"t": "Yes", "pts": {0: 3}, "why": "Keys, quotas and usage plans are built into a gateway and absent elsewhere."},
+    {"t": "No", "pts": {1: 1, 2: 1}, "why": "Without API-product needs, the simpler layers suffice."}]},
+   {"q": "Who should operate it?", "a": [
+    {"t": "Managed by the cloud", "pts": {0: 2, 2: 2}, "why": "Gateways and load balancers come fully managed."},
+    {"t": "We run it — portable, multi-cloud, sidecar", "pts": {1: 3}, "why": "A proxy is vendor-neutral and runs anywhere you do."}]},
+   {"q": "What does the traffic need?", "a": [
+    {"t": "L7 transformation and header work", "pts": {0: 2, 1: 2}, "why": "Both gateways and proxies rewrite and transform at L7."},
+    {"t": "Raw L4 throughput and static IPs", "pts": {2: 3}, "why": "That is the NLB profile — no API features attached."}]},
+  ],
   "teaser": "Gateway, proxy, load balancer — what each is actually for, and why you often need all three.",
  },
  {
@@ -162,6 +211,20 @@ DECISIONS = [
    ("Cache settings for REST APIs", "https://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-caching.html"),
   ],
   "crosslinks": [("AWS API Gateway Atlas", "/aws-api-gateway/"), ("APIM Feature Matrix", "/apim-matrix/")],
+    "wizard": [
+   {"q": "Do you need API keys with usage plans?", "a": [
+    {"t": "Yes", "pts": {0: 3}, "why": "Per-client throttling and quotas exist only on REST APIs."},
+    {"t": "No", "pts": {1: 1}, "why": "No usage plans removes the strongest REST-only pull."}]},
+   {"q": "AWS WAF, a private (VPC-only) endpoint, or request validation?", "a": [
+    {"t": "Yes — at least one", "pts": {0: 3}, "why": "WAF, private endpoints and request validation are REST-only features."},
+    {"t": "No", "pts": {1: 1}, "why": "None of the REST-only features applies."}]},
+   {"q": "How will callers authenticate?", "a": [
+    {"t": "JWTs from an OIDC/OAuth issuer", "pts": {1: 2}, "why": "HTTP APIs have a native JWT authorizer; REST needs a Lambda authorizer for JWTs."},
+    {"t": "IAM or Lambda authorizers", "pts": {0: 1}, "why": "Both types cover IAM and Lambda auth."}]},
+   {"q": "How price-sensitive is this API?", "a": [
+    {"t": "Cost matters — high volume", "pts": {1: 2}, "why": "About $1.00 vs $3.50 per million requests."},
+    {"t": "Features over price", "pts": {0: 1}, "why": "The premium buys caching, validation and edge endpoints."}]},
+  ],
   "teaser": "API Gateway's cheaper default vs the feature-complete original — and the features that force the choice.",
  },
  {
@@ -195,6 +258,20 @@ DECISIONS = [
    ("App Engine flexible environment overview", "https://docs.cloud.google.com/appengine/docs/flexible/overview"),
   ],
   "crosslinks": [("GCP Compute Index", "/gcp-compute/")],
+    "wizard": [
+   {"q": "Does scale-to-zero matter?", "a": [
+    {"t": "Yes — idle should cost nothing", "pts": {0: 3}, "why": "Cloud Run scales to zero and bills per request; Flexible always keeps a VM."},
+    {"t": "Always-on is fine", "pts": {1: 1}, "why": "Steady traffic blunts Cloud Run's idle advantage."}]},
+   {"q": "Do you need SSH into the VM or Compute-network placement?", "a": [
+    {"t": "Yes", "pts": {1: 3}, "why": "Only Flexible exposes the underlying Compute Engine VM."},
+    {"t": "No", "pts": {0: 1}, "why": "No VM-level needs keeps the modern default in play."}]},
+   {"q": "New project, or an existing Flexible app?", "a": [
+    {"t": "New project", "pts": {0: 2}, "why": "Google's own docs recommend Cloud Run for new users."},
+    {"t": "Existing Flexible app", "pts": {1: 2}, "why": "Migration cost can outweigh modernising right now."}]},
+   {"q": "GPUs?", "a": [
+    {"t": "Yes", "pts": {0: 3}, "why": "Cloud Run offers NVIDIA GPUs; Flexible does not."},
+    {"t": "No", "pts": {}, "why": "GPU needs do not separate the two here."}]},
+  ],
   "teaser": "Google's modern serverless-container default vs the legacy VM-backed option.",
  },
  {
@@ -227,6 +304,20 @@ DECISIONS = [
    ("Amazon Aurora pricing", "https://aws.amazon.com/rds/aurora/pricing/"),
   ],
   "crosslinks": [],
+    "wizard": [
+   {"q": "Which engine do you need?", "a": [
+    {"t": "MySQL or PostgreSQL (compatible is fine)", "pts": {0: 2}, "why": "Aurora speaks both — its architecture becomes the differentiator."},
+    {"t": "MariaDB, Oracle, SQL Server or Db2", "pts": {1: 3}, "why": "Aurora supports none of those engines — RDS is the only managed option."}]},
+   {"q": "How hard do availability and read scale bite?", "a": [
+    {"t": "Fast failover and many low-lag readers", "pts": {0: 3}, "why": "Aurora fails over in ~30 s and runs up to 15 readers on one volume."},
+    {"t": "A single instance with a standby is fine", "pts": {1: 1}, "why": "Multi-AZ RDS covers ordinary availability needs."}]},
+   {"q": "What is the load shape?", "a": [
+    {"t": "Spiky — would love scale-to-low", "pts": {0: 2}, "why": "Aurora Serverless v2 steps in 0.5-ACU increments and can pause."},
+    {"t": "Small and steady", "pts": {1: 2}, "why": "RDS's simple instance-plus-volume floor is cheaper at small steady load."}]},
+   {"q": "Multi-region posture?", "a": [
+    {"t": "Active multi-region with sub-second lag", "pts": {0: 3}, "why": "Aurora Global Database spans up to 10 Regions with sub-second lag."},
+    {"t": "Single region (maybe a DR copy)", "pts": {1: 1}, "why": "Cross-Region read replicas cover the basic DR story."}]},
+  ],
   "teaser": "AWS's cloud-native database engine vs classic managed RDS — architecture, or the cheaper floor.",
  },
  {
@@ -259,6 +350,21 @@ DECISIONS = [
    ("Azure Virtual Machines overview", "https://learn.microsoft.com/en-us/azure/virtual-machines/overview"),
   ],
   "crosslinks": [("Azure VM Atlas", "/azure-vm/")],
+    "wizard": [
+   {"q": "What is the deploy unit?", "a": [
+    {"t": "Code in a supported language", "pts": {0: 3}, "why": "Code-first web apps are App Service's home turf."},
+    {"t": "Container images / microservices", "pts": {1: 3}, "why": "Containerised microservices are what Container Apps was built for."},
+    {"t": "A whole OS image — lift-and-shift", "pts": {2: 3}, "why": "Like-for-like migrations land on VMs."}]},
+   {"q": "Does scale-to-zero matter?", "a": [
+    {"t": "Yes", "pts": {1: 3}, "why": "Of the three, only Container Apps scales to zero."},
+    {"t": "No — steady traffic", "pts": {0: 1, 2: 1}, "why": "Always-running plans and VMs fit steady load."}]},
+   {"q": "OS-level control, or software no PaaS supports?", "a": [
+    {"t": "Yes", "pts": {2: 3}, "why": "Full OS access exists only on Virtual Machines."},
+    {"t": "No", "pts": {0: 1, 1: 1}, "why": "No OS needs keeps both PaaS options open."}]},
+   {"q": "Event-driven patterns (KEDA, Dapr, jobs)?", "a": [
+    {"t": "Yes", "pts": {1: 2}, "why": "KEDA scaling and Dapr come built into Container Apps."},
+    {"t": "Classic web app / REST API", "pts": {0: 2}, "why": "Slots, certificates and CI/CD make App Service the comfortable fit."}]},
+  ],
   "teaser": "Azure's PaaS, its serverless containers, or raw VMs — the modern three-way compute call.",
  },
  {
@@ -293,6 +399,21 @@ DECISIONS = [
    ("Egress-only internet gateways", "https://docs.aws.amazon.com/vpc/latest/userguide/egress-only-internet-gateway.html"),
   ],
   "crosslinks": [],
+    "wizard": [
+   {"q": "Where does the egress actually go?", "a": [
+    {"t": "General internet destinations", "pts": {0: 3}, "why": "General outbound is the NAT Gateway's job — the AWS-recommended default."},
+    {"t": "Only AWS services (S3, DynamoDB, APIs)", "pts": {2: 3}, "why": "A free Gateway endpoint or Interface endpoints beat paying NAT per GB for AWS-bound traffic."},
+    {"t": "Almost nowhere — tiny, rare egress", "pts": {1: 2}, "why": "At trickle volumes a small NAT instance can undercut the gateway's hourly charge."}]},
+   {"q": "Port forwarding, or a bastion on the same box?", "a": [
+    {"t": "Yes", "pts": {1: 3}, "why": "A NAT Gateway supports neither — this is the NAT instance's surviving niche."},
+    {"t": "No", "pts": {0: 1}, "why": "No special tricks needed — managed NAT stays ahead."}]},
+   {"q": "Maintenance appetite?", "a": [
+    {"t": "Zero — managed only", "pts": {0: 2, 2: 2}, "why": "Gateways and endpoints carry no patching at all."},
+    {"t": "We will patch an AMI to save cost", "pts": {1: 2}, "why": "A NAT instance trades your ops time for its lower hourly rate."}]},
+   {"q": "Traffic volume?", "a": [
+    {"t": "Moderate to high", "pts": {0: 2}, "why": "The gateway auto-scales to 100 Gbps; an instance caps at its type."},
+    {"t": "Tiny", "pts": {1: 1, 2: 1}, "why": "Small volumes keep the cheap paths honest."}]},
+  ],
   "teaser": "Private-subnet egress on AWS — the managed default, the legacy workaround, and skipping NAT outright.",
  },
  {
@@ -352,6 +473,20 @@ DECISIONS = [
     ("Infra Atlas — Compliance Footprint (certifications)", "/compliance/"),
   ],
   "crosslinks": [("European Sovereignty", "/sovereignty/"), ("Compliance Footprint", "/compliance/")],
+    "wizard": [
+   {"q": "Is immunity from US legal compulsion a hard requirement?", "a": [
+    {"t": "Yes — regulated, public-sector or defence workload", "pts": {1: 3}, "why": "Only an EU-jurisdiction parent sits outside the CLOUD Act's reach."},
+    {"t": "Residency + EU operations suffice", "pts": {0: 3}, "why": "Operational sovereignty is exactly what a sovereign region sells."}]},
+   {"q": "Is SecNumCloud-grade (ANSSI) assurance required?", "a": [
+    {"t": "Yes", "pts": {1: 3}, "why": "Several EU-native providers hold SecNumCloud outright; hyperscalers route via partners — verify per service."},
+    {"t": "Not required", "pts": {0: 1}, "why": "Without SecNumCloud, the partner-based certifications may be enough."}]},
+   {"q": "Does the workload need hyperscaler-only services?", "a": [
+    {"t": "Yes — the full catalogue", "pts": {0: 3}, "why": "EU-native catalogues are narrower; hyperscaler breadth is their trade."},
+    {"t": "No — it fits a narrower catalogue", "pts": {1: 2}, "why": "If the workload fits, the narrower catalogue stops being a cost."}]},
+   {"q": "Where are you today?", "a": [
+    {"t": "Deep in one hyperscaler", "pts": {0: 2}, "why": "Migration cost is real — a sovereign region keeps the ecosystem."},
+    {"t": "Greenfield or portable", "pts": {1: 1}, "why": "Nothing anchors you to a US-parent provider."}]},
+  ],
   "teaser": "A US hyperscaler's 'sovereign' region buys operational sovereignty; only an EU-parent provider gives legal sovereignty — the CLOUD Act is why.",
  },
 ]
@@ -403,6 +538,78 @@ def seo_title(d):
     H1 keeps the editorial 'or' phrasing.  Applied to generated pages only;
     hand-authored pages control their own <title>."""
     return plain_title(d).replace(" or ", " vs ")
+
+
+def render_wizard(d):
+    """The interactive section: 3-4 questions scored against the page's own
+    sourced content. A heuristic, deliberately subordinate to the verdict —
+    every answer's "why" line paraphrases a comparison row or pick bullet."""
+    w = d.get("wizard")
+    if not w:
+        return ""
+    qs = []
+    for qi, q in enumerate(w):
+        opts = "".join(
+            f'<label class="wiz__opt"><input type="radio" name="q{qi}" value="{ai}">'
+            f"<span>{esc(a['t'])}</span></label>"
+            for ai, a in enumerate(q["a"]))
+        qs.append(f'<fieldset class="wiz__q"><legend>{esc(q["q"])}</legend>'
+                  f'<div class="wiz__opts">{opts}</div></fieldset>')
+    wiz_data = json.dumps(
+        {"cols": d["cols"],
+         "qs": [{"a": [{"pts": a.get("pts", {}), "why": a["why"]} for a in q["a"]]}
+                for q in w]},
+        ensure_ascii=False).replace("<", "\u003c")
+    return f"""
+  <section class="wizard" aria-label="Interactive decision helper">
+    <div class="sec-label">Decide interactively</div>
+    <p class="wiz__intro">Answer the questions — the helper scores both the options against the sourced
+    table below and shows its reasoning. A heuristic, not an oracle: the verdict above stays the authority.</p>
+    <form id="wiz-form">
+{chr(10).join(qs)}
+    </form>
+    <div class="wiz__result" id="wiz-result" aria-live="polite" hidden></div>
+    <button type="button" class="wiz__reset" id="wiz-reset" hidden>Reset</button>
+  </section>
+  <script>
+  (function () {{
+    const WIZ = {wiz_data};
+    const form = document.getElementById("wiz-form");
+    const out = document.getElementById("wiz-result");
+    const reset = document.getElementById("wiz-reset");
+    const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}}[c]));
+    function score() {{
+      const picked = WIZ.qs.map((q, qi) => {{
+        const v = form.querySelector(`input[name="q${{qi}}"]:checked`);
+        return v ? q.a[+v.value] : null;
+      }});
+      if (picked.some(p => p === null)) {{ out.hidden = true; reset.hidden = true; return; }}
+      const pts = WIZ.cols.map(() => 0);
+      picked.forEach(p => Object.entries(p.pts).forEach(([i, w]) => {{ pts[+i] += w; }}));
+      const max = Math.max(...pts);
+      const winners = WIZ.cols.filter((c, i) => pts[i] === max);
+      const head = winners.length > 1
+        ? `<div class="wiz__call">Even split between <strong>${{winners.map(esc).join("</strong> and <strong>")}}</strong> — this one genuinely hinges on the verdict above.</div>`
+        : `<div class="wiz__call">Leaning <strong>${{esc(winners[0])}}</strong> — now read its "pick when" list below to confirm.</div>`;
+      const total = pts.reduce((a, b) => a + b, 0) || 1;
+      const bars = WIZ.cols.map((c, i) =>
+        `<div class="wiz__bar"><span class="wiz__bar-name">${{esc(c)}}</span>` +
+        `<span class="wiz__bar-track"><span class="wiz__bar-fill${{pts[i] === max ? " is-top" : ""}}" style="width:${{Math.max(4, Math.round(pts[i] / total * 100))}}%"></span></span>` +
+        `<span class="wiz__bar-n">${{pts[i]}}</span></div>`).join("");
+      const trail = picked.map(p => `<li>${{esc(p.why)}}</li>`).join("");
+      out.innerHTML = head + bars +
+        `<div class="wiz__trail-label">Why</div><ul class="wiz__trail">${{trail}}</ul>`;
+      out.hidden = false;
+      reset.hidden = false;
+    }}
+    form.addEventListener("change", score);
+    reset.addEventListener("click", () => {{
+      form.reset();
+      out.hidden = true;
+      reset.hidden = true;
+    }});
+  }})();
+  </script>"""
 
 
 def render_page(d):
@@ -534,11 +741,11 @@ def render_page(d):
     <a href="https://github.com/ineslino/infra-atlas/issues/new" target="_blank" rel="noopener">Open an issue</a>.
   </footer>
 </div>
-<script src="/nav.js?v=2" defer></script>
+{NAV_TAG}
 </body>
 </html>
 """
-    return head + masthead + verdict + table + pickwhen + sources + cross + foot
+    return head + masthead + verdict + render_wizard(d) + table + pickwhen + sources + cross + foot
 
 
 def render_hub():
@@ -596,7 +803,7 @@ def render_hub():
     <a href="https://github.com/ineslino/infra-atlas/issues/new" target="_blank" rel="noopener">Open an issue</a>.
   </footer>
 </div>
-<script src="/nav.js?v=2" defer></script>
+{NAV_TAG}
 </body>
 </html>
 """
