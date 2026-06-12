@@ -25,7 +25,7 @@ REVIEWED = "2026-05-19"
 # the bump touches generated *.html, but this generator is a separate source,
 # so without the version here a regen would silently revert the pages to a
 # stale nav.js (exactly what happened between v=2 and v=4).
-NAV_TAG = '<script src="/nav.js?v=6" defer></script>'
+NAV_TAG = '<script src="/nav.js?v=7" defer></script>'
 
 # Social-share image. Keep the ?v= in sync with the site-wide cache-bust:
 # the bump touches generated *.html, but this generator is a separate source,
