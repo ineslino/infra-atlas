@@ -67,6 +67,19 @@ jobs:
       - name: Check region data against the verified reference
         run: python3 scripts/check_region_drift.py
 
+  mcp-logic:
+    name: MCP server logic vs site math
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      # mcp/ mirrors the site's equivalence scoring and egress tier walk in
+      # Python. These offline tests pin the known-good numbers (m5.xlarge
+      # parity, $912.60 AWS / $1,136.64 GCP for 10 TB, live band wordings) so
+      # a drift between the MCP server and the site fails the build.
+      - name: Run offline MCP logic tests
+        run: python3 mcp/tests/test_logic.py
+
   landing-stats:
     name: Landing-page stats vs instrument data
     runs-on: ubuntu-latest
