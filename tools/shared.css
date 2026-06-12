@@ -225,3 +225,40 @@ h1.title em { font-style: italic; color: var(--accent); }
   .tbx-row { grid-template-columns: 1fr; }
   .tbx-row__repo { grid-column: 1; grid-row: auto; align-self: start; }
 }
+
+/* ─── Provenance — where the numbers come from (every calculator) ───
+   One row per data component: a tier chip (primary vendor source /
+   aggregator / curated snapshot), the source with a link, and the
+   freshness date read from the data itself where it exists. The
+   report link prefills a GitHub issue with the current view. */
+.prov {
+  border: 1px solid var(--line); border-radius: 5px;
+  padding: 18px 22px; margin-bottom: 28px;
+}
+.prov__title {
+  font-family: var(--mono); font-size: 10px; letter-spacing: 0.18em;
+  text-transform: uppercase; color: var(--paper-3); margin-bottom: 12px;
+  display: flex; align-items: center; gap: 10px;
+}
+.prov__title::after { content: ''; flex: 1; height: 1px; background: var(--line); }
+.prov__row {
+  display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap;
+  font-family: var(--mono); font-size: 11px; line-height: 1.65;
+  color: var(--paper-2); padding: 3px 0;
+}
+.prov__tier {
+  font-size: 8.5px; letter-spacing: 0.14em; text-transform: uppercase;
+  padding: 2px 8px; border-radius: 99px; border: 1px solid var(--line-2);
+  color: var(--paper-3); flex: none;
+}
+.prov__tier--primary    { color: var(--mint); border-color: rgba(111, 231, 181, 0.35); }
+.prov__tier--aggregator { color: var(--gold); border-color: rgba(244, 198, 96, 0.35); }
+.prov__row a {
+  color: var(--paper-2); text-decoration: underline;
+  text-decoration-color: var(--line-3); text-underline-offset: 3px;
+}
+.prov__row a:hover { color: var(--accent); }
+.prov__fresh { color: var(--paper-3); }
+.prov__report { margin-top: 12px; font-family: var(--mono); font-size: 10.5px; }
+.prov__report a { color: var(--accent); text-decoration: none; }
+.prov__report a:hover { color: var(--accent-2); }

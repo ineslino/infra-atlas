@@ -132,6 +132,16 @@
     <section class="clouds" id="clouds" aria-label="Per-cloud usable hosts"></section>
 
     <!-- About / caveat -->
+    <section class="prov" aria-label="Where these numbers come from">
+      <div class="prov__title">Where these numbers come from</div>
+      <div class="prov__row"><span class="prov__tier prov__tier--primary">method</span><span><strong>Subnet arithmetic</strong> —
+        pure CIDR math (RFC 4632 for IPv4, RFC 4291 for IPv6), computed in your browser; no external data involved</span></div>
+      <div class="prov__row"><span class="prov__tier">curated</span><span><strong>Reserved-IP rules per cloud</strong> —
+        hand-verified against each vendor's VPC/VNet/VCN documentation (verified <span class="prov__fresh">2026-05-19</span>);
+        the source link sits under every provider card</span></div>
+      <div class="prov__report"><a id="prov-report" href="https://github.com/ineslino/infra-atlas/issues/new" target="_blank" rel="noopener">Spotted a wrong number? Report it — the issue arrives prefilled →</a></div>
+    </section>
+
     <div class="about">
       <span class="about__mark">*</span>
       <p><strong>Usable</strong> here means routable for workloads. AWS and Azure each reserve <code>first 4 + last 1</code>; GCP reserves <code>first 2 + last 2</code>; OCI reserves <code>first 2 + last 1</code>. IPv6 subnets are <code>/64</code> almost everywhere — the host count is meaningless at that size (~18 quintillion), so the panel shows the prefix you get and the reservations that still apply. Built on the cross-cloud <a href="/networking-matrix/">Networking Matrix</a>.</p>
@@ -196,6 +206,21 @@ const CLOUDS = [
 
 // ─── State ───
 const state = { input: "10.0.0.0/24", family: "ipv4" };
+
+// report link — prefilled with the exact view at click time
+(function () {
+  const rep = document.getElementById("prov-report");
+  if (!rep) return;
+  rep.addEventListener("click", () => {
+    const params = new URLSearchParams({
+      title: "Wrong number in the Subnet Calculator",
+      body: "Page: " + location.href
+        + "\nInput: " + state.input + " (" + state.family + ")"
+        + "\n\nWhich number looks wrong, and what does the vendor's documentation say?",
+    });
+    rep.href = "https://github.com/ineslino/infra-atlas/issues/new?" + params.toString();
+  });
+})();
 
 const $ = (s) => document.querySelector(s);
 const $$ = (s) => Array.from(document.querySelectorAll(s));

@@ -101,6 +101,20 @@
     <!-- Results -->
     <section class="results" id="results" aria-live="polite" aria-label="Cost comparison"></section>
 
+    <!-- Provenance -->
+    <section class="prov" aria-label="Where these numbers come from">
+      <div class="prov__title">Where these numbers come from</div>
+      <div class="prov__row"><span class="prov__tier">curated</span><span><strong>Tier ladders</strong> —
+        mirror the <a href="/egress/">Egress Cost Map</a> (verified <span class="prov__fresh">2026-05-19</span>),
+        which cites each provider's pricing page; the per-provider source link sits under every result card
+        · a CI guard re-derives these ladders from the canonical <a href="/egress/data.json">egress/data.json</a> and fails the build if this mirror drifts</span></div>
+      <div class="prov__row"><span class="prov__tier">curated</span><span><strong>Upstreams</strong> —
+        <a href="https://aws.amazon.com/ec2/pricing/on-demand/" target="_blank" rel="noopener">AWS data-transfer pricing</a> ·
+        <a href="https://azure.microsoft.com/en-us/pricing/details/bandwidth/" target="_blank" rel="noopener">Azure bandwidth pricing</a> ·
+        <a href="https://cloud.google.com/network-tiers/pricing" target="_blank" rel="noopener">GCP network tiers pricing</a></span></div>
+      <div class="prov__report"><a id="prov-report" href="https://github.com/ineslino/infra-atlas/issues/new" target="_blank" rel="noopener">Spotted a wrong number? Report it — the issue arrives prefilled →</a></div>
+    </section>
+
     <!-- About / caveat -->
     <div class="about">
       <span class="about__mark">*</span>
@@ -118,8 +132,10 @@
 <script>
 // ═══════════════════════════════════════════════════════════════════
 // Egress Cost Calculator · Infra Atlas
-// Rate values mirror /egress/data.json (verified 2026-05-19). Keep in
-// sync when the Egress Cost Map's TRANSFERS const is bumped.
+// Rate values mirror /egress/data.json (verified 2026-05-19). The mirror
+// is GUARDED: scripts/check_calculator_rates.py re-derives every ladder and
+// flat rate from the canonical data.json on each push and fails the build
+// on drift, and checks this page's "Verified" stamp against the map's.
 // ═══════════════════════════════════════════════════════════════════
 
 const CLOUDS = [
@@ -179,6 +195,22 @@ const RATES = {
 
 // ─── State ───
 const state = { transfer: "internet-egress", volumeGB: 10240, unit: "TB" };
+
+// report link — prefilled with the exact view at click time
+(function () {
+  const rep = document.getElementById("prov-report");
+  if (!rep) return;
+  rep.addEventListener("click", () => {
+    const vol = state.unit === "TB" ? (state.volumeGB / 1024) + " TB" : state.volumeGB + " GB";
+    const params = new URLSearchParams({
+      title: "Wrong number in the Egress Cost Calculator",
+      body: "Page: " + location.href
+        + "\nInputs: " + state.transfer + ", " + vol + "/month"
+        + "\n\nWhich number looks wrong, and what does the provider's pricing page say?",
+    });
+    rep.href = "https://github.com/ineslino/infra-atlas/issues/new?" + params.toString();
+  });
+})();
 
 const $ = (s) => document.querySelector(s);
 const $$ = (s) => Array.from(document.querySelectorAll(s));
