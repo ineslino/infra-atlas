@@ -52,6 +52,7 @@ Data is CC BY 4.0; the data endpoints below are CORS-enabled JSON, no key needed
 ## Calculators
 
 - [Cross-Cloud TCO Comparator](https://infraatlas.dev/tools/tco/): the monthly bill for a workload on every cloud — equivalent SKUs, compute hours plus egress
+- [Right-Sizing Calculator](https://infraatlas.dev/tools/right-size/): enter an instance and its real utilisation — get the cheaper instances that still fit, same cloud and cross-cloud
 - [Egress Cost Calculator](https://infraatlas.dev/tools/egress-cost/): estimate a transfer bill across AWS/Azure/GCP
 - [Subnet Calculator](https://infraatlas.dev/tools/subnet/): CIDR planning for VPC/VNet/VCN
 - [APIM Limits Picker](https://infraatlas.dev/tools/apim-limits/): rate/payload/timeout limits per API platform

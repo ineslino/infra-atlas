@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="color-scheme" content="dark">
+<title>Right-Sizing Calculator · Infra Atlas</title>
+<link rel="icon" href="/favicon.svg?v=2" type="image/svg+xml">
+<meta name="description" content="Paying for headroom you never use? Enter an instance and its real utilisation — the calculator works out what you actually need and finds cheaper instances that fit, on the same cloud and on every other one. List prices, sourced, honestly footnoted.">
+<link rel="canonical" href="https://infraatlas.dev/tools/right-size/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Infra Atlas">
+<meta property="og:title" content="Right-Sizing Calculator · Infra Atlas">
+<meta property="og:description" content="Enter an instance and its real utilisation — get cheaper instances that fit, on the same cloud and on every other one. List prices, sourced.">
+<meta property="og:url" content="https://infraatlas.dev/tools/right-size/">
+<meta property="og:image" content="https://infraatlas.dev/og.png?v=3">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Right-Sizing Calculator · Infra Atlas">
+<meta name="twitter:description" content="What you actually need, and the cheaper instances that fit it — same cloud and cross-cloud, list prices.">
+<meta name="twitter:image" content="https://infraatlas.dev/og.png?v=3">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@300;400;500;600&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/tools/shared.css">
+
+<style>
+/* ─────────── INPUT PANEL ─────────── */
+.panel {
+  display: grid; gap: 14px;
+  grid-template-columns: minmax(0,1fr) minmax(0,1.7fr) minmax(0,0.8fr) minmax(0,0.8fr) minmax(0,0.9fr);
+  padding: 22px; background: linear-gradient(180deg, var(--surface) 0%, var(--ink-2) 100%);
+  border: 1px solid var(--line-2); border-radius: 6px; margin-bottom: 14px;
+}
+.panel .field { min-width: 0; }
+.panel-tools { display: flex; justify-content: flex-end; margin-bottom: 28px; }
+
+/* ─────────── NEED SUMMARY ─────────── */
+.need {
+  display: flex; align-items: baseline; gap: 22px; flex-wrap: wrap;
+  padding: 16px 22px; margin-bottom: 26px;
+  border-left: 2px solid var(--accent); background: rgba(255,120,73,0.05);
+  border-radius: 0 4px 4px 0;
+}
+.need__label {
+  font-family: var(--mono); font-size: 9px; letter-spacing: 0.22em;
+  text-transform: uppercase; color: var(--accent); flex: none;
+}
+.need__item { font-family: var(--mono); font-size: 12px; color: var(--paper-2); }
+.need__item strong { color: var(--paper); font-weight: 500; }
+
+/* ─────────── RESULTS ─────────── */
+.sec-label { margin-top: 36px; }
+.rs-list { display: flex; flex-direction: column; gap: 8px; margin-top: 16px; }
+.rs-row {
+  display: grid; grid-template-columns: auto 1fr auto; gap: 16px; align-items: center;
+  padding: 14px 18px; background: var(--surface); border: 1px solid var(--line); border-radius: 5px;
+}
+.rs-row.is-top { border-color: rgba(111, 231, 181, 0.4); background: linear-gradient(90deg, rgba(111,231,181,0.05), transparent 55%), var(--surface); }
+.rs-row__rank { font-family: var(--serif); font-style: italic; font-size: 20px; color: var(--paper-3); min-width: 30px; }
+.rs-row.is-top .rs-row__rank { color: var(--mint); }
+.rs-row__name { font-family: var(--mono); font-size: 13.5px; color: var(--paper); font-weight: 500; }
+.rs-row__cloud { font-family: var(--mono); font-size: 8.5px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--paper-3); margin-right: 8px; }
+.rs-row__specs { font-family: var(--mono); font-size: 10.5px; color: var(--paper-3); margin-top: 4px; }
+.rs-row__fit { color: var(--mint); }
+.rs-row__save { text-align: right; }
+.rs-row__save-amt { font-family: var(--serif); font-style: italic; font-size: 24px; color: var(--mint); line-height: 1; }
+.rs-row__save-pct { font-family: var(--mono); font-size: 10px; color: var(--paper-3); margin-top: 4px; }
+.rs-row__save-note { font-family: var(--mono); font-size: 10px; color: var(--paper-3); }
+.rs-empty {
+  padding: 22px; border: 1px dashed var(--line-2); border-radius: 6px; margin-top: 16px;
+  font-family: var(--mono); font-size: 12px; color: var(--paper-3); text-align: center;
+}
+
+.status-note { font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.06em; color: var(--paper-3); margin: -18px 0 26px; }
+.status-note.is-err { color: var(--rose); }
+.current {
+  font-family: var(--mono); font-size: 11.5px; color: var(--paper-2); margin-bottom: 18px;
+}
+.current strong { color: var(--paper); }
+
+@media (max-width: 1000px) { .panel { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 560px) {
+  .panel { grid-template-columns: 1fr; }
+  .rs-row { grid-template-columns: auto 1fr; }
+  .rs-row__save { grid-column: 2; text-align: left; }
+}
+</style>
+</head>
+<body>
+
+<div class="grain"></div>
+<div class="scanlines"></div>
+
+<div class="page">
+
+  <header class="masthead">
+    <a class="eyebrow" href="../"><span class="arrow">←</span> Infra Atlas · Calculators</a>
+    <h1 class="title">Right-<em>Sizing.</em></h1>
+    <p class="subtitle">Paying for headroom you never use? Enter the instance and what it <em>actually</em> runs at — the calculator works out the capacity you need (with safety headroom), then finds the cheapest instances that still fit it: on the same cloud, and on every other one. Built on the live catalogues behind the <a href="/equivalent-sku/">Equivalent-SKU Finder</a>.</p>
+  </header>
+
+  <main id="ia-main">
+
+    <!-- Inputs -->
+    <section class="panel" aria-label="Right-sizing inputs">
+      <div class="field">
+        <label class="field__label" for="src-cloud">Cloud</label>
+        <select id="src-cloud"></select>
+      </div>
+      <div class="field">
+        <label class="field__label" for="src-type">Current instance</label>
+        <select id="src-type"></select>
+      </div>
+      <div class="field">
+        <label class="field__label" for="cpu">Avg CPU use %</label>
+        <input id="cpu" type="number" min="1" max="100" step="1" value="35" inputmode="numeric" autocomplete="off">
+      </div>
+      <div class="field">
+        <label class="field__label" for="mem">Avg memory use %</label>
+        <input id="mem" type="number" min="1" max="100" step="1" value="50" inputmode="numeric" autocomplete="off">
+      </div>
+      <div class="field">
+        <label class="field__label" for="headroom">Safety headroom %</label>
+        <input id="headroom" type="number" min="0" max="200" step="5" value="30" inputmode="numeric" autocomplete="off">
+      </div>
+    </section>
+    <div class="panel-tools ia-ttools" role="group" aria-label="Share">
+      <button type="button" data-share>Copy link to this analysis</button>
+    </div>
+
+    <div class="status-note" id="status-note">Loading the live catalogues…</div>
+
+    <div class="current" id="current" hidden></div>
+    <div class="need" id="need" hidden></div>
+
+    <section aria-label="Same-cloud alternatives">
+      <div class="sec-label">Cheaper on the same cloud</div>
+      <div class="rs-list" id="same-cloud" aria-live="polite"></div>
+    </section>
+
+    <section aria-label="Cross-cloud alternatives">
+      <div class="sec-label">Cheapest fit on every other cloud</div>
+      <div class="rs-list" id="cross-cloud" aria-live="polite"></div>
+    </section>
+
+    <!-- Caveats -->
+    <div class="about" style="margin-top: 36px;">
+      <span class="about__mark">*</span>
+      <p><strong>Utilisation-based downsizing is a heuristic, not a guarantee.</strong> Average CPU hides burst patterns; memory pressure, IOPS, network ceilings, licensing and architecture differences don't show in these two numbers at all. Candidates keep your current CPU architecture and workload class to stay bootable and comparable, and the need is computed as <em>current × utilisation × (1 + headroom)</em>, rounded up. Savings are hourly on-demand <em>list</em> prices × 730 h — same caveats as the <a href="/tools/tco/">TCO comparator</a>: no spot/reserved/committed rates, no regional uplifts, EUR never compared to USD. <strong>Benchmark before you resize.</strong></p>
+    </div>
+
+    <!-- Provenance -->
+    <section class="prov" id="prov" hidden aria-label="Where these numbers come from"></section>
+
+  </main>
+
+  <footer class="colophon">
+    <p>Infra Atlas · <a href="../">Calculators</a> · <a href="/equivalent-sku/">Equivalent-SKU Finder</a> · <a href="/tools/tco/">TCO Comparator</a> · <a href="https://github.com/ineslino/infra-atlas" target="_blank" rel="noopener">GitHub</a> · MIT-licensed · live data from the public <a href="/api/">data.json API</a></p>
+  </footer>
+
+</div>
+
+<script>
+// ═══════════════════════════════════════════════════════════════════
+// Right-Sizing Calculator · Infra Atlas
+// Catalogues come live from each instrument's data.json (the same
+// flattening as the Equivalent-SKU Finder / TCO comparator). The need
+// is current_specs × utilisation × (1 + headroom); candidates must fit
+// the need, keep the architecture and workload class, and cost less.
+// ═══════════════════════════════════════════════════════════════════
+
+const CLOUDS = {
+  aws:   { id: "aws",   label: "AWS",   slug: "ec2" },
+  azure: { id: "azure", label: "Azure", slug: "azure-vm" },
+  gcp:   { id: "gcp",   label: "GCP",   slug: "gcp-compute" },
+  oci:   { id: "oci",   label: "OCI",   slug: "oci-compute" },
+  ovh:   { id: "ovh",   label: "OVH",   slug: "ovh-instances" },
+};
+const ORDER = ["aws", "azure", "gcp", "oci", "ovh"];
+const HOURS = 730;
+
+const PROV = {
+  aws:   { tier: "aggregator", upstream: "ec2instances.info (Vantage)", url: "https://instances.vantage.sh/" },
+  azure: { tier: "primary",    upstream: "Azure Retail Prices API",     url: "https://learn.microsoft.com/en-us/rest/api/cost-management/retail-prices/azure-retail-prices" },
+  gcp:   { tier: "curated",    upstream: "GCP Compute Engine docs (no list prices in the dataset)", url: "https://cloud.google.com/compute/docs/machine-resource" },
+  oci:   { tier: "primary",    upstream: "Oracle Cloud public price list", url: "https://www.oracle.com/cloud/price-list/" },
+  ovh:   { tier: "primary",    upstream: "OVHcloud public order catalogue", url: "https://www.ovhcloud.com/en/public-cloud/prices/" },
+};
+const ISSUE_URL = "https://github.com/ineslino/infra-atlas/issues/new";
+
+// ─── Catalogue flattening (same adapter as the finder / TCO) ───
+function gcpVcpu(name) {
+  if (/^(e2-(micro|small|medium)|f1-micro|g1-small)$/.test(name)) return null;
+  const m = name.match(/-(\d+)$/);
+  return m ? parseInt(m[1], 10) : null;
+}
+function flatten(cid, json) {
+  if (!json || !Array.isArray(json.families)) return null;
+  const out = [];
+  json.families.forEach((fam) => {
+    const cat = fam.cat || "general";
+    const arch = fam.arch || "x86";
+    const specs = fam.specs || {};
+    (fam.sizes || []).forEach((sz) => {
+      const sp = specs[sz] || {};
+      let name, v;
+      if (cid === "aws") { name = sz.indexOf(fam.key) === 0 ? sz : fam.key + "." + sz; v = sp.vcpu ?? null; }
+      else if (cid === "gcp") { name = sz; v = gcpVcpu(sz); }
+      else if (cid === "oci") { name = /OCPUs?$/.test(sz) ? fam.key + " · " + sz : sz; v = sp.vcpu ?? null; }
+      else { name = sz; v = sp.vcpu ?? null; }
+      out.push({ n: name, cat, arch, v, m: sp.mem ?? null,
+                 p: typeof sp.price === "number" ? sp.price : null });
+    });
+  });
+  return out.length ? { list: out, currency: json.currency || "USD", generated: json.generated } : null;
+}
+
+// ─── State ───
+const state = { data: {}, srcCloud: "aws", srcName: "", cpu: 35, mem: 50, headroom: 30 };
+const $ = (s) => document.querySelector(s);
+const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+const money = (n, cur) => (cur === "EUR" ? "€" : "$") + n.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+
+function instOf(cid, name) { return (state.data[cid]?.list || []).find((i) => i.n === name) || null; }
+
+// ─── Hash state (#src=aws/m5.2xlarge&cpu=35&mem=50&hr=30) ───
+function writeHash() {
+  const p = new URLSearchParams();
+  if (state.srcName) p.set("src", state.srcCloud + "/" + state.srcName);
+  if (state.cpu !== 35) p.set("cpu", String(state.cpu));
+  if (state.mem !== 50) p.set("mem", String(state.mem));
+  if (state.headroom !== 30) p.set("hr", String(state.headroom));
+  const h = p.toString();
+  try { history.replaceState(null, "", h ? "#" + h : location.pathname); } catch (e) { /* file:// */ }
+}
+function applyHash() {
+  const p = new URLSearchParams(location.hash.slice(1));
+  const src = p.get("src");
+  if (src && src.includes("/")) {
+    const cid = src.split("/")[0];
+    const name = src.slice(cid.length + 1);
+    if (CLOUDS[cid] && instOf(cid, name)) { state.srcCloud = cid; state.srcName = name; }
+  }
+  const num = (k, lo, hi) => { const v = parseInt(p.get(k) || "", 10); return v >= lo && v <= hi ? v : null; };
+  state.cpu = num("cpu", 1, 100) ?? state.cpu;
+  state.mem = num("mem", 1, 100) ?? state.mem;
+  state.headroom = num("hr", 0, 200) ?? state.headroom;
+}
+
+// ─── The need + candidate fit ───
+function need(src) {
+  const f = 1 + state.headroom / 100;
+  return {
+    vcpu: Math.max(1, Math.ceil(src.v * (state.cpu / 100) * f)),
+    mem: src.m != null ? Math.max(0.5, src.m * (state.mem / 100) * f) : null,
+  };
+}
+function fits(cand, nd, src) {
+  if (!cand.v || cand.v < nd.vcpu) return false;
+  if (nd.mem != null && (cand.m == null || cand.m < nd.mem)) return false;
+  if (cand.arch !== src.arch) return false;          // an x86 image won't boot on Arm
+  if (cand.cat !== src.cat) return false;            // keep the workload class comparable
+  return true;
+}
+
+// ─── Selects ───
+const CAT_LABEL = { general: "General", compute: "Compute", memory: "Memory", storage: "Storage",
+                    accelerated: "Accelerated", hpc: "HPC", macos: "macOS", baremetal: "Bare metal", confidential: "Confidential" };
+function buildSelects() {
+  $("#src-cloud").innerHTML = ORDER.map((cid) =>
+    `<option value="${cid}"${cid === state.srcCloud ? " selected" : ""}>${CLOUDS[cid].label} · ${CLOUDS[cid].slug}</option>`).join("");
+  const sel = $("#src-type");
+  // right-sizing needs a price on the CURRENT instance — there is no saving
+  // to compute against an unpriced SKU (this drops GCP as a source; it still
+  // appears as a candidate column note below)
+  const list = (state.data[state.srcCloud]?.list || []).filter((i) => i.v != null && i.p != null);
+  const order = ["general", "compute", "memory", "storage", "accelerated", "hpc", "baremetal", "confidential", "macos"];
+  const byCat = {};
+  list.forEach((i) => { (byCat[i.cat] = byCat[i.cat] || []).push(i); });
+  sel.innerHTML = Object.keys(byCat)
+    .sort((a, b) => (order.indexOf(a) + 99 * (order.indexOf(a) < 0)) - (order.indexOf(b) + 99 * (order.indexOf(b) < 0)))
+    .map((cat) => `<optgroup label="${esc((CAT_LABEL[cat] || cat).toUpperCase())}">`
+      + byCat[cat].sort((a, b) => (a.v || 0) - (b.v || 0) || a.n.localeCompare(b.n))
+        .map((i) => `<option value="${esc(i.n)}"${i.n === state.srcName ? " selected" : ""}>${esc(i.n)}  ·  ${i.v} vCPU${i.m != null ? " / " + i.m + " GB" : ""}</option>`).join("")
+      + "</optgroup>").join("");
+}
+
+// ─── Render ───
+function row(cand, cid, cur, src, srcCur, rank, isTop) {
+  const monthly = cand.p * HOURS;
+  const comparable = cur === srcCur;
+  const save = comparable ? (src.p - cand.p) * HOURS : null;
+  const pct = comparable ? ((src.p - cand.p) / src.p) * 100 : null;
+  const saveHtml = comparable
+    ? `<div class="rs-row__save-amt">−${money(save, cur)}</div>
+       <div class="rs-row__save-pct">${pct.toFixed(0)}% off · ${money(monthly, cur)}/mo</div>`
+    : `<div class="rs-row__save-note">${money(monthly, cur)}/mo · ${cur} — not compared to ${srcCur}</div>`;
+  return `<div class="rs-row${isTop ? " is-top" : ""}">
+    <div class="rs-row__rank">${String(rank).padStart(2, "0")}</div>
+    <div>
+      <div class="rs-row__name"><span class="rs-row__cloud">${esc(CLOUDS[cid].label)}</span>${esc(cand.n)}</div>
+      <div class="rs-row__specs">${cand.v} vCPU · ${cand.m != null ? cand.m + " GB" : "mem n/d"} · ${money(cand.p, cur)}/h
+        <span class="rs-row__fit">· fits the need</span></div>
+    </div>
+    <div class="rs-row__save">${saveHtml}</div>
+  </div>`;
+}
+
+function render() {
+  const src = instOf(state.srcCloud, state.srcName);
+  if (!src) return;
+  const srcCur = state.data[state.srcCloud].currency;
+  const nd = need(src);
+
+  $("#current").hidden = false;
+  $("#current").innerHTML = `Current: <strong>${esc(src.n)}</strong> — ${src.v} vCPU · ${src.m != null ? src.m + " GB" : "mem n/d"}
+    · ${money(src.p, srcCur)}/h ≈ <strong>${money(src.p * HOURS, srcCur)}/mo</strong> list`;
+
+  $("#need").hidden = false;
+  $("#need").innerHTML = `<span class="need__label">You need</span>
+    <span class="need__item">≥ <strong>${nd.vcpu} vCPU</strong> (${src.v} × ${state.cpu}% × ${(1 + state.headroom / 100).toFixed(2)})</span>
+    ${nd.mem != null ? `<span class="need__item">≥ <strong>${nd.mem % 1 ? nd.mem.toFixed(1) : nd.mem} GB</strong> memory (${src.m} × ${state.mem}% × ${(1 + state.headroom / 100).toFixed(2)})</span>` : ""}
+    <span class="need__item">same arch (<strong>${src.arch === "arm" ? "arm64" : "x86_64"}</strong>) · same class (<strong>${esc(CAT_LABEL[src.cat] || src.cat)}</strong>)</span>`;
+
+  // same cloud — cheaper instances that fit, top 5 by price
+  const same = (state.data[state.srcCloud].list || [])
+    .filter((c) => c.n !== src.n && c.p != null && c.p < src.p && fits(c, nd, src))
+    .sort((a, b) => a.p - b.p)
+    .slice(0, 5);
+  $("#same-cloud").innerHTML = same.length
+    ? same.map((c, i) => row(c, state.srcCloud, srcCur, src, srcCur, i + 1, i === 0)).join("")
+    : `<div class="rs-empty">Nothing cheaper fits on ${esc(CLOUDS[state.srcCloud].label)} — at this utilisation, ${esc(src.n)} is already the right size (or the smallest of its class).</div>`;
+
+  // cross cloud — the cheapest fitting instance per other cloud
+  const cross = [];
+  ORDER.forEach((cid) => {
+    if (cid === state.srcCloud) return;
+    const cur = state.data[cid]?.currency;
+    if (!cur) return;
+    const best = (state.data[cid].list || [])
+      .filter((c) => c.p != null && fits(c, nd, src))
+      .sort((a, b) => a.p - b.p)[0];
+    if (best) cross.push({ cand: best, cid, cur });
+  });
+  cross.sort((a, b) => a.cand.p - b.cand.p);
+  $("#cross-cloud").innerHTML = cross.length
+    ? cross.map((x, i) => row(x.cand, x.cid, x.cur, src, srcCur, i + 1, i === 0 && x.cur === srcCur && x.cand.p < src.p)).join("")
+      + `<div class="rs-empty" style="border:0; padding: 10px 0 0; text-align: left;">GCP is absent: its dataset publishes no list prices, so no saving can be computed. Migration cost, egress and ecosystem are not in these numbers — for a fuller bill, hand this instance to the <a href="/tools/tco/#src=${esc(state.srcCloud)}/${encodeURIComponent(src.n)}" style="color: var(--paper); text-decoration: underline; text-decoration-color: var(--accent);">TCO comparator</a>.</div>`
+    : `<div class="rs-empty">No priced instance on another cloud fits the need.</div>`;
+
+  renderProvenance();
+}
+
+function tierChip(tier) { return `<span class="prov__tier prov__tier--${tier}">${tier}</span>`; }
+function renderProvenance() {
+  const box = $("#prov");
+  const rows = [];
+  ORDER.forEach((cid) => {
+    const d = state.data[cid];
+    if (!d) return;
+    const p = PROV[cid];
+    const fresh = d.generated ? `refreshed <span class="prov__fresh">${esc(String(d.generated).slice(0, 10))}</span>` : "";
+    rows.push(`<div class="prov__row">${tierChip(p.tier)}<span><strong>${CLOUDS[cid].label}</strong> —
+      list prices from <a href="/${CLOUDS[cid].slug}/data.json">${CLOUDS[cid].slug}/data.json</a> ${fresh}
+      · upstream <a href="${p.url}" target="_blank" rel="noopener">${esc(p.upstream)}</a></span></div>`);
+  });
+  box.innerHTML = '<div class="prov__title">Where these numbers come from</div>' + rows.join("")
+    + `<div class="prov__report"><a id="prov-report" href="${ISSUE_URL}" target="_blank" rel="noopener">Spotted a wrong number? Report it — the issue arrives prefilled →</a></div>`;
+  box.hidden = false;
+  const rep = $("#prov-report");
+  rep.addEventListener("click", () => {
+    const params = new URLSearchParams({
+      title: "Wrong number in the Right-Sizing Calculator",
+      body: "Page (with the exact inputs): " + location.href
+        + "\n\nWhich number looks wrong, and what does the vendor page say?",
+    });
+    rep.href = ISSUE_URL + "?" + params.toString();
+  });
+}
+
+// ─── Events ───
+function rerender() { writeHash(); render(); }
+document.addEventListener("change", (e) => {
+  if (e.target.id === "src-cloud") {
+    state.srcCloud = e.target.value;
+    const list = (state.data[state.srcCloud]?.list || []).filter((i) => i.v != null && i.p != null);
+    state.srcName = list.find((i) => i.cat === "general" && i.v === 8)?.n || list[0]?.n || "";
+    buildSelects();
+    rerender();
+  } else if (e.target.id === "src-type") {
+    state.srcName = e.target.value;
+    rerender();
+  }
+});
+document.addEventListener("input", (e) => {
+  const t = e.target;
+  const clamp = (v, lo, hi, dflt) => { const n = parseInt(v, 10); return isFinite(n) ? Math.min(hi, Math.max(lo, n)) : dflt; };
+  if (t.id === "cpu") { state.cpu = clamp(t.value, 1, 100, 35); rerender(); }
+  else if (t.id === "mem") { state.mem = clamp(t.value, 1, 100, 50); rerender(); }
+  else if (t.id === "headroom") { state.headroom = clamp(t.value, 0, 200, 30); rerender(); }
+});
+document.querySelector("[data-share]").addEventListener("click", function () {
+  if (window.IA && IA.copyText) IA.copyText(location.href, this);
+});
+
+// ─── Boot ───
+(async () => {
+  const note = $("#status-note");
+  const results = await Promise.allSettled(ORDER.map(async (cid) => {
+    const r = await fetch("/" + CLOUDS[cid].slug + "/data.json", { cache: "no-cache" });
+    if (!r.ok) throw new Error(String(r.status));
+    return { cid, flat: flatten(cid, await r.json()) };
+  }));
+  let live = 0, newest = "";
+  results.forEach((r) => {
+    if (r.status === "fulfilled" && r.value.flat) {
+      state.data[r.value.cid] = r.value.flat;
+      live++;
+      const g = r.value.flat.generated || "";
+      if (g > newest) newest = g;
+    }
+  });
+  if (live < 2) {
+    note.textContent = "Could not load the live catalogues — check the network and reload.";
+    note.classList.add("is-err");
+    return;
+  }
+  note.textContent = `Live · ${live}/5 catalogues · data ${newest.slice(0, 10) || "—"} · prices are on-demand list prices`;
+
+  state.srcName = "m5.2xlarge";
+  applyHash();
+  if (!instOf(state.srcCloud, state.srcName)) {
+    const list = (state.data[state.srcCloud]?.list || []).filter((i) => i.v != null && i.p != null);
+    state.srcName = list.find((i) => i.cat === "general" && i.v === 8)?.n || list[0]?.n || "";
+  }
+  buildSelects();
+  $("#cpu").value = state.cpu;
+  $("#mem").value = state.mem;
+  $("#headroom").value = state.headroom;
+  render();
+
+  window.addEventListener("hashchange", () => {
+    const before = state.srcCloud + "/" + state.srcName;
+    applyHash();
+    if (state.srcCloud + "/" + state.srcName !== before) { buildSelects(); render(); }
+  });
+})();
+</script>
+
+<script src="/nav.js?v=6" defer></script>
+</body>
+</html>
