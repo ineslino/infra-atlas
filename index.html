@@ -702,7 +702,16 @@ body {
 
 /* ───────── WHAT CHANGED · feed ───────── */
 /* .dispatch-* row styles live in /assets/feed.css (shared with /changelog/) */
-.dispatches { margin-top: 100px; }
+.dispatches {
+  margin-top: 100px;
+  /* align with the numbered sections (01-04): same container + inset —
+     without this the "05 What Changed" head and feed sat 48px left of
+     its siblings (UI-coherence review, 2026-06-12) */
+  max-width: 1280px;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 0 clamp(20px, 4vw, 48px);
+}
 .dispatches .section-head__meta a { color: var(--accent); text-decoration: none; }
 .dispatches .section-head__meta a:hover { text-decoration: underline; }
 
@@ -2187,6 +2196,6 @@ body {
     .catch(function () { /* keep the static fallback */ });
 })();
 </script>
-<script src="/nav.js?v=4" defer></script>
+<script src="/nav.js?v=5" defer></script>
 </body>
 </html>

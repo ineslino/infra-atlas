@@ -214,7 +214,9 @@ a:focus-visible, button:focus-visible, input:focus-visible, [tabindex]:focus-vis
   width: 48px; background: linear-gradient(to left, var(--ink), transparent);
   pointer-events: none; border-radius: 0 5px 5px 0;
 }
-@media (min-width: 1381px) { .scroll-hint::after { display: none; } }
+/* hide the hint only when the WRAP can actually fit the table:
+   table min-width + the page's 2×48px padding */
+@media (min-width: 1477px) { .scroll-hint::after { display: none; } }
 .matrix { min-width: 1380px; /* 7 tool columns + label — wider than the shared default */ }
 .matrix thead th.feature-col { min-width: 240px; /* wider label column; padding/serif from matrix.css */ }
 
@@ -677,6 +679,6 @@ function bootstrap() {
 bootstrap();
 </script>
 <script src="/assets/matrix.js?v=4" defer></script>
-<script src="/nav.js?v=4" defer></script>
+<script src="/nav.js?v=5" defer></script>
 </body>
 </html>
