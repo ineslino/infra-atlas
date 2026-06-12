@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="color-scheme" content="dark">
+<title>Cross-Cloud TCO Comparator · Infra Atlas</title>
+<link rel="icon" href="/favicon.svg?v=2" type="image/svg+xml">
+<meta name="description" content="What would this workload cost on every cloud? Pick an instance, get its closest equivalent on AWS, Azure, GCP, OCI and OVHcloud, and compare the monthly bill — compute hours plus internet egress, list prices, sourced.">
+<link rel="canonical" href="https://infraatlas.dev/tools/tco/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Infra Atlas">
+<meta property="og:title" content="Cross-Cloud TCO Comparator · Infra Atlas">
+<meta property="og:description" content="Pick an instance, get its closest equivalent on every cloud, and compare the monthly bill — compute plus egress, list prices, sourced.">
+<meta property="og:url" content="https://infraatlas.dev/tools/tco/">
+<meta property="og:image" content="https://infraatlas.dev/og.png?v=3">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Cross-Cloud TCO Comparator · Infra Atlas">
+<meta name="twitter:description" content="The monthly bill for this workload on every cloud — equivalent SKUs, compute hours plus egress, list prices.">
+<meta name="twitter:image" content="https://infraatlas.dev/og.png?v=3">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@300;400;500;600&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/tools/shared.css">
+
+<style>
+/* ─────────── INPUT PANEL ─────────── */
+.panel {
+  display: grid; gap: 14px;
+  /* minmax(0,…) — grid items default to min-width:auto, which lets wide
+     selects push the row past the panel edge */
+  grid-template-columns: minmax(0,1fr) minmax(0,1.6fr) minmax(0,0.55fr) minmax(0,0.65fr) minmax(0,1fr) auto;
+  padding: 22px; background: linear-gradient(180deg, var(--surface) 0%, var(--ink-2) 100%);
+  border: 1px solid var(--line-2); border-radius: 6px; margin-bottom: 14px;
+}
+.panel .field { min-width: 0; }
+.panel .unit-toggle { align-self: start; }
+.panel-tools { display: flex; justify-content: flex-end; margin-bottom: 28px; }
+
+/* ─────────── RESULTS ─────────── */
+.results { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 14px; margin-bottom: 32px; }
+.tco-card { background: var(--surface); border: 1px solid var(--line); border-radius: 5px; padding: 18px; display: flex; flex-direction: column; gap: 12px; }
+.tco-card.is-source { border-color: var(--line-2); background: linear-gradient(180deg, rgba(255,120,73,0.05), transparent 55%), var(--surface); }
+.tco-card.is-cheapest { border-color: rgba(111, 231, 181, 0.4); background: linear-gradient(180deg, rgba(111,231,181,0.04), transparent 60%), var(--surface); }
+.tco-card__head { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.tco-card__cloud { font-family: var(--mono); font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--paper-2); display: inline-flex; align-items: center; gap: 8px; }
+.tco-card__cloud .dot { width: 8px; height: 8px; border-radius: 2px; flex: none; }
+.tco-card__tag { font-family: var(--mono); font-size: 9.5px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--mint); padding: 3px 8px; border: 1px solid rgba(111,231,181,0.4); border-radius: 99px; white-space: nowrap; }
+.tco-card__tag--src { color: var(--accent); border-color: rgba(255,120,73,0.4); }
+.tco-card__score { font-family: var(--mono); font-size: 10px; color: var(--paper-3); }
+.tco-card__score strong { color: var(--paper); font-weight: 500; }
+.tco-card select {
+  width: 100%; background: var(--ink-2); color: var(--paper); border: 1px solid var(--line-2);
+  border-radius: 3px; padding: 9px 10px; font-family: var(--mono); font-size: 12px; outline: none;
+}
+.tco-card select:focus { border-color: var(--accent); }
+.tco-card__specs { font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.04em; color: var(--paper-3); }
+.tco-card__regions { display: flex; flex-direction: column; gap: 5px; }
+.tco-card__regions label { font-family: var(--mono); font-size: 9px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--paper-3); }
+.tco-card__avail { font-family: var(--mono); font-size: 10px; color: var(--paper-3); }
+.tco-card__avail.is-no { color: var(--rose); }
+.tco-card__total { font-family: var(--serif); font-style: italic; font-size: 38px; line-height: 1; color: var(--paper); letter-spacing: -0.012em; margin-top: 2px; }
+.tco-card__total .unit { font-size: 15px; color: var(--paper-3); margin-left: 4px; }
+.tco-card__delta { font-family: var(--mono); font-size: 10.5px; color: var(--paper-3); }
+.tco-card__delta.is-up { color: var(--rose); }
+.tco-card__delta.is-down { color: var(--mint); }
+.tco-card__bd { font-family: var(--mono); font-size: 11px; color: var(--paper-2); display: flex; flex-direction: column; gap: 4px; border-top: 1px solid var(--line); padding-top: 10px; }
+.tco-card__bd-row { display: flex; justify-content: space-between; gap: 10px; }
+.tco-card__bd-row span:first-child { color: var(--paper-3); }
+.tco-card__bd-row .na { color: var(--paper-3); font-style: italic; }
+.tco-card__why { display: flex; flex-wrap: wrap; gap: 4px; }
+.tco-card__chip { font-family: var(--mono); font-size: 9px; letter-spacing: 0.02em; padding: 2px 6px; border-radius: 2px; border: 1px solid var(--line-2); color: var(--paper-3); }
+
+.status-note { font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.06em; color: var(--paper-3); margin: -18px 0 26px; }
+.status-note.is-err { color: var(--rose); }
+
+@media (max-width: 1000px) { .panel { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 560px) { .panel { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+
+<div class="grain"></div>
+<div class="scanlines"></div>
+
+<div class="page">
+
+  <header class="masthead">
+    <a class="eyebrow" href="../"><span class="arrow">←</span> Infra Atlas · Calculators</a>
+    <h1 class="title">Cross-Cloud <em>TCO.</em></h1>
+    <p class="subtitle">What would this workload cost elsewhere? Pick an instance; the comparator pulls its closest equivalent on every other cloud — the same transparent scoring as the <a href="/equivalent-sku/">Equivalent-SKU Finder</a> — and lines up the monthly bill: compute hours plus internet egress, from the live catalogues and the <a href="/egress/">Egress Cost Map</a>. List prices, honestly footnoted.</p>
+  </header>
+
+  <main id="ia-main">
+
+    <!-- Inputs -->
+    <section class="panel" aria-label="Workload inputs">
+      <div class="field">
+        <label class="field__label" for="src-cloud">Source cloud</label>
+        <select id="src-cloud"></select>
+      </div>
+      <div class="field">
+        <label class="field__label" for="src-type">Source instance</label>
+        <select id="src-type"></select>
+      </div>
+      <div class="field">
+        <label class="field__label" for="count">Instances</label>
+        <input id="count" type="number" min="1" max="10000" step="1" value="1" inputmode="numeric" autocomplete="off">
+      </div>
+      <div class="field">
+        <label class="field__label" for="hours">Hours / month</label>
+        <input id="hours" type="number" min="1" max="744" step="1" value="730" inputmode="numeric" autocomplete="off">
+      </div>
+      <div class="field">
+        <label class="field__label" for="egress">Internet egress / month</label>
+        <input id="egress" type="number" min="0" step="any" value="1" inputmode="decimal" autocomplete="off">
+      </div>
+      <div class="field">
+        <label class="field__label">Unit</label>
+        <div class="unit-toggle" role="radiogroup" aria-label="Egress unit">
+          <button type="button" data-unit="GB" role="radio" aria-checked="false">GB</button>
+          <button type="button" data-unit="TB" role="radio" aria-checked="true" class="is-active">TB</button>
+        </div>
+      </div>
+    </section>
+    <div class="panel-tools ia-ttools" role="group" aria-label="Share">
+      <button type="button" data-share>Copy link to this comparison</button>
+    </div>
+
+    <div class="status-note" id="status-note">Loading the live catalogues…</div>
+
+    <!-- Results -->
+    <section class="results" id="results" aria-live="polite" aria-label="Monthly cost comparison"></section>
+
+    <!-- Caveats -->
+    <div class="about">
+      <span class="about__mark">*</span>
+      <p><strong>These are list prices, not a quote.</strong> Compute is the hourly on-demand list price (Linux; USD, except OVHcloud in EUR) times your hours — spot, reserved, savings plans and negotiated rates are out of scope, and <em>regional price uplifts are not modelled</em> (the region picker checks availability, not price). Egress walks the internet-egress tier ladder curated in the <a href="/egress/">Egress Cost Map</a> for AWS, Azure and GCP; OCI and OVHcloud egress is not mapped there yet, so their totals are compute-only. GCP publishes no per-size list prices in the Atlas dataset, so its compute line is unavailable. EUR and USD totals are not converted — compare like with like.</p>
+    </div>
+
+  </main>
+
+  <footer class="colophon">
+    <p>Infra Atlas · <a href="../">Calculators</a> · <a href="/equivalent-sku/">Equivalent-SKU Finder</a> · <a href="/egress/">Egress Cost Map</a> · <a href="https://github.com/ineslino/infra-atlas" target="_blank" rel="noopener">GitHub</a> · MIT-licensed · live data from the public <a href="/api/">data.json API</a></p>
+  </footer>
+
+</div>
+
+<script>
+// ═══════════════════════════════════════════════════════════════════
+// Cross-Cloud TCO Comparator · Infra Atlas
+// Catalogues come live from each instrument's data.json. The equivalence
+// scoring is the Equivalent-SKU Finder's, kept in lockstep with
+// equivalent-sku/index.html (and pinned by mcp/tests/test_logic.py):
+// vCPU 50 + memory 38 + category 12, renormalised, ×0.55 cross-arch.
+// The egress ladders mirror /egress/data.json via tools/egress-cost/.
+// ═══════════════════════════════════════════════════════════════════
+
+const CLOUDS = {
+  aws:   { id: "aws",   label: "AWS",   slug: "ec2",           swatch: "#FF9F66" },
+  azure: { id: "azure", label: "Azure", slug: "azure-vm",      swatch: "#7CD7F1" },
+  gcp:   { id: "gcp",   label: "GCP",   slug: "gcp-compute",   swatch: "#F4C660" },
+  oci:   { id: "oci",   label: "OCI",   slug: "oci-compute",   swatch: "#E26464" },
+  ovh:   { id: "ovh",   label: "OVH",   slug: "ovh-instances", swatch: "#C586E8" },
+};
+const ORDER = ["aws", "azure", "gcp", "oci", "ovh"];
+
+// internet-egress tier ladders — mirror /egress/data.json (sync with the
+// Egress Cost Map / egress-cost calculator when those bump)
+const EGRESS = {
+  aws: [ { upToGB: 100, usd: 0 }, { upToGB: 10240, usd: 0.09 }, { upToGB: 51200, usd: 0.085 }, { upToGB: 153600, usd: 0.07 }, { upToGB: null, usd: 0.05 } ],
+  azure: [ { upToGB: 100, usd: 0 }, { upToGB: 10240, usd: 0.087 }, { upToGB: 51200, usd: 0.083 }, { upToGB: 153600, usd: 0.07 }, { upToGB: null, usd: 0.05 } ],
+  gcp: [ { upToGB: 1024, usd: 0.12 }, { upToGB: 10240, usd: 0.11 }, { upToGB: null, usd: 0.08 } ],
+};
+
+// ─── Equivalence scoring (Equivalent-SKU Finder parity) ───
+const W_VCPU = 50, W_MEM = 38, W_CAT = 12, ARCH_FACTOR = 0.55;
+const CAT_ADJ = {
+  general: ["compute", "memory"], compute: ["general", "hpc"], memory: ["general"],
+  hpc: ["compute"], storage: [], accelerated: [], macos: [], baremetal: [], confidential: ["general"],
+};
+const CAT_LABEL = {
+  general: "General", compute: "Compute", memory: "Memory", storage: "Storage",
+  accelerated: "Accelerated", hpc: "HPC", macos: "macOS", baremetal: "Bare metal", confidential: "Confidential",
+};
+
+function ratioScore(a, b) {
+  if (!a || !b || a <= 0 || b <= 0) return null;
+  return Math.max(0, 1 - Math.abs(Math.log2(b / a)));
+}
+function scoreCandidate(src, cand) {
+  let earned = 0, available = 0;
+  const v = ratioScore(src.v, cand.v);
+  if (v !== null) { earned += v * W_VCPU; available += W_VCPU; }
+  const memScored = src.m != null && cand.m != null;
+  if (memScored) { const m = ratioScore(src.m, cand.m); if (m !== null) { earned += m * W_MEM; available += W_MEM; } }
+  const c = src.cat === cand.cat ? 1 : (CAT_ADJ[src.cat] || []).includes(cand.cat) ? 0.5 : 0;
+  earned += c * W_CAT; available += W_CAT;
+  const base = available > 0 ? (earned / available) * 100 : 0;
+  const archOk = src.arch === cand.arch;
+  return { score: Math.round(base * (archOk ? 1 : ARCH_FACTOR)), memScored, archOk };
+}
+
+// ─── Catalogue flattening (same adapter as the finder) ───
+function gcpVcpu(name) {
+  if (/^(e2-(micro|small|medium)|f1-micro|g1-small)$/.test(name)) return null;
+  const m = name.match(/-(\d+)$/);
+  return m ? parseInt(m[1], 10) : null;
+}
+function flatten(cid, json) {
+  if (!json || !Array.isArray(json.families)) return null;
+  const out = [];
+  const allRegions = (json.regions || []).map((r) => ({ code: r.code, name: r.name }));
+  json.families.forEach((fam) => {
+    const cat = fam.cat || "general";
+    const arch = fam.arch || "x86";
+    const specs = fam.specs || {};
+    const inCodes = fam.in === "*" ? null : Array.isArray(fam.in) ? fam.in : [];
+    (fam.sizes || []).forEach((sz) => {
+      const sp = specs[sz] || {};
+      let name, v;
+      if (cid === "aws") { name = sz.indexOf(fam.key) === 0 ? sz : fam.key + "." + sz; v = sp.vcpu ?? null; }
+      else if (cid === "gcp") { name = sz; v = gcpVcpu(sz); }
+      else if (cid === "oci") { name = /OCPUs?$/.test(sz) ? fam.key + " · " + sz : sz; v = sp.vcpu ?? null; }
+      else { name = sz; v = sp.vcpu ?? null; }
+      out.push({
+        n: name, fam: fam.key, cat, arch, v, m: sp.mem ?? null,
+        p: typeof sp.price === "number" ? sp.price : null,
+        inCodes, // null = every region in the catalogue
+      });
+    });
+  });
+  return out.length ? { list: out, regions: allRegions, currency: json.currency || "USD", generated: json.generated } : null;
+}
+
+// ─── State ───
+const state = {
+  data: {},          // cid → {list, regions, currency, generated}
+  srcCloud: "aws",
+  srcName: "",
+  chosen: {},        // cid → instance name (equivalents, user-overridable)
+  region: {},        // cid → region code or "" (any)
+  count: 1, hours: 730, gb: 1024, unit: "TB",
+};
+const $ = (s) => document.querySelector(s);
+const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+const money = (n, cur) => (cur === "EUR" ? "€" : "$") + n.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+
+function instOf(cid, name) { return (state.data[cid]?.list || []).find((i) => i.n === name) || null; }
+
+function egressCost(cid, gb) {
+  const ladder = EGRESS[cid];
+  if (!ladder) return null; // OCI / OVH: not mapped in the Egress Cost Map
+  let remaining = gb, prev = 0, total = 0;
+  for (const t of ladder) {
+    const upTo = t.upToGB === null ? Infinity : t.upToGB;
+    const inTier = Math.min(remaining, upTo - prev);
+    if (inTier <= 0) break;
+    total += inTier * t.usd;
+    remaining -= inTier;
+    prev = upTo;
+    if (remaining <= 0) break;
+  }
+  return total;
+}
+
+// ─── Hash state (#src=aws/m5.xlarge&n=2&h=730&gb=500&u=GB) ───
+function writeHash() {
+  const p = new URLSearchParams();
+  if (state.srcName) p.set("src", state.srcCloud + "/" + state.srcName);
+  if (state.count !== 1) p.set("n", String(state.count));
+  if (state.hours !== 730) p.set("h", String(state.hours));
+  if (state.gb !== 1024) p.set("gb", String(Math.round(state.gb)));
+  const h = p.toString();
+  try { history.replaceState(null, "", h ? "#" + h : location.pathname); } catch (e) { /* file:// */ }
+}
+function applyHash() {
+  const p = new URLSearchParams(location.hash.slice(1));
+  const src = p.get("src");
+  if (src && src.includes("/")) {
+    const [cid, ...rest] = src.split("/");
+    const name = rest.join("/");
+    if (CLOUDS[cid] && instOf(cid, name)) { state.srcCloud = cid; state.srcName = name; }
+  }
+  const n = parseInt(p.get("n") || "", 10); if (n >= 1) state.count = Math.min(n, 10000);
+  const h = parseInt(p.get("h") || "", 10); if (h >= 1) state.hours = Math.min(h, 744);
+  const gb = parseFloat(p.get("gb") || ""); if (gb >= 0) state.gb = gb;
+}
+
+// ─── Equivalents ───
+function pickEquivalents() {
+  const src = instOf(state.srcCloud, state.srcName);
+  state.chosen = {};
+  if (!src || !src.v) return;
+  ORDER.forEach((cid) => {
+    if (cid === state.srcCloud) return;
+    // same ranking as the finder: score, then a scored-memory match outranks
+    // a dropped axis, then closest vCPU, then name for stability
+    let best = null, bestS = null;
+    (state.data[cid]?.list || []).forEach((cand) => {
+      if (!cand.v) return;
+      const s = scoreCandidate(src, cand);
+      const better = !best
+        || s.score > bestS.score
+        || (s.score === bestS.score && s.memScored && !bestS.memScored)
+        || (s.score === bestS.score && s.memScored === bestS.memScored
+            && Math.abs((cand.v || 0) - src.v) < Math.abs((best.v || 0) - src.v))
+        || (s.score === bestS.score && s.memScored === bestS.memScored
+            && Math.abs((cand.v || 0) - src.v) === Math.abs((best.v || 0) - src.v)
+            && cand.n < best.n);
+      if (better) { best = cand; bestS = s; }
+    });
+    if (best) state.chosen[cid] = best.n;
+  });
+}
+
+// ─── Select builders ───
+function buildSourceSelects() {
+  $("#src-cloud").innerHTML = ORDER.map((cid) =>
+    `<option value="${cid}"${cid === state.srcCloud ? " selected" : ""}>${CLOUDS[cid].label} · ${CLOUDS[cid].slug}</option>`).join("");
+  buildTypeSelect($("#src-type"), state.srcCloud, state.srcName);
+}
+function buildTypeSelect(sel, cid, current) {
+  const list = (state.data[cid]?.list || []).filter((i) => i.v != null);
+  const order = ["general", "compute", "memory", "storage", "accelerated", "hpc", "baremetal", "confidential", "macos"];
+  const byCat = {};
+  list.forEach((i) => { (byCat[i.cat] = byCat[i.cat] || []).push(i); });
+  sel.innerHTML = Object.keys(byCat)
+    .sort((a, b) => (order.indexOf(a) + 99 * (order.indexOf(a) < 0)) - (order.indexOf(b) + 99 * (order.indexOf(b) < 0)))
+    .map((cat) => `<optgroup label="${esc((CAT_LABEL[cat] || cat).toUpperCase())}">`
+      + byCat[cat].sort((a, b) => (a.v || 0) - (b.v || 0) || a.n.localeCompare(b.n))
+        .map((i) => `<option value="${esc(i.n)}"${i.n === current ? " selected" : ""}>${esc(i.n)}${i.v != null ? "  ·  " + i.v + " vCPU" + (i.m != null ? " / " + i.m + " GB" : "") : ""}</option>`).join("")
+      + "</optgroup>").join("");
+}
+
+// ─── Render ───
+function render() {
+  const results = $("#results");
+  const src = instOf(state.srcCloud, state.srcName);
+  if (!src) { results.innerHTML = ""; return; }
+
+  const cards = [];
+  const totals = {};
+  ORDER.forEach((cid) => {
+    const isSrc = cid === state.srcCloud;
+    const name = isSrc ? state.srcName : state.chosen[cid];
+    const inst = name ? instOf(cid, name) : null;
+    if (!inst) return;
+    const cur = state.data[cid].currency;
+    const computeM = inst.p != null ? inst.p * state.hours * state.count : null;
+    const egressM = egressCost(cid, state.gb);
+    const total = computeM != null ? computeM + (egressM ?? 0) : null;
+    if (total != null && egressM != null) totals[cid] = total; // full pricing only
+    cards.push({ cid, isSrc, inst, cur, computeM, egressM, total });
+  });
+
+  // crown a cheapest only among full totals in the SAME currency as the
+  // source when possible; EUR/USD are never compared against each other
+  const srcCur = state.data[state.srcCloud].currency;
+  const comparable = cards.filter((c) => c.total != null && c.egressM != null && c.cur === srcCur);
+  let cheapest = null;
+  if (comparable.length > 1) {
+    const sorted = comparable.slice().sort((a, b) => a.total - b.total);
+    if (sorted[1].total > sorted[0].total * 1.01) cheapest = sorted[0].cid;
+  }
+
+  const srcTotal = cards.find((c) => c.isSrc)?.total ?? null;
+
+  results.innerHTML = cards.map((c) => {
+    const meta = CLOUDS[c.cid];
+    const score = !c.isSrc && src.v && c.inst.v ? scoreCandidate(src, c.inst) : null;
+    const regions = state.data[c.cid].regions;
+    const availIn = c.inst.inCodes === null ? regions.length : c.inst.inCodes.length;
+    const regionSel = `<select data-region="${c.cid}" aria-label="Availability check region for ${esc(meta.label)}">`
+      + `<option value="">Any region · available in ${availIn}</option>`
+      + regions.map((r) => {
+          const ok = c.inst.inCodes === null || c.inst.inCodes.includes(r.code);
+          return `<option value="${esc(r.code)}"${state.region[c.cid] === r.code ? " selected" : ""}${ok ? "" : " disabled"}>${esc(r.code)} · ${esc(r.name)}${ok ? "" : " — not offered"}</option>`;
+        }).join("") + "</select>";
+    const picked = state.region[c.cid];
+    const pickedOk = !picked || c.inst.inCodes === null || c.inst.inCodes.includes(picked);
+
+    const bd = [
+      `<div class="tco-card__bd-row"><span>Compute × ${state.count} × ${state.hours}h</span>`
+        + (c.computeM != null ? `<span>${money(c.computeM, c.cur)}</span>` : `<span class="na">no list price</span>`) + `</div>`,
+      `<div class="tco-card__bd-row"><span>Internet egress</span>`
+        + (c.egressM != null ? `<span>${money(c.egressM, "USD")}</span>` : `<span class="na">not mapped</span>`) + `</div>`,
+    ].join("");
+
+    let delta = "";
+    if (!c.isSrc && c.total != null && srcTotal != null && c.cur === srcCur && srcTotal > 0) {
+      const d = ((c.total - srcTotal) / srcTotal) * 100;
+      const cls = d > 0.5 ? "is-up" : d < -0.5 ? "is-down" : "";
+      const partial = c.egressM == null ? " · compute only, egress not mapped" : "";
+      delta = `<div class="tco-card__delta ${cls}">${d > 0 ? "+" : ""}${d.toFixed(1)}% vs source${partial}</div>`;
+    } else if (!c.isSrc && c.cur !== srcCur) {
+      delta = `<div class="tco-card__delta">${c.cur} — not compared across currencies</div>`;
+    }
+
+    return `<article class="tco-card${c.isSrc ? " is-source" : ""}${c.cid === cheapest ? " is-cheapest" : ""}">
+      <div class="tco-card__head">
+        <span class="tco-card__cloud"><span class="dot" style="background:${meta.swatch}"></span>${meta.label}</span>
+        ${c.isSrc ? '<span class="tco-card__tag tco-card__tag--src">Source</span>'
+          : c.cid === cheapest ? '<span class="tco-card__tag">Cheapest</span>'
+          : score ? `<span class="tco-card__score">match <strong>${score.score}</strong>/100</span>` : ""}
+      </div>
+      ${c.isSrc ? `<div class="tco-card__specs" style="font-size:12px;color:var(--paper)">${esc(c.inst.n)}</div>`
+                : `<select data-choose="${c.cid}" aria-label="Instance on ${esc(meta.label)}"></select>`}
+      <div class="tco-card__specs">${c.inst.v != null ? c.inst.v + " vCPU" : "vCPU n/d"} · ${c.inst.m != null ? c.inst.m + " GB" : "mem n/d"} · ${c.inst.p != null ? money(c.inst.p, c.cur) + "/h" : "price n/d"}</div>
+      <div class="tco-card__regions">
+        <label>Region check</label>
+        ${regionSel}
+        ${picked && !pickedOk ? '<span class="tco-card__avail is-no">Not offered in the picked region</span>' : ""}
+      </div>
+      <div class="tco-card__total">${c.total != null ? money(c.total, c.cur) : "—"}<span class="unit">/mo</span></div>
+      ${delta}
+      <div class="tco-card__bd">${bd}</div>
+    </article>`;
+  }).join("");
+
+  // equivalents are user-overridable: full catalogue select per card
+  ORDER.forEach((cid) => {
+    const sel = results.querySelector(`select[data-choose="${cid}"]`);
+    if (sel) buildTypeSelect(sel, cid, state.chosen[cid]);
+  });
+}
+
+// ─── Events ───
+function rerender() { writeHash(); render(); }
+
+document.addEventListener("change", (e) => {
+  const t = e.target;
+  if (t.id === "src-cloud") {
+    state.srcCloud = t.value;
+    const list = (state.data[state.srcCloud]?.list || []).filter((i) => i.v != null);
+    state.srcName = list[0]?.n || "";
+    buildTypeSelect($("#src-type"), state.srcCloud, state.srcName);
+    pickEquivalents();
+    rerender();
+  } else if (t.id === "src-type") {
+    state.srcName = t.value;
+    pickEquivalents();
+    rerender();
+  } else if (t.dataset.choose) {
+    state.chosen[t.dataset.choose] = t.value;
+    rerender();
+  } else if (t.dataset.region !== undefined) {
+    state.region[t.dataset.region] = t.value;
+    rerender();
+  }
+});
+document.addEventListener("input", (e) => {
+  const t = e.target;
+  if (t.id === "count") { state.count = Math.max(1, parseInt(t.value || "1", 10) || 1); rerender(); }
+  else if (t.id === "hours") { state.hours = Math.min(744, Math.max(1, parseInt(t.value || "730", 10) || 730)); rerender(); }
+  else if (t.id === "egress") {
+    const v = Math.max(0, parseFloat(t.value || "0") || 0);
+    state.gb = state.unit === "TB" ? v * 1024 : v;
+    rerender();
+  }
+});
+document.querySelectorAll(".unit-toggle button").forEach((b) => {
+  b.addEventListener("click", () => {
+    state.unit = b.dataset.unit;
+    document.querySelectorAll(".unit-toggle button").forEach((x) => {
+      x.classList.toggle("is-active", x === b);
+      x.setAttribute("aria-checked", x === b ? "true" : "false");
+    });
+    const v = parseFloat($("#egress").value || "0") || 0;
+    state.gb = state.unit === "TB" ? v * 1024 : v;
+    rerender();
+  });
+});
+document.querySelector("[data-share]").addEventListener("click", function () {
+  if (window.IA && IA.copyText) IA.copyText(location.href, this);
+});
+
+// ─── Boot ───
+(async () => {
+  const note = $("#status-note");
+  const results = await Promise.allSettled(ORDER.map(async (cid) => {
+    const r = await fetch("/" + CLOUDS[cid].slug + "/data.json", { cache: "no-cache" });
+    if (!r.ok) throw new Error(String(r.status));
+    return { cid, flat: flatten(cid, await r.json()) };
+  }));
+  let live = 0, newest = "";
+  results.forEach((r) => {
+    if (r.status === "fulfilled" && r.value.flat) {
+      state.data[r.value.cid] = r.value.flat;
+      live++;
+      const g = r.value.flat.generated || "";
+      if (g > newest) newest = g;
+    }
+  });
+  if (live < 2) {
+    note.textContent = "Could not load the live catalogues — check the network and reload.";
+    note.classList.add("is-err");
+    return;
+  }
+  note.textContent = `Live · ${live}/5 catalogues · data ${newest.slice(0, 10) || "—"} · prices are on-demand list prices`;
+
+  state.srcName = "m5.xlarge";
+  applyHash();
+  if (!instOf(state.srcCloud, state.srcName)) {
+    const list = (state.data[state.srcCloud]?.list || []).filter((i) => i.v != null);
+    state.srcName = list.find((i) => i.cat === "general" && i.v === 4)?.n || list[0]?.n || "";
+  }
+  buildSourceSelects();
+  $("#count").value = state.count;
+  $("#hours").value = state.hours;
+  $("#egress").value = state.unit === "TB" ? state.gb / 1024 : state.gb;
+  pickEquivalents();
+  render();
+
+  window.addEventListener("hashchange", () => {
+    const before = state.srcCloud + "/" + state.srcName;
+    applyHash();
+    if (state.srcCloud + "/" + state.srcName !== before) {
+      buildSourceSelects();
+      pickEquivalents();
+      render();
+    }
+  });
+})();
+</script>
+
+<script src="/nav.js?v=3" defer></script>
+</body>
+</html>
