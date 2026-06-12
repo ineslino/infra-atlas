@@ -140,3 +140,11 @@ jobs:
       # re-verified (its <time> bumped) but the landing chip wasn't updated.
       - name: Check landing-page freshness chips match instruments
         run: python3 scripts/check_freshness_chips.py
+
+      # nav.js is the canonical instrument/tool registry; README.md and
+      # llms.txt are hand-maintained mirrors and they rot (the README sat at
+      # "Nineteen instruments" while the site shipped 25; llms.txt missed two
+      # launches). This fails when either mirror misses a registered path or
+      # the README's instrument count drifts.
+      - name: Check README and llms.txt mirror the nav.js registry
+        run: python3 scripts/check_registry_sync.py

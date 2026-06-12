@@ -22,8 +22,8 @@ key.
 
 ## The instruments
 
-Nineteen instruments in three departments — plus a Decisions department of
-side-by-side "X vs Y" guides and a public data API.
+25 instruments in three departments — plus a Decisions department of
+side-by-side "X vs Y" guides, a set of calculators, and a public data API.
 
 ### Cloud compute
 
@@ -53,18 +53,25 @@ side-by-side "X vs Y" guides and a public data API.
 | Equivalent-SKU Finder | `equivalent-sku/` | Instance/SKU equivalents across clouds — dated snapshot |
 | Kubernetes Atlas | `kubernetes/` | Managed Kubernetes (EKS · AKS · GKE · OKE) compared — dated snapshot |
 | Compliance Footprint | `compliance/` | Certifications by cloud and region — dated snapshot |
+| European Sovereignty | `sovereignty/` | Sovereign-cloud offerings, jurisdiction, EUCS/DPF — dated snapshot |
 | Confidential Computing | `confidential-computing/` | Confidential-compute offerings compared — dated snapshot |
 | IAM Matrix | `iam-matrix/` | Identity and access models compared — dated snapshot |
 | Generative AI Atlas | `ai-atlas/` | Cloud AI platforms and model families compared — dated snapshot |
 | Networking Matrix | `networking-matrix/` | Networking primitives across AWS · Azure · GCP · OCI — dated snapshot |
 | Egress Cost Map | `egress/` | Data-transfer list prices across AWS · Azure · GCP — curated |
+| Observability Matrix | `observability/` | Cloud observability services + OpenTelemetry — dated snapshot |
+| Observability Stacks | `observability-stacks/` | Self-hosted observability (Prometheus, Grafana, ELK…) — dated snapshot |
+| IDP Matrix | `idp-matrix/` | Internal Developer Portals (Backstage, Port, Cortex…) — dated snapshot |
+| Data Layer Equivalence | `data-layer/` | Managed database/storage equivalents across clouds — dated snapshot |
+| Service Quotas | `service-quotas/` | Default quotas that bite during scaling, adjustable-vs-hard — dated snapshot |
 
 ### Decisions
 
 A separate department of side-by-side "X vs Y" verdicts — Fargate vs EC2,
-Aurora vs RDS, NAT gateway vs instance, and more. A hub at `decisions/` plus
-eight decision pages, generated from one source list by
-`scripts/build_decisions.py`.
+Aurora vs RDS, NAT gateway vs instance, and more — each with an interactive
+"decide" wizard scored against its own sourced table. A hub at `decisions/`
+plus ten decision pages: nine generated from one source list by
+`scripts/build_decisions.py`, one hand-authored.
 
 ### The data API
 

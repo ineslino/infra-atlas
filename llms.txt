@@ -28,6 +28,10 @@ Data is CC BY 4.0; the data endpoints below are CORS-enabled JSON, no key needed
 - [Equivalent-SKU Finder](https://infraatlas.dev/equivalent-sku/): pick an instance on one cloud, get the closest match on every other, with a transparent score, list price and region count
 - [Kubernetes Atlas](https://infraatlas.dev/kubernetes/): EKS vs AKS vs GKE vs OKE vs OVH managed Kubernetes
 - [APIM Feature Matrix](https://infraatlas.dev/apim-matrix/): AWS API Gateway, Apigee, MuleSoft, Kong, Gravitee, IBM compared
+- [AWS API Gateway Atlas](https://infraatlas.dev/aws-api-gateway/): REST vs HTTP vs WebSocket, authorizers, stages, limits — the deep-dive
+- [Apigee Atlas](https://infraatlas.dev/apigee/): Google Apigee X/Hybrid/Edge — policies, proxies, KVMs
+- [MuleSoft Atlas](https://infraatlas.dev/mulesoft/): Anypoint, CloudHub, RTF, Flex Gateway, DataWeave
+- [Self-Hosted APIM](https://infraatlas.dev/self-hosted-apim/): Kong vs Gravitee vs IBM API Connect
 - [Compliance Footprint](https://infraatlas.dev/compliance/): certifications (FedRAMP, ISO, SOC, HIPAA, PCI, GDPR…) per cloud
 - [European Sovereignty](https://infraatlas.dev/sovereignty/): sovereign-cloud offerings, jurisdiction and EUCS/DPF status
 - [Confidential Computing](https://infraatlas.dev/confidential-computing/): SGX/SEV/SNP/TDX/Nitro TEE per cloud
@@ -39,6 +43,7 @@ Data is CC BY 4.0; the data endpoints below are CORS-enabled JSON, no key needed
 - [Observability Stacks](https://infraatlas.dev/observability-stacks/): Prometheus/Grafana/Loki/Tempo/ELK/SigNoz self-hosted options
 - [IDP Matrix](https://infraatlas.dev/idp-matrix/): Backstage, Roadie, Port, Cortex, OpsLevel, Compass compared neutrally
 - [Data Layer Equivalence](https://infraatlas.dev/data-layer/): managed database/storage equivalents across clouds
+- [Service Quotas](https://infraatlas.dev/service-quotas/): the default quotas that bite during scaling — vCPUs, concurrency, VPCs, IPs, buckets, roles, clusters — adjustable-vs-hard marked, with the raise path per cloud
 
 ## Decision guides
 
@@ -46,6 +51,7 @@ Data is CC BY 4.0; the data endpoints below are CORS-enabled JSON, no key needed
 
 ## Calculators
 
+- [Cross-Cloud TCO Comparator](https://infraatlas.dev/tools/tco/): the monthly bill for a workload on every cloud — equivalent SKUs, compute hours plus egress
 - [Egress Cost Calculator](https://infraatlas.dev/tools/egress-cost/): estimate a transfer bill across AWS/Azure/GCP
 - [Subnet Calculator](https://infraatlas.dev/tools/subnet/): CIDR planning for VPC/VNet/VCN
 - [APIM Limits Picker](https://infraatlas.dev/tools/apim-limits/): rate/payload/timeout limits per API platform
