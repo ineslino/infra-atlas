@@ -1,8 +1,9 @@
 # infraatlas-mcp
 
-MCP server for [Infra Atlas](https://infraatlas.dev) — query live multi-cloud
-compute catalogues, cross-cloud SKU equivalence, regions and egress cost math
-from Claude, Cursor, or any MCP client.
+MCP server **and CLI** for [Infra Atlas](https://infraatlas.dev) — query live
+multi-cloud compute catalogues, cross-cloud SKU equivalence, regions and
+egress cost math from Claude, Cursor, any MCP client, or straight from the
+terminal.
 
 LLMs answer infrastructure questions with stale training data. Infra Atlas has
 structured, daily-refreshed JSON for AWS, Azure, GCP, OCI and OVHcloud — this
@@ -80,6 +81,28 @@ The scoring constants mirror `equivalent-sku/index.html` (vCPU 50 / memory 38 /
 category 12, ×0.55 cross-architecture) and the egress walk mirrors
 `tools/egress-cost/`. If those change, change this server with them — the
 offline tests pin the known-good numbers.
+
+## The CLI
+
+The same package ships an `infraatlas` terminal client over the same logic —
+the public data API without the browser, with a ~1h on-disk cache
+(`~/.cache/infraatlas`, `--fresh` bypasses) so repeat queries answer
+instantly. Every command takes `--json` for piping into `jq`.
+
+```sh
+uvx --from "git+https://github.com/ineslino/infra-atlas#subdirectory=mcp" infraatlas --help
+
+infraatlas ec2 --region eu-west-1 --arch arm64 --min-memory 16
+infraatlas equivalent m5.xlarge
+infraatlas egress aws azure --gb 500
+infraatlas regions gcp --area Europe
+infraatlas changes --days 7 --instrument aws
+```
+
+`ec2`, `azure`, `gcp`, `oci` and `ovh` are shorthands for `compute <cloud>`;
+`changes --instrument` reads the per-instrument feeds
+(`/ec2/feed.json`, …). Same price note as the tools: hourly on-demand list
+prices, never spot/reserved/invoiced.
 
 ## Data & license
 
