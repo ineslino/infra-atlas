@@ -126,6 +126,14 @@ jobs:
       - name: Check European Sovereignty freshness
         run: python3 scripts/check_sovereignty_freshness.py
 
+      # The Egress Cost Calculator and the TCO Comparator carry inline
+      # mirrors of the egress tier ladders (offline resilience). Mirrors rot
+      # (lessons.md L5) — this re-derives every ladder/flat from the
+      # canonical egress/data.json and fails on any drift, and pins the
+      # calculators' visible "Verified" dates to the Egress Cost Map's stamp.
+      - name: Check calculator mirrors match canonical data
+        run: python3 scripts/check_calculator_rates.py
+
       # Each landing card carries a freshness chip ("Refreshed daily" /
       # "Verified <date>"). The chip is hand-typed; the truth lives in each
       # instrument page's <time datetime> stamp. This fails when a snapshot is
