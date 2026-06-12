@@ -14,6 +14,7 @@ Data is CC BY 4.0; the data endpoints below are CORS-enabled JSON, no key needed
 - [Cloud regions](https://infraatlas.dev/regions/data.json): every GA region for the 5 clouds, with city/area/partition (curated)
 - [Egress pricing](https://infraatlas.dev/egress/data.json): data-transfer price tiers for AWS/Azure/GCP (curated)
 - [Change feed](https://infraatlas.dev/feed.json): regions/families/instance types added or removed, per refresh
+- Per-instrument change feeds: the same shape filtered to one cloud — /ec2/feed.json, /regions/feed.json, /azure-vm/feed.json, /gcp-compute/feed.json, /oci-compute/feed.json, /ovh-instances/feed.json
 - [API documentation](https://infraatlas.dev/api/): how the endpoints fit together
 
 ## Instruments (interactive reference pages)

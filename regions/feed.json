@@ -1,0 +1,78 @@
+{
+  "generated": "2026-06-10T10:15:50Z",
+  "instrument": "regions",
+  "entries": [
+    {
+      "ts": "2026-06-02",
+      "instrument": "regions",
+      "kind": "region-added",
+      "text": "new region BHS"
+    },
+    {
+      "ts": "2026-06-02",
+      "instrument": "regions",
+      "kind": "region-added",
+      "text": "new region ERI"
+    },
+    {
+      "ts": "2026-06-02",
+      "instrument": "regions",
+      "kind": "region-added",
+      "text": "new region LIM"
+    },
+    {
+      "ts": "2026-06-02",
+      "instrument": "regions",
+      "kind": "region-added",
+      "text": "new region TOR"
+    },
+    {
+      "ts": "2026-06-02",
+      "instrument": "regions",
+      "kind": "region-removed",
+      "text": "region BHS5 withdrawn"
+    },
+    {
+      "ts": "2026-06-02",
+      "instrument": "regions",
+      "kind": "region-removed",
+      "text": "region DE withdrawn"
+    },
+    {
+      "ts": "2026-06-02",
+      "instrument": "regions",
+      "kind": "region-removed",
+      "text": "region MAD withdrawn"
+    },
+    {
+      "ts": "2026-06-02",
+      "instrument": "regions",
+      "kind": "region-removed",
+      "text": "region UK1 withdrawn"
+    },
+    {
+      "ts": "2026-05-16",
+      "instrument": "regions",
+      "kind": "region-added",
+      "text": "54 new regions (ap-batam-1, ap-east-2, ap-kulai-2…)"
+    },
+    {
+      "ts": "2026-05-16",
+      "instrument": "regions",
+      "kind": "region-removed",
+      "text": "region asia-southeast4 withdrawn"
+    },
+    {
+      "ts": "2026-05-16",
+      "instrument": "regions",
+      "kind": "region-removed",
+      "text": "region taiwannorth withdrawn"
+    },
+    {
+      "ts": "2026-05-16",
+      "instrument": "regions",
+      "kind": "region-removed",
+      "text": "region TOR withdrawn"
+    }
+  ]
+}

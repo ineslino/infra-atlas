@@ -113,4 +113,28 @@ with tempfile.TemporaryDirectory() as td:
           and feed["entries"][0]["instrument"] == "ec2"
           and feed["entries"][0]["ts"] == "2026-05-16")
 
+# 12 · per-instrument feed — written beside the new data.json, filtered, shaped
+with tempfile.TemporaryDirectory() as td:
+    inst_dir = os.path.join(td, "ec2")
+    os.makedirs(inst_dir)
+    oldp, newp = os.path.join(td, "old.json"), os.path.join(inst_dir, "data.json")
+    feedp = os.path.join(td, "feed.json")
+    # the aggregate already carries another instrument's entry — it must NOT
+    # leak into ec2's per-instrument feed
+    json.dump({"entries": [{"ts": "2026-05-01", "instrument": "regions",
+                            "kind": "region-added", "text": "x"}]}, open(feedp, "w"))
+    json.dump(base, open(oldp, "w"))
+    json.dump(d5, open(newp, "w"))
+    r = subprocess.run([sys.executable, os.path.join(HERE, "diff_feed.py"),
+                        "ec2", oldp, newp, feedp])
+    instp = os.path.join(inst_dir, "feed.json")
+    check("per-instrument feed written", r.returncode == 0 and os.path.exists(instp))
+    inst_feed = json.load(open(instp))
+    check("per-instrument feed filtered",
+          inst_feed["instrument"] == "ec2"
+          and len(inst_feed["entries"]) == 1
+          and all(e["instrument"] == "ec2" for e in inst_feed["entries"]))
+    agg = json.load(open(feedp))
+    check("aggregate keeps both instruments", len(agg["entries"]) == 2)
+
 print(f"\n{passed} checks passed — OK")
