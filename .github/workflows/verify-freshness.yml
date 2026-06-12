@@ -41,6 +41,7 @@ jobs:
             "ai-atlas:45"
             "egress:180"
             "idp-matrix:180"
+            "service-quotas:120"
             "decisions:365"
           )
           now=$(date -u +%s)
