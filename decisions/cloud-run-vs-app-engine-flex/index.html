@@ -104,6 +104,58 @@
     <div class="sec-label">The verdict</div>
     <p><strong>Cloud Run</strong> is Google&#x27;s modern default — its own documentation recommends it over App Engine for new users, citing advanced capabilities such as GPUs at lower prices. It scales to zero and bills per request. <strong>App Engine Flexible</strong> is not deprecated and remains supported, but it is a legacy option: it still fits when you need VM-level control (Compute Engine VMs with SSH), workloads that must sit in the Compute Engine network, or steady traffic where an always-on instance is acceptable. The deciding factor is scale-to-zero and billing — Cloud Run charges nothing when idle; Flexible always keeps a billable VM running.</p>
   </section>
+  <section class="wizard" aria-label="Interactive decision helper">
+    <div class="sec-label">Decide interactively</div>
+    <p class="wiz__intro">Answer the questions — the helper scores both the options against the sourced
+    table below and shows its reasoning. A heuristic, not an oracle: the verdict above stays the authority.</p>
+    <form id="wiz-form">
+<fieldset class="wiz__q"><legend>Does scale-to-zero matter?</legend><div class="wiz__opts"><label class="wiz__opt"><input type="radio" name="q0" value="0"><span>Yes — idle should cost nothing</span></label><label class="wiz__opt"><input type="radio" name="q0" value="1"><span>Always-on is fine</span></label></div></fieldset>
+<fieldset class="wiz__q"><legend>Do you need SSH into the VM or Compute-network placement?</legend><div class="wiz__opts"><label class="wiz__opt"><input type="radio" name="q1" value="0"><span>Yes</span></label><label class="wiz__opt"><input type="radio" name="q1" value="1"><span>No</span></label></div></fieldset>
+<fieldset class="wiz__q"><legend>New project, or an existing Flexible app?</legend><div class="wiz__opts"><label class="wiz__opt"><input type="radio" name="q2" value="0"><span>New project</span></label><label class="wiz__opt"><input type="radio" name="q2" value="1"><span>Existing Flexible app</span></label></div></fieldset>
+<fieldset class="wiz__q"><legend>GPUs?</legend><div class="wiz__opts"><label class="wiz__opt"><input type="radio" name="q3" value="0"><span>Yes</span></label><label class="wiz__opt"><input type="radio" name="q3" value="1"><span>No</span></label></div></fieldset>
+    </form>
+    <div class="wiz__result" id="wiz-result" aria-live="polite" hidden></div>
+    <button type="button" class="wiz__reset" id="wiz-reset" hidden>Reset</button>
+  </section>
+  <script>
+  (function () {
+    const WIZ = {"cols": ["Cloud Run", "App Engine Flexible"], "qs": [{"a": [{"pts": {"0": 3}, "why": "Cloud Run scales to zero and bills per request; Flexible always keeps a VM."}, {"pts": {"1": 1}, "why": "Steady traffic blunts Cloud Run's idle advantage."}]}, {"a": [{"pts": {"1": 3}, "why": "Only Flexible exposes the underlying Compute Engine VM."}, {"pts": {"0": 1}, "why": "No VM-level needs keeps the modern default in play."}]}, {"a": [{"pts": {"0": 2}, "why": "Google's own docs recommend Cloud Run for new users."}, {"pts": {"1": 2}, "why": "Migration cost can outweigh modernising right now."}]}, {"a": [{"pts": {"0": 3}, "why": "Cloud Run offers NVIDIA GPUs; Flexible does not."}, {"pts": {}, "why": "GPU needs do not separate the two here."}]}]};
+    const form = document.getElementById("wiz-form");
+    const out = document.getElementById("wiz-result");
+    const reset = document.getElementById("wiz-reset");
+    const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+    function score() {
+      const picked = WIZ.qs.map((q, qi) => {
+        const v = form.querySelector(`input[name="q${qi}"]:checked`);
+        return v ? q.a[+v.value] : null;
+      });
+      if (picked.some(p => p === null)) { out.hidden = true; reset.hidden = true; return; }
+      const pts = WIZ.cols.map(() => 0);
+      picked.forEach(p => Object.entries(p.pts).forEach(([i, w]) => { pts[+i] += w; }));
+      const max = Math.max(...pts);
+      const winners = WIZ.cols.filter((c, i) => pts[i] === max);
+      const head = winners.length > 1
+        ? `<div class="wiz__call">Even split between <strong>${winners.map(esc).join("</strong> and <strong>")}</strong> — this one genuinely hinges on the verdict above.</div>`
+        : `<div class="wiz__call">Leaning <strong>${esc(winners[0])}</strong> — now read its "pick when" list below to confirm.</div>`;
+      const total = pts.reduce((a, b) => a + b, 0) || 1;
+      const bars = WIZ.cols.map((c, i) =>
+        `<div class="wiz__bar"><span class="wiz__bar-name">${esc(c)}</span>` +
+        `<span class="wiz__bar-track"><span class="wiz__bar-fill${pts[i] === max ? " is-top" : ""}" style="width:${Math.max(4, Math.round(pts[i] / total * 100))}%"></span></span>` +
+        `<span class="wiz__bar-n">${pts[i]}</span></div>`).join("");
+      const trail = picked.map(p => `<li>${esc(p.why)}</li>`).join("");
+      out.innerHTML = head + bars +
+        `<div class="wiz__trail-label">Why</div><ul class="wiz__trail">${trail}</ul>`;
+      out.hidden = false;
+      reset.hidden = false;
+    }
+    form.addEventListener("change", score);
+    reset.addEventListener("click", () => {
+      form.reset();
+      out.hidden = true;
+      reset.hidden = true;
+    });
+  })();
+  </script>
   <section>
     <div class="sec-label">Head to head</div>
     <div class="compare-wrap"><table class="compare">

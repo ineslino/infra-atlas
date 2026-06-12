@@ -104,6 +104,58 @@
     <div class="sec-label">The verdict</div>
     <p><strong>HTTP API</strong> is the right default for new APIs — roughly a third of the price per million requests, and it covers the common cases: Lambda and HTTP proxy integrations, JWT / Lambda / IAM authorization, CORS, custom domains. Choose <strong>REST API</strong> when you specifically need API keys with usage plans, AWS WAF, a private (VPC-only) endpoint, request validation, response caching, an edge-optimized endpoint, or body transformation. The deciding factor: if you need API keys plus usage plans, WAF, or a private endpoint, you must use REST API — HTTP API does not offer them.</p>
   </section>
+  <section class="wizard" aria-label="Interactive decision helper">
+    <div class="sec-label">Decide interactively</div>
+    <p class="wiz__intro">Answer the questions — the helper scores both the options against the sourced
+    table below and shows its reasoning. A heuristic, not an oracle: the verdict above stays the authority.</p>
+    <form id="wiz-form">
+<fieldset class="wiz__q"><legend>Do you need API keys with usage plans?</legend><div class="wiz__opts"><label class="wiz__opt"><input type="radio" name="q0" value="0"><span>Yes</span></label><label class="wiz__opt"><input type="radio" name="q0" value="1"><span>No</span></label></div></fieldset>
+<fieldset class="wiz__q"><legend>AWS WAF, a private (VPC-only) endpoint, or request validation?</legend><div class="wiz__opts"><label class="wiz__opt"><input type="radio" name="q1" value="0"><span>Yes — at least one</span></label><label class="wiz__opt"><input type="radio" name="q1" value="1"><span>No</span></label></div></fieldset>
+<fieldset class="wiz__q"><legend>How will callers authenticate?</legend><div class="wiz__opts"><label class="wiz__opt"><input type="radio" name="q2" value="0"><span>JWTs from an OIDC/OAuth issuer</span></label><label class="wiz__opt"><input type="radio" name="q2" value="1"><span>IAM or Lambda authorizers</span></label></div></fieldset>
+<fieldset class="wiz__q"><legend>How price-sensitive is this API?</legend><div class="wiz__opts"><label class="wiz__opt"><input type="radio" name="q3" value="0"><span>Cost matters — high volume</span></label><label class="wiz__opt"><input type="radio" name="q3" value="1"><span>Features over price</span></label></div></fieldset>
+    </form>
+    <div class="wiz__result" id="wiz-result" aria-live="polite" hidden></div>
+    <button type="button" class="wiz__reset" id="wiz-reset" hidden>Reset</button>
+  </section>
+  <script>
+  (function () {
+    const WIZ = {"cols": ["REST API", "HTTP API"], "qs": [{"a": [{"pts": {"0": 3}, "why": "Per-client throttling and quotas exist only on REST APIs."}, {"pts": {"1": 1}, "why": "No usage plans removes the strongest REST-only pull."}]}, {"a": [{"pts": {"0": 3}, "why": "WAF, private endpoints and request validation are REST-only features."}, {"pts": {"1": 1}, "why": "None of the REST-only features applies."}]}, {"a": [{"pts": {"1": 2}, "why": "HTTP APIs have a native JWT authorizer; REST needs a Lambda authorizer for JWTs."}, {"pts": {"0": 1}, "why": "Both types cover IAM and Lambda auth."}]}, {"a": [{"pts": {"1": 2}, "why": "About $1.00 vs $3.50 per million requests."}, {"pts": {"0": 1}, "why": "The premium buys caching, validation and edge endpoints."}]}]};
+    const form = document.getElementById("wiz-form");
+    const out = document.getElementById("wiz-result");
+    const reset = document.getElementById("wiz-reset");
+    const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+    function score() {
+      const picked = WIZ.qs.map((q, qi) => {
+        const v = form.querySelector(`input[name="q${qi}"]:checked`);
+        return v ? q.a[+v.value] : null;
+      });
+      if (picked.some(p => p === null)) { out.hidden = true; reset.hidden = true; return; }
+      const pts = WIZ.cols.map(() => 0);
+      picked.forEach(p => Object.entries(p.pts).forEach(([i, w]) => { pts[+i] += w; }));
+      const max = Math.max(...pts);
+      const winners = WIZ.cols.filter((c, i) => pts[i] === max);
+      const head = winners.length > 1
+        ? `<div class="wiz__call">Even split between <strong>${winners.map(esc).join("</strong> and <strong>")}</strong> — this one genuinely hinges on the verdict above.</div>`
+        : `<div class="wiz__call">Leaning <strong>${esc(winners[0])}</strong> — now read its "pick when" list below to confirm.</div>`;
+      const total = pts.reduce((a, b) => a + b, 0) || 1;
+      const bars = WIZ.cols.map((c, i) =>
+        `<div class="wiz__bar"><span class="wiz__bar-name">${esc(c)}</span>` +
+        `<span class="wiz__bar-track"><span class="wiz__bar-fill${pts[i] === max ? " is-top" : ""}" style="width:${Math.max(4, Math.round(pts[i] / total * 100))}%"></span></span>` +
+        `<span class="wiz__bar-n">${pts[i]}</span></div>`).join("");
+      const trail = picked.map(p => `<li>${esc(p.why)}</li>`).join("");
+      out.innerHTML = head + bars +
+        `<div class="wiz__trail-label">Why</div><ul class="wiz__trail">${trail}</ul>`;
+      out.hidden = false;
+      reset.hidden = false;
+    }
+    form.addEventListener("change", score);
+    reset.addEventListener("click", () => {
+      form.reset();
+      out.hidden = true;
+      reset.hidden = true;
+    });
+  })();
+  </script>
   <section>
     <div class="sec-label">Head to head</div>
     <div class="compare-wrap"><table class="compare">

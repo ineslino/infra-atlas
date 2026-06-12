@@ -182,3 +182,53 @@ table.compare td.val { color: var(--paper-2); }
   .page { padding: 32px 20px 72px; }
   .pickwhen { grid-template-columns: 1fr; }
 }
+
+/* ─── Wizard — the interactive decision helper (generated pages) ───
+   Subordinate to the verdict by design: it sits between the verdict and
+   the sourced table, scores the page's own content, and says so. */
+.wizard {
+  margin: 36px 0; padding: 26px 28px;
+  background: linear-gradient(180deg, var(--surface) 0%, var(--ink-2) 100%);
+  border: 1px solid var(--line-2); border-radius: 6px;
+}
+.wiz__intro { font-size: 13.5px; color: var(--paper-2); line-height: 1.6; margin-bottom: 20px; max-width: 720px; }
+.wiz__q { border: 0; margin-bottom: 18px; }
+.wiz__q legend {
+  font-family: var(--mono); font-size: 11px; letter-spacing: 0.08em;
+  color: var(--paper); margin-bottom: 9px;
+}
+.wiz__opts { display: flex; flex-wrap: wrap; gap: 7px; }
+.wiz__opt { position: relative; }
+.wiz__opt input { position: absolute; opacity: 0; width: 100%; height: 100%; cursor: pointer; }
+.wiz__opt span {
+  display: inline-block; font-family: var(--mono); font-size: 11.5px; letter-spacing: 0.02em;
+  color: var(--paper-2); border: 1px solid var(--line-2); border-radius: 99px;
+  padding: 8px 14px; cursor: pointer; transition: all 0.15s ease;
+}
+.wiz__opt:hover span { border-color: var(--paper-3); color: var(--paper); }
+.wiz__opt input:checked + span { background: var(--paper); border-color: var(--paper); color: var(--ink); }
+.wiz__opt input:focus-visible + span { outline: 2px solid var(--accent); outline-offset: 2px; }
+.wiz__result { margin-top: 22px; padding-top: 20px; border-top: 1px solid var(--line); }
+.wiz__call { font-size: 15px; color: var(--paper-2); margin-bottom: 16px; }
+.wiz__call strong { color: var(--accent-2); font-weight: 600; }
+.wiz__bar { display: grid; grid-template-columns: minmax(120px, 220px) 1fr auto; gap: 12px; align-items: center; margin-bottom: 7px; }
+.wiz__bar-name { font-family: var(--mono); font-size: 11px; color: var(--paper-2); }
+.wiz__bar-track { height: 6px; background: var(--ink); border: 1px solid var(--line); border-radius: 99px; overflow: hidden; }
+.wiz__bar-fill { display: block; height: 100%; background: var(--paper-3); border-radius: 99px; transition: width 0.25s ease; }
+.wiz__bar-fill.is-top { background: var(--accent); }
+.wiz__bar-n { font-family: var(--mono); font-size: 11px; color: var(--paper-3); min-width: 2ch; text-align: right; }
+.wiz__trail-label {
+  font-family: var(--mono); font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase;
+  color: var(--paper-3); margin: 16px 0 8px;
+}
+.wiz__trail { list-style: none; }
+.wiz__trail li {
+  font-size: 13px; color: var(--paper-2); line-height: 1.55; padding-left: 18px; position: relative; margin-bottom: 6px;
+}
+.wiz__trail li::before { content: '·'; position: absolute; left: 4px; color: var(--accent); }
+.wiz__reset {
+  margin-top: 14px; background: transparent; border: 1px solid var(--line-2); color: var(--paper-3);
+  font-family: var(--mono); font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase;
+  padding: 8px 14px; border-radius: 3px; cursor: pointer; transition: all 0.15s ease;
+}
+.wiz__reset:hover { border-color: var(--paper-3); color: var(--paper); }

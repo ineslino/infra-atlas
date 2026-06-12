@@ -104,6 +104,58 @@
     <div class="sec-label">The verdict</div>
     <p>Pick <strong>Fargate</strong> for zero infrastructure management, spiky workloads, or simply getting started — you pay per vCPU-second the task requests and AWS owns the host. Pick the <strong>EC2 launch type</strong> for large, steady, high-utilisation workloads that must be price-optimised, or anything needing GPUs, privileged containers, daemon workloads, or custom AMIs. The deciding factor is steady-state utilisation and host control: high predictable load plus any host-level need points to EC2; everything else favours Fargate.</p>
   </section>
+  <section class="wizard" aria-label="Interactive decision helper">
+    <div class="sec-label">Decide interactively</div>
+    <p class="wiz__intro">Answer the questions — the helper scores both the options against the sourced
+    table below and shows its reasoning. A heuristic, not an oracle: the verdict above stays the authority.</p>
+    <form id="wiz-form">
+<fieldset class="wiz__q"><legend>What does steady-state utilisation look like?</legend><div class="wiz__opts"><label class="wiz__opt"><input type="radio" name="q0" value="0"><span>High and predictable</span></label><label class="wiz__opt"><input type="radio" name="q0" value="1"><span>Variable or spiky</span></label></div></fieldset>
+<fieldset class="wiz__q"><legend>GPUs, privileged containers, DAEMON tasks or custom AMIs?</legend><div class="wiz__opts"><label class="wiz__opt"><input type="radio" name="q1" value="0"><span>Yes — at least one of those</span></label><label class="wiz__opt"><input type="radio" name="q1" value="1"><span>No</span></label></div></fieldset>
+<fieldset class="wiz__q"><legend>Who should own the hosts?</legend><div class="wiz__opts"><label class="wiz__opt"><input type="radio" name="q2" value="0"><span>AWS — zero provisioning and patching</span></label><label class="wiz__opt"><input type="radio" name="q2" value="1"><span>Us — we tune instance types and packing</span></label></div></fieldset>
+<fieldset class="wiz__q"><legend>Does per-task isolation matter?</legend><div class="wiz__opts"><label class="wiz__opt"><input type="radio" name="q3" value="0"><span>Yes — strong boundaries per task</span></label><label class="wiz__opt"><input type="radio" name="q3" value="1"><span>Not especially</span></label></div></fieldset>
+    </form>
+    <div class="wiz__result" id="wiz-result" aria-live="polite" hidden></div>
+    <button type="button" class="wiz__reset" id="wiz-reset" hidden>Reset</button>
+  </section>
+  <script>
+  (function () {
+    const WIZ = {"cols": ["Fargate", "EC2 launch type"], "qs": [{"a": [{"pts": {"1": 3}, "why": "Packed, high-utilisation instances beat per-task pricing at steady load."}, {"pts": {"0": 3}, "why": "Per-second task billing beats paying for idle instances."}]}, {"a": [{"pts": {"1": 3}, "why": "Fargate supports none of those — they force the EC2 launch type."}, {"pts": {"0": 1}, "why": "Nothing host-shaped blocks Fargate."}]}, {"a": [{"pts": {"0": 2}, "why": "With Fargate, AWS owns the host entirely."}, {"pts": {"1": 2}, "why": "The EC2 launch type exists exactly for owned, tuned capacity."}]}, {"a": [{"pts": {"0": 2}, "why": "Each Fargate task runs in its own kernel/CPU/memory boundary."}, {"pts": {"1": 1}, "why": "Shared-kernel instances are acceptable here."}]}]};
+    const form = document.getElementById("wiz-form");
+    const out = document.getElementById("wiz-result");
+    const reset = document.getElementById("wiz-reset");
+    const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+    function score() {
+      const picked = WIZ.qs.map((q, qi) => {
+        const v = form.querySelector(`input[name="q${qi}"]:checked`);
+        return v ? q.a[+v.value] : null;
+      });
+      if (picked.some(p => p === null)) { out.hidden = true; reset.hidden = true; return; }
+      const pts = WIZ.cols.map(() => 0);
+      picked.forEach(p => Object.entries(p.pts).forEach(([i, w]) => { pts[+i] += w; }));
+      const max = Math.max(...pts);
+      const winners = WIZ.cols.filter((c, i) => pts[i] === max);
+      const head = winners.length > 1
+        ? `<div class="wiz__call">Even split between <strong>${winners.map(esc).join("</strong> and <strong>")}</strong> — this one genuinely hinges on the verdict above.</div>`
+        : `<div class="wiz__call">Leaning <strong>${esc(winners[0])}</strong> — now read its "pick when" list below to confirm.</div>`;
+      const total = pts.reduce((a, b) => a + b, 0) || 1;
+      const bars = WIZ.cols.map((c, i) =>
+        `<div class="wiz__bar"><span class="wiz__bar-name">${esc(c)}</span>` +
+        `<span class="wiz__bar-track"><span class="wiz__bar-fill${pts[i] === max ? " is-top" : ""}" style="width:${Math.max(4, Math.round(pts[i] / total * 100))}%"></span></span>` +
+        `<span class="wiz__bar-n">${pts[i]}</span></div>`).join("");
+      const trail = picked.map(p => `<li>${esc(p.why)}</li>`).join("");
+      out.innerHTML = head + bars +
+        `<div class="wiz__trail-label">Why</div><ul class="wiz__trail">${trail}</ul>`;
+      out.hidden = false;
+      reset.hidden = false;
+    }
+    form.addEventListener("change", score);
+    reset.addEventListener("click", () => {
+      form.reset();
+      out.hidden = true;
+      reset.hidden = true;
+    });
+  })();
+  </script>
   <section>
     <div class="sec-label">Head to head</div>
     <div class="compare-wrap"><table class="compare">
