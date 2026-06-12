@@ -942,6 +942,24 @@ a.masthead__eyebrow:hover .masthead__eyebrow-arrow { transform: translateX(-4px)
   transition: all 0.15s ease;
 }
 .rec__clear:hover { border-color: var(--paper-3); color: var(--paper); }
+.rec__actions { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 12px; }
+.rec__add {
+  background: transparent; border: 1px solid var(--line-2); color: var(--paper-3);
+  font-family: var(--mono); font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase;
+  padding: 9px 13px; border-radius: 3px; cursor: pointer; transition: all 0.15s ease;
+}
+.rec__add:hover { border-color: var(--paper-3); color: var(--paper); }
+.rec__rm {
+  background: none; border: 0; color: var(--paper-3); cursor: pointer;
+  font-size: 13px; line-height: 1; padding: 4px 6px; align-self: center;
+}
+.rec__rm:hover { color: var(--accent); }
+.rec__geochip {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-family: var(--mono); font-size: 11.5px; color: var(--paper);
+  border: 1px solid var(--line-2); border-radius: 3px; padding: 11px 14px;
+  background: var(--ink);
+}
 .rec__results { margin-top: 4px; }
 .rec__placeholder {
   font-family: var(--mono);
@@ -1150,13 +1168,12 @@ a.masthead__eyebrow:hover .masthead__eyebrow-arrow { transform: translateX(-4px)
       <div class="rec__title">Nearest region.</div>
       <div class="rec__hint">Tell it where your users are — it ranks the closest region on every cloud.</div>
     </div>
-    <div class="rec__controls">
-      <label class="rec__field">
-        <span>Your users are near</span>
-        <select class="rec__select" id="rec-metro">
-          <option value="">Select a city…</option>
-        </select>
-      </label>
+    <div class="rec__controls" id="rec-origins">
+      <!-- origin rows are rendered by renderOriginRows() -->
+    </div>
+    <div class="rec__actions">
+      <button class="rec__add" id="rec-add" type="button" hidden title="Rank by the worst-case user across locations">+ Add a location</button>
+      <button class="rec__add" id="rec-geo" type="button" title="Resolved in your browser only — nothing is sent anywhere">◎ Use my location</button>
       <button class="rec__clear" id="rec-clear" type="button" hidden>Clear</button>
     </div>
     <div class="rec__results" id="rec-results">
@@ -1724,7 +1741,7 @@ async function loadData() {
 // STATE + RENDER
 // ───────────────────────────────────────────────────────────────────
 
-const state = { providers: new Set(["aws","azure","gcp","oci","ovh"]), area: "all", query: "", origin: null };
+const state = { providers: new Set(["aws","azure","gcp","oci","ovh"]), area: "all", query: "", origins: [] };
 
 const $  = (s) => document.querySelector(s);
 const $$ = (s) => Array.from(document.querySelectorAll(s));
@@ -1747,7 +1764,7 @@ async function init() {
     if (el) el.textContent = `(${c})`;
   });
 
-  buildMetroSelect();
+  renderOriginRows();
   applyHash();
   renderMarkers();
   renderList();
@@ -1767,7 +1784,7 @@ function writeHash() {
   if (state.providers.size < 5) p.set("providers", PROV_ALL.filter(x => state.providers.has(x)).join(","));
   if (state.area !== "all")     p.set("area", state.area);
   if (state.query.trim())       p.set("q", state.query.trim());
-  if (state.origin)             p.set("o", state.origin.name);
+  if (state.origins.length)     p.set("o", state.origins.map(o => o.geo ? "@" + o.lat.toFixed(2) + "," + o.lng.toFixed(2) : o.name).join("|"));
   const h = p.toString();
   history.replaceState(null, "", h ? "#" + h : location.pathname + location.search);
 }
@@ -1781,7 +1798,13 @@ function applyHash() {
   const area = p.get("area"); if (area) state.area = area;
   state.query = p.get("q") || "";
   const o = p.get("o");
-  state.origin = o ? (METROS.find(m => m.name === o) || null) : null;
+  state.origins = !o ? [] : o.split("|").map(tok => {
+    if (tok.startsWith("@")) {
+      const m = tok.slice(1).split(",").map(Number);
+      return (isFinite(m[0]) && isFinite(m[1])) ? { name: "My location", lat: m[0], lng: m[1], geo: true } : null;
+    }
+    return METROS.find(x => x.name === tok) || null;
+  }).filter(Boolean).slice(0, 3);
   const allOn = state.providers.size === 5;
   $$('.chip[data-p]').forEach(b => {
     if (b.dataset.p === "all") b.classList.toggle("is-active", allOn);
@@ -1789,7 +1812,7 @@ function applyHash() {
   });
   $$('.chip[data-area]').forEach(b => b.classList.toggle("is-active", b.dataset.area === state.area));
   const sb = $("#search"); if (sb) sb.value = state.query;
-  const ms = $("#rec-metro"); if (ms) ms.value = state.origin ? state.origin.name : "";
+  renderOriginRows();
 }
 
 // One marker per city: a pie segmented by the providers present there.
@@ -1858,39 +1881,44 @@ function renderMarkers() {
     layer.appendChild(g);
   });
 
-  // origin pin — drawn last so it sits above the region markers
-  if (state.origin) {
-    const ox = lngToX(state.origin.lng), oy = latToY(state.origin.lat);
-    const g = document.createElementNS(SVGNS, "g");
-    g.classList.add("origin");
-    const ranked = recommend(state.origin);
+  // origin pins — drawn last so they sit above the region markers. With a
+  // single origin the dashed line to the closest region is kept; with the
+  // multi-location compromise view the lines would be 3×5 spaghetti, so
+  // only the pins are drawn.
+  if (state.origins.length) {
+    const ranked = recommend(state.origins);
     const visible = ranked.filter(e => state.providers.has(e.region.p));
-    const target = (visible[0] || ranked[0]);
-    if (target) {
-      const line = document.createElementNS(SVGNS, "line");
-      line.setAttribute("x1", ox.toFixed(1));
-      line.setAttribute("y1", oy.toFixed(1));
-      line.setAttribute("x2", lngToX(target.region.lng).toFixed(1));
-      line.setAttribute("y2", latToY(target.region.lat).toFixed(1));
-      line.classList.add("origin-line");
-      g.appendChild(line);
-    }
-    const pulse = document.createElementNS(SVGNS, "circle");
-    pulse.setAttribute("cx", ox.toFixed(1)); pulse.setAttribute("cy", oy.toFixed(1));
-    pulse.setAttribute("r", "6.6");
-    pulse.classList.add("origin-pulse");
-    g.appendChild(pulse);
-    const ring = document.createElementNS(SVGNS, "circle");
-    ring.setAttribute("cx", ox.toFixed(1)); ring.setAttribute("cy", oy.toFixed(1));
-    ring.setAttribute("r", "4.1");
-    ring.classList.add("origin-ring");
-    g.appendChild(ring);
-    const core = document.createElementNS(SVGNS, "circle");
-    core.setAttribute("cx", ox.toFixed(1)); core.setAttribute("cy", oy.toFixed(1));
-    core.setAttribute("r", "1.7");
-    core.classList.add("origin-core");
-    g.appendChild(core);
-    layer.appendChild(g);
+    const target = state.origins.length === 1 ? (visible[0] || ranked[0]) : null;
+    state.origins.forEach(origin => {
+      const ox = lngToX(origin.lng), oy = latToY(origin.lat);
+      const g = document.createElementNS(SVGNS, "g");
+      g.classList.add("origin");
+      if (target) {
+        const line = document.createElementNS(SVGNS, "line");
+        line.setAttribute("x1", ox.toFixed(1));
+        line.setAttribute("y1", oy.toFixed(1));
+        line.setAttribute("x2", lngToX(target.region.lng).toFixed(1));
+        line.setAttribute("y2", latToY(target.region.lat).toFixed(1));
+        line.classList.add("origin-line");
+        g.appendChild(line);
+      }
+      const pulse = document.createElementNS(SVGNS, "circle");
+      pulse.setAttribute("cx", ox.toFixed(1)); pulse.setAttribute("cy", oy.toFixed(1));
+      pulse.setAttribute("r", "6.6");
+      pulse.classList.add("origin-pulse");
+      g.appendChild(pulse);
+      const ring = document.createElementNS(SVGNS, "circle");
+      ring.setAttribute("cx", ox.toFixed(1)); ring.setAttribute("cy", oy.toFixed(1));
+      ring.setAttribute("r", "4.1");
+      ring.classList.add("origin-ring");
+      g.appendChild(ring);
+      const core = document.createElementNS(SVGNS, "circle");
+      core.setAttribute("cx", ox.toFixed(1)); core.setAttribute("cy", oy.toFixed(1));
+      core.setAttribute("r", "1.7");
+      core.classList.add("origin-core");
+      g.appendChild(core);
+      layer.appendChild(g);
+    });
   }
 }
 
@@ -2046,9 +2074,8 @@ function haversine(lat1, lng1, lat2, lng2) {
 function estRttMs(km) { return Math.max(2, Math.round(km / 100 * 1.5 + 2)); }
 function fmtKm(km) { return Math.round(km).toLocaleString("en-US"); }
 
-function buildMetroSelect() {
-  const sel = $("#rec-metro");
-  if (!sel) return;
+function fillMetroSelect(sel) {
+  sel.innerHTML = '<option value="">Select a city…</option>';
   ["Americas","Europe","Middle East","Africa","Asia Pacific"].forEach(area => {
     const inArea = METROS.filter(m => m.area === area);
     if (!inArea.length) return;
@@ -2064,12 +2091,66 @@ function buildMetroSelect() {
   });
 }
 
-// closest region for each provider, ranked by distance
-function recommend(origin) {
+// the recommender's origin rows — one select per metro origin, a chip for a
+// geolocated origin, ✕ on every row beyond the first; max 3 locations
+function renderOriginRows() {
+  const box = $("#rec-origins");
+  if (!box) return;
+  box.innerHTML = "";
+  const rows = state.origins.length ? state.origins : [null];
+  rows.forEach((origin, i) => {
+    if (origin && origin.geo) {
+      const chip = document.createElement("div");
+      chip.className = "rec__field";
+      chip.innerHTML = '<span>' + (i === 0 ? "Your users are near" : "And near") + '</span>'
+        + '<span class="rec__geochip">◎ My location'
+        + '<button type="button" class="rec__rm" data-rm-origin="' + i + '" aria-label="Remove this location">✕</button></span>';
+      box.appendChild(chip);
+      return;
+    }
+    const label = document.createElement("label");
+    label.className = "rec__field";
+    label.innerHTML = '<span>' + (i === 0 ? "Your users are near" : "And near") + '</span>';
+    const wrap = document.createElement("div");
+    wrap.style.display = "flex";
+    wrap.style.gap = "4px";
+    const sel = document.createElement("select");
+    sel.className = "rec__select";
+    sel.dataset.originIdx = String(i);
+    if (i === 0) sel.id = "rec-metro";
+    fillMetroSelect(sel);
+    sel.value = origin ? origin.name : "";
+    wrap.appendChild(sel);
+    if (i > 0) {
+      const rm = document.createElement("button");
+      rm.type = "button";
+      rm.className = "rec__rm";
+      rm.dataset.rmOrigin = String(i);
+      rm.setAttribute("aria-label", "Remove this location");
+      rm.textContent = "✕";
+      wrap.appendChild(rm);
+    }
+    label.appendChild(wrap);
+    box.appendChild(label);
+  });
+  const add = $("#rec-add");
+  if (add) add.hidden = !(state.origins.length >= 1 && state.origins.length < 3);
+  const clear = $("#rec-clear");
+  if (clear) clear.hidden = state.origins.length === 0;
+}
+
+// closest region for each provider. With one origin: plain distance. With
+// several: the compromise pick — minimise the WORST user's distance (max),
+// with the mean tracked for display.
+function recommend(origins) {
+  const list = Array.isArray(origins) ? origins : [origins];
+  if (!list.length) return [];
   const best = {};
   ALL_REGIONS.forEach(r => {
-    const d = haversine(origin.lat, origin.lng, r.lat, r.lng);
-    if (!best[r.p] || d < best[r.p].dist) best[r.p] = { region: r, dist: d };
+    const dists = list.map(o => haversine(o.lat, o.lng, r.lat, r.lng));
+    const worst = Math.max(...dists);
+    const avg = dists.reduce((a, b) => a + b, 0) / dists.length;
+    if (!best[r.p] || worst < best[r.p].dist) best[r.p] = { region: r, dist: worst, avg };
   });
   return PROV_ALL.map(p => best[p]).filter(Boolean).sort((a, b) => a.dist - b.dist);
 }
@@ -2078,21 +2159,28 @@ function renderRecommender() {
   const box = $("#rec-results");
   const clearBtn = $("#rec-clear");
   if (!box) return;
-  if (!state.origin) {
+  if (!state.origins.length) {
     box.innerHTML = '<div class="rec__placeholder">Pick a city above to see the nearest cloud regions.</div>';
     if (clearBtn) clearBtn.hidden = true;
     return;
   }
   if (clearBtn) clearBtn.hidden = false;
-  const ranked = recommend(state.origin);
+  const multi = state.origins.length > 1;
+  const ranked = recommend(state.origins);
   if (!ranked.length) {
     box.innerHTML = '<div class="rec__placeholder">No region data available.</div>';
     return;
   }
-  let html = `<div class="rec__resulthead">Nearest region to <em>${state.origin.name}</em></div>`;
+  const names = state.origins.map(o => o.name).join(" · ");
+  let html = `<div class="rec__resulthead">${multi ? "Best compromise region for" : "Nearest region to"} <em>${names}</em></div>`;
   ranked.forEach((entry, i) => {
     const r = entry.region;
-    const badge = i === 0 ? '<span class="rec-row__badge">Closest</span>' : "";
+    const badge = i === 0 ? `<span class="rec-row__badge">${multi ? "Best compromise" : "Closest"}</span>` : "";
+    const stats = multi
+      ? `<div class="rec-row__dist"><strong>${fmtKm(entry.dist)}</strong> km worst</div>
+         <div class="rec-row__lat">avg ${fmtKm(entry.avg)} km · ≈ ${estRttMs(entry.dist)} ms worst RTT</div>`
+      : `<div class="rec-row__dist"><strong>${fmtKm(entry.dist)}</strong> km</div>
+         <div class="rec-row__lat">≈ ${estRttMs(entry.dist)} ms RTT</div>`;
     html += `
       <div class="rec-row${i === 0 ? " is-top" : ""}">
         <span class="rec-row__rank">${String(i + 1).padStart(2, "0")}</span>
@@ -2101,13 +2189,12 @@ function renderRecommender() {
           <div class="rec-row__code">${r.code}${badge}</div>
           <div class="rec-row__loc">${r.name} · ${r.city.split(",")[0]}, ${r.country}</div>
         </div>
-        <div class="rec-row__stats">
-          <div class="rec-row__dist"><strong>${fmtKm(entry.dist)}</strong> km</div>
-          <div class="rec-row__lat">≈ ${estRttMs(entry.dist)} ms RTT</div>
-        </div>
+        <div class="rec-row__stats">${stats}</div>
       </div>`;
   });
-  html += '<div class="rec__note">Great-circle distance. Latency is estimated from distance — a theoretical floor; real RTT depends on routing and peering.</div>';
+  html += multi
+    ? '<div class="rec__note">Ranked by the worst-placed user: each provider\'s pick minimises the maximum great-circle distance across your locations. Latency is a theoretical floor; real RTT depends on routing and peering.</div>'
+    : '<div class="rec__note">Great-circle distance. Latency is estimated from distance — a theoretical floor; real RTT depends on routing and peering.</div>';
   box.innerHTML = html;
 }
 
@@ -2266,24 +2353,82 @@ function wireEvents() {
     applyDotFilter();
     renderList();
   });
-  // Recommender — metro picker
-  const metroSel = $("#rec-metro");
-  if (metroSel) {
-    metroSel.addEventListener("change", () => {
-      state.origin = METROS.find(m => m.name === metroSel.value) || null;
-      renderRecommender();
-      renderMarkers();
-      writeHash();
+  // Recommender — origin rows (delegated: rows re-render on every change)
+  function syncRec() {
+    renderOriginRows();
+    renderRecommender();
+    renderMarkers();
+    writeHash();
+  }
+  const recBox = $("#rec-origins");
+  if (recBox) {
+    recBox.addEventListener("change", (e) => {
+      const sel = e.target.closest("select[data-origin-idx]");
+      if (!sel) return;
+      const idx = +sel.dataset.originIdx;
+      const metro = METROS.find(m => m.name === sel.value) || null;
+      if (metro) state.origins[idx] = metro;
+      else state.origins.splice(idx, 1);
+      state.origins = state.origins.filter(Boolean).slice(0, 3);
+      syncRec();
+    });
+    recBox.addEventListener("click", (e) => {
+      const rm = e.target.closest("[data-rm-origin]");
+      if (!rm) return;
+      state.origins.splice(+rm.dataset.rmOrigin, 1);
+      syncRec();
+    });
+  }
+  const recAdd = $("#rec-add");
+  if (recAdd) {
+    recAdd.addEventListener("click", () => {
+      if (state.origins.length && state.origins.length < 3) {
+        // an empty slot: render one extra select row without an origin yet
+        renderOriginRows();
+        const box = $("#rec-origins");
+        const i = state.origins.length;
+        const label = document.createElement("label");
+        label.className = "rec__field";
+        label.innerHTML = '<span>And near</span>';
+        const sel = document.createElement("select");
+        sel.className = "rec__select";
+        sel.dataset.originIdx = String(i);
+        fillMetroSelect(sel);
+        label.appendChild(sel);
+        box.appendChild(label);
+        recAdd.hidden = true;
+        sel.focus();
+      }
     });
   }
   const recClear = $("#rec-clear");
   if (recClear) {
     recClear.addEventListener("click", () => {
-      state.origin = null;
-      if (metroSel) metroSel.value = "";
-      renderRecommender();
-      renderMarkers();
-      writeHash();
+      state.origins = [];
+      syncRec();
+    });
+  }
+  const recGeo = $("#rec-geo");
+  if (recGeo) {
+    recGeo.addEventListener("click", () => {
+      if (!navigator.geolocation) { recGeo.textContent = "Geolocation unavailable"; return; }
+      if (state.origins.length >= 3) return;
+      recGeo.textContent = "◎ Locating…";
+      navigator.geolocation.getCurrentPosition(
+        (pos) => {
+          recGeo.textContent = "◎ Use my location";
+          state.origins.push({
+            name: "My location",
+            lat: Math.round(pos.coords.latitude * 100) / 100,
+            lng: Math.round(pos.coords.longitude * 100) / 100,
+            geo: true,
+          });
+          state.origins = state.origins.slice(0, 3);
+          syncRec();
+        },
+        () => { recGeo.textContent = "◎ Location denied"; setTimeout(() => { recGeo.textContent = "◎ Use my location"; }, 1800); },
+        { timeout: 8000, maximumAge: 600000 }
+      );
     });
   }
   // Mobile map toggle
