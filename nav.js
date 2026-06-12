@@ -34,7 +34,8 @@
     ["/networking-matrix/",      "Networking Matrix",      "Cross-cloud", "networking primitives vpc vnet vcn subnet route table peering transit gateway virtual wan ncc drg firewall security group nsg network acl nat load balancer privatelink private link rosetta aws azure gcp oci"],
     ["/observability/",          "Observability Matrix",   "Cross-cloud", "observability monitoring metrics logs traces profiling cloudwatch azure monitor gcp cloud monitoring oci datadog grafana new relic honeycomb dynatrace opentelemetry otel otlp kubernetes"],
     ["/observability-stacks/",   "Observability Stacks",   "Cross-cloud", "observability open source self-hosted prometheus grafana mimir loki tempo pyroscope elk elastic stack elasticsearch kibana logstash opensearch jaeger victoriametrics signoz oss self host"],
-    ["/idp-matrix/",             "IDP Matrix",             "Cross-cloud", "internal developer portal idp platform engineering devex developer experience backstage spotify portal roadie port cortex opslevel atlassian compass software catalog scaffolder golden paths scorecards maturity techdocs plugins rbac"]
+    ["/idp-matrix/",             "IDP Matrix",             "Cross-cloud", "internal developer portal idp platform engineering devex developer experience backstage spotify portal roadie port cortex opslevel atlassian compass software catalog scaffolder golden paths scorecards maturity techdocs plugins rbac"],
+    ["/service-quotas/",         "Service Quotas",         "Cross-cloud", "service quotas limits default vcpu limit ec2 on-demand spot lambda concurrency concurrent executions function timeout vpc vnet vcn elastic ip public ip nat gateway s3 buckets storage iam roles service accounts eks aks gke oke clusters adjustable hard raise increase"]
   ];
   var TOOLS = [
     ["/tools/tco/",          "Cross-Cloud TCO Comparator", "Tool", "tco total cost ownership monthly bill compare workload compute hours egress equivalent sku price aws azure gcp oci ovh"],
@@ -85,6 +86,7 @@
     "/ovh-instances/":          ["/equivalent-sku/", "/regions/"],
     "/regions/":                ["/ec2/", "/azure-vm/", "/gcp-compute/"],
     "/equivalent-sku/":         ["/tools/tco/", "/ec2/", "/azure-vm/", "/gcp-compute/", "/oci-compute/"],
+    "/service-quotas/":         ["/ec2/", "/kubernetes/", "/networking-matrix/", "/tools/subnet/"],
     "/kubernetes/":             ["/networking-matrix/", "/iam-matrix/", "/equivalent-sku/", "/observability/"],
     "/iam-matrix/":             ["/networking-matrix/", "/kubernetes/", "/confidential-computing/", "/toolbox/auth/"],
     "/aws-api-gateway/":        ["/apim-matrix/", "/apigee/", "/mulesoft/", "/decisions/rest-api-vs-http-api/"],

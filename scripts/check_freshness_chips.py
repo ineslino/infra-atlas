@@ -35,7 +35,7 @@ SNAPSHOT = [
     "apim-matrix", "aws-api-gateway", "apigee", "mulesoft", "self-hosted-apim",
     "kubernetes", "compliance", "sovereignty", "confidential-computing",
     "iam-matrix", "ai-atlas", "egress", "networking-matrix", "observability",
-    "observability-stacks", "idp-matrix", "data-layer",
+    "observability-stacks", "idp-matrix", "data-layer", "service-quotas",
 ]
 
 CHIP_RE = re.compile(
