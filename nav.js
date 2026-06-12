@@ -174,6 +174,11 @@
 
   // ── Styles ───────────────────────────────────────────────────────
   var css = ''
+    /* the [hidden] attribute loses to any author display:* rule of equal
+       specificity — and the site toggles `hidden` on elements that carry
+       display classes (shortlist button, finder controls, drawers). Make
+       hidden mean hidden, site-wide. */
+    + '[hidden]{display:none !important;}'
     + '.ia-nav{position:sticky;top:0;z-index:60;display:grid;'
     + 'grid-template-columns:1fr auto 1fr;align-items:center;'
     + 'height:46px;padding:0 clamp(20px,4vw,48px);'
@@ -369,6 +374,7 @@
     + '.ia-nav__slbtn .ia-sl-n{font-size:9px;border:1px solid currentColor;border-radius:99px;'
     + 'padding:1px 6px;opacity:0.75;}'
     + '.ia-nav__slbtn.is-flash{border-color:var(--mint,#6FE7B5);color:var(--mint,#6FE7B5);}'
+    + '@media(max-width:560px){.ia-nav__slbtn .ia-sl-word{display:none;}}'
     + '.ia-sl{position:fixed;inset:0;z-index:210;display:none;align-items:flex-start;'
     + 'justify-content:center;padding:11vh 16px 16px;background:rgba(10,9,7,0.74);'
     + 'backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);}'
@@ -394,6 +400,8 @@
     + '.ia-sl__name a:hover{color:var(--accent,#FF7849);}'
     + '.ia-sl__specs{font-family:var(--mono,monospace);font-size:10.5px;'
     + 'color:var(--paper-3,rgba(244,239,230,0.55));margin-left:auto;white-space:nowrap;}'
+    + '@media(max-width:560px){.ia-sl__row{flex-wrap:wrap;}'
+    + '.ia-sl__specs{flex-basis:100%;margin-left:58px;white-space:normal;}}'
     + '.ia-sl__rm{background:none;border:0;color:var(--paper-3,rgba(244,239,230,0.55));'
     + 'cursor:pointer;font-size:13px;line-height:1;padding:2px 6px;flex:none;}'
     + '.ia-sl__rm:hover{color:var(--accent,#FF7849);}'
@@ -915,7 +923,7 @@
     btnSl.type = "button";
     btnSl.hidden = true;
     btnSl.setAttribute("aria-haspopup", "dialog");
-    btnSl.innerHTML = '☆ Shortlist <span class="ia-sl-n" id="ia-sl-count">0</span>';
+    btnSl.innerHTML = '☆ <span class="ia-sl-word">Shortlist </span><span class="ia-sl-n" id="ia-sl-count">0</span>';
     right.insertBefore(btnSl, right.firstChild);
 
     // panel
