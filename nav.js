@@ -34,6 +34,7 @@
     ["/networking-matrix/",      "Networking Matrix",      "Cross-cloud", "networking primitives vpc vnet vcn subnet route table peering transit gateway virtual wan ncc drg firewall security group nsg network acl nat load balancer privatelink private link rosetta aws azure gcp oci"],
     ["/observability/",          "Observability Matrix",   "Cross-cloud", "observability monitoring metrics logs traces profiling cloudwatch azure monitor gcp cloud monitoring oci datadog grafana new relic honeycomb dynatrace opentelemetry otel otlp kubernetes"],
     ["/observability-stacks/",   "Observability Stacks",   "Cross-cloud", "observability open source self-hosted prometheus grafana mimir loki tempo pyroscope elk elastic stack elasticsearch kibana logstash opensearch jaeger victoriametrics signoz oss self host"],
+    ["/data-layer/",             "Data Layer Equivalence", "Cross-cloud", "data layer database managed relational postgresql mysql aurora alloydb nosql redis memcached dynamodb cosmos firestore cassandra object storage s3 blob gcs equivalent cross-cloud"],
     ["/idp-matrix/",             "IDP Matrix",             "Cross-cloud", "internal developer portal idp platform engineering devex developer experience backstage spotify portal roadie port cortex opslevel atlassian compass software catalog scaffolder golden paths scorecards maturity techdocs plugins rbac"],
     ["/service-quotas/",         "Service Quotas",         "Cross-cloud", "service quotas limits default vcpu limit ec2 on-demand spot lambda concurrency concurrent executions function timeout vpc vnet vcn elastic ip public ip nat gateway s3 buckets storage iam roles service accounts eks aks gke oke clusters adjustable hard raise increase"]
   ];
@@ -128,6 +129,39 @@
   var here = location.pathname.replace(/index\.html$/, "");
   if (here.charAt(here.length - 1) !== "/") here += "/";
 
+  // ── Embed mode (?view=embed) — a stripped-down view for iframes ──
+  // No nav, no palette, no donation chrome, no enhancers: just the page's
+  // filters + table + drawer, compacted, with a mandatory attribution link
+  // back to the full instrument (the data is CC BY 4.0). Filter state still
+  // arrives via the location hash, exactly like the full page.
+  if (new URLSearchParams(location.search).get("view") === "embed") {
+    document.documentElement.classList.add("ia-embed");
+    var embedCss = document.createElement("style");
+    embedCss.textContent = ""
+      + "[hidden]{display:none !important;}"
+      + ".ia-embed .masthead,.ia-embed .readnote,.ia-embed .legend,"
+      + ".ia-embed .colophon,.ia-embed footer.colophon{display:none !important;}"
+      + ".ia-embed .page{max-width:none;padding:14px 14px 8px;}"
+      + ".ia-embed .filters{position:static;}"
+      + ".ia-embed-credit{display:flex;justify-content:flex-end;padding:10px 14px 14px;"
+      + "font-family:var(--mono,monospace);font-size:10px;letter-spacing:0.08em;"
+      + "text-transform:uppercase;}"
+      + ".ia-embed-credit a{color:var(--paper-3,rgba(244,239,230,0.55));text-decoration:none;}"
+      + ".ia-embed-credit a:hover{color:var(--accent,#FF7849);}";
+    document.head.appendChild(embedCss);
+    var credit = document.createElement("div");
+    credit.className = "ia-embed-credit";
+    credit.innerHTML = '<a href="https://infraatlas.dev' + here + location.hash
+      + '" target="_blank" rel="noopener">Data: Infra Atlas — open the full instrument ↗</a>';
+    // viewers re-filter inside the iframe (writeHash updates the hash) —
+    // resolve the link at click time so it opens the view they are seeing
+    credit.firstChild.addEventListener("click", function () {
+      this.href = "https://infraatlas.dev" + here + location.hash;
+    });
+    document.body.appendChild(credit);
+    return; // nothing else from nav.js applies inside an iframe
+  }
+
   var isMac = /Mac|iPod|iPhone|iPad/.test(navigator.platform || "");
   var kLabel = isMac ? "⌘K" : "Ctrl K";
 
@@ -147,9 +181,6 @@
   }, {
     href: "/about/", name: "About the Methodology", vendor: "About",
     group: "", keywords: "about methodology sourcing how data enters verified reviewed tiers tier 1 2 3 trust credibility open source guards ci freshness policy"
-  }, {
-    href: "/data-layer/", name: "Data Layer Equivalence — databases & storage", vendor: "Cross-cloud",
-    group: "", keywords: "data layer database managed relational postgresql mysql aurora alloydb nosql redis memcached dynamodb cosmos firestore cassandra object storage s3 blob gcs equivalent cross-cloud"
   }];
   function pushGroup(arr, label) {
     arr.forEach(function (it) {
@@ -829,11 +860,19 @@
         + '<button type="button" data-fmt="md">Markdown</button>'
         + '<button type="button" data-fmt="csv">CSV</button>'
         + '<button type="button" data-fmt="json">JSON</button>'
-        + '<button type="button" data-fmt="link">Link</button>';
+        + '<button type="button" data-fmt="link">Link</button>'
+        + '<button type="button" data-fmt="embed">Embed</button>';
       div.addEventListener("click", function (e) {
         var btn = e.target.closest("button[data-fmt]");
         if (!btn) return;
         if (btn.dataset.fmt === "link") { copyText(location.href, btn); return; }
+        if (btn.dataset.fmt === "embed") {
+          var src = "https://infraatlas.dev" + location.pathname + "?view=embed" + location.hash;
+          copyText('<iframe src="' + src + '" width="100%" height="640" loading="lazy" '
+            + 'style="border:1px solid #2a2a2a;border-radius:8px;background:#0A0907" '
+            + 'title="' + document.title.replace(/"/g, "&quot;") + '"></iframe>', btn);
+          return;
+        }
         var h = harvest(table);
         copyText(btn.dataset.fmt === "csv" ? toCSV(h) : btn.dataset.fmt === "md" ? toMD(h) : toJSON(h), btn);
       });

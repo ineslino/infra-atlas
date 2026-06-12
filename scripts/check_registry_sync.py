@@ -51,12 +51,7 @@ def main():
             err("nav.js", f"could not parse the {name} registry array — "
                           f"update scripts/check_registry_sync.py if its shape changed.")
             return 1
-    # Registry quirk: data-layer is registered in nav.js's BASE items block
-    # (group: "") rather than the XCLOUD array — it predates a tidy-up. It is
-    # a real instrument (homepage card 23), so count and check it here; fold
-    # it into XCLOUD on the next natural nav.js cache-bust.
-    EXTRA_INSTRUMENTS = ["/data-layer/"]
-    instruments = groups["CLOUD"] + groups["APIM"] + groups["XCLOUD"] + EXTRA_INSTRUMENTS
+    instruments = groups["CLOUD"] + groups["APIM"] + groups["XCLOUD"]
     tools = groups["TOOLS"]
 
     with open(os.path.join(ROOT, "README.md"), encoding="utf-8") as f:

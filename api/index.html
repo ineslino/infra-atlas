@@ -160,6 +160,7 @@ pre code .c { color: var(--paper-3); }
       <p><strong>Best-effort, but stable where it counts.</strong> These are flat JSON files served straight off the static host. The top-level shape — the <code style="font-family:var(--mono);color:var(--accent-2)">generated</code> timestamp and the main <code style="font-family:var(--mono);color:var(--accent-2)">regions[]</code> / <code style="font-family:var(--mono);color:var(--accent-2)">families[]</code> arrays — is stable and only changes additively; deeper nested fields can still evolve as instruments mature, so read those defensively rather than hard-coding deep paths.</p>
       <p>There is <strong>no uptime guarantee, no SLA, no API key and no rate limit</strong> — please be kind, and cache rather than poll. Responses are cached roughly an hour at the edge; the <code style="font-family:var(--mono);color:var(--accent-2)">generated</code> field carries the dataset's own timestamp, so a consumer can tell how fresh a copy is.</p>
       <p>The cloud-compute endpoints refresh daily from public datasets and price APIs; <em style="font-family:var(--serif);font-style:italic;color:var(--paper)">regions</em>, <em style="font-family:var(--serif);font-style:italic;color:var(--paper)">gcp-compute</em> and <em style="font-family:var(--serif);font-style:italic;color:var(--paper)">egress</em> are curated snapshots — dated and re-verified against the vendor sources rather than polled.</p>
+      <p><strong>Embeds are part of the contract too.</strong> Every matrix instrument renders a stripped-down iframe view at <code style="font-family:var(--mono);color:var(--accent-2)">?view=embed</code> (filter state travels in the URL hash, exactly like the full page) — the "Embed" button in each matrix's Copy-view bar hands you the snippet. Instrument paths and the embed parameter are stable; treat them like the JSON shape above.</p>
     </div>
   </section>
 
@@ -195,6 +196,6 @@ curl -s https://infraatlas.dev/ec2/data.json \
   </footer>
 
 </div>
-<script src="/nav.js?v=6" defer></script>
+<script src="/nav.js?v=7" defer></script>
 </body>
 </html>
