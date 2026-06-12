@@ -39,6 +39,7 @@
   ];
   var TOOLS = [
     ["/tools/tco/",          "Cross-Cloud TCO Comparator", "Tool", "tco total cost ownership monthly bill compare workload compute hours egress equivalent sku price aws azure gcp oci ovh"],
+    ["/tools/right-size/",   "Right-Sizing Calculator",    "Tool", "right size rightsizing downsize cheaper instance utilisation utilization cpu memory headroom savings overprovisioned waste cost optimize optimization"],
     ["/tools/egress-cost/",  "Egress Cost Calculator",     "Tool", "egress cost calculator bandwidth bill data transfer aws azure gcp price tier compare"],
     ["/tools/subnet/",       "Subnet Calculator",          "Tool", "subnet cidr calculator vpc vnet vcn reserved ips usable hosts aws azure gcp oci ipv4 ipv6"],
     ["/tools/apim-limits/",  "APIM Limits Picker",         "Tool", "apim api gateway limits timeout payload rate limit websocket pick choose vendor mulesoft apigee"]
@@ -104,7 +105,8 @@
     "/decisions/cloud-native-vs-managed-vs-self-hosted-observability/": ["/observability/", "/observability-stacks/", "/toolbox/observability/"],
     "/egress/":                 ["/tools/egress-cost/", "/networking-matrix/", "/sovereignty/", "/decisions/nat-gateway-vs-instance-vs-no-nat/"],
     "/apim-matrix/":            ["/tools/apim-limits/", "/aws-api-gateway/", "/apigee/", "/mulesoft/"],
-    "/tools/tco/":              ["/equivalent-sku/", "/tools/egress-cost/", "/ec2/", "/regions/"],
+    "/tools/tco/":              ["/equivalent-sku/", "/tools/right-size/", "/tools/egress-cost/", "/ec2/"],
+    "/tools/right-size/":       ["/tools/tco/", "/equivalent-sku/", "/ec2/", "/azure-vm/"],
     "/tools/egress-cost/":      ["/egress/", "/tools/tco/", "/networking-matrix/", "/decisions/nat-gateway-vs-instance-vs-no-nat/"],
     "/tools/subnet/":           ["/networking-matrix/", "/regions/"],
     "/tools/apim-limits/":      ["/apim-matrix/", "/aws-api-gateway/", "/decisions/rest-api-vs-http-api/"],
