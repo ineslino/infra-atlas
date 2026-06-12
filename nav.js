@@ -360,6 +360,46 @@
     + 'transition:color .15s,border-color .15s;}'
     + '.ia-ttools button:hover{color:var(--paper,#F4EFE6);border-color:var(--paper-3,rgba(244,239,230,0.55));}'
     + '.ia-ttools button.is-done{color:var(--mint,#6FE7B5);border-color:var(--mint,#6FE7B5);}'
+    /* shortlist — persistent cross-instrument pin tray (localStorage) */
+    + '.ia-nav__slbtn{position:relative;}'
+    + '.ia-nav__slbtn .ia-sl-n{font-size:9px;border:1px solid currentColor;border-radius:99px;'
+    + 'padding:1px 6px;opacity:0.75;}'
+    + '.ia-nav__slbtn.is-flash{border-color:var(--mint,#6FE7B5);color:var(--mint,#6FE7B5);}'
+    + '.ia-sl{position:fixed;inset:0;z-index:210;display:none;align-items:flex-start;'
+    + 'justify-content:center;padding:11vh 16px 16px;background:rgba(10,9,7,0.74);'
+    + 'backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);}'
+    + '.ia-sl.is-open{display:flex;}'
+    + '.ia-sl__box{width:min(680px,100%);background:var(--ink-2,#100E0C);'
+    + 'border:1px solid var(--line-2,rgba(244,239,230,0.14));border-radius:10px;'
+    + 'box-shadow:0 30px 80px rgba(0,0,0,0.6);overflow:hidden;display:flex;flex-direction:column;'
+    + 'max-height:72vh;}'
+    + '.ia-sl__head{display:flex;align-items:baseline;justify-content:space-between;gap:14px;'
+    + 'padding:16px 19px 13px;border-bottom:1px solid var(--line,rgba(244,239,230,0.08));}'
+    + '.ia-sl__title{font-family:var(--serif,serif);font-size:21px;color:var(--paper,#F4EFE6);}'
+    + '.ia-sl__close{background:transparent;border:1px solid var(--line-2,rgba(244,239,230,0.14));'
+    + 'color:var(--paper-2,rgba(244,239,230,0.66));font-family:var(--mono,monospace);font-size:12px;'
+    + 'padding:5px 10px;border-radius:3px;cursor:pointer;}'
+    + '.ia-sl__close:hover{border-color:var(--paper,#F4EFE6);color:var(--paper,#F4EFE6);}'
+    + '.ia-sl__body{overflow-y:auto;padding:7px 9px;flex:1;}'
+    + '.ia-sl__row{display:flex;align-items:center;gap:12px;padding:10px;border-radius:6px;}'
+    + '.ia-sl__row:hover{background:var(--surface-2,#1E1A15);}'
+    + '.ia-sl__cloud{font-family:var(--mono,monospace);font-size:8.5px;letter-spacing:0.12em;'
+    + 'text-transform:uppercase;color:var(--paper-3,rgba(244,239,230,0.55));min-width:46px;flex:none;}'
+    + '.ia-sl__name{font-family:var(--mono,monospace);font-size:13px;color:var(--paper,#F4EFE6);}'
+    + '.ia-sl__name a{color:inherit;text-decoration:none;}'
+    + '.ia-sl__name a:hover{color:var(--accent,#FF7849);}'
+    + '.ia-sl__specs{font-family:var(--mono,monospace);font-size:10.5px;'
+    + 'color:var(--paper-3,rgba(244,239,230,0.55));margin-left:auto;white-space:nowrap;}'
+    + '.ia-sl__rm{background:none;border:0;color:var(--paper-3,rgba(244,239,230,0.55));'
+    + 'cursor:pointer;font-size:13px;line-height:1;padding:2px 6px;flex:none;}'
+    + '.ia-sl__rm:hover{color:var(--accent,#FF7849);}'
+    + '.ia-sl__empty{padding:30px 14px;text-align:center;'
+    + 'color:var(--paper-3,rgba(244,239,230,0.55));font-family:var(--mono,monospace);font-size:12px;}'
+    + '.ia-sl__foot{display:flex;align-items:center;gap:7px;flex-wrap:wrap;padding:11px 15px;'
+    + 'border-top:1px solid var(--line,rgba(244,239,230,0.08));}'
+    + '.ia-sl__foot .ia-sl__hint{font-family:var(--mono,monospace);font-size:9.5px;'
+    + 'letter-spacing:0.08em;text-transform:uppercase;color:var(--paper-3,rgba(244,239,230,0.55));'
+    + 'margin-right:auto;}'
     /* what-changed strip — appears under the nav when feed.json has entries
        newer than the visitor\'s last acknowledged change */
     + '.ia-fresh{display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap;'
@@ -840,6 +880,173 @@
         .catch(function () { /* offline → no strip */ });
     }
     ("requestIdleCallback" in window) ? requestIdleCallback(run) : setTimeout(run, 600);
+  })();
+
+  // ── Shortlist — persistent cross-instrument pin tray ──────────────
+  // Pages push items via IA.shortlist.add({source, cloud, name, vcpu, mem,
+  // price, currency, regions, href}); the tray lives in the nav (hidden at
+  // zero), persists in localStorage, syncs across tabs, and copies the list
+  // as Markdown / CSV / JSON for ADRs and slides.
+  (function () {
+    var KEY = "ia:shortlist";
+    var storageOk = true;
+    try { localStorage.getItem(KEY); } catch (e) { storageOk = false; }
+    if (!storageOk) return; // private mode without storage — feature off, no errors
+
+    function load() {
+      try {
+        var v = JSON.parse(localStorage.getItem(KEY) || "[]");
+        return Array.isArray(v) ? v : [];
+      } catch (e) { return []; }
+    }
+    function persist(list) {
+      try { localStorage.setItem(KEY, JSON.stringify(list)); } catch (e) { /* full/blocked */ }
+    }
+    function idOf(it) { return (it.cloud || "") + "::" + (it.name || ""); }
+
+    // nav button — sits before "Report a fix", hidden until something is saved
+    var right = nav.querySelector(".ia-nav__right");
+    var btnSl = document.createElement("button");
+    btnSl.className = "ia-nav__btn ia-nav__slbtn";
+    btnSl.type = "button";
+    btnSl.hidden = true;
+    btnSl.setAttribute("aria-haspopup", "dialog");
+    btnSl.innerHTML = '☆ Shortlist <span class="ia-sl-n" id="ia-sl-count">0</span>';
+    right.insertBefore(btnSl, right.firstChild);
+
+    // panel
+    var ov = document.createElement("div");
+    ov.className = "ia-sl";
+    ov.setAttribute("role", "dialog");
+    ov.setAttribute("aria-modal", "true");
+    ov.setAttribute("aria-label", "Shortlist");
+    ov.innerHTML =
+        '<div class="ia-sl__box">'
+      +   '<div class="ia-sl__head">'
+      +     '<span class="ia-sl__title">Shortlist.</span>'
+      +     '<button type="button" class="ia-sl__close">Close ✕</button>'
+      +   '</div>'
+      +   '<div class="ia-sl__body" id="ia-sl-body"></div>'
+      +   '<div class="ia-sl__foot ia-ttools">'
+      +     '<span class="ia-sl__hint">List prices · saved in this browser only</span>'
+      +     '<button type="button" data-fmt="md">Markdown</button>'
+      +     '<button type="button" data-fmt="csv">CSV</button>'
+      +     '<button type="button" data-fmt="json">JSON</button>'
+      +     '<button type="button" data-sl-clear>Clear all</button>'
+      +   '</div>'
+      + '</div>';
+    document.body.appendChild(ov);
+
+    function slEsc(s) {
+      return String(s == null ? "" : s).replace(/[&<>"]/g, function (c) {
+        return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c];
+      });
+    }
+    function fmtPrice(it) {
+      if (it.price == null) return null;
+      var s = Number(it.price).toFixed(4).replace(/0+$/, "").replace(/\.$/, "");
+      if (s.indexOf(".") === -1) s += ".00";
+      return (it.currency === "EUR" ? "€" : "$") + s + "/h";
+    }
+
+    function render() {
+      var list = load();
+      btnSl.hidden = list.length === 0 && !ov.classList.contains("is-open");
+      var n = document.getElementById("ia-sl-count");
+      if (n) n.textContent = String(list.length);
+      var body = document.getElementById("ia-sl-body");
+      if (!body) return;
+      if (!list.length) {
+        body.innerHTML = '<div class="ia-sl__empty">Nothing saved yet — use “☆ Shortlist” on a '
+          + 'compare selection or an Equivalent-SKU match.</div>';
+        return;
+      }
+      body.innerHTML = list.map(function (it) {
+        var bits = [];
+        if (it.vcpu != null) bits.push(it.vcpu + " vCPU");
+        if (it.mem != null) bits.push(it.mem + " GiB");
+        var p = fmtPrice(it);
+        if (p) bits.push(p);
+        if (it.regions != null) bits.push(it.regions + " regions");
+        return '<div class="ia-sl__row" data-id="' + slEsc(idOf(it)) + '">'
+          + '<span class="ia-sl__cloud">' + slEsc(it.cloud || "") + '</span>'
+          + '<span class="ia-sl__name">' + (it.href ? '<a href="' + slEsc(it.href) + '">' + slEsc(it.name) + '</a>' : slEsc(it.name)) + '</span>'
+          + '<span class="ia-sl__specs">' + slEsc(bits.join(" · ")) + '</span>'
+          + '<button type="button" class="ia-sl__rm" data-rm="' + slEsc(idOf(it)) + '" aria-label="Remove ' + slEsc(it.name) + '">✕</button>'
+          + '</div>';
+      }).join("");
+    }
+
+    function exportText(fmt) {
+      var list = load();
+      var cols = ["Cloud", "Instance", "vCPU", "Memory GiB", "Price/hr", "Currency", "Regions", "Added"];
+      if (fmt === "json") {
+        return JSON.stringify({ source: "https://infraatlas.dev shortlist", items: list }, null, 2);
+      }
+      if (fmt === "csv") {
+        var q = function (v) {
+          var s = v == null ? "" : String(v);
+          return /[",\n]/.test(s) ? '"' + s.replace(/"/g, '""') + '"' : s;
+        };
+        return [cols.map(q).join(",")].concat(list.map(function (it) {
+          return [it.cloud, it.name, it.vcpu, it.mem, it.price, it.currency || "USD", it.regions, it.addedAt].map(q).join(",");
+        })).join("\n");
+      }
+      var lines = ["| " + cols.join(" | ") + " |",
+                   "| " + cols.map(function () { return "---"; }).join(" | ") + " |"];
+      list.forEach(function (it) {
+        lines.push("| " + [it.cloud, it.name, it.vcpu != null ? it.vcpu : "", it.mem != null ? it.mem : "",
+          fmtPrice(it) || "", it.currency || "USD", it.regions != null ? it.regions : "", it.addedAt || ""].join(" | ") + " |");
+      });
+      lines.push("");
+      lines.push("Source: Infra Atlas shortlist · https://infraatlas.dev · list prices, not invoiced prices");
+      return lines.join("\n");
+    }
+
+    function open() { render(); ov.classList.add("is-open"); var c = ov.querySelector(".ia-sl__close"); if (c) c.focus(); }
+    function close() { ov.classList.remove("is-open"); render(); btnSl.focus(); }
+
+    btnSl.addEventListener("click", function () { ov.classList.contains("is-open") ? close() : open(); });
+    ov.addEventListener("mousedown", function (e) { if (e.target === ov) close(); });
+    ov.querySelector(".ia-sl__close").addEventListener("click", close);
+    document.addEventListener("keydown", function (e) {
+      if (e.key === "Escape" && ov.classList.contains("is-open")) { e.preventDefault(); close(); }
+    });
+    ov.addEventListener("click", function (e) {
+      var rm = e.target.closest("[data-rm]");
+      if (rm) { persist(load().filter(function (it) { return idOf(it) !== rm.dataset.rm; })); render(); return; }
+      if (e.target.closest("[data-sl-clear]")) { persist([]); render(); return; }
+      var fmtBtn = e.target.closest("button[data-fmt]");
+      if (fmtBtn && window.IA && IA.copyText) IA.copyText(exportText(fmtBtn.dataset.fmt), fmtBtn);
+    });
+    // another tab changed the list — stay in sync
+    window.addEventListener("storage", function (e) { if (e.key === KEY) render(); });
+
+    window.IA = window.IA || {};
+    window.IA.shortlist = {
+      items: load,
+      count: function () { return load().length; },
+      add: function (item) {
+        if (!item || !item.name) return false;
+        var list = load();
+        if (list.some(function (it) { return idOf(it) === idOf(item); })) return false;
+        item.addedAt = item.addedAt || new Date().toISOString().slice(0, 10);
+        list.push(item);
+        persist(list);
+        render();
+        // flash the nav button so the save has a visible landing place
+        btnSl.hidden = false;
+        btnSl.classList.add("is-flash");
+        setTimeout(function () { btnSl.classList.remove("is-flash"); }, 1200);
+        return true;
+      },
+      remove: function (cloud, name) {
+        persist(load().filter(function (it) { return idOf(it) !== cloud + "::" + name; }));
+        render();
+      },
+      open: open
+    };
+    render();
   })();
 
   // ── Related instruments — small pill strip after the masthead ─────
