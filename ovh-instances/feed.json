@@ -1,0 +1,36 @@
+{
+  "generated": "2026-06-10T10:15:50Z",
+  "instrument": "ovh-instances",
+  "entries": [
+    {
+      "ts": "2026-05-16",
+      "instrument": "ovh-instances",
+      "kind": "region-added",
+      "text": "new region PAR"
+    },
+    {
+      "ts": "2026-05-15",
+      "instrument": "ovh-instances",
+      "kind": "instance-added",
+      "text": "6 size groups expanded (b3, c3, h100…)"
+    },
+    {
+      "ts": "2026-05-15",
+      "instrument": "ovh-instances",
+      "kind": "instance-removed",
+      "text": "h100: 4 sizes withdrawn"
+    },
+    {
+      "ts": "2026-05-15",
+      "instrument": "ovh-instances",
+      "kind": "instance-removed",
+      "text": "i1: 3 sizes withdrawn"
+    },
+    {
+      "ts": "2026-05-15",
+      "instrument": "ovh-instances",
+      "kind": "instance-removed",
+      "text": "t2: 1 size withdrawn"
+    }
+  ]
+}

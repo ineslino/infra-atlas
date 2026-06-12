@@ -13,9 +13,11 @@ usage error (wrong arguments) exits non-zero.
 Usage:  diff_feed.py <instrument> <old.json> <new.json> <feed.json>
 """
 import json
+import os
 import sys
 
 CAP = 200            # keep only the newest N feed entries
+INST_CAP = 100       # newest N entries kept in each per-instrument feed
 PRICE_EPS = 0.02     # ignore on-demand price moves smaller than ±2%
 PRICE_LIST_MAX = 6   # list price changes individually up to this many, else summarise
 
@@ -122,6 +124,19 @@ def main():
 
     with open(feed_p, "w", encoding="utf-8") as f:
         json.dump(feed, f, indent=2, ensure_ascii=False)
+        f.write("\n")
+
+    # Per-instrument feed — the same shape, filtered to this instrument and
+    # written beside its data.json, so subscribers can follow one cloud
+    # without the aggregate's noise (backlog: "Per-instrument feeds").
+    inst_dir = os.path.dirname(os.path.abspath(new_p))
+    inst_feed = {
+        "generated": feed["generated"],
+        "instrument": inst,
+        "entries": [e for e in feed["entries"] if e.get("instrument") == inst][:INST_CAP],
+    }
+    with open(os.path.join(inst_dir, "feed.json"), "w", encoding="utf-8") as f:
+        json.dump(inst_feed, f, indent=2, ensure_ascii=False)
         f.write("\n")
     print(f"::notice::diff_feed {inst}: +{len(fresh)} entr{'y' if len(fresh) == 1 else 'ies'}")
 

@@ -105,7 +105,7 @@ jobs:
           git pull --rebase --autostash
           git config user.name "infraatlas-bot"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add ${{ matrix.instrument }}/data.json feed.json index.html
+          git add ${{ matrix.instrument }}/data.json ${{ matrix.instrument }}/feed.json feed.json index.html
           if git diff --cached --quiet; then
             echo "::notice::${{ matrix.instrument }}: no data changes — skipping commit."
           else

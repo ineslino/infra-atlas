@@ -10,6 +10,12 @@
   Cache-Control: public, max-age=3600, s-maxage=3600, stale-while-revalidate=86400
   Access-Control-Allow-Origin: *
 
+# Per-instrument change feeds (ec2/feed.json, regions/feed.json, …) — same
+# cache shape and CORS as the instrument data they sit beside
+/*/feed.json
+  Cache-Control: public, max-age=3600, s-maxage=3600, stale-while-revalidate=86400
+  Access-Control-Allow-Origin: *
+
 # Aggregate change feed — root-level, so it needs its own rule (the /*/data.json
 # glob requires a path segment + /data.json and would not match /feed.json)
 /feed.json
