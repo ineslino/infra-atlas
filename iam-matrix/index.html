@@ -610,9 +610,9 @@ const FEATURES = [
       // https://docs.cloud.google.com/iam/docs/workload-identity-federation
       gcp:   { level:"yes",  note:"Workload Identity Federation: a workload identity pool + provider trusts an external IdP (OIDC, SAML, AWS, Azure). External credentials are exchanged via the Security Token Service for short-lived Google Cloud access tokens, optionally impersonating a service account.",
                src:"https://docs.cloud.google.com/iam/docs/workload-identity-federation" },
-      // https://docs.oracle.com/en-us/iaas/Content/Identity/domains/use-cases-iam-tokenexchange.htm
+      // https://docs.oracle.com/en-us/iaas/Content/Identity/api-getstarted/json_web_token_exchange.htm
       oci:   { level:"part", note:"OCI Identity Domains support OAuth2 token exchange and federation with external OIDC/SAML IdPs for SSO and for app integrations. There is no GitHub-Actions-style turnkey OIDC-to-IAM-role exchange equivalent to the other three; in-cloud workloads instead use instance/resource principals (see below).",
-               src:"https://docs.oracle.com/en-us/iaas/Content/Identity/domains/use-cases-iam-tokenexchange.htm" }
+               src:"https://docs.oracle.com/en-us/iaas/Content/Identity/api-getstarted/json_web_token_exchange.htm" }
     }
   },
   { id:"managed-identity", category:"workload", name:"Identity for in-cloud compute (keyless)",
@@ -661,9 +661,9 @@ const FEATURES = [
       // https://docs.cloud.google.com/iam/docs/workforce-identity-federation
       gcp:   { level:"yes",  note:"Workforce Identity Federation lets workforce users from a SAML or OIDC IdP access Google Cloud directly; Cloud Identity / Workspace can also federate with a SAML IdP.",
                src:"https://docs.cloud.google.com/iam/docs/workforce-identity-federation" },
-      // https://docs.oracle.com/en-us/iaas/Content/Identity/federating/federation_topic-Overview_of_Federation.htm
+      // https://docs.oracle.com/en-us/iaas/Content/Identity/Concepts/federation.htm
       oci:   { level:"yes",  note:"OCI IAM federates with SAML 2.0 identity providers (Entra ID, Okta, AD FS, and others) so users sign in with their existing enterprise credentials.",
-               src:"https://docs.oracle.com/en-us/iaas/Content/Identity/federating/federation_topic-Overview_of_Federation.htm" }
+               src:"https://docs.oracle.com/en-us/iaas/Content/Identity/Concepts/federation.htm" }
     }
   },
 
@@ -764,7 +764,7 @@ const FEATURES = [
       // https://learn.microsoft.com/en-us/entra/identity/users/groups-dynamic-membership
       azure: { level:"yes",  note:"Entra ID dynamic membership groups: membership is computed from a rule over user or device attributes, and roles/access assigned to the group follow automatically as attributes change.",
                src:"https://learn.microsoft.com/en-us/entra/identity/users/groups-dynamic-membership" },
-      // https://docs.cloud.google.com/workspace/admin/topics/dynamic-groups
+      // https://docs.cloud.google.com/identity/docs/concepts/overview-dynamic-groups
       gcp:   { level:"part", note:"Cloud Identity / Workspace dynamic groups compute membership from a CEL query over user attributes, and those groups can receive IAM roles. It is a directory feature (sibling product) rather than part of Google Cloud IAM proper.",
                src:"https://docs.cloud.google.com/identity/docs/how-to/create-dynamic-groups" },
       // https://docs.oracle.com/en-us/iaas/Content/Identity/dynamicgroups/managingdynamicgroups.htm

@@ -1,0 +1,33 @@
+name: Verify source links
+
+# The site's whole promise is "sourced": every matrix cell, decision row and
+# calculator figure cites an official vendor doc URL. Those URLs rot as vendors
+# restructure docs (a 2026-06 audit found 44 dead among ~850). This walks every
+# cited external URL and fails when any genuinely 404s.
+#
+# It is NOT part of verify-data.yml: it makes hundreds of outbound requests to
+# vendor sites that rate-limit and occasionally block CI egress, so it must not
+# gate day-to-day pushes/PRs. It runs on a schedule (catching rot before a
+# reader does) and on manual dispatch. The checker treats 401/403/405/429 as
+# "bot-blocked, alive" — only real 404/410/DNS failures fail the job.
+
+on:
+  schedule:
+    - cron: '0 7 1 * *'   # 1st of each month, 07:00 UTC (after the freshness check)
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: verify-links
+  cancel-in-progress: true
+
+jobs:
+  links:
+    name: Cited source links resolve
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check every cited source URL
+        run: python3 scripts/check_source_links.py

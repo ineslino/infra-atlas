@@ -510,9 +510,9 @@ const FEATURES = [
       // SRC: https://cloud.google.com/kubernetes-engine/docs/concepts/spot-vms — Spot VMs node pools
       gke: { level:"yes", value:"Spot VMs", note:"GKE node pools can run on Spot VMs (the successor to preemptible VMs) for stateless, batch and fault-tolerant workloads.",
              src:"https://cloud.google.com/kubernetes-engine/docs/concepts/spot-vms" },
-      // SRC: https://docs.oracle.com/en-us/iaas/Content/ContEng/Tasks/contengcreatingpreemptiblenodepool.htm — preemptible node pools supported
+      // SRC: https://docs.oracle.com/en-us/iaas/Content/ContEng/Tasks/contengusingpreemptiblecapacity.htm — preemptible node pools supported
       oke: { level:"yes", value:"Preemptible nodes", note:"OKE supports preemptible node pools backed by OCI preemptible compute instances for cost-optimised, interruption-tolerant workloads.",
-             src:"https://docs.oracle.com/en-us/iaas/Content/ContEng/Tasks/contengcreatingpreemptiblenodepool.htm" },
+             src:"https://docs.oracle.com/en-us/iaas/Content/ContEng/Tasks/contengusingpreemptiblecapacity.htm" },
       // SRC: https://github.com/ovh/docs/blob/develop/pages/public_cloud/containers_orchestration/managed_kubernetes/managing-nodes/guide.en-gb.md — node pools use standard Public Cloud instances; no spot/preemptible tier documented for MKS
       ovh: { level:"no", value:"", note:"OVHcloud Managed Kubernetes node pools use standard Public Cloud instances (monthly or hourly billing). No spot or preemptible node-pool tier is documented for the service.",
              src:"https://github.com/ovh/docs/blob/develop/pages/public_cloud/containers_orchestration/managed_kubernetes/managing-nodes/guide.en-gb.md" }
@@ -530,9 +530,9 @@ const FEATURES = [
       // SRC: https://cloud.google.com/kubernetes-engine/docs/how-to/gpus — GPU node pools
       gke: { level:"yes", value:"GPU node pools", note:"GKE supports attaching NVIDIA GPUs to node pools, with GKE managing driver installation; Autopilot also supports GPU workloads.",
              src:"https://cloud.google.com/kubernetes-engine/docs/how-to/gpus" },
-      // SRC: https://docs.oracle.com/en-us/iaas/Content/ContEng/Tasks/contengrunningadeploymentaccessgpu.htm — GPU shapes for node pools
+      // SRC: https://docs.oracle.com/en-us/iaas/Content/ContEng/Tasks/contengrunninggpunodes.htm — GPU shapes for node pools
       oke: { level:"yes", value:"GPU shapes", note:"OKE node pools can use OCI GPU compute shapes; the OKE GPU images bundle the NVIDIA drivers.",
-             src:"https://docs.oracle.com/en-us/iaas/Content/ContEng/Tasks/contengrunningadeploymentaccessgpu.htm" },
+             src:"https://docs.oracle.com/en-us/iaas/Content/ContEng/Tasks/contengrunninggpunodes.htm" },
       // SRC: https://github.com/ovh/docs/blob/develop/pages/public_cloud/containers_orchestration/managed_kubernetes/deploying-gpu-application/guide.en-gb.md — GPU node pools via t1/t2 flavors
       ovh: { level:"yes", value:"GPU flavors (t1/t2)", note:"OVHcloud Managed Kubernetes supports GPU node pools using the t1 and t2 instance flavors; GPU nodes can take over an hour to become Ready.",
              src:"https://github.com/ovh/docs/blob/develop/pages/public_cloud/containers_orchestration/managed_kubernetes/deploying-gpu-application/guide.en-gb.md" }
@@ -550,9 +550,9 @@ const FEATURES = [
       // SRC: https://cloud.google.com/kubernetes-engine/docs/how-to/prepare-arm-workloads-for-deployment — Arm node pools (Axion / Tau T2A)
       gke: { level:"yes", value:"Arm node pools", note:"GKE supports Arm node pools on Google's Arm-based machine series (Axion C4A, Tau T2A).",
              src:"https://cloud.google.com/kubernetes-engine/docs/how-to/prepare-arm-workloads-for-deployment" },
-      // SRC: https://docs.oracle.com/en-us/iaas/Content/ContEng/Concepts/contengaboutnodepools.htm — node pools support Ampere A1 (Arm) shapes
+      // SRC: https://docs.oracle.com/en-us/iaas/Content/ContEng/Tasks/contengnodepoolmanagement_topic.htm — node pools support Ampere A1 (Arm) shapes
       oke: { level:"yes", value:"Ampere A1 (Arm)", note:"OKE node pools can use OCI Ampere A1 Arm-based compute shapes.",
-             src:"https://docs.oracle.com/en-us/iaas/Content/ContEng/Concepts/contengaboutnodepools.htm" },
+             src:"https://docs.oracle.com/en-us/iaas/Content/ContEng/Tasks/contengnodepoolmanagement_topic.htm" },
       // SRC: https://github.com/ovh/docs/blob/develop/pages/public_cloud/containers_orchestration/managed_kubernetes/software-versions-reserved-resources/guide.en-gb.md — reserved-resource table lists only x86 b2/b3 flavors; no Arm flavor documented for MKS
       ovh: { level:"no", value:"", note:"OVHcloud Managed Kubernetes documents only x86 instance flavors (b2/b3 general-purpose, t1/t2 GPU). No ARM-based node-pool flavor is listed for the service.",
              src:"https://github.com/ovh/docs/blob/develop/pages/public_cloud/containers_orchestration/managed_kubernetes/software-versions-reserved-resources/guide.en-gb.md" }
@@ -674,9 +674,9 @@ const FEATURES = [
       // SRC: https://cloud.google.com/kubernetes-engine/quotas — default 5,000 per cluster; up to 15,000 or 65,000 by request
       gke: { level:"yes", value:"5,000 (default)", note:"GKE Standard clusters default to a 5,000-node quota per cluster; this can be raised to 15,000, or to 65,000 for large-scale AI workloads, via Cloud Customer Care.",
              src:"https://cloud.google.com/kubernetes-engine/quotas" },
-      // SRC: https://docs.oracle.com/en-us/iaas/Content/ContEng/Concepts/contengaboutclusterstructure.htm — Enhanced clusters support a much higher node count than Basic
+      // SRC: https://docs.oracle.com/en-us/iaas/Content/ContEng/Concepts/contengclustersnodes.htm — Enhanced clusters support a much higher node count than Basic
       oke: { level:"part", value:"Enhanced > Basic", note:"OKE Enhanced clusters support substantially more worker nodes per cluster than Basic clusters; exact ceilings are governed by tenancy service limits rather than a single fixed number.",
-             src:"https://docs.oracle.com/en-us/iaas/Content/ContEng/Concepts/contengaboutclusterstructure.htm" },
+             src:"https://docs.oracle.com/en-us/iaas/Content/ContEng/Concepts/contengclustersnodes.htm" },
       // SRC: https://github.com/ovh/docs/blob/develop/pages/public_cloud/containers_orchestration/managed_kubernetes/known-limits/guide.en-gb.md — Free 100, Standard 500
       ovh: { level:"yes", value:"100 / 500", note:"OVHcloud Managed Kubernetes: a tested maximum of 100 nodes per cluster on the Free plan and 500 on the Standard plan.",
              src:"https://github.com/ovh/docs/blob/develop/pages/public_cloud/containers_orchestration/managed_kubernetes/known-limits/guide.en-gb.md" }

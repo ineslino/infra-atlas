@@ -351,7 +351,7 @@ const FEATURES = [
       grafana:   { level:"yes", value:"OTel-native",       note:"The Grafana stack is OTel-first — every signal accepts OTLP. Auto-instrumentation supported across Java, Python, Node, .NET, Go.", src:"https://opentelemetry.io/docs/" },
       elk:       { level:"yes", value:"EDOT",              note:"Elastic Distribution of OpenTelemetry covers Java, Node, Python, .NET, iOS. Recommended path on Elastic since 2024.", src:"https://www.elastic.co/guide/en/observability/current/apm-open-telemetry-direct.html" },
       opensearch:{ level:"part", value:"Standard OTel SDK", note:"No curated OpenSearch distribution; standard OTel SDK ships via Data Prepper.", src:"https://opentelemetry.io/docs/" },
-      jaeger:    { level:"part", value:"Standard OTel SDK", note:"OTel SDK ships traces via OTLP; Jaeger itself no longer provides its own SDKs (deprecated 2022).", src:"https://www.jaegertracing.io/docs/latest/client-libraries/" },
+      jaeger:    { level:"part", value:"Standard OTel SDK", note:"OTel SDK ships traces via OTLP; Jaeger itself no longer provides its own SDKs (deprecated 2022).", src:"https://www.jaegertracing.io/sdk-migration/" },
       vm:        { level:"part", value:"Standard OTel SDK", note:"No curated VictoriaMetrics distribution; standard OTel SDK works against the OTLP endpoint.", src:"https://opentelemetry.io/docs/" }
     }
   },
@@ -363,7 +363,7 @@ const FEATURES = [
       grafana:   { level:"yes", value:"Helm + Tanka",       note:"Comprehensive Helm charts (grafana/loki-stack, grafana/k8s-monitoring). Multiple operator projects for individual components.", src:"https://grafana.com/docs/grafana-cloud/monitor-infrastructure/kubernetes-monitoring/" },
       elk:       { level:"yes", value:"ECK Operator",       note:"Elastic Cloud on Kubernetes — official, production-mature operator. Supports Elasticsearch, Kibana, APM Server, Beats, Logstash.", src:"https://www.elastic.co/guide/en/cloud-on-k8s/current/index.html" },
       opensearch:{ level:"yes", value:"OpenSearch Operator", note:"Community-maintained operator under the OpenSearch project. Helm charts mature.", src:"https://github.com/opensearch-project/opensearch-k8s-operator" },
-      jaeger:    { level:"yes", value:"Jaeger Operator",    note:"CNCF-graduated operator. Production-ready.", src:"https://www.jaegertracing.io/docs/latest/operator/" },
+      jaeger:    { level:"yes", value:"Jaeger Operator",    note:"CNCF-graduated operator. Production-ready.", src:"https://www.jaegertracing.io/docs/1.76/deployment/operator/" },
       vm:        { level:"yes", value:"VictoriaMetrics Operator", note:"Comprehensive operator covering vmagent, vmsingle, vmcluster, vmalert, and the long-term storage components.", src:"https://docs.victoriametrics.com/operator/" }
     }
   },
@@ -384,7 +384,7 @@ const FEATURES = [
     support:{
       prom:      { level:"no",  value:"Single-tenant",     note:"No native multi-tenancy. Run per-team Prometheus instances or front with Thanos/Cortex.", src:"https://prometheus.io/docs/introduction/faq/" },
       grafana:   { level:"yes", value:"X-Scope-OrgID",     note:"Mimir, Loki, and Tempo all support tenant headers. First-class multi-tenancy throughout the stack.", src:"https://grafana.com/docs/mimir/latest/manage/secure/" },
-      elk:       { level:"part", value:"Index-level",      note:"Document-level security in the paid commercial tier; OSS distribution is index-isolation only.", src:"https://www.elastic.co/guide/en/elasticsearch/reference/current/security-features.html" },
+      elk:       { level:"part", value:"Index-level",      note:"Document-level security in the paid commercial tier; OSS distribution is index-isolation only.", src:"https://www.elastic.co/docs/deploy-manage/security" },
       opensearch:{ level:"part", value:"Fine-grained ACL", note:"Index- and document-level access control; no soft-tenant header model like Mimir.", src:"https://opensearch.org/docs/latest/security/access-control/index/" },
       jaeger:    { level:"no",  value:"Per-deployment",    note:"No tenancy header. Isolate via separate Jaeger instances or backend ACLs.", src:"https://www.jaegertracing.io/" },
       vm:        { level:"yes", value:"Native accountID",  note:"Cluster version is natively multi-tenant via accountID/projectID labels routed through vminsert/vmselect.", src:"https://docs.victoriametrics.com/cluster-victoriametrics/" }
@@ -417,8 +417,8 @@ const FEATURES = [
     desc:"Open-source licence of the core distribution as of 2026.",
     support:{
       prom:      { level:"yes", value:"Apache 2.0",        note:"CNCF graduated; fully permissive open source.", src:"https://github.com/prometheus/prometheus/blob/main/LICENSE" },
-      grafana:   { level:"part", value:"AGPLv3",           note:"Grafana moved to AGPLv3 in 2021; Mimir, Loki, Tempo and Pyroscope also shifted to AGPLv3 in late 2023. Source-available — not Apache-permissive.", src:"https://grafana.com/blog/2024/01/02/grafana-loki-pyroscope-tempo-license-update/" },
-      elk:       { level:"part", value:"AGPLv3 (since 2024)", note:"Reverted from SSPL/Elastic License v2 to AGPLv3 in 2024 — still source-available, not Apache-permissive. Kibana follows the same path.", src:"https://www.elastic.co/blog/elastic-license-fork-aws" },
+      grafana:   { level:"part", value:"AGPLv3",           note:"Grafana moved to AGPLv3 in 2021; Mimir, Loki, Tempo and Pyroscope also shifted to AGPLv3 in late 2023. Source-available — not Apache-permissive.", src:"https://grafana.com/blog/grafana-loki-tempo-relicensing-to-agplv3/" },
+      elk:       { level:"part", value:"AGPLv3 (since 2024)", note:"Reverted from SSPL/Elastic License v2 to AGPLv3 in 2024 — still source-available, not Apache-permissive. Kibana follows the same path.", src:"https://www.elastic.co/blog/why-license-change-aws" },
       opensearch:{ level:"yes", value:"Apache 2.0",        note:"AWS-led Apache 2.0 fork after Elastic's 2021 license change. Permissive.", src:"https://github.com/opensearch-project/OpenSearch/blob/main/LICENSE.txt" },
       jaeger:    { level:"yes", value:"Apache 2.0",        note:"CNCF graduated; fully permissive.", src:"https://github.com/jaegertracing/jaeger/blob/main/LICENSE" },
       vm:        { level:"yes", value:"Apache 2.0",        note:"Apache 2.0 for the open-source edition; Enterprise edition adds proprietary features.", src:"https://github.com/VictoriaMetrics/VictoriaMetrics/blob/master/LICENSE" }

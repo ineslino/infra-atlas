@@ -411,14 +411,14 @@ const FEATURES = [
       gcp:   { level:"yes", tier:"High",
                note:"FedRAMP High authorization covering an in-scope set of Google Cloud products and US regions; FedRAMP Moderate also held for a broader product list. Google's Assured Workloads for Government helps constrain workloads to the authorized boundary.",
                src:"https://cloud.google.com/security/compliance/fedramp" },
-      // OCI — https://www.oracle.com/corporate/cloud-compliance/fedramp/
+      // OCI — https://www.oracle.com/government/govcloud/fedramp-high-jab/
       oci:   { level:"yes", tier:"High",
                note:"FedRAMP High via the Oracle US Government Cloud regions; the commercial Oracle Cloud realm is separate. Authorization is scoped to the US Gov realm and its in-scope service list — not the commercial OCI tenancy.",
-               src:"https://www.oracle.com/corporate/cloud-compliance/fedramp/" },
-      // OVH — https://us.ovhcloud.com/about/company/security/  (OVHcloud US entity)
+               src:"https://www.oracle.com/government/govcloud/fedramp-high-jab/" },
+      // OVH — https://www.ovhcloud.com/en/compliance/  (OVHcloud US entity)
       ovh:   { level:"no",
                note:"OVHcloud does not hold a FedRAMP authorization. OVHcloud US operates as a separate US entity and publishes SOC reports, but is not in the FedRAMP Marketplace as an authorized CSP. Treat as not available for US federal agency workloads.",
-               src:"https://us.ovhcloud.com/about/company/security/" }
+               src:"https://www.ovhcloud.com/en/compliance/" }
     }
   },
 
@@ -434,10 +434,10 @@ const FEATURES = [
       azure: { level:"yes", tier:"IL4–6",
                note:"DoD IL4 and IL5 Provisional Authorizations for Azure Government; IL6 for Azure Government Secret. IL5 isolation guidance applies — some services need dedicated host configuration to remain in IL5 scope.",
                src:"https://learn.microsoft.com/azure/compliance/offerings/offering-dod-il5" },
-      // GCP — https://cloud.google.com/security/compliance/dod-srg
+      // GCP — https://cloud.google.com/security/compliance/disa
       gcp:   { level:"part", tier:"IL2 / IL4",
                note:"Google Cloud holds DoD SRG IL2 and IL4 Provisional Authorizations for an in-scope product set. IL5 coverage is narrower than AWS/Azure GovCloud — confirm the current authorized service list and regions for IL5 needs.",
-               src:"https://cloud.google.com/security/compliance/dod-srg" },
+               src:"https://cloud.google.com/security/compliance/disa" },
       // OCI — https://www.oracle.com/government/  (Oracle US Government / DoD regions)
       oci:   { level:"yes", tier:"IL4–6",
                note:"DoD IL4 and IL5 via Oracle US Government Cloud; IL6 via dedicated Oracle National Security Regions / DoD regions. Scoped to those isolated realms, not commercial OCI.",
@@ -445,7 +445,7 @@ const FEATURES = [
       // OVH — no DoD authorization
       ovh:   { level:"no",
                note:"OVHcloud does not hold any DoD Cloud SRG Impact Level authorization. Not available for DoD CUI or classified workloads.",
-               src:"https://us.ovhcloud.com/about/company/security/" }
+               src:"https://www.ovhcloud.com/en/compliance/" }
     }
   },
 
@@ -458,18 +458,18 @@ const FEATURES = [
       aws:   { level:"yes", tier:"PROTECTED",
                note:"IRAP assessed at the PROTECTED level for an in-scope service list, primarily in the Asia Pacific (Sydney) and Melbourne regions. Reports are available via AWS Artifact. Scope is the assessed service list — verify a given service is included.",
                src:"https://aws.amazon.com/compliance/irap/" },
-      // Azure — https://learn.microsoft.com/azure/compliance/offerings/offering-irap
+      // Azure — https://learn.microsoft.com/en-us/compliance/regulatory/offering-irap-australia
       azure: { level:"yes", tier:"PROTECTED",
                note:"IRAP assessed up to the PROTECTED level for in-scope services in the Australia East / Australia Central regions. Microsoft publishes the IRAP assessment and an ISM control mapping via the Service Trust Portal.",
-               src:"https://learn.microsoft.com/azure/compliance/offerings/offering-irap" },
+               src:"https://learn.microsoft.com/en-us/compliance/regulatory/offering-irap-australia" },
       // GCP — https://cloud.google.com/security/compliance/irap
       gcp:   { level:"yes", tier:"PROTECTED",
                note:"IRAP assessed at the PROTECTED level for an in-scope product set, with the Sydney and Melbourne regions in geographic scope. Assessment letter and scope are published on the Google Cloud compliance offering page.",
                src:"https://cloud.google.com/security/compliance/irap" },
-      // OCI — https://www.oracle.com/au/corporate/cloud-compliance/irap/
+      // OCI — https://www.oracle.com/au/corporate/cloud-compliance/
       oci:   { level:"yes", tier:"PROTECTED",
                note:"IRAP assessed at the PROTECTED level for OCI services in Australian regions (Sydney, Melbourne). Oracle also operates dedicated Australian government cloud regions. Confirm whether commercial or government-region scope applies.",
-               src:"https://www.oracle.com/au/corporate/cloud-compliance/irap/" },
+               src:"https://www.oracle.com/au/corporate/cloud-compliance/" },
       // OVH — no IRAP; OVHcloud has no Australian government assessment / region
       ovh:   { level:"no",
                note:"OVHcloud has no IRAP assessment and no Australian region. Not positioned for Australian Government PROTECTED workloads.",
@@ -485,18 +485,18 @@ const FEATURES = [
       aws:   { level:"yes",
                note:"C5 attestation covering an in-scope AWS service list; report available via AWS Artifact. The attestation is renewed annually and the in-scope service list grows over time — check the current report for a specific service.",
                src:"https://aws.amazon.com/compliance/bsi-c5/" },
-      // Azure — https://learn.microsoft.com/azure/compliance/offerings/offering-c5-germany
+      // Azure — https://learn.microsoft.com/en-us/compliance/regulatory/offering-c5-germany
       azure: { level:"yes",
                note:"C5 attestation (type 2) for in-scope Azure services; the C5 report is published on the Service Trust Portal. Scope is the audited service list — not all Azure services are covered.",
-               src:"https://learn.microsoft.com/azure/compliance/offerings/offering-c5-germany" },
+               src:"https://learn.microsoft.com/en-us/compliance/regulatory/offering-c5-germany" },
       // GCP — https://cloud.google.com/security/compliance/bsi-c5
       gcp:   { level:"yes",
                note:"C5:2020 attestation for an in-scope set of Google Cloud products; the C5 report is available through the Compliance Reports Manager. Confirm a given product is in the audited scope.",
                src:"https://cloud.google.com/security/compliance/bsi-c5" },
-      // OCI — https://www.oracle.com/corporate/cloud-compliance/c5/
+      // OCI — https://www.oracle.com/corporate/cloud-compliance/
       oci:   { level:"yes",
                note:"C5 attestation for OCI; Oracle publishes a C5 report covering in-scope OCI services. Oracle also operates Frankfurt-region capacity relevant to German data-location requirements.",
-               src:"https://www.oracle.com/corporate/cloud-compliance/c5/" },
+               src:"https://www.oracle.com/corporate/cloud-compliance/" },
       // OVH — https://www.ovhcloud.com/en/enterprise/certification-conformity/  (OVHcloud lists BSI C5 type 2)
       ovh:   { level:"part",
                note:"OVHcloud publishes a BSI C5 type 2 attestation, but scope is narrower than the hyperscalers — bounded to specific products (e.g. parts of the Hosted Private Cloud / bare-metal range) and locations. Check OVHcloud's attestation list for the exact in-scope products before relying on it.",
@@ -508,22 +508,22 @@ const FEATURES = [
     sub:"Esquema Nacional de Seguridad",
     desc:"The Esquema Nacional de Seguridad (ENS) is Spain's National Security Framework, mandatory for public-sector systems. Cloud providers obtain ENS certification at a category — Basic, Medium or High — from an accredited certification body.",
     support: {
-      // AWS — https://aws.amazon.com/compliance/esquema-nacional-seguridad/
+      // AWS — https://aws.amazon.com/compliance/esquema-nacional-de-seguridad/
       aws:   { level:"yes", tier:"High",
                note:"ENS High certification for an in-scope AWS service list; certificate available via AWS Artifact. ENS High is the top category. Verify a given service is within the certified scope.",
-               src:"https://aws.amazon.com/compliance/esquema-nacional-seguridad/" },
-      // Azure — https://learn.microsoft.com/azure/compliance/offerings/offering-ens-spain
+               src:"https://aws.amazon.com/compliance/esquema-nacional-de-seguridad/" },
+      // Azure — https://learn.microsoft.com/en-us/compliance/regulatory/offering-ens-spain
       azure: { level:"yes", tier:"High",
                note:"ENS High certification for in-scope Azure services; the ENS certificate and scope are published via the Service Trust Portal.",
-               src:"https://learn.microsoft.com/azure/compliance/offerings/offering-ens-spain" },
+               src:"https://learn.microsoft.com/en-us/compliance/regulatory/offering-ens-spain" },
       // GCP — https://cloud.google.com/security/compliance/ens
       gcp:   { level:"yes", tier:"High",
                note:"ENS High certification covering an in-scope set of Google Cloud products; certificate published on the Google Cloud compliance offering page.",
                src:"https://cloud.google.com/security/compliance/ens" },
-      // OCI — https://www.oracle.com/es/corporate/cloud-compliance/ens/
+      // OCI — https://www.oracle.com/es/corporate/cloud-compliance/
       oci:   { level:"yes", tier:"High",
                note:"ENS High certification for OCI services. Oracle operates a Madrid (Spain) region relevant to Spanish public-sector data-location needs.",
-               src:"https://www.oracle.com/es/corporate/cloud-compliance/ens/" },
+               src:"https://www.oracle.com/es/corporate/cloud-compliance/" },
       // OVH — https://www.ovhcloud.com/es-es/enterprise/certification-conformity/  (verify ENS scope; treat as unclear)
       ovh:   { level:"part", tier:"unclear",
                note:"UNCLEAR — OVHcloud markets to the Spanish public sector and operates EU regions, but a current, clearly published ENS certificate with a defined scope for OVHcloud is not consistently documented in its central certification list. Confirm directly with OVHcloud whether an in-scope ENS certificate exists for the products you need.",
@@ -548,10 +548,10 @@ const FEATURES = [
       gcp:   { level:"yes",
                note:"ISO/IEC 27001 certified (plus 27017 / 27018 / 27701). The certificate covers an in-scope product set; the scope and certificate are available via the Compliance Reports Manager.",
                src:"https://cloud.google.com/security/compliance/iso-27001" },
-      // OCI — https://www.oracle.com/corporate/cloud-compliance/iso-27001/
+      // OCI — https://www.oracle.com/corporate/cloud-compliance/
       oci:   { level:"yes",
                note:"ISO/IEC 27001 certified for OCI (with 27017 / 27018). Certificate and scope are published on Oracle's cloud compliance pages.",
-               src:"https://www.oracle.com/corporate/cloud-compliance/iso-27001/" },
+               src:"https://www.oracle.com/corporate/cloud-compliance/" },
       // OVH — https://www.ovhcloud.com/en/enterprise/certification-conformity/
       ovh:   { level:"yes",
                note:"ISO/IEC 27001 certified (OVHcloud also holds 27017, 27018 and 27701). The certificate scope covers OVHcloud data centres / services as listed in its certification documentation — confirm the specific product and location are in scope.",
@@ -575,14 +575,14 @@ const FEATURES = [
       gcp:   { level:"yes",
                note:"SOC 1 / SOC 2 / SOC 3 reports for an in-scope Google Cloud product set. SOC 1/2 are obtained under NDA via the Compliance Reports Manager; SOC 3 is public.",
                src:"https://cloud.google.com/security/compliance/soc-2" },
-      // OCI — https://www.oracle.com/corporate/cloud-compliance/soc/
+      // OCI — https://www.oracle.com/corporate/cloud-compliance/
       oci:   { level:"yes",
                note:"SOC 1 and SOC 2 (Type II) reports are produced for in-scope OCI services and made available to customers under NDA. Confirm a given service is in the report's scope.",
-               src:"https://www.oracle.com/corporate/cloud-compliance/soc/" },
-      // OVH — https://us.ovhcloud.com/about/company/security/  (OVHcloud US publishes SOC 1 & SOC 2 Type II)
+               src:"https://www.oracle.com/corporate/cloud-compliance/" },
+      // OVH — https://www.ovhcloud.com/en/compliance/  (OVHcloud US publishes SOC 1 & SOC 2 Type II)
       ovh:   { level:"part",
                note:"SOC 2 (Type II) reporting is published primarily by the OVHcloud US entity for its US-hosted products; coverage for the EU OVHcloud entity / product range is narrower and not uniform across all services. Confirm whether a SOC 2 report exists for the specific OVHcloud product and region you need.",
-               src:"https://us.ovhcloud.com/about/company/security/" }
+               src:"https://www.ovhcloud.com/en/compliance/" }
     }
   },
 
@@ -602,10 +602,10 @@ const FEATURES = [
       gcp:   { level:"yes",
                note:"Google Cloud is a PCI DSS compliant service provider; the AOC covers an in-scope product set and is available via the Compliance Reports Manager. Customer CDE is separately assessed.",
                src:"https://cloud.google.com/security/compliance/pci-dss" },
-      // OCI — https://www.oracle.com/corporate/cloud-compliance/pci/
+      // OCI — https://www.oracle.com/corporate/cloud-compliance/
       oci:   { level:"yes",
                note:"OCI is assessed as a PCI DSS compliant service provider; Oracle's AOC covers in-scope OCI services and is available to customers. Verify a given service is listed in the AOC scope.",
-               src:"https://www.oracle.com/corporate/cloud-compliance/pci/" },
+               src:"https://www.oracle.com/corporate/cloud-compliance/" },
       // OVH — https://www.ovhcloud.com/en/enterprise/certification-conformity/  (OVHcloud lists PCI DSS for specific scoped products)
       ovh:   { level:"part",
                note:"OVHcloud holds PCI DSS attestation for a specific, narrow scope — particular products / infrastructure offerings rather than its whole catalogue. Check OVHcloud's certification list for the exact in-scope products before designing a cardholder-data environment on it.",
@@ -630,10 +630,10 @@ const FEATURES = [
       gcp:   { level:"yes",
                note:"Google Cloud offers a BAA and publishes a list of HIPAA-covered products. Only covered products may process PHI under the BAA; verify a given product is on the covered list.",
                src:"https://cloud.google.com/security/compliance/hipaa" },
-      // OCI — https://www.oracle.com/corporate/cloud-compliance/hipaa/
+      // OCI — https://www.oracle.com/corporate/cloud-compliance/
       oci:   { level:"yes",
                note:"Oracle offers a HIPAA BAA for OCI; Oracle designates in-scope OCI services for PHI workloads. Confirm a service is in scope of the BAA before use.",
-               src:"https://www.oracle.com/corporate/cloud-compliance/hipaa/" },
+               src:"https://www.oracle.com/corporate/cloud-compliance/" },
       // OVH — OVHcloud US targets HIPAA; EU OVHcloud does not market HIPAA. Region-dependent → partial.
       ovh:   { level:"part",
                note:"HIPAA is a US-market construct: the OVHcloud US entity positions products for HIPAA / healthcare and can enter a BAA for specific US-hosted offerings, while the EU OVHcloud catalogue does not market HIPAA eligibility. Availability is entity- and product-specific — confirm a BAA is offered for the exact product.",
@@ -649,18 +649,18 @@ const FEATURES = [
       aws:   { level:"yes",
                note:"AWS holds HDS certification; the certificate covers an in-scope service list, with the Paris (eu-west-3) region central to French health-data hosting. Verify a service is within the HDS-certified scope.",
                src:"https://aws.amazon.com/compliance/hds/" },
-      // Azure — https://learn.microsoft.com/azure/compliance/offerings/offering-hds-france
+      // Azure — https://learn.microsoft.com/en-us/compliance/regulatory/offering-hds-france
       azure: { level:"yes",
                note:"Azure holds HDS certification for in-scope services; the France Central region supports French health-data residency. The HDS certificate is published via the Service Trust Portal.",
-               src:"https://learn.microsoft.com/azure/compliance/offerings/offering-hds-france" },
+               src:"https://learn.microsoft.com/en-us/compliance/regulatory/offering-hds-france" },
       // GCP — https://cloud.google.com/security/compliance/hds
       gcp:   { level:"yes",
                note:"Google Cloud holds HDS certification for an in-scope product set; the Paris region supports French health-data hosting. Certificate available via the Compliance Reports Manager.",
                src:"https://cloud.google.com/security/compliance/hds" },
-      // OCI — https://www.oracle.com/fr/corporate/cloud-compliance/hds/
+      // OCI — https://www.oracle.com/fr/corporate/cloud-compliance/
       oci:   { level:"yes",
                note:"Oracle holds HDS certification for OCI; Oracle operates a Paris (France) region for French health-data residency. Confirm in-scope services on Oracle's HDS page.",
-               src:"https://www.oracle.com/fr/corporate/cloud-compliance/hds/" },
+               src:"https://www.oracle.com/fr/corporate/cloud-compliance/" },
       // OVH — https://www.ovhcloud.com/en/enterprise/certification-conformity/  (OVHcloud is HDS-certified, French operator)
       ovh:   { level:"yes",
                note:"OVHcloud holds HDS certification — as a French operator this is a long-standing strength. The certificate covers in-scope OVHcloud products hosted in eligible French / EU data centres; check the certification list for exact in-scope products.",
@@ -689,10 +689,10 @@ const FEATURES = [
       oci:   { level:"yes", tier:"EU Sovereign Cloud",
                note:"Oracle operates a dedicated EU Sovereign Cloud — physically and logically separate regions (initially in Germany and Spain) operated by EU-based legal entities and EU-resident personnel, with no connectivity to Oracle's commercial cloud. One of the more clearly delineated sovereign offerings.",
                src:"https://www.oracle.com/cloud/eu-sovereign-cloud/" },
-      // OVH — https://www.ovhcloud.com/en/enterprise/products/trusted-cloud/  (OVHcloud, EU-headquartered)
+      // OVH — https://corporate.ovhcloud.com/en/trusted-cloud/  (OVHcloud, EU-headquartered)
       ovh:   { level:"yes", tier:"EU-native",
                note:"OVHcloud is a European company headquartered in France and is structurally outside the scope of the US CLOUD Act for its EU operations — sovereignty is its core positioning rather than a bolt-on. It also offers SecNumCloud-qualified ranges (the French ANSSI sovereign-cloud qualification). Note this is a smaller service catalogue than the hyperscalers.",
-               src:"https://www.ovhcloud.com/en/enterprise/products/trusted-cloud/" }
+               src:"https://corporate.ovhcloud.com/en/trusted-cloud/" }
     }
   }
 ];
