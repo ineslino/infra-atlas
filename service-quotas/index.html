@@ -16,7 +16,7 @@
 <meta property="og:image" content="https://infraatlas.dev/og.png?v=3">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta property="og:image:alt" content="Infra Atlas — a reference for the infrastructure stack">
+<meta property="og:image:alt" content="Infra Atlas — default service quotas across AWS, Azure, GCP and OCI">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Cross-Cloud · Service Quotas Matrix · Infra Atlas">
 <meta name="twitter:description" content="Default quotas across AWS, Azure, GCP and OCI — sourced, adjustable-vs-hard marked, with the raise path for each cloud.">
@@ -246,7 +246,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, [tabindex]:focus-vis
   display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 32px;
   font-size: 13px; color: var(--paper-3);
 }
-.colophon h5 {
+.colophon h2 {
   font-family: var(--mono); font-size: 10px; letter-spacing: 0.18em;
   text-transform: uppercase; color: var(--paper-2); margin-bottom: 10px; font-weight: 500;
 }
@@ -346,15 +346,15 @@ a:focus-visible, button:focus-visible, input:focus-visible, [tabindex]:focus-vis
 
   <footer class="colophon">
     <div>
-      <h5>About</h5>
+      <h2>About</h2>
       <p>The quota layer of <a href="../">Infra Atlas</a> — the default service limits that interrupt scaling, mapped across AWS, Azure, GCP and OCI with the raise path for each. Click any cell for the note and the source URL. Scope is deliberately narrow: the quotas platform engineers actually hit — compute, serverless, networking, storage, identity, Kubernetes.</p>
     </div>
     <div>
-      <h5>Sources</h5>
+      <h2>Sources</h2>
       <p>Every cell is read off the vendor&rsquo;s own quota and limits documentation, and the source URL is cited in the cell&rsquo;s drawer. Defaults shift with account age, payment plan and vendor policy — this is a curated snapshot, verified 2026-06-12 and reviewed roughly quarterly (the CI nags at 120 days). <em>If you spot a stale default, <a href="https://github.com/ineslino/infra-atlas/issues/new" target="_blank" rel="noopener">open an issue</a>.</em></p>
     </div>
     <div>
-      <h5>Shortcuts</h5>
+      <h2>Shortcuts</h2>
       <p><code>/</code> search · <code>Esc</code> close drawer · click a cell for the note, click a row name for the full per-cloud breakdown.</p>
     </div>
   </footer>

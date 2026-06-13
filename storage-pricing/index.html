@@ -16,7 +16,7 @@
 <meta property="og:image" content="https://infraatlas.dev/og.png?v=3">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta property="og:image:alt" content="Infra Atlas — a reference for the infrastructure stack">
+<meta property="og:image:alt" content="Infra Atlas — object storage pricing across AWS, Azure, GCP, OCI and OVHcloud">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Cross-Cloud · Object Storage Pricing Matrix · Infra Atlas">
 <meta name="twitter:description" content="Object storage cost across 5 clouds — storage by tier and the retrieval/duration/egress asterisks, each cell sourced from the vendor's pricing page.">
@@ -110,7 +110,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, [tabindex]:focus-vis
 }
 .masthead__title em { font-style: italic; color: var(--accent); }
 .masthead__subtitle {
-  margin-top: 18px; font-size: 16px; color: var(--paper-2); max-width: 680px; line-height: 1.55;
+  margin-top: 18px; font-size: 16px; color: var(--paper-2); max-width: 660px; line-height: 1.55;
 }
 .masthead__subtitle span {
   font-family: var(--serif); font-style: italic; color: var(--paper);
@@ -246,7 +246,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, [tabindex]:focus-vis
   display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 32px;
   font-size: 13px; color: var(--paper-3);
 }
-.colophon h5 {
+.colophon h2 {
   font-family: var(--mono); font-size: 10px; letter-spacing: 0.18em;
   text-transform: uppercase; color: var(--paper-2); margin-bottom: 10px; font-weight: 500;
 }
@@ -307,7 +307,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, [tabindex]:focus-vis
   <div class="readnote">
     <span class="readnote__mark">*</span>
     <p class="readnote__text">
-      <strong>The cheapest per-GB tier is rarely the cheapest bill.</strong> Cold and archive tiers trade their low storage price for a retrieval fee, a minimum-duration penalty (delete early and you pay the rest anyway), and a restore wait measured in hours. The numbers below are <em>list</em> prices in USD for a representative US region (S3 N. Virginia, Azure East US, GCS us-central1; OCI and OVH price uniformly; OVH is shown in USD from its US price page, EU customers are billed in EUR). The marks score what actually helps or bites: <strong>instant access vs a mandatory restore</strong>, and <strong>free vs billed</strong> egress and requests. Storage prices and durations stay descriptive (≈) — a fact, not a virtue. Region, redundancy (LRS vs multi-region) and volume tiers move every number; read the cell's source before you commit one to a slide.
+      <strong>The cheapest per-GB tier is rarely the cheapest bill.</strong> Cold and archive tiers trade their low storage price for a retrieval fee, a minimum-duration penalty (delete early and you pay the rest anyway), and a restore wait measured in hours. The numbers below are <em>list</em> prices in USD for a representative US region (S3 N. Virginia, Azure East US, GCS us-central1; OCI and OVH price uniformly; OVH is shown in USD from its US price page, EU customers are billed in EUR). GCS and OVHcloud publish per-<em>GiB</em> rates (binary, 2<sup>30</sup>); shown here converted to per-GB to align the column — a ~7% basis difference the headline price hides. The marks score what actually helps or bites: <strong>instant access vs a mandatory restore</strong>, and <strong>free vs billed</strong> egress and requests. Storage prices and durations stay descriptive (≈) — a fact, not a virtue. Region, redundancy (LRS vs multi-region) and volume tiers move every number; read the cell's source before you commit one to a slide.
     </p>
   </div>
 
@@ -346,15 +346,15 @@ a:focus-visible, button:focus-visible, input:focus-visible, [tabindex]:focus-vis
 
   <footer class="colophon">
     <div>
-      <h5>About</h5>
+      <h2>About</h2>
       <p>The object-storage cost layer of <a href="../">Infra Atlas</a> — S3, Azure Blob, Google Cloud Storage, OCI Object Storage and OVHcloud, mapped across the dimensions that decide the real bill, not just the per-GB headline. Click any cell for the note and the source URL. Scope is the public object-storage classes; block and file storage are out of scope.</p>
     </div>
     <div>
-      <h5>Sources</h5>
+      <h2>Sources</h2>
       <p>Every cell is read off the vendor&rsquo;s own pricing and docs pages, cited in the cell&rsquo;s drawer. Prices shift with region, redundancy and volume, and the vendors restructure tiers — this is a curated snapshot, verified 2026-06-12 and reviewed roughly quarterly (the CI nags at 120 days). <em>If you spot a stale price, <a href="https://github.com/ineslino/infra-atlas/issues/new" target="_blank" rel="noopener">open an issue</a>.</em> For data-transfer costs in depth, see the <a href="/egress/">Egress Cost Map</a>.</p>
     </div>
     <div>
-      <h5>Shortcuts</h5>
+      <h2>Shortcuts</h2>
       <p><code>/</code> search · <code>Esc</code> close drawer · click a cell for the note, click a row name for the full per-cloud breakdown.</p>
     </div>
   </footer>

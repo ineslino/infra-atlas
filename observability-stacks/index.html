@@ -138,7 +138,7 @@ body {
 
 /* ─── COLOPHON ─── */
 .colophon { margin-top: 64px; padding-top: 32px; border-top: 1px solid var(--line); display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 32px; font-size: 13px; color: var(--paper-3); }
-.colophon h5 { font-family: var(--mono); font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--paper-2); margin-bottom: 10px; font-weight: 500; }
+.colophon h2 { font-family: var(--mono); font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--paper-2); margin-bottom: 10px; font-weight: 500; }
 .colophon p { font-size: 13px; line-height: 1.6; }
 .colophon p a { color: var(--paper-2); text-decoration: underline; text-decoration-color: var(--line-2); text-underline-offset: 3px; }
 .colophon p a:hover { color: var(--plum); }
@@ -226,15 +226,15 @@ body {
 
   <footer class="colophon">
     <div>
-      <h5>Scope</h5>
+      <h2>Scope</h2>
       <p>Open-source stacks you deploy and operate yourself. Excludes vendor-hosted versions (Grafana Cloud, Elastic Cloud, Aiven Loki, etc.) — those live in the <a href="/observability/">Observability Matrix</a> Section B. Commercial extensions (Elastic paid tier, Grafana Enterprise) are noted in cell footnotes only where the OSS distribution alone is materially limited.</p>
     </div>
     <div>
-      <h5>Sources</h5>
+      <h2>Sources</h2>
       <p>Every cell cites the project&rsquo;s official documentation. Licences change — Elastic and Grafana have both made non-trivial changes since 2021. Verify the current licence on the project repo before adopting. Spot an error? <a href="https://github.com/ineslino/infra-atlas/issues/new/choose" target="_blank" rel="noopener">Open an issue →</a></p>
     </div>
     <div>
-      <h5>What&rsquo;s not here</h5>
+      <h2>What&rsquo;s not here</h2>
       <p>Newer all-in-one OSS APMs (SigNoz, HyperDX, OpenObserve) — strong candidates but each has fewer than 3 years of mainstream production references at the time of writing. Operational burden estimates (storage cost, ops headcount) — too deployment-specific to compare meaningfully. See also: <a href="/decisions/cloud-native-vs-managed-vs-self-hosted-observability/">Cloud-native vs managed vs self-hosted decision</a>.</p>
     </div>
   </footer>
