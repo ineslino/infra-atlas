@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url><loc>https://infraatlas.dev/</loc><lastmod>2026-06-12</lastmod></url>
+  <url><loc>https://infraatlas.dev/</loc><lastmod>2026-06-13</lastmod></url>
   <url><loc>https://infraatlas.dev/about/</loc><lastmod>2026-06-12</lastmod></url>
   <url><loc>https://infraatlas.dev/ai-atlas/</loc><lastmod>2026-06-12</lastmod></url>
   <url><loc>https://infraatlas.dev/api/</loc><lastmod>2026-06-12</lastmod></url>
@@ -32,6 +32,7 @@
   <url><loc>https://infraatlas.dev/self-hosted-apim/</loc><lastmod>2026-06-12</lastmod></url>
   <url><loc>https://infraatlas.dev/service-quotas/</loc><lastmod>2026-06-12</lastmod></url>
   <url><loc>https://infraatlas.dev/sovereignty/</loc><lastmod>2026-06-12</lastmod></url>
+  <url><loc>https://infraatlas.dev/storage-pricing/</loc><lastmod>2026-06-13</lastmod></url>
   <url><loc>https://infraatlas.dev/support/</loc><lastmod>2026-06-12</lastmod></url>
   <url><loc>https://infraatlas.dev/toolbox/</loc><lastmod>2026-06-12</lastmod></url>
   <url><loc>https://infraatlas.dev/tools/</loc><lastmod>2026-06-12</lastmod></url>

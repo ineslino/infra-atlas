@@ -36,7 +36,8 @@
     ["/observability-stacks/",   "Observability Stacks",   "Cross-cloud", "observability open source self-hosted prometheus grafana mimir loki tempo pyroscope elk elastic stack elasticsearch kibana logstash opensearch jaeger victoriametrics signoz oss self host"],
     ["/data-layer/",             "Data Layer Equivalence", "Cross-cloud", "data layer database managed relational postgresql mysql aurora alloydb nosql redis memcached dynamodb cosmos firestore cassandra object storage s3 blob gcs equivalent cross-cloud"],
     ["/idp-matrix/",             "IDP Matrix",             "Cross-cloud", "internal developer portal idp platform engineering devex developer experience backstage spotify portal roadie port cortex opslevel atlassian compass software catalog scaffolder golden paths scorecards maturity techdocs plugins rbac"],
-    ["/service-quotas/",         "Service Quotas",         "Cross-cloud", "service quotas limits default vcpu limit ec2 on-demand spot lambda concurrency concurrent executions function timeout vpc vnet vcn elastic ip public ip nat gateway s3 buckets storage iam roles service accounts eks aks gke oke clusters adjustable hard raise increase"]
+    ["/service-quotas/",         "Service Quotas",         "Cross-cloud", "service quotas limits default vcpu limit ec2 on-demand spot lambda concurrency concurrent executions function timeout vpc vnet vcn elastic ip public ip nat gateway s3 buckets storage iam roles service accounts eks aks gke oke clusters adjustable hard raise increase"],
+    ["/storage-pricing/",        "Storage Pricing",        "Cross-cloud", "object storage pricing cost s3 azure blob gcs google cloud storage oci ovh standard nearline coldline archive glacier cold deep infrequent access tier retrieval fee egress minimum duration restore latency requests per gb"]
   ];
   var TOOLS = [
     ["/tools/tco/",          "Cross-Cloud TCO Comparator", "Tool", "tco total cost ownership monthly bill compare workload compute hours egress equivalent sku price aws azure gcp oci ovh"],
@@ -89,6 +90,7 @@
     "/regions/":                ["/ec2/", "/azure-vm/", "/gcp-compute/"],
     "/equivalent-sku/":         ["/tools/tco/", "/ec2/", "/azure-vm/", "/gcp-compute/", "/oci-compute/"],
     "/service-quotas/":         ["/ec2/", "/kubernetes/", "/networking-matrix/", "/tools/subnet/"],
+    "/storage-pricing/":        ["/egress/", "/data-layer/", "/tools/tco/", "/compliance/"],
     "/kubernetes/":             ["/networking-matrix/", "/iam-matrix/", "/equivalent-sku/", "/observability/"],
     "/iam-matrix/":             ["/networking-matrix/", "/kubernetes/", "/confidential-computing/", "/toolbox/auth/"],
     "/aws-api-gateway/":        ["/apim-matrix/", "/apigee/", "/mulesoft/", "/decisions/rest-api-vs-http-api/"],

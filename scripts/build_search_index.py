@@ -33,7 +33,7 @@ os.chdir(ROOT)
 MATRIX = [
     "kubernetes", "iam-matrix", "apim-matrix", "compliance",
     "confidential-computing", "ai-atlas", "networking-matrix", "egress",
-    "idp-matrix", "service-quotas",
+    "idp-matrix", "service-quotas", "storage-pricing",
 ]
 COMPUTE = ["ec2", "azure-vm", "gcp-compute", "oci-compute", "ovh-instances"]
 TOOLBOX = [

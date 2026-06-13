@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="color-scheme" content="dark">
+<title>Cross-Cloud · Object Storage Pricing Matrix · Infra Atlas</title>
+<link rel="icon" href="/favicon.svg?v=2" type="image/svg+xml">
+<meta name="description" content="What object storage actually costs across AWS S3, Azure Blob, Google Cloud Storage, OCI and OVHcloud — storage by access tier, plus the hidden asterisks: retrieval fees, minimum-duration penalties, restore latency, egress and per-request charges. Every cell sourced from the vendor's pricing page.">
+<link rel="canonical" href="https://infraatlas.dev/storage-pricing/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Infra Atlas">
+<meta property="og:title" content="Cross-Cloud · Object Storage Pricing Matrix · Infra Atlas">
+<meta property="og:description" content="Object storage cost across S3, Blob, GCS, OCI and OVHcloud — storage by tier plus the asterisks nobody charts neutrally: retrieval fees, minimum durations, restore latency, egress. Sourced.">
+<meta property="og:url" content="https://infraatlas.dev/storage-pricing/">
+<meta property="og:image" content="https://infraatlas.dev/og.png?v=3">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Infra Atlas — a reference for the infrastructure stack">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Cross-Cloud · Object Storage Pricing Matrix · Infra Atlas">
+<meta name="twitter:description" content="Object storage cost across 5 clouds — storage by tier and the retrieval/duration/egress asterisks, each cell sourced from the vendor's pricing page.">
+<meta name="twitter:image" content="https://infraatlas.dev/og.png?v=3">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@300;400;500;600&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/matrix.css?v=5">
+
+<style>
+:root {
+  --ink: #0A0907; --ink-2: #100E0C; --surface: #161310; --surface-2: #1E1A15; --surface-3: #2A241C;
+  --line: rgba(244, 239, 230, 0.06); --line-2: rgba(244, 239, 230, 0.14); --line-3: rgba(244, 239, 230, 0.28);
+  --paper: #F4EFE6; --paper-2: rgba(244, 239, 230, 0.66); --paper-3: rgba(244, 239, 230, 0.55); --paper-4: rgba(244, 239, 230, 0.20);
+  --accent: #FF7849; --accent-2: #FFA66E; --accent-glow: rgba(255, 120, 73, 0.22);
+  --mint: #6FE7B5; --gold: #F4C660; --plum: #C586E8; --sky: #7CD7F1; --rose: #F47B7B; --teal: #5BCCC9;
+  --yes:   #6FE7B5;
+  --no:    #F47B7B;
+  --part:  #F4C660;
+  --serif: 'Instrument Serif', 'Times New Roman', serif;
+  --mono: 'JetBrains Mono', ui-monospace, monospace;
+  --sans: 'Manrope', -apple-system, system-ui, sans-serif;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body {
+  background: var(--ink);
+  color: var(--paper);
+  font-family: var(--sans);
+  font-size: 15px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  min-height: 100vh;
+}
+
+body {
+  background:
+    radial-gradient(ellipse at 100% -10%, rgba(255, 120, 73, 0.07), transparent 55%),
+    radial-gradient(ellipse at -10% 110%, rgba(244, 198, 96, 0.05), transparent 65%),
+    var(--ink);
+  background-attachment: fixed;
+  overflow-x: hidden;
+}
+
+.grain {
+  pointer-events: none; position: fixed; inset: 0; z-index: 100; opacity: 0.08; mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml;utf8,<svg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.6 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+}
+.scanlines {
+  pointer-events: none; position: fixed; inset: 0; z-index: 99;
+  background: repeating-linear-gradient(180deg, transparent, transparent 2px, rgba(244,239,230,0.012) 2px, rgba(244,239,230,0.012) 3px);
+}
+::selection { background: var(--accent); color: var(--ink); }
+
+/* ─────────── FOCUS ─────────── */
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+a:focus-visible, button:focus-visible, input:focus-visible, [tabindex]:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+.matrix tbody tr.feature-row td.cell:focus-visible,
+.matrix tbody tr.feature-row td.feature-col:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: -2px;
+}
+
+.page { max-width: 1640px; margin: 0 auto; padding: 56px 48px 96px; position: relative; }
+
+/* ─────────── MASTHEAD ─────────── */
+.masthead {
+  display: grid; grid-template-columns: 1fr auto; gap: 48px; align-items: end;
+  padding-bottom: 36px; border-bottom: 1px solid var(--line); margin-bottom: 32px;
+}
+.masthead__eyebrow {
+  font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.22em; color: var(--paper-3);
+  text-transform: uppercase; display: inline-flex; align-items: center; gap: 12px;
+  text-decoration: none; transition: color 0.2s ease;
+}
+.masthead__eyebrow:hover { color: var(--paper); }
+.masthead__eyebrow-arrow { color: var(--accent); transition: transform 0.2s ease; }
+.masthead__eyebrow:hover .masthead__eyebrow-arrow { transform: translateX(-4px); }
+.masthead__title {
+  font-family: var(--serif); font-weight: 400;
+  font-size: clamp(48px, 7vw, 108px); line-height: 0.95; letter-spacing: -0.02em;
+  margin-top: 16px; color: var(--paper);
+}
+.masthead__title em { font-style: italic; color: var(--accent); }
+.masthead__subtitle {
+  margin-top: 18px; font-size: 16px; color: var(--paper-2); max-width: 680px; line-height: 1.55;
+}
+.masthead__subtitle span {
+  font-family: var(--serif); font-style: italic; color: var(--paper);
+}
+
+.masthead__status {
+  text-align: right; display: flex; flex-direction: column; align-items: flex-end; gap: 14px; padding-bottom: 6px;
+}
+.status-line {
+  display: inline-flex; align-items: center; gap: 10px;
+  font-family: var(--mono); font-size: 11px; letter-spacing: 0.18em;
+  text-transform: uppercase; color: var(--gold);
+}
+.status-dot {
+  width: 8px; height: 8px; border-radius: 50%; background: var(--gold);
+}
+@media (prefers-reduced-motion: no-preference) {
+  .status-dot { animation: pulse 2.4s infinite; }
+  @keyframes pulse {
+    0% { box-shadow: 0 0 0 0 rgba(244,198,96,0.5); }
+    70% { box-shadow: 0 0 0 14px rgba(244,198,96,0); }
+    100% { box-shadow: 0 0 0 0 rgba(244,198,96,0); }
+  }
+}
+.status-time { font-family: var(--mono); font-size: 12px; color: var(--paper-3); }
+.status-counts { display: flex; gap: 24px; margin-top: 4px; }
+.status-counts > div {
+  text-align: right; font-family: var(--mono); font-size: 11px; letter-spacing: 0.12em;
+  text-transform: uppercase; color: var(--paper-3); display: flex; flex-direction: column; gap: 2px;
+}
+.status-counts strong {
+  font-family: var(--serif); font-style: italic; font-weight: 400; font-size: 28px;
+  color: var(--paper); letter-spacing: -0.01em; text-transform: none;
+}
+
+/* ─────────── READING NOTE ─────────── */
+.readnote {
+  display: flex; gap: 18px; align-items: flex-start;
+  padding: 20px 24px; margin-bottom: 28px;
+  background: linear-gradient(180deg, rgba(255,120,73,0.075), rgba(255,120,73,0.02));
+  border: 1px solid rgba(255,120,73,0.22); border-radius: 5px;
+}
+.readnote__mark {
+  font-family: var(--serif); font-style: italic; font-size: 40px;
+  color: var(--accent); line-height: 0.7; flex-shrink: 0;
+}
+.readnote__text { font-size: 13.5px; color: var(--paper-2); line-height: 1.62; }
+.readnote__text strong { color: var(--paper); font-weight: 600; }
+.readnote__text em { font-family: var(--serif); font-style: italic; color: var(--paper); font-size: 15px; }
+
+/* ─────────── FILTERS ─────────── */
+.filters {
+  display: grid; grid-template-columns: auto 1fr; gap: 18px 32px; align-items: center;
+  padding: 18px 22px; background: linear-gradient(180deg, var(--surface) 0%, var(--ink-2) 100%);
+  border: 1px solid var(--line); border-radius: 4px;
+  position: sticky; top: 16px; z-index: 50; backdrop-filter: blur(12px); margin-bottom: 28px;
+}
+.filter-search {
+  flex: 1; position: relative; grid-column: 1 / -1;
+}
+.filter-search input {
+  width: 100%; background: var(--ink); border: 1px solid var(--line); color: var(--paper);
+  font-family: var(--mono); font-size: 13px; padding: 12px 16px 12px 42px;
+  border-radius: 3px; outline: none; transition: border-color 0.2s ease;
+}
+.filter-search input::placeholder { color: var(--paper-3); }
+.filter-search input:focus { border-color: var(--accent); }
+.filter-search::before {
+  content: '⌕'; position: absolute; left: 16px; top: 50%; transform: translateY(-50%);
+  color: var(--paper-3); font-size: 18px; pointer-events: none;
+}
+.filter-chips {
+  grid-column: 1 / -1; display: flex; flex-wrap: wrap; gap: 6px; align-items: center;
+}
+.filter-chips__label {
+  font-family: var(--mono); font-size: 10px; letter-spacing: 0.16em;
+  text-transform: uppercase; color: var(--paper-3); margin-right: 4px;
+}
+.chip {
+  background: transparent; border: 1px solid var(--line-2); color: var(--paper-2);
+  font-family: var(--mono); font-size: 11px; letter-spacing: 0.06em;
+  padding: 6px 12px; border-radius: 99px; cursor: pointer; transition: all 0.15s ease;
+  display: inline-flex; align-items: center; gap: 8px; white-space: nowrap;
+}
+.chip:hover { border-color: var(--paper-3); color: var(--paper); }
+.chip.is-active { background: var(--paper); border-color: var(--paper); color: var(--ink); }
+.chip .swatch {
+  width: 8px; height: 8px; border-radius: 2px;
+}
+
+/* ─────────── MATRIX (storage-specific overrides) ─────────── */
+/* base matrix table + button-wrappers + drawer + vendor-row + empty state in /assets/matrix.css */
+.matrix-wrap {
+  margin-bottom: 48px;
+  border: 1px solid var(--line); border-radius: 6px;
+  background: linear-gradient(180deg, var(--ink-2) 0%, var(--ink) 100%);
+}
+.scroll-hint { position: relative; }
+.scroll-hint::after {
+  content: ''; position: absolute; top: 0; right: 0; bottom: 0;
+  width: 48px; background: linear-gradient(to left, var(--ink), transparent);
+  pointer-events: none; border-radius: 0 5px 5px 0;
+}
+/* hide the hint only when the WRAP can fit the table: min-width + 2×48px padding */
+@media (min-width: 1377px) { .scroll-hint::after { display: none; } }
+.matrix { min-width: 1280px; /* 5 cloud columns + the label column */ }
+.matrix thead th.feature-col { min-width: 250px; /* wider label column; padding/serif from matrix.css */ }
+
+/* Hide columns when a cloud is filtered out */
+.matrix.hide-aws   .col-aws,
+.matrix.hide-azure .col-azure,
+.matrix.hide-gcp   .col-gcp,
+.matrix.hide-oci   .col-oci,
+.matrix.hide-ovh   .col-ovh { display: none; }
+
+/* ─────────── LEGEND ─────────── */
+.legend {
+  display: flex; flex-wrap: wrap; gap: 18px; align-items: center;
+  margin-bottom: 28px; padding: 16px 22px;
+  background: var(--surface); border: 1px solid var(--line); border-radius: 4px;
+  font-family: var(--mono); font-size: 11px; color: var(--paper-2);
+}
+.legend__label {
+  font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--paper-3);
+}
+.legend__item { display: inline-flex; align-items: center; gap: 8px; }
+
+/* drawer + vendor-row in /assets/matrix.css */
+
+/* ─────────── COLOPHON ─────────── */
+.colophon {
+  margin-top: 64px; padding-top: 32px; border-top: 1px solid var(--line);
+  display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 32px;
+  font-size: 13px; color: var(--paper-3);
+}
+.colophon h5 {
+  font-family: var(--mono); font-size: 10px; letter-spacing: 0.18em;
+  text-transform: uppercase; color: var(--paper-2); margin-bottom: 10px; font-weight: 500;
+}
+.colophon p { font-size: 13px; line-height: 1.6; }
+.colophon p a {
+  color: var(--paper-2); text-decoration: underline;
+  text-decoration-color: var(--line-2); text-underline-offset: 3px;
+}
+.colophon p a:hover { color: var(--accent); }
+.colophon code {
+  font-family: var(--mono); font-size: 11.5px; background: var(--surface);
+  padding: 1px 6px; border-radius: 2px; border: 1px solid var(--line); color: var(--accent-2);
+}
+
+@media (max-width: 900px) {
+  .page { padding: 32px 22px 72px; }
+  .masthead { grid-template-columns: 1fr; gap: 24px; }
+  .masthead__status { text-align: left; align-items: flex-start; }
+  .filters { position: static; padding: 14px; }
+  .colophon { grid-template-columns: 1fr; gap: 24px; }
+}
+</style>
+</head>
+<body>
+
+<div class="grain"></div>
+<div class="scanlines"></div>
+
+<div class="page">
+
+  <header class="masthead">
+    <div class="masthead__brand">
+      <a class="masthead__eyebrow" href="../">
+        <span class="masthead__eyebrow-arrow">←</span>
+        Infra Atlas · Cross-Cloud · Object Storage
+      </a>
+      <h1 class="masthead__title">Storage <em>Pricing.</em></h1>
+      <p class="masthead__subtitle">
+        What object storage really costs across AWS, Azure, GCP, OCI and OVHcloud — <span>not just the per-GB headline</span>, but the asterisks nobody charts neutrally: <span>retrieval fees, minimum-duration penalties, restore latency, egress and request charges</span>. Every cell sourced from the vendor's own pricing page.
+      </p>
+    </div>
+    <aside class="masthead__status">
+      <div class="status-line">
+        <span class="status-dot"></span>
+        <span class="status-text">Curated · v1</span>
+      </div>
+      <div class="status-time">Verified · <time datetime="2026-06-12">2026-06-12</time></div>
+      <div class="status-counts">
+        <div>Clouds<strong id="count-vendors">5</strong></div>
+        <div>Dimensions<strong id="count-features">—</strong></div>
+        <div>Sources<strong id="count-stars">—</strong></div>
+      </div>
+    </aside>
+  </header>
+
+  <main id="ia-main">
+
+  <div class="readnote">
+    <span class="readnote__mark">*</span>
+    <p class="readnote__text">
+      <strong>The cheapest per-GB tier is rarely the cheapest bill.</strong> Cold and archive tiers trade their low storage price for a retrieval fee, a minimum-duration penalty (delete early and you pay the rest anyway), and a restore wait measured in hours. The numbers below are <em>list</em> prices in USD for a representative US region (S3 N. Virginia, Azure East US, GCS us-central1; OCI and OVH price uniformly; OVH is shown in USD from its US price page, EU customers are billed in EUR). The marks score what actually helps or bites: <strong>instant access vs a mandatory restore</strong>, and <strong>free vs billed</strong> egress and requests. Storage prices and durations stay descriptive (≈) — a fact, not a virtue. Region, redundancy (LRS vs multi-region) and volume tiers move every number; read the cell's source before you commit one to a slide.
+    </p>
+  </div>
+
+  <section class="filters">
+    <div class="filter-search">
+      <label for="search" class="sr-only">Search tiers, clouds, or terms</label>
+      <input id="search" type="search" autocomplete="off" spellcheck="false" placeholder="Filter — search by tier, cloud, or term…" aria-label="Search tiers, clouds, or terms">
+    </div>
+    <div class="filter-chips" id="cat-chips"></div>
+    <div class="filter-chips" id="vendor-chips"></div>
+  </section>
+
+  <div class="sr-only" id="filter-status" role="status" aria-live="polite"></div>
+
+  <div class="legend">
+    <span class="legend__label">Legend</span>
+    <span class="legend__item"><span class="cell-mark cell-mark--yes">✓</span> Instant / free — the advantage</span>
+    <span class="legend__item"><span class="cell-mark cell-mark--part">◐</span> Caveated — read the note</span>
+    <span class="legend__item"><span class="cell-mark cell-mark--no">✗</span> Restore wait / not offered</span>
+    <span class="legend__item"><span class="cell-mark cell-mark--info">≈</span> List price / fact (not scored)</span>
+    <span class="legend__item">Click any cell for the note &amp; source</span>
+  </div>
+
+  <div class="scroll-hint">
+  <div class="matrix-wrap" id="matrix-wrap">
+    <table class="matrix" id="matrix" aria-label="Cross-cloud object storage pricing comparison"></table>
+  </div>
+  </div>
+
+  <div class="matrix-empty" id="matrix-empty" role="status" aria-live="polite">
+    <strong>No rows match your filters.</strong><br>
+    Try a broader search term, or switch the category to “All”.
+  </div>
+
+  </main>
+
+  <footer class="colophon">
+    <div>
+      <h5>About</h5>
+      <p>The object-storage cost layer of <a href="../">Infra Atlas</a> — S3, Azure Blob, Google Cloud Storage, OCI Object Storage and OVHcloud, mapped across the dimensions that decide the real bill, not just the per-GB headline. Click any cell for the note and the source URL. Scope is the public object-storage classes; block and file storage are out of scope.</p>
+    </div>
+    <div>
+      <h5>Sources</h5>
+      <p>Every cell is read off the vendor&rsquo;s own pricing and docs pages, cited in the cell&rsquo;s drawer. Prices shift with region, redundancy and volume, and the vendors restructure tiers — this is a curated snapshot, verified 2026-06-12 and reviewed roughly quarterly (the CI nags at 120 days). <em>If you spot a stale price, <a href="https://github.com/ineslino/infra-atlas/issues/new" target="_blank" rel="noopener">open an issue</a>.</em> For data-transfer costs in depth, see the <a href="/egress/">Egress Cost Map</a>.</p>
+    </div>
+    <div>
+      <h5>Shortcuts</h5>
+      <p><code>/</code> search · <code>Esc</code> close drawer · click a cell for the note, click a row name for the full per-cloud breakdown.</p>
+    </div>
+  </footer>
+
+</div>
+
+<!-- DRAWER -->
+<div class="drawer-backdrop" id="drawer-backdrop"></div>
+<aside class="drawer" id="drawer" role="dialog" aria-modal="true" aria-labelledby="drawer-title" aria-hidden="true" hidden>
+  <div class="drawer__head" id="drawer-head"></div>
+  <div class="drawer__body" id="drawer-body"></div>
+</aside>
+
+<script>
+// ═══════════════════════════════════════════════════════════════════
+// INFRA ATLAS · OBJECT STORAGE PRICING MATRIX
+// Every cell is read off the vendor's pricing/docs pages (2026-06-12).
+// Representative US region, USD, single-region/LRS where it applies.
+// The level scores the things that move the bill: instant access vs a
+// mandatory restore, and free vs billed egress/requests. Storage prices,
+// retrieval fees and durations are level:"info" — facts, not scores.
+// ═══════════════════════════════════════════════════════════════════
+
+const VENDORS = [
+  { key: "aws",   name: "AWS S3",                 short: "S3",    kind: "N. Virginia · USD", swatch: "#FF9F66" },
+  { key: "azure", name: "Azure Blob Storage",     short: "Azure", kind: "East US · LRS · USD", swatch: "#7CD7F1" },
+  { key: "gcp",   name: "Google Cloud Storage",   short: "GCS",   kind: "us-central1 · USD", swatch: "#F4C660" },
+  { key: "oci",   name: "OCI Object Storage",     short: "OCI",   kind: "Uniform · USD",     swatch: "#E26464" },
+  { key: "ovh",   name: "OVHcloud Object Storage",short: "OVH",   kind: "USD (EU in EUR)",   swatch: "#C586E8" }
+];
+
+const CATEGORIES = [
+  { key: "tiers",     label: "Storage price by access tier" },
+  { key: "retrieval", label: "The retrieval asterisks" },
+  { key: "fineprint", label: "The fine print" }
+];
+
+// level: yes (instant/free advantage) | part (caveated) | no (restore/absent) | info (a price/fact)
+const FEATURES = [
+
+  // ══ Storage price by access tier ══ (all level:info — the per-GB headline)
+  { id:"tier-standard", category:"tiers", name:"Standard / hot — $/GB-month",
+    desc:"The frequently-accessed default tier: lowest latency, highest storage price, no retrieval fee or minimum duration.",
+    support: {
+      aws:   { level:"info", value:"$0.023", note:"S3 Standard, first 50 TB/month (then $0.022, then $0.021 over 500 TB). No retrieval fee, no minimum duration, millisecond access.", src:"https://aws.amazon.com/s3/pricing/" },
+      azure: { level:"info", value:"$0.0208", note:"Blob Hot, East US, LRS, first 50 TB/month. Free retrieval, no minimum duration, millisecond access. East US 2 prices lower ($0.0184).", src:"https://azure.microsoft.com/en-us/pricing/details/storage/blobs/" },
+      gcp:   { level:"info", value:"$0.020", note:"Standard storage, us-central1 single-region. No retrieval fee, no minimum duration, low latency.", src:"https://cloud.google.com/storage/pricing" },
+      oci:   { level:"info", value:"$0.0255", note:"Standard tier, uniform across regions; the first 10 GB/month is free. No retrieval fee, no minimum retention, immediate access.", src:"https://www.oracle.com/cloud/storage/pricing/" },
+      ovh:   { level:"info", value:"$0.0081", note:"Standard (S3, HDD-backed) ≈ $0.0081/GB-month from $0.00001111/GiB-hour. The SSD-class High Performance tier is $0.0203/GB-month. No retrieval fee.", src:"https://us.ovhcloud.com/public-cloud/prices/" }
+    }
+  },
+
+  { id:"tier-ia", category:"tiers", name:"Infrequent access — $/GB-month",
+    desc:"Cheaper storage for data read occasionally — still online and instant, but with a per-GB retrieval fee and a ~30-day minimum.",
+    support: {
+      aws:   { level:"info", value:"$0.0125", note:"S3 Standard-IA. $0.01/GB retrieval, 30-day minimum, 128 KB minimum billable object size, millisecond access.", src:"https://aws.amazon.com/s3/pricing/" },
+      azure: { level:"info", value:"$0.0152", note:"Blob Cool, East US LRS. $0.01/GB retrieval, 30-day minimum (prorated on GPv2), millisecond access.", src:"https://learn.microsoft.com/en-us/azure/storage/blobs/access-tiers-overview" },
+      gcp:   { level:"info", value:"$0.010", note:"Nearline, us-central1. $0.01/GB retrieval, 30-day minimum, online (same low latency as Standard).", src:"https://cloud.google.com/storage/pricing" },
+      oci:   { level:"info", value:"$0.010", note:"Infrequent Access, uniform. $0.01/GB retrieved (first 10 GB/month free), 31-day minimum retention, immediate access.", src:"https://docs.oracle.com/en-us/iaas/Content/Object/Concepts/understandingstoragetiers.htm" },
+      ovh:   { level:"info", value:"$0.00436", note:"Infrequent Access ≈ $0.00436/GB-month from $0.00000597/GiB-hour. 30-day minimum billing; a per-GB retrieval fee applies (amount not published in fetchable text). Millisecond access.", src:"https://us.ovhcloud.com/public-cloud/prices/" }
+    }
+  },
+
+  { id:"tier-cold", category:"tiers", name:"Cold (instant) — $/GB-month",
+    desc:"A colder online tier kept for the rare read: lower storage price, higher retrieval fee, longer minimum — but still no restore wait. Not every cloud offers a distinct instant-cold tier.",
+    support: {
+      aws:   { level:"info", value:"$0.004", note:"S3 Glacier Instant Retrieval. $0.03/GB retrieval, 90-day minimum, millisecond access — archive price without the restore wait.", src:"https://aws.amazon.com/s3/pricing/" },
+      azure: { level:"info", value:"$0.0036", note:"Blob Cold tier, East US LRS. $0.03/GB retrieval, 90-day minimum, online (same retrieval latency as hot).", src:"https://learn.microsoft.com/en-us/azure/storage/blobs/access-tiers-overview" },
+      gcp:   { level:"info", value:"$0.004", note:"Coldline, us-central1. $0.02/GB retrieval, 90-day minimum, online and instant.", src:"https://cloud.google.com/storage/pricing" },
+      oci:   { level:"no", value:"Not offered", note:"OCI Object Storage has Standard, Infrequent Access and Archive — no distinct instant-cold tier between IA and the restore-based Archive.", src:"https://docs.oracle.com/en-us/iaas/Content/Object/Concepts/understandingstoragetiers.htm" },
+      ovh:   { level:"no", value:"Not offered", note:"OVHcloud's classes are Standard, High Performance, Infrequent Access and Cold Archive — no distinct instant-cold tier.", src:"https://www.ovhcloud.com/en/public-cloud/object-storage/" }
+    }
+  },
+
+  { id:"tier-deep", category:"tiers", name:"Deep archive — $/GB-month",
+    desc:"The coldest tier: the lowest storage price on the page, paid for with the longest minimum duration, a retrieval fee, and (almost everywhere) a restore measured in hours.",
+    support: {
+      aws:   { level:"info", value:"$0.00099", note:"S3 Glacier Deep Archive — $0.00099/GB-month ($1/TB). 180-day minimum. Restore: Standard within 12 h, Bulk within 48 h.", src:"https://aws.amazon.com/s3/storage-classes/glacier/" },
+      azure: { level:"info", value:"$0.00099", note:"Blob Archive, East US. 180-day minimum. Offline tier — rehydration takes up to ~15 h standard, under 1 h high-priority (objects <10 GB).", src:"https://azure.microsoft.com/en-us/pricing/details/storage/blobs/" },
+      gcp:   { level:"info", value:"$0.0012", note:"Archive, us-central1 — and uniquely, online: data is available in milliseconds, not hours. 365-day minimum, $0.05/GB retrieval.", src:"https://cloud.google.com/storage/pricing" },
+      oci:   { level:"info", value:"$0.0026", note:"Archive tier, uniform. 90-day minimum retention. Restore takes at most an hour; no per-GB retrieval fee, but restored objects bill at Standard while restored.", src:"https://docs.oracle.com/en-us/iaas/Content/Object/Concepts/understandingstoragetiers.htm" },
+      ovh:   { level:"info", value:"$0.002", note:"Cold Archive — 'starting at $0.002/GB-month' (tape-backed; live detail ≈$0.00138). 180-day minimum, $0.005/GB restore. Billed as if ≥1 TB even with less data.", src:"https://www.ovhcloud.com/en/public-cloud/cold-archive/" }
+    }
+  },
+
+  // ══ The retrieval asterisks ══
+  { id:"deep-latency", category:"retrieval", name:"Deep-archive access latency",
+    desc:"The dimension that decides whether 'archive' fits your recovery plan: is the coldest data online, or behind a restore job that takes hours?",
+    support: {
+      aws:   { level:"no", value:"12–48 h restore", note:"Glacier Deep Archive must be restored before reading: Standard retrievals within 12 hours, Bulk within 48. Not suitable for time-sensitive reads.", src:"https://docs.aws.amazon.com/AmazonS3/latest/userguide/restoring-objects-retrieval-options.html" },
+      azure: { level:"no", value:"1–15 h rehydrate", note:"Archive is offline. Rehydration to an online tier: high-priority under 1 h (objects <10 GB), standard up to 15 h; capped at 10 GiB/hour per account.", src:"https://learn.microsoft.com/en-us/azure/storage/blobs/archive-rehydrate-overview" },
+      gcp:   { level:"yes", value:"Milliseconds", note:"The standout: 'Unlike the coldest storage services offered by other Cloud providers, your data is available within milliseconds, not hours or days.' No restore job.", src:"https://cloud.google.com/storage/docs/storage-classes" },
+      oci:   { level:"part", value:"≤ 1 h restore", note:"Archive needs a restore request, but the fastest of the restore-based tiers: 'Restoration takes at most an hour … to the time the first byte of data is retrieved.'", src:"https://docs.oracle.com/en-us/iaas/Content/Object/Concepts/understandingstoragetiers.htm" },
+      ovh:   { level:"no", value:"Minutes–48 h", note:"Cold Archive is tape-backed: 'restore time can vary from a few minutes to several hours'; hundreds of TB may take up to 48 hours.", src:"https://www.ovhcloud.com/en/public-cloud/cold-archive/" }
+    }
+  },
+
+  { id:"deep-retrieval", category:"retrieval", name:"Deep-archive retrieval fee — $/GB",
+    desc:"What you pay per gigabyte to read cold data back — separate from, and on top of, any internet egress.",
+    support: {
+      aws:   { level:"info", value:"$0.02 / $0.0025", note:"Glacier Deep Archive: $0.02/GB Standard, $0.0025/GB Bulk (Expedited not available). Restore-request fees apply on top.", src:"https://aws.amazon.com/s3/pricing/" },
+      azure: { level:"info", value:"$0.02 / $0.10", note:"Archive data retrieval: $0.02/GB standard priority, $0.10/GB high priority.", src:"https://azure.microsoft.com/en-us/pricing/details/storage/blobs/" },
+      gcp:   { level:"info", value:"$0.05", note:"Archive retrieval: $0.05/GB — the highest per-GB retrieval here, the trade for millisecond access and no restore job.", src:"https://cloud.google.com/storage/pricing" },
+      oci:   { level:"info", value:"None", note:"No per-GB Archive retrieval fee. Restored objects are billed at Standard tier rates for as long as they sit restored.", src:"https://docs.oracle.com/en-us/iaas/Content/Object/Concepts/understandingstoragetiers.htm" },
+      ovh:   { level:"info", value:"$0.005", note:"Cold Archive restore is billed at $0.005/GB ('Cold restore: $0.005'). Data restoration, when needed, is billed.", src:"https://www.ovhcloud.com/en/public-cloud/old-prices/" }
+    }
+  },
+
+  { id:"deep-mindur", category:"retrieval", name:"Deep-archive minimum duration",
+    desc:"Delete or overwrite an object before this window and you are billed for the remaining days anyway — the penalty that punishes churny archives.",
+    support: {
+      aws:   { level:"info", value:"180 days", note:"Glacier Deep Archive — objects deleted before 180 days are charged for the remainder. Min billable object size 40 KB.", src:"https://aws.amazon.com/s3/pricing/" },
+      azure: { level:"info", value:"180 days", note:"Archive — 180-day early-deletion window, prorated.", src:"https://learn.microsoft.com/en-us/azure/storage/blobs/access-tiers-overview" },
+      gcp:   { level:"info", value:"365 days", note:"Archive — a full year minimum, the longest here. Early deletion is charged for the remaining days.", src:"https://cloud.google.com/storage/docs/storage-classes" },
+      oci:   { level:"info", value:"90 days", note:"Archive minimum retention is 90 days — the shortest archive window of the five.", src:"https://docs.oracle.com/en-us/iaas/Content/Object/Concepts/understandingstoragetiers.htm" },
+      ovh:   { level:"info", value:"180 days", note:"Cold Archive — 'Minimum storage billed: 180 days', and billed as if at least 1 TB even with less data.", src:"https://www.ovhcloud.com/en/public-cloud/cold-archive/" }
+    }
+  },
+
+  { id:"ia-mindur", category:"retrieval", name:"Infrequent-access minimum duration",
+    desc:"The shorter early-deletion window on the warm-but-cheaper tier — the one most workloads actually use.",
+    support: {
+      aws:   { level:"info", value:"30 days", note:"S3 Standard-IA — 30-day minimum, 128 KB min billable object size.", src:"https://aws.amazon.com/s3/pricing/" },
+      azure: { level:"info", value:"30 days", note:"Blob Cool — 30-day early-deletion window (no minimum on legacy Blob Storage accounts).", src:"https://learn.microsoft.com/en-us/azure/storage/blobs/access-tiers-overview" },
+      gcp:   { level:"info", value:"30 days", note:"Nearline — 30-day minimum storage duration.", src:"https://cloud.google.com/storage/docs/storage-classes" },
+      oci:   { level:"info", value:"31 days", note:"Infrequent Access — 31-day minimum retention.", src:"https://docs.oracle.com/en-us/iaas/Content/Object/Concepts/understandingstoragetiers.htm" },
+      ovh:   { level:"info", value:"30 days", note:"Infrequent Access — 30-day minimum billing.", src:"https://us.ovhcloud.com/public-cloud/prices/" }
+    }
+  },
+
+  // ══ The fine print ══
+  { id:"egress", category:"fineprint", name:"Internet egress on read",
+    desc:"The charge to send retrieved data out to the internet — distinct from the storage retrieval fee, and often the bigger number. This is where OVHcloud broke ranks.",
+    support: {
+      aws:   { level:"info", value:"Billed", note:"Internet data-transfer-out is charged separately on the standard egress tiers — see the Egress Cost Map. First 100 GB/month free, then ~$0.09/GB.", src:"https://aws.amazon.com/s3/pricing/" },
+      azure: { level:"info", value:"Billed", note:"Outbound internet transfer billed on the bandwidth tiers — see the Egress Cost Map. First 100 GB/month free.", src:"https://azure.microsoft.com/en-us/pricing/details/bandwidth/" },
+      gcp:   { level:"info", value:"Billed", note:"Internet egress billed on the network tiers — see the Egress Cost Map.", src:"https://cloud.google.com/storage/pricing" },
+      oci:   { level:"part", value:"10 TB/mo free", note:"OCI includes 10 TB/month of outbound data transfer free across the tenancy, then bills — the most generous free allowance of the hyperscalers.", src:"https://www.oracle.com/cloud/networking/pricing/" },
+      ovh:   { level:"yes", value:"Free", note:"The standout: OVHcloud removed object-storage egress fees as of 2026-01-01 — 'free API calls, internal traffic, and outgoing traffic.' Every traffic row reads 'Included'.", src:"https://www.ovhcloud.com/en/public-cloud/object-storage/" }
+    }
+  },
+
+  { id:"requests", category:"fineprint", name:"Per-request operations",
+    desc:"The per-operation charge that quietly dominates the bill for small-object, high-throughput workloads.",
+    support: {
+      aws:   { level:"info", value:"PUT $0.005/1k · GET $0.0004/1k", note:"S3 Standard request pricing: $0.005 per 1,000 PUT/COPY/POST/LIST, $0.0004 per 1,000 GET and all other requests.", src:"https://aws.amazon.com/s3/pricing/" },
+      azure: { level:"info", value:"Write $0.05 · Read $0.004 /10k", note:"Blob Hot, LRS: $0.05 per 10,000 write operations, $0.004 per 10,000 read. Cool/Cold/Archive cost more per operation.", src:"https://azure.microsoft.com/en-us/pricing/details/storage/blobs/" },
+      gcp:   { level:"info", value:"A $0.005 · B $0.0004 /1k", note:"Standard, single-region: Class A operations $0.005 per 1,000, Class B $0.0004 per 1,000. Multi-region and hierarchical namespace cost more.", src:"https://cloud.google.com/storage/pricing" },
+      oci:   { level:"part", value:"$0.0034/10k, 50k free", note:"$0.0034 per 10,000 requests, with the first 50,000 requests/month free.", src:"https://www.oracle.com/cloud/storage/pricing/" },
+      ovh:   { level:"yes", value:"None", note:"The standout: OVHcloud does not bill per request on Object Storage — 'No API call fees.' Archive classes bill on restored volume, not request count.", src:"https://www.ovhcloud.com/en/public-cloud/object-storage/" }
+    }
+  }
+
+];
+
+// ─── State ───
+const state = { category: "all", vendors: new Set(VENDORS.map(v => v.key)), query: "" };
+
+const $ = (s) => document.querySelector(s);
+
+const escapeHtml = (s) => String(s).replace(/[&<>"']/g, (c) => ({
+  "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
+}[c]));
+
+// Filter machinery (category + cloud chips, search, permalink ⇄ hash) lives in
+// /assets/matrix.js — IA.matrix.filters(...), built in init() below.
+
+let F;  // shared filter machinery (IA.matrix.filters), built once IA.matrix is ready
+function init() {
+  // Counts
+  $("#count-features").textContent = FEATURES.length;
+  const stars = FEATURES.reduce((acc, f) => acc + Object.values(f.support).filter(s => s.src && s.src.length > 0).length, 0);
+  $("#count-stars").textContent = stars;
+
+  F = IA.matrix.filters({
+    state, vendors: VENDORS, categories: CATEGORIES,
+    catChipsEl: $("#cat-chips"), vendorChipsEl: $("#vendor-chips"), searchEl: $("#search"),
+    categoryLabel: "Category", vendorLabel: "Clouds", vendorParam: "clouds",
+    onChange: applyFilter
+  });
+
+  F.buildChips();
+  F.applyHash();
+  renderMatrix();
+  F.wire();
+  IA.matrix.drawer.init();
+  IA.matrix.wireDelegation((featureId, vendorKey) => {
+    const f = FEATURES.find(x => x.id === featureId);
+    if (f) openFeatureDrawer(f, vendorKey);
+  });
+  IA.matrix.syncChipsAria('.chip[data-cat]');
+  IA.matrix.syncChipsAria('.chip[data-v]');
+  window.addEventListener("hashchange", () => { F.applyHash(); applyFilter(); });
+}
+
+function renderMatrix() {
+  IA.matrix.renderTable({
+    tableEl: $("#matrix"),
+    vendors: VENDORS, categories: CATEGORIES, features: FEATURES,
+    dimensionLabel: "Dimension"
+  });
+  applyFilter();
+}
+
+function applyFilter() {
+  const q = state.query.trim().toLowerCase();
+  const table = $("#matrix");
+
+  VENDORS.forEach(v => {
+    table.classList.toggle(`hide-${v.key}`, !state.vendors.has(v.key));
+  });
+
+  const anyFilter = !!q || state.category !== "all" || state.vendors.size < VENDORS.length;
+  IA.matrix.applyVisibility({
+    table, features: FEATURES, categories: CATEGORIES,
+    isVisibleFn: (f) => {
+      if (state.category !== "all" && f.category !== state.category) return false;
+      if (!q) return true;
+      const cat = (CATEGORIES.find(c => c.key === f.category) || {}).label || "";
+      const vendorHay = VENDORS
+        .filter(v => state.vendors.has(v.key))
+        .map(v => { const s = f.support[v.key] || {}; return `${v.name} ${v.short} ${v.kind} ${s.value || ""} ${s.note || ""}`; })
+        .join(" ");
+      return `${f.name} ${f.desc} ${cat} ${vendorHay}`.toLowerCase().includes(q);
+    },
+    emptyEl: $("#matrix-empty"),
+    statusEl: $("#filter-status"),
+    statusNoun: "row", statusNounPlural: "rows",
+    anyFilterActive: anyFilter
+  });
+  F.writeHash();
+}
+
+function openFeatureDrawer(feature, focusVendor) {
+  const cat = (CATEGORIES.find(c => c.key === feature.category) || {}).label || "";
+  const head = `
+    <button class="drawer__close" type="button" data-action="close-drawer" aria-label="Close (Esc)">✕</button>
+    <div class="drawer__eyebrow">${escapeHtml(cat)}</div>
+    <h2 class="drawer__title" id="drawer-title">${escapeHtml(feature.name)}</h2>
+    <p class="drawer__desc">${escapeHtml(feature.desc)}</p>
+  `;
+  const body = `<div class="drawer__section"><h4>Per-cloud detail &amp; sources</h4>` +
+    VENDORS.map(v => {
+      const s = feature.support[v.key] || { level: "no", value: "—", note: "" };
+      const sym = s.level === "yes" ? "✓" : s.level === "part" ? "◐" : s.level === "info" ? "≈" : "✗";
+      const markLabel = s.level === "yes" ? "Advantage" : s.level === "part" ? "Caveated — read the note" : s.level === "info" ? "List price / fact" : "Restore wait / not offered";
+      const isFocus = focusVendor === v.key;
+      const valText = s.value || sym;
+      const srcHtml = s.src
+        ? `<div class="vendor-row__src">Source · <a href="${escapeHtml(s.src)}" target="_blank" rel="noopener">${escapeHtml(s.src)}</a></div>`
+        : "";
+      return `<div class="vendor-row" ${isFocus ? 'style="border-color: var(--accent); background: rgba(255,120,73,0.05);"' : ''}>
+        <span class="vendor-row__mark vendor-row__mark--${s.level}" role="img" aria-label="${markLabel}">${sym}</span>
+        <div>
+          <div class="vendor-row__name"><span class="swatch" style="background:${v.swatch}" aria-hidden="true"></span>${escapeHtml(v.name)} <span style="color:var(--paper-3); font-weight:400">· ${escapeHtml(v.kind)}</span></div>
+          <div class="vendor-row__value vendor-row__value--${s.level}">${escapeHtml(valText)}</div>
+          <div class="vendor-row__note">${escapeHtml(s.note || (s.level === "no" ? "Not offered." : "—"))}</div>
+          ${srcHtml}
+        </div>
+      </div>`;
+    }).join("") + `</div>`;
+  IA.matrix.drawer.open(head, body);
+}
+
+function bootstrap() {
+  if (!window.IA || !window.IA.matrix) { setTimeout(bootstrap, 20); return; }
+  init();
+}
+bootstrap();
+</script>
+<script src="/assets/matrix.js?v=4" defer></script>
+<script src="/nav.js?v=7" defer></script>
+</body>
+</html>
