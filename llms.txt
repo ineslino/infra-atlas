@@ -44,6 +44,7 @@ Data is CC BY 4.0; the data endpoints below are CORS-enabled JSON, no key needed
 - [IDP Matrix](https://infraatlas.dev/idp-matrix/): Backstage, Roadie, Port, Cortex, OpsLevel, Compass compared neutrally
 - [Data Layer Equivalence](https://infraatlas.dev/data-layer/): managed database/storage equivalents across clouds
 - [Service Quotas](https://infraatlas.dev/service-quotas/): the default quotas that bite during scaling — vCPUs, concurrency, VPCs, IPs, buckets, roles, clusters — adjustable-vs-hard marked, with the raise path per cloud
+- [Storage Pricing](https://infraatlas.dev/storage-pricing/): object storage cost across S3, Azure Blob, GCS, OCI and OVHcloud — storage by tier plus retrieval fees, minimum durations, restore latency, egress and per-request charges, all sourced
 
 ## Decision guides
 

@@ -22,7 +22,7 @@ key.
 
 ## The instruments
 
-25 instruments in three departments — plus a Decisions department of
+26 instruments in three departments — plus a Decisions department of
 side-by-side "X vs Y" guides, a set of calculators, and a public data API.
 
 ### Cloud compute
@@ -64,6 +64,7 @@ side-by-side "X vs Y" guides, a set of calculators, and a public data API.
 | IDP Matrix | `idp-matrix/` | Internal Developer Portals (Backstage, Port, Cortex…) — dated snapshot |
 | Data Layer Equivalence | `data-layer/` | Managed database/storage equivalents across clouds — dated snapshot |
 | Service Quotas | `service-quotas/` | Default quotas that bite during scaling, adjustable-vs-hard — dated snapshot |
+| Storage Pricing | `storage-pricing/` | Object storage cost across 5 clouds — tiers, retrieval, egress asterisks — dated snapshot |
 
 ### Decisions
 

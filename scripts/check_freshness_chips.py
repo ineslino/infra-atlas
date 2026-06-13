@@ -36,6 +36,7 @@ SNAPSHOT = [
     "kubernetes", "compliance", "sovereignty", "confidential-computing",
     "iam-matrix", "ai-atlas", "egress", "networking-matrix", "observability",
     "observability-stacks", "idp-matrix", "data-layer", "service-quotas",
+    "storage-pricing",
 ]
 
 CHIP_RE = re.compile(
