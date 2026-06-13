@@ -148,3 +148,9 @@ jobs:
       # the README's instrument count drifts.
       - name: Check README and llms.txt mirror the nav.js registry
         run: python3 scripts/check_registry_sync.py
+
+      # The shared instrument/calculator template put colophon column heads at
+      # <h5>, so pages jumped h1→h5 for screen-reader heading nav (UI audit,
+      # 2026-06-13). This fails if a colophon footer reintroduces <h5>.
+      - name: Check colophon heading levels (no h1→h5 skip)
+        run: python3 scripts/check_heading_levels.py

@@ -348,7 +348,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, [tabindex]:focus-vis
   display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 32px;
   font-size: 13px; color: var(--paper-3);
 }
-.colophon h5 {
+.colophon h2 {
   font-family: var(--mono); font-size: 10px; letter-spacing: 0.18em;
   text-transform: uppercase; color: var(--paper-2); margin-bottom: 10px; font-weight: 500;
 }
@@ -442,15 +442,15 @@ a:focus-visible, button:focus-visible, input:focus-visible, [tabindex]:focus-vis
 
   <footer class="colophon">
     <div>
-      <h5>About</h5>
+      <h2>About</h2>
       <p>Instrument 18 of <a href="../">Infra Atlas</a>. The cross-cloud data-transfer cost map — what AWS, Azure and Google Cloud charge to move a gigabyte: out to the internet, between zones and regions, and through a NAT gateway or a private interconnect. Each route shows the price ladder inline; click any cloud for the note and the source.</p>
     </div>
     <div>
-      <h5>Sources &amp; method</h5>
+      <h2>Sources &amp; method</h2>
       <p>Every rate is a published list price, curated from the providers&rsquo; official pricing pages — AWS EC2, VPC and Direct Connect; Azure bandwidth, NAT Gateway and ExpressRoute; Google Cloud network, NAT and Interconnect. Source URLs are cited in each cell&rsquo;s drawer. Pricing pages render dynamically and change without notice — this is a snapshot, verified 2026-05-19, not a live feed. List price, never the invoiced price. <em>Spot a stale rate? <a href="https://github.com/ineslino/infra-atlas/issues/new" target="_blank" rel="noopener">Open an issue</a>.</em></p>
     </div>
     <div>
-      <h5>Shortcuts</h5>
+      <h2>Shortcuts</h2>
       <p><code>/</code> search · <code>Esc</code> close drawer · click any cloud panel for the full note, the tier ladder and the source. The same data is published as JSON at <code>/egress/data.json</code>.</p>
     </div>
   </footer>

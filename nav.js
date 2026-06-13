@@ -739,9 +739,20 @@
     window.addEventListener("scroll", onScroll, { passive: true });
     window.addEventListener("resize", onScroll, { passive: true });
     scan();
-    // data tables render from inline bootstraps after this script — keep watching
-    new MutationObserver(function () { if (!scanRaf) scanRaf = requestAnimationFrame(scan); })
-      .observe(document.body, { childList: true, subtree: true });
+    // data tables render from inline bootstraps after this script — keep watching,
+    // but ignore mutations confined to our own injected chrome (nav, palette,
+    // dock, drawer, shortlist, sticky clones) so an interaction-time DOM change
+    // doesn't trigger a full-document table re-scan for nothing.
+    var CHROME = ".ia-nav,.ia-cmdk,.ctbl-dock,.ctbl-cmp,.drawer,.ia-sl,.ia-sthead,.ia-grat,.ia-support,.ia-fresh,.ia-totop";
+    new MutationObserver(function (records) {
+      for (var i = 0; i < records.length; i++) {
+        var t = records[i].target;
+        if (t.nodeType === 1 && !t.closest(CHROME)) {
+          if (!scanRaf) scanRaf = requestAnimationFrame(scan);
+          return;
+        }
+      }
+    }).observe(document.body, { childList: true, subtree: true });
   })();
 
   // ── Copy this view — CSV / Markdown / JSON / link export on matrices ──
