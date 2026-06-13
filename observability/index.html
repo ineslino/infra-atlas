@@ -335,7 +335,7 @@ const FEATURES_A = [
     support:{
       cw:    { level:"yes", value:"CloudWatch Metrics",  note:"AWS resources emit metrics at no extra cost. Custom metrics ~$0.30/metric/month. 15-month retention by default.", src:"https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/working_with_metrics.html" },
       azmon: { level:"yes", value:"Azure Metrics",       note:"Platform metrics are free; custom and logs-based metrics are billable. 93 days default retention; custom metrics configurable to 2 years.", src:"https://learn.microsoft.com/en-us/azure/azure-monitor/essentials/metrics-getting-started" },
-      gcpm:  { level:"yes", value:"Cloud Monitoring",    note:"System metrics included free. Custom metrics charged per MiB ingested. 6-week retention for system metrics; 24 months for custom.", src:"https://cloud.google.com/monitoring/docs/metrics" },
+      gcpm:  { level:"yes", value:"Cloud Monitoring",    note:"System metrics included free. Custom metrics charged per MiB ingested. 6-week retention for system metrics; 24 months for custom.", src:"https://docs.cloud.google.com/monitoring/api/metrics_gcp" },
       ocimon:{ level:"yes", value:"OCI Metrics",         note:"Raw data retained 90 days; aggregated data up to 14 months. OCI resources emit metrics for free.", src:"https://docs.oracle.com/en-us/iaas/Content/Monitoring/Concepts/monitoringoverview.htm" }
     }
   },
@@ -372,7 +372,7 @@ const FEATURES_A = [
     support:{
       cw:    { level:"yes", value:"15 months",           note:"CloudWatch keeps metrics for 15 months. High-resolution (1-second) metrics retained 3 hours; 1-minute for 15 days; 5-minute for 63 days.", src:"https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/cloudwatch_concepts.html" },
       azmon: { level:"yes", value:"93 days",             note:"Platform metrics retained 93 days by default. Custom metrics: 30 days standard, configurable to 2 years.", src:"https://learn.microsoft.com/en-us/azure/azure-monitor/essentials/data-platform-metrics#retention-of-metrics" },
-      gcpm:  { level:"part", value:"6 weeks / 24 months",note:"System metrics: 6 weeks. Custom metrics: 24 months. Shorter-than-expected default for system metrics is a common surprise.", src:"https://cloud.google.com/monitoring/docs/retention-policy" },
+      gcpm:  { level:"part", value:"6 weeks / 24 months",note:"System metrics: 6 weeks. Custom metrics: 24 months. Shorter-than-expected default for system metrics is a common surprise.", src:"https://docs.cloud.google.com/monitoring/api/v3/latency-n-retention" },
       ocimon:{ level:"yes", value:"90 days (raw)",       note:"Raw data points retained 90 days. Aggregated rollups kept up to 14 months.", src:"https://docs.oracle.com/en-us/iaas/Content/Monitoring/Concepts/monitoringoverview.htm" }
     }
   },
@@ -400,7 +400,7 @@ const FEATURES_A = [
     support:{
       cw:    { level:"yes", value:"ADOT",                note:"AWS Distro for OpenTelemetry (ADOT) provides auto-instrumentation for Java, Python, Node, .NET. Recommended path for OTEL on AWS.", src:"https://aws.amazon.com/otel/" },
       azmon: { level:"yes", value:"Azure Monitor Distro", note:"Azure Monitor OpenTelemetry Distro wraps the OTEL SDK for Java, Python, Node, .NET. GA for Java and Node; preview for others.", src:"https://learn.microsoft.com/en-us/azure/azure-monitor/app/opentelemetry-enable" },
-      gcpm:  { level:"yes", value:"Cloud Ops Agent",     note:"Google Cloud Ops Agent and native OTEL SDK support. GCP also publishes language-specific guides for OTEL SDK integration.", src:"https://cloud.google.com/logging/docs/agent/opentelemetry/cloud-ops-agent" },
+      gcpm:  { level:"yes", value:"Cloud Ops Agent",     note:"Google Cloud Ops Agent and native OTEL SDK support. GCP also publishes language-specific guides for OTEL SDK integration.", src:"https://docs.cloud.google.com/stackdriver/docs/solutions/agents/ops-agent" },
       ocimon:{ level:"yes", value:"OCI APM Agents",      note:"OCI APM provides Java, Node, and Python agents. OTEL SDK support via the APM OTLP endpoint for all other languages.", src:"https://docs.oracle.com/en-us/iaas/application-performance-monitoring/doc/configure-open-source-tracing-systems.html" }
     }
   },
@@ -411,7 +411,7 @@ const FEATURES_A = [
       cw:    { level:"yes", value:"Container Insights",  note:"Amazon CloudWatch Container Insights for EKS provides node, pod, and container metrics using a CloudWatch agent DaemonSet.", src:"https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/ContainerInsights.html" },
       azmon: { level:"yes", value:"Container Insights",  note:"Azure Monitor Container Insights for AKS. Prometheus scraping now supported; Managed Prometheus (Azure Monitor for Prometheus) GA since 2023.", src:"https://learn.microsoft.com/en-us/azure/azure-monitor/containers/container-insights-overview" },
       gcpm:  { level:"yes", value:"GKE Observability",   note:"GKE System Metrics and Google Cloud Managed Prometheus for node/pod metrics. Native integration — no agent installation required.", src:"https://cloud.google.com/stackdriver/docs/solutions/gke/observing" },
-      ocimon:{ level:"yes", value:"OKE Monitoring",      note:"OCI Container Engine for Kubernetes emits cluster metrics to OCI Monitoring. Node metrics via the OCI Management Agent.", src:"https://docs.oracle.com/en-us/iaas/Content/ContEng/Concepts/contengaboutmonitoringclusters.htm" }
+      ocimon:{ level:"yes", value:"OKE Monitoring",      note:"OCI Container Engine for Kubernetes emits cluster metrics to OCI Monitoring. Node metrics via the OCI Management Agent.", src:"https://docs.oracle.com/en-us/iaas/Content/ContEng/Tasks/contengobservingclusters_topic.htm" }
     }
   },
   { id:"a-k8s-cp", category:"kubernetes", name:"Control plane logs",
@@ -420,7 +420,7 @@ const FEATURES_A = [
       cw:    { level:"yes", value:"EKS control plane logs", note:"Optional, per log type. Enabled per cluster; routes to a CloudWatch log group. Not enabled by default.", src:"https://docs.aws.amazon.com/eks/latest/userguide/control-plane-logs.html" },
       azmon: { level:"yes", value:"AKS diagnostics logs", note:"Kube-apiserver, kube-scheduler, kube-controller-manager logs available via AKS Diagnostic settings. Sent to Log Analytics or Storage.", src:"https://learn.microsoft.com/en-us/azure/aks/monitor-aks" },
       gcpm:  { level:"yes", value:"GKE audit logs",       note:"GKE system components emit to Cloud Audit Logs. Admin Activity logs always on; Data Access logs configurable.", src:"https://cloud.google.com/kubernetes-engine/docs/how-to/audit-logging" },
-      ocimon:{ level:"yes", value:"OKE audit logs",       note:"Kubernetes API server audit logs sent to OCI Audit service. Enabled via OKE cluster settings.", src:"https://docs.oracle.com/en-us/iaas/Content/ContEng/Concepts/contengaboutmonitoringclusters.htm" }
+      ocimon:{ level:"yes", value:"OKE audit logs",       note:"Kubernetes API server audit logs sent to OCI Audit service. Enabled via OKE cluster settings.", src:"https://docs.oracle.com/en-us/iaas/Content/ContEng/Tasks/contengobservingclusters_topic.htm" }
     }
   },
   // ── Alerting ──
@@ -470,7 +470,7 @@ const FEATURES_B = [
       dd:       { level:"yes", value:"Metrics",         note:"DogStatsD and custom metrics. Custom metrics pricing is per host/metric. 15-month retention. Excellent query language (DDMetrics QL).", src:"https://docs.datadoghq.com/metrics/" },
       grafana:  { level:"yes", value:"Prometheus/Mimir",note:"Prometheus-compatible Mimir backend. Unlimited cardinality on paid tiers. 13-month retention on free tier.", src:"https://grafana.com/docs/grafana-cloud/data-configuration/metrics/" },
       nr:       { level:"yes", value:"NRDB Metrics",    note:"All telemetry stored in NRDB (New Relic Database). 8-day retention on free tier; 13 months on paid. Powerful NRQL query language.", src:"https://docs.newrelic.com/docs/data-apis/understand-data/new-relic-data-types/" },
-      honeycomb:{ level:"part", value:"Events-model",   note:"Honeycomb uses a high-cardinality wide-events model — metrics are derived from events/traces rather than a separate metrics store. Excellent for high-cardinality analysis; not a traditional metrics system.", src:"https://docs.honeycomb.io/concepts/metrics/" },
+      honeycomb:{ level:"part", value:"Events-model",   note:"Honeycomb uses a high-cardinality wide-events model — metrics are derived from events/traces rather than a separate metrics store. Excellent for high-cardinality analysis; not a traditional metrics system.", src:"https://docs.honeycomb.io/get-started/observability/concepts/events-metrics-logs" },
       dynatrace:{ level:"yes", value:"Davis AI Metrics",note:"All metrics enriched by Smartscape topology. Davis AI auto-baselines and detects anomalies. 14-month retention on paid.", src:"https://www.dynatrace.com/support/help/observe-and-explore/metrics/" }
     }
   },
@@ -501,7 +501,7 @@ const FEATURES_B = [
       grafana:  { level:"yes", value:"Grafana Pyroscope", note:"Open-source Pyroscope (merged into Grafana). Supports Go, Java, Python, Ruby, Rust, Node. 100 GB/month free tier.", src:"https://grafana.com/docs/pyroscope/latest/" },
       nr:       { level:"part", value:"Pixie (K8s only)", note:"Pixie by New Relic provides eBPF-based profiling for Kubernetes workloads. Not available for non-K8s environments.", src:"https://docs.newrelic.com/docs/kubernetes-pixie/auto-telemetry-pixie/get-started-auto-telemetry-pixie/" },
       honeycomb:{ level:"no",  value:"Not available",   note:"Honeycomb does not offer profiling. It is a traces-first, high-cardinality analysis tool — profiling is outside its scope.", src:"https://docs.honeycomb.io/" },
-      dynatrace:{ level:"yes", value:"Continuous Profiling", note:"Integrated with OneAgent. Code-level hotspot analysis correlated with PurePath traces and anomaly detection.", src:"https://www.dynatrace.com/support/help/observe-and-explore/profiling-and-code-analysis/" }
+      dynatrace:{ level:"yes", value:"Continuous Profiling", note:"Integrated with OneAgent. Code-level hotspot analysis correlated with PurePath traces and anomaly detection.", src:"https://docs.dynatrace.com/docs/observe/application-observability/profiling-and-optimization" }
     }
   },
   { id:"b-rum", category:"signals", name:"RUM / Frontend monitoring",
@@ -511,7 +511,7 @@ const FEATURES_B = [
       grafana:  { level:"yes", value:"Grafana Faro",    note:"Grafana Faro for frontend observability (errors, web vitals, logs from browser). Integrated with Tempo for browser-to-backend correlation.", src:"https://grafana.com/docs/grafana-cloud/monitor-applications/frontend-observability/" },
       nr:       { level:"yes", value:"Browser Monitoring", note:"Core Web Vitals, JavaScript error tracking, Ajax monitoring, session traces. Free tier includes browser monitoring.", src:"https://docs.newrelic.com/docs/browser/browser-monitoring/getting-started/introduction-browser-monitoring/" },
       honeycomb:{ level:"no",  value:"Not available",   note:"Honeycomb is focused on backend/server-side distributed tracing. No RUM or frontend monitoring product.", src:"https://docs.honeycomb.io/" },
-      dynatrace:{ level:"yes", value:"Digital Experience", note:"Full session replay, user journey analysis, apdex scoring. OneAgent for native apps; JavaScript tag for web. Highly automated.", src:"https://www.dynatrace.com/support/help/observe-and-explore/digital-experience/" }
+      dynatrace:{ level:"yes", value:"Digital Experience", note:"Full session replay, user journey analysis, apdex scoring. OneAgent for native apps; JavaScript tag for web. Highly automated.", src:"https://docs.dynatrace.com/docs/observe/digital-experience" }
     }
   },
   // ── OTEL ──
@@ -533,7 +533,7 @@ const FEATURES_B = [
       grafana:  { level:"yes", value:"Grafana k8s-monitoring", note:"Helm chart (grafana/k8s-monitoring) deploys Grafana Alloy (OTEL Collector) + Prometheus node_exporter. Full metrics, logs, traces, and events collection.", src:"https://grafana.com/docs/grafana-cloud/monitor-infrastructure/kubernetes-monitoring/" },
       nr:       { level:"yes", value:"K8s Integration", note:"Kubernetes Cluster Explorer with infra agent DaemonSet + events integration. Pixie auto-instruments K8s workloads via eBPF with no code changes.", src:"https://docs.newrelic.com/docs/kubernetes-pixie/kubernetes-integration/get-started/introduction-kubernetes-integration/" },
       honeycomb:{ level:"yes", value:"via OTel Collector", note:"No native Kubernetes agent; recommended approach is the OTel Collector with k8sattributes processor and k8s_events receiver for full enrichment.", src:"https://docs.honeycomb.io/getting-data-in/opentelemetry/" },
-      dynatrace:{ level:"yes", value:"Dynatrace Operator", note:"Dynatrace Operator automatically injects OneAgent into pods. Full autopilot: no manual instrumentation needed for supported runtimes.", src:"https://www.dynatrace.com/support/help/setup-and-configuration/setup-on-container-platforms/kubernetes/" }
+      dynatrace:{ level:"yes", value:"Dynatrace Operator", note:"Dynatrace Operator automatically injects OneAgent into pods. Full autopilot: no manual instrumentation needed for supported runtimes.", src:"https://docs.dynatrace.com/docs/ingest-from/setup-on-k8s" }
     }
   },
   // ── Alerting ──
@@ -542,7 +542,7 @@ const FEATURES_B = [
     support:{
       dd:       { level:"yes", value:"Monitors",         note:"Comprehensive monitor types (metric, log, APM, RUM, composite). Granular threshold tuning UI with preview. Routes via 60+ integrations.", src:"https://docs.datadoghq.com/monitors/" },
       grafana:  { level:"yes", value:"Grafana Alerting", note:"Unified alerting across Mimir/Loki/Tempo. Multi-dimensional rules; contact points for Slack, PagerDuty, webhooks, OnCall.", src:"https://grafana.com/docs/grafana/latest/alerting/" },
-      nr:       { level:"yes", value:"NRQL Alerts",      note:"Condition alerts on any NRQL query. Workflows route to PagerDuty, Slack, webhooks. Static and baseline thresholds.", src:"https://docs.newrelic.com/docs/alerts/get-started/intro-alerts/" },
+      nr:       { level:"yes", value:"NRQL Alerts",      note:"Condition alerts on any NRQL query. Workflows route to PagerDuty, Slack, webhooks. Static and baseline thresholds.", src:"https://docs.newrelic.com/docs/alerts/overview/" },
       honeycomb:{ level:"yes", value:"Triggers + SLOs",  note:"Threshold triggers on event aggregates. SLO burn-rate alerts built in. Slack and PagerDuty integration native.", src:"https://docs.honeycomb.io/notify/triggers/" },
       dynatrace:{ level:"yes", value:"Problems",         note:"Threshold alerts integrate with Davis AI; multiple signals collapsed into a single 'Problem' card with root-cause context.", src:"https://docs.dynatrace.com/docs/platform/davis-ai" }
     }
@@ -552,8 +552,8 @@ const FEATURES_B = [
     support:{
       dd:       { level:"yes", value:"Watchdog + Anomaly", note:"Watchdog AI auto-detects anomalies across metrics/traces/logs without config. Anomaly Detection monitor type uses ML baselining.", src:"https://docs.datadoghq.com/monitors/types/anomaly/" },
       grafana:  { level:"part", value:"Adaptive thresholds (preview)", note:"Native ML anomaly detection limited; adaptive thresholds in Grafana Cloud are in preview. Often supplemented with Prometheus recording rules.", src:"https://grafana.com/docs/grafana-cloud/alerting-and-irm/alerting/" },
-      nr:       { level:"yes", value:"Applied Intelligence", note:"NRAI learns baselines for any NRQL query; auto-groups related incidents and suppresses correlated noise.", src:"https://docs.newrelic.com/docs/alerts/applied-intelligence/overview/" },
-      honeycomb:{ level:"part", value:"BubbleUp (manual)",  note:"BubbleUp surfaces correlated dimensions on outliers — a powerful manual analysis tool, but not autonomous ML alerting.", src:"https://docs.honeycomb.io/investigate/bubbleup/" },
+      nr:       { level:"yes", value:"Applied Intelligence", note:"NRAI learns baselines for any NRQL query; auto-groups related incidents and suppresses correlated noise.", src:"https://docs.newrelic.com/docs/alerts/alerts-ai-overview-page/" },
+      honeycomb:{ level:"part", value:"BubbleUp (manual)",  note:"BubbleUp surfaces correlated dimensions on outliers — a powerful manual analysis tool, but not autonomous ML alerting.", src:"https://docs.honeycomb.io/investigate/analyze/identify-outliers" },
       dynatrace:{ level:"yes", value:"Davis AI",          note:"Davis AI auto-baselines every metric with zero configuration; anomalies open Problem tickets automatically with causal analysis.", src:"https://docs.dynatrace.com/docs/platform/davis-ai" }
     }
   },
