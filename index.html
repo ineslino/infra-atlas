@@ -381,7 +381,9 @@ body {
 
 /* ─────────────── PROVIDERS STRIP ─────────────── */
 .providers {
-  padding: 56px 0;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 56px clamp(20px, 4vw, 48px);
   border-bottom: 1px solid var(--line);
   display: grid;
   grid-template-columns: 220px 1fr;
@@ -444,10 +446,12 @@ body {
 
 /* ─────────────── MANIFESTO ─────────────── */
 .manifesto {
+  max-width: 1280px;
+  margin: 0 auto;
   display: grid;
   grid-template-columns: 220px 1fr;
   gap: 80px;
-  padding: 96px 0;
+  padding: 96px clamp(20px, 4vw, 48px);
   border-bottom: 1px solid var(--line);
 }
 
@@ -981,11 +985,12 @@ body {
 
 /* ─────────────── COLOPHON ─────────────── */
 .colophon {
+  max-width: 1280px;
+  margin: 64px auto 0;
   display: grid;
   grid-template-columns: 220px 1fr 1fr 1fr;
   gap: 40px;
-  padding: 64px 0 32px;
-  margin-top: 64px;
+  padding: 64px clamp(20px, 4vw, 48px) 32px;
   border-top: 1px solid var(--line);
 }
 
@@ -1060,8 +1065,8 @@ body {
   .page { padding: 36px 24px 64px; }
   .corner-mark { display: none; }
   .hero { grid-template-columns: 1fr; gap: 40px; padding: 40px 0 8px; min-height: auto; }
-  .providers { grid-template-columns: 1fr; gap: 16px; padding: 36px 0; }
-  .manifesto { grid-template-columns: 1fr; gap: 24px; padding: 64px 0; }
+  .providers { grid-template-columns: 1fr; gap: 16px; padding: 36px clamp(20px, 4vw, 48px); }
+  .manifesto { grid-template-columns: 1fr; gap: 24px; padding: 64px clamp(20px, 4vw, 48px); }
   .section-head { grid-template-columns: 1fr; gap: 16px; }
   .section-head__num { font-size: 44px; }
   .section-head__title { font-size: 32px; }
