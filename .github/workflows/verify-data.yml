@@ -154,3 +154,12 @@ jobs:
       # 2026-06-13). This fails if a colophon footer reintroduces <h5>.
       - name: Check colophon heading levels (no h1→h5 skip)
         run: python3 scripts/check_heading_levels.py
+
+      # Homepage sections paint translucent boxes over the fixed globe canvas.
+      # Coherence kept drifting: sections shipped without the shared container
+      # (48px horizontal offset, re-aligned 2026-06-12 and 2026-06-16) or spaced
+      # with a vertical margin that let the globe show through the seam
+      # ("What Changed" looked detached, 2026-06-16). This fails if a section
+      # drops the container token or spaces itself with a vertical margin.
+      - name: Check homepage section rhythm (container + no globe seams)
+        run: python3 scripts/check_section_rhythm.py
