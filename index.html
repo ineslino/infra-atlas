@@ -98,6 +98,12 @@
   --serif: 'Instrument Serif', 'Times New Roman', serif;
   --mono: 'JetBrains Mono', ui-monospace, monospace;
   --sans: 'Manrope', -apple-system, system-ui, sans-serif;
+
+  /* Homepage section container. Every top-level translucent section aligns to
+     this rectangle and insets its content by the same amount, single-sourced so
+     a new section can't drift. Enforced by scripts/check_section_rhythm.py. */
+  --ia-section-max: 1280px;
+  --ia-section-pad-x: clamp(20px, 4vw, 48px);
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -381,9 +387,9 @@ body {
 
 /* ─────────────── PROVIDERS STRIP ─────────────── */
 .providers {
-  max-width: 1280px;
+  max-width: var(--ia-section-max);
   margin: 0 auto;
-  padding: 56px clamp(20px, 4vw, 48px);
+  padding: 56px var(--ia-section-pad-x);
   border-bottom: 1px solid var(--line);
   display: grid;
   grid-template-columns: 220px 1fr;
@@ -446,12 +452,12 @@ body {
 
 /* ─────────────── MANIFESTO ─────────────── */
 .manifesto {
-  max-width: 1280px;
+  max-width: var(--ia-section-max);
   margin: 0 auto;
   display: grid;
   grid-template-columns: 220px 1fr;
   gap: 80px;
-  padding: 96px clamp(20px, 4vw, 48px);
+  padding: 96px var(--ia-section-pad-x);
   border-bottom: 1px solid var(--line);
 }
 
@@ -515,9 +521,9 @@ body {
 
 /* ─────────────── INSTRUMENTS ─────────────── */
 .instruments {
-  max-width: 1280px;
+  max-width: var(--ia-section-max);
   margin: 0 auto;
-  padding: 96px clamp(20px, 4vw, 48px) 64px;
+  padding: 96px var(--ia-section-pad-x) 64px;
 }
 
 .section-head {
@@ -713,10 +719,10 @@ body {
      where the globe shows through and detaches "05 What Changed" from the
      page. Padding keeps the box tiling with its neighbours.
      (UI-coherence reviews: 2026-06-12 horizontal inset, 2026-06-16 vertical) */
-  max-width: 1280px;
+  max-width: var(--ia-section-max);
   margin-left: auto;
   margin-right: auto;
-  padding: 96px clamp(20px, 4vw, 48px) 64px;
+  padding: 96px var(--ia-section-pad-x) 64px;
 }
 .dispatches .section-head__meta a { color: var(--accent); text-decoration: none; }
 .dispatches .section-head__meta a:hover { text-decoration: underline; }
@@ -987,12 +993,12 @@ body {
 
 /* ─────────────── COLOPHON ─────────────── */
 .colophon {
-  max-width: 1280px;
+  max-width: var(--ia-section-max);
   margin: 64px auto 0;
   display: grid;
   grid-template-columns: 220px 1fr 1fr 1fr;
   gap: 40px;
-  padding: 64px clamp(20px, 4vw, 48px) 32px;
+  padding: 64px var(--ia-section-pad-x) 32px;
   border-top: 1px solid var(--line);
 }
 
@@ -1067,8 +1073,8 @@ body {
   .page { padding: 36px 24px 64px; }
   .corner-mark { display: none; }
   .hero { grid-template-columns: 1fr; gap: 40px; padding: 40px 0 8px; min-height: auto; }
-  .providers { grid-template-columns: 1fr; gap: 16px; padding: 36px clamp(20px, 4vw, 48px); }
-  .manifesto { grid-template-columns: 1fr; gap: 24px; padding: 64px clamp(20px, 4vw, 48px); }
+  .providers { grid-template-columns: 1fr; gap: 16px; padding: 36px var(--ia-section-pad-x); }
+  .manifesto { grid-template-columns: 1fr; gap: 24px; padding: 64px var(--ia-section-pad-x); }
   .section-head { grid-template-columns: 1fr; gap: 16px; }
   .section-head__num { font-size: 44px; }
   .section-head__title { font-size: 32px; }
@@ -1771,7 +1777,7 @@ body {
 
   <!-- ───────── DECISIONS ───────── -->
   <style>
-    .dx { max-width: 1280px; margin: 0 auto; padding: 0 clamp(20px,4vw,48px) 32px; }
+    .dx { max-width: var(--ia-section-max); margin: 0 auto; padding: 0 var(--ia-section-pad-x) 32px; }
     .dx__intro { font-size: 14px; color: var(--paper-2); max-width: 620px; margin: 4px 0 20px; line-height: 1.6; }
     .dx__intro a { color: var(--accent); text-decoration: none; white-space: nowrap; }
     .dx__intro a:hover { text-decoration: underline; }
