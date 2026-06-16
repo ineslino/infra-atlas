@@ -707,14 +707,16 @@ body {
 /* ───────── WHAT CHANGED · feed ───────── */
 /* .dispatch-* row styles live in /assets/feed.css (shared with /changelog/) */
 .dispatches {
-  margin-top: 100px;
-  /* align with the numbered sections (01-04): same container + inset —
-     without this the "05 What Changed" head and feed sat 48px left of
-     its siblings (UI-coherence review, 2026-06-12) */
+  /* Numbered section like 01-04: match their container and vertical rhythm.
+     Space with padding, not margin: each section paints a translucent box
+     over the fixed globe canvas, so a top margin opens a transparent gap
+     where the globe shows through and detaches "05 What Changed" from the
+     page. Padding keeps the box tiling with its neighbours.
+     (UI-coherence reviews: 2026-06-12 horizontal inset, 2026-06-16 vertical) */
   max-width: 1280px;
   margin-left: auto;
   margin-right: auto;
-  padding: 0 clamp(20px, 4vw, 48px);
+  padding: 96px clamp(20px, 4vw, 48px) 64px;
 }
 .dispatches .section-head__meta a { color: var(--accent); text-decoration: none; }
 .dispatches .section-head__meta a:hover { text-decoration: underline; }
