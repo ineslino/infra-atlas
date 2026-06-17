@@ -20,8 +20,9 @@ This guard reads the inline CSS in index.html and, for every section in the
 translucent-background group, asserts:
   - it sizes with the container token  `max-width: var(--ia-section-max)`
   - it insets with the padding token   `... var(--ia-section-pad-x) ...`
+  - its vertical padding is 0 or a `--ia-space-*` scale token (no ad-hoc px)
   - it does NOT space itself with a non-zero vertical margin
-Both tokens must be defined in :root.
+The container tokens and the `--ia-space-*` scale must be defined in :root.
 
 `.signature` (a centred one-line credit, not a container) is exempt from the
 container checks. `.colophon` keeps a deliberate `margin-top` that separates the
@@ -42,6 +43,8 @@ INDEX = os.path.join(ROOT, "index.html")
 BG_MARKER = "rgba(10, 9, 7, 0.88)"
 MAX_TOKEN = "var(--ia-section-max)"
 PADX_TOKEN = "var(--ia-section-pad-x)"
+SCALE_TOKENS = ("--ia-space-2xl", "--ia-space-xl", "--ia-space-m")
+SCALE_PREFIX = "var(--ia-space-"
 
 # Centred credit line, not a content rectangle — no container contract.
 EXEMPT_CONTAINER = {".signature"}
@@ -106,6 +109,25 @@ def vertical_margin_offender(body):
     return None
 
 
+def vertical_padding_offender(body):
+    """Return the offending value if a `padding` shorthand sets a top/bottom
+    that is neither 0 nor a --ia-space-* scale token, else None. (Horizontal is
+    the --ia-section-pad-x token and is checked separately.)"""
+    m = re.search(r"(?<![\w-])padding\s*:\s*([^;]+);", body)
+    if not m:
+        return None
+    vals = m.group(1).split()  # token values have no spaces (var(...) / 0)
+    if not vals:
+        return None
+    top = vals[0]
+    bottom = vals[2] if len(vals) >= 3 else top
+    for side in (top, bottom):
+        if side in ("0", "0px") or side.startswith(SCALE_PREFIX):
+            continue
+        return "padding vertical `" + side + "`"
+    return None
+
+
 def main():
     html = open(INDEX, encoding="utf-8").read()
     css = css_of(html)
@@ -117,6 +139,9 @@ def main():
         errors.append("--ia-section-max is not defined in :root.")
     if "--ia-section-pad-x:" not in css:
         errors.append("--ia-section-pad-x is not defined in :root.")
+    for tok in SCALE_TOKENS:
+        if tok + ":" not in css:
+            errors.append(f"{tok} (vertical scale) is not defined in :root.")
 
     sections = section_classes(rule_list)
     if not sections:
@@ -147,6 +172,11 @@ def main():
             if PADX_TOKEN not in joined:
                 errors.append(f"{cls}: missing `{PADX_TOKEN}` in padding — inset "
                               f"with the shared token, not a literal/zero.")
+            for body in bodies:
+                off = vertical_padding_offender(body)
+                if off:
+                    errors.append(f"{cls}: {off} is off the vertical scale — "
+                                  f"use a --ia-space-* token (or 0).")
 
         if cls not in ALLOW_VMARGIN:
             for body in bodies:
@@ -165,8 +195,8 @@ def main():
         return 1
 
     checked = ", ".join(sorted(sections))
-    print(f"OK — {len(sections)} homepage sections share the container token "
-          f"and tile without globe seams ({checked}).")
+    print(f"OK — {len(sections)} homepage sections share the container token, "
+          f"sit on the vertical scale, and tile without globe seams ({checked}).")
     return 0
 
 
