@@ -2206,20 +2206,27 @@ body {
   }
 })();
 
-/* Sync label — surface the real last-updated date from the data feed instead of
-   stating a schedule. Every data.json carries a "generated" ISO timestamp; we
-   pull just the first bytes via a Range request (Python's server and Cloudflare
-   both honour it) and regex the date out. Falls back to the static label. */
+/* Sync label — show the date of the most recent REAL change, i.e. the newest
+   entry in the What Changed feed, so the label and that section always agree.
+   A daily refresh that only re-fetches identical data bumps each data.json's
+   "generated" but writes no feed entry, so it must NOT move this label. That
+   mismatch, "Updated today" over an empty What Changed, is the bug this fixes.
+   Falls back to the static label on any error. */
 (function () {
   var el = document.getElementById("sync-label");
   if (!el || !window.fetch) return;
-  fetch("./ec2/data.json", { headers: { Range: "bytes=0-200" }, cache: "no-cache" })
-    .then(function (r) { return (r.ok || r.status === 206) ? r.text() : null; })
-    .then(function (txt) {
-      if (!txt) return;
-      var m = txt.match(/"generated"\s*:\s*"([^"]+)"/);
-      if (!m) return;
-      var gen = new Date(m[1]);
+  fetch("./feed.json", { cache: "no-cache" })
+    .then(function (r) { return r.ok ? r.json() : null; })
+    .then(function (data) {
+      var entries = data && data.entries;
+      if (!entries || !entries.length) return;
+      var latest = null;                       // ISO YYYY-MM-DD sorts lexically
+      for (var i = 0; i < entries.length; i++) {
+        var t = entries[i].ts;
+        if (t && (latest === null || t > latest)) latest = t;
+      }
+      if (!latest) return;
+      var gen = new Date(latest);
       if (isNaN(gen.getTime())) return;
       var now = new Date();
       var DAY = 86400000;
