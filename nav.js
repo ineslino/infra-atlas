@@ -665,6 +665,16 @@
         th.style.position = "static"; // defuse the (inert) sticky rules on the copy
         tr.appendChild(th);
       }
+      // Mirror a sticky-left first column (matrices' .feature-col): keep the
+      // clone's first cell put on horizontal scroll so it stays aligned with the
+      // real pinned column below it. Skip where the real first column isn't
+      // sticky (e.g. compute tables), to avoid a lone floating header cell.
+      r.stickyFirst = !!src[0] && getComputedStyle(src[0]).position === "sticky";
+      if (r.stickyFirst && tr.firstChild) {
+        tr.firstChild.style.position = "relative";
+        tr.firstChild.style.zIndex = "2";
+        tr.firstChild.style.background = "var(--ink-2,#100E0C)";
+      }
       var h = document.createElement("thead");
       h.appendChild(tr);
       clone.appendChild(h);
@@ -672,11 +682,31 @@
       r.inner.appendChild(clone);
     }
 
+    // The clone sits just under the page's pinned filter/section bar, not the
+    // nav — otherwise the column header hides behind that (often tall) bar.
+    // Falls back to the nav height when no such bar is pinned.
+    function barBottom() {
+      var off = NAVH;
+      var bars = document.querySelectorAll(".filters, .section__head");
+      for (var i = 0; i < bars.length; i++) {
+        if (getComputedStyle(bars[i]).position !== "sticky") continue;
+        var bb = bars[i].getBoundingClientRect();
+        if (bb.top <= NAVH + 24 && bb.bottom > off && bb.bottom < NAVH + 420) off = bb.bottom;
+      }
+      return off;
+    }
+
     function place(r) {
       var b = r.wrap.getBoundingClientRect();
       r.strip.style.left = b.left + "px";
       r.strip.style.width = b.width + "px";
-      r.inner.style.transform = "translateX(" + (-r.wrap.scrollLeft) + "px)";
+      r.strip.style.top = barBottom() + "px";
+      var sl = r.wrap.scrollLeft;
+      r.inner.style.transform = "translateX(" + (-sl) + "px)";
+      if (r.stickyFirst) {
+        var first = r.inner.querySelector("th, td");
+        if (first) first.style.transform = "translateX(" + sl + "px)";
+      }
     }
 
     function state(r) {
@@ -688,7 +718,8 @@
       }
       var tb = r.table.getBoundingClientRect();
       var hb = thead.getBoundingClientRect();
-      var should = hb.top < NAVH && tb.bottom > NAVH + hb.height + 36;
+      var off = barBottom();
+      var should = hb.top < off && tb.bottom > off + hb.height + 36;
       if (should && !r.on) { r.on = true; rebuild(r); place(r); r.strip.classList.add("is-on"); }
       else if (!should && r.on) { r.on = false; r.strip.classList.remove("is-on"); }
       else if (r.on) place(r);
@@ -712,7 +743,7 @@
       var inner = document.createElement("div");
       strip.appendChild(inner);
       document.body.appendChild(strip);
-      var r = { table: table, wrap: wrap, strip: strip, inner: inner, on: false };
+      var r = { table: table, wrap: wrap, strip: strip, inner: inner, on: false, stickyFirst: false };
       REG.push(r);
       wrap.addEventListener("scroll", function () { if (r.on) place(r); }, { passive: true });
       // sort/filter re-renders swap the thead in place — rebuild while pinned
