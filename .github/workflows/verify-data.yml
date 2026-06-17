@@ -163,3 +163,11 @@ jobs:
       # drops the container token or spaces itself with a vertical margin.
       - name: Check homepage section rhythm (container + no globe seams)
         run: python3 scripts/check_section_rhythm.py
+
+      # diff_feed.py builds the What Changed feed and runs fail-safe in the daily
+      # refresh — a bug there silently produces a wrong/empty feed, never a red
+      # build. Run its unit tests here so a regression in the diff logic (new
+      # change kinds, the region-availability deltas, the summary caps) fails the
+      # PR instead of shipping a broken feed.
+      - name: Run What Changed feed-diff tests
+        run: python3 scripts/test_diff_feed.py
