@@ -21,10 +21,13 @@ def data(regions, families):
     return {"generated": "2026-05-16T06:00:00Z", "regions": regions, "families": families}
 
 
-def fam(key, sizes, prices=None):
+def fam(key, sizes, prices=None, in_regions=None):
     prices = prices or {}
     specs = {s: {"vcpu": 2, "mem": 8, "price": prices.get(s)} for s in sizes}
-    return {"key": key, "sizes": sizes, "specs": specs}
+    f = {"key": key, "sizes": sizes, "specs": specs}
+    if in_regions is not None:
+        f["in"] = in_regions
+    return f
 
 
 def reg(*codes):
@@ -81,6 +84,34 @@ big_n = data(base["regions"], [fam("m5", [f"s{i}" for i in range(20)],
                                    {f"s{i}": 2.0 for i in range(20)})])
 e = df.diff("ec2", big_o, big_n)
 check("20 price changes → 1 summary", len(e) == 1 and "price changes" in e[0][3])
+
+# 8b · availability — a family becomes available in an EXISTING region
+av_base = data(reg("a", "b", "c"), [fam("m5", ["large"], in_regions=["a", "b"])])
+av_new = data(reg("a", "b", "c"), [fam("m5", ["large"], in_regions=["a", "b", "c"])])
+e = df.diff("ec2", av_base, av_new)
+check("availability gained → availability-added",
+      len(e) == 1 and e[0][2] == "availability-added" and "now in c" in e[0][3])
+
+# 8c · availability — a family drops a region
+e = df.diff("ec2", av_new, av_base)
+check("availability lost → availability-removed",
+      len(e) == 1 and e[0][2] == "availability-removed" and "no longer in c" in e[0][3])
+
+# 8d · a brand-new region is reported once (region-added), NOT also per-family
+nr_base = data(reg("a", "b"), [fam("m5", ["large"], in_regions=["a", "b"])])
+nr_new = data(reg("a", "b", "c"), [fam("m5", ["large"], in_regions=["a", "b", "c"])])
+e = df.diff("ec2", nr_base, nr_new)
+check("new region not double-reported as availability",
+      len(e) == 1 and e[0][2] == "region-added")
+
+# 8e · many families gaining regions collapse to one summary entry
+many_o = data(reg("a", "b"),
+              [fam(f"f{i}", ["large"], in_regions=["a"]) for i in range(10)])
+many_n = data(reg("a", "b"),
+              [fam(f"f{i}", ["large"], in_regions=["a", "b"]) for i in range(10)])
+e = df.diff("ec2", many_o, many_n)
+check("10 availability changes → 1 summary",
+      len(e) == 1 and e[0][2] == "availability-added" and "families gained regions" in e[0][3])
 
 # 9 · fail-safe — missing old file → exit 0, no feed written
 with tempfile.TemporaryDirectory() as td:

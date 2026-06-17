@@ -18,7 +18,9 @@
   var TONE = {
     "price-change": "price",
     "instance-added": "add", "family-added": "add", "region-added": "add",
+    "availability-added": "add",
     "instance-removed": "drop", "family-removed": "drop", "region-removed": "drop",
+    "availability-removed": "drop",
     "dispatch": "note"
   };
 
