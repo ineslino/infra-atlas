@@ -3,8 +3,9 @@
 
 Diffs two data.json snapshots of one instrument and appends human-readable
 change entries to a shared feed.json. Detects: regions added/removed,
-families added/removed, instance sizes added/removed, and on-demand price
-moves beyond ±2%.
+families added/removed, instance sizes added/removed, per-family region
+availability added/removed (a family's `in` list — finer than a whole region
+launching), and on-demand price moves beyond ±2%.
 
 FAIL-SAFE: any runtime error is swallowed and the script exits 0, so a bug
 in the diff logic can never block the daily data-refresh commit. Only a
@@ -20,6 +21,7 @@ CAP = 200            # keep only the newest N feed entries
 INST_CAP = 100       # newest N entries kept in each per-instrument feed
 PRICE_EPS = 0.02     # ignore on-demand price moves smaller than ±2%
 PRICE_LIST_MAX = 6   # list price changes individually up to this many, else summarise
+AVAIL_LIST_MAX = 6   # list families with availability changes individually up to this many
 
 
 def load(path):
@@ -55,10 +57,23 @@ def diff(inst, old, new):
     for k in sorted(o_fam.keys() - n_fam.keys()):
         entries.append((ts, inst, "family-removed", f"family {k} withdrawn"))
 
-    # ── Sizes + prices, for families present in both snapshots ──
+    # ── Sizes, prices, and per-family region availability, for families
+    #    present in both snapshots ──
     price_changes = []
+    avail_add, avail_drop = [], []
+    new_regions, gone_regions = n_reg - o_reg, o_reg - n_reg
     for k in sorted(n_fam.keys() & o_fam.keys()):
         of, nf = o_fam[k], n_fam[k]
+        # Availability: the family's `in` list. Exclude brand-new / withdrawn
+        # regions — region-added / region-removed already report those, so a
+        # region launch doesn't also spam one entry per family.
+        o_in, n_in = set(of.get("in", [])), set(nf.get("in", []))
+        gained = sorted((n_in - o_in) - new_regions)
+        lost = sorted((o_in - n_in) - gone_regions)
+        if gained:
+            avail_add.append((k, gained))
+        if lost:
+            avail_drop.append((k, lost))
         o_sz, n_sz = set(of.get("sizes", [])), set(nf.get("sizes", []))
         added, removed = sorted(n_sz - o_sz), sorted(o_sz - n_sz)
         if added:
@@ -87,6 +102,27 @@ def diff(inst, old, new):
         entries.append((ts, inst, "price-change",
                         f"{len(price_changes)} price changes ({ups} up, "
                         f"{len(price_changes) - ups} down)"))
+
+    # ── Availability render — capped like prices: list each family up to
+    #    AVAIL_LIST_MAX, otherwise one summary entry. ──
+    def render_avail(items, kind, phrase, summary):
+        if not items:
+            return
+        if len(items) <= AVAIL_LIST_MAX:
+            for fk, regs in items:
+                shown = ", ".join(regs[:3]) + ("…" if len(regs) > 3 else "")
+                if len(regs) <= 3:
+                    entries.append((ts, inst, kind, f"{fk} {phrase} {shown}"))
+                else:
+                    entries.append((ts, inst, kind,
+                                    f"{fk} {phrase} {len(regs)} regions ({shown})"))
+        else:
+            pairs = sum(len(r) for _, r in items)
+            entries.append((ts, inst, kind,
+                            f"{len(items)} {summary} ({pairs} region changes)"))
+    render_avail(avail_add, "availability-added", "now in", "families gained regions")
+    render_avail(avail_drop, "availability-removed", "no longer in",
+                 "families dropped regions")
     return entries
 
 
