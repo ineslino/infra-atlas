@@ -72,6 +72,28 @@ jobs:
         run: ./${{ matrix.instrument }}/refresh.sh
 
       - if: steps.gate.outputs.run == 'true'
+        name: Drop a generated-only change (no real data delta)
+        # refresh.sh always stamps a fresh "generated" timestamp, so a run that
+        # re-fetched identical data still dirtied data.json and committed a daily
+        # no-op ("refresh data <date>" with only the timestamp moved) — churn,
+        # and it made the homepage chip say "Updated today" over an empty What
+        # Changed. If the ONLY change vs HEAD is the generated line, revert the
+        # file: "generated" then tracks the last REAL change (matching the feed
+        # and the chip) and the steps below stage nothing, so no commit happens.
+        run: |
+          file="${{ matrix.instrument }}/data.json"
+          if ! git diff --quiet -- "$file"; then
+            real=$(git diff -U0 -- "$file" \
+                     | grep -E '^[+-]' \
+                     | grep -vE '^(\+\+\+|---)' \
+                     | grep -vE '^[+-][[:space:]]*"generated"[[:space:]]*:' || true)
+            if [ -z "$real" ]; then
+              echo "::notice::${{ matrix.instrument }}: only 'generated' changed — reverting (no real data change)."
+              git checkout -- "$file"
+            fi
+          fi
+
+      - if: steps.gate.outputs.run == 'true'
         name: Sync landing-page chips to the refreshed data
         # Keep the homepage card chips in lockstep with data.json so a count
         # change (new region/family) never leaves a stale chip for the next
