@@ -1,5 +1,5 @@
 {
-  "generated": "2026-06-17T21:45:06Z",
+  "generated": "2026-06-19T10:50:08Z",
   "source": "ec2instances.info (Vantage) — public dataset, no credentials",
   "currency": "USD",
   "priceRef": "us-east-1",
@@ -4866,6 +4866,76 @@
         "me-central-1",
         "sa-east-1",
         "us-east-1",
+        "us-east-2",
+        "us-west-2"
+      ]
+    },
+    {
+      "key": "g7",
+      "cat": "accelerated",
+      "arch": "x86",
+      "vendor": "Intel",
+      "desc": "GPU instance · Intel Xeon Scalable (Granite Rapids)",
+      "clock": "3.9 GHz",
+      "sizes": [
+        "2xlarge",
+        "4xlarge",
+        "8xlarge",
+        "12xlarge",
+        "24xlarge",
+        "48xlarge"
+      ],
+      "specs": {
+        "2xlarge": {
+          "vcpu": 8,
+          "mem": 32,
+          "price": null,
+          "storage": "440 GB NVMe SSD",
+          "net": "60 Gigabit",
+          "gpu": "GPU"
+        },
+        "4xlarge": {
+          "vcpu": 16,
+          "mem": 64,
+          "price": null,
+          "storage": "875 GB NVMe SSD",
+          "net": "60 Gigabit",
+          "gpu": "GPU"
+        },
+        "8xlarge": {
+          "vcpu": 32,
+          "mem": 128,
+          "price": null,
+          "storage": "930 GB NVMe SSD",
+          "net": "80 Gigabit",
+          "gpu": "GPU"
+        },
+        "12xlarge": {
+          "vcpu": 48,
+          "mem": 192,
+          "price": null,
+          "storage": "1900 GB NVMe SSD",
+          "net": "175 Gigabit",
+          "gpu": "2 × GPU"
+        },
+        "24xlarge": {
+          "vcpu": 96,
+          "mem": 384,
+          "price": null,
+          "storage": "3800 GB NVMe SSD",
+          "net": "350 Gigabit",
+          "gpu": "4 × GPU"
+        },
+        "48xlarge": {
+          "vcpu": 192,
+          "mem": 768,
+          "price": null,
+          "storage": "2 × 3800 GB NVMe SSD",
+          "net": "700 Gigabit",
+          "gpu": "8 × GPU"
+        }
+      },
+      "in": [
         "us-east-2",
         "us-west-2"
       ]
