@@ -1,5 +1,5 @@
 {
-  "generated": "2026-06-19T10:50:08Z",
+  "generated": "2026-06-25T09:35:48Z",
   "source": "ec2instances.info (Vantage) — public dataset, no credentials",
   "currency": "USD",
   "priceRef": "us-east-1",
@@ -16092,6 +16092,7 @@
         }
       },
       "in": [
+        "ap-northeast-2",
         "eu-central-1",
         "eu-north-1",
         "us-east-1",

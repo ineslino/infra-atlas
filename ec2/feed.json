@@ -1,7 +1,13 @@
 {
-  "generated": "2026-06-19T10:50:08Z",
+  "generated": "2026-06-25T09:35:48Z",
   "instrument": "ec2",
   "entries": [
+    {
+      "ts": "2026-06-25",
+      "instrument": "ec2",
+      "kind": "availability-added",
+      "text": "u7in-24tb now in ap-northeast-2"
+    },
     {
       "ts": "2026-06-19",
       "instrument": "ec2",
