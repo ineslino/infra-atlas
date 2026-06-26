@@ -1,6 +1,12 @@
 {
-  "generated": "2026-06-25T09:35:48Z",
+  "generated": "2026-06-26T09:41:47Z",
   "entries": [
+    {
+      "ts": "2026-06-26",
+      "instrument": "ec2",
+      "kind": "availability-added",
+      "text": "7 families gained regions (23 region changes)"
+    },
     {
       "ts": "2026-06-25",
       "instrument": "ec2",
