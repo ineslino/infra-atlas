@@ -6,7 +6,15 @@
     <atom:link href="https://infraatlas.dev/feed.xml" rel="self" type="application/rss+xml"/>
     <description>A neutral, sourced changelog of cloud infrastructure — new instance families, regions, withdrawals and price moves across AWS, Azure, GCP, OCI and OVHcloud.</description>
     <language>en</language>
-    <lastBuildDate>Thu, 25 Jun 2026 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Fri, 26 Jun 2026 00:00:00 +0000</lastBuildDate>
+    <item>
+      <title>AWS EC2 · 7 families gained regions (23 region changes)</title>
+      <link>https://infraatlas.dev/ec2/</link>
+      <guid isPermaLink="false">db5775bb8617650dfc84556ab1fc9023</guid>
+      <category>availability-added</category>
+      <pubDate>Fri, 26 Jun 2026 00:00:00 +0000</pubDate>
+      <description>AWS EC2 · 7 families gained regions (23 region changes)</description>
+    </item>
     <item>
       <title>AWS EC2 · u7in-24tb now in ap-northeast-2</title>
       <link>https://infraatlas.dev/ec2/</link>
