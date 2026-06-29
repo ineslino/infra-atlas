@@ -1,7 +1,19 @@
 {
-  "generated": "2026-06-26T09:41:47Z",
+  "generated": "2026-06-29T11:16:09Z",
   "instrument": "ec2",
   "entries": [
+    {
+      "ts": "2026-06-29",
+      "instrument": "ec2",
+      "kind": "family-removed",
+      "text": "family i3p withdrawn"
+    },
+    {
+      "ts": "2026-06-29",
+      "instrument": "ec2",
+      "kind": "availability-removed",
+      "text": "74 families dropped regions (898 region changes)"
+    },
     {
       "ts": "2026-06-26",
       "instrument": "ec2",
