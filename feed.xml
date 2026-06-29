@@ -6,7 +6,23 @@
     <atom:link href="https://infraatlas.dev/feed.xml" rel="self" type="application/rss+xml"/>
     <description>A neutral, sourced changelog of cloud infrastructure — new instance families, regions, withdrawals and price moves across AWS, Azure, GCP, OCI and OVHcloud.</description>
     <language>en</language>
-    <lastBuildDate>Fri, 26 Jun 2026 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Mon, 29 Jun 2026 00:00:00 +0000</lastBuildDate>
+    <item>
+      <title>AWS EC2 · family i3p withdrawn</title>
+      <link>https://infraatlas.dev/ec2/</link>
+      <guid isPermaLink="false">b171bd8fbe907e56a139c29e02346527</guid>
+      <category>family-removed</category>
+      <pubDate>Mon, 29 Jun 2026 00:00:00 +0000</pubDate>
+      <description>AWS EC2 · family i3p withdrawn</description>
+    </item>
+    <item>
+      <title>AWS EC2 · 74 families dropped regions (898 region changes)</title>
+      <link>https://infraatlas.dev/ec2/</link>
+      <guid isPermaLink="false">f7214ed01e22933dd55cc5288167f598</guid>
+      <category>availability-removed</category>
+      <pubDate>Mon, 29 Jun 2026 00:00:00 +0000</pubDate>
+      <description>AWS EC2 · 74 families dropped regions (898 region changes)</description>
+    </item>
     <item>
       <title>AWS EC2 · 7 families gained regions (23 region changes)</title>
       <link>https://infraatlas.dev/ec2/</link>
