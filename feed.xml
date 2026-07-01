@@ -6,7 +6,23 @@
     <atom:link href="https://infraatlas.dev/feed.xml" rel="self" type="application/rss+xml"/>
     <description>A neutral, sourced changelog of cloud infrastructure — new instance families, regions, withdrawals and price moves across AWS, Azure, GCP, OCI and OVHcloud.</description>
     <language>en</language>
-    <lastBuildDate>Mon, 29 Jun 2026 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Wed, 01 Jul 2026 00:00:00 +0000</lastBuildDate>
+    <item>
+      <title>AWS EC2 · new family c9g</title>
+      <link>https://infraatlas.dev/ec2/</link>
+      <guid isPermaLink="false">20584b9e62810ec0fbd5b21dc20ae9bc</guid>
+      <category>family-added</category>
+      <pubDate>Wed, 01 Jul 2026 00:00:00 +0000</pubDate>
+      <description>AWS EC2 · new family c9g</description>
+    </item>
+    <item>
+      <title>AWS EC2 · new family c9gd</title>
+      <link>https://infraatlas.dev/ec2/</link>
+      <guid isPermaLink="false">6fd3ee92cb07a404d3252499b051f9a9</guid>
+      <category>family-added</category>
+      <pubDate>Wed, 01 Jul 2026 00:00:00 +0000</pubDate>
+      <description>AWS EC2 · new family c9gd</description>
+    </item>
     <item>
       <title>AWS EC2 · family i3p withdrawn</title>
       <link>https://infraatlas.dev/ec2/</link>
