@@ -1,7 +1,19 @@
 {
-  "generated": "2026-06-29T11:16:09Z",
+  "generated": "2026-07-01T10:03:14Z",
   "instrument": "ec2",
   "entries": [
+    {
+      "ts": "2026-07-01",
+      "instrument": "ec2",
+      "kind": "family-added",
+      "text": "new family c9g"
+    },
+    {
+      "ts": "2026-07-01",
+      "instrument": "ec2",
+      "kind": "family-added",
+      "text": "new family c9gd"
+    },
     {
       "ts": "2026-06-29",
       "instrument": "ec2",
