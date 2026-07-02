@@ -1,5 +1,5 @@
 {
-  "generated": "2026-07-01T10:03:14Z",
+  "generated": "2026-07-02T09:26:07Z",
   "source": "ec2instances.info (Vantage) — public dataset, no credentials",
   "currency": "USD",
   "priceRef": "us-east-1",
@@ -315,7 +315,7 @@
       "arch": "x86",
       "vendor": "Intel",
       "desc": "Compute optimized · Intel Xeon Family",
-      "clock": null,
+      "clock": "1.8 GHz",
       "sizes": [
         "medium",
         "xlarge"
@@ -6360,7 +6360,7 @@
       "arch": "x86",
       "vendor": "Intel",
       "desc": "Machine Learning ASIC Instances · Intel Xeon Platinum 8275CL (Cascade Lake)",
-      "clock": null,
+      "clock": "3.0 GHz",
       "sizes": [
         "xlarge",
         "2xlarge",
@@ -6561,7 +6561,7 @@
       "arch": "x86",
       "vendor": "Intel",
       "desc": "General purpose · Intel Xeon Family",
-      "clock": null,
+      "clock": "1.8 GHz",
       "sizes": [
         "small",
         "medium",
@@ -6615,7 +6615,7 @@
       "arch": "x86",
       "vendor": "Intel",
       "desc": "Memory optimized · Intel Xeon Family",
-      "clock": null,
+      "clock": "2.4 GHz",
       "sizes": [
         "xlarge",
         "2xlarge",
@@ -7547,7 +7547,7 @@
       "arch": "arm",
       "vendor": "Graviton2",
       "desc": "General purpose · AWS Graviton2 Processor",
-      "clock": null,
+      "clock": "2.5 GHz",
       "sizes": [
         "medium",
         "large",
@@ -14497,7 +14497,7 @@
       "arch": "x86",
       "vendor": "AWS",
       "desc": "Micro instances · Variable",
-      "clock": null,
+      "clock": "2.5 GHz",
       "sizes": [
         "micro"
       ],
@@ -15111,7 +15111,7 @@
       "arch": "x86",
       "vendor": "Intel",
       "desc": "Memory optimized · Intel Xeon Scalable (Skylake)",
-      "clock": null,
+      "clock": "2.1 GHz",
       "sizes": [
         "56xlarge",
         "112xlarge",
