@@ -1,6 +1,12 @@
 {
-  "generated": "2026-07-01T10:03:14Z",
+  "generated": "2026-07-07T09:54:54Z",
   "entries": [
+    {
+      "ts": "2026-07-07",
+      "instrument": "ec2",
+      "kind": "availability-added",
+      "text": "c8ine now in eu-central-1"
+    },
     {
       "ts": "2026-07-01",
       "instrument": "ec2",

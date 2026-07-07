@@ -1,5 +1,5 @@
 {
-  "generated": "2026-07-02T09:26:07Z",
+  "generated": "2026-07-07T09:54:54Z",
   "source": "ec2instances.info (Vantage) — public dataset, no credentials",
   "currency": "USD",
   "priceRef": "us-east-1",
@@ -3539,6 +3539,7 @@
       },
       "in": [
         "ap-northeast-1",
+        "eu-central-1",
         "us-east-1",
         "us-west-2"
       ]
@@ -6372,29 +6373,25 @@
           "vcpu": 4,
           "mem": 8,
           "price": 0.228,
-          "net": "Up to 25 Gigabit",
-          "gpu": "GPU"
+          "net": "Up to 25 Gigabit"
         },
         "2xlarge": {
           "vcpu": 8,
           "mem": 16,
           "price": 0.362,
-          "net": "Up to 25 Gigabit",
-          "gpu": "GPU"
+          "net": "Up to 25 Gigabit"
         },
         "6xlarge": {
           "vcpu": 24,
           "mem": 48,
           "price": 1.18,
-          "net": "25 Gigabit",
-          "gpu": "4 × GPU"
+          "net": "25 Gigabit"
         },
         "24xlarge": {
           "vcpu": 96,
           "mem": 192,
           "price": 4.721,
-          "net": "100 Gigabit",
-          "gpu": "16 × GPU"
+          "net": "100 Gigabit"
         }
       },
       "in": [
@@ -6439,29 +6436,25 @@
           "vcpu": 4,
           "mem": 16,
           "price": 0.7582,
-          "net": "Up to 15 Gigabit",
-          "gpu": "GPU"
+          "net": "Up to 15 Gigabit"
         },
         "8xlarge": {
           "vcpu": 32,
           "mem": 128,
           "price": 1.9679,
-          "net": "Up to 25 Gigabit",
-          "gpu": "GPU"
+          "net": "Up to 25 Gigabit"
         },
         "24xlarge": {
           "vcpu": 96,
           "mem": 384,
           "price": 6.4906,
-          "net": "50 Gigabit",
-          "gpu": "6 × GPU"
+          "net": "50 Gigabit"
         },
         "48xlarge": {
           "vcpu": 192,
           "mem": 768,
           "price": 12.9813,
-          "net": "100 Gigabit",
-          "gpu": "12 × GPU"
+          "net": "100 Gigabit"
         }
       },
       "in": [
@@ -14890,16 +14883,14 @@
           "mem": 32,
           "price": 1.3438,
           "storage": "474 GB NVMe SSD",
-          "net": "Up to 12.5 Gigabit",
-          "gpu": "GPU"
+          "net": "Up to 12.5 Gigabit"
         },
         "32xlarge": {
           "vcpu": 128,
           "mem": 512,
           "price": 21.5,
           "storage": "4 × 1900 GB NVMe SSD",
-          "net": "8x 100 Gigabit",
-          "gpu": "16 × GPU"
+          "net": "8x 100 Gigabit"
         }
       },
       "in": [
@@ -14925,8 +14916,7 @@
           "mem": 512,
           "price": 24.78,
           "storage": "4 × 1900 GB NVMe SSD",
-          "net": "16x 100 Gigabit",
-          "gpu": "16 × GPU"
+          "net": "16x 100 Gigabit"
         }
       },
       "in": [
@@ -14951,8 +14941,7 @@
           "mem": 2048,
           "price": null,
           "storage": "4 × 1900 GB NVMe SSD",
-          "net": "16x 200 Gigabit",
-          "gpu": "16 × GPU"
+          "net": "16x 200 Gigabit"
         }
       },
       "in": [
