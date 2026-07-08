@@ -1,6 +1,12 @@
 {
-  "generated": "2026-07-07T09:54:54Z",
+  "generated": "2026-07-08T08:39:28Z",
   "entries": [
+    {
+      "ts": "2026-07-08",
+      "instrument": "ec2",
+      "kind": "availability-added",
+      "text": "c8g now in 4 regions (af-south-1, ca-west-1, eu-west-3…)"
+    },
     {
       "ts": "2026-07-07",
       "instrument": "ec2",

@@ -1,5 +1,5 @@
 {
-  "generated": "2026-07-07T09:54:54Z",
+  "generated": "2026-07-08T08:39:28Z",
   "source": "ec2instances.info (Vantage) — public dataset, no credentials",
   "currency": "USD",
   "priceRef": "us-east-1",
@@ -2553,6 +2553,7 @@
         }
       },
       "in": [
+        "af-south-1",
         "ap-east-1",
         "ap-northeast-1",
         "ap-northeast-2",
@@ -2566,6 +2567,7 @@
         "ap-southeast-5",
         "ap-southeast-7",
         "ca-central-1",
+        "ca-west-1",
         "eu-central-1",
         "eu-central-2",
         "eu-north-1",
@@ -2573,6 +2575,8 @@
         "eu-south-2",
         "eu-west-1",
         "eu-west-2",
+        "eu-west-3",
+        "il-central-1",
         "sa-east-1",
         "us-east-1",
         "us-east-2",
@@ -4006,8 +4010,7 @@
           "vcpu": 96,
           "mem": 768,
           "price": 13.109,
-          "storage": "4 × 1000 GB NVMe SSD",
-          "net": "4x 100 Gigabit"
+          "net": "400 Gigabit"
         }
       },
       "in": [
