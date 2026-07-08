@@ -6,7 +6,15 @@
     <atom:link href="https://infraatlas.dev/feed.xml" rel="self" type="application/rss+xml"/>
     <description>A neutral, sourced changelog of cloud infrastructure — new instance families, regions, withdrawals and price moves across AWS, Azure, GCP, OCI and OVHcloud.</description>
     <language>en</language>
-    <lastBuildDate>Tue, 07 Jul 2026 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Wed, 08 Jul 2026 00:00:00 +0000</lastBuildDate>
+    <item>
+      <title>AWS EC2 · c8g now in 4 regions (af-south-1, ca-west-1, eu-west-3…)</title>
+      <link>https://infraatlas.dev/ec2/</link>
+      <guid isPermaLink="false">d6c49ce5289c5e1a3f047902e2298a02</guid>
+      <category>availability-added</category>
+      <pubDate>Wed, 08 Jul 2026 00:00:00 +0000</pubDate>
+      <description>AWS EC2 · c8g now in 4 regions (af-south-1, ca-west-1, eu-west-3…)</description>
+    </item>
     <item>
       <title>AWS EC2 · c8ine now in eu-central-1</title>
       <link>https://infraatlas.dev/ec2/</link>
