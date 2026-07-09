@@ -1,5 +1,5 @@
 {
-  "generated": "2026-07-08T08:39:28Z",
+  "generated": "2026-07-09T10:02:12Z",
   "source": "ec2instances.info (Vantage) — public dataset, no credentials",
   "currency": "USD",
   "priceRef": "us-east-1",
@@ -6023,6 +6023,7 @@
         "ap-northeast-1",
         "ap-northeast-2",
         "ap-south-1",
+        "ap-south-2",
         "ap-southeast-1",
         "ap-southeast-2",
         "ap-southeast-3",
@@ -9276,6 +9277,7 @@
       },
       "in": [
         "ap-northeast-1",
+        "ap-south-1",
         "ap-southeast-2",
         "ap-southeast-5",
         "ca-central-1",
@@ -9283,6 +9285,7 @@
         "eu-south-2",
         "eu-west-1",
         "eu-west-2",
+        "eu-west-3",
         "sa-east-1",
         "us-east-1",
         "us-east-2",
@@ -13573,17 +13576,24 @@
       "in": [
         "af-south-1",
         "ap-east-1",
+        "ap-east-2",
         "ap-northeast-1",
         "ap-northeast-2",
+        "ap-northeast-3",
+        "ap-south-1",
+        "ap-southeast-1",
         "ap-southeast-2",
         "ap-southeast-3",
         "ap-southeast-5",
         "ca-central-1",
         "ca-west-1",
         "eu-central-1",
+        "eu-north-1",
+        "eu-south-1",
         "eu-south-2",
         "eu-west-1",
         "eu-west-2",
+        "eu-west-3",
         "sa-east-1",
         "us-east-1",
         "us-east-2",
@@ -14004,7 +14014,10 @@
         }
       },
       "in": [
+        "ap-northeast-1",
+        "eu-central-1",
         "eu-south-2",
+        "eu-west-1",
         "us-east-1",
         "us-east-2",
         "us-west-2"
@@ -14250,7 +14263,10 @@
         }
       },
       "in": [
+        "ap-northeast-1",
+        "eu-central-1",
         "eu-south-2",
+        "eu-west-1",
         "us-east-1",
         "us-east-2",
         "us-west-2"
@@ -14372,7 +14388,10 @@
         }
       },
       "in": [
+        "ap-northeast-1",
+        "eu-central-1",
         "eu-south-2",
+        "eu-west-1",
         "us-east-1",
         "us-east-2",
         "us-west-2"
@@ -14481,7 +14500,10 @@
         }
       },
       "in": [
+        "ap-northeast-1",
+        "eu-central-1",
         "eu-south-2",
+        "eu-west-1",
         "us-east-1",
         "us-east-2",
         "us-west-2"
@@ -15223,6 +15245,7 @@
         "ap-southeast-1",
         "ap-southeast-2",
         "eu-central-1",
+        "eu-central-2",
         "eu-north-1",
         "eu-south-1",
         "eu-south-2",

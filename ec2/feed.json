@@ -1,7 +1,13 @@
 {
-  "generated": "2026-07-08T08:39:28Z",
+  "generated": "2026-07-09T10:02:12Z",
   "instrument": "ec2",
   "entries": [
+    {
+      "ts": "2026-07-09",
+      "instrument": "ec2",
+      "kind": "availability-added",
+      "text": "8 families gained regions (23 region changes)"
+    },
     {
       "ts": "2026-07-08",
       "instrument": "ec2",
