@@ -1,6 +1,24 @@
 {
-  "generated": "2026-07-09T10:02:12Z",
+  "generated": "2026-07-10T09:48:22Z",
   "entries": [
+    {
+      "ts": "2026-07-10",
+      "instrument": "ec2",
+      "kind": "availability-added",
+      "text": "c8id now in ap-south-1, eu-north-1"
+    },
+    {
+      "ts": "2026-07-10",
+      "instrument": "ec2",
+      "kind": "availability-added",
+      "text": "m8id now in eu-north-1, eu-west-2"
+    },
+    {
+      "ts": "2026-07-10",
+      "instrument": "ec2",
+      "kind": "availability-added",
+      "text": "r8id now in eu-west-2"
+    },
     {
       "ts": "2026-07-09",
       "instrument": "ec2",
