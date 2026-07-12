@@ -1,5 +1,5 @@
 {
-  "generated": "2026-07-10T09:48:22Z",
+  "generated": "2026-07-12T08:27:15Z",
   "source": "ec2instances.info (Vantage) — public dataset, no credentials",
   "currency": "USD",
   "priceRef": "us-east-1",
@@ -4873,7 +4873,7 @@
         "2xlarge": {
           "vcpu": 8,
           "mem": 32,
-          "price": null,
+          "price": 2.52,
           "storage": "440 GB NVMe SSD",
           "net": "60 Gigabit",
           "gpu": "NVIDIA RTX PRO 4500 Blackwell · 32 GB"
@@ -4881,7 +4881,7 @@
         "4xlarge": {
           "vcpu": 16,
           "mem": 64,
-          "price": null,
+          "price": 3.0421,
           "storage": "875 GB NVMe SSD",
           "net": "60 Gigabit",
           "gpu": "NVIDIA RTX PRO 4500 Blackwell · 32 GB"
@@ -4889,7 +4889,7 @@
         "8xlarge": {
           "vcpu": 32,
           "mem": 128,
-          "price": null,
+          "price": 4.0862,
           "storage": "930 GB NVMe SSD",
           "net": "80 Gigabit",
           "gpu": "NVIDIA RTX PRO 4500 Blackwell · 32 GB"
@@ -4897,7 +4897,7 @@
         "12xlarge": {
           "vcpu": 48,
           "mem": 192,
-          "price": null,
+          "price": 7.1283,
           "storage": "1900 GB NVMe SSD",
           "net": "175 Gigabit",
           "gpu": "2 × NVIDIA RTX PRO 4500 Blackwell · 64 GB"
@@ -4905,7 +4905,7 @@
         "24xlarge": {
           "vcpu": 96,
           "mem": 384,
-          "price": null,
+          "price": 14.2566,
           "storage": "3800 GB NVMe SSD",
           "net": "350 Gigabit",
           "gpu": "4 × NVIDIA RTX PRO 4500 Blackwell · 128 GB"
@@ -4913,13 +4913,14 @@
         "48xlarge": {
           "vcpu": 192,
           "mem": 768,
-          "price": null,
+          "price": 28.5133,
           "storage": "2 × 3800 GB NVMe SSD",
           "net": "700 Gigabit",
           "gpu": "8 × NVIDIA RTX PRO 4500 Blackwell · 256 GB"
         }
       },
       "in": [
+        "us-east-1",
         "us-east-2",
         "us-west-2"
       ]
