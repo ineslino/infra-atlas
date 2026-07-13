@@ -1,5 +1,5 @@
 {
-  "generated": "2026-07-02T09:26:07Z",
+  "generated": "2026-07-12T08:27:15Z",
   "source": "ec2instances.info (Vantage) — public dataset, no credentials",
   "currency": "USD",
   "priceRef": "us-east-1",
@@ -2553,6 +2553,7 @@
         }
       },
       "in": [
+        "af-south-1",
         "ap-east-1",
         "ap-northeast-1",
         "ap-northeast-2",
@@ -2566,6 +2567,7 @@
         "ap-southeast-5",
         "ap-southeast-7",
         "ca-central-1",
+        "ca-west-1",
         "eu-central-1",
         "eu-central-2",
         "eu-north-1",
@@ -2573,6 +2575,8 @@
         "eu-south-2",
         "eu-west-1",
         "eu-west-2",
+        "eu-west-3",
+        "il-central-1",
         "sa-east-1",
         "us-east-1",
         "us-east-2",
@@ -3362,7 +3366,9 @@
       },
       "in": [
         "ap-northeast-1",
+        "ap-south-1",
         "eu-central-1",
+        "eu-north-1",
         "eu-south-2",
         "us-east-1",
         "us-east-2",
@@ -3539,6 +3545,7 @@
       },
       "in": [
         "ap-northeast-1",
+        "eu-central-1",
         "us-east-1",
         "us-west-2"
       ]
@@ -4005,8 +4012,7 @@
           "vcpu": 96,
           "mem": 768,
           "price": 13.109,
-          "storage": "4 × 1000 GB NVMe SSD",
-          "net": "4x 100 Gigabit"
+          "net": "400 Gigabit"
         }
       },
       "in": [
@@ -4867,7 +4873,7 @@
         "2xlarge": {
           "vcpu": 8,
           "mem": 32,
-          "price": null,
+          "price": 2.52,
           "storage": "440 GB NVMe SSD",
           "net": "60 Gigabit",
           "gpu": "NVIDIA RTX PRO 4500 Blackwell · 32 GB"
@@ -4875,7 +4881,7 @@
         "4xlarge": {
           "vcpu": 16,
           "mem": 64,
-          "price": null,
+          "price": 3.0421,
           "storage": "875 GB NVMe SSD",
           "net": "60 Gigabit",
           "gpu": "NVIDIA RTX PRO 4500 Blackwell · 32 GB"
@@ -4883,7 +4889,7 @@
         "8xlarge": {
           "vcpu": 32,
           "mem": 128,
-          "price": null,
+          "price": 4.0862,
           "storage": "930 GB NVMe SSD",
           "net": "80 Gigabit",
           "gpu": "NVIDIA RTX PRO 4500 Blackwell · 32 GB"
@@ -4891,7 +4897,7 @@
         "12xlarge": {
           "vcpu": 48,
           "mem": 192,
-          "price": null,
+          "price": 7.1283,
           "storage": "1900 GB NVMe SSD",
           "net": "175 Gigabit",
           "gpu": "2 × NVIDIA RTX PRO 4500 Blackwell · 64 GB"
@@ -4899,7 +4905,7 @@
         "24xlarge": {
           "vcpu": 96,
           "mem": 384,
-          "price": null,
+          "price": 14.2566,
           "storage": "3800 GB NVMe SSD",
           "net": "350 Gigabit",
           "gpu": "4 × NVIDIA RTX PRO 4500 Blackwell · 128 GB"
@@ -4907,13 +4913,14 @@
         "48xlarge": {
           "vcpu": 192,
           "mem": 768,
-          "price": null,
+          "price": 28.5133,
           "storage": "2 × 3800 GB NVMe SSD",
           "net": "700 Gigabit",
           "gpu": "8 × NVIDIA RTX PRO 4500 Blackwell · 256 GB"
         }
       },
       "in": [
+        "us-east-1",
         "us-east-2",
         "us-west-2"
       ]
@@ -6019,6 +6026,7 @@
         "ap-northeast-1",
         "ap-northeast-2",
         "ap-south-1",
+        "ap-south-2",
         "ap-southeast-1",
         "ap-southeast-2",
         "ap-southeast-3",
@@ -6372,29 +6380,25 @@
           "vcpu": 4,
           "mem": 8,
           "price": 0.228,
-          "net": "Up to 25 Gigabit",
-          "gpu": "GPU"
+          "net": "Up to 25 Gigabit"
         },
         "2xlarge": {
           "vcpu": 8,
           "mem": 16,
           "price": 0.362,
-          "net": "Up to 25 Gigabit",
-          "gpu": "GPU"
+          "net": "Up to 25 Gigabit"
         },
         "6xlarge": {
           "vcpu": 24,
           "mem": 48,
           "price": 1.18,
-          "net": "25 Gigabit",
-          "gpu": "4 × GPU"
+          "net": "25 Gigabit"
         },
         "24xlarge": {
           "vcpu": 96,
           "mem": 192,
           "price": 4.721,
-          "net": "100 Gigabit",
-          "gpu": "16 × GPU"
+          "net": "100 Gigabit"
         }
       },
       "in": [
@@ -6439,29 +6443,25 @@
           "vcpu": 4,
           "mem": 16,
           "price": 0.7582,
-          "net": "Up to 15 Gigabit",
-          "gpu": "GPU"
+          "net": "Up to 15 Gigabit"
         },
         "8xlarge": {
           "vcpu": 32,
           "mem": 128,
           "price": 1.9679,
-          "net": "Up to 25 Gigabit",
-          "gpu": "GPU"
+          "net": "Up to 25 Gigabit"
         },
         "24xlarge": {
           "vcpu": 96,
           "mem": 384,
           "price": 6.4906,
-          "net": "50 Gigabit",
-          "gpu": "6 × GPU"
+          "net": "50 Gigabit"
         },
         "48xlarge": {
           "vcpu": 192,
           "mem": 768,
           "price": 12.9813,
-          "net": "100 Gigabit",
-          "gpu": "12 × GPU"
+          "net": "100 Gigabit"
         }
       },
       "in": [
@@ -9280,6 +9280,7 @@
       },
       "in": [
         "ap-northeast-1",
+        "ap-south-1",
         "ap-southeast-2",
         "ap-southeast-5",
         "ca-central-1",
@@ -9287,6 +9288,7 @@
         "eu-south-2",
         "eu-west-1",
         "eu-west-2",
+        "eu-west-3",
         "sa-east-1",
         "us-east-1",
         "us-east-2",
@@ -9828,7 +9830,9 @@
       "in": [
         "ap-northeast-1",
         "eu-central-1",
+        "eu-north-1",
         "eu-south-2",
+        "eu-west-2",
         "us-east-1",
         "us-east-2",
         "us-west-2"
@@ -13577,17 +13581,24 @@
       "in": [
         "af-south-1",
         "ap-east-1",
+        "ap-east-2",
         "ap-northeast-1",
         "ap-northeast-2",
+        "ap-northeast-3",
+        "ap-south-1",
+        "ap-southeast-1",
         "ap-southeast-2",
         "ap-southeast-3",
         "ap-southeast-5",
         "ca-central-1",
         "ca-west-1",
         "eu-central-1",
+        "eu-north-1",
+        "eu-south-1",
         "eu-south-2",
         "eu-west-1",
         "eu-west-2",
+        "eu-west-3",
         "sa-east-1",
         "us-east-1",
         "us-east-2",
@@ -14008,7 +14019,10 @@
         }
       },
       "in": [
+        "ap-northeast-1",
+        "eu-central-1",
         "eu-south-2",
+        "eu-west-1",
         "us-east-1",
         "us-east-2",
         "us-west-2"
@@ -14133,6 +14147,7 @@
         "ap-northeast-1",
         "eu-central-1",
         "eu-south-2",
+        "eu-west-2",
         "us-east-1",
         "us-east-2",
         "us-west-2"
@@ -14254,7 +14269,10 @@
         }
       },
       "in": [
+        "ap-northeast-1",
+        "eu-central-1",
         "eu-south-2",
+        "eu-west-1",
         "us-east-1",
         "us-east-2",
         "us-west-2"
@@ -14376,7 +14394,10 @@
         }
       },
       "in": [
+        "ap-northeast-1",
+        "eu-central-1",
         "eu-south-2",
+        "eu-west-1",
         "us-east-1",
         "us-east-2",
         "us-west-2"
@@ -14485,7 +14506,10 @@
         }
       },
       "in": [
+        "ap-northeast-1",
+        "eu-central-1",
         "eu-south-2",
+        "eu-west-1",
         "us-east-1",
         "us-east-2",
         "us-west-2"
@@ -14890,16 +14914,14 @@
           "mem": 32,
           "price": 1.3438,
           "storage": "474 GB NVMe SSD",
-          "net": "Up to 12.5 Gigabit",
-          "gpu": "GPU"
+          "net": "Up to 12.5 Gigabit"
         },
         "32xlarge": {
           "vcpu": 128,
           "mem": 512,
           "price": 21.5,
           "storage": "4 × 1900 GB NVMe SSD",
-          "net": "8x 100 Gigabit",
-          "gpu": "16 × GPU"
+          "net": "8x 100 Gigabit"
         }
       },
       "in": [
@@ -14925,8 +14947,7 @@
           "mem": 512,
           "price": 24.78,
           "storage": "4 × 1900 GB NVMe SSD",
-          "net": "16x 100 Gigabit",
-          "gpu": "16 × GPU"
+          "net": "16x 100 Gigabit"
         }
       },
       "in": [
@@ -14951,8 +14972,7 @@
           "mem": 2048,
           "price": null,
           "storage": "4 × 1900 GB NVMe SSD",
-          "net": "16x 200 Gigabit",
-          "gpu": "16 × GPU"
+          "net": "16x 200 Gigabit"
         }
       },
       "in": [
@@ -15231,6 +15251,7 @@
         "ap-southeast-1",
         "ap-southeast-2",
         "eu-central-1",
+        "eu-central-2",
         "eu-north-1",
         "eu-south-1",
         "eu-south-2",

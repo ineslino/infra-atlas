@@ -6,7 +6,63 @@
     <atom:link href="https://infraatlas.dev/feed.xml" rel="self" type="application/rss+xml"/>
     <description>A neutral, sourced changelog of cloud infrastructure — new instance families, regions, withdrawals and price moves across AWS, Azure, GCP, OCI and OVHcloud.</description>
     <language>en</language>
-    <lastBuildDate>Wed, 01 Jul 2026 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Sun, 12 Jul 2026 00:00:00 +0000</lastBuildDate>
+    <item>
+      <title>AWS EC2 · g7 now in us-east-1</title>
+      <link>https://infraatlas.dev/ec2/</link>
+      <guid isPermaLink="false">8d22cc71e56fcdbaef8cd3a2f5809f98</guid>
+      <category>availability-added</category>
+      <pubDate>Sun, 12 Jul 2026 00:00:00 +0000</pubDate>
+      <description>AWS EC2 · g7 now in us-east-1</description>
+    </item>
+    <item>
+      <title>AWS EC2 · c8id now in ap-south-1, eu-north-1</title>
+      <link>https://infraatlas.dev/ec2/</link>
+      <guid isPermaLink="false">9caf850ebac21e61079e1109e373d11f</guid>
+      <category>availability-added</category>
+      <pubDate>Fri, 10 Jul 2026 00:00:00 +0000</pubDate>
+      <description>AWS EC2 · c8id now in ap-south-1, eu-north-1</description>
+    </item>
+    <item>
+      <title>AWS EC2 · m8id now in eu-north-1, eu-west-2</title>
+      <link>https://infraatlas.dev/ec2/</link>
+      <guid isPermaLink="false">23d0ed3e16d4c1d73daea33e4aded1e8</guid>
+      <category>availability-added</category>
+      <pubDate>Fri, 10 Jul 2026 00:00:00 +0000</pubDate>
+      <description>AWS EC2 · m8id now in eu-north-1, eu-west-2</description>
+    </item>
+    <item>
+      <title>AWS EC2 · r8id now in eu-west-2</title>
+      <link>https://infraatlas.dev/ec2/</link>
+      <guid isPermaLink="false">1c00ea5252d7ba5f01181d753b1dee12</guid>
+      <category>availability-added</category>
+      <pubDate>Fri, 10 Jul 2026 00:00:00 +0000</pubDate>
+      <description>AWS EC2 · r8id now in eu-west-2</description>
+    </item>
+    <item>
+      <title>AWS EC2 · 8 families gained regions (23 region changes)</title>
+      <link>https://infraatlas.dev/ec2/</link>
+      <guid isPermaLink="false">ab645f69657f552f2d33609b3f2f9cd4</guid>
+      <category>availability-added</category>
+      <pubDate>Thu, 09 Jul 2026 00:00:00 +0000</pubDate>
+      <description>AWS EC2 · 8 families gained regions (23 region changes)</description>
+    </item>
+    <item>
+      <title>AWS EC2 · c8g now in 4 regions (af-south-1, ca-west-1, eu-west-3…)</title>
+      <link>https://infraatlas.dev/ec2/</link>
+      <guid isPermaLink="false">d6c49ce5289c5e1a3f047902e2298a02</guid>
+      <category>availability-added</category>
+      <pubDate>Wed, 08 Jul 2026 00:00:00 +0000</pubDate>
+      <description>AWS EC2 · c8g now in 4 regions (af-south-1, ca-west-1, eu-west-3…)</description>
+    </item>
+    <item>
+      <title>AWS EC2 · c8ine now in eu-central-1</title>
+      <link>https://infraatlas.dev/ec2/</link>
+      <guid isPermaLink="false">4e8e5f64cd51131c79a114048d4cd1a6</guid>
+      <category>availability-added</category>
+      <pubDate>Tue, 07 Jul 2026 00:00:00 +0000</pubDate>
+      <description>AWS EC2 · c8ine now in eu-central-1</description>
+    </item>
     <item>
       <title>AWS EC2 · new family c9g</title>
       <link>https://infraatlas.dev/ec2/</link>

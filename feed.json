@@ -1,6 +1,48 @@
 {
-  "generated": "2026-07-01T10:03:14Z",
+  "generated": "2026-07-12T08:27:15Z",
   "entries": [
+    {
+      "ts": "2026-07-12",
+      "instrument": "ec2",
+      "kind": "availability-added",
+      "text": "g7 now in us-east-1"
+    },
+    {
+      "ts": "2026-07-10",
+      "instrument": "ec2",
+      "kind": "availability-added",
+      "text": "c8id now in ap-south-1, eu-north-1"
+    },
+    {
+      "ts": "2026-07-10",
+      "instrument": "ec2",
+      "kind": "availability-added",
+      "text": "m8id now in eu-north-1, eu-west-2"
+    },
+    {
+      "ts": "2026-07-10",
+      "instrument": "ec2",
+      "kind": "availability-added",
+      "text": "r8id now in eu-west-2"
+    },
+    {
+      "ts": "2026-07-09",
+      "instrument": "ec2",
+      "kind": "availability-added",
+      "text": "8 families gained regions (23 region changes)"
+    },
+    {
+      "ts": "2026-07-08",
+      "instrument": "ec2",
+      "kind": "availability-added",
+      "text": "c8g now in 4 regions (af-south-1, ca-west-1, eu-west-3…)"
+    },
+    {
+      "ts": "2026-07-07",
+      "instrument": "ec2",
+      "kind": "availability-added",
+      "text": "c8ine now in eu-central-1"
+    },
     {
       "ts": "2026-07-01",
       "instrument": "ec2",
