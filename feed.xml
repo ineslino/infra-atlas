@@ -6,7 +6,39 @@
     <atom:link href="https://infraatlas.dev/feed.xml" rel="self" type="application/rss+xml"/>
     <description>A neutral, sourced changelog of cloud infrastructure — new instance families, regions, withdrawals and price moves across AWS, Azure, GCP, OCI and OVHcloud.</description>
     <language>en</language>
-    <lastBuildDate>Sun, 12 Jul 2026 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Wed, 15 Jul 2026 00:00:00 +0000</lastBuildDate>
+    <item>
+      <title>AWS EC2 · m8ib now in ap-northeast-1, eu-west-1, us-east-2</title>
+      <link>https://infraatlas.dev/ec2/</link>
+      <guid isPermaLink="false">ae97dabb3182ae55482876b92bc2ba75</guid>
+      <category>availability-added</category>
+      <pubDate>Wed, 15 Jul 2026 00:00:00 +0000</pubDate>
+      <description>AWS EC2 · m8ib now in ap-northeast-1, eu-west-1, us-east-2</description>
+    </item>
+    <item>
+      <title>AWS EC2 · m8idb now in ap-northeast-1, eu-west-1, us-east-2</title>
+      <link>https://infraatlas.dev/ec2/</link>
+      <guid isPermaLink="false">bb0fbda17412f7812b5cabf3175fcba1</guid>
+      <category>availability-added</category>
+      <pubDate>Wed, 15 Jul 2026 00:00:00 +0000</pubDate>
+      <description>AWS EC2 · m8idb now in ap-northeast-1, eu-west-1, us-east-2</description>
+    </item>
+    <item>
+      <title>AWS EC2 · m8idn now in ap-northeast-1, eu-west-1, us-east-2</title>
+      <link>https://infraatlas.dev/ec2/</link>
+      <guid isPermaLink="false">76f5fb0e72d3a7e408395380890b268c</guid>
+      <category>availability-added</category>
+      <pubDate>Wed, 15 Jul 2026 00:00:00 +0000</pubDate>
+      <description>AWS EC2 · m8idn now in ap-northeast-1, eu-west-1, us-east-2</description>
+    </item>
+    <item>
+      <title>AWS EC2 · m8in now in ap-northeast-1, eu-west-1, us-east-2</title>
+      <link>https://infraatlas.dev/ec2/</link>
+      <guid isPermaLink="false">d64d8eaaa2d10df602a215c77d251a20</guid>
+      <category>availability-added</category>
+      <pubDate>Wed, 15 Jul 2026 00:00:00 +0000</pubDate>
+      <description>AWS EC2 · m8in now in ap-northeast-1, eu-west-1, us-east-2</description>
+    </item>
     <item>
       <title>AWS EC2 · g7 now in us-east-1</title>
       <link>https://infraatlas.dev/ec2/</link>
