@@ -1,6 +1,30 @@
 {
-  "generated": "2026-07-15T08:26:33Z",
+  "generated": "2026-07-16T08:25:03Z",
   "entries": [
+    {
+      "ts": "2026-07-16",
+      "instrument": "ec2",
+      "kind": "availability-added",
+      "text": "g7e now in ap-south-1, eu-central-1, eu-north-1"
+    },
+    {
+      "ts": "2026-07-16",
+      "instrument": "ec2",
+      "kind": "availability-added",
+      "text": "r8i now in eu-central-2, eu-north-1"
+    },
+    {
+      "ts": "2026-07-16",
+      "instrument": "ec2",
+      "kind": "availability-added",
+      "text": "r8i-flex now in eu-central-2, eu-north-1"
+    },
+    {
+      "ts": "2026-07-16",
+      "instrument": "ec2",
+      "kind": "availability-added",
+      "text": "u7in-24tb now in eu-west-3"
+    },
     {
       "ts": "2026-07-15",
       "instrument": "ec2",
