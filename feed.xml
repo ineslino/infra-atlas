@@ -6,7 +6,47 @@
     <atom:link href="https://infraatlas.dev/feed.xml" rel="self" type="application/rss+xml"/>
     <description>A neutral, sourced changelog of cloud infrastructure — new instance families, regions, withdrawals and price moves across AWS, Azure, GCP, OCI and OVHcloud.</description>
     <language>en</language>
-    <lastBuildDate>Thu, 16 Jul 2026 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Wed, 22 Jul 2026 00:00:00 +0000</lastBuildDate>
+    <item>
+      <title>AWS EC2 · c6in now in ap-east-2</title>
+      <link>https://infraatlas.dev/ec2/</link>
+      <guid isPermaLink="false">d4e59d1c4c9eeab077afb7e2ccc57ec0</guid>
+      <category>availability-added</category>
+      <pubDate>Wed, 22 Jul 2026 00:00:00 +0000</pubDate>
+      <description>AWS EC2 · c6in now in ap-east-2</description>
+    </item>
+    <item>
+      <title>AWS EC2 · m6idn now in ap-south-2, sa-east-1</title>
+      <link>https://infraatlas.dev/ec2/</link>
+      <guid isPermaLink="false">0d2cfce63cd4920d450d03af0c229f98</guid>
+      <category>availability-added</category>
+      <pubDate>Wed, 22 Jul 2026 00:00:00 +0000</pubDate>
+      <description>AWS EC2 · m6idn now in ap-south-2, sa-east-1</description>
+    </item>
+    <item>
+      <title>AWS EC2 · m6in now in ap-south-2, sa-east-1</title>
+      <link>https://infraatlas.dev/ec2/</link>
+      <guid isPermaLink="false">b017d21d6a80c1ef2e8ed09dfafa58ac</guid>
+      <category>availability-added</category>
+      <pubDate>Wed, 22 Jul 2026 00:00:00 +0000</pubDate>
+      <description>AWS EC2 · m6in now in ap-south-2, sa-east-1</description>
+    </item>
+    <item>
+      <title>AWS EC2 · r6idn now in ca-central-1, eu-west-3</title>
+      <link>https://infraatlas.dev/ec2/</link>
+      <guid isPermaLink="false">3b957f923b30b760845914c4939c8643</guid>
+      <category>availability-added</category>
+      <pubDate>Wed, 22 Jul 2026 00:00:00 +0000</pubDate>
+      <description>AWS EC2 · r6idn now in ca-central-1, eu-west-3</description>
+    </item>
+    <item>
+      <title>AWS EC2 · r6in now in ca-central-1, eu-west-3</title>
+      <link>https://infraatlas.dev/ec2/</link>
+      <guid isPermaLink="false">5cfcc38f354da6c10ef69b00efa7f2a0</guid>
+      <category>availability-added</category>
+      <pubDate>Wed, 22 Jul 2026 00:00:00 +0000</pubDate>
+      <description>AWS EC2 · r6in now in ca-central-1, eu-west-3</description>
+    </item>
     <item>
       <title>AWS EC2 · g7e now in ap-south-1, eu-central-1, eu-north-1</title>
       <link>https://infraatlas.dev/ec2/</link>
