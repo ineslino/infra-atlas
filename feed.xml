@@ -6,7 +6,47 @@
     <atom:link href="https://infraatlas.dev/feed.xml" rel="self" type="application/rss+xml"/>
     <description>A neutral, sourced changelog of cloud infrastructure — new instance families, regions, withdrawals and price moves across AWS, Azure, GCP, OCI and OVHcloud.</description>
     <language>en</language>
-    <lastBuildDate>Wed, 22 Jul 2026 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Thu, 23 Jul 2026 00:00:00 +0000</lastBuildDate>
+    <item>
+      <title>AWS EC2 · c7a now in us-west-1</title>
+      <link>https://infraatlas.dev/ec2/</link>
+      <guid isPermaLink="false">c7ebccabdcbc05d796cba9a320301334</guid>
+      <category>availability-added</category>
+      <pubDate>Thu, 23 Jul 2026 00:00:00 +0000</pubDate>
+      <description>AWS EC2 · c7a now in us-west-1</description>
+    </item>
+    <item>
+      <title>AWS EC2 · c7i now in ca-west-1, eu-south-1</title>
+      <link>https://infraatlas.dev/ec2/</link>
+      <guid isPermaLink="false">9ab901ffc20e34cabf9db7bac6ea8285</guid>
+      <category>availability-added</category>
+      <pubDate>Thu, 23 Jul 2026 00:00:00 +0000</pubDate>
+      <description>AWS EC2 · c7i now in ca-west-1, eu-south-1</description>
+    </item>
+    <item>
+      <title>AWS EC2 · i8ge now in ca-central-1, eu-west-2</title>
+      <link>https://infraatlas.dev/ec2/</link>
+      <guid isPermaLink="false">2a73681836378705776f94d603572b6d</guid>
+      <category>availability-added</category>
+      <pubDate>Thu, 23 Jul 2026 00:00:00 +0000</pubDate>
+      <description>AWS EC2 · i8ge now in ca-central-1, eu-west-2</description>
+    </item>
+    <item>
+      <title>AWS EC2 · m8a now in ap-south-2</title>
+      <link>https://infraatlas.dev/ec2/</link>
+      <guid isPermaLink="false">4402ccc62629910809904b167ca552c0</guid>
+      <category>availability-added</category>
+      <pubDate>Thu, 23 Jul 2026 00:00:00 +0000</pubDate>
+      <description>AWS EC2 · m8a now in ap-south-2</description>
+    </item>
+    <item>
+      <title>AWS EC2 · m8id now in eu-west-1</title>
+      <link>https://infraatlas.dev/ec2/</link>
+      <guid isPermaLink="false">9d8207c080b62aeccec85f636e541ea6</guid>
+      <category>availability-added</category>
+      <pubDate>Thu, 23 Jul 2026 00:00:00 +0000</pubDate>
+      <description>AWS EC2 · m8id now in eu-west-1</description>
+    </item>
     <item>
       <title>AWS EC2 · c6in now in ap-east-2</title>
       <link>https://infraatlas.dev/ec2/</link>
