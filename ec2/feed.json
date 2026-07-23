@@ -1,7 +1,37 @@
 {
-  "generated": "2026-07-22T08:38:43Z",
+  "generated": "2026-07-23T08:40:18Z",
   "instrument": "ec2",
   "entries": [
+    {
+      "ts": "2026-07-23",
+      "instrument": "ec2",
+      "kind": "availability-added",
+      "text": "c7a now in us-west-1"
+    },
+    {
+      "ts": "2026-07-23",
+      "instrument": "ec2",
+      "kind": "availability-added",
+      "text": "c7i now in ca-west-1, eu-south-1"
+    },
+    {
+      "ts": "2026-07-23",
+      "instrument": "ec2",
+      "kind": "availability-added",
+      "text": "i8ge now in ca-central-1, eu-west-2"
+    },
+    {
+      "ts": "2026-07-23",
+      "instrument": "ec2",
+      "kind": "availability-added",
+      "text": "m8a now in ap-south-2"
+    },
+    {
+      "ts": "2026-07-23",
+      "instrument": "ec2",
+      "kind": "availability-added",
+      "text": "m8id now in eu-west-1"
+    },
     {
       "ts": "2026-07-22",
       "instrument": "ec2",
