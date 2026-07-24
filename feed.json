@@ -1,6 +1,18 @@
 {
-  "generated": "2026-07-23T08:40:18Z",
+  "generated": "2026-07-24T08:36:13Z",
   "entries": [
+    {
+      "ts": "2026-07-24",
+      "instrument": "ec2",
+      "kind": "availability-added",
+      "text": "u7in-16tb now in sa-east-1"
+    },
+    {
+      "ts": "2026-07-24",
+      "instrument": "ec2",
+      "kind": "availability-added",
+      "text": "u7in-24tb now in eu-west-1"
+    },
     {
       "ts": "2026-07-23",
       "instrument": "ec2",
