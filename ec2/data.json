@@ -1,5 +1,5 @@
 {
-  "generated": "2026-07-25T08:16:49Z",
+  "generated": "2026-07-26T08:35:24Z",
   "source": "ec2instances.info (Vantage) — public dataset, no credentials",
   "currency": "USD",
   "priceRef": "us-east-1",
@@ -4879,7 +4879,7 @@
           "mem": 32,
           "price": 2.52,
           "storage": "440 GB NVMe SSD",
-          "net": "Up to 60 Gigabit",
+          "net": "60 Gigabit",
           "gpu": "NVIDIA RTX PRO 4500 Blackwell · 32 GB"
         },
         "4xlarge": {
