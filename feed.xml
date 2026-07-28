@@ -6,7 +6,23 @@
     <atom:link href="https://infraatlas.dev/feed.xml" rel="self" type="application/rss+xml"/>
     <description>A neutral, sourced changelog of cloud infrastructure — new instance families, regions, withdrawals and price moves across AWS, Azure, GCP, OCI and OVHcloud.</description>
     <language>en</language>
-    <lastBuildDate>Fri, 24 Jul 2026 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Tue, 28 Jul 2026 00:00:00 +0000</lastBuildDate>
+    <item>
+      <title>AWS EC2 · c7i-flex now in eu-south-1</title>
+      <link>https://infraatlas.dev/ec2/</link>
+      <guid isPermaLink="false">894e86af04d999b8edb3c591ec8d5e9f</guid>
+      <category>availability-added</category>
+      <pubDate>Tue, 28 Jul 2026 00:00:00 +0000</pubDate>
+      <description>AWS EC2 · c7i-flex now in eu-south-1</description>
+    </item>
+    <item>
+      <title>AWS EC2 · g5 now in eu-south-2, eu-west-3</title>
+      <link>https://infraatlas.dev/ec2/</link>
+      <guid isPermaLink="false">90fe54aac2999963cfae38b625642470</guid>
+      <category>availability-added</category>
+      <pubDate>Tue, 28 Jul 2026 00:00:00 +0000</pubDate>
+      <description>AWS EC2 · g5 now in eu-south-2, eu-west-3</description>
+    </item>
     <item>
       <title>AWS EC2 · u7in-16tb now in sa-east-1</title>
       <link>https://infraatlas.dev/ec2/</link>
