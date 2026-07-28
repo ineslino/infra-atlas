@@ -1,5 +1,5 @@
 {
-  "generated": "2026-07-26T08:35:24Z",
+  "generated": "2026-07-28T08:45:52Z",
   "source": "ec2instances.info (Vantage) — public dataset, no credentials",
   "currency": "USD",
   "priceRef": "us-east-1",
@@ -2343,6 +2343,7 @@
         "eu-central-1",
         "eu-central-2",
         "eu-north-1",
+        "eu-south-1",
         "eu-south-2",
         "eu-west-1",
         "eu-west-2",
@@ -4513,8 +4514,10 @@
         "ca-central-1",
         "eu-central-1",
         "eu-north-1",
+        "eu-south-2",
         "eu-west-1",
         "eu-west-2",
+        "eu-west-3",
         "il-central-1",
         "me-central-1",
         "sa-east-1",
@@ -4887,7 +4890,7 @@
           "mem": 64,
           "price": 3.0421,
           "storage": "875 GB NVMe SSD",
-          "net": "60 Gigabit",
+          "net": "Up to 100 Gigabit",
           "gpu": "NVIDIA RTX PRO 4500 Blackwell · 32 GB"
         },
         "8xlarge": {
