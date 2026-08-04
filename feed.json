@@ -1,6 +1,18 @@
 {
-  "generated": "2026-07-28T08:45:52Z",
+  "generated": "2026-08-04T08:48:53Z",
   "entries": [
+    {
+      "ts": "2026-08-04",
+      "instrument": "ec2",
+      "kind": "availability-added",
+      "text": "i7i now in ap-southeast-7, il-central-1"
+    },
+    {
+      "ts": "2026-08-04",
+      "instrument": "ec2",
+      "kind": "availability-added",
+      "text": "i8g now in ap-southeast-3, eu-west-3"
+    },
     {
       "ts": "2026-07-28",
       "instrument": "ec2",
