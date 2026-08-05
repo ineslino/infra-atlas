@@ -1,5 +1,5 @@
 {
-  "generated": "2026-08-04T08:48:53Z",
+  "generated": "2026-08-05T08:46:12Z",
   "source": "ec2instances.info (Vantage) — public dataset, no credentials",
   "currency": "USD",
   "priceRef": "us-east-1",
@@ -4954,7 +4954,7 @@
           "price": 3.3631,
           "storage": "1900 GB NVMe SSD",
           "net": "50 Gigabit",
-          "gpu": "NVIDIA GB202 · 96 GB"
+          "gpu": "NVIDIA RTX PRO 6000 Blackwell · 96 GB"
         },
         "4xlarge": {
           "vcpu": 16,
@@ -4962,7 +4962,7 @@
           "price": 3.9982,
           "storage": "1900 GB NVMe SSD",
           "net": "50 Gigabit",
-          "gpu": "NVIDIA GB202 · 96 GB"
+          "gpu": "NVIDIA RTX PRO 6000 Blackwell · 96 GB"
         },
         "8xlarge": {
           "vcpu": 32,
@@ -4970,7 +4970,7 @@
           "price": 5.2682,
           "storage": "1900 GB NVMe SSD",
           "net": "100 Gigabit",
-          "gpu": "NVIDIA GB202 · 96 GB"
+          "gpu": "NVIDIA RTX PRO 6000 Blackwell · 96 GB"
         },
         "12xlarge": {
           "vcpu": 48,
@@ -4978,7 +4978,7 @@
           "price": 8.2861,
           "storage": "3800 GB NVMe SSD",
           "net": "400 Gigabit",
-          "gpu": "2 × NVIDIA GB202 · 192 GB"
+          "gpu": "2 × NVIDIA RTX PRO 6000 Blackwell · 192 GB"
         },
         "24xlarge": {
           "vcpu": 96,
@@ -4986,7 +4986,7 @@
           "price": 16.5722,
           "storage": "2 × 3800 GB NVMe SSD",
           "net": "800 Gigabit",
-          "gpu": "4 × NVIDIA GB202 · 384 GB"
+          "gpu": "4 × NVIDIA RTX PRO 6000 Blackwell · 384 GB"
         },
         "48xlarge": {
           "vcpu": 192,
@@ -4994,7 +4994,7 @@
           "price": 33.1443,
           "storage": "4 × 3800 GB NVMe SSD",
           "net": "1600 Gigabit",
-          "gpu": "8 × NVIDIA GB202 · 768 GB"
+          "gpu": "8 × NVIDIA RTX PRO 6000 Blackwell · 768 GB"
         }
       },
       "in": [
