@@ -1,6 +1,12 @@
 {
-  "generated": "2026-08-04T08:48:53Z",
+  "generated": "2026-08-06T08:47:39Z",
   "entries": [
+    {
+      "ts": "2026-08-06",
+      "instrument": "ec2",
+      "kind": "availability-added",
+      "text": "m8g now in ap-east-2, mx-central-1"
+    },
     {
       "ts": "2026-08-04",
       "instrument": "ec2",
