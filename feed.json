@@ -1,6 +1,24 @@
 {
-  "generated": "2026-08-06T08:47:39Z",
+  "generated": "2026-08-07T07:26:42Z",
   "entries": [
+    {
+      "ts": "2026-08-07",
+      "instrument": "ec2",
+      "kind": "availability-added",
+      "text": "g7 now in eu-south-2"
+    },
+    {
+      "ts": "2026-08-07",
+      "instrument": "ec2",
+      "kind": "availability-added",
+      "text": "r8i now in eu-south-1"
+    },
+    {
+      "ts": "2026-08-07",
+      "instrument": "ec2",
+      "kind": "availability-added",
+      "text": "r8i-flex now in eu-south-1"
+    },
     {
       "ts": "2026-08-06",
       "instrument": "ec2",
