@@ -1,7 +1,19 @@
 {
-  "generated": "2026-08-07T07:26:42Z",
+  "generated": "2026-08-11T07:17:57Z",
   "instrument": "ec2",
   "entries": [
+    {
+      "ts": "2026-08-11",
+      "instrument": "ec2",
+      "kind": "availability-added",
+      "text": "r8a now in ca-central-1"
+    },
+    {
+      "ts": "2026-08-11",
+      "instrument": "ec2",
+      "kind": "availability-added",
+      "text": "u7in-24tb now in sa-east-1"
+    },
     {
       "ts": "2026-08-07",
       "instrument": "ec2",
