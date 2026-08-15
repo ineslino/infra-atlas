@@ -6,7 +6,23 @@
     <atom:link href="https://infraatlas.dev/feed.xml" rel="self" type="application/rss+xml"/>
     <description>A neutral, sourced changelog of cloud infrastructure — new instance families, regions, withdrawals and price moves across AWS, Azure, GCP, OCI and OVHcloud.</description>
     <language>en</language>
-    <lastBuildDate>Tue, 11 Aug 2026 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Sat, 15 Aug 2026 00:00:00 +0000</lastBuildDate>
+    <item>
+      <title>AWS EC2 · r8i now in ca-west-1</title>
+      <link>https://infraatlas.dev/ec2/</link>
+      <guid isPermaLink="false">beab5ef9a74c5418be189457f02cf483</guid>
+      <category>availability-added</category>
+      <pubDate>Sat, 15 Aug 2026 00:00:00 +0000</pubDate>
+      <description>AWS EC2 · r8i now in ca-west-1</description>
+    </item>
+    <item>
+      <title>AWS EC2 · r8i-flex now in ca-west-1</title>
+      <link>https://infraatlas.dev/ec2/</link>
+      <guid isPermaLink="false">6b837aaf3e3ffe76301577c917c40204</guid>
+      <category>availability-added</category>
+      <pubDate>Sat, 15 Aug 2026 00:00:00 +0000</pubDate>
+      <description>AWS EC2 · r8i-flex now in ca-west-1</description>
+    </item>
     <item>
       <title>AWS EC2 · r8a now in ca-central-1</title>
       <link>https://infraatlas.dev/ec2/</link>
