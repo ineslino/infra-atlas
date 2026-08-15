@@ -341,7 +341,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, [tabindex]:focus-vis
         <span class="status-dot"></span>
         <span class="status-text">Curated · v1</span>
       </div>
-      <div class="status-time">Verified · <time datetime="2026-05-19">2026-05-19</time></div>
+      <div class="status-time">Verified · <time datetime="2026-08-15">2026-08-15</time></div>
       <div class="status-counts">
         <div>Platforms<strong id="count-vendors">5</strong></div>
         <div>Models<strong id="count-models">—</strong></div>
@@ -415,7 +415,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, [tabindex]:focus-vis
     </div>
     <div>
       <h2>Sources</h2>
-      <p>Every cell is backed by the provider&rsquo;s official documentation — the Amazon Bedrock, Azure AI Foundry, Vertex AI, OCI Generative AI and OVHcloud AI Endpoints docs. Source URLs are cited in each cell&rsquo;s drawer. Generative-AI offerings move fast, so this is a curated snapshot — verified 2026-05-19 and re-checked roughly monthly. <em>If you spot a stale fact, <a href="https://github.com/ineslino/infra-atlas/issues/new" target="_blank" rel="noopener">open an issue</a>.</em></p>
+      <p>Every cell is backed by the provider&rsquo;s official documentation — the Amazon Bedrock, Azure AI Foundry, Vertex AI, OCI Generative AI and OVHcloud AI Endpoints docs. Source URLs are cited in each cell&rsquo;s drawer. Generative-AI offerings move fast, so this is a curated snapshot — verified 2026-08-15 and re-checked roughly monthly. <em>If you spot a stale fact, <a href="https://github.com/ineslino/infra-atlas/issues/new" target="_blank" rel="noopener">open an issue</a>.</em></p>
     </div>
     <div>
       <h2>Shortcuts</h2>
@@ -435,7 +435,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, [tabindex]:focus-vis
 <script>
 // ═══════════════════════════════════════════════════════════════════
 // INFRA ATLAS · GENERATIVE AI ATLAS
-// All values verified against official vendor documentation (2026-05-19).
+// All values verified against official vendor documentation (2026-08-15).
 // Source URL for each datum is in the cell's `src` field, surfaced in
 // the drawer. Unverifiable values are marked level:"no" with an
 // explicit "—" and a note — never fabricated.
@@ -476,11 +476,11 @@ const FEATURES = [
   { id:"fam-anthropic", category:"families", name:"Anthropic Claude",
     desc:"Whether the platform hosts Anthropic's Claude family of models.",
     support: {
-      bedrock: { level:"yes", value:"Opus · Sonnet · Haiku", note:"Claude Opus 4.7/4.6/4.5, Sonnet 4.6/4.5 and Haiku 4.5/3.5 are available on Amazon Bedrock.",
+      bedrock: { level:"yes", value:"Claude 5.x · 4.x", note:"Claude 5.x (Opus, Sonnet, Mythos and Fable) and the Claude 4.x family are available on Amazon Bedrock.",
                  src:"https://docs.aws.amazon.com/bedrock/latest/userguide/model-cards.html" },
-      azure:   { level:"yes", value:"Opus · Sonnet · Haiku", note:"Claude Opus 4.7/4.6, Sonnet 4.6/4.5 and Haiku 4.5 are available; deployment is limited to Enterprise / MCA-E subscriptions.",
-                 src:"https://learn.microsoft.com/en-us/azure/foundry/foundry-models/how-to/use-foundry-models-claude" },
-      vertex:  { level:"yes", value:"Opus · Sonnet · Haiku", note:"Claude Opus 4.7, Sonnet 4.6 and Haiku 4.5 are offered as managed APIs in Vertex AI Model Garden.",
+      azure:   { level:"yes", value:"Claude 5 · 4.x", note:"Claude Opus 5, Sonnet 5, Fable 5, the Claude 4.x family and Haiku 4.5 are available in Microsoft Foundry across supported paid subscriptions.",
+                 src:"https://learn.microsoft.com/en-us/azure/foundry/foundry-models/concepts/claude-models" },
+      vertex:  { level:"yes", value:"Claude 5 · 4.x", note:"Claude Sonnet 5, Opus 5, Fable 5 and the Claude 4.x family are offered as managed partner APIs.",
                  src:"https://cloud.google.com/vertex-ai/generative-ai/docs/partner-models/use-partner-models" },
       oci:     { level:"no", value:"", note:"OCI Generative AI's pretrained-model catalogue lists no Anthropic Claude models.",
                  src:"https://docs.oracle.com/en-us/iaas/Content/generative-ai/pretrained-models.htm" },
@@ -491,7 +491,7 @@ const FEATURES = [
   { id:"fam-openai", category:"families", name:"OpenAI GPT / o-series",
     desc:"Whether the platform hosts OpenAI's models — the proprietary GPT and o-series, or only the open-weight gpt-oss.",
     support: {
-      bedrock: { level:"part", value:"gpt-oss only", note:"Bedrock carries OpenAI's open-weight gpt-oss-120b/20b; the proprietary GPT and o-series models are not offered.",
+      bedrock: { level:"yes", value:"GPT-5.x · gpt-oss", note:"Bedrock offers proprietary GPT-5.x models alongside the open-weight gpt-oss-120b/20b family.",
                  src:"https://docs.aws.amazon.com/bedrock/latest/userguide/model-cards-openai.html" },
       azure:   { level:"yes", value:"GPT-5.x · o-series", note:"Azure is OpenAI's first-party cloud — GPT-5.x, o3/o4-mini, GPT-4.1/4o, Sora and gpt-oss are all in the catalogue.",
                  src:"https://learn.microsoft.com/en-us/azure/ai-foundry/foundry-models/concepts/models" },
@@ -506,7 +506,7 @@ const FEATURES = [
   { id:"fam-google", category:"families", name:"Google Gemini / Gemma",
     desc:"Whether the platform hosts Google's models — the proprietary Gemini, or the open-weight Gemma.",
     support: {
-      bedrock: { level:"part", value:"Gemma 3 only", note:"Bedrock offers the open-weight Gemma 3 models; Google's proprietary Gemini is not available.",
+      bedrock: { level:"part", value:"Gemma 4 · 3", note:"Bedrock offers the open-weight Gemma 4 and Gemma 3 families; Google's proprietary Gemini is not available.",
                  src:"https://docs.aws.amazon.com/bedrock/latest/userguide/model-cards-google.html" },
       azure:   { level:"no", value:"", note:"No Gemini or Gemma models appear in the Azure AI Foundry catalogue.",
                  src:"https://learn.microsoft.com/en-us/azure/foundry/foundry-models/concepts/models-from-partners" },
@@ -529,7 +529,7 @@ const FEATURES = [
                  src:"https://cloud.google.com/vertex-ai/generative-ai/docs/open-models/use-open-models" },
       oci:     { level:"yes", value:"Llama 4 · Llama 3.3", note:"Meta Llama 4 Maverick, Llama 4 Scout and Llama 3.3 70B are current managed chat models.",
                  src:"https://docs.oracle.com/en-us/iaas/Content/generative-ai/pretrained-models.htm" },
-      ovh:     { level:"yes", value:"Llama 3.x", note:"OVHcloud AI Endpoints serves Llama-3.1-8B and Llama-3.3-70B-Instruct.",
+      ovh:     { level:"yes", value:"Llama 3.3", note:"OVHcloud AI Endpoints currently serves Meta-Llama-3.3-70B-Instruct.",
                  src:"https://www.ovhcloud.com/en/public-cloud/ai-endpoints/catalog/" }
     }
   },
@@ -544,7 +544,7 @@ const FEATURES = [
                  src:"https://cloud.google.com/vertex-ai/generative-ai/docs/partner-models/use-partner-models" },
       oci:     { level:"no", value:"", note:"No Mistral models appear in OCI Generative AI's managed pretrained-model list.",
                  src:"https://docs.oracle.com/en-us/iaas/Content/generative-ai/pretrained-models.htm" },
-      ovh:     { level:"yes", value:"Mistral · Mixtral", note:"OVHcloud AI Endpoints serves Mistral 7B, Mistral Nemo, Mistral Small 3.2 and Mixtral.",
+      ovh:     { level:"no", value:"", note:"No Mistral or Mixtral model appears in the current OVHcloud AI Endpoints catalogue.",
                  src:"https://www.ovhcloud.com/en/public-cloud/ai-endpoints/catalog/" }
     }
   },
@@ -566,7 +566,7 @@ const FEATURES = [
   { id:"fam-amazon", category:"families", name:"Amazon Nova / Titan",
     desc:"Whether the platform hosts Amazon's own Nova and Titan models.",
     support: {
-      bedrock: { level:"yes", value:"Nova family + Titan", note:"Amazon's own Nova family (Premier, Pro, Lite, Micro, Canvas, Reel, Sonic) and the legacy Titan models.",
+      bedrock: { level:"yes", value:"Nova 2 + Nova · Titan", note:"Amazon Nova 2 Lite/Sonic, the Nova family (Premier, Pro, Lite, Micro, Canvas, Reel and Sonic) and Titan models are available.",
                  src:"https://docs.aws.amazon.com/bedrock/latest/userguide/model-cards-amazon.html" },
       azure:   { level:"no", value:"", note:"No Amazon Nova or Titan models appear in the Azure AI Foundry catalogue.",
                  src:"https://learn.microsoft.com/en-us/azure/foundry/foundry-models/concepts/models-from-partners" },
@@ -581,11 +581,11 @@ const FEATURES = [
   { id:"fam-xai", category:"families", name:"xAI Grok",
     desc:"Whether the platform hosts xAI's Grok family.",
     support: {
-      bedrock: { level:"no", value:"", note:"xAI Grok models do not appear in the Amazon Bedrock catalogue.",
+      bedrock: { level:"yes", value:"Grok 4.3", note:"Amazon Bedrock offers xAI Grok 4.3.",
                  src:"https://docs.aws.amazon.com/bedrock/latest/userguide/model-cards.html" },
       azure:   { level:"yes", value:"Grok 4.x", note:"Grok 4.3, Grok 4, Grok 4.1 Fast and grok-code-fast are sold directly by Azure.",
                  src:"https://learn.microsoft.com/en-us/azure/ai-foundry/foundry-models/concepts/models-sold-directly-by-azure" },
-      vertex:  { level:"yes", value:"Grok 4.x", note:"Grok 4.20 and Grok 4.1 Fast are offered as managed partner APIs in Model Garden.",
+      vertex:  { level:"yes", value:"Grok 4.x", note:"Grok 4.3, Grok 4.20 and Grok 4.1 Fast are offered as managed partner APIs in Model Garden.",
                  src:"https://cloud.google.com/vertex-ai/generative-ai/docs/partner-models/use-partner-models" },
       oci:     { level:"yes", value:"Grok 4.3 · 4.20", note:"xAI Grok 4.3, Grok 4.20 and Grok 4.20 Multi-Agent are current managed chat models.",
                  src:"https://docs.oracle.com/en-us/iaas/Content/generative-ai/pretrained-models.htm" },
