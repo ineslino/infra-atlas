@@ -6,7 +6,39 @@
     <atom:link href="https://infraatlas.dev/feed.xml" rel="self" type="application/rss+xml"/>
     <description>A neutral, sourced changelog of cloud infrastructure — new instance families, regions, withdrawals and price moves across AWS, Azure, GCP, OCI and OVHcloud.</description>
     <language>en</language>
-    <lastBuildDate>Sat, 15 Aug 2026 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Tue, 18 Aug 2026 00:00:00 +0000</lastBuildDate>
+    <item>
+      <title>AWS EC2 · p6-b300 now in ap-northeast-2</title>
+      <link>https://infraatlas.dev/ec2/</link>
+      <guid isPermaLink="false">a0318270884a1648b025dce26a082af8</guid>
+      <category>availability-added</category>
+      <pubDate>Tue, 18 Aug 2026 00:00:00 +0000</pubDate>
+      <description>AWS EC2 · p6-b300 now in ap-northeast-2</description>
+    </item>
+    <item>
+      <title>AWS EC2 · r8i now in il-central-1</title>
+      <link>https://infraatlas.dev/ec2/</link>
+      <guid isPermaLink="false">736cd32e53a72c543320fd7fc93dcf58</guid>
+      <category>availability-added</category>
+      <pubDate>Tue, 18 Aug 2026 00:00:00 +0000</pubDate>
+      <description>AWS EC2 · r8i now in il-central-1</description>
+    </item>
+    <item>
+      <title>AWS EC2 · r8id now in ap-south-1</title>
+      <link>https://infraatlas.dev/ec2/</link>
+      <guid isPermaLink="false">3cc94a4f9a4b37394619f37134562176</guid>
+      <category>availability-added</category>
+      <pubDate>Tue, 18 Aug 2026 00:00:00 +0000</pubDate>
+      <description>AWS EC2 · r8id now in ap-south-1</description>
+    </item>
+    <item>
+      <title>AWS EC2 · u7i-6tb now in eu-central-2</title>
+      <link>https://infraatlas.dev/ec2/</link>
+      <guid isPermaLink="false">c6d9afd8b66bf196f0dee73df02fb2e7</guid>
+      <category>availability-added</category>
+      <pubDate>Tue, 18 Aug 2026 00:00:00 +0000</pubDate>
+      <description>AWS EC2 · u7i-6tb now in eu-central-2</description>
+    </item>
     <item>
       <title>AWS EC2 · r8i now in ca-west-1</title>
       <link>https://infraatlas.dev/ec2/</link>
