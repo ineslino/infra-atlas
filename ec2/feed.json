@@ -1,7 +1,31 @@
 {
-  "generated": "2026-08-15T06:48:57Z",
+  "generated": "2026-08-18T06:54:34Z",
   "instrument": "ec2",
   "entries": [
+    {
+      "ts": "2026-08-18",
+      "instrument": "ec2",
+      "kind": "availability-added",
+      "text": "p6-b300 now in ap-northeast-2"
+    },
+    {
+      "ts": "2026-08-18",
+      "instrument": "ec2",
+      "kind": "availability-added",
+      "text": "r8i now in il-central-1"
+    },
+    {
+      "ts": "2026-08-18",
+      "instrument": "ec2",
+      "kind": "availability-added",
+      "text": "r8id now in ap-south-1"
+    },
+    {
+      "ts": "2026-08-18",
+      "instrument": "ec2",
+      "kind": "availability-added",
+      "text": "u7i-6tb now in eu-central-2"
+    },
     {
       "ts": "2026-08-15",
       "instrument": "ec2",
