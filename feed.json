@@ -1,6 +1,24 @@
 {
-  "generated": "2026-08-20T06:56:04Z",
+  "generated": "2026-08-21T06:57:18Z",
   "entries": [
+    {
+      "ts": "2026-08-21",
+      "instrument": "ec2",
+      "kind": "availability-added",
+      "text": "c8gd now in ap-southeast-1"
+    },
+    {
+      "ts": "2026-08-21",
+      "instrument": "ec2",
+      "kind": "availability-added",
+      "text": "m8gd now in mx-central-1"
+    },
+    {
+      "ts": "2026-08-21",
+      "instrument": "ec2",
+      "kind": "availability-added",
+      "text": "r8gd now in eu-central-2"
+    },
     {
       "ts": "2026-08-20",
       "instrument": "ec2",
