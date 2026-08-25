@@ -1,7 +1,19 @@
 {
-  "generated": "2026-08-21T06:57:18Z",
+  "generated": "2026-08-25T06:58:37Z",
   "instrument": "ec2",
   "entries": [
+    {
+      "ts": "2026-08-25",
+      "instrument": "ec2",
+      "kind": "availability-added",
+      "text": "m8i now in ca-west-1"
+    },
+    {
+      "ts": "2026-08-25",
+      "instrument": "ec2",
+      "kind": "availability-added",
+      "text": "m8i-flex now in ca-west-1"
+    },
     {
       "ts": "2026-08-21",
       "instrument": "ec2",
