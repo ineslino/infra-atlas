@@ -1,7 +1,25 @@
 {
-  "generated": "2026-08-25T06:58:37Z",
+  "generated": "2026-08-26T06:59:15Z",
   "instrument": "ec2",
   "entries": [
+    {
+      "ts": "2026-08-26",
+      "instrument": "ec2",
+      "kind": "availability-added",
+      "text": "c8id now in ap-southeast-2, ca-central-1"
+    },
+    {
+      "ts": "2026-08-26",
+      "instrument": "ec2",
+      "kind": "availability-added",
+      "text": "m8id now in ap-south-1, ca-central-1"
+    },
+    {
+      "ts": "2026-08-26",
+      "instrument": "ec2",
+      "kind": "availability-added",
+      "text": "r8id now in 5 regions (ap-southeast-2, ap-southeast-5, ca-central-1…)"
+    },
     {
       "ts": "2026-08-25",
       "instrument": "ec2",
