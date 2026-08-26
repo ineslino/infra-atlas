@@ -6,7 +6,31 @@
     <atom:link href="https://infraatlas.dev/feed.xml" rel="self" type="application/rss+xml"/>
     <description>A neutral, sourced changelog of cloud infrastructure — new instance families, regions, withdrawals and price moves across AWS, Azure, GCP, OCI and OVHcloud.</description>
     <language>en</language>
-    <lastBuildDate>Tue, 25 Aug 2026 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Wed, 26 Aug 2026 00:00:00 +0000</lastBuildDate>
+    <item>
+      <title>AWS EC2 · c8id now in ap-southeast-2, ca-central-1</title>
+      <link>https://infraatlas.dev/ec2/</link>
+      <guid isPermaLink="false">6159d069243980b20d270ef03d6f9504</guid>
+      <category>availability-added</category>
+      <pubDate>Wed, 26 Aug 2026 00:00:00 +0000</pubDate>
+      <description>AWS EC2 · c8id now in ap-southeast-2, ca-central-1</description>
+    </item>
+    <item>
+      <title>AWS EC2 · m8id now in ap-south-1, ca-central-1</title>
+      <link>https://infraatlas.dev/ec2/</link>
+      <guid isPermaLink="false">10488993cdcb6df8ed70bdebddd5bdfd</guid>
+      <category>availability-added</category>
+      <pubDate>Wed, 26 Aug 2026 00:00:00 +0000</pubDate>
+      <description>AWS EC2 · m8id now in ap-south-1, ca-central-1</description>
+    </item>
+    <item>
+      <title>AWS EC2 · r8id now in 5 regions (ap-southeast-2, ap-southeast-5, ca-central-1…)</title>
+      <link>https://infraatlas.dev/ec2/</link>
+      <guid isPermaLink="false">9a7870a16e3e287613c38158461ce762</guid>
+      <category>availability-added</category>
+      <pubDate>Wed, 26 Aug 2026 00:00:00 +0000</pubDate>
+      <description>AWS EC2 · r8id now in 5 regions (ap-southeast-2, ap-southeast-5, ca-central-1…)</description>
+    </item>
     <item>
       <title>AWS EC2 · m8i now in ca-west-1</title>
       <link>https://infraatlas.dev/ec2/</link>
