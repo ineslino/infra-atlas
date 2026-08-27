@@ -1,6 +1,12 @@
 {
-  "generated": "2026-08-26T06:59:15Z",
+  "generated": "2026-08-27T17:33:03Z",
   "entries": [
+    {
+      "ts": "2026-08-27",
+      "instrument": "ec2",
+      "kind": "availability-added",
+      "text": "x8i now in eu-south-1, eu-south-2"
+    },
     {
       "ts": "2026-08-26",
       "instrument": "ec2",
