@@ -1,7 +1,13 @@
 {
-  "generated": "2026-08-27T17:33:03Z",
+  "generated": "2026-08-28T18:29:31Z",
   "instrument": "ec2",
   "entries": [
+    {
+      "ts": "2026-08-28",
+      "instrument": "ec2",
+      "kind": "availability-added",
+      "text": "p6-b300 now in ap-south-2"
+    },
     {
       "ts": "2026-08-27",
       "instrument": "ec2",
