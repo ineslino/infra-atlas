@@ -1,5 +1,5 @@
 {
-  "generated": "2026-08-29T12:35:25Z",
+  "generated": "2026-09-01T11:29:52Z",
   "source": "ec2instances.info (Vantage) — public dataset, no credentials",
   "currency": "USD",
   "priceRef": "us-east-1",
@@ -14584,6 +14584,207 @@
         "eu-central-1",
         "eu-south-2",
         "eu-west-1",
+        "us-east-1",
+        "us-east-2",
+        "us-west-2"
+      ]
+    },
+    {
+      "key": "r9g",
+      "cat": "memory",
+      "arch": "arm",
+      "vendor": "Graviton5",
+      "desc": "Memory optimized · AWS Graviton5 Processor",
+      "clock": "3.3 GHz",
+      "sizes": [
+        "medium",
+        "large",
+        "xlarge",
+        "2xlarge",
+        "4xlarge",
+        "8xlarge",
+        "12xlarge",
+        "16xlarge",
+        "24xlarge",
+        "48xlarge",
+        "metal-48xl"
+      ],
+      "specs": {
+        "medium": {
+          "vcpu": 1,
+          "mem": 8,
+          "price": 0.0642,
+          "net": "Up to 15 Gigabit"
+        },
+        "large": {
+          "vcpu": 2,
+          "mem": 16,
+          "price": 0.1284,
+          "net": "Up to 15 Gigabit"
+        },
+        "xlarge": {
+          "vcpu": 4,
+          "mem": 32,
+          "price": 0.2568,
+          "net": "Up to 15 Gigabit"
+        },
+        "2xlarge": {
+          "vcpu": 8,
+          "mem": 64,
+          "price": 0.5137,
+          "net": "Up to 17 Gigabit"
+        },
+        "4xlarge": {
+          "vcpu": 16,
+          "mem": 128,
+          "price": 1.0274,
+          "net": "Up to 17 Gigabit"
+        },
+        "8xlarge": {
+          "vcpu": 32,
+          "mem": 256,
+          "price": 2.0547,
+          "net": "17 Gigabit"
+        },
+        "12xlarge": {
+          "vcpu": 48,
+          "mem": 384,
+          "price": 3.0821,
+          "net": "25 Gigabit"
+        },
+        "16xlarge": {
+          "vcpu": 64,
+          "mem": 512,
+          "price": 4.1094,
+          "net": "34 Gigabit"
+        },
+        "24xlarge": {
+          "vcpu": 96,
+          "mem": 768,
+          "price": 6.1642,
+          "net": "50 Gigabit"
+        },
+        "48xlarge": {
+          "vcpu": 192,
+          "mem": 1536,
+          "price": 12.3283,
+          "net": "100 Gigabit"
+        },
+        "metal-48xl": {
+          "vcpu": 192,
+          "mem": 1536,
+          "price": 12.3283,
+          "net": "100 Gigabit"
+        }
+      },
+      "in": [
+        "eu-central-1",
+        "us-east-1",
+        "us-east-2",
+        "us-west-2"
+      ]
+    },
+    {
+      "key": "r9gd",
+      "cat": "memory",
+      "arch": "arm",
+      "vendor": "Graviton5",
+      "desc": "Memory optimized · AWS Graviton5 Processor",
+      "clock": "3.3 GHz",
+      "sizes": [
+        "medium",
+        "large",
+        "xlarge",
+        "2xlarge",
+        "4xlarge",
+        "8xlarge",
+        "12xlarge",
+        "16xlarge",
+        "24xlarge",
+        "48xlarge",
+        "metal-48xl"
+      ],
+      "specs": {
+        "medium": {
+          "vcpu": 1,
+          "mem": 8,
+          "price": 0.0801,
+          "storage": "59 GB NVMe SSD",
+          "net": "Up to 15 Gigabit"
+        },
+        "large": {
+          "vcpu": 2,
+          "mem": 16,
+          "price": 0.1602,
+          "storage": "118 GB NVMe SSD",
+          "net": "Up to 15 Gigabit"
+        },
+        "xlarge": {
+          "vcpu": 4,
+          "mem": 32,
+          "price": 0.3204,
+          "storage": "237 GB NVMe SSD",
+          "net": "Up to 15 Gigabit"
+        },
+        "2xlarge": {
+          "vcpu": 8,
+          "mem": 64,
+          "price": 0.6407,
+          "storage": "474 GB NVMe SSD",
+          "net": "Up to 17 Gigabit"
+        },
+        "4xlarge": {
+          "vcpu": 16,
+          "mem": 128,
+          "price": 1.2814,
+          "storage": "950 GB NVMe SSD",
+          "net": "Up to 17 Gigabit"
+        },
+        "8xlarge": {
+          "vcpu": 32,
+          "mem": 256,
+          "price": 2.5629,
+          "storage": "1900 GB NVMe SSD",
+          "net": "17 Gigabit"
+        },
+        "12xlarge": {
+          "vcpu": 48,
+          "mem": 384,
+          "price": 3.8443,
+          "storage": "3 × 950 GB NVMe SSD",
+          "net": "25 Gigabit"
+        },
+        "16xlarge": {
+          "vcpu": 64,
+          "mem": 512,
+          "price": 5.1258,
+          "storage": "3800 GB NVMe SSD",
+          "net": "34 Gigabit"
+        },
+        "24xlarge": {
+          "vcpu": 96,
+          "mem": 768,
+          "price": 7.6886,
+          "storage": "3 × 1900 GB NVMe SSD",
+          "net": "50 Gigabit"
+        },
+        "48xlarge": {
+          "vcpu": 192,
+          "mem": 1536,
+          "price": 15.3773,
+          "storage": "3 × 3800 GB NVMe SSD",
+          "net": "100 Gigabit"
+        },
+        "metal-48xl": {
+          "vcpu": 192,
+          "mem": 1536,
+          "price": 15.3773,
+          "storage": "3 × 3800 GB NVMe SSD",
+          "net": "100 Gigabit"
+        }
+      },
+      "in": [
+        "eu-central-1",
         "us-east-1",
         "us-east-2",
         "us-west-2"
