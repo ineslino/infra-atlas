@@ -1,5 +1,5 @@
 {
-  "generated": "2026-07-04T08:47:49Z",
+  "generated": "2026-09-01T11:30:54Z",
   "provider": "azure",
   "source": "Azure Retail Prices API — public, no credentials",
   "currency": "USD",
@@ -2014,7 +2014,7 @@
         "M16s_v3": {
           "vcpu": 16,
           "mem": null,
-          "price": null
+          "price": 0.0
         },
         "M32s_v3": {
           "vcpu": 32,
