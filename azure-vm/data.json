@@ -1,5 +1,5 @@
 {
-  "generated": "2026-09-01T11:30:54Z",
+  "generated": "2026-09-02T11:05:09Z",
   "provider": "azure",
   "source": "Azure Retail Prices API — public, no credentials",
   "currency": "USD",
@@ -2014,7 +2014,7 @@
         "M16s_v3": {
           "vcpu": 16,
           "mem": null,
-          "price": 0.0
+          "price": 2.29519
         },
         "M32s_v3": {
           "vcpu": 32,
@@ -3499,47 +3499,47 @@
         "DC2es_v6": {
           "vcpu": 2,
           "mem": null,
-          "price": 0.121
+          "price": 0.133
         },
         "DC4es_v6": {
           "vcpu": 4,
           "mem": null,
-          "price": 0.242
+          "price": 0.266
         },
         "DC8es_v6": {
           "vcpu": 8,
           "mem": null,
-          "price": 0.483
+          "price": 0.531
         },
         "DC16es_v6": {
           "vcpu": 16,
           "mem": null,
-          "price": 0.966
+          "price": 1.063
         },
         "DC32es_v6": {
           "vcpu": 32,
           "mem": null,
-          "price": 1.932
+          "price": 2.125
         },
         "DC48es_v6": {
           "vcpu": 48,
           "mem": null,
-          "price": 2.898
+          "price": 3.188
         },
         "DC64es_v6": {
           "vcpu": 64,
           "mem": null,
-          "price": 3.864
+          "price": 4.251
         },
         "DC96es_v6": {
           "vcpu": 96,
           "mem": null,
-          "price": 5.796
+          "price": 6.376
         },
         "DC128es_v6": {
           "vcpu": 128,
           "mem": null,
-          "price": 7.729
+          "price": 8.502
         }
       },
       "in": [

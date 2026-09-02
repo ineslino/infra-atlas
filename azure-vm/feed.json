@@ -1,7 +1,13 @@
 {
-  "generated": "2026-06-10T10:15:50Z",
+  "generated": "2026-09-02T11:05:09Z",
   "instrument": "azure-vm",
   "entries": [
+    {
+      "ts": "2026-09-02",
+      "instrument": "azure-vm",
+      "kind": "price-change",
+      "text": "9 price changes (9 up, 0 down)"
+    },
     {
       "ts": "2026-05-16",
       "instrument": "azure-vm",
