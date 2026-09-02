@@ -1,5 +1,5 @@
 {
-  "generated": "2026-09-01T11:29:52Z",
+  "generated": "2026-09-02T11:04:18Z",
   "source": "ec2instances.info (Vantage) — public dataset, no credentials",
   "currency": "USD",
   "priceRef": "us-east-1",
@@ -4282,7 +4282,6 @@
           "vcpu": 4,
           "mem": 16,
           "price": 0.3785,
-          "storage": "150 GB NVMe SSD",
           "net": "Up to 10 Gigabit",
           "gpu": "AMD Radeon Pro V520 · 8 GB"
         },
@@ -4290,7 +4289,6 @@
           "vcpu": 8,
           "mem": 32,
           "price": 0.5412,
-          "storage": "300 GB NVMe SSD",
           "net": "Up to 10 Gigabit",
           "gpu": "AMD Radeon Pro V520 · 8 GB"
         },
@@ -4298,7 +4296,6 @@
           "vcpu": 16,
           "mem": 64,
           "price": 0.867,
-          "storage": "600 GB NVMe SSD",
           "net": "Up to 10 Gigabit",
           "gpu": "AMD Radeon Pro V520 · 8 GB"
         },
@@ -4306,7 +4303,6 @@
           "vcpu": 32,
           "mem": 128,
           "price": 1.734,
-          "storage": "1200 GB NVMe SSD",
           "net": "15 Gigabit",
           "gpu": "2 × AMD Radeon Pro V520 · 16 GB"
         },
@@ -4314,7 +4310,6 @@
           "vcpu": 64,
           "mem": 256,
           "price": 3.468,
-          "storage": "2 × 1200 GB NVMe SSD",
           "net": "25 Gigabit",
           "gpu": "4 × AMD Radeon Pro V520 · 32 GB"
         }
