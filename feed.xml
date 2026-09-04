@@ -6,7 +6,55 @@
     <atom:link href="https://infraatlas.dev/feed.xml" rel="self" type="application/rss+xml"/>
     <description>A neutral, sourced changelog of cloud infrastructure — new instance families, regions, withdrawals and price moves across AWS, Azure, GCP, OCI and OVHcloud.</description>
     <language>en</language>
-    <lastBuildDate>Wed, 02 Sep 2026 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Fri, 04 Sep 2026 00:00:00 +0000</lastBuildDate>
+    <item>
+      <title>AWS EC2 · c9g now in ap-northeast-1</title>
+      <link>https://infraatlas.dev/ec2/</link>
+      <guid isPermaLink="false">39b6686d888365b47f7af65aef1adf60</guid>
+      <category>availability-added</category>
+      <pubDate>Fri, 04 Sep 2026 00:00:00 +0000</pubDate>
+      <description>AWS EC2 · c9g now in ap-northeast-1</description>
+    </item>
+    <item>
+      <title>AWS EC2 · c9gd now in ap-northeast-1</title>
+      <link>https://infraatlas.dev/ec2/</link>
+      <guid isPermaLink="false">6ae4ac08aa3943fa166c9fa6247792c6</guid>
+      <category>availability-added</category>
+      <pubDate>Fri, 04 Sep 2026 00:00:00 +0000</pubDate>
+      <description>AWS EC2 · c9gd now in ap-northeast-1</description>
+    </item>
+    <item>
+      <title>AWS EC2 · m9g now in 4 regions (ap-northeast-1, ap-southeast-1, ap-southeast-2…)</title>
+      <link>https://infraatlas.dev/ec2/</link>
+      <guid isPermaLink="false">e992c486a5fd031829faa424acc838bb</guid>
+      <category>availability-added</category>
+      <pubDate>Fri, 04 Sep 2026 00:00:00 +0000</pubDate>
+      <description>AWS EC2 · m9g now in 4 regions (ap-northeast-1, ap-southeast-1, ap-southeast-2…)</description>
+    </item>
+    <item>
+      <title>AWS EC2 · m9gd now in 4 regions (ap-northeast-1, ap-southeast-1, ap-southeast-2…)</title>
+      <link>https://infraatlas.dev/ec2/</link>
+      <guid isPermaLink="false">066c55f8f85187d5968b759c62a0cf50</guid>
+      <category>availability-added</category>
+      <pubDate>Fri, 04 Sep 2026 00:00:00 +0000</pubDate>
+      <description>AWS EC2 · m9gd now in 4 regions (ap-northeast-1, ap-southeast-1, ap-southeast-2…)</description>
+    </item>
+    <item>
+      <title>AWS EC2 · p6-b200 now in ap-south-2</title>
+      <link>https://infraatlas.dev/ec2/</link>
+      <guid isPermaLink="false">337ef42a607cd1fc554108c6616d9909</guid>
+      <category>availability-added</category>
+      <pubDate>Fri, 04 Sep 2026 00:00:00 +0000</pubDate>
+      <description>AWS EC2 · p6-b200 now in ap-south-2</description>
+    </item>
+    <item>
+      <title>AWS EC2 · p6-b300 now in ap-southeast-3</title>
+      <link>https://infraatlas.dev/ec2/</link>
+      <guid isPermaLink="false">80a0250910c2339430d408c85a8b9b73</guid>
+      <category>availability-added</category>
+      <pubDate>Fri, 04 Sep 2026 00:00:00 +0000</pubDate>
+      <description>AWS EC2 · p6-b300 now in ap-southeast-3</description>
+    </item>
     <item>
       <title>Azure VM · 9 price changes (9 up, 0 down)</title>
       <link>https://infraatlas.dev/azure-vm/</link>
