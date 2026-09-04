@@ -1,5 +1,5 @@
 {
-  "generated": "2026-09-02T11:04:18Z",
+  "generated": "2026-09-04T11:02:27Z",
   "source": "ec2instances.info (Vantage) — public dataset, no credentials",
   "currency": "USD",
   "priceRef": "us-east-1",
@@ -3651,6 +3651,7 @@
         }
       },
       "in": [
+        "ap-northeast-1",
         "eu-central-1",
         "us-east-1",
         "us-east-2",
@@ -3757,6 +3758,7 @@
         }
       },
       "in": [
+        "ap-northeast-1",
         "eu-central-1",
         "us-east-1",
         "us-east-2",
@@ -10379,7 +10381,11 @@
         }
       },
       "in": [
+        "ap-northeast-1",
+        "ap-southeast-1",
+        "ap-southeast-2",
         "eu-central-1",
+        "eu-west-1",
         "us-east-1",
         "us-east-2",
         "us-west-2"
@@ -10485,7 +10491,11 @@
         }
       },
       "in": [
+        "ap-northeast-1",
+        "ap-southeast-1",
+        "ap-southeast-2",
         "eu-central-1",
+        "eu-west-1",
         "us-east-1",
         "us-east-2",
         "us-west-2"
@@ -11039,6 +11049,7 @@
       },
       "in": [
         "ap-south-1",
+        "ap-south-2",
         "us-east-1",
         "us-east-2",
         "us-west-2"
@@ -11067,6 +11078,7 @@
       "in": [
         "ap-northeast-2",
         "ap-south-2",
+        "ap-southeast-3",
         "sa-east-1",
         "us-east-1",
         "us-west-2"
