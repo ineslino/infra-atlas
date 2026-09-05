@@ -38,6 +38,14 @@
 .panel-tools { display: flex; justify-content: flex-end; margin-bottom: 28px; }
 
 /* ─────────── RESULTS ─────────── */
+.tco-summary { grid-column: 1 / -1; overflow-x: auto; margin-bottom: 14px; border: 1px solid var(--line); border-radius: 5px; background: var(--surface); }
+.tco-summary table { width: 100%; min-width: 620px; border-collapse: collapse; font-family: var(--mono); font-size: 10.5px; }
+.tco-summary caption { padding: 12px 14px 8px; text-align: left; color: var(--paper-2); font-size: 11px; }
+.tco-summary th, .tco-summary td { padding: 9px 14px; border-top: 1px solid var(--line); text-align: left; vertical-align: top; }
+.tco-summary th { color: var(--paper-3); font-size: 9.5px; letter-spacing: 0.12em; text-transform: uppercase; font-weight: 500; }
+.tco-summary td:last-child { color: var(--paper-2); }
+.tco-summary__complete { color: var(--mint); }
+.tco-summary__partial, .tco-summary__na { color: var(--paper-3); }
 .results { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 14px; margin-bottom: 32px; }
 .tco-card { background: var(--surface); border: 1px solid var(--line); border-radius: 5px; padding: 18px; display: flex; flex-direction: column; gap: 12px; }
 .tco-card.is-source { border-color: var(--line-2); background: linear-gradient(180deg, rgba(255,120,73,0.05), transparent 55%), var(--surface); }
@@ -59,6 +67,7 @@
 .tco-card__regions label { font-family: var(--mono); font-size: 9px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--paper-3); }
 .tco-card__avail { font-family: var(--mono); font-size: 10px; color: var(--paper-3); }
 .tco-card__avail.is-no { color: var(--rose); }
+.tco-card__total-label { font-family: var(--mono); font-size: 9px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--paper-3); }
 .tco-card__total { font-family: var(--serif); font-style: italic; font-size: 38px; line-height: 1; color: var(--paper); letter-spacing: -0.012em; margin-top: 2px; }
 .tco-card__total .unit { font-size: 15px; color: var(--paper-3); margin-left: 4px; }
 .tco-card__delta { font-family: var(--mono); font-size: 10.5px; color: var(--paper-3); }
@@ -88,7 +97,7 @@
   <header class="masthead">
     <a class="eyebrow" href="../"><span class="arrow">←</span> Infra Atlas · Calculators</a>
     <h1 class="title">Cross-Cloud <em>TCO.</em></h1>
-    <p class="subtitle">What would this workload cost elsewhere? Pick an instance; the comparator pulls its closest equivalent on every other cloud — the same transparent scoring as the <a href="/equivalent-sku/">Equivalent-SKU Finder</a> — and lines up the monthly bill: compute hours plus internet egress, from the live catalogues and the <a href="/egress/">Egress Cost Map</a>. List prices, honestly footnoted.</p>
+    <p class="subtitle">Compare monthly <em>compute plus internet egress</em> for equivalent instances. Pick an instance; the comparator pulls its closest equivalent on every other cloud — the same transparent scoring as the <a href="/equivalent-sku/">Equivalent-SKU Finder</a> — using the live catalogues and the <a href="/egress/">Egress Cost Map</a>. List prices, honestly footnoted.</p>
   </header>
 
   <main id="ia-main">
@@ -392,6 +401,10 @@ function buildTypeSelect(sel, cid, current) {
 // ─── Render ───
 function render() {
   const results = $("#results");
+  const active = document.activeElement;
+  const restoreFocus = active instanceof HTMLSelectElement && results.contains(active)
+    ? (active.dataset.choose ? { type: "choose", cid: active.dataset.choose } : active.dataset.region !== undefined ? { type: "region", cid: active.dataset.region } : null)
+    : null;
   const src = instOf(state.srcCloud, state.srcName);
   if (!src) { results.innerHTML = ""; return; }
 
@@ -420,9 +433,21 @@ function render() {
     if (sorted[1].total > sorted[0].total * 1.01) cheapest = sorted[0].cid;
   }
 
-  const srcTotal = cards.find((c) => c.isSrc)?.total ?? null;
+  const srcCard = cards.find((c) => c.isSrc);
+  const srcTotal = srcCard?.total ?? null;
+  const srcHasCompleteTotal = srcCard?.computeM != null && srcCard?.egressM != null;
 
-  results.innerHTML = cards.map((c) => {
+  const summary = cards.map((c) => {
+    const totalState = c.computeM == null
+      ? '<span class="tco-summary__na">No compute list price</span>'
+      : c.egressM == null
+        ? '<span class="tco-summary__partial">Compute only; egress unmapped</span>'
+        : `<span class="tco-summary__complete">${money(c.total, c.cur)} complete</span>`;
+    const egress = c.egressM != null ? money(c.egressM, "USD") : '<span class="tco-summary__na">Unmapped</span>';
+    return `<tr><th scope="row">${esc(CLOUDS[c.cid].label)}</th><td>${c.computeM != null ? money(c.computeM, c.cur) : '<span class="tco-summary__na">Unavailable</span>'}</td><td>${egress}</td><td>${totalState}</td></tr>`;
+  }).join("");
+
+  results.innerHTML = `<div class="tco-summary"><table><caption>Aligned monthly comparison. A complete total includes compute and mapped internet egress.</caption><thead><tr><th scope="col">Cloud</th><th scope="col">Compute subtotal</th><th scope="col">Internet egress</th><th scope="col">Monthly total</th></tr></thead><tbody>${summary}</tbody></table></div>` + cards.map((c) => {
     const meta = CLOUDS[c.cid];
     const score = !c.isSrc && src.v && c.inst.v ? scoreCandidate(src, c.inst) : null;
     const regions = state.data[c.cid].regions;
@@ -444,11 +469,12 @@ function render() {
     ].join("");
 
     let delta = "";
-    if (!c.isSrc && c.total != null && srcTotal != null && c.cur === srcCur && srcTotal > 0) {
+    if (!c.isSrc && c.computeM != null && c.egressM != null && srcHasCompleteTotal && c.cur === srcCur && srcTotal > 0) {
       const d = ((c.total - srcTotal) / srcTotal) * 100;
       const cls = d > 0.5 ? "is-up" : d < -0.5 ? "is-down" : "";
-      const partial = c.egressM == null ? " · compute only, egress not mapped" : "";
-      delta = `<div class="tco-card__delta ${cls}">${d > 0 ? "+" : ""}${d.toFixed(1)}% vs source${partial}</div>`;
+      delta = `<div class="tco-card__delta ${cls}">${d > 0 ? "+" : ""}${d.toFixed(1)}% vs source complete total</div>`;
+    } else if (!c.isSrc && c.computeM != null && c.egressM == null) {
+      delta = `<div class="tco-card__delta">Compute-only subtotal; egress is not mapped</div>`;
     } else if (!c.isSrc && c.cur !== srcCur) {
       delta = `<div class="tco-card__delta">${c.cur} — not compared across currencies</div>`;
     }
@@ -468,6 +494,7 @@ function render() {
         ${regionSel}
         ${picked && !pickedOk ? '<span class="tco-card__avail is-no">Not offered in the picked region</span>' : ""}
       </div>
+      <div class="tco-card__total-label">${c.computeM == null ? "Monthly total unavailable" : c.egressM == null ? "Compute-only subtotal" : "Complete compute + egress total"}</div>
       <div class="tco-card__total">${c.total != null ? money(c.total, c.cur) : "—"}<span class="unit">/mo</span></div>
       ${delta}
       <div class="tco-card__bd">${bd}</div>
@@ -479,6 +506,10 @@ function render() {
     const sel = results.querySelector(`select[data-choose="${cid}"]`);
     if (sel) buildTypeSelect(sel, cid, state.chosen[cid]);
   });
+  if (restoreFocus) {
+    const selector = restoreFocus.type === "choose" ? `select[data-choose="${restoreFocus.cid}"]` : `select[data-region="${restoreFocus.cid}"]`;
+    results.querySelector(selector)?.focus();
+  }
 }
 
 // ─── Events ───
@@ -581,6 +612,6 @@ document.querySelector("[data-share]").addEventListener("click", function () {
 })();
 </script>
 
-<script src="/nav.js?v=8" defer></script>
+<script src="/nav.js?v=9" defer></script>
 </body>
 </html>

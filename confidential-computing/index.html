@@ -499,7 +499,7 @@ body {
 
 <div class="page">
 
-  <header class="masthead">
+  <header class="masthead ia-toolhead">
     <div class="masthead__brand">
       <a class="masthead__eyebrow" href="../">
         <span class="masthead__eyebrow-arrow">←</span>
@@ -541,9 +541,9 @@ body {
     </div>
   </section>
 
-  <section class="filters">
+  <section class="filters ia-tool-controls">
     <div class="filter-search">
-      <input id="search" type="search" autocomplete="off" spellcheck="false" placeholder="Filter technologies — search SGX, SEV-SNP, TDX, Nitro, GPU, enclave…">
+      <div class="ia-search-field"><label class="ia-search-label" for="search">Search confidential computing technologies</label><input id="search" aria-keyshortcuts="Alt+/" type="search" autocomplete="off" spellcheck="false" placeholder="Filter technologies — search SGX, SEV-SNP, TDX, Nitro, GPU, enclave…"></div>
     </div>
     <div class="filter-chips" id="cat-chips"></div>
     <div class="filter-chips" id="cloud-chips"></div>
@@ -582,7 +582,7 @@ body {
 
 <!-- DRAWER -->
 <div class="drawer-backdrop" id="drawer-backdrop"></div>
-<aside class="drawer" id="drawer" aria-hidden="true">
+<aside class="drawer" id="drawer" role="dialog" aria-modal="true" aria-label="Details" aria-hidden="true">
   <div class="drawer__head" id="drawer-head"></div>
   <div class="drawer__body" id="drawer-body"></div>
 </aside>
@@ -847,7 +847,7 @@ function applyHash() {
     if (b.dataset.c === "all") b.classList.toggle("is-active", allC);
     else b.classList.toggle("is-active", !allC && state.clouds.has(b.dataset.c));
   });
-  $$('.chip[data-cat]').forEach(b => b.classList.toggle("is-active", b.dataset.cat === state.category));
+  $$('.chip[data-cat]').forEach(b => { b.classList.toggle("is-active", b.dataset.cat === state.category); b.setAttribute("aria-pressed", String(b.classList.contains("is-active"))); });
   const sb = $("#search"); if (sb) sb.value = state.query;
 }
 
@@ -861,14 +861,14 @@ function init() {
   // Category chips
   const catChips = $("#cat-chips");
   catChips.innerHTML = `<span class="filter-chips__label">Layer</span>
-    <button class="chip is-active" data-cat="all">All</button>` +
-    CATEGORIES.map(c => `<button class="chip" data-cat="${c.key}">${c.label}</button>`).join("");
+    <button class="chip is-active" aria-pressed="true" data-cat="all">All</button>` +
+    CATEGORIES.map(c => `<button class="chip" aria-pressed="false" data-cat="${c.key}">${c.label}</button>`).join("");
 
   // Cloud chips
   const cChips = $("#cloud-chips");
   cChips.innerHTML = `<span class="filter-chips__label">Clouds</span>
-    <button class="chip is-active" data-c="all">All</button>` +
-    CLOUDS.map(c => `<button class="chip" data-c="${c.key}"><span class="swatch" style="background:${c.swatch}"></span>${c.short}</button>`).join("");
+    <button class="chip is-active" aria-pressed="true" data-c="all">All</button>` +
+    CLOUDS.map(c => `<button class="chip" aria-pressed="false" data-c="${c.key}"><span class="swatch" style="background:${c.swatch}"></span>${c.short}</button>`).join("");
 
   applyHash();
   renderMatrix();
@@ -1033,7 +1033,7 @@ function wireEvents() {
     const cc = e.target.closest(".chip[data-cat]");
     if (cc) {
       state.category = cc.dataset.cat;
-      $$('.chip[data-cat]').forEach(b => b.classList.toggle("is-active", b.dataset.cat === state.category));
+      $$('.chip[data-cat]').forEach(b => { b.classList.toggle("is-active", b.dataset.cat === state.category); b.setAttribute("aria-pressed", String(b.classList.contains("is-active"))); });
       applyFilter();
       return;
     }
@@ -1043,19 +1043,19 @@ function wireEvents() {
       const key = cl.dataset.c;
       if (key === "all") {
         state.clouds = new Set(CLOUDS.map(x => x.key));
-        $$('.chip[data-c]').forEach(b => b.classList.toggle("is-active", b.dataset.c === "all"));
+        $$('.chip[data-c]').forEach(b => { b.classList.toggle("is-active", b.dataset.c === "all"); b.setAttribute("aria-pressed", String(b.classList.contains("is-active"))); });
       } else {
         if ($('.chip[data-c="all"]').classList.contains("is-active")) {
           state.clouds = new Set([key]);
-          $$('.chip[data-c]').forEach(b => b.classList.toggle("is-active", b.dataset.c === key));
+          $$('.chip[data-c]').forEach(b => { b.classList.toggle("is-active", b.dataset.c === key); b.setAttribute("aria-pressed", String(b.classList.contains("is-active"))); });
         } else {
           if (state.clouds.has(key) && state.clouds.size === 1) {
             state.clouds = new Set(CLOUDS.map(x => x.key));
-            $$('.chip[data-c]').forEach(b => b.classList.toggle("is-active", b.dataset.c === "all"));
+            $$('.chip[data-c]').forEach(b => { b.classList.toggle("is-active", b.dataset.c === "all"); b.setAttribute("aria-pressed", String(b.classList.contains("is-active"))); });
           } else {
             state.clouds.has(key) ? state.clouds.delete(key) : state.clouds.add(key);
-            cl.classList.toggle("is-active");
-            $('.chip[data-c="all"]').classList.remove("is-active");
+            cl.classList.toggle("is-active"); cl.setAttribute("aria-pressed", String(cl.classList.contains("is-active")));
+            $('.chip[data-c="all"]').classList.remove("is-active"); $('.chip[data-c="all"]').setAttribute("aria-pressed", "false");
           }
         }
       }
@@ -1092,6 +1092,6 @@ function wireEvents() {
 
 init();
 </script>
-<script src="/nav.js?v=8" defer></script>
+<script src="/nav.js?v=9" defer></script>
 </body>
 </html>

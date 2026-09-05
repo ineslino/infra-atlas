@@ -1072,7 +1072,7 @@ a.masthead__eyebrow:hover .masthead__eyebrow-arrow { transform: translateX(-4px)
 
 <div class="page">
 
-  <header class="masthead">
+  <header class="masthead ia-toolhead">
     <div class="masthead__brand">
       <a class="masthead__eyebrow" href="../">
         <span class="masthead__eyebrow-arrow">←</span>
@@ -1153,12 +1153,12 @@ a.masthead__eyebrow:hover .masthead__eyebrow-arrow { transform: translateX(-4px)
 
       <div class="chart-legend">
         <span class="chart-legend__label">Providers</span>
-        <button class="chip is-active" data-p="all"><span class="swatch" style="background: var(--paper-2)"></span>All <span class="chip__count" id="count-all"></span></button>
-        <button class="chip" data-p="aws"><span class="swatch"></span>AWS <span class="chip__count" id="count-aws"></span></button>
-        <button class="chip" data-p="azure"><span class="swatch"></span>Azure <span class="chip__count" id="count-azure"></span></button>
-        <button class="chip" data-p="gcp"><span class="swatch"></span>Google Cloud <span class="chip__count" id="count-gcp"></span></button>
-        <button class="chip" data-p="oci"><span class="swatch"></span>Oracle Cloud <span class="chip__count" id="count-oci"></span></button>
-        <button class="chip" data-p="ovh"><span class="swatch"></span>OVHcloud <span class="chip__count" id="count-ovh"></span></button>
+        <button class="chip is-active" aria-pressed="true" data-p="all"><span class="swatch" style="background: var(--paper-2)"></span>All <span class="chip__count" id="count-all"></span></button>
+        <button class="chip" aria-pressed="false" data-p="aws"><span class="swatch"></span>AWS <span class="chip__count" id="count-aws"></span></button>
+        <button class="chip" aria-pressed="false" data-p="azure"><span class="swatch"></span>Azure <span class="chip__count" id="count-azure"></span></button>
+        <button class="chip" aria-pressed="false" data-p="gcp"><span class="swatch"></span>Google Cloud <span class="chip__count" id="count-gcp"></span></button>
+        <button class="chip" aria-pressed="false" data-p="oci"><span class="swatch"></span>Oracle Cloud <span class="chip__count" id="count-oci"></span></button>
+        <button class="chip" aria-pressed="false" data-p="ovh"><span class="swatch"></span>OVHcloud <span class="chip__count" id="count-ovh"></span></button>
       </div>
     </div>
   </section>
@@ -1181,18 +1181,18 @@ a.masthead__eyebrow:hover .masthead__eyebrow-arrow { transform: translateX(-4px)
     </div>
   </section>
 
-  <section class="filters">
+  <section class="filters ia-tool-controls">
     <div class="filter-search">
-      <input id="search" type="search" autocomplete="off" spellcheck="false" placeholder="Filter by city, region code, country, or area…">
+      <div class="ia-search-field"><label class="ia-search-label" for="search">Search cloud regions</label><input id="search" aria-keyshortcuts="Alt+/" type="search" autocomplete="off" spellcheck="false" placeholder="Filter by city, region code, country, or area…"></div>
     </div>
     <div class="filter-chips">
       <span class="filter-chips__label">Area</span>
-      <button class="chip is-active" data-area="all">All</button>
-      <button class="chip" data-area="Americas">Americas</button>
-      <button class="chip" data-area="Europe">Europe</button>
-      <button class="chip" data-area="Middle East">Middle East</button>
-      <button class="chip" data-area="Africa">Africa</button>
-      <button class="chip" data-area="Asia Pacific">Asia Pacific</button>
+      <button class="chip is-active" aria-pressed="true" data-area="all">All</button>
+      <button class="chip" aria-pressed="false" data-area="Americas">Americas</button>
+      <button class="chip" aria-pressed="false" data-area="Europe">Europe</button>
+      <button class="chip" aria-pressed="false" data-area="Middle East">Middle East</button>
+      <button class="chip" aria-pressed="false" data-area="Africa">Africa</button>
+      <button class="chip" aria-pressed="false" data-area="Asia Pacific">Asia Pacific</button>
     </div>
   </section>
 
@@ -1810,7 +1810,7 @@ function applyHash() {
     if (b.dataset.p === "all") b.classList.toggle("is-active", allOn);
     else b.classList.toggle("is-active", !allOn && state.providers.has(b.dataset.p));
   });
-  $$('.chip[data-area]').forEach(b => b.classList.toggle("is-active", b.dataset.area === state.area));
+  $$('.chip[data-area]').forEach(b => { b.classList.toggle("is-active", b.dataset.area === state.area); b.setAttribute("aria-pressed", String(b.classList.contains("is-active"))); });
   const sb = $("#search"); if (sb) sb.value = state.query;
   renderOriginRows();
 }
@@ -2315,22 +2315,22 @@ function wireEvents() {
       const p = btn.dataset.p;
       if (p === "all") {
         state.providers = new Set(["aws","azure","gcp","oci","ovh"]);
-        $$('.chip[data-p]').forEach(b => b.classList.toggle("is-active", b.dataset.p === "all"));
+        $$('.chip[data-p]').forEach(b => { b.classList.toggle("is-active", b.dataset.p === "all"); b.setAttribute("aria-pressed", String(b.classList.contains("is-active"))); });
       } else {
         // Toggle this provider on/off
         if (state.providers.has(p) && state.providers.size === 1) {
           // turning off the last → switch back to all
           state.providers = new Set(["aws","azure","gcp","oci","ovh"]);
-          $$('.chip[data-p]').forEach(b => b.classList.toggle("is-active", b.dataset.p === "all"));
+          $$('.chip[data-p]').forEach(b => { b.classList.toggle("is-active", b.dataset.p === "all"); b.setAttribute("aria-pressed", String(b.classList.contains("is-active"))); });
         } else {
           // If 'all' was active and user clicks specific, switch to single
           if ($('.chip[data-p="all"]').classList.contains("is-active")) {
             state.providers = new Set([p]);
-            $$('.chip[data-p]').forEach(b => b.classList.toggle("is-active", b.dataset.p === p));
+            $$('.chip[data-p]').forEach(b => { b.classList.toggle("is-active", b.dataset.p === p); b.setAttribute("aria-pressed", String(b.classList.contains("is-active"))); });
           } else {
             state.providers.has(p) ? state.providers.delete(p) : state.providers.add(p);
-            btn.classList.toggle("is-active");
-            $('.chip[data-p="all"]').classList.remove("is-active");
+            btn.classList.toggle("is-active"); btn.setAttribute("aria-pressed", String(btn.classList.contains("is-active")));
+            $('.chip[data-p="all"]').classList.remove("is-active"); $('.chip[data-p="all"]').setAttribute("aria-pressed", "false");
           }
         }
       }
@@ -2342,7 +2342,7 @@ function wireEvents() {
   $$('.chip[data-area]').forEach(btn => {
     btn.addEventListener("click", () => {
       state.area = btn.dataset.area;
-      $$('.chip[data-area]').forEach(b => b.classList.toggle("is-active", b.dataset.area === state.area));
+      $$('.chip[data-area]').forEach(b => { b.classList.toggle("is-active", b.dataset.area === state.area); b.setAttribute("aria-pressed", String(b.classList.contains("is-active"))); });
       applyDotFilter();
       renderList();
     });
@@ -2452,6 +2452,6 @@ function wireEvents() {
 
 init();
 </script>
-<script src="/nav.js?v=8" defer></script>
+<script src="/nav.js?v=9" defer></script>
 </body>
 </html>

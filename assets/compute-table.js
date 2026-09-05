@@ -65,6 +65,34 @@
   // 1,300+ rows of DOM made the mobile page ~61k px tall for no scan value —
   // sorting/filtering/export always operate on the full entry set regardless.
   var ROW_LIMIT = 250;
+  var cmpFocusOrigin = null, cmpIsolation = [];
+  var CMP_FOCUSABLE = 'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])';
+
+  function isolateComparison(modal) {
+    cmpIsolation = [];
+    Array.prototype.forEach.call(document.body.children, function (node) {
+      if (node === modal) return;
+      cmpIsolation.push({ node: node, inert: node.inert, ariaHidden: node.getAttribute("aria-hidden") });
+      node.inert = true;
+      node.setAttribute("aria-hidden", "true");
+    });
+  }
+  function restoreComparisonIsolation() {
+    cmpIsolation.forEach(function (state) {
+      state.node.inert = state.inert;
+      if (state.ariaHidden == null) state.node.removeAttribute("aria-hidden");
+      else state.node.setAttribute("aria-hidden", state.ariaHidden);
+    });
+    cmpIsolation = [];
+  }
+  function trapComparisonFocus(e, modal) {
+    if (e.key !== "Tab") return;
+    var nodes = modal.querySelectorAll(CMP_FOCUSABLE);
+    if (!nodes.length) return;
+    var first = nodes[0], last = nodes[nodes.length - 1];
+    if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+    else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+  }
 
   IA.computeTable = {
     _cfg: null, _entries: [], _sort: { key: "name", dir: 1 }, _sel: new Map(), _built: false, _container: null, _showAll: false,
@@ -254,6 +282,7 @@
       var ov = document.createElement("div");
       ov.className = "ctbl-cmp"; ov.id = "ctbl-cmp";
       ov.setAttribute("role", "dialog"); ov.setAttribute("aria-modal", "true"); ov.setAttribute("aria-label", "Instance comparison");
+      ov.setAttribute("aria-hidden", "true");
       ov.innerHTML = "<div class='ctbl-cmp__panel'><div class='ctbl-cmp__head'>"
         + "<span class='ctbl-cmp__title'>Compare instances</span>"
         + "<button type='button' class='ctbl-cmp__close' id='ctbl-cmp-close'>Close ✕</button></div>"
@@ -287,7 +316,11 @@
       dock.querySelector("#ctbl-dock-clear").addEventListener("click", function () { self.clear(); });
       ov.querySelector("#ctbl-cmp-close").addEventListener("click", function () { self._closeCmp(); });
       ov.addEventListener("click", function (e) { if (e.target === ov) self._closeCmp(); });
-      document.addEventListener("keydown", function (e) { if (e.key === "Escape" && ov.classList.contains("is-open")) self._closeCmp(); });
+      document.addEventListener("keydown", function (e) {
+        if (!ov.classList.contains("is-open")) return;
+        if (e.key === "Escape") { e.preventDefault(); self._closeCmp(); }
+        else trapComparisonFocus(e, ov);
+      });
     },
 
     _syncDock: function () {
@@ -345,17 +378,28 @@
         items.forEach(function (e, i) { var v = rawVal(e, metric); if (v == null) return; if (best == null || v < best) { best = v; idx = i; } });
         return idx;
       }
-      var head = "<thead><tr><th>Spec</th>" + items.map(function (e) { return "<td>" + esc(e.name) + "</td>"; }).join("") + "</tr></thead>";
+      var head = "<thead><tr><th scope='col'>Spec</th>" + items.map(function (e) { return "<th scope='col' class='ctbl-cmp__instance'>" + esc(e.name) + "</th>"; }).join("") + "</tr></thead>";
       var body = "<tbody>" + ROWS.map(function (r) {
         var metric = r[2], bi = metric ? cheapestIdx(metric) : -1;
-        return "<tr><th>" + esc(r[0]) + "</th>" + items.map(function (e, i) {
+        return "<tr><th scope='row'>" + esc(r[0]) + "</th>" + items.map(function (e, i) {
           return "<td" + (metric && i === bi ? " class='is-best'" : "") + ">" + esc(r[1](e)) + "</td>";
         }).join("") + "</tr>";
       }).join("") + "</tbody>";
+      var modal = document.getElementById("ctbl-cmp");
       document.getElementById("ctbl-cmp-body").innerHTML = "<table class='ctbl-cmp__grid'>" + head + body + "</table>";
-      document.getElementById("ctbl-cmp").classList.add("is-open");
+      cmpFocusOrigin = document.activeElement;
+      isolateComparison(modal);
+      modal.setAttribute("aria-hidden", "false");
+      modal.classList.add("is-open");
       document.getElementById("ctbl-cmp-close").focus();
     },
-    _closeCmp: function () { var o = document.getElementById("ctbl-cmp"); if (o) o.classList.remove("is-open"); }
+    _closeCmp: function () {
+      var o = document.getElementById("ctbl-cmp");
+      if (!o || !o.classList.contains("is-open")) return;
+      o.classList.remove("is-open"); o.setAttribute("aria-hidden", "true");
+      restoreComparisonIsolation();
+      if (cmpFocusOrigin && cmpFocusOrigin.isConnected && typeof cmpFocusOrigin.focus === "function") cmpFocusOrigin.focus();
+      cmpFocusOrigin = null;
+    }
   };
 })(window);

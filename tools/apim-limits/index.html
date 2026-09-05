@@ -43,8 +43,9 @@
 input[type="range"] {
   -webkit-appearance: none; appearance: none;
   width: 100%; height: 4px; border-radius: 2px;
-  background: var(--surface-2); outline: none; cursor: pointer;
+  background: var(--surface-2); cursor: pointer;
 }
+input[type="range"]:focus-visible { outline: 2px solid var(--accent); outline-offset: 5px; }
 input[type="range"]::-webkit-slider-thumb {
   -webkit-appearance: none; appearance: none;
   width: 16px; height: 16px; border-radius: 50%;
@@ -57,7 +58,8 @@ input[type="range"]::-moz-range-thumb {
 .checks { display: flex; flex-direction: column; gap: 9px; }
 .check { display: flex; align-items: center; gap: 12px; cursor: pointer;
   font-family: var(--sans); font-size: 13.5px; color: var(--paper-2); user-select: none; }
-.check input { position: absolute; opacity: 0; pointer-events: none; }
+.check input { position: absolute; width: 1px; height: 1px; opacity: 0; }
+.check input:focus-visible + .check__box { outline: 2px solid var(--accent); outline-offset: 3px; }
 .check__box {
   width: 18px; height: 18px; border: 1px solid var(--line-3); border-radius: 3px;
   display: inline-flex; align-items: center; justify-content: center;
@@ -522,6 +524,6 @@ $("#reset").addEventListener("click", () => {
 
 render();
 </script>
-<script src="/nav.js?v=8" defer></script>
+<script src="/nav.js?v=9" defer></script>
 </body>
 </html>

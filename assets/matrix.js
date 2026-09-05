@@ -24,7 +24,7 @@
 
   // ─── drawer ────────────────────────────────────────────────────
   var drawerEl = null, backdropEl = null;
-  var lastFocused = null, scrollLockY = 0;
+  var lastFocused = null, scrollLockY = 0, isolatedNodes = [];
   var FOCUSABLE = 'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"]), input, select, textarea';
 
   function trapFocus(e) {
@@ -34,6 +34,23 @@
     var first = nodes[0], last = nodes[nodes.length - 1];
     if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
     else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+  }
+  function isolateDrawer() {
+    isolatedNodes = [];
+    Array.prototype.forEach.call(document.body.children, function (node) {
+      if (node === drawerEl || node === backdropEl) return;
+      isolatedNodes.push({ node: node, inert: node.inert, ariaHidden: node.getAttribute("aria-hidden") });
+      node.inert = true;
+      node.setAttribute("aria-hidden", "true");
+    });
+  }
+  function restoreDrawerIsolation() {
+    isolatedNodes.forEach(function (state) {
+      state.node.inert = state.inert;
+      if (state.ariaHidden == null) state.node.removeAttribute("aria-hidden");
+      else state.node.setAttribute("aria-hidden", state.ariaHidden);
+    });
+    isolatedNodes = [];
   }
 
   IA.matrix.drawer = {
@@ -61,6 +78,7 @@
       drawerEl.classList.add("is-open");
       drawerEl.setAttribute("aria-hidden", "false");
       drawerEl.hidden = false;
+      isolateDrawer();
       // scroll lock
       scrollLockY = window.scrollY;
       document.body.style.position = "fixed";
@@ -78,6 +96,7 @@
       drawerEl.classList.remove("is-open");
       drawerEl.setAttribute("aria-hidden", "true");
       document.removeEventListener("keydown", trapFocus);
+      restoreDrawerIsolation();
       // restore scroll
       document.body.style.position = "";
       document.body.style.top = "";
@@ -166,6 +185,9 @@
       if (!f) continue;
       var show = opts.isVisibleFn(f);
       row.classList.toggle("is-hidden", !show);
+      row.querySelectorAll("td.cell[data-vendor]").forEach(function (cell) {
+        cell.hidden = opts.table.classList.contains("hide-" + cell.dataset.vendor);
+      });
       if (show) totalVisible++;
     }
     opts.categories.forEach(function (cat) {
@@ -341,10 +363,24 @@
       });
       if (cfg.searchEl) {
         cfg.searchEl.addEventListener("input", function (e) { state.query = e.target.value; onChange(); });
+        cfg.searchEl.setAttribute("aria-keyshortcuts", "Alt+/");
+        document.querySelectorAll("code").forEach(function (code) {
+          if (code.textContent.trim() === "/" && /\bsearch\b/i.test(code.parentNode.textContent)) code.textContent = "Alt+/";
+        });
+      }
+      function isTextEntry(target) {
+        return target && (target.matches("input, textarea, select") || target.isContentEditable);
       }
       document.addEventListener("keydown", function (e) {
-        if (e.key === "/" && e.target.tagName !== "INPUT" && cfg.searchEl) { e.preventDefault(); cfg.searchEl.focus(); }
-      });
+        if (e.altKey && !e.ctrlKey && !e.metaKey && e.key === "/" && !isTextEntry(e.target) && cfg.searchEl) {
+          e.preventDefault(); e.stopImmediatePropagation(); cfg.searchEl.focus();
+        }
+      }, true);
+      document.addEventListener("keydown", function (e) {
+        if (!e.altKey && !e.ctrlKey && !e.metaKey && e.key === "/" && !isTextEntry(e.target)) {
+          e.preventDefault(); e.stopImmediatePropagation();
+        }
+      }, true);
     }
 
     return { buildChips: buildChips, applyHash: applyHash, writeHash: writeHash, wire: wire };

@@ -241,7 +241,7 @@
     + '.ia-nav__btn svg{display:block;flex:none;}'
     + '.ia-nav__btn kbd{font-family:var(--mono,monospace);font-size:9px;letter-spacing:0.03em;'
     + 'text-transform:none;border:1px solid currentColor;border-radius:3px;padding:1px 4px;opacity:0.6;}'
-    + '.ia-nav__right{display:flex;align-items:center;gap:18px;justify-content:flex-end;}'
+    + '.ia-nav__right{display:flex;align-items:center;gap:18px;justify-content:flex-end;min-width:0;}'
     + '.ia-nav__support{font-family:var(--mono,monospace);font-size:10.5px;'
     + 'letter-spacing:0.14em;text-transform:uppercase;color:var(--accent,#FF7849);'
     + 'transition:color .15s;}'
@@ -297,7 +297,20 @@
     + '.ia-nav__sec:hover{color:var(--paper,#F4EFE6);}'
     + '.ia-nav__sec.is-cur{color:var(--paper,#F4EFE6);'
     + 'border-bottom:1px solid rgba(244,239,230,0.4);padding-bottom:2px;}'
-    + '@media(max-width:840px){.ia-nav__sections{display:none;}}'
+    + '.ia-nav__mobile-sections{display:none;position:relative;}'
+    + '.ia-nav__mobile-sections summary{list-style:none;background:transparent;border:1px solid var(--line-2,rgba(244,239,230,0.14));'
+    + 'border-radius:99px;color:var(--paper-2,rgba(244,239,230,0.66));cursor:pointer;font-family:var(--mono,monospace);'
+    + 'font-size:10px;letter-spacing:0.12em;padding:7px 10px;text-transform:uppercase;white-space:nowrap;}'
+    + '.ia-nav__mobile-sections summary::-webkit-details-marker{display:none;}'
+    + '.ia-nav__mobile-list{position:absolute;right:0;top:calc(100% + 8px);width:max-content;min-width:166px;'
+    + 'padding:6px;background:var(--ink-2,#100E0C);border:1px solid var(--line-2,rgba(244,239,230,0.14));'
+    + 'border-radius:6px;box-shadow:0 14px 34px rgba(0,0,0,.4);}'
+    + '.ia-nav__mobile-list .ia-nav__sec{display:block;padding:10px;}'
+    + '@media(max-width:840px){.ia-nav{grid-template-columns:minmax(0,1fr) auto auto;padding:0 16px;}'
+    + '.ia-nav__sections{display:none;}.ia-nav__mobile-sections{display:block;}.ia-nav__right{gap:8px;}}'
+    + '@media(max-width:560px){.ia-nav__action,.ia-nav__support{display:none;}.ia-nav__word{font-size:10px;letter-spacing:.13em;}'
+    + '.ia-nav__btn{padding:7px 9px;gap:6px;}.ia-nav__mobile-sections summary{padding:7px 8px;}}'
+    + '@media(max-width:390px){.ia-nav__word{display:none;}}'
     /* keep page sticky elements clear of the 46px nav bar */
     + '.filters{top:60px !important;}'
     + '.section__head{top:62px !important;}'
@@ -404,6 +417,18 @@
     + 'transition:color .15s,border-color .15s;}'
     + '.ia-ttools button:hover{color:var(--paper,#F4EFE6);border-color:var(--paper-3,rgba(244,239,230,0.55));}'
     + '.ia-ttools button.is-done{color:var(--mint,#6FE7B5);border-color:var(--mint,#6FE7B5);}'
+    + '.ctbl-cmp__grid thead th.ctbl-cmp__instance{font-family:var(--serif,serif);font-size:18px;color:var(--paper,#F4EFE6);'
+    + 'letter-spacing:normal;text-transform:none;text-align:right;}'
+    /* compact header primitives shared by calculator pages */
+    + '.ia-toolhead{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:16px;align-items:end;margin:0 0 22px;}'
+    + '.ia-toolhead__eyebrow{font-family:var(--mono,monospace);font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--accent,#FF7849);}'
+    + '.ia-toolhead__actions,.ia-tool-controls{display:flex;align-items:center;gap:8px;flex-wrap:wrap;}'
+    + '.ia-tool-controls input,.ia-tool-controls select,.ia-tool-controls button{box-sizing:border-box;min-width:0;max-width:100%;}'
+    + '.ia-search-field{display:grid;gap:5px;min-width:0;flex:1;}'
+    + '.ia-search-label{font:11px/1.5 var(--mono,monospace);color:var(--paper-2,rgba(244,239,230,.66));}'
+    + 'a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible,summary:focus-visible{outline:2px solid var(--accent,#FF7849);outline-offset:3px;}'
+    + '@media(max-width:680px){.ia-toolhead{grid-template-columns:1fr;align-items:start;}.ia-toolhead__actions,.ia-tool-controls{width:100%;}'
+    + '.ia-tool-controls input,.ia-tool-controls select{flex:1 1 12rem;}}'
     /* shortlist — persistent cross-instrument pin tray (localStorage) */
     + '.ia-nav__slbtn{position:relative;}'
     + '.ia-nav__slbtn .ia-sl-n{font-size:9px;border:1px solid currentColor;border-radius:99px;'
@@ -494,14 +519,21 @@
     ? '<span class="ia-nav__here">' + current.vendor + ' · <em>' + current.name + '</em></span>'
     : '';
 
-  var sec = here.startsWith('/atlas/')     ? 'atlas'
+  var sec = here.startsWith('/atlas/')     ? 'map'
           : here.startsWith('/decisions/') ? 'decisions'
           : here.startsWith('/tools/')      ? 'calculators'
           : here.startsWith('/toolbox/')    ? 'toolbox'
-          : 'instruments';
+          : 'explore';
 
   function secLink(s, label, href) {
     return '<a class="ia-nav__sec' + (sec === s ? ' is-cur' : '') + '" href="' + href + '">' + label + '</a>';
+  }
+  function sectionLinks() {
+    return secLink('explore',     'Explore',     '/')
+         + secLink('map',         'Map',         '/atlas/')
+         + secLink('decisions',   'Decisions',   '/decisions/')
+         + secLink('calculators', 'Calculators', '/tools/')
+         + secLink('toolbox',     'Toolbox',     '/toolbox/');
   }
 
   nav.innerHTML =
@@ -513,12 +545,12 @@
     +   hereHtml
     + '</a>'
     + '<nav class="ia-nav__sections" aria-label="Site sections">'
-    +   secLink('instruments', 'Instruments', '/')
-    +   secLink('atlas',       'Atlas',       '/atlas/')
-    +   secLink('decisions',   'Decisions',   '/decisions/')
-    +   secLink('calculators', 'Calculators', '/tools/')
-    +   secLink('toolbox',     'Toolbox',     '/toolbox/')
+    +   sectionLinks()
     + '</nav>'
+    + '<details class="ia-nav__mobile-sections">'
+    +   '<summary>Sections</summary>'
+    +   '<nav class="ia-nav__mobile-list" aria-label="Site sections">' + sectionLinks() + '</nav>'
+    + '</details>'
     + '<div class="ia-nav__right">'
     +   '<a class="ia-nav__action" href="https://github.com/ineslino/infra-atlas/issues/new/choose" target="_blank" rel="noopener">Report a fix</a>'
     +   '<a class="ia-nav__support" href="/support/" data-ia-cta="nav">Support us</a>'
@@ -555,6 +587,34 @@
 
   document.body.insertBefore(nav, document.body.firstChild);
   document.body.appendChild(overlay);
+
+  // Keep each injected modal self-contained without overwriting state owned by
+  // page-level drawers or another script. Every value changed here is restored.
+  function isolateModal(modal) {
+    var saved = [];
+    Array.prototype.forEach.call(document.body.children, function (node) {
+      if (node === modal) return;
+      saved.push({ node: node, inert: node.inert, ariaHidden: node.getAttribute("aria-hidden") });
+      node.inert = true;
+      node.setAttribute("aria-hidden", "true");
+    });
+    return saved;
+  }
+  function restoreModalIsolation(saved) {
+    saved.forEach(function (state) {
+      state.node.inert = state.inert;
+      if (state.ariaHidden == null) state.node.removeAttribute("aria-hidden");
+      else state.node.setAttribute("aria-hidden", state.ariaHidden);
+    });
+  }
+  function trapModalTab(e, modal) {
+    if (e.key !== "Tab") return;
+    var nodes = modal.querySelectorAll('a[href],button:not([disabled]),input:not([disabled]),select:not([disabled]),textarea:not([disabled]),[tabindex]:not([tabindex="-1"])');
+    if (!nodes.length) return;
+    var first = nodes[0], last = nodes[nodes.length - 1];
+    if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+    else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+  }
 
   // ── Skip link — first focusable element, jumps past the nav ──
   var mainEl = document.querySelector("main");
@@ -1100,19 +1160,54 @@
       return lines.join("\n");
     }
 
-    function open() { render(); ov.classList.add("is-open"); var c = ov.querySelector(".ia-sl__close"); if (c) c.focus(); }
-    function close() { ov.classList.remove("is-open"); render(); btnSl.focus(); }
+    var shortlistTrigger = null, shortlistIsolation = [];
+    function focusShortlist(itemId) {
+      var next = null;
+      if (itemId) {
+        Array.prototype.some.call(ov.querySelectorAll("[data-rm]"), function (button) {
+          if (button.dataset.rm !== itemId) return false;
+          next = button;
+          return true;
+        });
+      }
+      (next || ov.querySelector(".ia-sl__close")).focus();
+    }
+    function open() {
+      render();
+      shortlistTrigger = document.activeElement;
+      shortlistIsolation = isolateModal(ov);
+      ov.classList.add("is-open");
+      btnSl.setAttribute("aria-expanded", "true");
+      focusShortlist();
+    }
+    function close() {
+      ov.classList.remove("is-open");
+      restoreModalIsolation(shortlistIsolation); shortlistIsolation = [];
+      render();
+      btnSl.setAttribute("aria-expanded", "false");
+      var focusTarget = shortlistTrigger && shortlistTrigger.isConnected && !shortlistTrigger.hidden ? shortlistTrigger : btn;
+      if (focusTarget && typeof focusTarget.focus === "function") focusTarget.focus();
+      shortlistTrigger = null;
+    }
 
     btnSl.addEventListener("click", function () { ov.classList.contains("is-open") ? close() : open(); });
     ov.addEventListener("mousedown", function (e) { if (e.target === ov) close(); });
     ov.querySelector(".ia-sl__close").addEventListener("click", close);
     document.addEventListener("keydown", function (e) {
       if (e.key === "Escape" && ov.classList.contains("is-open")) { e.preventDefault(); close(); }
+      else if (ov.classList.contains("is-open")) trapModalTab(e, ov);
     });
     ov.addEventListener("click", function (e) {
       var rm = e.target.closest("[data-rm]");
-      if (rm) { persist(load().filter(function (it) { return idOf(it) !== rm.dataset.rm; })); render(); return; }
-      if (e.target.closest("[data-sl-clear]")) { persist([]); render(); return; }
+      if (rm) {
+        var row = rm.closest(".ia-sl__row");
+        var next = row && (row.nextElementSibling || row.previousElementSibling);
+        persist(load().filter(function (it) { return idOf(it) !== rm.dataset.rm; }));
+        render();
+        focusShortlist(next && next.dataset.id);
+        return;
+      }
+      if (e.target.closest("[data-sl-clear]")) { persist([]); render(); focusShortlist(); return; }
       var fmtBtn = e.target.closest("button[data-fmt]");
       if (fmtBtn && window.IA && IA.copyText) IA.copyText(exportText(fmtBtn.dataset.fmt), fmtBtn);
     });
@@ -1203,6 +1298,7 @@
   var results = document.getElementById("ia-cmdk-results");
   var visible = [];
   var sel = 0;
+  var cmdkTrigger = null, cmdkIsolation = [];
 
   // Lazy-loaded content index for ⌘K — `{href, term}` entries built by
   // scripts/build_search_index.py. Fetched on first palette open so visitors
@@ -1306,11 +1402,22 @@
     render();
     scrollSel();
   }
+  function destination(item) {
+    // Matrix filters are hash-based. Only send the canonical mTLS filter to a
+    // route that is confirmed to support it; every other result stays unchanged.
+    var matrixSearchRoutes = { "/apim-matrix/": true };
+    return item && matrixSearchRoutes[item.href] && input.value.trim().toLowerCase() === "mtls"
+      ? item.href + "#q=mTLS"
+      : item && item.href;
+  }
   function go() {
-    if (visible[sel]) location.href = visible[sel].href;
+    var href = destination(visible[sel]);
+    if (href) location.href = href;
   }
   function openCmdk() {
     loadSearchIndex();                          // lazy-fetch the content index on first open
+    cmdkTrigger = document.activeElement;
+    cmdkIsolation = isolateModal(overlay);
     overlay.classList.add("is-open");
     btn.classList.add("is-open");
     btn.setAttribute("aria-expanded", "true");
@@ -1325,9 +1432,11 @@
   function closeCmdk() {
     if (!overlay.classList.contains("is-open")) return;
     overlay.classList.remove("is-open");
+    restoreModalIsolation(cmdkIsolation); cmdkIsolation = [];
     btn.classList.remove("is-open");
     btn.setAttribute("aria-expanded", "false");
-    btn.focus();
+    if (cmdkTrigger && cmdkTrigger.isConnected && typeof cmdkTrigger.focus === "function") cmdkTrigger.focus();
+    cmdkTrigger = null;
   }
   function toggle() {
     overlay.classList.contains("is-open") ? closeCmdk() : openCmdk();
@@ -1365,7 +1474,11 @@
   });
   results.addEventListener("click", function (e) {
     var row = e.target.closest(".ia-cmdk__row");
-    if (row) location.href = row.getAttribute("data-href");
+    if (row) {
+      var index = +row.getAttribute("data-idx");
+      var href = destination(visible[index]);
+      if (href) location.href = href;
+    }
   });
   results.addEventListener("mousemove", function (e) {
     var row = e.target.closest(".ia-cmdk__row");
@@ -1385,9 +1498,7 @@
       e.preventDefault();
       closeCmdk();
     } else if (e.key === "Tab" && overlay.classList.contains("is-open")) {
-      // focus trap — the input is the palette's only focusable control
-      e.preventDefault();
-      input.focus();
+      trapModalTab(e, overlay);
     }
   }, true);
 })();

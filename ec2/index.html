@@ -57,8 +57,8 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@300;400;500;600&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/assets/compute-table.css?v=4">
-<script src="/assets/compute-table.js?v=4"></script>
-<link rel="stylesheet" href="/assets/compute-page.css?v=2">
+<script src="/assets/compute-table.js?v=5"></script>
+<link rel="stylesheet" href="/assets/compute-page.css?v=3">
 <style>
 :root {
   --ink: #0A0907;
@@ -146,7 +146,7 @@ button:focus-visible,
 
 <div class="page">
 
-  <header class="masthead">
+  <header class="masthead ia-toolhead">
     <div class="masthead__brand">
       <a href="../" class="masthead__eyebrow masthead__back">
         <span class="masthead__back-arrow">←</span>
@@ -174,36 +174,36 @@ button:focus-visible,
 
   <main id="ia-main">
 
-  <section class="filters">
+  <section class="filters ia-tool-controls">
     <div class="filter-tabs" aria-label="View mode">
       <button class="filter-tab is-active" type="button" data-mode="region" aria-pressed="true">By Region</button>
       <button class="filter-tab" type="button" data-mode="instance" aria-pressed="false">By Instance</button>
     </div>
     <div class="filter-search">
-      <input id="search" type="search" autocomplete="off" spellcheck="false" placeholder="Filter regions, instance types, families…">
-      <kbd>/</kbd>
+      <div class="ia-search-field"><label class="ia-search-label" for="search">Search EC2 instances and regions</label><input id="search" aria-keyshortcuts="Alt+/" type="search" autocomplete="off" spellcheck="false" placeholder="Filter regions, instance types, families…"></div>
+      <kbd>Alt+/</kbd>
     </div>
     <div class="filter-chips">
       <span class="filter-chips__label">Family</span>
-      <button class="chip is-active" data-cat="all"><span class="dot"></span>All</button>
-      <button class="chip" data-cat="general"><span class="dot"></span>General</button>
-      <button class="chip" data-cat="compute"><span class="dot"></span>Compute</button>
-      <button class="chip" data-cat="memory"><span class="dot"></span>Memory</button>
-      <button class="chip" data-cat="storage"><span class="dot"></span>Storage</button>
-      <button class="chip" data-cat="accelerated"><span class="dot"></span>Accelerated</button>
-      <button class="chip" data-cat="hpc"><span class="dot"></span>HPC</button>
-      <button class="chip" data-cat="macos"><span class="dot"></span>macOS</button>
+      <button class="chip is-active" aria-pressed="true" data-cat="all"><span class="dot"></span>All</button>
+      <button class="chip" aria-pressed="false" data-cat="general"><span class="dot"></span>General</button>
+      <button class="chip" aria-pressed="false" data-cat="compute"><span class="dot"></span>Compute</button>
+      <button class="chip" aria-pressed="false" data-cat="memory"><span class="dot"></span>Memory</button>
+      <button class="chip" aria-pressed="false" data-cat="storage"><span class="dot"></span>Storage</button>
+      <button class="chip" aria-pressed="false" data-cat="accelerated"><span class="dot"></span>Accelerated</button>
+      <button class="chip" aria-pressed="false" data-cat="hpc"><span class="dot"></span>HPC</button>
+      <button class="chip" aria-pressed="false" data-cat="macos"><span class="dot"></span>macOS</button>
       <span class="filter-chips__label" style="margin-left: 16px;">Arch</span>
-      <button class="chip is-active" data-arch="all"><span class="dot"></span>All</button>
-      <button class="chip" data-arch="x86"><span class="dot"></span>x86_64</button>
-      <button class="chip" data-arch="arm"><span class="dot"></span>arm64</button>
+      <button class="chip is-active" aria-pressed="true" data-arch="all"><span class="dot"></span>All</button>
+      <button class="chip" aria-pressed="false" data-arch="x86"><span class="dot"></span>x86_64</button>
+      <button class="chip" aria-pressed="false" data-arch="arm"><span class="dot"></span>arm64</button>
       <span class="chip-group" id="price-chips">
         <span class="filter-chips__label" style="margin-left: 16px;">Price</span>
-        <button class="chip is-active" data-tier="any">Any</button>
-        <button class="chip" data-tier="0">&lt; $0.25</button>
-        <button class="chip" data-tier="1">$0.25–1</button>
-        <button class="chip" data-tier="2">$1–4</button>
-        <button class="chip" data-tier="3">≥ $4</button>
+        <button class="chip is-active" aria-pressed="true" data-tier="any">Any</button>
+        <button class="chip" aria-pressed="false" data-tier="0">&lt; $0.25</button>
+        <button class="chip" aria-pressed="false" data-tier="1">$0.25–1</button>
+        <button class="chip" aria-pressed="false" data-tier="2">$1–4</button>
+        <button class="chip" aria-pressed="false" data-tier="3">≥ $4</button>
       </span>
     </div>
   </section>
@@ -249,7 +249,7 @@ button:focus-visible,
 
 <!-- DRAWER -->
 <div class="drawer-backdrop" id="drawer-backdrop"></div>
-<aside class="drawer" id="drawer" aria-hidden="true">
+<aside class="drawer" id="drawer" role="dialog" aria-modal="true" aria-label="Details" aria-hidden="true">
   <div class="drawer__head" id="drawer-head"></div>
   <div class="drawer__body" id="drawer-body"></div>
 </aside>
@@ -1303,11 +1303,11 @@ function applyHash() {
   $$(".filter-tab").forEach(b => {
     const on = b.dataset.mode === state.mode;
     b.classList.toggle("is-active", on);
-    b.setAttribute("aria-selected", on);
+    b.setAttribute("aria-pressed", on);
   });
-  $$('.chip[data-cat]').forEach(b => b.classList.toggle("is-active", b.dataset.cat === state.cat));
-  $$('.chip[data-arch]').forEach(b => b.classList.toggle("is-active", b.dataset.arch === state.arch));
-  $$('.chip[data-tier]').forEach(b => b.classList.toggle("is-active", b.dataset.tier === state.priceTier));
+  $$('.chip[data-cat]').forEach(b => { b.classList.toggle("is-active", b.dataset.cat === state.cat); b.setAttribute("aria-pressed", String(b.classList.contains("is-active"))); });
+  $$('.chip[data-arch]').forEach(b => { b.classList.toggle("is-active", b.dataset.arch === state.arch); b.setAttribute("aria-pressed", String(b.classList.contains("is-active"))); });
+  $$('.chip[data-tier]').forEach(b => { b.classList.toggle("is-active", b.dataset.tier === state.priceTier); b.setAttribute("aria-pressed", String(b.classList.contains("is-active"))); });
   const sortSel = $("#sort"); if (sortSel) sortSel.value = state.sort;
   const s = $("#search"); if (s) s.value = state.query;
 }
@@ -1328,7 +1328,7 @@ function render() {
 
 function setMode(m) {
   state.mode = m;
-  $$(".filter-tab").forEach(b => b.classList.toggle("is-active", b.dataset.mode === m));
+  $$(".filter-tab").forEach(b => { b.classList.toggle("is-active", b.dataset.mode === m); b.setAttribute("aria-pressed", String(b.classList.contains("is-active"))); });
   $$(".filter-tab").forEach(b => b.setAttribute("aria-pressed", b.dataset.mode === m));
   $("#search").placeholder = m === "region"
     ? "Filter regions, areas, or instance types…"
@@ -1338,13 +1338,13 @@ function setMode(m) {
 
 function setCat(c) {
   state.cat = c;
-  $$('.chip[data-cat]').forEach(b => b.classList.toggle("is-active", b.dataset.cat === c));
+  $$('.chip[data-cat]').forEach(b => { b.classList.toggle("is-active", b.dataset.cat === c); b.setAttribute("aria-pressed", String(b.classList.contains("is-active"))); });
   render();
 }
 
 function setArch(a) {
   state.arch = a;
-  $$('.chip[data-arch]').forEach(b => b.classList.toggle("is-active", b.dataset.arch === a));
+  $$('.chip[data-arch]').forEach(b => { b.classList.toggle("is-active", b.dataset.arch === a); b.setAttribute("aria-pressed", String(b.classList.contains("is-active"))); });
   render();
 }
 
@@ -1355,7 +1355,7 @@ function setSort(v) {
 
 function setPriceTier(t) {
   state.priceTier = t;
-  $$('.chip[data-tier]').forEach(b => b.classList.toggle("is-active", b.dataset.tier === t));
+  $$('.chip[data-tier]').forEach(b => { b.classList.toggle("is-active", b.dataset.tier === t); b.setAttribute("aria-pressed", String(b.classList.contains("is-active"))); });
   render();
 }
 
@@ -1376,10 +1376,10 @@ function init() {
   document.addEventListener("keydown", (e) => {
     if (e.key === "Escape") { closeDrawer(); return; }
     if (e.target.tagName === "INPUT") return;
-    if (e.key === "/") { e.preventDefault(); $("#search").focus(); }
+    if (e.altKey && e.key === "/") { e.preventDefault(); $("#search").focus(); }
     if (document.querySelector(".cmp-overlay.is-open")) return;
-    if (e.key === "r" || e.key === "R") setMode("region");
-    if (e.key === "i" || e.key === "I") setMode("instance");
+    if (e.altKey && (e.key === "r" || e.key === "R")) setMode("region");
+    if (e.altKey && (e.key === "i" || e.key === "I")) setMode("instance");
   });
 }
 
@@ -1671,6 +1671,6 @@ async function loadData() {
   syncCompare();
 })();
 </script>
-<script src="/nav.js?v=8" defer></script>
+<script src="/nav.js?v=9" defer></script>
 </body>
 </html>

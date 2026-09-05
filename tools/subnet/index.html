@@ -37,6 +37,7 @@
 /* Local size override — the quick-prefix presets are tighter than the
    default unit toggle. */
 .unit-toggle button { font-size: 12px; }
+.field__help { font-family: var(--mono); font-size: 10px; line-height: 1.4; color: var(--paper-3); }
 
 .warning {
   font-family: var(--mono); font-size: 11.5px; color: var(--rose);
@@ -108,7 +109,8 @@
     <section class="panel" aria-label="Subnet inputs">
       <div class="field">
         <label class="field__label" for="cidr">Network (CIDR)</label>
-        <input id="cidr" type="text" value="10.0.0.0/24" autocomplete="off" spellcheck="false" placeholder="10.0.0.0/24">
+        <input id="cidr" type="text" value="10.0.0.0/24" autocomplete="off" spellcheck="false" placeholder="10.0.0.0/24" aria-describedby="cidr-help cidr-error">
+        <span class="field__help" id="cidr-help">Enter an IPv4 or IPv6 network with its prefix length.</span>
       </div>
       <div class="field">
         <label class="field__label" for="family">Family</label>
@@ -119,11 +121,11 @@
       </div>
       <div class="field">
         <label class="field__label">Quick set prefix</label>
-        <div class="unit-toggle" id="quick" role="radiogroup" aria-label="Quick CIDR prefix"></div>
+        <div class="unit-toggle" id="quick" role="group" aria-label="Quick CIDR prefix"></div>
       </div>
     </section>
 
-    <div class="warning is-hidden" id="warn" role="alert"></div>
+    <div class="warning is-hidden" id="cidr-error" role="alert" aria-live="assertive"></div>
 
     <!-- Summary row (generic) -->
     <section class="summary" id="summary" aria-label="Network summary"></section>
@@ -313,7 +315,7 @@ function v6Net(ip, prefix) {
 
 // ─── Render ───
 function showWarning(msg) {
-  const w = $("#warn");
+  const w = $("#cidr-error");
   if (!msg) { w.classList.add("is-hidden"); w.textContent = ""; return; }
   w.classList.remove("is-hidden");
   w.textContent = msg;
@@ -383,6 +385,7 @@ function renderClouds(family, prefix, total) {
 }
 
 function render() {
+  syncQuickToggle();
   if (state.family === "ipv4") {
     const r = parseV4(state.input);
     if (r.error) { showWarning(r.error); renderSummary([]); renderClouds("ipv4", -1, 0n); return; }
@@ -431,7 +434,7 @@ function buildQuickToggle() {
     ? [["/16", "16"], ["/20", "20"], ["/24", "24"], ["/27", "27"], ["/28", "28"]]
     : [["/48", "48"], ["/56", "56"], ["/60", "60"], ["/64", "64"]];
   $("#quick").innerHTML = presets.map(([label, p]) =>
-    '<button type="button" data-prefix="' + p + '">' + label + '</button>'
+    '<button type="button" data-prefix="' + p + '" aria-pressed="false" aria-controls="cidr">' + label + '</button>'
   ).join("");
   $$('#quick button').forEach((btn) => {
     btn.addEventListener("click", () => {
@@ -452,6 +455,16 @@ function buildQuickToggle() {
   });
 }
 
+function syncQuickToggle() {
+  const parsed = state.family === "ipv4" ? parseV4(state.input) : parseV6(state.input);
+  const prefix = parsed.error ? null : parsed.prefix;
+  $$("#quick button").forEach((btn) => {
+    const active = Number(btn.dataset.prefix) === prefix;
+    btn.classList.toggle("is-active", active);
+    btn.setAttribute("aria-pressed", active ? "true" : "false");
+  });
+}
+
 $("#cidr").addEventListener("input", (e) => { state.input = e.target.value; render(); });
 $("#family").addEventListener("change", (e) => setFamily(e.target.value));
 
@@ -459,6 +472,6 @@ $("#family").addEventListener("change", (e) => setFamily(e.target.value));
 buildQuickToggle();
 render();
 </script>
-<script src="/nav.js?v=8" defer></script>
+<script src="/nav.js?v=9" defer></script>
 </body>
 </html>

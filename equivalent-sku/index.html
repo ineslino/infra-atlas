@@ -680,6 +680,8 @@ a.fnd-tco { text-decoration: none; }
 }
 
 .match__score.tier-high  { color: var(--mint); }
+.match__completeness { margin-top: 6px; font-family: var(--mono); font-size: 9px; letter-spacing: 0.04em; color: var(--paper-3); }
+.match__completeness.is-partial { color: var(--gold); }
 .match__score.tier-mid   { color: var(--gold); }
 .match__score.tier-low   { color: var(--rose); }
 
@@ -1010,7 +1012,7 @@ a.fnd-tco { text-decoration: none; }
 @media (max-width: 560px) {
   .finder__controls { flex-direction: column; align-items: stretch; }
   .finder__field { width: 100%; }
-  .fnd-select { width: 100%; min-width: 0; }
+  #fnd-cloud, #fnd-type { width: 100%; min-width: 0; }
   .source-card { grid-template-columns: 1fr; gap: 12px; }
   .match__score { font-size: 20px; }
 }
@@ -1554,6 +1556,7 @@ const CAT_ADJ = {
 const state = {
   data: null,        // { cloudId: [instance, ...] }
   cur: {},           // { cloudId: "USD" | "EUR" } — from each data.json
+  generated: {},     // { cloudId: ISO date | null } — from each data.json
   cloud: "aws",
   typeKey: "",       // unique key "cloud::name"
   loaded: false,
@@ -1811,6 +1814,9 @@ function renderMatch(entry, rank, cloudId) {
   if (price) bits.push(`${price}/hr list`);
   if (inst.r != null) bits.push(`${inst.r} region${inst.r === 1 ? "" : "s"}`);
   const meta = bits.length ? `<div class="match__meta">${bits.join(" · ")}</div>` : "";
+  const completeness = entry.memScored
+    ? '<div class="match__completeness">Score basis: vCPU, memory and class</div>'
+    : '<div class="match__completeness is-partial">Score basis: vCPU and class; memory unavailable</div>';
   return `
     <div class="match${isTop ? " is-top" : ""}">
       <div class="match__head">
@@ -1818,10 +1824,11 @@ function renderMatch(entry, rank, cloudId) {
         <div class="match__name">${esc(inst.n)}${isTop ? '<span class="match__badge">Closest</span>' : ""}</div>
         <button type="button" class="match__pin" data-pin="${esc(keyOf(cloudId, inst))}"
           aria-label="Save ${esc(inst.n)} to the shortlist" title="Save to shortlist">☆</button>
-        <div class="match__score tier-${tier}">${score}<span class="match__score-unit">/ 100</span></div>
+        <div class="match__score tier-${tier}">${score}<span class="match__score-unit">match / 100</span></div>
       </div>
       <div class="match__bar"><span class="tier-${tier}" style="width:${Math.max(3, score)}%"></span></div>
       <div class="match__why">${renderWhy(entry.why)}</div>
+      ${completeness}
       ${meta}
     </div>`;
 }
@@ -2031,9 +2038,9 @@ function flattenCatalogue(cloudId, json) {
 
 async function loadData() {
   const data = {};
+  const generated = {};
   CLOUD_ORDER.forEach((c) => { data[c] = SKU_FALLBACK[c].slice(); });
   let freshCount = 0;
-  let latest = SNAPSHOT_DATE;
 
   const results = await Promise.allSettled(
     CLOUD_ORDER.map(async (cid) => {
@@ -2050,13 +2057,13 @@ async function loadData() {
     if (flat) {
       data[r.value.cid] = flat;
       state.cur[r.value.cid] = r.value.json.currency || "USD";
+      generated[r.value.cid] = r.value.json.generated || null;
       freshCount++;
-      const g = r.value.json.generated;
-      if (g && g > latest) latest = g;
     }
   });
 
   state.data = data;
+  state.generated = generated;
   state.loaded = true;
 
   // status line
@@ -2066,14 +2073,13 @@ async function loadData() {
   $("#status-text").textContent = freshCount === 0
     ? "Snapshot · embedded"
     : live ? "Live · data.json" : "Partial · " + freshCount + "/5 live";
-  const d = new Date(latest);
-  if (!isNaN(d)) {
-    const day = d.toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric" });
-    const time = d.toLocaleTimeString("en-GB", { hour: "2-digit", minute: "2-digit", timeZone: "UTC" });
-    $("#status-time").textContent = day + " · " + time + " UTC";
-  } else {
-    $("#status-time").textContent = "snapshot";
-  }
+  const cadence = { aws: "daily", azure: "daily", gcp: "curated", oci: "daily", ovh: "daily" };
+  const perCloud = CLOUD_ORDER.map((cid) => {
+    const d = new Date(generated[cid] || SNAPSHOT_DATE);
+    const day = !isNaN(d) ? d.toLocaleDateString("en-GB", { day: "2-digit", month: "short" }) : "snapshot";
+    return CLOUD_META[cid].short + " " + cadence[cid] + " " + day;
+  });
+  $("#status-time").textContent = perCloud.join(" · ");
 }
 
 // ─── Keyboard shortcuts ───
@@ -2156,6 +2162,6 @@ function onKey(e) {
 })();
 </script>
 
-<script src="/nav.js?v=8" defer></script>
+<script src="/nav.js?v=9" defer></script>
 </body>
 </html>

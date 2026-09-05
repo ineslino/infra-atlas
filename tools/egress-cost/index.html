@@ -30,6 +30,8 @@
   padding: 22px; background: linear-gradient(180deg, var(--surface) 0%, var(--ink-2) 100%);
   border: 1px solid var(--line-2); border-radius: 6px; margin-bottom: 36px;
 }
+.panel .field { min-width: 0; }
+.panel .field select, .panel .field input, .panel .unit-toggle { width: 100%; max-width: 100%; box-sizing: border-box; }
 
 /* ─────────── RESULTS ─────────── */
 .results { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 32px; }
@@ -382,6 +384,6 @@ readUrlState();
 syncDOMFromState();
 render();
 </script>
-<script src="/nav.js?v=8" defer></script>
+<script src="/nav.js?v=9" defer></script>
 </body>
 </html>

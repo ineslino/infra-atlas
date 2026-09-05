@@ -291,6 +291,19 @@
   document.addEventListener('pointercancel', function () { drag.on = false; });
 
   /* ── Pause / resume ──────────────────────────────────────────── */
+  var pauseButton = document.createElement('button');
+  pauseButton.type = 'button';
+  pauseButton.className = 'globe-pause';
+  pauseButton.textContent = 'Pause globe animation';
+  pauseButton.setAttribute('aria-pressed', 'false');
+  var motionHost = document.querySelector('.hero__brand');
+  if (motionHost) motionHost.appendChild(pauseButton);
+  pauseButton.addEventListener('click', function () {
+    paused = !paused;
+    pauseButton.setAttribute('aria-pressed', String(paused));
+    pauseButton.textContent = paused ? 'Resume globe animation' : 'Pause globe animation';
+    if (paused) stopLoop(); else startLoop();
+  });
   var paused = false;
   var raf    = null;
 

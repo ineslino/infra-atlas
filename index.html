@@ -60,7 +60,7 @@
     t.src = '/assets/three.min.js';
     t.onload = function () {
       var g = document.createElement('script');
-      g.src = '/globe.js';
+      g.src = '/globe.js?v=2';
       document.head.appendChild(g);
     };
     document.head.appendChild(t);
@@ -529,7 +529,7 @@ body {
 .instruments {
   max-width: var(--ia-section-max);
   margin: 0 auto;
-  padding: var(--ia-space-2xl) var(--ia-section-pad-x) var(--ia-space-xl);
+  padding: var(--ia-space-m) var(--ia-section-pad-x) var(--ia-space-xl);
 }
 
 .section-head {
@@ -1092,6 +1092,29 @@ body {
   .colophon { grid-template-columns: 1fr; gap: 28px; }
 }
 /* A1-7 focus */ a:focus-visible,button:focus-visible,[tabindex]:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:2px;}
+
+.globe-pause { margin-top: 12px; padding: 7px 10px; color: var(--paper-2); background: var(--ink); border: 1px solid var(--line-2); font: 11px var(--mono); cursor: pointer; }
+.instruments .section-head { margin-bottom: 20px; gap: 16px; grid-template-columns: auto 1fr auto; }
+.instruments .section-head__num { font-size: 36px; }
+.instruments .section-head__title { font-size: 32px; }
+@media(max-width:600px){.instruments .section-head { grid-template-columns: auto 1fr; }.instruments .section-head__meta { grid-column:1 / -1;text-align:left; }}
+/* Task-first editorial entrance: keep the masthead, bring discovery into view. */
+.hero { min-height: 0; gap: 32px; padding: 28px 0; align-items: center; grid-template-columns: minmax(0, 1fr) auto; }
+.hero__title { font-size: clamp(54px, 7vw, 96px); line-height: 1; }
+.hero__title em { display: inline; margin-left: 0; }
+.hero__eyebrow { margin-bottom: 14px; }
+.hero__lead { margin-top: 18px; }
+.hero__status { gap: 8px; }
+.hero__stat { padding: 8px 0; }
+.hero__stat-value { font-size: 34px; }
+.hero__lead { font-size: 16px; line-height: 1.6; }
+.hero__find { margin-top: 18px; }
+.hero__popular { font-size: 11px; }
+.hero__search { min-width: 0; max-width: 100%; }
+.subject-tasks { display: grid; gap: 8px; margin-top: 18px; }
+.subject-tasks a { color: var(--accent); font: 12px/1.6 var(--mono); text-underline-offset: 4px; padding: 4px 0; }
+.ia-pageindex__item { white-space: normal; min-height: 40px; }
+@media(max-width: 768px) { .top-rule { display:none; } .hero__lead { margin-top: 12px; } .hero__eyebrow { font-size: 9px; } .hero { grid-template-columns: minmax(0, 1fr); gap: 20px; } .hero__status { display: none; } .hero__eyebrow { letter-spacing: .1em; } }
 </style>
 </head>
 <body>
@@ -1119,9 +1142,7 @@ body {
     <div class="hero__brand">
       <div class="hero__eyebrow">A New Periodical of Infrastructure</div>
       <h1 class="hero__title">Infra<em>Atlas.</em></h1>
-      <p class="hero__lead">
-        Reference data for the infrastructure stack — <em>cloud regions, instance types, API gateways, managed Kubernetes</em> — cross-referenced across every major vendor and laid out the way the documentation always should have been. Free, open, and footnoted — cloud-compute refreshed daily, the rest as dated snapshots.
-      </p>
+      <p class="hero__lead">Research infrastructure, compare cloud services and make informed decisions. Explore sourced comparisons, then check costs and constraints for your workload.</p>
       <div class="hero__find">
         <button type="button" class="hero__search" id="hero-search" aria-haspopup="dialog" aria-label="Search all instruments">
           <span class="hero__search-ico" aria-hidden="true">⌕</span>
@@ -1164,46 +1185,15 @@ body {
   <section class="instruments">
     <header class="section-head">
       <div class="section-head__num">01</div>
-      <h2 class="section-head__title">The <em>Instruments</em></h2>
+      <h2 class="section-head__title">Explore by <em>subject</em></h2>
       <div class="section-head__meta">
         <strong>26</strong> Live · <strong>0</strong> In Dev · <strong>0</strong> Planned
       </div>
     </header>
 
-    <p class="instruments__intro">
-      <strong>New here?</strong> The cross-cloud instruments — <a href="./equivalent-sku/">Equivalent-SKU</a>, <a href="./networking-matrix/">Networking</a>, <a href="./ai-atlas/">Generative AI</a> and <a href="./iam-matrix/">IAM</a> — are what nobody else does neutrally. Start there, or <a href="./atlas/">see how they all connect on the map →</a>.
-    </p>
+    <p class="instruments__intro">Start with a subject below. Use provider and format filters to narrow the list, or search for a service, capability or instrument.</p>
 
-    <nav class="ia-pageindex" aria-label="Jump to department">
-      <span class="ia-pageindex__label" aria-hidden="true">Jump to</span>
-      <a href="#dept-cloud" class="ia-pageindex__item" aria-label="Jump to Department I, Cloud Compute, 6 instruments">
-        <span class="dot" style="background:var(--sky)" aria-hidden="true"></span>
-        <span>Dept I — Cloud Compute</span>
-        <span class="ia-pageindex__count" aria-hidden="true">6</span>
-      </a>
-      <a href="#dept-apim" class="ia-pageindex__item" aria-label="Jump to Department II, API Management, 5 instruments">
-        <span class="dot" style="background:var(--gold)" aria-hidden="true"></span>
-        <span>Dept II — API Management</span>
-        <span class="ia-pageindex__count" aria-hidden="true">5</span>
-      </a>
-      <a href="#dept-xcloud" class="ia-pageindex__item" aria-label="Jump to Department III, Cross-Cloud, 15 instruments">
-        <span class="dot" style="background:var(--plum)" aria-hidden="true"></span>
-        <span>Dept III — Cross-Cloud</span>
-        <span class="ia-pageindex__count" aria-hidden="true">15</span>
-      </a>
-      <a href="#sec-decisions" class="ia-pageindex__item" aria-label="Jump to the Decisions section">
-        <span class="dot" style="background:var(--mint)" aria-hidden="true"></span>
-        <span>Decisions</span>
-      </a>
-      <a href="#sec-calculators" class="ia-pageindex__item" aria-label="Jump to the Calculators section">
-        <span class="dot" style="background:var(--rose)" aria-hidden="true"></span>
-        <span>Calculators</span>
-      </a>
-      <a href="#sec-toolbox" class="ia-pageindex__item" aria-label="Jump to the Toolbox section">
-        <span class="dot" style="background:var(--gold)" aria-hidden="true"></span>
-        <span>Toolbox</span>
-      </a>
-    </nav>
+    <nav class="ia-pageindex" aria-label="Browse by subject"><a class="ia-pageindex__item" href="#dept-cloud" aria-label="Jump to Compute &amp; regions, 7 instruments"><span>Compute &amp; regions</span><span class="ia-pageindex__count">7</span></a><a class="ia-pageindex__item" href="#dept-apim" aria-label="Jump to API management, 5 instruments"><span>API management</span><span class="ia-pageindex__count">5</span></a><a class="ia-pageindex__item" href="#dept-network" aria-label="Jump to Networking &amp; transfer, 2 instruments"><span>Networking &amp; transfer</span><span class="ia-pageindex__count">2</span></a><a class="ia-pageindex__item" href="#dept-security" aria-label="Jump to Security &amp; identity, 4 instruments"><span>Security &amp; identity</span><span class="ia-pageindex__count">4</span></a><a class="ia-pageindex__item" href="#dept-platform" aria-label="Jump to Platforms &amp; operations, 6 instruments"><span>Platforms &amp; operations</span><span class="ia-pageindex__count">6</span></a><a class="ia-pageindex__item" href="#dept-data" aria-label="Jump to Data &amp; storage, 2 instruments"><span>Data &amp; storage</span><span class="ia-pageindex__count">2</span></a></nav>
 
     <div class="ia-filters">
     <div class="ia-filter" id="ia-filter" role="group" aria-label="Filter instruments by type">
@@ -1226,15 +1216,8 @@ body {
     <div class="ia-sr" id="ia-filter-status" role="status" aria-live="polite"></div>
 
     <!-- ───── DEPARTMENT I: CLOUD COMPUTE ───── -->
-    <div class="department" id="dept-cloud" data-dept="cloud">
-      <div class="department__title">
-        <div class="department__kicker"><span class="dot"></span>Department I</div>
-        <h3 class="department__name">Cloud <em>Compute</em></h3>
-        <p class="department__desc">Regions, instance types, and the geography behind every hyperscaler.</p>
-      </div>
-      <div class="department__items">
-
-        <a class="instrument is-live" href="./ec2/" data-clouds="aws">
+<span id="dept-xcloud" aria-hidden="true"></span>
+<div class="department" id="dept-cloud" data-dept="cloud"><div class="department__title"><div class="department__kicker"><span class="dot"></span>Subject 01</div><h3 class="department__name">Compute &amp; regions</h3><p class="department__desc">Find an instance, compare equivalents, then estimate the workload cost.</p><nav class="subject-tasks" aria-label="Related tasks: Compute &amp; regions"><a href="./tools/tco/">Estimate total cost →</a><a href="./decisions/fargate-vs-ec2/">Fargate or EC2 →</a></nav></div><div class="department__items"><a class="instrument is-live" href="./ec2/" data-clouds="aws">
           <div class="instrument__num">01</div>
           <div class="instrument__main">
             <div class="instrument__head">
@@ -1253,8 +1236,7 @@ body {
             <div class="instrument__cta"><span>Open</span><span class="instrument__cta-arrow">→</span></div>
           </div>
         </a>
-
-        <a class="instrument is-live" href="./regions/" data-clouds="aws azure gcp oci ovh">
+<a class="instrument is-live" href="./regions/" data-clouds="aws azure gcp oci ovh">
           <div class="instrument__num">02</div>
           <div class="instrument__main">
             <div class="instrument__head">
@@ -1273,8 +1255,7 @@ body {
             <div class="instrument__cta"><span>Open</span><span class="instrument__cta-arrow">→</span></div>
           </div>
         </a>
-
-        <a class="instrument is-live" href="./azure-vm/" data-clouds="azure">
+<a class="instrument is-live" href="./azure-vm/" data-clouds="azure">
           <div class="instrument__num">03</div>
           <div class="instrument__main">
             <div class="instrument__head">
@@ -1293,8 +1274,7 @@ body {
             <div class="instrument__cta"><span>Open</span><span class="instrument__cta-arrow">→</span></div>
           </div>
         </a>
-
-        <a class="instrument is-live" href="./gcp-compute/" data-clouds="gcp">
+<a class="instrument is-live" href="./gcp-compute/" data-clouds="gcp">
           <div class="instrument__num">04</div>
           <div class="instrument__main">
             <div class="instrument__head">
@@ -1313,8 +1293,7 @@ body {
             <div class="instrument__cta"><span>Open</span><span class="instrument__cta-arrow">→</span></div>
           </div>
         </a>
-
-        <a class="instrument is-live" href="./oci-compute/" data-clouds="oci">
+<a class="instrument is-live" href="./oci-compute/" data-clouds="oci">
           <div class="instrument__num">05</div>
           <div class="instrument__main">
             <div class="instrument__head">
@@ -1333,8 +1312,7 @@ body {
             <div class="instrument__cta"><span>Open</span><span class="instrument__cta-arrow">→</span></div>
           </div>
         </a>
-
-        <a class="instrument is-live" href="./ovh-instances/" data-clouds="ovh">
+<a class="instrument is-live" href="./ovh-instances/" data-clouds="ovh">
           <div class="instrument__num">06</div>
           <div class="instrument__main">
             <div class="instrument__head">
@@ -1353,20 +1331,26 @@ body {
             <div class="instrument__cta"><span>Open</span><span class="instrument__cta-arrow">→</span></div>
           </div>
         </a>
-
-      </div>
-    </div>
-
-    <!-- ───── DEPARTMENT II: API MANAGEMENT ───── -->
-    <div class="department" id="dept-apim" data-dept="apim">
-      <div class="department__title">
-        <div class="department__kicker"><span class="dot"></span>Department II</div>
-        <h3 class="department__name">API <em>Management</em></h3>
-        <p class="department__desc">Gateways, brokers, and the long footnotes that separate the marketing pages from production.</p>
-      </div>
-      <div class="department__items">
-
-        <a class="instrument is-live" href="./apim-matrix/" data-clouds="aws azure gcp">
+<a class="instrument is-live" href="./equivalent-sku/" data-clouds="aws azure gcp oci ovh">
+          <div class="instrument__num">12</div>
+          <div class="instrument__main">
+            <div class="instrument__head">
+              <span class="instrument__vendor" data-v="multi">CROSS-CLOUD</span>
+              <h4 class="instrument__title">Equivalent-SKU <em>Finder</em></h4>
+              <span class="instrument__type" data-type="tool">Tool</span>
+            </div>
+            <p class="instrument__desc">
+              <em>The cross-cloud translator.</em> Pick any instance type — EC2, Azure VM, GCP, OCI or OVH — and see the closest match on every other cloud, scored on vCPU, memory and category. Built for migration planning and honest price comparison.
+            </p>
+            <div class="instrument__tags">
+              <span>5 clouds</span><span>vCPU + memory scored</span><span>Confidence ranked</span><span>Sourced</span>
+            <span class="instrument__fresh" data-fresh="live">Live data</span></div>
+          </div>
+          <div class="instrument__side">
+            <div class="instrument__cta"><span>Open</span><span class="instrument__cta-arrow">→</span></div>
+          </div>
+        </a></div></div>
+<div class="department" id="dept-apim" data-dept="apim"><div class="department__title"><div class="department__kicker"><span class="dot"></span>Subject 02</div><h3 class="department__name">API management</h3><p class="department__desc">Compare gateway capabilities, check limits and choose a deployment model.</p><nav class="subject-tasks" aria-label="Related tasks: API management"><a href="./tools/apim-limits/">Check API limits →</a><a href="./decisions/rest-api-vs-http-api/">REST or HTTP API →</a></nav></div><div class="department__items"><a class="instrument is-live" href="./apim-matrix/" data-clouds="aws azure gcp">
           <div class="instrument__num">07</div>
           <div class="instrument__main">
             <div class="instrument__head">
@@ -1385,8 +1369,7 @@ body {
             <div class="instrument__cta"><span>Open</span><span class="instrument__cta-arrow">→</span></div>
           </div>
         </a>
-
-        <a class="instrument is-live" href="./aws-api-gateway/" data-clouds="aws">
+<a class="instrument is-live" href="./aws-api-gateway/" data-clouds="aws">
           <div class="instrument__num">08</div>
           <div class="instrument__main">
             <div class="instrument__head">
@@ -1405,8 +1388,7 @@ body {
             <div class="instrument__cta"><span>Open</span><span class="instrument__cta-arrow">→</span></div>
           </div>
         </a>
-
-        <a class="instrument is-live" href="./apigee/" data-clouds="gcp">
+<a class="instrument is-live" href="./apigee/" data-clouds="gcp">
           <div class="instrument__num">09</div>
           <div class="instrument__main">
             <div class="instrument__head">
@@ -1425,8 +1407,7 @@ body {
             <div class="instrument__cta"><span>Open</span><span class="instrument__cta-arrow">→</span></div>
           </div>
         </a>
-
-        <a class="instrument is-live" href="./mulesoft/">
+<a class="instrument is-live" href="./mulesoft/">
           <div class="instrument__num">10</div>
           <div class="instrument__main">
             <div class="instrument__head">
@@ -1445,8 +1426,7 @@ body {
             <div class="instrument__cta"><span>Open</span><span class="instrument__cta-arrow">→</span></div>
           </div>
         </a>
-
-        <a class="instrument is-live" href="./self-hosted-apim/">
+<a class="instrument is-live" href="./self-hosted-apim/">
           <div class="instrument__num">11</div>
           <div class="instrument__main">
             <div class="instrument__head">
@@ -1464,141 +1444,8 @@ body {
           <div class="instrument__side">
             <div class="instrument__cta"><span>Open</span><span class="instrument__cta-arrow">→</span></div>
           </div>
-        </a>
-
-      </div>
-    </div>
-
-    <!-- ───── DEPARTMENT III: CROSS-CLOUD ───── -->
-    <div class="department" id="dept-xcloud" data-dept="xcloud">
-      <div class="department__title">
-        <div class="department__kicker"><span class="dot"></span>Department III</div>
-        <h3 class="department__name">Cross-<em>Cloud</em></h3>
-        <p class="department__desc">Translators and matrices that read across every provider at once.</p>
-      </div>
-      <div class="department__items">
-
-        <a class="instrument is-live" href="./equivalent-sku/" data-clouds="aws azure gcp oci ovh">
-          <div class="instrument__num">12</div>
-          <div class="instrument__main">
-            <div class="instrument__head">
-              <span class="instrument__vendor" data-v="multi">CROSS-CLOUD</span>
-              <h4 class="instrument__title">Equivalent-SKU <em>Finder</em></h4>
-              <span class="instrument__type" data-type="tool">Tool</span>
-            </div>
-            <p class="instrument__desc">
-              <em>The cross-cloud translator.</em> Pick any instance type — EC2, Azure VM, GCP, OCI or OVH — and see the closest match on every other cloud, scored on vCPU, memory and category. Built for migration planning and honest price comparison.
-            </p>
-            <div class="instrument__tags">
-              <span>5 clouds</span><span>vCPU + memory scored</span><span>Confidence ranked</span><span>Sourced</span>
-            <span class="instrument__fresh" data-fresh="live">Live data</span></div>
-          </div>
-          <div class="instrument__side">
-            <div class="instrument__cta"><span>Open</span><span class="instrument__cta-arrow">→</span></div>
-          </div>
-        </a>
-
-        <a class="instrument is-live" href="./kubernetes/" data-clouds="aws azure gcp oci ovh">
-          <div class="instrument__num">13</div>
-          <div class="instrument__main">
-            <div class="instrument__head">
-              <span class="instrument__vendor" data-v="multi">CROSS-CLOUD</span>
-              <h4 class="instrument__title">Kubernetes <em>Atlas</em></h4>
-              <span class="instrument__type" data-type="matrix">Matrix</span>
-            </div>
-            <p class="instrument__desc">
-              Managed Kubernetes, vendor by vendor — EKS · AKS · GKE · OKE · OVH. Control-plane SLA and cost, version cadence, node-pool limits, networking, autoscaling — <em>fourteen capabilities with the footnotes that decide a platform choice.</em>
-            </p>
-            <div class="instrument__tags">
-              <span>5 services</span><span>14 capabilities</span><span>Control-plane SLA</span><span>Sourced</span>
-            <span class="instrument__fresh" data-fresh="2026-05-18">Verified 2026-05-18</span></div>
-          </div>
-          <div class="instrument__side">
-            <div class="instrument__cta"><span>Open</span><span class="instrument__cta-arrow">→</span></div>
-          </div>
-        </a>
-
-        <a class="instrument is-live" href="./compliance/" data-clouds="aws azure gcp oci ovh">
-          <div class="instrument__num">14</div>
-          <div class="instrument__main">
-            <div class="instrument__head">
-              <span class="instrument__vendor" data-v="multi">CROSS-CLOUD</span>
-              <h4 class="instrument__title">Compliance <em>Footprint</em></h4>
-              <span class="instrument__type" data-type="matrix">Matrix</span>
-            </div>
-            <p class="instrument__desc">
-              Which compliance programs each hyperscaler <em>actually</em> holds — FedRAMP, IRAP, C5, ENS, ISO 27001, SOC 2, PCI DSS and more — across AWS, Azure, GCP, OCI and OVHcloud. Scoped to region and service, never blanket-claimed.
-            </p>
-            <div class="instrument__tags">
-              <span>5 clouds</span><span>11 programs</span><span>Region-scoped</span><span>Sourced</span>
-            <span class="instrument__fresh" data-fresh="2026-05-16">Verified 2026-05-16</span></div>
-          </div>
-          <div class="instrument__side">
-            <div class="instrument__cta"><span>Open</span><span class="instrument__cta-arrow">→</span></div>
-          </div>
-        </a>
-
-        <a class="instrument is-live" href="./confidential-computing/" data-clouds="aws azure gcp oci ovh">
-          <div class="instrument__num">15</div>
-          <div class="instrument__main">
-            <div class="instrument__head">
-              <span class="instrument__vendor" data-v="multi">CROSS-CLOUD</span>
-              <h4 class="instrument__title">Confidential <em>Computing</em></h4>
-              <span class="instrument__type" data-type="matrix">Matrix</span>
-            </div>
-            <p class="instrument__desc">
-              <em>Hardware-backed trusted execution,</em> mapped across the major clouds — Intel SGX, AMD SEV-SNP, Intel TDX, AWS Nitro Enclaves and confidential GPU. Which cloud, which technology, which families, which regions.
-            </p>
-            <div class="instrument__tags">
-              <span>5 clouds</span><span>5 technologies</span><span>SGX + SEV-SNP + TDX</span><span>Sourced</span>
-            <span class="instrument__fresh" data-fresh="2026-05-16">Verified 2026-05-16</span></div>
-          </div>
-          <div class="instrument__side">
-            <div class="instrument__cta"><span>Open</span><span class="instrument__cta-arrow">→</span></div>
-          </div>
-        </a>
-
-        <a class="instrument is-live" href="./iam-matrix/" data-clouds="aws azure gcp oci">
-          <div class="instrument__num">16</div>
-          <div class="instrument__main">
-            <div class="instrument__head">
-              <span class="instrument__vendor" data-v="multi">CROSS-CLOUD</span>
-              <h4 class="instrument__title">IAM <em>Matrix</em></h4>
-              <span class="instrument__type" data-type="matrix">Matrix</span>
-            </div>
-            <p class="instrument__desc">
-              Four hyperscaler IAM systems on one grid — AWS IAM, Azure (Entra ID + RBAC), GCP IAM and OCI IAM. <em>Policy model, evaluation logic,</em> workload-identity federation, short-lived credentials, the account hierarchy and ABAC — with the model spelled out per cell.
-            </p>
-            <div class="instrument__tags">
-              <span>4 providers</span><span>21 capabilities</span><span>Policy + RBAC + ABAC</span><span>Sourced</span>
-            <span class="instrument__fresh" data-fresh="2026-05-16">Verified 2026-05-16</span></div>
-          </div>
-          <div class="instrument__side">
-            <div class="instrument__cta"><span>Open</span><span class="instrument__cta-arrow">→</span></div>
-          </div>
-        </a>
-
-        <a class="instrument is-live" href="./ai-atlas/" data-clouds="aws azure gcp oci ovh">
-          <div class="instrument__num">17</div>
-          <div class="instrument__main">
-            <div class="instrument__head">
-              <span class="instrument__vendor" data-v="multi">CROSS-CLOUD</span>
-              <h4 class="instrument__title">Generative AI <em>Atlas</em></h4>
-              <span class="instrument__type" data-type="matrix">Matrix</span>
-            </div>
-            <p class="instrument__desc">
-              The major cloud generative-AI platforms on one grid — Amazon Bedrock, Azure AI Foundry, Vertex AI, OCI Generative AI and OVHcloud AI Endpoints. <em>Which model families each hosts</em> — Claude, GPT, Gemini, Llama, Mistral — and how they compare on fine-tuning, RAG, agents and guardrails.
-            </p>
-            <div class="instrument__tags">
-              <span>5 platforms</span><span>9 model families</span><span>Fine-tuning + RAG + Agents</span><span>Sourced</span>
-            <span class="instrument__fresh" data-fresh="2026-08-15">Verified 2026-08-15</span></div>
-          </div>
-          <div class="instrument__side">
-            <div class="instrument__cta"><span>Open</span><span class="instrument__cta-arrow">→</span></div>
-          </div>
-        </a>
-
-        <a class="instrument is-live" href="./egress/" data-clouds="aws azure gcp">
+        </a></div></div>
+<div class="department" id="dept-network" data-dept="network"><div class="department__title"><div class="department__kicker"><span class="dot"></span>Subject 03</div><h3 class="department__name">Networking &amp; transfer</h3><p class="department__desc">Compare connectivity and understand the cost of moving data.</p><nav class="subject-tasks" aria-label="Related tasks: Networking &amp; transfer"><a href="./tools/egress-cost/">Estimate transfer costs →</a><a href="./tools/subnet/">Plan subnets →</a></nav></div><div class="department__items"><a class="instrument is-live" href="./egress/" data-clouds="aws azure gcp">
           <div class="instrument__num">18</div>
           <div class="instrument__main">
             <div class="instrument__head">
@@ -1617,8 +1464,7 @@ body {
             <div class="instrument__cta"><span>Open</span><span class="instrument__cta-arrow">→</span></div>
           </div>
         </a>
-
-        <a class="instrument is-live" href="./networking-matrix/" data-clouds="aws azure gcp oci">
+<a class="instrument is-live" href="./networking-matrix/" data-clouds="aws azure gcp oci">
           <div class="instrument__num">19</div>
           <div class="instrument__main">
             <div class="instrument__head">
@@ -1636,9 +1482,122 @@ body {
           <div class="instrument__side">
             <div class="instrument__cta"><span>Open</span><span class="instrument__cta-arrow">→</span></div>
           </div>
+        </a></div></div>
+<div class="department" id="dept-security" data-dept="security"><div class="department__title"><div class="department__kicker"><span class="dot"></span>Subject 04</div><h3 class="department__name">Security &amp; identity</h3><p class="department__desc">Check access models, confidentiality, compliance and sovereignty.</p><nav class="subject-tasks" aria-label="Related tasks: Security &amp; identity"><a href="./about/">Understand the evidence →</a></nav></div><div class="department__items"><a class="instrument is-live" href="./compliance/" data-clouds="aws azure gcp oci ovh">
+          <div class="instrument__num">14</div>
+          <div class="instrument__main">
+            <div class="instrument__head">
+              <span class="instrument__vendor" data-v="multi">CROSS-CLOUD</span>
+              <h4 class="instrument__title">Compliance <em>Footprint</em></h4>
+              <span class="instrument__type" data-type="matrix">Matrix</span>
+            </div>
+            <p class="instrument__desc">
+              Which compliance programs each hyperscaler <em>actually</em> holds — FedRAMP, IRAP, C5, ENS, ISO 27001, SOC 2, PCI DSS and more — across AWS, Azure, GCP, OCI and OVHcloud. Scoped to region and service, never blanket-claimed.
+            </p>
+            <div class="instrument__tags">
+              <span>5 clouds</span><span>11 programs</span><span>Region-scoped</span><span>Sourced</span>
+            <span class="instrument__fresh" data-fresh="2026-05-16">Verified 2026-05-16</span></div>
+          </div>
+          <div class="instrument__side">
+            <div class="instrument__cta"><span>Open</span><span class="instrument__cta-arrow">→</span></div>
+          </div>
         </a>
-
-        <a class="instrument is-live" href="./observability/" data-clouds="aws azure gcp oci">
+<a class="instrument is-live" href="./confidential-computing/" data-clouds="aws azure gcp oci ovh">
+          <div class="instrument__num">15</div>
+          <div class="instrument__main">
+            <div class="instrument__head">
+              <span class="instrument__vendor" data-v="multi">CROSS-CLOUD</span>
+              <h4 class="instrument__title">Confidential <em>Computing</em></h4>
+              <span class="instrument__type" data-type="matrix">Matrix</span>
+            </div>
+            <p class="instrument__desc">
+              <em>Hardware-backed trusted execution,</em> mapped across the major clouds — Intel SGX, AMD SEV-SNP, Intel TDX, AWS Nitro Enclaves and confidential GPU. Which cloud, which technology, which families, which regions.
+            </p>
+            <div class="instrument__tags">
+              <span>5 clouds</span><span>5 technologies</span><span>SGX + SEV-SNP + TDX</span><span>Sourced</span>
+            <span class="instrument__fresh" data-fresh="2026-05-16">Verified 2026-05-16</span></div>
+          </div>
+          <div class="instrument__side">
+            <div class="instrument__cta"><span>Open</span><span class="instrument__cta-arrow">→</span></div>
+          </div>
+        </a>
+<a class="instrument is-live" href="./iam-matrix/" data-clouds="aws azure gcp oci">
+          <div class="instrument__num">16</div>
+          <div class="instrument__main">
+            <div class="instrument__head">
+              <span class="instrument__vendor" data-v="multi">CROSS-CLOUD</span>
+              <h4 class="instrument__title">IAM <em>Matrix</em></h4>
+              <span class="instrument__type" data-type="matrix">Matrix</span>
+            </div>
+            <p class="instrument__desc">
+              Four hyperscaler IAM systems on one grid — AWS IAM, Azure (Entra ID + RBAC), GCP IAM and OCI IAM. <em>Policy model, evaluation logic,</em> workload-identity federation, short-lived credentials, the account hierarchy and ABAC — with the model spelled out per cell.
+            </p>
+            <div class="instrument__tags">
+              <span>4 providers</span><span>21 capabilities</span><span>Policy + RBAC + ABAC</span><span>Sourced</span>
+            <span class="instrument__fresh" data-fresh="2026-05-16">Verified 2026-05-16</span></div>
+          </div>
+          <div class="instrument__side">
+            <div class="instrument__cta"><span>Open</span><span class="instrument__cta-arrow">→</span></div>
+          </div>
+        </a>
+<a class="instrument is-live" href="./sovereignty/" data-clouds="aws azure gcp ovh">
+          <div class="instrument__num">22</div>
+          <div class="instrument__main">
+            <div class="instrument__head">
+              <span class="instrument__vendor" data-v="multi">CROSS-CLOUD</span>
+              <h4 class="instrument__title">European <em>Sovereignty</em></h4>
+              <span class="instrument__type" data-type="matrix">Matrix</span>
+            </div>
+            <p class="instrument__desc">
+              Which providers are <em>actually</em> sovereign — and at which layer. Operational vs legal sovereignty, the US CLOUD Act reaching US-parent “sovereign” regions, EU-native providers, and the regulatory frame — Data Act, EUCS, Schrems II / DPF — with the asterisks intact.
+            </p>
+            <div class="instrument__tags">
+              <span>8 providers</span><span>Legal vs operational</span><span>CLOUD Act</span><span>Sourced</span>
+            <span class="instrument__fresh" data-fresh="2026-06-01">Verified 2026-06-01</span></div>
+          </div>
+          <div class="instrument__side">
+            <div class="instrument__cta"><span>Open</span><span class="instrument__cta-arrow">→</span></div>
+          </div>
+        </a></div></div>
+<div class="department" id="dept-platform" data-dept="platform"><div class="department__title"><div class="department__kicker"><span class="dot"></span>Subject 05</div><h3 class="department__name">Platforms &amp; operations</h3><p class="department__desc">Compare managed platforms, observability and operational constraints.</p><nav class="subject-tasks" aria-label="Related tasks: Platforms &amp; operations"><a href="./decisions/cloud-native-vs-managed-vs-self-hosted-observability/">Choose observability hosting →</a></nav></div><div class="department__items"><a class="instrument is-live" href="./kubernetes/" data-clouds="aws azure gcp oci ovh">
+          <div class="instrument__num">13</div>
+          <div class="instrument__main">
+            <div class="instrument__head">
+              <span class="instrument__vendor" data-v="multi">CROSS-CLOUD</span>
+              <h4 class="instrument__title">Kubernetes <em>Atlas</em></h4>
+              <span class="instrument__type" data-type="matrix">Matrix</span>
+            </div>
+            <p class="instrument__desc">
+              Managed Kubernetes, vendor by vendor — EKS · AKS · GKE · OKE · OVH. Control-plane SLA and cost, version cadence, node-pool limits, networking, autoscaling — <em>fourteen capabilities with the footnotes that decide a platform choice.</em>
+            </p>
+            <div class="instrument__tags">
+              <span>5 services</span><span>14 capabilities</span><span>Control-plane SLA</span><span>Sourced</span>
+            <span class="instrument__fresh" data-fresh="2026-05-18">Verified 2026-05-18</span></div>
+          </div>
+          <div class="instrument__side">
+            <div class="instrument__cta"><span>Open</span><span class="instrument__cta-arrow">→</span></div>
+          </div>
+        </a>
+<a class="instrument is-live" href="./ai-atlas/" data-clouds="aws azure gcp oci ovh">
+          <div class="instrument__num">17</div>
+          <div class="instrument__main">
+            <div class="instrument__head">
+              <span class="instrument__vendor" data-v="multi">CROSS-CLOUD</span>
+              <h4 class="instrument__title">Generative AI <em>Atlas</em></h4>
+              <span class="instrument__type" data-type="matrix">Matrix</span>
+            </div>
+            <p class="instrument__desc">
+              The major cloud generative-AI platforms on one grid — Amazon Bedrock, Azure AI Foundry, Vertex AI, OCI Generative AI and OVHcloud AI Endpoints. <em>Which model families each hosts</em> — Claude, GPT, Gemini, Llama, Mistral — and how they compare on fine-tuning, RAG, agents and guardrails.
+            </p>
+            <div class="instrument__tags">
+              <span>5 platforms</span><span>9 model families</span><span>Fine-tuning + RAG + Agents</span><span>Sourced</span>
+            <span class="instrument__fresh" data-fresh="2026-08-15">Verified 2026-08-15</span></div>
+          </div>
+          <div class="instrument__side">
+            <div class="instrument__cta"><span>Open</span><span class="instrument__cta-arrow">→</span></div>
+          </div>
+        </a>
+<a class="instrument is-live" href="./observability/" data-clouds="aws azure gcp oci">
           <div class="instrument__num">20</div>
           <div class="instrument__main">
             <div class="instrument__head">
@@ -1657,8 +1616,7 @@ body {
             <div class="instrument__cta"><span>Open</span><span class="instrument__cta-arrow">→</span></div>
           </div>
         </a>
-
-        <a class="instrument is-live" href="./observability-stacks/">
+<a class="instrument is-live" href="./observability-stacks/">
           <div class="instrument__num">21</div>
           <div class="instrument__main">
             <div class="instrument__head">
@@ -1677,46 +1635,7 @@ body {
             <div class="instrument__cta"><span>Open</span><span class="instrument__cta-arrow">→</span></div>
           </div>
         </a>
-
-        <a class="instrument is-live" href="./sovereignty/" data-clouds="aws azure gcp ovh">
-          <div class="instrument__num">22</div>
-          <div class="instrument__main">
-            <div class="instrument__head">
-              <span class="instrument__vendor" data-v="multi">CROSS-CLOUD</span>
-              <h4 class="instrument__title">European <em>Sovereignty</em></h4>
-              <span class="instrument__type" data-type="matrix">Matrix</span>
-            </div>
-            <p class="instrument__desc">
-              Which providers are <em>actually</em> sovereign — and at which layer. Operational vs legal sovereignty, the US CLOUD Act reaching US-parent “sovereign” regions, EU-native providers, and the regulatory frame — Data Act, EUCS, Schrems II / DPF — with the asterisks intact.
-            </p>
-            <div class="instrument__tags">
-              <span>8 providers</span><span>Legal vs operational</span><span>CLOUD Act</span><span>Sourced</span>
-            <span class="instrument__fresh" data-fresh="2026-06-01">Verified 2026-06-01</span></div>
-          </div>
-          <div class="instrument__side">
-            <div class="instrument__cta"><span>Open</span><span class="instrument__cta-arrow">→</span></div>
-          </div>
-        </a>
-        <a class="instrument is-live" href="./data-layer/" data-clouds="aws azure gcp oci">
-          <div class="instrument__num">23</div>
-          <div class="instrument__main">
-            <div class="instrument__head">
-              <span class="instrument__vendor" data-v="multi">CROSS-CLOUD</span>
-              <h4 class="instrument__title">Data Layer <em>Equivalence</em></h4>
-              <span class="instrument__type" data-type="matrix">Matrix</span>
-            </div>
-            <p class="instrument__desc">
-              Managed relational, NoSQL, and object storage compared across AWS, Azure, GCP and OCI — which service in Cloud B is the closest structural match to the one in Cloud A, and where the match breaks down.
-            </p>
-            <div class="instrument__tags">
-              <span>22 features</span><span>Relational + NoSQL + Object</span><span>4 clouds</span><span>Sourced</span>
-            <span class="instrument__fresh" data-fresh="2026-06-02">Verified 2026-06-02</span></div>
-          </div>
-          <div class="instrument__side">
-            <div class="instrument__cta"><span>Open</span><span class="instrument__cta-arrow">→</span></div>
-          </div>
-        </a>
-        <a class="instrument is-live" href="./idp-matrix/">
+<a class="instrument is-live" href="./idp-matrix/">
           <div class="instrument__num">24</div>
           <div class="instrument__main">
             <div class="instrument__head">
@@ -1735,8 +1654,7 @@ body {
             <div class="instrument__cta"><span>Open</span><span class="instrument__cta-arrow">→</span></div>
           </div>
         </a>
-
-        <a class="instrument is-live" href="./service-quotas/" data-clouds="aws azure gcp oci">
+<a class="instrument is-live" href="./service-quotas/" data-clouds="aws azure gcp oci">
           <div class="instrument__num">25</div>
           <div class="instrument__main">
             <div class="instrument__head">
@@ -1754,9 +1672,27 @@ body {
           <div class="instrument__side">
             <div class="instrument__cta"><span>Open</span><span class="instrument__cta-arrow">→</span></div>
           </div>
+        </a></div></div>
+<div class="department" id="dept-data" data-dept="data"><div class="department__title"><div class="department__kicker"><span class="dot"></span>Subject 06</div><h3 class="department__name">Data &amp; storage</h3><p class="department__desc">Match storage and database capabilities to the workload.</p><nav class="subject-tasks" aria-label="Related tasks: Data &amp; storage"><a href="./decisions/aurora-vs-rds/">Aurora or RDS →</a></nav></div><div class="department__items"><a class="instrument is-live" href="./data-layer/" data-clouds="aws azure gcp oci">
+          <div class="instrument__num">23</div>
+          <div class="instrument__main">
+            <div class="instrument__head">
+              <span class="instrument__vendor" data-v="multi">CROSS-CLOUD</span>
+              <h4 class="instrument__title">Data Layer <em>Equivalence</em></h4>
+              <span class="instrument__type" data-type="matrix">Matrix</span>
+            </div>
+            <p class="instrument__desc">
+              Managed relational, NoSQL, and object storage compared across AWS, Azure, GCP and OCI — which service in Cloud B is the closest structural match to the one in Cloud A, and where the match breaks down.
+            </p>
+            <div class="instrument__tags">
+              <span>22 features</span><span>Relational + NoSQL + Object</span><span>4 clouds</span><span>Sourced</span>
+            <span class="instrument__fresh" data-fresh="2026-06-02">Verified 2026-06-02</span></div>
+          </div>
+          <div class="instrument__side">
+            <div class="instrument__cta"><span>Open</span><span class="instrument__cta-arrow">→</span></div>
+          </div>
         </a>
-
-        <a class="instrument is-live" href="./storage-pricing/" data-clouds="aws azure gcp oci ovh">
+<a class="instrument is-live" href="./storage-pricing/" data-clouds="aws azure gcp oci ovh">
           <div class="instrument__num">26</div>
           <div class="instrument__main">
             <div class="instrument__head">
@@ -1774,11 +1710,7 @@ body {
           <div class="instrument__side">
             <div class="instrument__cta"><span>Open</span><span class="instrument__cta-arrow">→</span></div>
           </div>
-        </a>
-
-      </div>
-    </div>
-
+        </a></div></div>
   </section>
 
   <!-- ───────── DECISIONS ───────── -->
@@ -1959,7 +1891,7 @@ body {
         return '<li class="dispatch-item">' + F.row(e) + '</li>';
       }).join("");
 
-      // Live wire under the hero — cycle the most recent changes.
+      // Latest change under the hero, stable while reading.
       var wire = document.querySelector(".hero-wire");
       var wireText = document.getElementById("hero-wire-text");
       if (wire && wireText) {
@@ -1970,17 +1902,7 @@ body {
         };
         show();
         wire.hidden = false;
-        var RM = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-        if (!RM && recent.length > 1) {
-          setInterval(function () {
-            wireText.style.opacity = "0";
-            setTimeout(function () {
-              wi = (wi + 1) % recent.length;
-              show();
-              wireText.style.opacity = "1";
-            }, 400);
-          }, 4200);
-        }
+        // Keep the latest item stable while reading; all changes remain in the feed.
       }
   });
 })();
@@ -2243,6 +2165,6 @@ body {
     .catch(function () { /* keep the static fallback */ });
 })();
 </script>
-<script src="/nav.js?v=8" defer></script>
+<script src="/nav.js?v=9" defer></script>
 </body>
 </html>

@@ -256,6 +256,9 @@
     display: flex; align-items: center; justify-content: space-between; gap: 14px;
     min-width: 0; padding: 7px 0; border-bottom: 1px dashed var(--line); text-align: left;
   }
+  /* Vendor filters set [hidden] on cells. This must beat the card layout's
+     display:flex rule, including on pages that do not load nav.js. */
+  .matrix tbody tr.feature-row td.cell[hidden] { display: none !important; }
   .matrix tbody tr.feature-row td.cell:last-child { border-bottom: 0; padding-bottom: 0; }
   .matrix tbody tr.feature-row td.cell:hover { background: none; }
   .matrix tbody tr.feature-row td.cell::before {

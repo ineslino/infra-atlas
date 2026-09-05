@@ -48,7 +48,8 @@ def main():
     # match the real cards in each department. The Cross-Cloud chip shipped "11"
     # while 12 cards lived under it (aria said 12, the chip said 11); the chip is
     # the STATIC value crawlers / no-JS clients see before any filter click.
-    order = ["dept-cloud", "dept-apim", "dept-xcloud"]
+    order = re.findall(r'class="department" id="([^"\s]+)"', html)
+    assert order, "Homepage must expose subject groups"
     starts = [html.index('class="department" id="%s"' % d) for d in order]
     ends = starts[1:] + [html.index("</section>", starts[-1])]
     for d, a, b in zip(order, starts, ends):
