@@ -1,7 +1,13 @@
 {
-  "generated": "2026-09-04T11:02:27Z",
+  "generated": "2026-09-10T11:03:27Z",
   "instrument": "ec2",
   "entries": [
+    {
+      "ts": "2026-09-10",
+      "instrument": "ec2",
+      "kind": "availability-added",
+      "text": "p6-b200 now in eu-north-1"
+    },
     {
       "ts": "2026-09-04",
       "instrument": "ec2",
