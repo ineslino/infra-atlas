@@ -6,7 +6,15 @@
     <atom:link href="https://infraatlas.dev/feed.xml" rel="self" type="application/rss+xml"/>
     <description>A neutral, sourced changelog of cloud infrastructure — new instance families, regions, withdrawals and price moves across AWS, Azure, GCP, OCI and OVHcloud.</description>
     <language>en</language>
-    <lastBuildDate>Thu, 10 Sep 2026 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Fri, 11 Sep 2026 00:00:00 +0000</lastBuildDate>
+    <item>
+      <title>AWS EC2 · x2idn now in ap-east-1</title>
+      <link>https://infraatlas.dev/ec2/</link>
+      <guid isPermaLink="false">f9f3545699cdd1100a33f2bcfd92b71c</guid>
+      <category>availability-added</category>
+      <pubDate>Fri, 11 Sep 2026 00:00:00 +0000</pubDate>
+      <description>AWS EC2 · x2idn now in ap-east-1</description>
+    </item>
     <item>
       <title>AWS EC2 · p6-b200 now in eu-north-1</title>
       <link>https://infraatlas.dev/ec2/</link>
