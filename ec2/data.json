@@ -1,5 +1,5 @@
 {
-  "generated": "2026-09-11T11:02:02Z",
+  "generated": "2026-09-18T10:59:39Z",
   "source": "ec2instances.info (Vantage) — public dataset, no credentials",
   "currency": "USD",
   "priceRef": "us-east-1",
@@ -5006,6 +5006,7 @@
         "ap-northeast-1",
         "ap-northeast-2",
         "ap-south-1",
+        "ap-southeast-3",
         "eu-central-1",
         "eu-north-1",
         "eu-south-2",
@@ -15181,6 +15182,64 @@
       ]
     },
     {
+      "key": "t8i",
+      "cat": "general",
+      "arch": "x86",
+      "vendor": "Intel",
+      "desc": "General purpose · Intel Xeon Scalable (Granite Rapids)",
+      "clock": "3.9 GHz",
+      "sizes": [
+        "nano",
+        "micro",
+        "small",
+        "medium"
+      ],
+      "specs": {
+        "nano": {
+          "vcpu": 2,
+          "mem": 0.5,
+          "price": 0.0062,
+          "net": "Up to 6.25 Gigabit"
+        },
+        "micro": {
+          "vcpu": 2,
+          "mem": 1,
+          "price": 0.0125,
+          "net": "Up to 6.25 Gigabit"
+        },
+        "small": {
+          "vcpu": 2,
+          "mem": 2,
+          "price": 0.025,
+          "net": "Up to 6.25 Gigabit"
+        },
+        "medium": {
+          "vcpu": 2,
+          "mem": 4,
+          "price": 0.0499,
+          "net": "Up to 6.25 Gigabit"
+        }
+      },
+      "in": [
+        "ap-northeast-1",
+        "ap-northeast-2",
+        "ap-south-1",
+        "ap-south-2",
+        "ap-southeast-1",
+        "ap-southeast-2",
+        "ap-southeast-5",
+        "ca-central-1",
+        "eu-central-1",
+        "eu-west-1",
+        "eu-west-2",
+        "eu-west-3",
+        "us-east-1",
+        "us-east-2",
+        "us-west-1",
+        "us-west-2"
+      ]
+    },
+    {
       "key": "trn1",
       "cat": "accelerated",
       "arch": "x86",
@@ -16514,6 +16573,7 @@
         "eu-south-2",
         "eu-west-1",
         "eu-west-3",
+        "sa-east-1",
         "us-east-1",
         "us-east-2",
         "us-west-2"

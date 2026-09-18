@@ -1,7 +1,25 @@
 {
-  "generated": "2026-09-11T11:02:02Z",
+  "generated": "2026-09-18T10:59:39Z",
   "instrument": "ec2",
   "entries": [
+    {
+      "ts": "2026-09-18",
+      "instrument": "ec2",
+      "kind": "family-added",
+      "text": "new family t8i"
+    },
+    {
+      "ts": "2026-09-18",
+      "instrument": "ec2",
+      "kind": "availability-added",
+      "text": "g7e now in ap-southeast-3"
+    },
+    {
+      "ts": "2026-09-18",
+      "instrument": "ec2",
+      "kind": "availability-added",
+      "text": "x8i now in sa-east-1"
+    },
     {
       "ts": "2026-09-11",
       "instrument": "ec2",
