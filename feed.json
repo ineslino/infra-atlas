@@ -1,6 +1,18 @@
 {
-  "generated": "2026-09-18T10:59:39Z",
+  "generated": "2026-09-19T10:43:59Z",
   "entries": [
+    {
+      "ts": "2026-09-19",
+      "instrument": "ec2",
+      "kind": "availability-added",
+      "text": "i7ie now in il-central-1"
+    },
+    {
+      "ts": "2026-09-19",
+      "instrument": "ec2",
+      "kind": "availability-added",
+      "text": "m7gd now in eu-west-2"
+    },
     {
       "ts": "2026-09-18",
       "instrument": "ec2",
