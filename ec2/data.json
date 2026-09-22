@@ -1,5 +1,5 @@
 {
-  "generated": "2026-09-19T10:43:59Z",
+  "generated": "2026-09-22T11:22:17Z",
   "source": "ec2instances.info (Vantage) — public dataset, no credentials",
   "currency": "USD",
   "priceRef": "us-east-1",
@@ -11054,6 +11054,7 @@
         "ap-south-1",
         "ap-south-2",
         "eu-north-1",
+        "eu-west-3",
         "us-east-1",
         "us-east-2",
         "us-west-2"
