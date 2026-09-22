@@ -6,7 +6,15 @@
     <atom:link href="https://infraatlas.dev/feed.xml" rel="self" type="application/rss+xml"/>
     <description>A neutral, sourced changelog of cloud infrastructure — new instance families, regions, withdrawals and price moves across AWS, Azure, GCP, OCI and OVHcloud.</description>
     <language>en</language>
-    <lastBuildDate>Sat, 19 Sep 2026 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Tue, 22 Sep 2026 00:00:00 +0000</lastBuildDate>
+    <item>
+      <title>AWS EC2 · p6-b200 now in eu-west-3</title>
+      <link>https://infraatlas.dev/ec2/</link>
+      <guid isPermaLink="false">90fb4b8bd909c04ddf4767920c5c016e</guid>
+      <category>availability-added</category>
+      <pubDate>Tue, 22 Sep 2026 00:00:00 +0000</pubDate>
+      <description>AWS EC2 · p6-b200 now in eu-west-3</description>
+    </item>
     <item>
       <title>AWS EC2 · i7ie now in il-central-1</title>
       <link>https://infraatlas.dev/ec2/</link>
