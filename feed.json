@@ -1,6 +1,18 @@
 {
-  "generated": "2026-09-22T11:22:17Z",
+  "generated": "2026-10-07T13:06:15Z",
   "entries": [
+    {
+      "ts": "2026-10-07",
+      "instrument": "ec2",
+      "kind": "availability-added",
+      "text": "g7 now in eu-central-1, eu-north-1"
+    },
+    {
+      "ts": "2026-10-07",
+      "instrument": "ec2",
+      "kind": "availability-added",
+      "text": "hpc8a now in ap-southeast-1"
+    },
     {
       "ts": "2026-09-22",
       "instrument": "ec2",
