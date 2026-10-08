@@ -171,3 +171,13 @@ jobs:
       # PR instead of shipping a broken feed.
       - name: Run What Changed feed-diff tests
         run: python3 scripts/test_diff_feed.py
+
+  decision-constraints:
+    name: Decision requirements override preferences
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: node scripts/test_decision_constraints.js
