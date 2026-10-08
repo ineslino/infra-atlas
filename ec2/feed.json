@@ -1,7 +1,13 @@
 {
-  "generated": "2026-10-07T13:06:15Z",
+  "generated": "2026-10-08T13:13:40Z",
   "instrument": "ec2",
   "entries": [
+    {
+      "ts": "2026-10-08",
+      "instrument": "ec2",
+      "kind": "availability-added",
+      "text": "c8gb now in 7 regions (af-south-1, eu-central-1, eu-north-1…)"
+    },
     {
       "ts": "2026-10-07",
       "instrument": "ec2",
