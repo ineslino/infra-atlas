@@ -25,7 +25,7 @@ REVIEWED = "2026-05-19"
 # the bump touches generated *.html, but this generator is a separate source,
 # so without the version here a regen would silently revert the pages to a
 # stale nav.js (exactly what happened between v=2 and v=4).
-NAV_TAG = '<script src="/nav.js?v=8" defer></script>'
+NAV_TAG = '<script src="/nav.js?v=9" defer></script>'
 
 # Social-share image. Keep the ?v= in sync with the site-wide cache-bust:
 # the bump touches generated *.html, but this generator is a separate source,
@@ -72,8 +72,8 @@ DECISIONS = [
    {"q": "What are you running?", "a": [
     {"t": "A stateless web app or HTTP API", "pts": {0: 3}, "why": "Stateless web apps and HTTP APIs are App Engine's ideal workload."},
     {"t": "A database, daemon, batch/GPU job, or lift-and-shift", "pts": {1: 3}, "why": "Workloads that are not request-scoped belong on Compute Engine."}]},
-   {"q": "Do you need root/SSH, a custom OS, kernel modules or GPUs?", "a": [
-    {"t": "Yes", "pts": {1: 3}, "why": "Host-level control is IaaS territory — App Engine will not host it."},
+   {"q": "Do you need persistent OS control, a custom OS, kernel modules or GPUs?", "a": [
+    {"t": "Yes", "pts": {1: 3}, "exclude": [0], "why": "Persistent OS control, custom operating systems, kernel modules or GPUs require Compute Engine; temporary SSH debugging on Flexible is not such a requirement."},
     {"t": "No", "pts": {0: 1}, "why": "No host-level needs keeps the PaaS path open."}]},
    {"q": "How does traffic behave?", "a": [
     {"t": "Spiky — can idle to zero", "pts": {0: 2}, "why": "App Engine Standard scales to zero between bursts."},
@@ -119,7 +119,7 @@ DECISIONS = [
     {"t": "High and predictable", "pts": {1: 3}, "why": "Packed, high-utilisation instances beat per-task pricing at steady load."},
     {"t": "Variable or spiky", "pts": {0: 3}, "why": "Per-second task billing beats paying for idle instances."}]},
    {"q": "GPUs, privileged containers, DAEMON tasks or custom AMIs?", "a": [
-    {"t": "Yes — at least one of those", "pts": {1: 3}, "why": "Fargate supports none of those — they force the EC2 launch type."},
+    {"t": "Yes — at least one of those", "pts": {1: 3}, "exclude": [0], "why": "Fargate supports none of those — they force the EC2 launch type."},
     {"t": "No", "pts": {0: 1}, "why": "Nothing host-shaped blocks Fargate."}]},
    {"q": "Who should own the hosts?", "a": [
     {"t": "AWS — zero provisioning and patching", "pts": {0: 2}, "why": "With Fargate, AWS owns the host entirely."},
@@ -213,10 +213,10 @@ DECISIONS = [
   "crosslinks": [("AWS API Gateway Atlas", "/aws-api-gateway/"), ("APIM Feature Matrix", "/apim-matrix/")],
     "wizard": [
    {"q": "Do you need API keys with usage plans?", "a": [
-    {"t": "Yes", "pts": {0: 3}, "why": "Per-client throttling and quotas exist only on REST APIs."},
+    {"t": "Yes", "pts": {0: 3}, "exclude": [1], "why": "Per-client throttling and quotas exist only on REST APIs."},
     {"t": "No", "pts": {1: 1}, "why": "No usage plans removes the strongest REST-only pull."}]},
    {"q": "AWS WAF, a private (VPC-only) endpoint, or request validation?", "a": [
-    {"t": "Yes — at least one", "pts": {0: 3}, "why": "WAF, private endpoints and request validation are REST-only features."},
+    {"t": "Yes — at least one", "pts": {0: 3}, "exclude": [1], "why": "WAF, private endpoints and request validation are REST-only features."},
     {"t": "No", "pts": {1: 1}, "why": "None of the REST-only features applies."}]},
    {"q": "How will callers authenticate?", "a": [
     {"t": "JWTs from an OIDC/OAuth issuer", "pts": {1: 2}, "why": "HTTP APIs have a native JWT authorizer; REST needs a Lambda authorizer for JWTs."},
@@ -260,16 +260,16 @@ DECISIONS = [
   "crosslinks": [("GCP Compute Index", "/gcp-compute/")],
     "wizard": [
    {"q": "Does scale-to-zero matter?", "a": [
-    {"t": "Yes — idle should cost nothing", "pts": {0: 3}, "why": "Cloud Run scales to zero and bills per request; Flexible always keeps a VM."},
+    {"t": "Yes — idle should cost nothing", "pts": {0: 3}, "exclude": [1], "why": "Cloud Run scales to zero and bills per request; Flexible always keeps a VM."},
     {"t": "Always-on is fine", "pts": {1: 1}, "why": "Steady traffic blunts Cloud Run's idle advantage."}]},
-   {"q": "Do you need SSH into the VM or Compute-network placement?", "a": [
-    {"t": "Yes", "pts": {1: 3}, "why": "Only Flexible exposes the underlying Compute Engine VM."},
+   {"q": "Do you need SSH into the underlying VM?", "a": [
+    {"t": "Yes", "pts": {1: 3}, "exclude": [0], "why": "Only Flexible exposes the underlying Compute Engine VM."},
     {"t": "No", "pts": {0: 1}, "why": "No VM-level needs keeps the modern default in play."}]},
    {"q": "New project, or an existing Flexible app?", "a": [
     {"t": "New project", "pts": {0: 2}, "why": "Google's own docs recommend Cloud Run for new users."},
     {"t": "Existing Flexible app", "pts": {1: 2}, "why": "Migration cost can outweigh modernising right now."}]},
    {"q": "GPUs?", "a": [
-    {"t": "Yes", "pts": {0: 3}, "why": "Cloud Run offers NVIDIA GPUs; Flexible does not."},
+    {"t": "Yes", "pts": {0: 3}, "exclude": [1], "why": "Cloud Run offers NVIDIA GPUs; Flexible does not."},
     {"t": "No", "pts": {}, "why": "GPU needs do not separate the two here."}]},
   ],
   "teaser": "Google's modern serverless-container default vs the legacy VM-backed option.",
@@ -307,7 +307,7 @@ DECISIONS = [
     "wizard": [
    {"q": "Which engine do you need?", "a": [
     {"t": "MySQL or PostgreSQL (compatible is fine)", "pts": {0: 2}, "why": "Aurora speaks both — its architecture becomes the differentiator."},
-    {"t": "MariaDB, Oracle, SQL Server or Db2", "pts": {1: 3}, "why": "Aurora supports none of those engines — RDS is the only managed option."}]},
+    {"t": "MariaDB, Oracle, SQL Server or Db2", "pts": {1: 3}, "exclude": [0], "why": "Aurora supports none of those engines — RDS is the only managed option."}]},
    {"q": "How hard do availability and read scale bite?", "a": [
     {"t": "Fast failover and many low-lag readers", "pts": {0: 3}, "why": "Aurora fails over in ~30 s and runs up to 15 readers on one volume."},
     {"t": "A single instance with a standby is fine", "pts": {1: 1}, "why": "Multi-AZ RDS covers ordinary availability needs."}]},
@@ -356,10 +356,10 @@ DECISIONS = [
     {"t": "Container images / microservices", "pts": {1: 3}, "why": "Containerised microservices are what Container Apps was built for."},
     {"t": "A whole OS image — lift-and-shift", "pts": {2: 3}, "why": "Like-for-like migrations land on VMs."}]},
    {"q": "Does scale-to-zero matter?", "a": [
-    {"t": "Yes", "pts": {1: 3}, "why": "Of the three, only Container Apps scales to zero."},
+    {"t": "Yes", "pts": {1: 3}, "exclude": [0, 2], "why": "Of the three, only Container Apps scales to zero."},
     {"t": "No — steady traffic", "pts": {0: 1, 2: 1}, "why": "Always-running plans and VMs fit steady load."}]},
    {"q": "OS-level control, or software no PaaS supports?", "a": [
-    {"t": "Yes", "pts": {2: 3}, "why": "Full OS access exists only on Virtual Machines."},
+    {"t": "Yes", "pts": {2: 3}, "exclude": [0, 1], "why": "Full OS access exists only on Virtual Machines."},
     {"t": "No", "pts": {0: 1, 1: 1}, "why": "No OS needs keeps both PaaS options open."}]},
    {"q": "Event-driven patterns (KEDA, Dapr, jobs)?", "a": [
     {"t": "Yes", "pts": {1: 2}, "why": "KEDA scaling and Dapr come built into Container Apps."},
@@ -405,10 +405,10 @@ DECISIONS = [
     {"t": "Only AWS services (S3, DynamoDB, APIs)", "pts": {2: 3}, "why": "A free Gateway endpoint or Interface endpoints beat paying NAT per GB for AWS-bound traffic."},
     {"t": "Almost nowhere — tiny, rare egress", "pts": {1: 2}, "why": "At trickle volumes a small NAT instance can undercut the gateway's hourly charge."}]},
    {"q": "Port forwarding, or a bastion on the same box?", "a": [
-    {"t": "Yes", "pts": {1: 3}, "why": "A NAT Gateway supports neither — this is the NAT instance's surviving niche."},
+    {"t": "Yes", "pts": {1: 3}, "exclude": [0, 2], "why": "A NAT Gateway supports neither — this is the NAT instance's surviving niche."},
     {"t": "No", "pts": {0: 1}, "why": "No special tricks needed — managed NAT stays ahead."}]},
    {"q": "Maintenance appetite?", "a": [
-    {"t": "Zero — managed only", "pts": {0: 2, 2: 2}, "why": "Gateways and endpoints carry no patching at all."},
+    {"t": "Zero — managed only", "pts": {0: 2, 2: 2}, "exclude": [1], "why": "Gateways and endpoints carry no patching at all."},
     {"t": "We will patch an AMI to save cost", "pts": {1: 2}, "why": "A NAT instance trades your ops time for its lower hourly rate."}]},
    {"q": "Traffic volume?", "a": [
     {"t": "Moderate to high", "pts": {0: 2}, "why": "The gateway auto-scales to 100 Gbps; an instance caps at its type."},
@@ -557,7 +557,7 @@ def render_wizard(d):
                   f'<div class="wiz__opts">{opts}</div></fieldset>')
     wiz_data = json.dumps(
         {"cols": d["cols"],
-         "qs": [{"a": [{"pts": a.get("pts", {}), "why": a["why"]} for a in q["a"]]}
+         "qs": [{"a": [{"pts": a.get("pts", {}), "why": a["why"], "exclude": a.get("exclude", [])} for a in q["a"]]}
                 for q in w]},
         ensure_ascii=False).replace("<", "\u003c")
     return f"""
@@ -586,14 +586,20 @@ def render_wizard(d):
       if (picked.some(p => p === null)) {{ out.hidden = true; reset.hidden = true; return; }}
       const pts = WIZ.cols.map(() => 0);
       picked.forEach(p => Object.entries(p.pts).forEach(([i, w]) => {{ pts[+i] += w; }}));
-      const max = Math.max(...pts);
-      const winners = WIZ.cols.filter((c, i) => pts[i] === max);
-      const head = winners.length > 1
+      // Required capabilities exclude incompatible options before preferences are ranked.
+      const excluded = new Set(picked.flatMap(p => p.exclude || []));
+      const eligible = pts.filter((p, i) => !excluded.has(i));
+      const max = Math.max(...eligible);
+      const winners = WIZ.cols.filter((c, i) => !excluded.has(i) && pts[i] === max);
+      const head = !winners.length
+        ? `<div class="wiz__call">No option meets all requirements. Review the conflicting constraints below.</div>`
+        : winners.length > 1
         ? `<div class="wiz__call">Even split between <strong>${{winners.map(esc).join("</strong> and <strong>")}}</strong> — this one genuinely hinges on the verdict above.</div>`
         : `<div class="wiz__call">Leaning <strong>${{esc(winners[0])}}</strong> — now read its "pick when" list below to confirm.</div>`;
       const total = pts.reduce((a, b) => a + b, 0) || 1;
-      const bars = WIZ.cols.map((c, i) =>
-        `<div class="wiz__bar"><span class="wiz__bar-name">${{esc(c)}}</span>` +
+      const bars = WIZ.cols.map((c, i) => excluded.has(i)
+        ? `<div class="wiz__bar"><span class="wiz__bar-name">${{esc(c)}}</span><span>Excluded by requirements</span></div>`
+        : `<div class="wiz__bar"><span class="wiz__bar-name">${{esc(c)}}</span>` +
         `<span class="wiz__bar-track"><span class="wiz__bar-fill${{pts[i] === max ? " is-top" : ""}}" style="width:${{Math.max(4, Math.round(pts[i] / total * 100))}}%"></span></span>` +
         `<span class="wiz__bar-n">${{pts[i]}}</span></div>`).join("");
       const trail = picked.map(p => `<li>${{esc(p.why)}}</li>`).join("");
@@ -684,7 +690,7 @@ def render_page(d):
 <body>
 <div class="grain"></div>
 <div class="scanlines"></div>
-<div class="page">"""
+<main class="page" id="ia-main">"""
 
     masthead = f"""
   <header class="masthead">
@@ -740,7 +746,7 @@ def render_page(d):
     · <a href="/decisions/">Decisions</a>. Spot a stale fact?
     <a href="https://github.com/ineslino/infra-atlas/issues/new" target="_blank" rel="noopener">Open an issue</a>.
   </footer>
-</div>
+</main>
 {NAV_TAG}
 </body>
 </html>
@@ -779,13 +785,27 @@ def render_hub():
 <meta name="twitter:title" content="Decisions · Infra Atlas">
 <meta name="twitter:description" content="Short, neutral, footnoted 'which one should I use' references for the cloud comparisons engineers ask most.">
 <meta name="twitter:image" content="{OG_IMAGE}">
+<script type="application/ld+json">
+{{
+  "@context": "https://schema.org",
+  "@type": "CollectionPage",
+  "name": "Decisions",
+  "url": "https://infraatlas.dev/decisions/",
+  "description": "Short, neutral, footnoted answers to the cloud comparison questions engineers ask most.",
+  "isPartOf": {{
+    "@type": "WebSite",
+    "name": "Infra Atlas",
+    "url": "https://infraatlas.dev/"
+  }}
+}}
+</script>
 {FONTS}
 <link rel="stylesheet" href="/decisions/decision.css">
 </head>
 <body>
 <div class="grain"></div>
 <div class="scanlines"></div>
-<div class="page">
+<main class="page" id="ia-main">
   <header class="masthead">
     <a class="eyebrow" href="/"><span class="arrow">←</span> Infra Atlas</a>
     <h1 class="title">The <em>Decisions.</em></h1>
@@ -802,7 +822,7 @@ def render_hub():
     vendor documentation. Part of <a href="/">Infra Atlas</a>. Spot a stale fact?
     <a href="https://github.com/ineslino/infra-atlas/issues/new" target="_blank" rel="noopener">Open an issue</a>.
   </footer>
-</div>
+</main>
 {NAV_TAG}
 </body>
 </html>

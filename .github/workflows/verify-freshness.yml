@@ -45,6 +45,10 @@ jobs:
             "storage-pricing:120"
             "decisions:365"
           )
+          # Each decision has its own review date; a current hub must not hide stale pages.
+          for decision in decisions/*/index.html; do
+            instruments+=("${decision%/index.html}:365")
+          done
           now=$(date -u +%s)
           stale=0
 

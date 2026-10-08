@@ -119,7 +119,7 @@
   </section>
   <script>
   (function () {
-    const WIZ = {"cols": ["Hyperscaler sovereign region", "EU-native provider"], "qs": [{"a": [{"pts": {"1": 3}, "why": "Only an EU-jurisdiction parent sits outside the CLOUD Act's reach."}, {"pts": {"0": 3}, "why": "Operational sovereignty is exactly what a sovereign region sells."}]}, {"a": [{"pts": {"1": 3}, "why": "Several EU-native providers hold SecNumCloud outright; hyperscalers route via partners — verify per service."}, {"pts": {"0": 1}, "why": "Without SecNumCloud, the partner-based certifications may be enough."}]}, {"a": [{"pts": {"0": 3}, "why": "EU-native catalogues are narrower; hyperscaler breadth is their trade."}, {"pts": {"1": 2}, "why": "If the workload fits, the narrower catalogue stops being a cost."}]}, {"a": [{"pts": {"0": 2}, "why": "Migration cost is real — a sovereign region keeps the ecosystem."}, {"pts": {"1": 1}, "why": "Nothing anchors you to a US-parent provider."}]}]};
+    const WIZ = {"cols": ["Hyperscaler sovereign region", "EU-native provider"], "qs": [{"a": [{"pts": {"1": 3}, "why": "Only an EU-jurisdiction parent sits outside the CLOUD Act's reach.", "exclude": []}, {"pts": {"0": 3}, "why": "Operational sovereignty is exactly what a sovereign region sells.", "exclude": []}]}, {"a": [{"pts": {"1": 3}, "why": "Several EU-native providers hold SecNumCloud outright; hyperscalers route via partners — verify per service.", "exclude": []}, {"pts": {"0": 1}, "why": "Without SecNumCloud, the partner-based certifications may be enough.", "exclude": []}]}, {"a": [{"pts": {"0": 3}, "why": "EU-native catalogues are narrower; hyperscaler breadth is their trade.", "exclude": []}, {"pts": {"1": 2}, "why": "If the workload fits, the narrower catalogue stops being a cost.", "exclude": []}]}, {"a": [{"pts": {"0": 2}, "why": "Migration cost is real — a sovereign region keeps the ecosystem.", "exclude": []}, {"pts": {"1": 1}, "why": "Nothing anchors you to a US-parent provider.", "exclude": []}]}]};
     const form = document.getElementById("wiz-form");
     const out = document.getElementById("wiz-result");
     const reset = document.getElementById("wiz-reset");
@@ -132,14 +132,20 @@
       if (picked.some(p => p === null)) { out.hidden = true; reset.hidden = true; return; }
       const pts = WIZ.cols.map(() => 0);
       picked.forEach(p => Object.entries(p.pts).forEach(([i, w]) => { pts[+i] += w; }));
-      const max = Math.max(...pts);
-      const winners = WIZ.cols.filter((c, i) => pts[i] === max);
-      const head = winners.length > 1
+      // Required capabilities exclude incompatible options before preferences are ranked.
+      const excluded = new Set(picked.flatMap(p => p.exclude || []));
+      const eligible = pts.filter((p, i) => !excluded.has(i));
+      const max = Math.max(...eligible);
+      const winners = WIZ.cols.filter((c, i) => !excluded.has(i) && pts[i] === max);
+      const head = !winners.length
+        ? `<div class="wiz__call">No option meets all requirements. Review the conflicting constraints below.</div>`
+        : winners.length > 1
         ? `<div class="wiz__call">Even split between <strong>${winners.map(esc).join("</strong> and <strong>")}</strong> — this one genuinely hinges on the verdict above.</div>`
         : `<div class="wiz__call">Leaning <strong>${esc(winners[0])}</strong> — now read its "pick when" list below to confirm.</div>`;
       const total = pts.reduce((a, b) => a + b, 0) || 1;
-      const bars = WIZ.cols.map((c, i) =>
-        `<div class="wiz__bar"><span class="wiz__bar-name">${esc(c)}</span>` +
+      const bars = WIZ.cols.map((c, i) => excluded.has(i)
+        ? `<div class="wiz__bar"><span class="wiz__bar-name">${esc(c)}</span><span>Excluded by requirements</span></div>`
+        : `<div class="wiz__bar"><span class="wiz__bar-name">${esc(c)}</span>` +
         `<span class="wiz__bar-track"><span class="wiz__bar-fill${pts[i] === max ? " is-top" : ""}" style="width:${Math.max(4, Math.round(pts[i] / total * 100))}%"></span></span>` +
         `<span class="wiz__bar-n">${pts[i]}</span></div>`).join("");
       const trail = picked.map(p => `<li>${esc(p.why)}</li>`).join("");
