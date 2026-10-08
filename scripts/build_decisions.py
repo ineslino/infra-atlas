@@ -72,8 +72,8 @@ DECISIONS = [
    {"q": "What are you running?", "a": [
     {"t": "A stateless web app or HTTP API", "pts": {0: 3}, "why": "Stateless web apps and HTTP APIs are App Engine's ideal workload."},
     {"t": "A database, daemon, batch/GPU job, or lift-and-shift", "pts": {1: 3}, "why": "Workloads that are not request-scoped belong on Compute Engine."}]},
-   {"q": "Do you need root/SSH, a custom OS, kernel modules or GPUs?", "a": [
-    {"t": "Yes", "pts": {1: 3}, "exclude": [0], "why": "Host-level control is IaaS territory — App Engine will not host it."},
+   {"q": "Do you need persistent OS control, a custom OS, kernel modules or GPUs?", "a": [
+    {"t": "Yes", "pts": {1: 3}, "exclude": [0], "why": "Persistent OS control, custom operating systems, kernel modules or GPUs require Compute Engine; temporary SSH debugging on Flexible is not such a requirement."},
     {"t": "No", "pts": {0: 1}, "why": "No host-level needs keeps the PaaS path open."}]},
    {"q": "How does traffic behave?", "a": [
     {"t": "Spiky — can idle to zero", "pts": {0: 2}, "why": "App Engine Standard scales to zero between bursts."},
