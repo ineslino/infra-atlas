@@ -1,5 +1,5 @@
 {
-  "generated": "2026-10-08T13:13:40Z",
+  "generated": "2026-10-09T13:00:21Z",
   "source": "ec2instances.info (Vantage) — public dataset, no credentials",
   "currency": "USD",
   "priceRef": "us-east-1",
@@ -6003,28 +6003,28 @@
           "mem": 192,
           "price": 3.1188,
           "storage": "2 × 7500 GB NVMe SSD",
-          "net": "Up to 25 Gigabit"
+          "net": "25 Gigabit"
         },
         "12xlarge": {
           "vcpu": 48,
           "mem": 384,
           "price": 6.2376,
           "storage": "4 × 7500 GB NVMe SSD",
-          "net": "Up to 50 Gigabit"
+          "net": "50 Gigabit"
         },
         "18xlarge": {
           "vcpu": 72,
           "mem": 576,
           "price": 9.3564,
           "storage": "6 × 7500 GB NVMe SSD",
-          "net": "Up to 75 Gigabit"
+          "net": "75 Gigabit"
         },
         "24xlarge": {
           "vcpu": 96,
           "mem": 768,
           "price": 12.4752,
           "storage": "8 × 7500 GB NVMe SSD",
-          "net": "Up to 100 Gigabit"
+          "net": "100 Gigabit"
         },
         "48xlarge": {
           "vcpu": 192,
@@ -6038,7 +6038,7 @@
           "mem": 768,
           "price": 12.4752,
           "storage": "8 × 7500 GB NVMe SSD",
-          "net": "Up to 100 Gigabit"
+          "net": "100 Gigabit"
         },
         "metal-48xl": {
           "vcpu": 192,
@@ -11094,6 +11094,7 @@
         "ap-northeast-2",
         "ap-south-2",
         "ap-southeast-3",
+        "eu-west-2",
         "sa-east-1",
         "us-east-1",
         "us-west-2"
