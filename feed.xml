@@ -6,7 +6,47 @@
     <atom:link href="https://infraatlas.dev/feed.xml" rel="self" type="application/rss+xml"/>
     <description>A neutral, sourced changelog of cloud infrastructure — new instance families, regions, withdrawals and price moves across AWS, Azure, GCP, OCI and OVHcloud.</description>
     <language>en</language>
-    <lastBuildDate>Fri, 09 Oct 2026 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Sat, 10 Oct 2026 00:00:00 +0000</lastBuildDate>
+    <item>
+      <title>AWS EC2 · m8gb.metal-24xl  13.968 → 6.984  (-50%)</title>
+      <link>https://infraatlas.dev/ec2/</link>
+      <guid isPermaLink="false">ec481f3fa18b815230cc10f12b252d3b</guid>
+      <category>price-change</category>
+      <pubDate>Sat, 10 Oct 2026 00:00:00 +0000</pubDate>
+      <description>AWS EC2 · m8gb.metal-24xl  13.968 → 6.984  (-50%)</description>
+    </item>
+    <item>
+      <title>AWS EC2 · r8gb.metal-24xl  17.4893 → 8.7446  (-50%)</title>
+      <link>https://infraatlas.dev/ec2/</link>
+      <guid isPermaLink="false">a86554fde186f0aacd4c288ed5b5bc9f</guid>
+      <category>price-change</category>
+      <pubDate>Sat, 10 Oct 2026 00:00:00 +0000</pubDate>
+      <description>AWS EC2 · r8gb.metal-24xl  17.4893 → 8.7446  (-50%)</description>
+    </item>
+    <item>
+      <title>AWS EC2 · c8gd now in ap-northeast-2, ap-south-1, eu-north-1</title>
+      <link>https://infraatlas.dev/ec2/</link>
+      <guid isPermaLink="false">aded0f9efa85b46b1fc090e499354183</guid>
+      <category>availability-added</category>
+      <pubDate>Sat, 10 Oct 2026 00:00:00 +0000</pubDate>
+      <description>AWS EC2 · c8gd now in ap-northeast-2, ap-south-1, eu-north-1</description>
+    </item>
+    <item>
+      <title>AWS EC2 · m9g now in ap-southeast-5, eu-south-2</title>
+      <link>https://infraatlas.dev/ec2/</link>
+      <guid isPermaLink="false">2fb54c9ca11550d31888b6516fa5f152</guid>
+      <category>availability-added</category>
+      <pubDate>Sat, 10 Oct 2026 00:00:00 +0000</pubDate>
+      <description>AWS EC2 · m9g now in ap-southeast-5, eu-south-2</description>
+    </item>
+    <item>
+      <title>AWS EC2 · m9gd now in ap-southeast-5, eu-south-2</title>
+      <link>https://infraatlas.dev/ec2/</link>
+      <guid isPermaLink="false">5ecbb45ff4ad2d597bd870ea8de6b0d8</guid>
+      <category>availability-added</category>
+      <pubDate>Sat, 10 Oct 2026 00:00:00 +0000</pubDate>
+      <description>AWS EC2 · m9gd now in ap-southeast-5, eu-south-2</description>
+    </item>
     <item>
       <title>AWS EC2 · p6-b300 now in eu-west-2</title>
       <link>https://infraatlas.dev/ec2/</link>
