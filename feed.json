@@ -1,6 +1,36 @@
 {
-  "generated": "2026-10-09T13:00:21Z",
+  "generated": "2026-10-10T12:17:12Z",
   "entries": [
+    {
+      "ts": "2026-10-10",
+      "instrument": "ec2",
+      "kind": "price-change",
+      "text": "m8gb.metal-24xl  13.968 → 6.984  (-50%)"
+    },
+    {
+      "ts": "2026-10-10",
+      "instrument": "ec2",
+      "kind": "price-change",
+      "text": "r8gb.metal-24xl  17.4893 → 8.7446  (-50%)"
+    },
+    {
+      "ts": "2026-10-10",
+      "instrument": "ec2",
+      "kind": "availability-added",
+      "text": "c8gd now in ap-northeast-2, ap-south-1, eu-north-1"
+    },
+    {
+      "ts": "2026-10-10",
+      "instrument": "ec2",
+      "kind": "availability-added",
+      "text": "m9g now in ap-southeast-5, eu-south-2"
+    },
+    {
+      "ts": "2026-10-10",
+      "instrument": "ec2",
+      "kind": "availability-added",
+      "text": "m9gd now in ap-southeast-5, eu-south-2"
+    },
     {
       "ts": "2026-10-09",
       "instrument": "ec2",

@@ -1,5 +1,5 @@
 {
-  "generated": "2026-10-09T13:00:21Z",
+  "generated": "2026-10-10T12:17:12Z",
   "source": "ec2instances.info (Vantage) — public dataset, no credentials",
   "currency": "USD",
   "priceRef": "us-east-1",
@@ -2808,6 +2808,8 @@
       },
       "in": [
         "ap-northeast-1",
+        "ap-northeast-2",
+        "ap-south-1",
         "ap-southeast-1",
         "ap-southeast-2",
         "ap-southeast-5",
@@ -2815,6 +2817,7 @@
         "ap-southeast-7",
         "ca-central-1",
         "eu-central-1",
+        "eu-north-1",
         "eu-south-2",
         "eu-west-1",
         "eu-west-2",
@@ -6024,7 +6027,7 @@
           "mem": 768,
           "price": 12.4752,
           "storage": "8 × 7500 GB NVMe SSD",
-          "net": "100 Gigabit"
+          "net": "Up to 100 Gigabit"
         },
         "48xlarge": {
           "vcpu": 192,
@@ -9196,7 +9199,7 @@
         "metal-24xl": {
           "vcpu": 96,
           "mem": 384,
-          "price": 13.968,
+          "price": 6.984,
           "net": "200 Gigabit"
         },
         "metal-48xl": {
@@ -10397,7 +10400,9 @@
         "ap-northeast-1",
         "ap-southeast-1",
         "ap-southeast-2",
+        "ap-southeast-5",
         "eu-central-1",
+        "eu-south-2",
         "eu-west-1",
         "us-east-1",
         "us-east-2",
@@ -10507,7 +10512,9 @@
         "ap-northeast-1",
         "ap-southeast-1",
         "ap-southeast-2",
+        "ap-southeast-5",
         "eu-central-1",
+        "eu-south-2",
         "eu-west-1",
         "us-east-1",
         "us-east-2",
@@ -13537,7 +13544,7 @@
         "metal-24xl": {
           "vcpu": 96,
           "mem": 768,
-          "price": 17.4893,
+          "price": 8.7446,
           "net": "200 Gigabit"
         },
         "metal-48xl": {
