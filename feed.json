@@ -1,6 +1,42 @@
 {
-  "generated": "2026-10-10T12:17:12Z",
+  "generated": "2026-10-13T13:59:26Z",
   "entries": [
+    {
+      "ts": "2026-10-13",
+      "instrument": "ec2",
+      "kind": "availability-added",
+      "text": "c9g now in ap-northeast-2, ap-southeast-1, ap-southeast-5"
+    },
+    {
+      "ts": "2026-10-13",
+      "instrument": "ec2",
+      "kind": "availability-added",
+      "text": "c9gd now in ap-northeast-2, ap-southeast-1, ap-southeast-5"
+    },
+    {
+      "ts": "2026-10-13",
+      "instrument": "ec2",
+      "kind": "availability-added",
+      "text": "g7e now in ap-southeast-5"
+    },
+    {
+      "ts": "2026-10-13",
+      "instrument": "ec2",
+      "kind": "availability-added",
+      "text": "m8gd now in ap-southeast-1, eu-north-1, us-west-1"
+    },
+    {
+      "ts": "2026-10-13",
+      "instrument": "ec2",
+      "kind": "availability-added",
+      "text": "m8id now in ap-southeast-2, ap-southeast-5"
+    },
+    {
+      "ts": "2026-10-13",
+      "instrument": "ec2",
+      "kind": "availability-added",
+      "text": "r7gd now in ca-central-1, ca-west-1, eu-central-2"
+    },
     {
       "ts": "2026-10-10",
       "instrument": "ec2",
