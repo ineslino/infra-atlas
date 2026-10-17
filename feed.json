@@ -1,6 +1,18 @@
 {
-  "generated": "2026-10-13T13:59:26Z",
+  "generated": "2026-10-17T10:28:42Z",
   "entries": [
+    {
+      "ts": "2026-10-17",
+      "instrument": "ec2",
+      "kind": "availability-added",
+      "text": "t8i now in sa-east-1"
+    },
+    {
+      "ts": "2026-10-17",
+      "instrument": "ec2",
+      "kind": "availability-added",
+      "text": "trn2 now in ap-south-2"
+    },
     {
       "ts": "2026-10-13",
       "instrument": "ec2",
