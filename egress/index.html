@@ -371,8 +371,9 @@ a:focus-visible, button:focus-visible, input:focus-visible, [tabindex]:focus-vis
   .colophon { grid-template-columns: 1fr; gap: 24px; }
 }
 </style>
+<link rel="stylesheet" href="/assets/task-first.css?v=1">
 </head>
-<body>
+<body data-task-first>
 
 <div class="grain"></div>
 <div class="scanlines"></div>
@@ -406,12 +407,6 @@ a:focus-visible, button:focus-visible, input:focus-visible, [tabindex]:focus-vis
 
   <main id="ia-main">
 
-  <div class="readnote">
-    <span class="readnote__mark">*</span>
-    <p class="readnote__text">
-      <strong>Egress pricing is conditional.</strong> Free monthly tiers, same-region exemptions, CDN-routed discounts and committed-use deals all move the real number. The per-GB rate <em>steps down with volume</em> — so each route shows the whole ladder, not one headline. Read every figure as a US-dollar <em>list</em> price, never the invoiced price. Click any cloud for the note and the vendor source.
-    </p>
-  </div>
 
   <section class="filters">
     <div class="filter-search">
@@ -424,9 +419,16 @@ a:focus-visible, button:focus-visible, input:focus-visible, [tabindex]:focus-vis
 
   <div class="sr-only" id="filter-status" role="status" aria-live="polite"></div>
 
+  <div class="readnote">
+    <span class="readnote__mark">*</span>
+    <p class="readnote__text">
+      <strong>Egress pricing is conditional.</strong> Free monthly tiers, same-region exemptions, CDN-routed discounts and committed-use deals all move the real number. The per-GB rate <em>steps down with volume</em> — so each route shows the whole ladder, not one headline. Read every figure as a US-dollar <em>list</em> price, never the invoiced price. Click any cloud for the note and the vendor source.
+    </p>
+  </div>
+
   <div class="legend">
     <span class="legend__label">Legend</span>
-    <span class="legend__item"><span class="legend__dot" style="background:rgba(255,120,73,0.5)"></span> Bar — relative $/GB within a route (shorter = cheaper)</span>
+    <span class="legend__item"><span class="legend__dot" style="background:rgba(255,120,73,0.5)"></span> Bar — rate per decimal GB within a route; billing labels keep GB/GiB</span>
     <span class="legend__item"><span class="legend__dot" style="background:var(--mint)"></span> Free — no charge for this transfer</span>
     <span class="legend__item"><span class="legend__star">*</span> Click any cloud for the note &amp; source</span>
   </div>
@@ -627,13 +629,20 @@ const rateOf = (t, k) => t.rates[k] || { level: "na", headline: "—", note: "" 
 const isTiered = (t) => PROVIDERS.some(p => (rateOf(t, p.key).tiers || []).length > 1);
 // Pull the leading number out of a headline ("$0.09 /GB" → 0.09) for bar scaling.
 const parseRate = (h) => { const m = String(h).match(/([\d.]+)/); return m ? parseFloat(m[1]) : 0; };
-// Highest $/unit anywhere in a route — the 100%-width reference for the ladder bars.
+// Normalize rates by byte volume; billing labels and tier boundaries remain unchanged.
+function ratePerGb(rate, unit) {
+  if (unit === "GB") return rate;
+  if (unit === "GiB") return rate * 1e9 / (2 ** 30);
+  return null;
+}
+
+// The largest normalized rate defines the shared ladder scale for this route.
 function routeMaxUsd(t) {
   let max = 0;
   PROVIDERS.forEach(p => {
     const r = rateOf(t, p.key);
-    (r.tiers || []).forEach(x => { if (x.usd > max) max = x.usd; });
-    if (r.level === "rate") { const n = parseRate(r.headline); if (n > max) max = n; }
+    (r.tiers || []).forEach(x => { const n = ratePerGb(x.usd, r.unit); if (n > max) max = n; });
+    if (r.level === "rate") { const n = ratePerGb(parseRate(r.headline), r.unit); if (n > max) max = n; }
   });
   return max;
 }
@@ -725,8 +734,9 @@ function providerPanel(t, p, tiered, maxUsd) {
     body = `<div class="ladder">` + r.tiers.map(x => {
       const free = x.usd === 0;
       const price = free ? "Free" : `$${x.usd} /${escapeHtml(r.unit)}`;
-      const w = (!free && maxUsd > 0) ? Math.max(4, Math.round(x.usd / maxUsd * 100)) : 0;
-      const bar = free ? "" : `<span class="rung__bar" style="width:${w}%"></span>`;
+      const normalized = ratePerGb(x.usd, r.unit);
+      const w = (!free && normalized != null && maxUsd > 0) ? Math.round(normalized / maxUsd * 100) : 0;
+      const bar = w > 0 ? `<span class="rung__bar" aria-hidden="true" style="width:${w}%"></span>` : "";
       return `<div class="rung">${bar}<span class="rung__band">${escapeHtml(x.band)}</span><span class="rung__price ${free ? "rung__price--free" : ""}">${price}</span></div>`;
     }).join("") + `</div>`;
   } else {
@@ -881,6 +891,6 @@ function bootstrap() {
 bootstrap();
 </script>
 <script src="/assets/matrix.js?v=5" defer></script>
-<script src="/nav.js?v=9" defer></script>
+<script src="/nav.js?v=10" defer></script>
 </body>
 </html>
