@@ -60,7 +60,7 @@
     t.src = '/assets/three.min.js';
     t.onload = function () {
       var g = document.createElement('script');
-      g.src = '/globe.js?v=2';
+      g.src = '/globe.js?v=3';
       document.head.appendChild(g);
     };
     document.head.appendChild(t);
@@ -134,16 +134,6 @@ body {
   overflow-x: hidden;
 }
 
-.grain {
-  pointer-events: none;
-  position: fixed;
-  inset: 0;
-  z-index: 100;
-  opacity: 0.08;
-  mix-blend-mode: overlay;
-  background-image: url("data:image/svg+xml;utf8,<svg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.6 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
-}
-
 .scanlines {
   pointer-events: none;
   position: fixed;
@@ -153,8 +143,8 @@ body {
     180deg,
     transparent,
     transparent 2px,
-    rgba(244,239,230,0.012) 2px,
-    rgba(244,239,230,0.012) 3px
+    rgba(244,239,230,0.005) 2px,
+    rgba(244,239,230,0.005) 3px
   );
 }
 
@@ -1118,11 +1108,23 @@ body {
 /* Keep functional controls readable and comfortable to tap. */
 .ia-filter__chip, .ia-pageindex__item, .hero__popular a { min-height: 44px; }
 .hero__popular a { display: inline-flex; align-items: center; }
+/* Fade the decorative globe behind copy without affecting its animation. */
+#ia-globe {
+  -webkit-mask-image: linear-gradient(to right, transparent, rgba(0,0,0,.18) 35%, #000 70%);
+  mask-image: linear-gradient(to right, transparent, rgba(0,0,0,.18) 35%, #000 70%);
+}
+/* Give common tasks a clear, touch-friendly entry point over the globe. */
+.hero__popular { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+.hero__popular-label { grid-column: 1 / -1; margin-bottom: 2px; }
+.hero__popular a { display: flex; justify-content: space-between; align-items: center; gap: 12px; min-height: 48px; padding: 12px 14px; border: 1px solid var(--line-2); border-radius: 6px; background: rgba(16,14,12,.86); color: var(--paper-2); font-family: var(--sans); font-size: 12px; transition: background .18s, border-color .18s; }
+.hero__popular a > span:last-child { color: var(--accent); }
+.hero__popular a:hover { background: var(--surface-2); border-color: var(--accent); color: var(--paper); }
+.hero__search { min-height: 52px; background: rgba(22,19,16,.94); }
+@media (max-width: 380px) { .hero__popular { grid-template-columns: 1fr; } }
 </style>
 </head>
 <body>
 
-<div class="grain"></div>
 <div class="scanlines"></div>
 <div class="corner-mark tl"></div>
 <div class="corner-mark tr"></div>
@@ -1153,11 +1155,11 @@ body {
           <kbd class="hero__search-kbd" aria-hidden="true">⌘K</kbd>
         </button>
         <div class="hero__popular">
-          <span class="hero__popular-label" aria-hidden="true">Popular</span>
-          <a href="./equivalent-sku/">Find equivalent instances</a>
-          <a href="./ec2/">Check EC2 availability</a>
-          <a href="./ai-atlas/">Compare AI platforms</a>
-          <a href="./networking-matrix/">Compare network services</a>
+          <span class="hero__popular-label" aria-hidden="true">Start with a task</span>
+          <a href="./equivalent-sku/"><span>Find equivalent instances</span><span aria-hidden="true">→</span></a>
+          <a href="./ec2/"><span>Check EC2 availability</span><span aria-hidden="true">→</span></a>
+          <a href="./ai-atlas/"><span>Compare AI platforms</span><span aria-hidden="true">→</span></a>
+          <a href="./networking-matrix/"><span>Compare network services</span><span aria-hidden="true">→</span></a>
         </div>
       </div>
     </div>

@@ -67,12 +67,12 @@ body {
 }
 
 .grain {
-  pointer-events: none; position: fixed; inset: 0; z-index: 100; opacity: 0.08; mix-blend-mode: overlay;
+  pointer-events: none; position: fixed; inset: 0; z-index: 100; opacity: 0.035; mix-blend-mode: overlay;
   background-image: url("data:image/svg+xml;utf8,<svg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.6 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
 }
 .scanlines {
   pointer-events: none; position: fixed; inset: 0; z-index: 99;
-  background: repeating-linear-gradient(180deg, transparent, transparent 2px, rgba(244,239,230,0.012) 2px, rgba(244,239,230,0.012) 3px);
+  background: repeating-linear-gradient(180deg, transparent, transparent 2px, rgba(244,239,230,0.005) 2px, rgba(244,239,230,0.005) 3px);
 }
 ::selection { background: var(--accent); color: var(--ink); }
 :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 2px; }
@@ -157,11 +157,35 @@ body {
   .masthead__status { text-align: left; }
   .cmap-index__grid { grid-template-columns: 1fr; gap: 22px; }
 }
-/* Narrow screens: the graph gets cramped — hide it, lean on the index list */
+/* Keep the graph readable on narrow screens with a scrollable viewport. */
 @media (max-width: 680px) {
-  .cmap-wrap { display: none; }
+  .cmap-wrap { overflow-x: auto; }
+  .cmap { min-width: 760px; }
   .cmap-index__intro { margin-top: 4px; }
 }
+/* Search and department controls work equally with the map and the list. */
+.map-controls { display: flex; align-items: end; gap: 12px; margin-bottom: 12px; }
+.map-controls label { display: flex; flex-direction: column; gap: 7px; color: var(--paper-2); font-size: 12px; }
+.map-search { flex: 1; }
+.map-controls input, .map-controls select, .map-reset { min-height: 46px; border: 1px solid var(--line-2); border-radius: 6px; background: var(--surface); color: var(--paper); padding: 10px 14px; font: inherit; }
+.map-controls input { width: 100%; }
+.map-controls input::placeholder { color: var(--paper-3); }
+.map-reset { cursor: pointer; font-size: 13px; }
+.map-reset:hover { border-color: var(--accent); }
+.map-results { font-family: var(--mono); font-size: 11px; color: var(--paper-2); margin-bottom: 22px; }
+.cmap-wrap { border-color: var(--line-2); background: radial-gradient(ellipse at 50% 40%, var(--surface), var(--ink) 78%); }
+.cmap__label { font-size: 11px; fill: var(--paper); }
+.cmap__node, .cmap__edge { transition: opacity .18s; }
+.cmap-dept__list a { min-height: 44px; display: flex; align-items: center; border-bottom-color: var(--line); border-radius: 0; }
+[hidden] { display: none !important; }
+@media (max-width: 680px) {
+  .map-controls { flex-wrap: wrap; }
+  .map-search { flex-basis: 100%; }
+  .map-group { flex: 1; min-width: 0; }
+  .map-group select { width: 100%; }
+  .cmap-wrap { margin-bottom: 24px; }
+}
+@media (prefers-reduced-motion: reduce) { .cmap__node, .cmap__edge { transition: none; } }
 </style>
 </head>
 <body>
@@ -185,6 +209,18 @@ body {
 
   <main id="ia-main">
 
+    <form class="map-controls" role="search" onsubmit="return false">
+      <label class="map-search" for="map-search">Find an instrument
+        <input id="map-search" type="search" placeholder="Try Kubernetes, IAM or EC2…" autocomplete="off" aria-controls="cmap-wrap cmap-index">
+      </label>
+      <label class="map-group" for="map-group">Department
+        <select id="map-group" aria-controls="cmap-wrap cmap-index">
+          <option value="">All departments</option><option>Cloud Compute</option><option>API Management</option><option>Cross-Cloud</option>
+        </select>
+      </label>
+      <button class="map-reset" type="reset">Reset view</button>
+    </form>
+    <p class="map-results" id="map-results" role="status" aria-live="polite"></p>
     <div class="cmap-legend" aria-hidden="true">
       <span class="cmap-legend__label">Departments</span>
       <span class="cmap-legend__item"><span class="cmap-legend__dot" style="background:var(--sky)"></span>Cloud Compute</span>
@@ -193,7 +229,7 @@ body {
       <span class="cmap-legend__hint">Hover a star to trace its links · click to open</span>
     </div>
 
-    <div class="cmap-wrap" id="cmap-wrap"><!-- SVG injected by JS --></div>
+    <div class="cmap-wrap" id="cmap-wrap" tabindex="0" role="region" aria-label="Instrument map, scroll horizontally on small screens"><!-- SVG injected by JS --></div>
 
     <nav class="cmap-index" aria-label="All instruments">
       <div class="cmap-index__intro">All instruments</div>
@@ -262,7 +298,7 @@ body {
     });
 
     // ── Build the SVG ──
-    var svg = '<svg class="cmap" viewBox="0 0 1000 760" role="img" '
+    var svg = '<svg class="cmap" viewBox="0 0 1000 760" role="group" '
             + 'aria-label="Constellation of ' + nodes.length + ' instruments in 3 departments. '
             + 'The grouped list below is the navigable index.">';
     // edges first (under the nodes)
@@ -336,10 +372,50 @@ body {
           +    '<h2 class="cmap-dept__name"><span class="cmap-dept__dot" style="background:' + g.color + '"></span>'
           +      esc(g.key) + ' · ' + arr.length + '</h2>'
           +    '<ul class="cmap-dept__list">'
-          +      arr.map(function (n) { return '<li><a href="' + esc(n.href) + '">' + esc(n.name) + '</a></li>'; }).join("")
+          +      arr.map(function (n) { return '<li data-href="' + esc(n.href) + '"><a href="' + esc(n.href) + '">' + esc(n.name) + '</a></li>'; }).join("")
           +    '</ul></section>';
     });
     document.getElementById("cmap-index").innerHTML = idx;
+
+    // Keep search results, links and graph in sync without changing the catalogue.
+    var search = document.getElementById("map-search");
+    var department = document.getElementById("map-group");
+    function filterMap() {
+      var query = search.value.trim().toLowerCase();
+      var visible = {};
+      nodes.forEach(function (n) {
+        visible[n.href] = (!department.value || n.group === department.value) &&
+          (n.name + " " + n.group + " " + n.href).toLowerCase().includes(query);
+      });
+      clearFocus();
+      svgEl.querySelectorAll(".cmap__node").forEach(function (a) {
+        a.style.display = visible[a.getAttribute("data-id")] ? "" : "none";
+      });
+      svgEl.querySelectorAll(".cmap__edge").forEach(function (edge) {
+        edge.style.display = visible[edge.getAttribute("data-a")] && visible[edge.getAttribute("data-b")] ? "" : "none";
+      });
+      document.querySelectorAll(".cmap-dept").forEach(function (section) {
+        var count = 0;
+        section.querySelectorAll("li").forEach(function (item) {
+          item.hidden = !visible[item.getAttribute("data-href")];
+          if (!item.hidden) count++;
+        });
+        section.hidden = count === 0;
+        var heading = section.querySelector("h2");
+        heading.lastChild.textContent = heading.lastChild.textContent.split(" · ")[0] + " · " + count;
+      });
+      var count = nodes.filter(function (n) { return visible[n.href]; }).length;
+      document.getElementById("map-results").textContent = count ? count + " of " + nodes.length + " instruments · select a name to open" : "No instruments found. Try a different term or reset the view.";
+      wrap.hidden = count === 0;
+    }
+    search.addEventListener("input", filterMap);
+    department.addEventListener("change", filterMap);
+    document.querySelector(".map-controls").addEventListener("reset", function () {
+      search.value = "";
+      department.value = "";
+      filterMap();
+    });
+    filterMap();
   }
 
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init);

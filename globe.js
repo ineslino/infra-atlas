@@ -92,7 +92,7 @@
   canvas.style.cssText =
     'position:fixed;inset:0;width:100vw;height:100vh;' +
     'z-index:0;pointer-events:none;' +
-    'opacity:1;';
+    'opacity:0.72;';
   document.body.prepend(canvas);
 
   var renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: !MOBILE, alpha: true });
@@ -103,10 +103,12 @@
   /* ── Scene + camera ──────────────────────────────────────────── */
   var scene  = new THREE.Scene();
   var camera = new THREE.PerspectiveCamera(45, W / H, 0.1, 100);
-  camera.position.z = 2.85;
+  camera.position.z = 3.25;
 
   /* ── Globe group (all 3D objects live here for unified rotation) */
   var globe = new THREE.Group();
+  // Keep the illuminated hemisphere beside the hero copy.
+  globe.position.x = 0.48;
   globe.rotation.x = -0.12;
   globe.rotation.y = -0.28;
   scene.add(globe);
