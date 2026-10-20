@@ -39,11 +39,13 @@
 
 /* ─────────── RESULTS ─────────── */
 .tco-summary { grid-column: 1 / -1; overflow-x: auto; margin-bottom: 14px; border: 1px solid var(--line); border-radius: 5px; background: var(--surface); }
-.tco-summary table { width: 100%; min-width: 620px; border-collapse: collapse; font-family: var(--mono); font-size: 10.5px; }
-.tco-summary caption { padding: 12px 14px 8px; text-align: left; color: var(--paper-2); font-size: 11px; }
+.tco-summary table { width: 100%; min-width: 620px; border-collapse: collapse; font-family: var(--mono); font-size: 14px; }
+.tco-summary caption { padding: 12px 14px 8px; text-align: left; color: var(--paper-2); font-size: 14px; }
 .tco-summary th, .tco-summary td { padding: 9px 14px; border-top: 1px solid var(--line); text-align: left; vertical-align: top; }
 .tco-summary th { color: var(--paper-3); font-size: 9.5px; letter-spacing: 0.12em; text-transform: uppercase; font-weight: 500; }
 .tco-summary td:last-child { color: var(--paper-2); }
+.tco-summary:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+.tco-summary .tco-partial { text-transform: none; letter-spacing: normal; }
 .tco-summary__complete { color: var(--mint); }
 .tco-summary__partial, .tco-summary__na { color: var(--paper-3); }
 .results { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 14px; margin-bottom: 32px; }
@@ -62,7 +64,7 @@
   border-radius: 3px; padding: 9px 10px; font-family: var(--mono); font-size: 12px; outline: none;
 }
 .tco-card select:focus { border-color: var(--accent); }
-.tco-card__specs { font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.04em; color: var(--paper-3); }
+.tco-card__specs { font-family: var(--mono); font-size: 14px; letter-spacing: 0.04em; color: var(--paper-3); }
 .tco-card__regions { display: flex; flex-direction: column; gap: 5px; }
 .tco-card__regions label { font-family: var(--mono); font-size: 9px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--paper-3); }
 .tco-card__avail { font-family: var(--mono); font-size: 10px; color: var(--paper-3); }
@@ -70,7 +72,7 @@
 .tco-card__total-label { font-family: var(--mono); font-size: 9px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--paper-3); }
 .tco-card__total { font-family: var(--serif); font-style: italic; font-size: 38px; line-height: 1; color: var(--paper); letter-spacing: -0.012em; margin-top: 2px; }
 .tco-card__total .unit { font-size: 15px; color: var(--paper-3); margin-left: 4px; }
-.tco-card__delta { font-family: var(--mono); font-size: 10.5px; color: var(--paper-3); }
+.tco-card__delta { font-family: var(--mono); font-size: 14px; color: var(--paper-3); }
 .tco-card__delta.is-up { color: var(--rose); }
 .tco-card__delta.is-down { color: var(--mint); }
 .tco-card__bd { font-family: var(--mono); font-size: 11px; color: var(--paper-2); display: flex; flex-direction: column; gap: 4px; border-top: 1px solid var(--line); padding-top: 10px; }
@@ -80,8 +82,16 @@
 .tco-card__why { display: flex; flex-wrap: wrap; gap: 4px; }
 .tco-card__chip { font-family: var(--mono); font-size: 9px; letter-spacing: 0.02em; padding: 2px 6px; border-radius: 2px; border: 1px solid var(--line-2); color: var(--paper-3); }
 
-.status-note { font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.06em; color: var(--paper-3); margin: -18px 0 26px; }
+.status-note { font-family: var(--mono); font-size: 14px; letter-spacing: 0.06em; color: var(--paper-3); margin: -18px 0 26px; }
 .status-note.is-err { color: var(--rose); }
+/* Keep errors, missing specifications and dates readable beside the decision. */
+.field__error, .tco-input-status { color: var(--rose); font-size: 14px; line-height: 1.5; }
+.field__error { display: block; margin-top: 6px; }
+.field__error[hidden] { display: none; }
+.panel input[aria-invalid="true"] { border-color: var(--rose); }
+.tco-card__score { font-size: 13px; }
+.tco-partial { display: block; color: var(--gold); font-size: 13px; line-height: 1.5; margin-top: 6px; }
+.tco-dates { display: block; color: var(--paper-2); font-size: 13px; line-height: 1.5; margin-top: 8px; }
 
 @media (max-width: 1000px) { .panel { grid-template-columns: 1fr 1fr; } }
 @media (max-width: 560px) { .panel { grid-template-columns: 1fr; } }
@@ -97,7 +107,7 @@
   <header class="masthead">
     <a class="eyebrow" href="../"><span class="arrow">←</span> Infra Atlas · Calculators</a>
     <h1 class="title">Cross-Cloud <em>TCO.</em></h1>
-    <p class="subtitle">Compare monthly <em>compute plus internet egress</em> for equivalent instances. Pick an instance; the comparator pulls its closest equivalent on every other cloud — the same transparent scoring as the <a href="/equivalent-sku/">Equivalent-SKU Finder</a> — using the live catalogues and the <a href="/egress/">Egress Cost Map</a>. List prices, honestly footnoted.</p>
+    <p class="subtitle">Compare monthly <em>compute plus internet egress</em> for equivalent instances. Pick an instance; the comparator pulls its closest equivalent on every other cloud — the same transparent scoring as the <a href="/equivalent-sku/">Equivalent-SKU Finder</a> — using the published catalogue files and the <a href="/egress/">Egress Cost Map</a>. List prices, honestly footnoted.</p>
   </header>
 
   <main id="ia-main">
@@ -114,15 +124,18 @@
       </div>
       <div class="field">
         <label class="field__label" for="count">Instances</label>
-        <input id="count" type="number" min="1" max="10000" step="1" value="1" inputmode="numeric" autocomplete="off">
+        <input id="count" type="number" min="1" max="10000" step="1" value="1" inputmode="numeric" autocomplete="off" required aria-describedby="count-error">
+        <span class="field__error" id="count-error" hidden></span>
       </div>
       <div class="field">
         <label class="field__label" for="hours">Hours / month</label>
-        <input id="hours" type="number" min="1" max="744" step="1" value="730" inputmode="numeric" autocomplete="off">
+        <input id="hours" type="number" min="1" max="744" step="1" value="730" inputmode="numeric" autocomplete="off" required aria-describedby="hours-error">
+        <span class="field__error" id="hours-error" hidden></span>
       </div>
       <div class="field">
         <label class="field__label" for="egress">Internet egress / month</label>
-        <input id="egress" type="number" min="0" step="any" value="1" inputmode="decimal" autocomplete="off">
+        <input id="egress" type="number" min="0" step="any" value="1" inputmode="decimal" autocomplete="off" required aria-describedby="egress-error">
+        <span class="field__error" id="egress-error" hidden></span>
       </div>
       <div class="field">
         <label class="field__label">Unit</label>
@@ -136,9 +149,11 @@
       <button type="button" data-share>Copy link to this comparison</button>
     </div>
 
-    <div class="status-note" id="status-note">Loading the live catalogues…</div>
+    <div class="status-note" id="status-note">Loading catalogue files…</div>
 
     <!-- Results -->
+    <p class="tco-input-status" id="input-status" role="status" aria-live="polite"></p>
+
     <section class="results" id="results" aria-live="polite" aria-label="Monthly cost comparison"></section>
 
     <!-- Provenance — rendered from the live catalogue metadata -->
@@ -214,7 +229,7 @@ function renderProvenance() {
     const d = state.data[cid];
     if (!d) return;
     const p = PROV[cid];
-    const fresh = d.generated ? `refreshed <span class="prov__fresh">${esc(String(d.generated).slice(0, 10))}</span>` : "";
+    const fresh = d.generated ? `file generated <span class="prov__fresh">${esc(String(d.generated).slice(0, 10))}</span>` : "";
     rows.push(`<div class="prov__row">${tierChip(p.tier)}<span><strong>${CLOUDS[cid].label} compute</strong> —
       list prices from <a href="/${CLOUDS[cid].slug}/data.json">${CLOUDS[cid].slug}/data.json</a> ${fresh}
       · upstream <a href="${p.url}" target="_blank" rel="noopener">${esc(p.upstream)}</a></span></div>`);
@@ -342,6 +357,8 @@ function writeHash() {
 function applyHash() {
   const p = new URLSearchParams(location.hash.slice(1));
   const src = p.get("src");
+  // Omitted workload parameters in a shared source link mean the documented defaults.
+  if (src) { state.count = 1; state.hours = 730; state.gb = 1024; }
   if (src && src.includes("/")) {
     const [cid, ...rest] = src.split("/");
     const name = rest.join("/");
@@ -398,15 +415,59 @@ function buildTypeSelect(sel, cid, current) {
       + "</optgroup>").join("");
 }
 
+// Validate visible values before updating state, estimates or the shareable URL.
+function validateWorkload() {
+  const messages = {
+    count: "Enter a whole number from 1 to 10000.",
+    hours: "Enter a whole number from 1 to 744.",
+    egress: "Enter a finite amount of 0 or more that can be calculated in the selected unit.",
+  };
+  let valid = true;
+  Object.keys(messages).forEach((id) => {
+    const input = $("#" + id);
+    const scaled = input.valueAsNumber * (id === "egress" && state.unit === "TB" ? 1024 : 1);
+    const ok = input.validity.valid && Number.isFinite(scaled);
+    const error = $("#" + id + "-error");
+    error.hidden = ok;
+    error.textContent = ok ? "" : messages[id];
+    if (ok) input.removeAttribute("aria-invalid");
+    else { input.setAttribute("aria-invalid", "true"); valid = false; }
+  });
+  $("#input-status").textContent = valid ? "" : "Estimates paused. Correct the highlighted fields to calculate and share this comparison.";
+  document.querySelector("[data-share]").disabled = !valid;
+  if (valid) {
+    state.count = $("#count").valueAsNumber;
+    state.hours = $("#hours").valueAsNumber;
+    state.gb = $("#egress").valueAsNumber * (state.unit === "TB" ? 1024 : 1);
+  }
+  return valid;
+}
+
+// Generation and verification dates convey different evidence; neither implies a fresh fetch.
+function sourceDateLabel(value, now = new Date()) {
+  const date = value ? new Date(value) : new Date(NaN);
+  if (isNaN(date.getTime())) return "date unavailable";
+  const age = Math.round((Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate())
+    - Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate())) / 86400000);
+  return date.toISOString().slice(0, 10) + (age < 0 ? " (future date; verify)" : age === 0 ? " (today)" : " (" + age + " days old)");
+}
+
+function renderSourceDates(cid) {
+  const compute = "Compute file: " + sourceDateLabel(state.data[cid].generated);
+  const egress = EGRESS[cid] ? "Egress verified: " + sourceDateLabel(EGRESS_VERIFIED) : "Egress: not mapped";
+  return `<span class="tco-dates">${esc(compute)}<br>${esc(egress)}</span>`;
+}
+
 // ─── Render ───
 function render() {
   const results = $("#results");
+  if (!validateWorkload()) { results.innerHTML = ""; return false; }
   const active = document.activeElement;
   const restoreFocus = active instanceof HTMLSelectElement && results.contains(active)
     ? (active.dataset.choose ? { type: "choose", cid: active.dataset.choose } : active.dataset.region !== undefined ? { type: "region", cid: active.dataset.region } : null)
     : null;
   const src = instOf(state.srcCloud, state.srcName);
-  if (!src) { results.innerHTML = ""; return; }
+  if (!src) { results.innerHTML = ""; return false; }
 
   const cards = [];
   const totals = {};
@@ -420,7 +481,8 @@ function render() {
     const egressM = egressCost(cid, state.gb);
     const total = computeM != null ? computeM + (egressM ?? 0) : null;
     if (total != null && egressM != null) totals[cid] = total; // full pricing only
-    cards.push({ cid, isSrc, inst, cur, computeM, egressM, total });
+    const score = !isSrc && src.v && inst.v ? scoreCandidate(src, inst) : null;
+    cards.push({ cid, isSrc, inst, cur, computeM, egressM, total, score });
   });
 
   // crown a cheapest only among full totals in the SAME currency as the
@@ -444,12 +506,12 @@ function render() {
         ? '<span class="tco-summary__partial">Compute only; egress unmapped</span>'
         : `<span class="tco-summary__complete">${money(c.total, c.cur)} complete</span>`;
     const egress = c.egressM != null ? money(c.egressM, "USD") : '<span class="tco-summary__na">Unmapped</span>';
-    return `<tr><th scope="row">${esc(CLOUDS[c.cid].label)}</th><td>${c.computeM != null ? money(c.computeM, c.cur) : '<span class="tco-summary__na">Unavailable</span>'}</td><td>${egress}</td><td>${totalState}</td></tr>`;
+    return `<tr><th scope="row">${esc(CLOUDS[c.cid].label)}${c.score && !c.score.memScored ? '<span class="tco-partial">Partial match · memory unavailable</span>' : ""}</th><td>${c.computeM != null ? money(c.computeM, c.cur) : '<span class="tco-summary__na">Unavailable</span>'}</td><td>${egress}</td><td>${totalState}${renderSourceDates(c.cid)}</td></tr>`;
   }).join("");
 
-  results.innerHTML = `<div class="tco-summary"><table><caption>Aligned monthly comparison. A complete total includes compute and mapped internet egress.</caption><thead><tr><th scope="col">Cloud</th><th scope="col">Compute subtotal</th><th scope="col">Internet egress</th><th scope="col">Monthly total</th></tr></thead><tbody>${summary}</tbody></table></div>` + cards.map((c) => {
+  results.innerHTML = `<div class="tco-summary" role="region" tabindex="0" aria-label="Monthly comparison table; scroll horizontally on narrow screens"><table><caption>Aligned monthly comparison. A complete total includes compute and mapped internet egress.</caption><thead><tr><th scope="col">Cloud</th><th scope="col">Compute subtotal</th><th scope="col">Internet egress</th><th scope="col">Monthly total</th></tr></thead><tbody>${summary}</tbody></table></div>` + cards.map((c) => {
     const meta = CLOUDS[c.cid];
-    const score = !c.isSrc && src.v && c.inst.v ? scoreCandidate(src, c.inst) : null;
+    const score = c.score;
     const regions = state.data[c.cid].regions;
     const availIn = c.inst.inCodes === null ? regions.length : c.inst.inCodes.length;
     const regionSel = `<select data-region="${c.cid}" aria-label="Availability check region for ${esc(meta.label)}">`
@@ -484,11 +546,12 @@ function render() {
         <span class="tco-card__cloud"><span class="dot" style="background:${meta.swatch}"></span>${meta.label}</span>
         ${c.isSrc ? '<span class="tco-card__tag tco-card__tag--src">Source</span>'
           : c.cid === cheapest ? '<span class="tco-card__tag">Cheapest</span>'
-          : score ? `<span class="tco-card__score">match <strong>${score.score}</strong>/100</span>` : ""}
+          : score ? `<span class="tco-card__score">${score.memScored ? "match" : "partial match"} <strong>${score.score}</strong>/100</span>` : ""}
       </div>
       ${c.isSrc ? `<div class="tco-card__specs" style="font-size:12px;color:var(--paper)">${esc(c.inst.n)}</div>`
                 : `<select data-choose="${c.cid}" aria-label="Instance on ${esc(meta.label)}"></select>`}
       <div class="tco-card__specs">${c.inst.v != null ? c.inst.v + " vCPU" : "vCPU n/d"} · ${c.inst.m != null ? c.inst.m + " GB" : "mem n/d"} · ${c.inst.p != null ? money(c.inst.p, c.cur) + "/h" : "price n/d"}</div>
+      ${score && !score.memScored ? '<span class="tco-partial">Partial match · memory unavailable. Confirm memory before comparing workloads.</span>' : ""}
       <div class="tco-card__regions">
         <label>Region check</label>
         ${regionSel}
@@ -496,6 +559,7 @@ function render() {
       </div>
       <div class="tco-card__total-label">${c.computeM == null ? "Monthly total unavailable" : c.egressM == null ? "Compute-only subtotal" : "Complete compute + egress total"}</div>
       <div class="tco-card__total">${c.total != null ? money(c.total, c.cur) : "—"}<span class="unit">/mo</span></div>
+      ${renderSourceDates(c.cid)}
       ${delta}
       <div class="tco-card__bd">${bd}</div>
     </article>`;
@@ -510,10 +574,18 @@ function render() {
     const selector = restoreFocus.type === "choose" ? `select[data-choose="${restoreFocus.cid}"]` : `select[data-region="${restoreFocus.cid}"]`;
     results.querySelector(selector)?.focus();
   }
+  return true;
 }
 
 // ─── Events ───
-function rerender() { writeHash(); render(); }
+// Keep visible inputs aligned when a shared URL changes the workload.
+function syncWorkloadInputs() {
+  $("#count").value = state.count;
+  $("#hours").value = state.hours;
+  $("#egress").value = state.unit === "TB" ? state.gb / 1024 : state.gb;
+}
+
+function rerender() { if (render()) writeHash(); }
 
 document.addEventListener("change", (e) => {
   const t = e.target;
@@ -538,13 +610,7 @@ document.addEventListener("change", (e) => {
 });
 document.addEventListener("input", (e) => {
   const t = e.target;
-  if (t.id === "count") { state.count = Math.max(1, parseInt(t.value || "1", 10) || 1); rerender(); }
-  else if (t.id === "hours") { state.hours = Math.min(744, Math.max(1, parseInt(t.value || "730", 10) || 730)); rerender(); }
-  else if (t.id === "egress") {
-    const v = Math.max(0, parseFloat(t.value || "0") || 0);
-    state.gb = state.unit === "TB" ? v * 1024 : v;
-    rerender();
-  }
+  if (["count", "hours", "egress"].includes(t.id)) rerender();
 });
 document.querySelectorAll(".unit-toggle button").forEach((b) => {
   b.addEventListener("click", () => {
@@ -553,12 +619,11 @@ document.querySelectorAll(".unit-toggle button").forEach((b) => {
       x.classList.toggle("is-active", x === b);
       x.setAttribute("aria-checked", x === b ? "true" : "false");
     });
-    const v = parseFloat($("#egress").value || "0") || 0;
-    state.gb = state.unit === "TB" ? v * 1024 : v;
     rerender();
   });
 });
 document.querySelector("[data-share]").addEventListener("click", function () {
+  if (!validateWorkload()) return;
   if (window.IA && IA.copyText) IA.copyText(location.href, this);
 });
 
@@ -570,21 +635,19 @@ document.querySelector("[data-share]").addEventListener("click", function () {
     if (!r.ok) throw new Error(String(r.status));
     return { cid, flat: flatten(cid, await r.json()) };
   }));
-  let live = 0, newest = "";
+  let live = 0;
   results.forEach((r) => {
     if (r.status === "fulfilled" && r.value.flat) {
       state.data[r.value.cid] = r.value.flat;
       live++;
-      const g = r.value.flat.generated || "";
-      if (g > newest) newest = g;
     }
   });
   if (live < 2) {
-    note.textContent = "Could not load the live catalogues — check the network and reload.";
+    note.textContent = "Could not load catalogue files — check the network and reload.";
     note.classList.add("is-err");
     return;
   }
-  note.textContent = `Live · ${live}/5 catalogues · data ${newest.slice(0, 10) || "—"} · prices are on-demand list prices`;
+  note.textContent = `Fetched · ${live}/5 catalogue files · on-demand list prices. Source dates are shown with each total; compute file generation is not a new vendor price verification.`;
   renderProvenance();
 
   state.srcName = "m5.xlarge";
@@ -594,9 +657,7 @@ document.querySelector("[data-share]").addEventListener("click", function () {
     state.srcName = list.find((i) => i.cat === "general" && i.v === 4)?.n || list[0]?.n || "";
   }
   buildSourceSelects();
-  $("#count").value = state.count;
-  $("#hours").value = state.hours;
-  $("#egress").value = state.unit === "TB" ? state.gb / 1024 : state.gb;
+  syncWorkloadInputs();
   pickEquivalents();
   render();
 
@@ -606,8 +667,9 @@ document.querySelector("[data-share]").addEventListener("click", function () {
     if (state.srcCloud + "/" + state.srcName !== before) {
       buildSourceSelects();
       pickEquivalents();
-      render();
     }
+    syncWorkloadInputs();
+    render();
   });
 })();
 </script>
