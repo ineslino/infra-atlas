@@ -649,7 +649,7 @@ body {
 /* the sticky page index (54px + own height) now sits over jump targets
    inside .instruments — leave room for it; the .dx sections live after
    the index unpins, so the nav-only offset is enough there */
-.department { scroll-margin-top: 132px; }
+.department { scroll-margin-top: var(--subject-sticky-top, 202px); }
 .dx { scroll-margin-top: 64px; }
 .ia-pageindex__count {
   background: var(--surface-2);
@@ -738,7 +738,7 @@ body {
   flex-direction: column;
   gap: 10px;
   position: sticky;
-  top: 32px;
+  top: var(--subject-sticky-top, 202px);
   height: max-content;
 }
 
@@ -1916,6 +1916,16 @@ body {
 (function () {
   var items = document.querySelectorAll(".ia-pageindex__item");
   if (!items.length) return;
+  // Keep the whole subject heading below the index when its links wrap.
+  var subjectIndex = document.querySelector(".ia-pageindex");
+  function updateSubjectOffset() {
+    var indexTop = parseFloat(getComputedStyle(subjectIndex).top) || 0;
+    var offset = indexTop + subjectIndex.offsetHeight + 16;
+    document.documentElement.style.setProperty("--subject-sticky-top", offset + "px");
+  }
+  updateSubjectOffset();
+  if (window.ResizeObserver) new ResizeObserver(updateSubjectOffset).observe(subjectIndex);
+  else window.addEventListener("resize", updateSubjectOffset);
   var byId = {};
   items.forEach(function (a) {
     var id = a.getAttribute("href").replace(/^#/, "");
