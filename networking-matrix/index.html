@@ -305,8 +305,9 @@ a:focus-visible, button:focus-visible, input:focus-visible, [tabindex]:focus-vis
   .colophon { grid-template-columns: 1fr; gap: 24px; }
 }
 </style>
+<link rel="stylesheet" href="/assets/task-first.css?v=1">
 </head>
-<body>
+<body data-task-first>
 
 <div class="grain"></div>
 <div class="scanlines"></div>
@@ -340,12 +341,6 @@ a:focus-visible, button:focus-visible, input:focus-visible, [tabindex]:focus-vis
 
   <main id="ia-main">
 
-  <div class="readnote">
-    <span class="readnote__mark">*</span>
-    <p class="readnote__text">
-      <strong>Equivalent is rarely 1:1.</strong> A security group is not quite a network security group; a global VPC is not a regional one; a stateless subnet ACL has no native match on half these clouds. This matrix maps the <em>closest</em> construct in each cloud — the ◐ marks and the per-cell notes are where the real differences live. Read them before you port a design.
-    </p>
-  </div>
 
   <section class="filters">
     <div class="filter-search">
@@ -357,6 +352,13 @@ a:focus-visible, button:focus-visible, input:focus-visible, [tabindex]:focus-vis
   </section>
 
   <div class="sr-only" id="filter-status" role="status" aria-live="polite"></div>
+
+  <div class="readnote">
+    <span class="readnote__mark">*</span>
+    <p class="readnote__text">
+      <strong>Equivalent is rarely 1:1.</strong> A security group is not quite a network security group; a global VPC is not a regional one; a stateless subnet ACL has no native match on half these clouds. This matrix maps the <em>closest</em> construct in each cloud — the ◐ marks and the per-cell notes are where the real differences live. Read them before you port a design.
+    </p>
+  </div>
 
   <div class="legend">
     <span class="legend__label">Legend</span>
@@ -886,6 +888,6 @@ function bootstrap() {
 bootstrap();
 </script>
 <script src="/assets/matrix.js?v=5" defer></script>
-<script src="/nav.js?v=9" defer></script>
+<script src="/nav.js?v=10" defer></script>
 </body>
 </html>

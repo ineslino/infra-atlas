@@ -1,0 +1,20 @@
+/* Opt-in layout for instruments whose controls should precede supporting navigation. */
+body[data-task-first] .page { padding-top: 24px; }
+body[data-task-first] .masthead { gap: 16px 32px; padding-bottom: 20px; margin-bottom: 20px; }
+body[data-task-first] .masthead__title { font-size: clamp(36px, 4vw, 60px); line-height: 1.05; margin-top: 10px; }
+body[data-task-first] .masthead__subtitle { margin-top: 10px; max-width: 70ch; }
+body[data-task-first] .masthead__status { gap: 8px; }
+body[data-task-first] .status-dot { animation: none; }
+body[data-task-first] .ia-related { margin: 24px 0 16px; }
+body[data-task-first] .ia-src-note { margin-top: 16px; }
+
+/* Keep source age visible while the full five-cloud schedule remains available on demand. */
+.catalogue-dates { max-width: 360px; font-family: var(--mono); font-size: 13px; line-height: 1.5; }
+.catalogue-dates summary { cursor: pointer; color: var(--paper-2); }
+.catalogue-dates summary:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; }
+.catalogue-dates .status-time { margin-top: 8px; white-space: pre-line; font-size: 13px; color: var(--paper-2); }
+
+@media (max-width: 760px) {
+  body[data-task-first] .masthead { grid-template-columns: 1fr; }
+  body[data-task-first] .masthead__status { text-align: left; align-items: flex-start; }
+}

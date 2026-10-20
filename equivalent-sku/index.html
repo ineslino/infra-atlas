@@ -145,7 +145,7 @@ select:focus-visible,
 
 .masthead__eyebrow {
   font-family: var(--mono);
-  font-size: 10.5px;
+  font-size: 14px;
   letter-spacing: 0.22em;
   color: var(--paper-3);
   text-transform: uppercase;
@@ -310,7 +310,7 @@ a.masthead__back::before { display: none; }
 
 .finder__hint {
   font-family: var(--mono);
-  font-size: 10.5px;
+  font-size: 14px;
   letter-spacing: 0.04em;
   color: var(--paper-3);
 }
@@ -536,12 +536,31 @@ a.fnd-tco { text-decoration: none; }
 
 .placeholder__sub {
   font-family: var(--mono);
-  font-size: 11.5px;
+  font-size: 14px;
   letter-spacing: 0.08em;
   color: var(--paper-3);
 }
 
 /* ─────────────── CLOUD RESULT BLOCKS ─────────────── */
+/* Keep exact specifications aligned before the detailed scoring cards. */
+.sku-overview { margin-bottom: 24px; }
+.sku-overview__scroll { overflow-x: auto; }
+.sku-overview table { width: 100%; border-collapse: collapse; font-family: var(--mono); font-size: 14px; font-variant-numeric: tabular-nums; }
+.sku-overview caption { text-align: left; font-family: var(--serif); font-size: 26px; color: var(--paper); padding-bottom: 10px; }
+.sku-overview th, .sku-overview td { text-align: left; padding: 12px; border-bottom: 1px solid var(--line-2); vertical-align: top; }
+.sku-overview thead th { color: var(--paper-2); font-weight: 500; }
+.sku-overview tbody th { color: var(--paper); font-weight: 500; overflow-wrap: anywhere; }
+.sku-overview th[scope="row"] { min-width: 160px; }
+.sku-overview small { display: block; color: var(--paper-2); margin-top: 4px; font-size: 14px; }
+.sku-overview .sku-overview__partial { color: var(--gold); }
+.sku-overview__note { color: var(--paper-2); font-size: 14px; line-height: 1.6; margin: 10px 0; }
+.sku-overview__scroll:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+.sku-overview__hint { display: none; }
+@media (max-width: 680px) {
+  .sku-overview__hint { display: block; }
+  .sku-overview tbody th { position: sticky; left: 0; background: var(--ink-2); }
+}
+
 .cloud-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(330px, 1fr));
@@ -680,7 +699,7 @@ a.fnd-tco { text-decoration: none; }
 }
 
 .match__score.tier-high  { color: var(--mint); }
-.match__completeness { margin-top: 6px; font-family: var(--mono); font-size: 9px; letter-spacing: 0.04em; color: var(--paper-3); }
+.match__completeness { margin-top: 6px; font-family: var(--mono); font-size: 14px; line-height: 1.5; color: var(--paper-2); }
 .match__completeness.is-partial { color: var(--gold); }
 .match__score.tier-mid   { color: var(--gold); }
 .match__score.tier-low   { color: var(--rose); }
@@ -716,7 +735,7 @@ a.fnd-tco { text-decoration: none; }
 .match__meta {
   margin-top: 8px;
   font-family: var(--mono);
-  font-size: 10.5px;
+  font-size: 14px;
   letter-spacing: 0.05em;
   color: var(--paper-2);
 }
@@ -758,7 +777,7 @@ a.fnd-tco { text-decoration: none; }
 
 .cloud-block__none {
   font-family: var(--mono);
-  font-size: 10.5px;
+  font-size: 14px;
   letter-spacing: 0.04em;
   color: var(--paper-3);
   padding: 16px 4px;
@@ -876,7 +895,7 @@ a.fnd-tco { text-decoration: none; }
 
 .axis__formula {
   font-family: var(--mono);
-  font-size: 10.5px;
+  font-size: 14px;
   color: var(--accent-2);
   background: var(--surface);
   border: 1px solid var(--line);
@@ -985,7 +1004,7 @@ a.fnd-tco { text-decoration: none; }
 
 .colophon code {
   font-family: var(--mono);
-  font-size: 11.5px;
+  font-size: 14px;
   background: var(--surface);
   padding: 1px 6px;
   border-radius: 2px;
@@ -1019,8 +1038,9 @@ a.fnd-tco { text-decoration: none; }
 
 #sku-results { min-height: 50vh; }
 </style>
+<link rel="stylesheet" href="/assets/task-first.css?v=1">
 </head>
-<body>
+<body data-task-first>
 
 <div class="grain"></div>
 <div class="scanlines"></div>
@@ -1045,7 +1065,10 @@ a.fnd-tco { text-decoration: none; }
         <span class="status-dot"></span>
         <span class="status-text" id="status-text">Snapshot · embedded</span>
       </div>
-      <div class="status-time" id="status-time">— · —</div>
+      <details class="catalogue-dates">
+        <summary id="status-summary">Catalogue dates and refresh schedules</summary>
+        <div class="status-time" id="status-time">Dates loading…</div>
+      </details>
       <div class="status-counts">
         <div>Clouds<strong>5</strong></div>
         <div>Instance types<strong id="count-types">—</strong></div>
@@ -1086,7 +1109,7 @@ a.fnd-tco { text-decoration: none; }
   <div id="source-mount"></div>
 
   <div class="result-meta" id="result-meta" hidden>
-    <div class="result-meta__title" id="result-title">Equivalents</div>
+    <div class="result-meta__title" id="result-title" role="status" aria-live="polite" aria-atomic="true">Equivalents</div>
     <div class="result-meta__count"><strong id="result-count">0</strong> clouds matched</div>
   </div>
 
@@ -1171,7 +1194,8 @@ a.fnd-tco { text-decoration: none; }
         <h3>Reading the score</h3>
         <p>
           Per cloud, the finder shows the three highest-scoring types. The top score colours by
-          confidence band, and the chips below each row break the score back down into its parts.
+          similarity band, and the chips below each row break the score back down into its parts.
+          Partial matches use an amber score when 65 or above and explicitly leave memory unverified.
         </p>
         <div class="tier-key">
           <span class="tier-key__item"><span class="tier-key__dot tk-high"></span>85&ndash;100 · close equivalent</span>
@@ -1805,7 +1829,7 @@ function renderWhy(why) {
 function renderMatch(entry, rank, cloudId) {
   const inst = entry.inst;
   const score = Math.round(entry.score);
-  const tier = tierOf(entry.score);
+  const tier = !entry.memScored && entry.score >= 65 ? "mid" : tierOf(entry.score);
   const isTop = rank === 0;
   // price + footprint come straight from the instrument's live data.json;
   // list price only — what you'd actually pay needs region + commitment
@@ -1821,10 +1845,10 @@ function renderMatch(entry, rank, cloudId) {
     <div class="match${isTop ? " is-top" : ""}">
       <div class="match__head">
         <span class="match__rank">${String(rank + 1).padStart(2, "0")}</span>
-        <div class="match__name">${esc(inst.n)}${isTop ? '<span class="match__badge">Closest</span>' : ""}</div>
+        <div class="match__name">${esc(inst.n)}${isTop ? `<span class="match__badge">${entry.memScored ? "Closest" : "Partial match"}</span>` : ""}</div>
         <button type="button" class="match__pin" data-pin="${esc(keyOf(cloudId, inst))}"
           aria-label="Save ${esc(inst.n)} to the shortlist" title="Save to shortlist">☆</button>
-        <div class="match__score tier-${tier}">${score}<span class="match__score-unit">match / 100</span></div>
+        <div class="match__score tier-${tier}">${score}<span class="match__score-unit">${entry.memScored ? "match / 100" : "partial / 100"}</span></div>
       </div>
       <div class="match__bar"><span class="tier-${tier}" style="width:${Math.max(3, score)}%"></span></div>
       <div class="match__why">${renderWhy(entry.why)}</div>
@@ -1855,6 +1879,40 @@ function renderCloudBlock(cloudId, ranked) {
       </div>
       <div class="cloud-block__body">${body}</div>
     </section>`;
+}
+
+// Use UTC calendar days so source age does not depend on the visitor's timezone.
+function catalogueDateInfo(value, now = new Date()) {
+  const date = value ? new Date(value) : new Date(NaN);
+  if (isNaN(date.getTime())) return { age: null, label: "date unavailable" };
+  const day = Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate());
+  const today = Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate());
+  const age = Math.round((today - day) / 86400000);
+  const label = date.toISOString().slice(0, 10);
+  return { age, label: label + (age < 0 ? " (future date; verify)" : age === 0 ? " (today)" : " (" + age + " days old)") };
+}
+
+// Compare the source with each cloud's first result without mixing prices or currencies.
+function renderOverview(src, srcCloud, equiv) {
+  const rows = CLOUD_ORDER.filter((cloud) => cloud !== srcCloud).map((cloud) => {
+    const entry = (equiv[cloud] || [])[0];
+    if (!entry) return `<tr><th scope="row">${esc(CLOUD_META[cloud].short)}</th><td colspan="5">No scorable instance types</td></tr>`;
+    const inst = entry.inst;
+    return `<tr><th scope="row">${esc(CLOUD_META[cloud].short)}<small>${esc(inst.n)}</small></th>
+      <td>${inst.v}</td><td>${inst.m == null ? "Unknown" : fmtMem(inst.m)}</td>
+      <td>${archLabel(inst.arch)}</td><td>${Math.round(entry.score)}/100${entry.memScored ? "" : '<small class="sku-overview__partial">Partial match</small>'}</td>
+      <td>${entry.memScored ? "vCPU, memory, class" : "vCPU, class; memory unavailable"}</td></tr>`;
+  });
+  return `<section class="sku-overview" aria-label="Top matches at a glance">
+    <p class="sku-overview__hint sku-overview__note">Scroll the table sideways to compare all specifications. Keyboard: focus the table and use the arrow keys.</p>
+    <div class="sku-overview__scroll" role="region" aria-label="Specifications comparison; scroll horizontally on narrow screens" tabindex="0">
+      <table><caption>Top matches at a glance</caption>
+        <thead><tr><th scope="col">Cloud / instance</th><th scope="col">vCPU</th><th scope="col">Memory</th><th scope="col">Architecture</th><th scope="col">Similarity</th><th scope="col">Score basis</th></tr></thead>
+        <tbody><tr><th scope="row">${esc(CLOUD_META[srcCloud].short)} · source<small>${esc(src.n)}</small></th><td>${src.v}</td><td>${src.m == null ? "Unknown" : fmtMem(src.m)}</td><td>${archLabel(src.arch)}</td><td>Reference</td><td>Not scored</td></tr>${rows.join("")}</tbody>
+      </table>
+    </div>
+    <p class="sku-overview__note">Similarity is not performance or deployment compatibility. A partial match leaves memory unverified, even at 100/100. Review the detailed differences below.</p>
+  </section>`;
 }
 
 function render() {
@@ -1892,7 +1950,7 @@ function render() {
   $("#result-count").textContent = blocks.length;
   clearBtn.hidden = false;
 
-  results.innerHTML = `<div class="cloud-grid">${blocks.join("")}</div>`;
+  results.innerHTML = renderOverview(src, srcCloud, equiv) + `<div class="cloud-grid">${blocks.join("")}</div>`;
 
   // pivot target = best top-1 across all clouds
   let bestKey = "", bestScore = -1;
@@ -2069,17 +2127,21 @@ async function loadData() {
   // status line
   const total = CLOUD_ORDER.reduce((n, c) => n + data[c].length, 0);
   $("#count-types").textContent = total.toLocaleString("en-US");
-  const live = freshCount === CLOUD_ORDER.length;
   $("#status-text").textContent = freshCount === 0
     ? "Snapshot · embedded"
-    : live ? "Live · data.json" : "Partial · " + freshCount + "/5 live";
+    : "Fetched · " + freshCount + "/5 catalogue files";
   const cadence = { aws: "daily", azure: "daily", gcp: "curated", oci: "daily", ovh: "daily" };
   const perCloud = CLOUD_ORDER.map((cid) => {
-    const d = new Date(generated[cid] || SNAPSHOT_DATE);
-    const day = !isNaN(d) ? d.toLocaleDateString("en-GB", { day: "2-digit", month: "short" }) : "snapshot";
-    return CLOUD_META[cid].short + " " + cadence[cid] + " " + day;
+    const fetched = Object.prototype.hasOwnProperty.call(generated, cid);
+    const info = catalogueDateInfo(fetched ? generated[cid] : SNAPSHOT_DATE);
+    return { cid, info, label: CLOUD_META[cid].short + " · " + (fetched ? "file " : "embedded ") + info.label + " · " + cadence[cid] + " schedule" };
   });
-  $("#status-time").textContent = perCloud.join(" · ");
+  $("#status-time").textContent = perCloud.map((item) => item.label).join("\n")
+    + "\nFile dates describe catalogue generation, not a new verification against vendor documentation.";
+  const dailyAges = perCloud.filter((item) => cadence[item.cid] === "daily").map((item) => item.info.age);
+  $("#status-summary").textContent = dailyAges.every((age) => age != null && age >= 0)
+    ? "Daily-file age: oldest " + Math.max(...dailyAges) + " days · details"
+    : "Catalogue dates need checking · details";
 }
 
 // ─── Keyboard shortcuts ───
@@ -2162,6 +2224,6 @@ function onKey(e) {
 })();
 </script>
 
-<script src="/nav.js?v=9" defer></script>
+<script src="/nav.js?v=10" defer></script>
 </body>
 </html>

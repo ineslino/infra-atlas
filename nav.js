@@ -1268,7 +1268,10 @@
       items.map(function (it) {
         return '<a class="ia-related__item" href="' + it.href + '">' + relEsc(it.name) + '</a>';
       }).join("");
-    masthead.parentNode.insertBefore(rel, masthead.nextSibling);
+    // Opted-in instruments keep supporting navigation after their working area.
+    var anchor = document.body.hasAttribute("data-task-first")
+      ? document.getElementById("ia-main") || masthead : masthead;
+    anchor.parentNode.insertBefore(rel, anchor.nextSibling);
   })();
 
   // ── Source attribution note — instruments + calculators ──────────────
@@ -1282,7 +1285,9 @@
     var masthead = document.querySelector(".masthead");
     if (!masthead) return;
     var rel = document.querySelector(".ia-related");
-    var insertRef = rel ? rel.nextSibling : masthead.nextSibling;
+    var anchor = document.body.hasAttribute("data-task-first")
+      ? document.getElementById("ia-main") || masthead : masthead;
+    var insertRef = rel ? rel.nextSibling : anchor.nextSibling;
     var txt = isMatrix
       ? 'Every cell cites an official vendor documentation page — click any cell to see the exact source URL and notes.'
       : 'All figures sourced from official vendor documentation — the source link appears below each result card.';
@@ -1291,7 +1296,7 @@
     note.innerHTML =
         '<span class="ia-src-note__label">Sources</span>'
       + '<span class="ia-src-note__txt">' + txt + '</span>';
-    masthead.parentNode.insertBefore(note, insertRef);
+    anchor.parentNode.insertBefore(note, insertRef);
   })();
 
   // ── Behaviour ────────────────────────────────────────────────────

@@ -181,3 +181,7 @@ jobs:
         with:
           node-version: '22'
       - run: node scripts/test_decision_constraints.js
+      - name: Check SKU presentation and egress unit scale
+        run: |
+          node scripts/test_sku_presentation.js
+          node scripts/test_egress_scale.js
