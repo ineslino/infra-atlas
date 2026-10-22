@@ -1,7 +1,19 @@
 {
-  "generated": "2026-10-17T10:28:42Z",
+  "generated": "2026-10-22T11:34:38Z",
   "instrument": "ec2",
   "entries": [
+    {
+      "ts": "2026-10-22",
+      "instrument": "ec2",
+      "kind": "availability-added",
+      "text": "r8ib now in us-west-1"
+    },
+    {
+      "ts": "2026-10-22",
+      "instrument": "ec2",
+      "kind": "availability-added",
+      "text": "r8in now in us-west-1"
+    },
     {
       "ts": "2026-10-17",
       "instrument": "ec2",
@@ -589,18 +601,6 @@
       "instrument": "ec2",
       "kind": "family-added",
       "text": "new family g7"
-    },
-    {
-      "ts": "2026-06-10",
-      "instrument": "ec2",
-      "kind": "family-added",
-      "text": "new family m9g"
-    },
-    {
-      "ts": "2026-06-10",
-      "instrument": "ec2",
-      "kind": "family-added",
-      "text": "new family m9gd"
     }
   ]
 }
