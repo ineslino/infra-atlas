@@ -1,6 +1,24 @@
 {
-  "generated": "2026-10-22T11:34:38Z",
+  "generated": "2026-10-29T12:44:54Z",
   "entries": [
+    {
+      "ts": "2026-10-29",
+      "instrument": "ec2",
+      "kind": "availability-added",
+      "text": "g7e now in ap-southeast-7"
+    },
+    {
+      "ts": "2026-10-29",
+      "instrument": "ec2",
+      "kind": "availability-added",
+      "text": "i8ge now in ap-south-2"
+    },
+    {
+      "ts": "2026-10-29",
+      "instrument": "ec2",
+      "kind": "availability-added",
+      "text": "p5e now in ap-southeast-2, eu-west-2"
+    },
     {
       "ts": "2026-10-22",
       "instrument": "ec2",

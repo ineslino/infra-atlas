@@ -1,7 +1,25 @@
 {
-  "generated": "2026-10-22T11:34:38Z",
+  "generated": "2026-10-29T12:44:54Z",
   "instrument": "ec2",
   "entries": [
+    {
+      "ts": "2026-10-29",
+      "instrument": "ec2",
+      "kind": "availability-added",
+      "text": "g7e now in ap-southeast-7"
+    },
+    {
+      "ts": "2026-10-29",
+      "instrument": "ec2",
+      "kind": "availability-added",
+      "text": "i8ge now in ap-south-2"
+    },
+    {
+      "ts": "2026-10-29",
+      "instrument": "ec2",
+      "kind": "availability-added",
+      "text": "p5e now in ap-southeast-2, eu-west-2"
+    },
     {
       "ts": "2026-10-22",
       "instrument": "ec2",
@@ -583,24 +601,6 @@
       "instrument": "ec2",
       "kind": "availability-removed",
       "text": "74 families dropped regions (898 region changes)"
-    },
-    {
-      "ts": "2026-06-26",
-      "instrument": "ec2",
-      "kind": "availability-added",
-      "text": "7 families gained regions (23 region changes)"
-    },
-    {
-      "ts": "2026-06-25",
-      "instrument": "ec2",
-      "kind": "availability-added",
-      "text": "u7in-24tb now in ap-northeast-2"
-    },
-    {
-      "ts": "2026-06-19",
-      "instrument": "ec2",
-      "kind": "family-added",
-      "text": "new family g7"
     }
   ]
 }
