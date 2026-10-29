@@ -6,7 +6,31 @@
     <atom:link href="https://infraatlas.dev/feed.xml" rel="self" type="application/rss+xml"/>
     <description>A neutral, sourced changelog of cloud infrastructure — new instance families, regions, withdrawals and price moves across AWS, Azure, GCP, OCI and OVHcloud.</description>
     <language>en</language>
-    <lastBuildDate>Thu, 22 Oct 2026 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Thu, 29 Oct 2026 00:00:00 +0000</lastBuildDate>
+    <item>
+      <title>AWS EC2 · g7e now in ap-southeast-7</title>
+      <link>https://infraatlas.dev/ec2/</link>
+      <guid isPermaLink="false">bba6f0b508293c600efe76092d3456b4</guid>
+      <category>availability-added</category>
+      <pubDate>Thu, 29 Oct 2026 00:00:00 +0000</pubDate>
+      <description>AWS EC2 · g7e now in ap-southeast-7</description>
+    </item>
+    <item>
+      <title>AWS EC2 · i8ge now in ap-south-2</title>
+      <link>https://infraatlas.dev/ec2/</link>
+      <guid isPermaLink="false">f31ee942bf98ef16284402e4f436be64</guid>
+      <category>availability-added</category>
+      <pubDate>Thu, 29 Oct 2026 00:00:00 +0000</pubDate>
+      <description>AWS EC2 · i8ge now in ap-south-2</description>
+    </item>
+    <item>
+      <title>AWS EC2 · p5e now in ap-southeast-2, eu-west-2</title>
+      <link>https://infraatlas.dev/ec2/</link>
+      <guid isPermaLink="false">b9cc93e5f3ba5ece643589479c90ec9e</guid>
+      <category>availability-added</category>
+      <pubDate>Thu, 29 Oct 2026 00:00:00 +0000</pubDate>
+      <description>AWS EC2 · p5e now in ap-southeast-2, eu-west-2</description>
+    </item>
     <item>
       <title>AWS EC2 · r8ib now in us-west-1</title>
       <link>https://infraatlas.dev/ec2/</link>
