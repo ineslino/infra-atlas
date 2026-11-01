@@ -1,6 +1,18 @@
 {
-  "generated": "2026-10-29T12:44:54Z",
+  "generated": "2026-11-01T13:03:49Z",
   "entries": [
+    {
+      "ts": "2026-11-01",
+      "instrument": "azure-vm",
+      "kind": "price-change",
+      "text": "Dasv5.D4as_v5  0.208 → 0.392  (+88%)"
+    },
+    {
+      "ts": "2026-11-01",
+      "instrument": "azure-vm",
+      "kind": "price-change",
+      "text": "Dasv5.D64as_v5  3.328 → 6.272  (+88%)"
+    },
     {
       "ts": "2026-10-29",
       "instrument": "ec2",

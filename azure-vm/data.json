@@ -1,5 +1,5 @@
 {
-  "generated": "2026-09-02T11:05:09Z",
+  "generated": "2026-11-01T13:03:49Z",
   "provider": "azure",
   "source": "Azure Retail Prices API — public, no credentials",
   "currency": "USD",
@@ -693,7 +693,7 @@
         "D4ds_v4": {
           "vcpu": 4,
           "mem": 16,
-          "price": 0.272
+          "price": null
         },
         "D8ds_v4": {
           "vcpu": 8,
@@ -956,7 +956,7 @@
         "D4as_v5": {
           "vcpu": 4,
           "mem": 16,
-          "price": 0.208
+          "price": 0.392
         },
         "D8as_v5": {
           "vcpu": 8,
@@ -981,7 +981,7 @@
         "D64as_v5": {
           "vcpu": 64,
           "mem": 256,
-          "price": 3.328
+          "price": 6.272
         },
         "D96as_v5": {
           "vcpu": 96,
@@ -1409,7 +1409,7 @@
         "E64s_v4": {
           "vcpu": 64,
           "mem": 512,
-          "price": 4.864
+          "price": null
         }
       },
       "in": "*"
@@ -1912,7 +1912,7 @@
         "E16pds_v5": {
           "vcpu": 16,
           "mem": 128,
-          "price": 1.104
+          "price": null
         },
         "E20pds_v5": {
           "vcpu": 20,
@@ -2979,7 +2979,7 @@
         "HB176-24rs_v4": {
           "vcpu": 24,
           "mem": null,
-          "price": 9.36
+          "price": null
         },
         "HB176-48rs_v4": {
           "vcpu": 48,
@@ -3211,7 +3211,7 @@
         "DC16as_v5": {
           "vcpu": 16,
           "mem": null,
-          "price": 0.832
+          "price": null
         },
         "DC32as_v5": {
           "vcpu": 32,
