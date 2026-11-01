@@ -6,7 +6,23 @@
     <atom:link href="https://infraatlas.dev/feed.xml" rel="self" type="application/rss+xml"/>
     <description>A neutral, sourced changelog of cloud infrastructure — new instance families, regions, withdrawals and price moves across AWS, Azure, GCP, OCI and OVHcloud.</description>
     <language>en</language>
-    <lastBuildDate>Thu, 29 Oct 2026 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Sun, 01 Nov 2026 00:00:00 +0000</lastBuildDate>
+    <item>
+      <title>Azure VM · Dasv5.D4as_v5  0.208 → 0.392  (+88%)</title>
+      <link>https://infraatlas.dev/azure-vm/</link>
+      <guid isPermaLink="false">18f6fae79736c2cf5415e8594a696389</guid>
+      <category>price-change</category>
+      <pubDate>Sun, 01 Nov 2026 00:00:00 +0000</pubDate>
+      <description>Azure VM · Dasv5.D4as_v5  0.208 → 0.392  (+88%)</description>
+    </item>
+    <item>
+      <title>Azure VM · Dasv5.D64as_v5  3.328 → 6.272  (+88%)</title>
+      <link>https://infraatlas.dev/azure-vm/</link>
+      <guid isPermaLink="false">8fe49a4196cd00b75981862db778f3f9</guid>
+      <category>price-change</category>
+      <pubDate>Sun, 01 Nov 2026 00:00:00 +0000</pubDate>
+      <description>Azure VM · Dasv5.D64as_v5  3.328 → 6.272  (+88%)</description>
+    </item>
     <item>
       <title>AWS EC2 · g7e now in ap-southeast-7</title>
       <link>https://infraatlas.dev/ec2/</link>
