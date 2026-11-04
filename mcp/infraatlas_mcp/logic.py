@@ -168,14 +168,14 @@ def _band_upper_gb(band: str):
     "Up to 10 TB / month", "0 – 1 TB / month", "0 to 1 TB / month",
     "Next 40 TB", "Beyond 150 TB", "10 TB and above".
     """
-    b = band.strip().lower()
+    b = band.strip().lower().replace(",", "")
     m = re.match(rf"first\s+([\d.]+)\s*{_UNIT}", b)
     if m:
         return _to_gb(float(m.group(1)), m.group(2))
     m = re.match(rf"up to\s+([\d.]+)\s*{_UNIT}", b)
     if m:
         return _to_gb(float(m.group(1)), m.group(2))
-    m = re.match(rf"[\d.]+\s*(?:[–-]|to)\s*([\d.]+)\s*{_UNIT}", b)
+    m = re.match(rf"[\d.]+\s*(?:gib|gb|tib|tb)?\s*(?:[–-]|to)\s*([\d.]+)\s*{_UNIT}", b)
     if m:
         return _to_gb(float(m.group(1)), m.group(2))
     if re.match(rf"next\s+[\d.]+\s*{_UNIT}", b):
@@ -185,8 +185,18 @@ def _band_upper_gb(band: str):
     return "unparseable"
 
 
-def parse_tiers(tiers: list[dict]) -> Optional[list[dict]]:
-    """[{band, usd}] → [{band, usd, upToGB}] cumulative, or None if unparseable."""
+def usd_per_gb(price: float, billing_unit: str) -> float:
+    """Convert a provider's unit price to the public API's decimal USD/GB."""
+    if billing_unit not in ("GB", "GiB"):
+        raise ValueError("Unsupported egress billing unit")
+    return price * (1e9 / 2**30 if billing_unit == "GiB" else 1)
+
+
+def parse_tiers(tiers: list[dict], billing_unit: str = "GB") -> Optional[list[dict]]:
+    """Normalise native bands to decimal GB; pass the published billing unit."""
+    if billing_unit not in ("GB", "GiB"):
+        return None
+    factor = 1e9 / 2**30 if billing_unit == "GiB" else 1
     out: list[dict] = []
     prev = 0.0
     for t in tiers:
@@ -194,10 +204,11 @@ def parse_tiers(tiers: list[dict]) -> Optional[list[dict]]:
         if upper == "unparseable":
             return None
         if upper == "relative":
-            m = re.match(rf"next\s+([\d.]+)\s*{_UNIT}", t["band"].strip().lower())
+            m = re.match(rf"next\s+([\d.]+)\s*{_UNIT}", t["band"].strip().lower().replace(",", ""))
             width = _to_gb(float(m.group(1)), m.group(2))
             upper = prev + width
-        out.append({"band": t["band"], "usd": t["usd"], "upToGB": upper})
+        out.append({"band": t["band"], "usd": usd_per_gb(t["usd"], billing_unit),
+                    "upToGB": upper / factor if upper is not None else None})
         prev = upper if upper is not None else prev
     return out
 

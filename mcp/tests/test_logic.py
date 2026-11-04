@@ -7,6 +7,7 @@ fails loudly here.
 """
 
 import sys
+import json
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
@@ -16,6 +17,7 @@ from infraatlas_mcp.logic import (  # noqa: E402
     parse_tiers,
     score_candidate,
     walk_ladder,
+    usd_per_gb,
 )
 
 FAILURES = []
@@ -131,6 +133,28 @@ check("gcp shared-core unscored", gcp_flat[1]["vcpu"], None)
 check("gcp '*' region count", gcp_flat[0]["regions"], 1)
 
 print()
+# Price the canonical GCP SKU using the public API's decimal-GB contract.
+source = json.loads((Path(__file__).resolve().parents[2] / "egress/data.json").read_text())
+gcp = next(t for t in source["transfers"] if t["id"] == "internet-egress")["rates"]["gcp"]
+normalised = parse_tiers(gcp["tiers"], gcp["unit"])
+check("1 decimal GB uses the GCP free tier", walk_ladder(normalised, 1)["totalUSD"], 0.0)
+check("2 GiB converted to decimal GB costs 0.12", walk_ladder(normalised, 2 * 2**30 / 1e9)["totalUSD"], 0.12)
+check("GCP flat USD/GiB normalised to USD/GB", round(usd_per_gb(0.01, "GiB"), 10), 0.0093132257)
+check("unsupported billing units are not priced", parse_tiers(gcp["tiers"], "unknown"), None)
+
+# Public band labels may repeat units and use thousands separators.
+live_wording = [
+    {"band": "First 1 GiB / month", "usd": 0},
+    {"band": "1 GiB to 1,024 GiB (1 TiB)", "usd": 0.12},
+    {"band": "1,024 to 10,240 GiB (1–10 TiB)", "usd": 0.11},
+    {"band": "10,240 GiB and above (10 TiB+)", "usd": 0.08},
+]
+parsed_live = parse_tiers(live_wording, "GiB")
+check("live GCP comma/unit wording parses", parsed_live is not None, True)
+if parsed_live:
+    check("live GCP wording preserves free tier", walk_ladder(parsed_live, 1)["totalUSD"], 0.0)
+    check("live GCP wording applies paid tier", walk_ladder(parsed_live, 2 * 2**30 / 1e9)["totalUSD"], 0.12)
+
 if FAILURES:
     print(f"FAILED ({len(FAILURES)}):")
     for f in FAILURES:

@@ -185,4 +185,5 @@ jobs:
         run: |
           node scripts/test_sku_presentation.js
           node scripts/test_egress_scale.js
+          node scripts/test_egress_calculation.js
           node scripts/test_tco_experience.js

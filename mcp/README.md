@@ -99,6 +99,13 @@ infraatlas regions gcp --area Europe
 infraatlas changes --days 7 --instrument aws
 ```
 
+Egress inputs and `volumeGB`/`usdPerGB` outputs use decimal GB (10^9 bytes).
+GCP's GiB billing thresholds and prices are converted before the tier walk.
+The internet-egress reference uses North America Premium VPC pricing and assumes
+the full monthly first-1-GiB allowance is unused for the priced SKU; other
+destinations and existing account usage can change the bill.
+
+
 `ec2`, `azure`, `gcp`, `oci` and `ovh` are shorthands for `compute <cloud>`;
 `changes --instrument` reads the per-instrument feeds
 (`/ec2/feed.json`, …). Same price note as the tools: hourly on-demand list

@@ -198,10 +198,11 @@ const ORDER = ["aws", "azure", "gcp", "oci", "ovh"];
 // and EGRESS_VERIFIED below must match the Egress Cost Map's own <time>
 // stamp, so re-verifying the map forces this page to be looked at too.
 const EGRESS_VERIFIED = "2026-05-19";
+const EGRESS_GCP_VERIFIED = "2026-11-04";
 const EGRESS = {
   aws: [ { upToGB: 100, usd: 0 }, { upToGB: 10240, usd: 0.09 }, { upToGB: 51200, usd: 0.085 }, { upToGB: 153600, usd: 0.07 }, { upToGB: null, usd: 0.05 } ],
   azure: [ { upToGB: 100, usd: 0 }, { upToGB: 10240, usd: 0.087 }, { upToGB: 51200, usd: 0.083 }, { upToGB: 153600, usd: 0.07 }, { upToGB: null, usd: 0.05 } ],
-  gcp: [ { upToGB: 1024, usd: 0.12 }, { upToGB: 10240, usd: 0.11 }, { upToGB: null, usd: 0.08 } ],
+  gcp: [ { upToGB: 1, usd: 0 }, { upToGB: 1024, usd: 0.12 }, { upToGB: 10240, usd: 0.11 }, { upToGB: null, usd: 0.08 } ],
 };
 
 // ─── Provenance — what feeds each component of the total ───
@@ -236,7 +237,7 @@ function renderProvenance() {
   });
   rows.push(`<div class="prov__row">${tierChip("curated")}<span><strong>Internet egress tiers</strong> —
     mirror the <a href="/egress/">Egress Cost Map</a> (verified <span class="prov__fresh">${EGRESS_VERIFIED}</span>,
-    AWS · Azure · GCP pricing pages cited there) · a CI guard fails the build if this mirror drifts</span></div>`);
+    GCP North America Premium SKU reviewed ${EGRESS_GCP_VERIFIED}; full unused first-1-GiB allowance assumed; other destinations differ) · a CI guard fails the build if this mirror drifts</span></div>`);
   box.innerHTML = '<div class="prov__title">Where these numbers come from</div>'
     + rows.join("")
     + `<div class="prov__report"><a id="prov-report" href="${ISSUE_URL}" target="_blank" rel="noopener">Spotted a wrong number? Report it — the issue arrives prefilled →</a></div>`;
@@ -331,7 +332,8 @@ function instOf(cid, name) { return (state.data[cid]?.list || []).find((i) => i.
 function egressCost(cid, gb) {
   const ladder = EGRESS[cid];
   if (!ladder) return null; // OCI / OVH: not mapped in the Egress Cost Map
-  let remaining = gb, prev = 0, total = 0;
+  // The workload is decimal GB; the GCP ladder is billed in GiB.
+  let remaining = cid === "gcp" ? gb * 1e9 / 2 ** 30 : gb, prev = 0, total = 0;
   for (const t of ladder) {
     const upTo = t.upToGB === null ? Infinity : t.upToGB;
     const inTier = Math.min(remaining, upTo - prev);
@@ -425,7 +427,7 @@ function validateWorkload() {
   let valid = true;
   Object.keys(messages).forEach((id) => {
     const input = $("#" + id);
-    const scaled = input.valueAsNumber * (id === "egress" && state.unit === "TB" ? 1024 : 1);
+    const scaled = input.valueAsNumber * (id === "egress" && state.unit === "TB" ? 1000 : 1);
     const ok = input.validity.valid && Number.isFinite(scaled);
     const error = $("#" + id + "-error");
     error.hidden = ok;
@@ -438,7 +440,7 @@ function validateWorkload() {
   if (valid) {
     state.count = $("#count").valueAsNumber;
     state.hours = $("#hours").valueAsNumber;
-    state.gb = $("#egress").valueAsNumber * (state.unit === "TB" ? 1024 : 1);
+    state.gb = $("#egress").valueAsNumber * (state.unit === "TB" ? 1000 : 1);
   }
   return valid;
 }
@@ -454,7 +456,7 @@ function sourceDateLabel(value, now = new Date()) {
 
 function renderSourceDates(cid) {
   const compute = "Compute file: " + sourceDateLabel(state.data[cid].generated);
-  const egress = EGRESS[cid] ? "Egress verified: " + sourceDateLabel(EGRESS_VERIFIED) : "Egress: not mapped";
+  const egress = EGRESS[cid] ? "Egress verified: " + sourceDateLabel(cid === "gcp" ? EGRESS_GCP_VERIFIED : EGRESS_VERIFIED) : "Egress: not mapped";
   return `<span class="tco-dates">${esc(compute)}<br>${esc(egress)}</span>`;
 }
 
@@ -582,7 +584,7 @@ function render() {
 function syncWorkloadInputs() {
   $("#count").value = state.count;
   $("#hours").value = state.hours;
-  $("#egress").value = state.unit === "TB" ? state.gb / 1024 : state.gb;
+  $("#egress").value = state.unit === "TB" ? state.gb / 1000 : state.gb;
 }
 
 function rerender() { if (render()) writeHash(); }

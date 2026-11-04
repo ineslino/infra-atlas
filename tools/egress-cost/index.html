@@ -120,7 +120,7 @@
     <!-- About / caveat -->
     <div class="about">
       <span class="about__mark">*</span>
-      <p><strong>This is the headline list price.</strong> Free monthly tiers, same-region exemptions, CDN routing, committed-use deals and enterprise discounts all move the real number — the breakdown shown applies the tier ladder honestly, but a real bill includes the conditionals in the footnotes of the <a href="/egress/">Egress Cost Map</a>. Read those before you commit a number to a slide.</p>
+      <p><strong>This is the headline list price.</strong> Input GB and TB are decimal (10^9 and 10^12 bytes); each provider’s billing units are converted before pricing. Free monthly tiers, same-region exemptions, CDN routing, committed-use deals and enterprise discounts all move the real number — the breakdown shown applies the tier ladder honestly, but a real bill includes the conditionals in the footnotes of the <a href="/egress/">Egress Cost Map</a>. Read those before you commit a number to a slide.</p>
     </div>
 
   </main>
@@ -146,11 +146,7 @@ const CLOUDS = [
   { key: "gcp",   name: "GCP",   swatch: "#F4C660" }
 ];
 
-// One entry per transfer × cloud. For tiered rates the upToGB is the
-// cumulative upper bound (null = unbounded). For flat rates, `flat` is the
-// per-unit USD rate. `unit` matters for display only (GB vs GiB); the
-// calculator treats the user's input volume as that provider's unit too —
-// the 7% GiB↔GB difference is well below tier rounding noise.
+// Tier bounds use the provider's billing unit; user inputs always represent decimal GB.
 const RATES = {
   "internet-egress": {
     aws: { unit: "GB", tiers: [
@@ -167,11 +163,12 @@ const RATES = {
       { upToGB: 153600, usd: 0.07,  band: "Next 100 TB" },
       { upToGB: null,   usd: 0.05,  band: "Beyond 150 TB" }
     ], note: "Zone 1 (NA + Europe) over Microsoft's global network. First 100 GB free, inbound free. Internet-routing preference prices a little lower.", src: "https://azure.microsoft.com/en-us/pricing/details/bandwidth/" },
-    gcp: { unit: "GiB", tiers: [
-      { upToGB: 1024,  usd: 0.12, band: "0 – 1 TB / month" },
-      { upToGB: 10240, usd: 0.11, band: "1 – 10 TB / month" },
-      { upToGB: null,  usd: 0.08, band: "10 TB and above" }
-    ], note: "Premium network tier, worldwide destinations excluding China and Australia. Standard tier is cheaper and carries a 200 GB/mo free allowance per region. Billed per GiB (≈ 7% > GB).", src: "https://cloud.google.com/network-tiers/pricing" }
+    gcp: { unit: "GiB", validatedAt: "2026-11-04", tiers: [
+      { upToGB: 1, usd: 0, band: "First 1 GiB / month" },
+      { upToGB: 1024, usd: 0.12, band: "1 to 1024 GiB / month" },
+      { upToGB: 10240, usd: 0.11, band: "1024 to 10240 GiB / month" },
+      { upToGB: null, usd: 0.08, band: "10240 GiB and above" }
+    ], note: "Premium VPC internet egress to North America, priced per monthly SKU. Assumes the full first-1-GiB allowance is unused; other destinations and existing account usage can change the bill. Reviewed 2026-11-04. Billing uses GiB (2^30 bytes); calculator inputs use decimal GB/TB.", src: "https://cloud.google.com/vpc/pricing#internet_data_transfer_rates" }
   },
   "cross-az": {
     aws:   { unit: "GB",  flat: 0.01, note: "Charged on both sides — a round trip between Availability Zones effectively costs ≈ $0.02/GB. Private-IP traffic across AZs only.", src: "https://aws.amazon.com/ec2/pricing/on-demand/" },
@@ -203,7 +200,7 @@ const state = { transfer: "internet-egress", volumeGB: 10240, unit: "TB" };
   const rep = document.getElementById("prov-report");
   if (!rep) return;
   rep.addEventListener("click", () => {
-    const vol = state.unit === "TB" ? (state.volumeGB / 1024) + " TB" : state.volumeGB + " GB";
+    const vol = state.unit === "TB" ? (state.volumeGB / 1000) + " TB" : state.volumeGB + " GB";
     const params = new URLSearchParams({
       title: "Wrong number in the Egress Cost Calculator",
       body: "Page: " + location.href
@@ -229,15 +226,16 @@ const num = (n) => n.toLocaleString("en-US", { maximumFractionDigits: 0 });
 function computeCost(transferId, cloud, volumeGB) {
   const rate = RATES[transferId][cloud];
   if (!rate) return { total: 0, breakdown: [], note: "—", src: "" };
+  const billingVolume = rate.unit === "GiB" ? volumeGB * 1e9 / 2 ** 30 : volumeGB;
   if (rate.flat !== undefined) {
     return {
-      total: rate.flat * volumeGB,
-      breakdown: [{ band: rate.flat === 0 ? "Free" : "Flat rate", volumeGB: volumeGB, usd: rate.flat, cost: rate.flat * volumeGB }],
+      total: rate.flat * billingVolume,
+      breakdown: [{ band: rate.flat === 0 ? "Free" : "Flat rate", volume: billingVolume, usd: rate.flat, cost: rate.flat * billingVolume }],
       note: rate.note, src: rate.src, unit: rate.unit
     };
   }
   // Tiered walk
-  let remaining = volumeGB;
+  let remaining = billingVolume;
   let prev = 0;
   let total = 0;
   const breakdown = [];
@@ -247,7 +245,7 @@ function computeCost(transferId, cloud, volumeGB) {
     const inThisTier = Math.min(remaining, width);
     if (inThisTier <= 0) break;
     const cost = inThisTier * t.usd;
-    breakdown.push({ band: t.band, volumeGB: inThisTier, usd: t.usd, cost: cost });
+    breakdown.push({ band: t.band, volume: inThisTier, usd: t.usd, cost: cost });
     total += cost;
     remaining -= inThisTier;
     prev = upTo;
@@ -281,14 +279,14 @@ function render() {
     const tag = isWinner ? '<span class="cloud-card__tag">cheapest</span>' : "";
     const perGB = state.volumeGB > 0 ? r.total / state.volumeGB : 0;
     const per = state.volumeGB > 0
-      ? '<div class="cloud-card__per">effective ' + usd(perGB) + ' / ' + esc(r.unit || "GB") + '</div>'
+      ? '<div class="cloud-card__per">effective ' + usd(perGB) + ' / GB' + '</div>'
       : "";
     const bd = r.breakdown.map((b) => {
       const costCls = b.cost === 0 ? "cloud-card__bd-cost cloud-card__bd-free" : "cloud-card__bd-cost";
       const costText = b.cost === 0 ? "Free" : usd(b.cost);
       return '<div class="cloud-card__bd-row">'
         + '<span class="cloud-card__bd-band">' + esc(b.band) + '</span>'
-        + '<span class="cloud-card__bd-vol">' + num(b.volumeGB) + ' ' + esc(r.unit || "GB") + ' @ ' + (b.usd === 0 ? "free" : "$" + b.usd) + '</span>'
+        + '<span class="cloud-card__bd-vol">' + b.volume.toLocaleString("en-US", {maximumFractionDigits: 6}) + ' ' + esc(r.unit || "GB") + ' @ ' + (b.usd === 0 ? "free" : "$" + b.usd) + '</span>'
         + '<span class="' + costCls + '">' + costText + '</span>'
         + '</div>';
     }).join("");
@@ -322,13 +320,13 @@ function readUrlState() {
   const v = parseFloat(params.get("v"));
   if (t && RATES[t]) state.transfer = t;
   if (u === "GB" || u === "TB") state.unit = u;
-  if (isFinite(v) && v >= 0) state.volumeGB = state.unit === "TB" ? v * 1024 : v;
+  if (isFinite(v) && v >= 0) state.volumeGB = state.unit === "TB" ? v * 1000 : v;
 }
 function writeUrlState() {
-  const v = state.unit === "TB" ? state.volumeGB / 1024 : state.volumeGB;
+  const v = state.unit === "TB" ? state.volumeGB / 1000 : state.volumeGB;
   const params = new URLSearchParams();
   params.set("t", state.transfer);
-  params.set("v", Number(v.toFixed(2)).toString());
+  params.set("v", Number(v.toPrecision(12)).toString());
   params.set("u", state.unit);
   history.replaceState(null, "", "?" + params.toString());
 }
@@ -337,12 +335,12 @@ function writeUrlState() {
 function readVolume() {
   const v = parseFloat($("#volume").value);
   if (!isFinite(v) || v < 0) return 0;
-  return state.unit === "TB" ? v * 1024 : v;
+  return state.unit === "TB" ? v * 1000 : v;
 }
 function applyUnitToInput() {
   // Express the current volumeGB in the active unit
-  const v = state.unit === "TB" ? state.volumeGB / 1024 : state.volumeGB;
-  $("#volume").value = Number(v.toFixed(2)).toString();
+  const v = state.unit === "TB" ? state.volumeGB / 1000 : state.volumeGB;
+  $("#volume").value = Number(v.toPrecision(12)).toString();
 }
 function syncDOMFromState() {
   $("#transfer").value = state.transfer;

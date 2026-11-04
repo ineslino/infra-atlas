@@ -50,6 +50,7 @@ from .logic import (
     public_view,
     score_candidate,
     walk_ladder,
+    usd_per_gb,
 )
 
 
@@ -130,7 +131,7 @@ class EgressQuery(BaseModel):
     """Volume to price through the egress tier ladder."""
     model_config = ConfigDict(str_strip_whitespace=True, extra="forbid")
 
-    gb: float = Field(..., gt=0, le=10_000_000, description="Monthly transfer volume in GB")
+    gb: float = Field(..., gt=0, le=10_000_000, description="Monthly transfer volume in decimal GB (10^9 bytes)")
     provider: Optional[str] = Field(default=None, description="aws, azure or gcp; omit for all three side by side")
     transfer: str = Field(default="internet-egress", description="Transfer type id from the Egress Cost Map: internet-egress, cross-az, cross-region, nat-processing or interconnect")
 
@@ -376,14 +377,19 @@ async def infraatlas_get_egress_cost(params: EgressQuery) -> str:
             results[prov] = {"error": f"No {prov} rate published for '{params.transfer}'."}
             continue
         entry: dict[str, Any] = {"note": rate.get("note", ""), "source": rate.get("src", "")}
-        ladder = parse_tiers(rate["tiers"]) if rate.get("tiers") else None
+        ladder = parse_tiers(rate["tiers"], rate.get("unit", "GB")) if rate.get("tiers") else None
+        # Never substitute a flat headline when a published tier ladder is unreadable.
+        if rate.get("tiers") and ladder is None:
+            entry["error"] = "Published tier bands could not be parsed; no estimate calculated."
+            results[prov] = entry
+            continue
         if ladder:
             entry.update(walk_ladder(ladder, params.gb))
         else:
             # headline like "$0.01 /GB" → flat rate; otherwise report verbatim
             m = re.match(r"\$([\d.]+)\s*/\s*(GB|GiB)", rate.get("headline", ""))
             if m:
-                usd = float(m.group(1))
+                usd = usd_per_gb(float(m.group(1)), m.group(2))
                 entry.update({
                     "totalUSD": round(usd * params.gb, 2),
                     "breakdown": [{"band": "Flat rate", "volumeGB": params.gb, "usdPerGB": usd, "cost": round(usd * params.gb, 2)}],

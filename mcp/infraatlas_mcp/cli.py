@@ -28,7 +28,7 @@ from pathlib import Path
 
 import httpx
 
-from .logic import flatten_catalogue, parse_tiers, score_candidate, walk_ladder
+from .logic import flatten_catalogue, parse_tiers, score_candidate, walk_ladder, usd_per_gb
 
 BASE_URL = "https://infraatlas.dev"
 CACHE_DIR = Path.home() / ".cache" / "infraatlas"
@@ -194,13 +194,18 @@ def cmd_egress(args):
         if not rate:
             rows.append([prov, "—", "no rate published", ""])
             continue
-        ladder = parse_tiers(rate["tiers"]) if rate.get("tiers") else None
+        ladder = parse_tiers(rate["tiers"], rate.get("unit", "GB")) if rate.get("tiers") else None
+        # A tier parsing failure must not silently become a flat-rate estimate.
+        if rate.get("tiers") and ladder is None:
+            payload[prov] = {"error": "Published tier bands could not be parsed; no estimate calculated."}
+            rows.append([prov, "—", "unreadable tier bands", ""])
+            continue
         if ladder:
             res = walk_ladder(ladder, args.gb)
         else:
             m = re.match(r"\$([\d.]+)\s*/\s*(GB|GiB)", rate.get("headline", ""))
             if m:
-                usd = float(m.group(1))
+                usd = usd_per_gb(float(m.group(1)), m.group(2))
                 res = {"totalUSD": round(usd * args.gb, 2),
                        "breakdown": [{"band": "Flat rate", "volumeGB": args.gb,
                                       "usdPerGB": usd, "cost": round(usd * args.gb, 2)}]}
@@ -319,7 +324,7 @@ def build_parser():
     sp = sub.add_parser("egress", help="price N GB through the egress tier ladders")
     sp.add_argument("providers", nargs="*", choices=["aws", "azure", "gcp"],
                     help="providers to compare (default: all three)")
-    sp.add_argument("--gb", type=float, required=True, help="monthly volume in GB")
+    sp.add_argument("--gb", type=float, required=True, help="monthly volume in decimal GB (10^9 bytes)")
     sp.add_argument("--transfer", default="internet-egress",
                     help="internet-egress | cross-az | cross-region | nat-processing | interconnect")
     common(sp)

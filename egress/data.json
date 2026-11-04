@@ -1,5 +1,5 @@
 {
-  "generated": "2026-05-19T10:18:23Z",
+  "generated": "2026-11-04T22:03:25Z",
   "schemaVersion": 1,
   "currency": "USD",
   "providers": [
@@ -106,22 +106,27 @@
           "level": "rate",
           "headline": "$0.12 /GiB",
           "unit": "GiB",
+          "validatedAt": "2026-11-04",
           "tiers": [
             {
-              "band": "0 to 1 TB / month",
+              "band": "First 1 GiB / month",
+              "usd": 0
+            },
+            {
+              "band": "1 to 1024 GiB / month",
               "usd": 0.12
             },
             {
-              "band": "1 to 10 TB / month",
+              "band": "1024 to 10240 GiB / month",
               "usd": 0.11
             },
             {
-              "band": "10 TB and above",
+              "band": "10240 GiB and above",
               "usd": 0.08
             }
           ],
-          "note": "Premium network tier, to worldwide destinations other than China and Australia. The Standard tier is cheaper — roughly $0.085 then $0.065 per GiB from a US region — and carries a 200 GB monthly free allowance per region. Google bills per GiB, slightly larger than a GB.",
-          "src": "https://cloud.google.com/network-tiers/pricing"
+          "note": "Premium VPC internet egress to North America, priced per monthly SKU. Assumes the full first-1-GiB allowance is unused; other destinations and existing account usage can change the bill. Reviewed 2026-11-04. Billing uses GiB (2^30 bytes); calculator inputs use decimal GB/TB.",
+          "src": "https://cloud.google.com/vpc/pricing#internet_data_transfer_rates"
         }
       }
     },
