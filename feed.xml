@@ -6,7 +6,15 @@
     <atom:link href="https://infraatlas.dev/feed.xml" rel="self" type="application/rss+xml"/>
     <description>A neutral, sourced changelog of cloud infrastructure — new instance families, regions, withdrawals and price moves across AWS, Azure, GCP, OCI and OVHcloud.</description>
     <language>en</language>
-    <lastBuildDate>Mon, 02 Nov 2026 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Wed, 04 Nov 2026 00:00:00 +0000</lastBuildDate>
+    <item>
+      <title>AWS EC2 · p5e now in us-west-2</title>
+      <link>https://infraatlas.dev/ec2/</link>
+      <guid isPermaLink="false">b0b278b1e35eb091666fbc4d8b0d7113</guid>
+      <category>availability-added</category>
+      <pubDate>Wed, 04 Nov 2026 00:00:00 +0000</pubDate>
+      <description>AWS EC2 · p5e now in us-west-2</description>
+    </item>
     <item>
       <title>Azure VM · Dasv5.D4as_v5  0.392 → 0.208  (-47%)</title>
       <link>https://infraatlas.dev/azure-vm/</link>
