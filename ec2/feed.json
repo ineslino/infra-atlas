@@ -1,7 +1,13 @@
 {
-  "generated": "2026-10-29T12:44:54Z",
+  "generated": "2026-11-04T14:13:18Z",
   "instrument": "ec2",
   "entries": [
+    {
+      "ts": "2026-11-04",
+      "instrument": "ec2",
+      "kind": "availability-added",
+      "text": "p5e now in us-west-2"
+    },
     {
       "ts": "2026-10-29",
       "instrument": "ec2",
@@ -595,12 +601,6 @@
       "instrument": "ec2",
       "kind": "family-removed",
       "text": "family i3p withdrawn"
-    },
-    {
-      "ts": "2026-06-29",
-      "instrument": "ec2",
-      "kind": "availability-removed",
-      "text": "74 families dropped regions (898 region changes)"
     }
   ]
 }
