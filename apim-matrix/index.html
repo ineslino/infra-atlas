@@ -91,17 +91,8 @@ body {
     radial-gradient(ellipse at -10% 110%, rgba(244, 198, 96, 0.05), transparent 65%),
     var(--ink);
   background-attachment: fixed;
-  overflow-x: hidden;
 }
 
-.grain {
-  pointer-events: none; position: fixed; inset: 0; z-index: 100; opacity: 0.08; mix-blend-mode: overlay;
-  background-image: url("data:image/svg+xml;utf8,<svg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.6 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
-}
-.scanlines {
-  pointer-events: none; position: fixed; inset: 0; z-index: 99;
-  background: repeating-linear-gradient(180deg, transparent, transparent 2px, rgba(244,239,230,0.012) 2px, rgba(244,239,230,0.012) 3px);
-}
 ::selection { background: var(--accent); color: var(--ink); }
 
 .page { max-width: 1640px; margin: 0 auto; padding: 56px 48px 96px; position: relative; }
@@ -111,14 +102,11 @@ body {
   display: grid; grid-template-columns: 1fr auto; gap: 48px; align-items: end;
   padding-bottom: 36px; border-bottom: 1px solid var(--line); margin-bottom: 32px;
 }
-.masthead__eyebrow {
-  font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.22em; color: var(--paper-3);
-  text-transform: uppercase; display: inline-flex; align-items: center; gap: 12px;
-  text-decoration: none; transition: color 0.2s ease;
-}
-.masthead__eyebrow:hover { color: var(--paper); }
-.masthead__eyebrow-arrow { color: var(--accent); transition: transform 0.2s ease; }
-.masthead__eyebrow:hover .masthead__eyebrow-arrow { transform: translateX(-4px); }
+.breadcrumb { display: inline-flex; align-items: center; flex-wrap: wrap; gap: 8px; color: var(--paper-3); font: 12px/1.4 var(--mono); letter-spacing: 0.02em; }
+.breadcrumb a { color: var(--paper-2); text-decoration: none; text-underline-offset: 3px; transition: color 0.2s ease; }
+.breadcrumb a:hover { color: var(--paper); }
+.breadcrumb__separator { color: var(--accent); }
+.breadcrumb [aria-current="page"] { color: var(--paper-3); }
 .masthead__title {
   font-family: var(--serif); font-weight: 400;
   font-size: clamp(48px, 7vw, 108px); line-height: 0.95; letter-spacing: -0.02em;
@@ -137,24 +125,16 @@ body {
 }
 .status-line {
   display: inline-flex; align-items: center; gap: 10px;
-  font-family: var(--mono); font-size: 11px; letter-spacing: 0.18em;
+  font-family: var(--mono); font-size: 12px; letter-spacing: 0.18em;
   text-transform: uppercase; color: var(--gold);
 }
 .status-dot {
   width: 8px; height: 8px; border-radius: 50%; background: var(--gold);
 }
-@media (prefers-reduced-motion: no-preference) {
-  .status-dot { animation: pulse 2.4s infinite; }
-  @keyframes pulse {
-    0% { box-shadow: 0 0 0 0 rgba(244,198,96,0.5); }
-    70% { box-shadow: 0 0 0 14px rgba(244,198,96,0); }
-    100% { box-shadow: 0 0 0 0 rgba(244,198,96,0); }
-  }
-}
 .status-time { font-family: var(--mono); font-size: 12px; color: var(--paper-3); }
 .status-counts { display: flex; gap: 24px; margin-top: 4px; }
 .status-counts > div {
-  text-align: right; font-family: var(--mono); font-size: 11px; letter-spacing: 0.12em;
+  text-align: right; font-family: var(--mono); font-size: 12px; letter-spacing: 0.12em;
   text-transform: uppercase; color: var(--paper-3); display: flex; flex-direction: column; gap: 2px;
 }
 .status-counts strong {
@@ -164,11 +144,12 @@ body {
 
 /* ─────────── FILTERS ─────────── */
 .filters {
-  display: grid; grid-template-columns: auto 1fr; gap: 18px 32px; align-items: center;
-  padding: 18px 22px; background: linear-gradient(180deg, var(--surface) 0%, var(--ink-2) 100%);
+  display: block; padding: 18px 22px; background: linear-gradient(180deg, var(--surface) 0%, var(--ink-2) 100%);
   border: 1px solid var(--line); border-radius: 4px;
   position: sticky; top: 16px; z-index: 50; backdrop-filter: blur(12px); margin-bottom: 28px;
 }
+.filters__summary { display: none; }
+.filters__body { display: grid; grid-template-columns: auto 1fr; gap: 18px 32px; align-items: center; padding: 0; }
 .filter-search {
   flex: 1; position: relative; grid-column: 1 / -1;
 }
@@ -186,13 +167,17 @@ body {
 .filter-chips {
   grid-column: 1 / -1; display: flex; flex-wrap: wrap; gap: 6px; align-items: center;
 }
+.filter-actions { grid-column: 1 / -1; display: flex; justify-content: flex-end; }
+.filter-clear { min-height: 44px; padding: 8px 12px; border: 1px solid var(--line-2); border-radius: 4px; background: transparent; color: var(--paper-2); font: 12px var(--mono); cursor: pointer; }
+.filter-clear:hover { border-color: var(--accent); color: var(--paper); }
+.filter-clear[hidden] { display: none; }
 .filter-chips__label {
-  font-family: var(--mono); font-size: 10px; letter-spacing: 0.16em;
+  font-family: var(--mono); font-size: 12px; letter-spacing: 0.16em;
   text-transform: uppercase; color: var(--paper-3); margin-right: 4px;
 }
 .chip {
   background: transparent; border: 1px solid var(--line-2); color: var(--paper-2);
-  font-family: var(--mono); font-size: 11px; letter-spacing: 0.06em;
+  font-family: var(--mono); font-size: 12px; letter-spacing: 0.06em;
   padding: 6px 12px; border-radius: 99px; cursor: pointer; transition: all 0.15s ease;
   display: inline-flex; align-items: center; gap: 8px; white-space: nowrap;
 }
@@ -219,6 +204,7 @@ body {
 .matrix { min-width: 1000px; /* 8 columns — wider than the shared default */ }
 .matrix thead th.feature-col { min-width: 280px; }
 .matrix tbody tr.feature-row td.cell { min-width: 90px; }
+.matrix .cell-value { font-size: 12px; }
 
 /* Cell mark "star" badge — apim-specific positioning for the corner-attached footnote indicator */
 .cell-mark__star {
@@ -242,10 +228,10 @@ body {
   display: flex; flex-wrap: wrap; gap: 18px; align-items: center;
   margin-bottom: 28px; padding: 16px 22px;
   background: var(--surface); border: 1px solid var(--line); border-radius: 4px;
-  font-family: var(--mono); font-size: 11px; color: var(--paper-2);
+  font-family: var(--mono); font-size: 12px; color: var(--paper-2);
 }
 .legend__label {
-  font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--paper-3);
+  font-size: 12px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--paper-3);
 }
 .legend__item { display: inline-flex; align-items: center; gap: 8px; }
 
@@ -276,24 +262,33 @@ body {
   .page { padding: 32px 22px 72px; }
   .masthead { grid-template-columns: 1fr; gap: 24px; }
   .masthead__status { text-align: left; align-items: flex-start; }
-  .filters { position: static; padding: 14px; }
+  .filters { position: static; padding: 0; }
+  .filters__summary { display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 52px; padding: 10px 14px; cursor: pointer; list-style: none; font: 12px var(--mono); }
+  .filters__summary::-webkit-details-marker { display: none; }
+  .filters__summary::after { content: "+"; color: var(--accent); font-size: 18px; }
+  .filters__disclosure[open] > .filters__summary::after { content: "−"; }
+  .filters__summary:focus-visible { outline: 2px solid var(--accent); outline-offset: -3px; }
+  .filters__body { grid-template-columns: 1fr; gap: 14px; padding: 0 14px 14px; }
+  .filter-search, .filter-chips, .filter-actions { grid-column: 1; }
+  .filter-search input { min-height: 48px; }
+  .filter-chips { gap: 8px; }
+  .filter-chips .chip { min-height: 44px; font-size: 12px; }
+  .filter-actions { justify-content: flex-start; }
   .colophon { grid-template-columns: 1fr; gap: 24px; }
 }
 </style>
 </head>
 <body>
 
-<div class="grain"></div>
-<div class="scanlines"></div>
-
 <div class="page">
 
   <header class="masthead">
     <div class="masthead__brand">
-      <a class="masthead__eyebrow" href="../">
-        <span class="masthead__eyebrow-arrow">←</span>
-        Infra Atlas · API Management · Feature Matrix
-      </a>
+      <nav class="breadcrumb" aria-label="Breadcrumb">
+        <a href="../">Infra Atlas</a>
+        <span class="breadcrumb__separator" aria-hidden="true">/</span>
+        <span aria-current="page">API Management Matrix</span>
+      </nav>
       <h1 class="masthead__title">Feature <em>Matrix.</em></h1>
       <p class="masthead__subtitle">
         Every major API management platform against <span>every meaningful capability</span> — OAuth flavours, mTLS, rate limiting, GraphQL, gRPC, multi-region, self-hosted, FedRAMP. <span>With the asterisks intact.</span>
@@ -315,13 +310,19 @@ body {
 
   <main id="ia-main">
 
-  <section class="filters">
-    <div class="filter-search">
-      <label for="search" class="sr-only">Search capabilities, categories, or vendors</label>
-      <input id="search" type="search" autocomplete="off" spellcheck="false" placeholder="Filter capabilities — search by name, category, vendor…" aria-label="Search capabilities, categories, or vendors">
-    </div>
-    <div class="filter-chips" id="cat-chips"></div>
-    <div class="filter-chips" id="vendor-chips"></div>
+  <section class="filters" aria-label="APIM matrix filters">
+    <details class="filters__disclosure" id="filters-disclosure" open>
+      <summary class="filters__summary"><span>Filters</span><span id="filter-count" aria-live="polite">0 active filters</span></summary>
+      <div class="filters__body">
+        <div class="filter-search">
+          <label for="search" class="sr-only">Search capabilities, categories, or vendors</label>
+          <input id="search" type="search" autocomplete="off" spellcheck="false" placeholder="Filter capabilities — search by name, category, vendor…" aria-label="Search capabilities, categories, or vendors">
+        </div>
+        <div class="filter-chips" id="cat-chips"></div>
+        <div class="filter-chips" id="vendor-chips"></div>
+        <div class="filter-actions"><button type="button" class="filter-clear" id="clear-filters" hidden>Clear filters</button></div>
+      </div>
+    </details>
   </section>
 
   <div class="sr-only" id="filter-status" role="status" aria-live="polite"></div>
@@ -838,6 +839,29 @@ const escapeHtml = (s) => String(s).replace(/[&<>"']/g, (c) => ({
 }[c]));
 
 let F;  // shared filter machinery (IA.matrix.filters), built once IA.matrix is ready
+function activeFilterCount() {
+  return Number(!!state.query.trim()) + Number(state.category !== "all") + Number(state.vendors.size < VENDORS.length);
+}
+
+function updateFilterSummary() {
+  const count = activeFilterCount();
+  $("#filter-count").textContent = count === 1 ? "1 active filter" : count + " active filters";
+  $("#clear-filters").hidden = count === 0;
+}
+
+function clearFilters() {
+  state.query = "";
+  state.category = "all";
+  state.vendors = new Set(VENDORS.map(v => v.key));
+  $("#search").value = "";
+  $$(".chip[data-cat]").forEach(button => button.classList.toggle("is-active", button.dataset.cat === "all"));
+  $$(".chip[data-v]").forEach(button => button.classList.toggle("is-active", button.dataset.v === "all"));
+  IA.matrix.syncChipsAria('.chip[data-cat]');
+  IA.matrix.syncChipsAria('.chip[data-v]');
+  applyFilter();
+  $("#search").focus();
+}
+
 function init() {
   // Counts
   $("#count-features").textContent = FEATURES.length;
@@ -853,8 +877,12 @@ function init() {
 
   F.buildChips();
   F.applyHash();
+  if (window.matchMedia && window.matchMedia("(max-width: 900px)").matches && activeFilterCount() === 0) {
+    $("#filters-disclosure").open = false;
+  }
   renderMatrix();
   F.wire();
+  $("#clear-filters").addEventListener("click", clearFilters);
   // Shared module owns: drawer modal open/close, ESC, backdrop click, focus trap,
   // scroll lock, and the cell/feature-col click delegation that opens the drawer.
   IA.matrix.drawer.init();
@@ -905,6 +933,7 @@ function applyFilter() {
     anyFilterActive: anyFilter
   });
   F.writeHash();
+  updateFilterSummary();
 }
 
 // Drawer infrastructure (focus trap, scroll lock, ESC, backdrop click) lives in
