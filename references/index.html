@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="color-scheme" content="dark">
+<title>Technical References · Infra Atlas</title>
+<link rel="icon" href="/favicon.svg?v=2" type="image/svg+xml">
+<meta name="description" content="Browse Infra Atlas technical references by subject. Each instrument lists its primary sources, scope and verification date.">
+<link rel="canonical" href="https://infraatlas.dev/references/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Infra Atlas">
+<meta property="og:title" content="Technical References · Infra Atlas">
+<meta property="og:description" content="A subject index to source-backed cloud infrastructure references in Infra Atlas.">
+<meta property="og:url" content="https://infraatlas.dev/references/">
+<meta property="og:image" content="https://infraatlas.dev/og.png?v=3">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Technical References · Infra Atlas">
+<meta name="twitter:description" content="Browse source-backed instruments by subject, with scope and review dates on each page.">
+<meta name="twitter:image" content="https://infraatlas.dev/og.png?v=3">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@300;400;500;600&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/tools/shared.css">
+<style>
+.masthead { margin-bottom: 28px; }
+.scope-strip {
+  display: grid; grid-template-columns: .7fr 1fr 1.4fr; gap: 18px;
+  margin-bottom: 34px; padding: 18px 20px;
+  border: 1px solid var(--line-2); border-radius: 5px;
+  background: linear-gradient(90deg, rgba(255,120,73,.045), transparent 70%);
+}
+.scope-strip__item { display: flex; flex-direction: column; gap: 4px; }
+.scope-strip__label { color: var(--paper-3); font: 10px var(--mono); letter-spacing: .15em; text-transform: uppercase; }
+.scope-strip__value { color: var(--accent); font: 26px/1 var(--serif); }
+.scope-strip__detail { color: var(--paper-2); font-size: 12px; }
+.reference-list { border-top: 1px solid var(--line-2); }
+.reference-row { display: grid; grid-template-columns: minmax(210px, .72fr) minmax(0, 1.6fr); gap: 22px; padding: 23px 0; border-bottom: 1px solid var(--line-2); }
+.reference-row__heading { display: flex; align-items: baseline; gap: 12px; }
+.reference-row__number { flex: none; color: var(--accent); font: 10px var(--mono); letter-spacing: .12em; }
+.reference-row h2 { font: 400 25px/1.1 var(--serif); }
+.reference-row__scope { margin: 7px 0 0 34px; color: var(--paper-2); font-size: 12px; line-height: 1.5; }
+.reference-links { display: flex; flex-wrap: wrap; align-content: flex-start; gap: 8px; }
+.reference-links a { display: inline-flex; align-items: center; min-height: 36px; padding: 7px 10px; border: 1px solid var(--line-2); border-radius: 3px; color: var(--paper-2); font-size: 12px; text-decoration: none; transition: color .15s ease, border-color .15s ease; }
+.reference-links a:hover { color: var(--paper); border-color: var(--accent); }
+.reference-note { margin-top: 28px; }
+@media (max-width: 680px) {
+  .page { padding: 34px 18px 64px; }
+  .scope-strip { grid-template-columns: 1fr 1fr; gap: 16px; padding: 16px; }
+  .scope-strip__item:last-child { grid-column: 1 / -1; }
+  .reference-row { grid-template-columns: 1fr; gap: 14px; padding: 19px 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; }
+}
+</style>
+</head>
+<body>
+<div class="grain"></div>
+<div class="scanlines"></div>
+<div class="page">
+  <header class="masthead">
+    <a class="eyebrow" href="/"><span class="arrow">←</span> Infra Atlas</a>
+    <h1 class="title">Technical <em>References.</em></h1>
+    <p class="subtitle">Choose a subject to reach a source-backed Atlas instrument. Each instrument explains its own scope, links its sources and shows when its claims were last verified.</p>
+  </header>
+
+  <main id="ia-main">
+    <section class="scope-strip" aria-label="Reference catalogue at a glance">
+      <div class="scope-strip__item"><span class="scope-strip__label">Collections</span><strong class="scope-strip__value">04</strong><span class="scope-strip__detail">technical subject areas</span></div>
+      <div class="scope-strip__item"><span class="scope-strip__label">Sources</span><strong class="scope-strip__value">Primary</strong><span class="scope-strip__detail">vendor documentation and public APIs</span></div>
+      <div class="scope-strip__item"><span class="scope-strip__label">Scope &amp; review</span><span class="scope-strip__detail">Defined on each instrument; dates are page-specific.</span></div>
+    </section>
+
+    <section class="reference-list" aria-label="Technical reference collections">
+      <article class="reference-row">
+        <div>
+          <div class="reference-row__heading"><span class="reference-row__number">01</span><h2>Compute &amp; capacity</h2></div>
+          <p class="reference-row__scope">Regions, machine families, instance catalogues and comparable cloud SKUs.</p>
+        </div>
+        <nav class="reference-links" aria-label="Compute and capacity references">
+          <a href="/ec2/">EC2 Observatory</a><a href="/azure-vm/">Azure VM Atlas</a><a href="/gcp-compute/">GCP Compute Index</a><a href="/oci-compute/">OCI Compute</a><a href="/ovh-instances/">OVH Instances</a><a href="/regions/">Region Map</a><a href="/equivalent-sku/">Equivalent-SKU Finder</a>
+        </nav>
+      </article>
+
+      <article class="reference-row">
+        <div>
+          <div class="reference-row__heading"><span class="reference-row__number">02</span><h2>Networking &amp; cost</h2></div>
+          <p class="reference-row__scope">Network capabilities, data transfer, storage pricing and quota limits.</p>
+        </div>
+        <nav class="reference-links" aria-label="Networking and cost references">
+          <a href="/networking-matrix/">Networking Matrix</a><a href="/egress/">Egress Cost Map</a><a href="/storage-pricing/">Storage Pricing</a><a href="/service-quotas/">Service Quotas</a><a href="/tools/egress-cost/">Egress Calculator</a><a href="/tools/subnet/">Subnet Calculator</a>
+        </nav>
+      </article>
+
+      <article class="reference-row">
+        <div>
+          <div class="reference-row__heading"><span class="reference-row__number">03</span><h2>APIs &amp; platforms</h2></div>
+          <p class="reference-row__scope">Managed and self-hosted API management, Kubernetes and developer platforms.</p>
+        </div>
+        <nav class="reference-links" aria-label="API and platform references">
+          <a href="/apim-matrix/">APIM Feature Matrix</a><a href="/aws-api-gateway/">AWS API Gateway</a><a href="/apigee/">Apigee Atlas</a><a href="/mulesoft/">MuleSoft Atlas</a><a href="/self-hosted-apim/">Self-hosted APIM</a><a href="/kubernetes/">Kubernetes Atlas</a><a href="/idp-matrix/">IDP Matrix</a>
+        </nav>
+      </article>
+
+      <article class="reference-row">
+        <div>
+          <div class="reference-row__heading"><span class="reference-row__number">04</span><h2>Security &amp; architecture</h2></div>
+          <p class="reference-row__scope">Identity, compliance, sovereignty, confidential computing, data and observability.</p>
+        </div>
+        <nav class="reference-links" aria-label="Security and architecture references">
+          <a href="/iam-matrix/">IAM Matrix</a><a href="/compliance/">Compliance Footprint</a><a href="/sovereignty/">European Sovereignty</a><a href="/confidential-computing/">Confidential Computing</a><a href="/data-layer/">Data Layer Equivalence</a><a href="/observability/">Observability Matrix</a><a href="/observability-stacks/">Observability Stacks</a><a href="/ai-atlas/">Generative AI Atlas</a><a href="/decisions/">Decision Guides</a>
+        </nav>
+      </article>
+    </section>
+
+    <aside class="about reference-note">
+      <span class="about__mark">*</span>
+      <p><strong>Why dates sit on each instrument.</strong> Live feeds, curated datasets and dated snapshots have different refresh schedules. The instrument page is the source of truth for its scope, upstream links and verification date. Read the <a href="/about/">methodology</a> for the sourcing rules or the <a href="/api/">data API guide</a> for machine-readable datasets.</p>
+    </aside>
+  </main>
+
+  <footer class="colophon">
+    <p>Infra Atlas · <a href="/">Home</a> · <a href="/about/">Methodology</a> · <a href="/compare-costs/">Compare rates</a> · <a href="https://github.com/ineslino/infra-atlas" target="_blank" rel="noopener">GitHub</a> · MIT-licensed</p>
+  </footer>
+</div>
+<script src="/nav.js?v=10" defer></script>
+</body>
+</html>
