@@ -1,7 +1,13 @@
 {
-  "generated": "2026-11-04T14:13:18Z",
+  "generated": "2026-11-05T14:27:26Z",
   "instrument": "ec2",
   "entries": [
+    {
+      "ts": "2026-11-05",
+      "instrument": "ec2",
+      "kind": "availability-added",
+      "text": "p5 now in eu-central-1"
+    },
     {
       "ts": "2026-11-04",
       "instrument": "ec2",
@@ -595,12 +601,6 @@
       "instrument": "ec2",
       "kind": "family-added",
       "text": "new family c9gd"
-    },
-    {
-      "ts": "2026-06-29",
-      "instrument": "ec2",
-      "kind": "family-removed",
-      "text": "family i3p withdrawn"
     }
   ]
 }
