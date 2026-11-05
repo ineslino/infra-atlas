@@ -58,8 +58,11 @@ Data is CC BY 4.0; the data endpoints below are CORS-enabled JSON, no key needed
 - [Subnet Calculator](https://infraatlas.dev/tools/subnet/): CIDR planning for VPC/VNet/VCN
 - [APIM Limits Picker](https://infraatlas.dev/tools/apim-limits/): rate/payload/timeout limits per API platform
 
+- [Compare Rates](https://infraatlas.dev/compare-costs/): compare two options using rates you enter for compute, egress and storage on the same monthly workload
+
 ## Optional
 
+- [Technical References](https://infraatlas.dev/references/): source-backed Atlas pages grouped by technical subject
 - [About & methodology](https://infraatlas.dev/about/): how data enters the atlas, verification tiers, freshness policy
 - [Changelog](https://infraatlas.dev/changelog/): what changed, refresh by refresh (also as RSS at /feed.xml)
 - [GitHub](https://github.com/ineslino/infra-atlas): source, issues, "report a fix"

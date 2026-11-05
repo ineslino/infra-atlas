@@ -6,17 +6,17 @@
 <meta name="color-scheme" content="dark">
 <title>Calculators · Infra Atlas</title>
 <link rel="icon" href="/favicon.svg?v=2" type="image/svg+xml">
-<meta name="description" content="Small interactive utilities that translate the curated data on Infra Atlas into answers: egress cost calculator, cross-cloud subnet calculator, APIM limits picker. Sourced, no signup, no ads.">
+<meta name="description" content="Interactive utilities for cloud infrastructure: catalogue-backed calculators and a manual rate comparison for your workload. No signup, no ads.">
 <link rel="canonical" href="https://infraatlas.dev/tools/">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Infra Atlas">
 <meta property="og:title" content="Calculators · Infra Atlas">
-<meta property="og:description" content="Interactive utilities built on top of the Atlas data — egress cost, subnet math, APIM limits picker.">
+<meta property="og:description" content="Interactive utilities for cloud infrastructure — cost, network and API-management decisions.">
 <meta property="og:url" content="https://infraatlas.dev/tools/">
 <meta property="og:image" content="https://infraatlas.dev/og.png?v=3">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Calculators · Infra Atlas">
-<meta name="twitter:description" content="Interactive utilities built on top of the Atlas data — egress cost, subnet math, APIM limits picker.">
+<meta name="twitter:description" content="Interactive utilities for cloud infrastructure — cost, network and API-management decisions.">
 <meta name="twitter:image" content="https://infraatlas.dev/og.png?v=3">
 <script type="application/ld+json">
 {
@@ -24,7 +24,7 @@
   "@type": "CollectionPage",
   "name": "Calculators",
   "url": "https://infraatlas.dev/tools/",
-  "description": "Interactive utilities that translate Atlas data into answers.",
+  "description": "Interactive utilities for cloud infrastructure decisions.",
   "isPartOf": {
     "@type": "WebSite",
     "name": "Infra Atlas",
@@ -68,7 +68,7 @@
   <header class="masthead">
     <a class="eyebrow" href="/"><span class="arrow">←</span> Infra Atlas</a>
     <h1 class="title">The <em>Calculators.</em></h1>
-    <p class="subtitle">Interactive utilities that translate the Atlas's curated data into answers. Each one points back to the instrument that sources its numbers — no signup, no ads, list prices and reserved IPs sourced to vendor docs.</p>
+    <p class="subtitle">Use catalogue-backed calculators for sourced prices, or compare two options with rates you provide. No signup, no ads.</p>
   </header>
 
   <main id="ia-main">
@@ -90,6 +90,13 @@
         <div class="tcard__desc">What would this workload cost elsewhere? Equivalent SKUs on every cloud, compute hours plus internet egress, side by side.</div>
         <div class="tcard__feeds">Built on <code>/equivalent-sku/</code> + <code>/egress/</code></div>
         <div class="tcard__cta">Open the comparator →</div>
+      </a>
+      <a class="tcard" href="/compare-costs/">
+        <div class="tcard__tag">Cross-cloud · Cost</div>
+        <div class="tcard__title">Compare <em>Rates.</em></div>
+        <div class="tcard__desc">Compare two options against the same workload using your own compute, egress and storage rates. No catalogue assumptions.</div>
+        <div class="tcard__feeds">Uses rates <code>you enter</code></div>
+        <div class="tcard__cta">Open the comparison →</div>
       </a>
       <a class="tcard" href="/tools/egress-cost/">
         <div class="tcard__tag">Networking · Cost</div>
@@ -116,11 +123,11 @@
   </main>
 
   <footer class="colophon">
-    <p>Infra Atlas · <a href="/">Home</a> · <a href="https://github.com/ineslino/infra-atlas" target="_blank" rel="noopener">GitHub</a> · MIT-licensed · Reviewed <time datetime="2026-05-19">2026-05-19</time></p>
+    <p>Infra Atlas · <a href="/">Home</a> · <a href="/references/">Technical references</a> · <a href="https://github.com/ineslino/infra-atlas" target="_blank" rel="noopener">GitHub</a> · MIT-licensed · Reviewed <time datetime="2026-05-19">2026-05-19</time></p>
   </footer>
 
 </div>
 
-<script src="/nav.js?v=9" defer></script>
+<script src="/nav.js?v=10" defer></script>
 </body>
 </html>

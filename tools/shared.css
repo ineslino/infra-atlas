@@ -1,6 +1,6 @@
 /* ════════════════════════════════════════════════════════════════════
    Infra Atlas · Tools — shared chrome
-   Used by /tools/, /tools/egress-cost/, /tools/subnet/, /tools/apim-limits/.
+   Used by /tools/, /compare-costs/, /references/, and individual calculator pages.
    Each tool keeps its own panel/results styling in an inline <style>
    block; the masthead, form controls, about block and colophon live here.
    ════════════════════════════════════════════════════════════════════ */

@@ -44,8 +44,13 @@
     ["/tools/right-size/",   "Right-Sizing Calculator",    "Tool", "right size rightsizing downsize cheaper instance utilisation utilization cpu memory headroom savings overprovisioned waste cost optimize optimization"],
     ["/tools/egress-cost/",  "Egress Cost Calculator",     "Tool", "egress cost calculator bandwidth bill data transfer aws azure gcp price tier compare"],
     ["/tools/subnet/",       "Subnet Calculator",          "Tool", "subnet cidr calculator vpc vnet vcn reserved ips usable hosts aws azure gcp oci ipv4 ipv6"],
-    ["/tools/apim-limits/",  "APIM Limits Picker",         "Tool", "apim api gateway limits timeout payload rate limit websocket pick choose vendor mulesoft apigee"]
+    ["/tools/apim-limits/",  "APIM Limits Picker",         "Tool", "apim api gateway limits timeout payload rate limit websocket pick choose vendor mulesoft apigee"],
+    ["/compare-costs/", "Compare Rates Calculator", "Tool", "compare rates compare costs custom unit price workload compute egress storage manual quote"],
   ];
+  var REFERENCES = [
+    ["/references/", "Technical References", "Reference", "source catalogue sources technical documentation scope verified reviewed date"],
+  ];
+
   var TOOLBOX = [
     ["/toolbox/",            "The Toolbox — hub",          "Toolbox", "tools curated open source TUI CLI GUI list recommended path engineer kubernetes networking shell auth secrets"],
     ["/toolbox/kubernetes/", "Kubernetes Toolbox",         "Toolbox", "k9s kubectx stern kubefwd popeye helm krew kind k3d skaffold tilt argocd dive lazydocker"],
@@ -193,6 +198,7 @@
   pushGroup(APIM, "API Management");
   pushGroup(XCLOUD, "Cross-Cloud");
   pushGroup(TOOLS, "Calculators");
+  pushGroup(REFERENCES, "Reference Library");
   pushGroup(TOOLBOX, "Toolbox");
   pushGroup(DECISIONS, "Decisions");
 
@@ -1290,7 +1296,9 @@
     var insertRef = rel ? rel.nextSibling : anchor.nextSibling;
     var txt = isMatrix
       ? 'Every cell cites an official vendor documentation page — click any cell to see the exact source URL and notes.'
-      : 'All figures sourced from official vendor documentation — the source link appears below each result card.';
+      : current.href === "/compare-costs/"
+        ? 'Rates are entered by you; this calculator does not load vendor prices.'
+        : 'All figures sourced from official vendor documentation — the source link appears below each result card.';
     var note = document.createElement("div");
     note.className = "ia-src-note";
     note.innerHTML =

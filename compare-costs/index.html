@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="color-scheme" content="dark">
+<title>Compare Rates · Infra Atlas</title>
+<link rel="icon" href="/favicon.svg?v=2" type="image/svg+xml">
+<meta name="description" content="Compare two monthly infrastructure estimates using your own compute, egress and storage rates. No vendor price assumptions or account required.">
+<link rel="canonical" href="https://infraatlas.dev/compare-costs/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Infra Atlas">
+<meta property="og:title" content="Compare Rates · Infra Atlas">
+<meta property="og:description" content="Compare two infrastructure options using your own unit rates and monthly workload.">
+<meta property="og:url" content="https://infraatlas.dev/compare-costs/">
+<meta property="og:image" content="https://infraatlas.dev/og.png?v=3">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Compare Rates · Infra Atlas">
+<meta name="twitter:description" content="A side-by-side monthly estimate for rates you provide.">
+<meta name="twitter:image" content="https://infraatlas.dev/og.png?v=3">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@300;400;500;600&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/tools/shared.css">
+<style>
+.masthead { margin-bottom: 28px; }
+.scope-strip {
+  display: grid; grid-template-columns: 0.8fr 0.8fr 1.4fr; gap: 18px;
+  margin: 0 0 34px; padding: 18px 20px;
+  border: 1px solid var(--line-2); border-radius: 5px;
+  background: linear-gradient(90deg, rgba(255,120,73,0.045), transparent 65%);
+}
+.scope-strip__item { display: grid; grid-template-columns: auto 1fr; align-items: baseline; gap: 4px 10px; }
+.scope-strip__label { grid-column: 1 / -1; color: var(--paper-3); font: 10px var(--mono); letter-spacing: .15em; text-transform: uppercase; }
+.scope-strip__value { color: var(--accent); font: 26px/1 var(--serif); }
+.scope-strip__detail { color: var(--paper-2); font-size: 12px; }
+.section-heading { display: flex; justify-content: space-between; align-items: flex-start; gap: 20px; margin-bottom: 18px; }
+.section-heading__index { color: var(--paper-3); font: 11px var(--mono); letter-spacing: .16em; }
+.section-heading h2 { margin-top: 2px; font: 400 28px/1.1 var(--serif); }
+.section-heading p { margin-top: 6px; color: var(--paper-2); font-size: 13px; }
+.workload-panel, .option-card {
+  padding: 22px; background: linear-gradient(180deg, var(--surface), var(--ink-2));
+  border: 1px solid var(--line-2); border-radius: 5px;
+}
+.workload-panel { margin-bottom: 22px; }
+.workload-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)) minmax(150px, .8fr); gap: 14px; }
+.field { min-width: 0; }
+.field__label { display: block; color: var(--paper-2); font: 10px var(--mono); letter-spacing: .1em; text-transform: uppercase; margin-bottom: 7px; }
+.field input, .field select {
+  width: 100%; min-height: 44px; padding: 10px 12px;
+  background: var(--ink); color: var(--paper); border: 1px solid var(--line-2);
+  border-radius: 3px; font: 14px var(--mono);
+}
+.field input:hover, .field select:hover { border-color: var(--line-3); }
+.field input[aria-invalid="true"] { border-color: var(--rose); }
+.field__hint { display: block; margin-top: 6px; color: var(--paper-2); font-size: 11px; line-height: 1.4; }
+.workload-note { margin-top: 14px; color: var(--paper-2); font-size: 12px; }
+.options { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+.option-card { min-width: 0; }
+.option-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 14px; padding-bottom: 16px; border-bottom: 1px solid var(--line); }
+.option-head__number { color: var(--accent); font: 12px var(--mono); letter-spacing: .14em; text-transform: uppercase; }
+.option-name { width: min(100%, 280px); min-height: 42px; margin-top: 8px; padding: 8px 10px;
+  background: var(--ink); color: var(--paper); border: 1px solid var(--line-2); border-radius: 3px; font: 15px var(--sans); }
+.currency-note { flex: none; padding-top: 4px; color: var(--paper-3); font: 10px var(--mono); text-transform: uppercase; }
+.rate-grid { display: grid; gap: 13px; margin: 17px 0 20px; }
+.rate-field { display: grid; grid-template-columns: 1fr minmax(125px, 42%); align-items: center; gap: 14px; }
+.rate-field__name { color: var(--paper-2); font-size: 13px; }
+.rate-field__unit { display: block; margin-top: 3px; color: var(--paper-3); font: 10px var(--mono); }
+.rate-field input { min-width: 0; min-height: 42px; padding: 9px 11px; background: var(--ink); color: var(--paper);
+  border: 1px solid var(--line-2); border-radius: 3px; font: 13px var(--mono); text-align: right; }
+.rate-field input[aria-invalid="true"] { border-color: var(--rose); }
+.option-total { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; padding-top: 16px; border-top: 1px solid var(--line-2); }
+.option-total__label { color: var(--paper-2); font: 10px var(--mono); letter-spacing: .1em; text-transform: uppercase; }
+.option-total__value { color: var(--paper); font: 32px/1 var(--serif); }
+.breakdown { display: grid; gap: 7px; margin-top: 13px; }
+.breakdown__row { display: flex; justify-content: space-between; gap: 12px; color: var(--paper-2); font: 11px var(--mono); }
+.breakdown__row output { color: var(--paper); }
+.option-card.is-cheapest { border-color: rgba(111,231,181,.5); }
+.option-card.is-cheapest .option-total__value { color: var(--mint); }
+.comparison-summary { min-height: 52px; margin-top: 18px; padding: 15px 18px; border-left: 2px solid var(--accent); background: rgba(255,120,73,.045); color: var(--paper-2); font-size: 13px; }
+.comparison-summary strong { color: var(--paper); font-weight: 600; }
+.reset-row { display: flex; justify-content: flex-end; margin: 12px 0 0; }
+.button-quiet { min-height: 40px; padding: 8px 12px; border: 1px solid var(--line-2); border-radius: 3px; background: transparent; color: var(--paper-2); font: 10px var(--mono); letter-spacing: .08em; text-transform: uppercase; cursor: pointer; }
+.button-quiet:hover { border-color: var(--line-3); color: var(--paper); }
+.about { margin-top: 26px; }
+@media (max-width: 820px) {
+  .workload-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 680px) {
+  .page { padding: 34px 18px 64px; }
+  .scope-strip { grid-template-columns: 1fr 1fr; gap: 16px; padding: 16px; }
+  .scope-strip__item:last-child { grid-column: 1 / -1; }
+  .workload-grid, .options { grid-template-columns: 1fr; }
+  .workload-panel, .option-card { padding: 18px; }
+  .rate-field { grid-template-columns: 1fr minmax(112px, 40%); gap: 10px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; }
+}
+</style>
+</head>
+<body>
+<div class="grain"></div>
+<div class="scanlines"></div>
+<div class="page">
+  <header class="masthead">
+    <a class="eyebrow" href="/tools/"><span class="arrow">←</span> Infra Atlas · Calculators</a>
+    <h1 class="title">Compare <em>Rates.</em></h1>
+    <p class="subtitle">Put two sets of unit rates against the same monthly workload. Use this when you already have quotes or prices to compare; every rate is entered by you.</p>
+  </header>
+
+  <main id="ia-main">
+    <section class="scope-strip" aria-label="Comparison scope">
+      <div class="scope-strip__item"><span class="scope-strip__label">Options</span><strong class="scope-strip__value">02</strong><span class="scope-strip__detail">side by side</span></div>
+      <div class="scope-strip__item"><span class="scope-strip__label">Workload</span><strong class="scope-strip__value">01</strong><span class="scope-strip__detail">monthly estimate</span></div>
+      <div class="scope-strip__item"><span class="scope-strip__label">Cost lines</span><strong class="scope-strip__detail">Compute · egress · storage</strong></div>
+    </section>
+
+    <form id="rate-form" novalidate>
+      <section class="workload-panel" aria-labelledby="workload-title">
+        <div class="section-heading">
+          <div>
+            <div class="section-heading__index">01 · Workload</div>
+            <h2 id="workload-title">Set monthly usage</h2>
+            <p>The same quantities are applied to both options.</p>
+          </div>
+        </div>
+        <div class="workload-grid">
+          <label class="field" for="compute-hours">
+            <span class="field__label">vCPU-hours / month</span>
+            <input id="compute-hours" type="number" min="0" step="any" value="720" inputmode="decimal" autocomplete="off" required>
+            <span class="field__hint">Set both rates as price per vCPU-hour.</span>
+          </label>
+          <label class="field" for="egress-gb">
+            <span class="field__label">Internet egress · GB / month</span>
+            <input id="egress-gb" type="number" min="0" step="any" value="500" inputmode="decimal" autocomplete="off" required>
+            <span class="field__hint">Decimal GB; enter 0 if unused.</span>
+          </label>
+          <label class="field" for="storage-gb-month">
+            <span class="field__label">Storage · GB-month</span>
+            <input id="storage-gb-month" type="number" min="0" step="any" value="250" inputmode="decimal" autocomplete="off" required>
+            <span class="field__hint">Enter 0 if storage is not in scope.</span>
+          </label>
+          <label class="field" for="currency">
+            <span class="field__label">Currency</span>
+            <select id="currency">
+              <option value="EUR" selected>EUR · euro</option>
+              <option value="USD">USD · US dollar</option>
+              <option value="GBP">GBP · pound sterling</option>
+            </select>
+            <span class="field__hint">Use the same currency for both options.</span>
+          </label>
+        </div>
+        <p class="workload-note">The example quantities are editable. Compute rates below are per vCPU-hour.</p>
+      </section>
+
+      <section class="options" aria-label="Enter rates for two options">
+        <article class="option-card" id="option-card-a">
+          <header class="option-head">
+            <div>
+              <label class="option-head__number" for="option-name-a">Option A · label</label>
+              <input class="option-name" id="option-name-a" type="text" value="Option A" maxlength="40" autocomplete="off">
+            </div>
+            <span class="currency-note" data-currency-note>USD rates</span>
+          </header>
+          <div class="rate-grid">
+            <label class="rate-field" for="rate-a-compute"><span class="rate-field__name">Compute<span class="rate-field__unit">per vCPU-hour</span></span><input id="rate-a-compute" type="number" min="0" step="any" inputmode="decimal" placeholder="0.00" autocomplete="off" required></label>
+            <label class="rate-field" for="rate-a-egress"><span class="rate-field__name">Egress<span class="rate-field__unit">per GB</span></span><input id="rate-a-egress" type="number" min="0" step="any" inputmode="decimal" placeholder="0.00" autocomplete="off" required></label>
+            <label class="rate-field" for="rate-a-storage"><span class="rate-field__name">Storage<span class="rate-field__unit">per GB-month</span></span><input id="rate-a-storage" type="number" min="0" step="any" inputmode="decimal" placeholder="0.00" autocomplete="off" required></label>
+          </div>
+          <div class="option-total"><span class="option-total__label">Estimated monthly total</span><output class="option-total__value" data-total="a">—</output></div>
+          <div class="breakdown" aria-label="Option A monthly breakdown">
+            <div class="breakdown__row"><span>Compute</span><output data-breakdown="a-compute">—</output></div>
+            <div class="breakdown__row"><span>Egress</span><output data-breakdown="a-egress">—</output></div>
+            <div class="breakdown__row"><span>Storage</span><output data-breakdown="a-storage">—</output></div>
+          </div>
+        </article>
+
+        <article class="option-card" id="option-card-b">
+          <header class="option-head">
+            <div>
+              <label class="option-head__number" for="option-name-b">Option B · label</label>
+              <input class="option-name" id="option-name-b" type="text" value="Option B" maxlength="40" autocomplete="off">
+            </div>
+            <span class="currency-note" data-currency-note>USD rates</span>
+          </header>
+          <div class="rate-grid">
+            <label class="rate-field" for="rate-b-compute"><span class="rate-field__name">Compute<span class="rate-field__unit">per vCPU-hour</span></span><input id="rate-b-compute" type="number" min="0" step="any" inputmode="decimal" placeholder="0.00" autocomplete="off" required></label>
+            <label class="rate-field" for="rate-b-egress"><span class="rate-field__name">Egress<span class="rate-field__unit">per GB</span></span><input id="rate-b-egress" type="number" min="0" step="any" inputmode="decimal" placeholder="0.00" autocomplete="off" required></label>
+            <label class="rate-field" for="rate-b-storage"><span class="rate-field__name">Storage<span class="rate-field__unit">per GB-month</span></span><input id="rate-b-storage" type="number" min="0" step="any" inputmode="decimal" placeholder="0.00" autocomplete="off" required></label>
+          </div>
+          <div class="option-total"><span class="option-total__label">Estimated monthly total</span><output class="option-total__value" data-total="b">—</output></div>
+          <div class="breakdown" aria-label="Option B monthly breakdown">
+            <div class="breakdown__row"><span>Compute</span><output data-breakdown="b-compute">—</output></div>
+            <div class="breakdown__row"><span>Egress</span><output data-breakdown="b-egress">—</output></div>
+            <div class="breakdown__row"><span>Storage</span><output data-breakdown="b-storage">—</output></div>
+          </div>
+        </article>
+      </section>
+
+      <p class="comparison-summary" id="comparison-summary" role="status" aria-live="polite">Enter rates for both options to see the monthly comparison. Use 0 for a cost line that does not apply.</p>
+      <div class="reset-row"><button class="button-quiet" type="reset">Reset example</button></div>
+    </form>
+
+    <aside class="about">
+      <span class="about__mark">*</span>
+      <p><strong>What this estimate includes.</strong> Monthly usage multiplied by the unit rates you enter. It does not load vendor catalogues or model free tiers, volume pricing ladders, taxes, discounts, commitments, or provider-specific billing rules. For catalogue-backed comparisons, use the <a href="/tools/tco/">Cross-Cloud TCO Comparator</a> or the <a href="/tools/egress-cost/">Egress Cost Calculator</a>. Browse the <a href="/references/">technical references</a> for source-backed instruments.</p>
+    </aside>
+  </main>
+
+  <footer class="colophon">
+    <p>Infra Atlas · <a href="/tools/">Calculators</a> · <a href="/references/">Technical references</a> · <a href="https://github.com/ineslino/infra-atlas" target="_blank" rel="noopener">GitHub</a> · MIT-licensed</p>
+  </footer>
+</div>
+
+<script>
+(function () {
+  "use strict";
+
+  const workloadInputs = {
+    compute: document.getElementById("compute-hours"),
+    egress: document.getElementById("egress-gb"),
+    storage: document.getElementById("storage-gb-month")
+  };
+  const optionInputs = {
+    a: {
+      name: document.getElementById("option-name-a"),
+      card: document.getElementById("option-card-a"),
+      rates: {
+        compute: document.getElementById("rate-a-compute"),
+        egress: document.getElementById("rate-a-egress"),
+        storage: document.getElementById("rate-a-storage")
+      }
+    },
+    b: {
+      name: document.getElementById("option-name-b"),
+      card: document.getElementById("option-card-b"),
+      rates: {
+        compute: document.getElementById("rate-b-compute"),
+        egress: document.getElementById("rate-b-egress"),
+        storage: document.getElementById("rate-b-storage")
+      }
+    }
+  };
+  const currencyInput = document.getElementById("currency");
+  const summary = document.getElementById("comparison-summary");
+  const currencyNotes = document.querySelectorAll("[data-currency-note]");
+  const form = document.getElementById("rate-form");
+
+  function readNumber(input) {
+    const raw = input.value.trim();
+    const value = Number(raw);
+    const valid = raw !== "" && Number.isFinite(value) && value >= 0;
+    input.setAttribute("aria-invalid", raw !== "" && !valid ? "true" : "false");
+    return valid ? value : null;
+  }
+
+  function formatMoney(value) {
+    return new Intl.NumberFormat(undefined, {
+      style: "currency",
+      currency: currencyInput.value,
+      maximumFractionDigits: 2
+    }).format(value);
+  }
+
+  function optionLabel(option, fallback) {
+    return option.name.value.trim() || fallback;
+  }
+
+  function clearOutputs() {
+    document.querySelectorAll("[data-total], [data-breakdown]").forEach(function (output) {
+      output.textContent = "—";
+    });
+    Object.values(optionInputs).forEach(function (option) {
+      option.card.classList.remove("is-cheapest");
+    });
+  }
+
+  function render() {
+    currencyNotes.forEach(function (note) {
+      note.textContent = currencyInput.value + " rates";
+    });
+
+    const workload = {};
+    let ready = true;
+    Object.keys(workloadInputs).forEach(function (key) {
+      workload[key] = readNumber(workloadInputs[key]);
+      if (workload[key] === null) ready = false;
+    });
+
+    const estimates = {};
+    Object.keys(optionInputs).forEach(function (key) {
+      const option = optionInputs[key];
+      estimates[key] = {};
+      Object.keys(option.rates).forEach(function (line) {
+        const rate = readNumber(option.rates[line]);
+        if (rate === null) ready = false;
+        estimates[key][line] = rate;
+      });
+    });
+
+    if (!ready) {
+      clearOutputs();
+      summary.textContent = "Enter a non-negative rate for each cost line in both options to see the monthly comparison. Use 0 for a cost line that does not apply.";
+      return;
+    }
+
+    const totals = {};
+    Object.keys(optionInputs).forEach(function (key) {
+      const option = optionInputs[key];
+      totals[key] = 0;
+      Object.keys(workload).forEach(function (line) {
+        const cost = workload[line] * estimates[key][line];
+        totals[key] += cost;
+        document.querySelector('[data-breakdown="' + key + "-" + line + '"]').textContent = formatMoney(cost);
+      });
+      document.querySelector('[data-total="' + key + '"]').textContent = formatMoney(totals[key]);
+      option.card.classList.remove("is-cheapest");
+    });
+
+    const labelA = optionLabel(optionInputs.a, "Option A");
+    const labelB = optionLabel(optionInputs.b, "Option B");
+    const difference = Math.abs(totals.a - totals.b);
+    if (difference < 0.005) {
+      summary.textContent = labelA + " and " + labelB + " have the same estimated monthly total: " + formatMoney(totals.a) + ".";
+      return;
+    }
+
+    const cheaperKey = totals.a < totals.b ? "a" : "b";
+    const expensiveKey = cheaperKey === "a" ? "b" : "a";
+    const cheaperName = cheaperKey === "a" ? labelA : labelB;
+    const expensiveName = expensiveKey === "a" ? labelA : labelB;
+    const relative = totals[expensiveKey] > 0 ? " (" + new Intl.NumberFormat(undefined, { maximumFractionDigits: 1 }).format(difference / totals[expensiveKey] * 100) + "% lower)" : "";
+    optionInputs[cheaperKey].card.classList.add("is-cheapest");
+    summary.textContent = cheaperName + " is lower by " + formatMoney(difference) + " per month" + relative + " than " + expensiveName + ".";
+  }
+
+  form.addEventListener("input", render);
+  form.addEventListener("change", render);
+  form.addEventListener("reset", function () {
+    window.setTimeout(render, 0);
+  });
+  render();
+}());
+</script>
+<script src="/nav.js?v=10" defer></script>
+</body>
+</html>
