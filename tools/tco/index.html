@@ -36,18 +36,38 @@
 .panel .field { min-width: 0; }
 .panel .unit-toggle { align-self: start; }
 .panel-tools { display: flex; justify-content: flex-end; margin-bottom: 28px; }
+.breadcrumb { display: inline-flex; align-items: center; flex-wrap: wrap; gap: 8px; color: var(--paper-3); font: 12px/1.4 var(--mono); letter-spacing: 0.02em; }
+.breadcrumb a { color: var(--paper-2); text-decoration: none; text-underline-offset: 3px; }
+.breadcrumb a:hover { color: var(--paper); }
+.breadcrumb__separator { color: var(--accent); }
+.page .colophon p { letter-spacing: 0.02em; }
 
 /* ─────────── RESULTS ─────────── */
-.tco-summary { grid-column: 1 / -1; overflow-x: auto; margin-bottom: 14px; border: 1px solid var(--line); border-radius: 5px; background: var(--surface); }
+.tco-summary { grid-column: 1 / -1; margin-bottom: 14px; border: 1px solid var(--line); border-radius: 5px; background: var(--surface); }
+.tco-summary__desktop { overflow-x: auto; }
 .tco-summary table { width: 100%; min-width: 620px; border-collapse: collapse; font-family: var(--mono); font-size: 14px; }
 .tco-summary caption { padding: 12px 14px 8px; text-align: left; color: var(--paper-2); font-size: 14px; }
 .tco-summary th, .tco-summary td { padding: 9px 14px; border-top: 1px solid var(--line); text-align: left; vertical-align: top; }
 .tco-summary th { color: var(--paper-3); font-size: 9.5px; letter-spacing: 0.12em; text-transform: uppercase; font-weight: 500; }
 .tco-summary td:last-child { color: var(--paper-2); }
-.tco-summary:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+.tco-summary__desktop:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
 .tco-summary .tco-partial { text-transform: none; letter-spacing: normal; }
 .tco-summary__complete { color: var(--mint); }
 .tco-summary__partial, .tco-summary__na { color: var(--paper-3); }
+.tco-summary__mobile { display: none; }
+.tco-summary__card { display: grid; gap: 10px; padding: 14px; border-top: 1px solid var(--line); }
+.tco-summary__card-head, .tco-summary__total { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.tco-summary__card-head { font-family: var(--mono); font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; }
+.tco-summary__score { color: var(--gold); font-size: 12px; letter-spacing: 0; text-align: right; text-transform: none; }
+.tco-summary__total-label { color: var(--paper-3); font: 12px/1.4 var(--mono); letter-spacing: 0.04em; text-transform: uppercase; }
+.tco-summary__total strong { font: italic 28px/1 var(--serif); overflow-wrap: anywhere; text-align: right; }
+.tco-summary__breakdown { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+.tco-summary__breakdown div { display: grid; gap: 3px; min-width: 0; padding-top: 7px; border-top: 1px solid var(--line); }
+.tco-summary__breakdown dt { color: var(--paper-3); font: 11px/1.4 var(--mono); letter-spacing: 0.08em; text-transform: uppercase; }
+.tco-summary__breakdown dd { color: var(--paper-2); font: 12px/1.45 var(--mono); overflow-wrap: anywhere; }
+.panel select, .tco-card select { min-height: 48px; }
+.panel .field__label { font-size: 12px; letter-spacing: 0.04em; }
+.panel .unit-toggle button { min-width: 52px; min-height: 44px; padding-inline: 14px; }
 .results { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 14px; margin-bottom: 32px; }
 .tco-card { background: var(--surface); border: 1px solid var(--line); border-radius: 5px; padding: 18px; display: flex; flex-direction: column; gap: 12px; }
 .tco-card.is-source { border-color: var(--line-2); background: linear-gradient(180deg, rgba(255,120,73,0.05), transparent 55%), var(--surface); }
@@ -82,7 +102,7 @@
 .tco-card__why { display: flex; flex-wrap: wrap; gap: 4px; }
 .tco-card__chip { font-family: var(--mono); font-size: 9px; letter-spacing: 0.02em; padding: 2px 6px; border-radius: 2px; border: 1px solid var(--line-2); color: var(--paper-3); }
 
-.status-note { font-family: var(--mono); font-size: 14px; letter-spacing: 0.06em; color: var(--paper-3); margin: -18px 0 26px; }
+.status-note { font-family: var(--mono); font-size: 14px; letter-spacing: 0.02em; color: var(--paper-3); margin: -18px 0 26px; }
 .status-note.is-err { color: var(--rose); }
 /* Keep errors, missing specifications and dates readable beside the decision. */
 .field__error, .tco-input-status { color: var(--rose); font-size: 14px; line-height: 1.5; }
@@ -95,17 +115,22 @@
 
 @media (max-width: 1000px) { .panel { grid-template-columns: 1fr 1fr; } }
 @media (max-width: 560px) { .panel { grid-template-columns: 1fr; } }
+@media (max-width: 680px) {
+  .tco-summary__desktop { display: none; }
+  .tco-summary__mobile { display: grid; }
+}
 </style>
 </head>
 <body>
 
-<div class="grain"></div>
-<div class="scanlines"></div>
-
 <div class="page">
 
   <header class="masthead">
-    <a class="eyebrow" href="../"><span class="arrow">←</span> Infra Atlas · Calculators</a>
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+      <a href="../">Infra Atlas</a>
+      <span class="breadcrumb__separator" aria-hidden="true">/</span>
+      <span aria-current="page">Cross-Cloud TCO</span>
+    </nav>
     <h1 class="title">Cross-Cloud <em>TCO.</em></h1>
     <p class="subtitle">Compare monthly <em>compute plus internet egress</em> for equivalent instances. Pick an instance; the comparator pulls its closest equivalent on every other cloud — the same transparent scoring as the <a href="/equivalent-sku/">Equivalent-SKU Finder</a> — using the published catalogue files and the <a href="/egress/">Egress Cost Map</a>. List prices, honestly footnoted.</p>
   </header>
@@ -503,15 +528,36 @@ function render() {
 
   const summary = cards.map((c) => {
     const totalState = c.computeM == null
-      ? '<span class="tco-summary__na">No compute list price</span>'
+      ? '<span class="tco-summary__na">Unavailable</span>'
       : c.egressM == null
-        ? '<span class="tco-summary__partial">Compute only; egress unmapped</span>'
-        : `<span class="tco-summary__complete">${money(c.total, c.cur)} complete</span>`;
+        ? `<span class="tco-summary__partial">${money(c.total, c.cur)} · compute only</span>`
+        : `<span class="tco-summary__complete">${money(c.total, c.cur)}</span>`;
     const egress = c.egressM != null ? money(c.egressM, "USD") : '<span class="tco-summary__na">Unmapped</span>';
-    return `<tr><th scope="row">${esc(CLOUDS[c.cid].label)}${c.score && !c.score.memScored ? '<span class="tco-partial">Partial match · memory unavailable</span>' : ""}</th><td>${c.computeM != null ? money(c.computeM, c.cur) : '<span class="tco-summary__na">Unavailable</span>'}</td><td>${egress}</td><td>${totalState}${renderSourceDates(c.cid)}</td></tr>`;
+    return `<tr><th scope="row">${esc(CLOUDS[c.cid].label)}${c.score && !c.score.memScored ? '<span class="tco-partial">Partial match · memory unavailable</span>' : ""}</th><td>${c.computeM != null ? money(c.computeM, c.cur) : '<span class="tco-summary__na">Unavailable</span>'}</td><td>${egress}</td><td>${totalState}</td></tr>`;
   }).join("");
 
-  results.innerHTML = `<div class="tco-summary" role="region" tabindex="0" aria-label="Monthly comparison table; scroll horizontally on narrow screens"><table><caption>Aligned monthly comparison. A complete total includes compute and mapped internet egress.</caption><thead><tr><th scope="col">Cloud</th><th scope="col">Compute subtotal</th><th scope="col">Internet egress</th><th scope="col">Monthly total</th></tr></thead><tbody>${summary}</tbody></table></div>` + cards.map((c) => {
+  const mobileSummary = cards.map((c) => {
+    const totalLabel = c.computeM == null ? "Monthly total unavailable"
+      : c.egressM == null ? "Compute-only subtotal"
+      : "Monthly total";
+    const partialScore = c.score && !c.score.memScored
+      ? '<span class="tco-summary__score" aria-label="Partial match; memory unavailable">Partial · memory not scored</span>' : "";
+    return `<article class="tco-summary__card" role="listitem">
+      <div class="tco-summary__card-head"><strong>${esc(CLOUDS[c.cid].label)}</strong>${partialScore}</div>
+      <div class="tco-summary__total"><span class="tco-summary__total-label">${totalLabel}</span><strong>${c.total != null ? money(c.total, c.cur) : "—"}</strong></div>
+      <dl class="tco-summary__breakdown">
+        <div><dt>Compute</dt><dd>${c.computeM != null ? money(c.computeM, c.cur) : "Unavailable"}</dd></div>
+        <div><dt>Internet egress</dt><dd>${c.egressM != null ? money(c.egressM, "USD") : "Not mapped"}</dd></div>
+      </dl>
+    </article>`;
+  }).join("");
+
+  results.innerHTML = `<div class="tco-summary">
+    <div class="tco-summary__desktop" role="region" tabindex="0" aria-label="Monthly cost comparison table">
+      <table><caption>Aligned monthly comparison. A complete total includes compute and mapped internet egress.</caption><thead><tr><th scope="col">Cloud</th><th scope="col">Compute subtotal</th><th scope="col">Internet egress</th><th scope="col">Monthly total</th></tr></thead><tbody>${summary}</tbody></table>
+    </div>
+    <div class="tco-summary__mobile" role="list" aria-label="Monthly cost comparison by cloud">${mobileSummary}</div>
+  </div>` + cards.map((c) => {
     const meta = CLOUDS[c.cid];
     const score = c.score;
     const regions = state.data[c.cid].regions;
