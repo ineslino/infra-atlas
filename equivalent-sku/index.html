@@ -1843,7 +1843,7 @@ function renderOverview(src, srcCloud, equiv) {
     return `<tr><th scope="row">${esc(CLOUD_META[cloud].short)}<small>${esc(inst.n)}</small></th>
       <td>${inst.v}</td><td>${inst.m == null ? "Unknown" : fmtMem(inst.m)}</td>
       <td>${archLabel(inst.arch)}</td><td>${Math.round(entry.score)}/100${entry.memScored ? "" : '<small class="sku-overview__partial">Partial match</small>'}</td>
-      <td>${entry.memScored ? "vCPU, memory, class" : "vCPU, class; memory not scored"}</td></tr>`;
+      <td>${entry.memScored ? "vCPU, memory, class" : "vCPU, class; memory unavailable (not scored)"}</td></tr>`;
   });
   return `<section class="sku-overview" aria-label="Top matches at a glance">
     <p class="sku-overview__hint sku-overview__note">Scroll the table sideways to compare all specifications. Keyboard: focus the table and use the arrow keys.</p>
