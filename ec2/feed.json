@@ -1,7 +1,19 @@
 {
-  "generated": "2026-11-05T14:27:26Z",
+  "generated": "2026-11-11T13:59:55Z",
   "instrument": "ec2",
   "entries": [
+    {
+      "ts": "2026-11-11",
+      "instrument": "ec2",
+      "kind": "availability-added",
+      "text": "g7 now in 4 regions (ap-south-1, ap-southeast-2, eu-west-2…)"
+    },
+    {
+      "ts": "2026-11-11",
+      "instrument": "ec2",
+      "kind": "availability-added",
+      "text": "p5en now in ca-central-1"
+    },
     {
       "ts": "2026-11-05",
       "instrument": "ec2",
@@ -589,18 +601,6 @@
       "instrument": "ec2",
       "kind": "availability-added",
       "text": "c8ine now in eu-central-1"
-    },
-    {
-      "ts": "2026-07-01",
-      "instrument": "ec2",
-      "kind": "family-added",
-      "text": "new family c9g"
-    },
-    {
-      "ts": "2026-07-01",
-      "instrument": "ec2",
-      "kind": "family-added",
-      "text": "new family c9gd"
     }
   ]
 }
