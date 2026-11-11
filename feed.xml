@@ -6,7 +6,23 @@
     <atom:link href="https://infraatlas.dev/feed.xml" rel="self" type="application/rss+xml"/>
     <description>A neutral, sourced changelog of cloud infrastructure — new instance families, regions, withdrawals and price moves across AWS, Azure, GCP, OCI and OVHcloud.</description>
     <language>en</language>
-    <lastBuildDate>Thu, 05 Nov 2026 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Wed, 11 Nov 2026 00:00:00 +0000</lastBuildDate>
+    <item>
+      <title>AWS EC2 · g7 now in 4 regions (ap-south-1, ap-southeast-2, eu-west-2…)</title>
+      <link>https://infraatlas.dev/ec2/</link>
+      <guid isPermaLink="false">4fe79a82aadc31637206fb87ad53be79</guid>
+      <category>availability-added</category>
+      <pubDate>Wed, 11 Nov 2026 00:00:00 +0000</pubDate>
+      <description>AWS EC2 · g7 now in 4 regions (ap-south-1, ap-southeast-2, eu-west-2…)</description>
+    </item>
+    <item>
+      <title>AWS EC2 · p5en now in ca-central-1</title>
+      <link>https://infraatlas.dev/ec2/</link>
+      <guid isPermaLink="false">cd0a343ac7fc04095df5c079ae6ba975</guid>
+      <category>availability-added</category>
+      <pubDate>Wed, 11 Nov 2026 00:00:00 +0000</pubDate>
+      <description>AWS EC2 · p5en now in ca-central-1</description>
+    </item>
     <item>
       <title>AWS EC2 · p5 now in eu-central-1</title>
       <link>https://infraatlas.dev/ec2/</link>
