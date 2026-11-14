@@ -1,6 +1,12 @@
 {
-  "generated": "2026-11-11T13:59:55Z",
+  "generated": "2026-11-14T13:20:18Z",
   "entries": [
+    {
+      "ts": "2026-11-14",
+      "instrument": "ec2",
+      "kind": "availability-added",
+      "text": "g7e now in ca-central-1"
+    },
     {
       "ts": "2026-11-11",
       "instrument": "ec2",
