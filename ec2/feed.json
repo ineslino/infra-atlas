@@ -1,7 +1,19 @@
 {
-  "generated": "2026-11-14T13:20:18Z",
+  "generated": "2026-11-18T15:28:36Z",
   "instrument": "ec2",
   "entries": [
+    {
+      "ts": "2026-11-18",
+      "instrument": "ec2",
+      "kind": "availability-added",
+      "text": "c8gn now in il-central-1"
+    },
+    {
+      "ts": "2026-11-18",
+      "instrument": "ec2",
+      "kind": "availability-added",
+      "text": "c8ine now in eu-west-1"
+    },
     {
       "ts": "2026-11-14",
       "instrument": "ec2",
@@ -589,18 +601,6 @@
       "instrument": "ec2",
       "kind": "availability-added",
       "text": "r8id now in eu-west-2"
-    },
-    {
-      "ts": "2026-07-09",
-      "instrument": "ec2",
-      "kind": "availability-added",
-      "text": "8 families gained regions (23 region changes)"
-    },
-    {
-      "ts": "2026-07-08",
-      "instrument": "ec2",
-      "kind": "availability-added",
-      "text": "c8g now in 4 regions (af-south-1, ca-west-1, eu-west-3…)"
     }
   ]
 }

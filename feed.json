@@ -1,6 +1,18 @@
 {
-  "generated": "2026-11-14T13:20:18Z",
+  "generated": "2026-11-18T15:28:36Z",
   "entries": [
+    {
+      "ts": "2026-11-18",
+      "instrument": "ec2",
+      "kind": "availability-added",
+      "text": "c8gn now in il-central-1"
+    },
+    {
+      "ts": "2026-11-18",
+      "instrument": "ec2",
+      "kind": "availability-added",
+      "text": "c8ine now in eu-west-1"
+    },
     {
       "ts": "2026-11-14",
       "instrument": "ec2",
