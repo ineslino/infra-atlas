@@ -6,7 +6,39 @@
     <atom:link href="https://infraatlas.dev/feed.xml" rel="self" type="application/rss+xml"/>
     <description>A neutral, sourced changelog of cloud infrastructure — new instance families, regions, withdrawals and price moves across AWS, Azure, GCP, OCI and OVHcloud.</description>
     <language>en</language>
-    <lastBuildDate>Wed, 18 Nov 2026 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Thu, 19 Nov 2026 00:00:00 +0000</lastBuildDate>
+    <item>
+      <title>AWS EC2 · c9g now in 4 regions (ap-southeast-2, eu-south-2, eu-west-1…)</title>
+      <link>https://infraatlas.dev/ec2/</link>
+      <guid isPermaLink="false">d1a3cc0abd78491f05aae8518653f852</guid>
+      <category>availability-added</category>
+      <pubDate>Thu, 19 Nov 2026 00:00:00 +0000</pubDate>
+      <description>AWS EC2 · c9g now in 4 regions (ap-southeast-2, eu-south-2, eu-west-1…)</description>
+    </item>
+    <item>
+      <title>AWS EC2 · c9gd now in eu-south-2, eu-west-1</title>
+      <link>https://infraatlas.dev/ec2/</link>
+      <guid isPermaLink="false">c45a3a0a1fdb6ea7b11f9a3cc5c38bc1</guid>
+      <category>availability-added</category>
+      <pubDate>Thu, 19 Nov 2026 00:00:00 +0000</pubDate>
+      <description>AWS EC2 · c9gd now in eu-south-2, eu-west-1</description>
+    </item>
+    <item>
+      <title>AWS EC2 · m9g now in 4 regions (ap-northeast-2, ca-central-1, sa-east-1…)</title>
+      <link>https://infraatlas.dev/ec2/</link>
+      <guid isPermaLink="false">fb1ccd6d0aaee839683b8738af1909b0</guid>
+      <category>availability-added</category>
+      <pubDate>Thu, 19 Nov 2026 00:00:00 +0000</pubDate>
+      <description>AWS EC2 · m9g now in 4 regions (ap-northeast-2, ca-central-1, sa-east-1…)</description>
+    </item>
+    <item>
+      <title>AWS EC2 · m9gd now in ap-northeast-2</title>
+      <link>https://infraatlas.dev/ec2/</link>
+      <guid isPermaLink="false">3d33b1a1f91c9ba1bacf2ba681218bfb</guid>
+      <category>availability-added</category>
+      <pubDate>Thu, 19 Nov 2026 00:00:00 +0000</pubDate>
+      <description>AWS EC2 · m9gd now in ap-northeast-2</description>
+    </item>
     <item>
       <title>AWS EC2 · c8gn now in il-central-1</title>
       <link>https://infraatlas.dev/ec2/</link>
