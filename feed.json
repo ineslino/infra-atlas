@@ -1,6 +1,30 @@
 {
-  "generated": "2026-11-18T15:28:36Z",
+  "generated": "2026-11-19T15:35:12Z",
   "entries": [
+    {
+      "ts": "2026-11-19",
+      "instrument": "ec2",
+      "kind": "availability-added",
+      "text": "c9g now in 4 regions (ap-southeast-2, eu-south-2, eu-west-1…)"
+    },
+    {
+      "ts": "2026-11-19",
+      "instrument": "ec2",
+      "kind": "availability-added",
+      "text": "c9gd now in eu-south-2, eu-west-1"
+    },
+    {
+      "ts": "2026-11-19",
+      "instrument": "ec2",
+      "kind": "availability-added",
+      "text": "m9g now in 4 regions (ap-northeast-2, ca-central-1, sa-east-1…)"
+    },
+    {
+      "ts": "2026-11-19",
+      "instrument": "ec2",
+      "kind": "availability-added",
+      "text": "m9gd now in ap-northeast-2"
+    },
     {
       "ts": "2026-11-18",
       "instrument": "ec2",
