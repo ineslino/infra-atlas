@@ -1,5 +1,5 @@
 {
-  "generated": "2026-11-19T15:35:12Z",
+  "generated": "2026-11-20T15:14:21Z",
   "source": "ec2instances.info (Vantage) — public dataset, no credentials",
   "currency": "USD",
   "priceRef": "us-east-1",
@@ -15296,6 +15296,60 @@
         "eu-west-1",
         "eu-west-2",
         "eu-west-3",
+        "sa-east-1",
+        "us-east-1",
+        "us-east-2",
+        "us-west-1",
+        "us-west-2"
+      ]
+    },
+    {
+      "key": "t9g",
+      "cat": "general",
+      "arch": "arm",
+      "vendor": "Graviton5",
+      "desc": "General purpose · AWS Graviton5 Processor",
+      "clock": "3.3 GHz",
+      "sizes": [
+        "nano",
+        "micro",
+        "small",
+        "medium"
+      ],
+      "specs": {
+        "nano": {
+          "vcpu": 2,
+          "mem": 0.5,
+          "price": 0.0052,
+          "net": "Up to 7.5 Gigabit"
+        },
+        "micro": {
+          "vcpu": 2,
+          "mem": 1,
+          "price": 0.0104,
+          "net": "Up to 7.5 Gigabit"
+        },
+        "small": {
+          "vcpu": 2,
+          "mem": 2,
+          "price": 0.0208,
+          "net": "Up to 7.5 Gigabit"
+        },
+        "medium": {
+          "vcpu": 2,
+          "mem": 4,
+          "price": 0.0417,
+          "net": "Up to 7.5 Gigabit"
+        }
+      },
+      "in": [
+        "ap-northeast-1",
+        "ap-southeast-1",
+        "ap-southeast-2",
+        "ap-southeast-5",
+        "ca-central-1",
+        "eu-central-1",
+        "eu-south-2",
         "sa-east-1",
         "us-east-1",
         "us-east-2",
