@@ -1,6 +1,18 @@
 {
-  "generated": "2026-11-20T15:14:21Z",
+  "generated": "2026-11-21T14:29:21Z",
   "entries": [
+    {
+      "ts": "2026-11-21",
+      "instrument": "ec2",
+      "kind": "availability-added",
+      "text": "p6-b300 now in ap-northeast-1, ap-southeast-5"
+    },
+    {
+      "ts": "2026-11-21",
+      "instrument": "ec2",
+      "kind": "availability-added",
+      "text": "x8i now in ap-southeast-6"
+    },
     {
       "ts": "2026-11-20",
       "instrument": "ec2",
