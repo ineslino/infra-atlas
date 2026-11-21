@@ -6,7 +6,23 @@
     <atom:link href="https://infraatlas.dev/feed.xml" rel="self" type="application/rss+xml"/>
     <description>A neutral, sourced changelog of cloud infrastructure — new instance families, regions, withdrawals and price moves across AWS, Azure, GCP, OCI and OVHcloud.</description>
     <language>en</language>
-    <lastBuildDate>Fri, 20 Nov 2026 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Sat, 21 Nov 2026 00:00:00 +0000</lastBuildDate>
+    <item>
+      <title>AWS EC2 · p6-b300 now in ap-northeast-1, ap-southeast-5</title>
+      <link>https://infraatlas.dev/ec2/</link>
+      <guid isPermaLink="false">02074453aaf7972306c3369d8e52004b</guid>
+      <category>availability-added</category>
+      <pubDate>Sat, 21 Nov 2026 00:00:00 +0000</pubDate>
+      <description>AWS EC2 · p6-b300 now in ap-northeast-1, ap-southeast-5</description>
+    </item>
+    <item>
+      <title>AWS EC2 · x8i now in ap-southeast-6</title>
+      <link>https://infraatlas.dev/ec2/</link>
+      <guid isPermaLink="false">8580e9f9fab8af0f898d8dc275a2466b</guid>
+      <category>availability-added</category>
+      <pubDate>Sat, 21 Nov 2026 00:00:00 +0000</pubDate>
+      <description>AWS EC2 · x8i now in ap-southeast-6</description>
+    </item>
     <item>
       <title>AWS EC2 · new family t9g</title>
       <link>https://infraatlas.dev/ec2/</link>
