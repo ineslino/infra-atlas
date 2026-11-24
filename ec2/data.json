@@ -1,5 +1,5 @@
 {
-  "generated": "2026-11-21T14:29:21Z",
+  "generated": "2026-11-24T17:25:06Z",
   "source": "ec2instances.info (Vantage) — public dataset, no credentials",
   "currency": "USD",
   "priceRef": "us-east-1",
@@ -4902,7 +4902,8 @@
         "8xlarge",
         "12xlarge",
         "24xlarge",
-        "48xlarge"
+        "48xlarge",
+        "metal"
       ],
       "specs": {
         "2xlarge": {
@@ -4946,6 +4947,14 @@
           "gpu": "4 × NVIDIA RTX PRO 4500 Blackwell · 128 GB"
         },
         "48xlarge": {
+          "vcpu": 192,
+          "mem": 768,
+          "price": 28.5133,
+          "storage": "2 × 3800 GB NVMe SSD",
+          "net": "700 Gigabit",
+          "gpu": "8 × NVIDIA RTX PRO 4500 Blackwell · 256 GB"
+        },
+        "metal": {
           "vcpu": 192,
           "mem": 768,
           "price": 28.5133,
@@ -9126,6 +9135,7 @@
         "eu-west-1",
         "eu-west-2",
         "eu-west-3",
+        "il-central-1",
         "me-central-1",
         "me-south-1",
         "mx-central-1",

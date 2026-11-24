@@ -1,6 +1,18 @@
 {
-  "generated": "2026-11-21T14:29:21Z",
+  "generated": "2026-11-24T17:25:06Z",
   "entries": [
+    {
+      "ts": "2026-11-24",
+      "instrument": "ec2",
+      "kind": "instance-added",
+      "text": "g7: 1 new size (metal)"
+    },
+    {
+      "ts": "2026-11-24",
+      "instrument": "ec2",
+      "kind": "availability-added",
+      "text": "m8g now in il-central-1"
+    },
     {
       "ts": "2026-11-21",
       "instrument": "ec2",
