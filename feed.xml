@@ -6,7 +6,23 @@
     <atom:link href="https://infraatlas.dev/feed.xml" rel="self" type="application/rss+xml"/>
     <description>A neutral, sourced changelog of cloud infrastructure — new instance families, regions, withdrawals and price moves across AWS, Azure, GCP, OCI and OVHcloud.</description>
     <language>en</language>
-    <lastBuildDate>Sat, 21 Nov 2026 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Tue, 24 Nov 2026 00:00:00 +0000</lastBuildDate>
+    <item>
+      <title>AWS EC2 · g7: 1 new size (metal)</title>
+      <link>https://infraatlas.dev/ec2/</link>
+      <guid isPermaLink="false">56edbad1dc83bf329020001d8d5f6894</guid>
+      <category>instance-added</category>
+      <pubDate>Tue, 24 Nov 2026 00:00:00 +0000</pubDate>
+      <description>AWS EC2 · g7: 1 new size (metal)</description>
+    </item>
+    <item>
+      <title>AWS EC2 · m8g now in il-central-1</title>
+      <link>https://infraatlas.dev/ec2/</link>
+      <guid isPermaLink="false">c36713e95b2e019fa954ab4c50a2d543</guid>
+      <category>availability-added</category>
+      <pubDate>Tue, 24 Nov 2026 00:00:00 +0000</pubDate>
+      <description>AWS EC2 · m8g now in il-central-1</description>
+    </item>
     <item>
       <title>AWS EC2 · p6-b300 now in ap-northeast-1, ap-southeast-5</title>
       <link>https://infraatlas.dev/ec2/</link>
