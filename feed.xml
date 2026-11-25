@@ -6,7 +6,15 @@
     <atom:link href="https://infraatlas.dev/feed.xml" rel="self" type="application/rss+xml"/>
     <description>A neutral, sourced changelog of cloud infrastructure — new instance families, regions, withdrawals and price moves across AWS, Azure, GCP, OCI and OVHcloud.</description>
     <language>en</language>
-    <lastBuildDate>Tue, 24 Nov 2026 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Wed, 25 Nov 2026 00:00:00 +0000</lastBuildDate>
+    <item>
+      <title>AWS EC2 · new family trn3</title>
+      <link>https://infraatlas.dev/ec2/</link>
+      <guid isPermaLink="false">e90501380e0bbac6f27e699636d1fcc6</guid>
+      <category>family-added</category>
+      <pubDate>Wed, 25 Nov 2026 00:00:00 +0000</pubDate>
+      <description>AWS EC2 · new family trn3</description>
+    </item>
     <item>
       <title>AWS EC2 · g7: 1 new size (metal)</title>
       <link>https://infraatlas.dev/ec2/</link>
