@@ -1,5 +1,5 @@
 {
-  "generated": "2026-11-24T17:25:06Z",
+  "generated": "2026-11-25T17:01:19Z",
   "source": "ec2instances.info (Vantage) — public dataset, no credentials",
   "currency": "USD",
   "priceRef": "us-east-1",
@@ -15450,6 +15450,36 @@
       "in": [
         "ap-south-2",
         "ap-southeast-4",
+        "us-east-2"
+      ]
+    },
+    {
+      "key": "trn3",
+      "cat": "accelerated",
+      "arch": "x86",
+      "vendor": "Intel",
+      "desc": "Machine Learning ASIC Instances · Intel Xeon Scalable (Emerald Rapids)",
+      "clock": "3.2 GHz",
+      "sizes": [
+        "3xlarge",
+        "48xlarge"
+      ],
+      "specs": {
+        "3xlarge": {
+          "vcpu": 12,
+          "mem": 128,
+          "price": null,
+          "net": "200 Gigabit"
+        },
+        "48xlarge": {
+          "vcpu": 192,
+          "mem": 2048,
+          "price": null,
+          "storage": "4 × 1900 GB NVMe SSD",
+          "net": "3200 Gigabit"
+        }
+      },
+      "in": [
         "us-east-2"
       ]
     },

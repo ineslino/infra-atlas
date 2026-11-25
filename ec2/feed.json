@@ -1,7 +1,13 @@
 {
-  "generated": "2026-11-24T17:25:06Z",
+  "generated": "2026-11-25T17:01:19Z",
   "instrument": "ec2",
   "entries": [
+    {
+      "ts": "2026-11-25",
+      "instrument": "ec2",
+      "kind": "family-added",
+      "text": "new family trn3"
+    },
     {
       "ts": "2026-11-24",
       "instrument": "ec2",
@@ -595,12 +601,6 @@
       "instrument": "ec2",
       "kind": "availability-added",
       "text": "r8i now in eu-central-2, eu-north-1"
-    },
-    {
-      "ts": "2026-07-16",
-      "instrument": "ec2",
-      "kind": "availability-added",
-      "text": "r8i-flex now in eu-central-2, eu-north-1"
     }
   ]
 }

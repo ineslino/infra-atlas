@@ -1,6 +1,12 @@
 {
-  "generated": "2026-11-24T17:25:06Z",
+  "generated": "2026-11-25T17:01:19Z",
   "entries": [
+    {
+      "ts": "2026-11-25",
+      "instrument": "ec2",
+      "kind": "family-added",
+      "text": "new family trn3"
+    },
     {
       "ts": "2026-11-24",
       "instrument": "ec2",
